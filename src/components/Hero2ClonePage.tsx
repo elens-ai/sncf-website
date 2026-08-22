@@ -240,8 +240,18 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
       id="hero2-clone-stage"
       className="relative w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
       style={{
-        background: `linear-gradient(${gradientAngle}deg, ${stageAccentA}, ${stageAccentB})`,
-        transition: 'background 900ms cubic-bezier(0.65, 0, 0.35, 1)',
+        /* The gradient reads the @property-registered colour variables rather
+           than literal colours. CSS cannot interpolate background-image, so a
+           gradient built from raw strings SNAPS between pillars however long
+           the transition is; registered <color> custom properties DO
+           interpolate, and the gradient repaints from them each frame.
+           880ms == the copy shuttle (380ms exit + 500ms rise), so the stage
+           finishes changing exactly as the new text settles. */
+        ['--accent-a' as string]: stageAccentA,
+        ['--accent-b' as string]: stageAccentB,
+        background: `linear-gradient(${gradientAngle}deg, var(--accent-a), var(--accent-b))`,
+        transition:
+          '--accent-a 880ms cubic-bezier(0.4, 0, 0.2, 1), --accent-b 880ms cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
       {/* 1. LEFT SOCIAL SIDEBAR (Fixed & Vertically Centered) */}
@@ -612,6 +622,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
               id="hero2-script-pillar-name"
+              style={{ transitionDelay: phase === 'exiting' ? '90ms' : '0ms' }}
               className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {getPillarScriptTitle(displayPillar)}
@@ -620,7 +631,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {/* 2. Main Headline (Delay: 50ms) */}
             <h1
               id="hero2-headline"
-              style={{ transitionDelay: phase === 'exiting' ? '0ms' : '50ms' }}
+              style={{ transitionDelay: phase === 'exiting' ? '70ms' : '60ms' }}
               className={`${getHeadingFontClass()} text-white text-3xl sm:text-4xl md:text-[44px] md:leading-[52px] mb-4 min-h-[2.4em] drop-shadow-md transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.headline}
@@ -629,7 +640,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {/* 3. Body Copy (Delay: 100ms) */}
             <p
               id="hero2-body-text"
-              style={{ transitionDelay: phase === 'exiting' ? '0ms' : '100ms' }}
+              style={{ transitionDelay: phase === 'exiting' ? '45ms' : '120ms' }}
               className={`font-artistic-serif text-white/95 text-lg sm:text-[19px] md:text-[20px] leading-relaxed mb-6 min-h-[6.6em] drop-shadow-sm max-w-[460px] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.body}
@@ -638,7 +649,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {/* 4. Impact Metrics Strip (Delay: 160ms) */}
             {showMetrics && (
               <div
-                style={{ transitionDelay: phase === 'exiting' ? '0ms' : '160ms' }}
+                style={{ transitionDelay: phase === 'exiting' ? '20ms' : '180ms' }}
                 className={`grid grid-cols-2 gap-3 mb-6 p-3.5 rounded-2xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[440px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
               >
                 {displayPillar.stats.slice(0, 2).map((stat, i) => (
@@ -660,7 +671,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
             {/* 5. Action Button (Delay: 220ms, with 1000ms color transition) */}
             <div
-              style={{ transitionDelay: phase === 'exiting' ? '0ms' : '220ms' }}
+              style={{ transitionDelay: phase === 'exiting' ? '0ms' : '240ms' }}
               className={`flex flex-wrap items-center gap-3 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               <button
