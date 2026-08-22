@@ -11,72 +11,118 @@ interface CardIllustrationProps {
 /**
  * Flat colour card for the orbit carousel.
  *
- * Replaces the previous per-pillar illustration scenes (layered sky gradients,
- * sun glow, cloud and hill SVGs, animated marks — ~25 nodes each). Those made
- * every card an expensive layer to rasterise, and the wheel re-rasterises on
- * every frame while the depth blur changes. A gradient plus one line icon
- * renders in a fraction of the time and keeps each pillar instantly readable
- * by colour alone.
+ * The vertical marks are drawn as inline SVG rather than loaded as image
+ * files: they are flat solid shapes, so vectors reproduce them exactly,
+ * stay crisp at every card scale, cost no network request, and avoid the
+ * decode/raster work that made the wheel stutter.
  */
 
-const ICONS: Record<string, React.ReactNode> = {
-  // Heal — leaf / care
-  heal: (
-    <>
-      <path d="M12 21c0-6.5 3.2-10.4 8-11-.3 5.9-3.4 9.7-8 11Z" />
-      <path d="M12 21c0-5.6-2.7-9-6.8-9.6C5.5 16.5 8.1 19.7 12 21Z" />
-      <path d="M12 21v-5" />
-    </>
-  ),
-  // Enrich — open book / learning
-  enrich: (
-    <>
-      <path d="M3 5.5c2.8-.9 5.5-.9 8.2.6v12c-2.7-1.5-5.4-1.5-8.2-.6v-12Z" />
-      <path d="M20.2 5.5c-2.8-.9-5.5-.9-8.2.6v12c2.7-1.5 5.4-1.5 8.2-.6v-12Z" />
-      <path d="M11.6 6.1v12" />
-    </>
-  ),
-  // Empower — figure with arms raised
-  empower: (
-    <>
-      <circle cx="12" cy="4.6" r="2.1" />
-      <path d="M12 7.8v6.4" />
-      <path d="M12 8.8 6.7 5.2" />
-      <path d="M12 8.8l5.3-3.6" />
-      <path d="M12 14.2 8.5 20.6" />
-      <path d="M12 14.2l3.5 6.4" />
-    </>
-  ),
-  // Projects — skyline with a health cross
-  projects: (
-    <>
-      <path d="M3 20v-8.6l4-1.5V20" />
-      <path d="M10 20V6.2L15.2 4.6V20" />
-      <path d="M18.2 20v-8.8H21V20" />
-      <path d="M12.6 9.2v3.2M11 10.8h3.2" />
-      <path d="M2 20h20" />
-    </>
-  ),
-  amrit: (
-    <>
-      <path d="M12 3.2 17 9.4a6.4 6.4 0 1 1-10 0Z" />
-      <path d="M8.6 14.4c.9 1.2 2 1.8 3.4 1.8" />
-    </>
-  ),
-  oneness: (
-    <>
-      <circle cx="12" cy="12" r="8.4" />
-      <path d="M3.8 9.6h16.4M3.8 14.4h16.4" />
-      <path d="M12 3.6c2.2 2.4 3.3 5.2 3.3 8.4S14.2 18 12 20.4C9.8 18 8.7 15.2 8.7 12S9.8 6 12 3.6Z" />
-    </>
-  ),
+interface Mark {
+  /** Solid colour of the glyph, matching the supplied vertical artwork. */
+  color: string;
+  art: React.ReactNode;
+}
+
+const MARKS: Record<string, Mark> = {
+  // HEAL — sprout: two upper leaves, two lower leaves, vein on the large leaf
+  heal: {
+    color: '#2FA96B',
+    art: (
+      <>
+        <path d="M12 13.1c0-5.6 3.9-10 9.6-10.6.4 5.8-3.4 10.2-9.6 10.6Z" />
+        <path d="M11.4 13.1c0-4.5-3.2-8-8.1-8.4-.3 4.7 3 8.1 8.1 8.4Z" />
+        <path d="M11.4 13.7c-3.5 0-6.1 2.7-6.1 6.2 3.6 0 6.1-2.7 6.1-6.2Z" />
+        <path d="M12.2 13.7c2.9 0 5.2 2.4 5.2 5.2-2.8 0-5.2-2.3-5.2-5.2Z" />
+        <path
+          d="M12.7 12.5c1-3.9 3.9-7.2 8-8.8"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="1.05"
+          strokeLinecap="round"
+        />
+      </>
+    ),
+  },
+
+  // ENRICH — open book with white pages
+  enrich: {
+    color: '#3BAFBF',
+    art: (
+      <>
+        <path d="M2.8 5.4c3.4-1.1 6.5-.6 9.2 1.3 2.7-1.9 5.8-2.4 9.2-1.3v13.4c-3.4-1.1-6.5-.6-9.2 1.3-2.7-1.9-5.8-2.4-9.2-1.3V5.4Z" />
+        <path d="M4.5 7c2.4-.5 4.6-.1 6.5 1.1V18c-1.9-1.2-4.1-1.6-6.5-1.1V7Z" fill="#fff" />
+        <path d="M19.5 7c-2.4-.5-4.6-.1-6.5 1.1V18c1.9-1.2 4.1-1.6 6.5-1.1V7Z" fill="#fff" />
+      </>
+    ),
+  },
+
+  // EMPOWER — figure with arms raised
+  empower: {
+    color: '#E0459A',
+    art: (
+      <>
+        <circle cx="12" cy="5.6" r="2.75" />
+        <path d="M9.4 11c0-1.3 1-2.1 2.6-2.1s2.6.8 2.6 2.1v8.4c0 .6-.5 1-1.2 1h-2.8c-.7 0-1.2-.4-1.2-1V11Z" />
+        <path
+          d="M10.1 10.9 3.5 6.6M13.9 10.9l6.6-4.3"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.7"
+          strokeLinecap="round"
+        />
+      </>
+    ),
+  },
+
+  // PROJECTS — skyline with a health cross
+  projects: {
+    color: '#C88A16',
+    art: (
+      <>
+        <path d="M2.8 20.4v-8l4-1.4v9.4h-4Z" />
+        <path d="M8.2 20.4V6.6l6.2-2v15.8H8.2Z" />
+        <path d="M15.8 20.4v-9h5v9h-5Z" />
+        <path
+          d="M10.65 7.7h1.3v1.35h1.35v1.3h-1.35v1.35h-1.3v-1.35H9.3v-1.3h1.35V7.7Z"
+          fill="#fff"
+        />
+        <path d="M1.6 20.6h20.8v1.2H1.6Z" />
+      </>
+    ),
+  },
+
+  amrit: {
+    color: '#0E8C7F',
+    art: (
+      <>
+        <path d="M12 2.9 17.4 9.5a6.9 6.9 0 1 1-10.8 0L12 2.9Z" />
+        <path
+          d="M8.6 14.6c.9 1.4 2.1 2.1 3.6 2.1"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="1.15"
+          strokeLinecap="round"
+        />
+      </>
+    ),
+  },
+
+  oneness: {
+    color: '#7B2CA8',
+    art: (
+      <>
+        <path d="M12 2.6a9.4 9.4 0 1 0 0 18.8 9.4 9.4 0 0 0 0-18.8Zm0 1.9c1.8 2.2 2.8 4.7 2.8 7.5s-1 5.3-2.8 7.5c-1.8-2.2-2.8-4.7-2.8-7.5s1-5.3 2.8-7.5Z" />
+        <path d="M3.4 9.4h17.2v1.6H3.4zM3.4 13h17.2v1.6H3.4z" />
+      </>
+    ),
+  },
 };
 
 export const CardIllustration: React.FC<CardIllustrationProps> = ({
   pillar,
   roundedClass = 'rounded-[18px]',
 }) => {
-  const icon = ICONS[pillar.id] ?? ICONS.oneness;
+  const mark = MARKS[pillar.id] ?? MARKS.oneness;
 
   return (
     <div
@@ -94,21 +140,18 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
         }}
       />
 
-      {/* Icon */}
+      {/* Vertical mark on a pale disc, as in the supplied artwork */}
       <div className="relative flex-1 flex items-center justify-center">
-        <div className="relative grid place-items-center w-[46%] aspect-square rounded-full bg-white/15 border border-white/25">
+        <div className="relative grid place-items-center w-[52%] aspect-square rounded-full bg-white/95 shadow-sm">
           <svg
-            className="w-1/2 h-1/2 text-white"
+            className="w-[58%] h-[58%]"
             viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            fill={mark.color}
+            color={mark.color}
             role="img"
             aria-label={`${pillar.label} icon`}
           >
-            {icon}
+            {mark.art}
           </svg>
         </div>
       </div>
