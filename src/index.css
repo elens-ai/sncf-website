@@ -569,51 +569,6 @@
 }
 
 /* ==========================================================================
-   WELCOME TAGLINE — automatic colour cycle
-   Walks the full logo palette in hue order and loops back to the start, so the
-   transition from the last stop to the first is as smooth as every other step.
-   Colours sampled from sncf-logo-only.webp.
-   ========================================================================== */
-@keyframes taglineColorCycle {
-  0% {
-    color: #6cb33f; /* leaf green */
-  }
-  16% {
-    color: #5fb934; /* logo green */
-  }
-  33% {
-    color: #1eb7ea; /* sky blue */
-  }
-  50% {
-    color: #043793; /* deep navy */
-  }
-  66% {
-    color: #b359c5; /* violet */
-  }
-  83% {
-    color: #d25aab; /* orchid */
-  }
-  100% {
-    color: #f52388; /* magenta */
-  }
-}
-
-/* `alternate` sweeps the palette forward then back rather than jumping from the
-   last colour to the first. Wrapping magenta -> green directly interpolates
-   through a muddy rose; ping-ponging keeps every leg between adjacent hues. */
-.tagline-color-cycle {
-  animation: taglineColorCycle 14s ease-in-out infinite alternate;
-  will-change: color;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tagline-color-cycle {
-    animation: none;
-    color: var(--sncf-tagline);
-  }
-}
-
-/* ==========================================================================
    WELCOME TAGLINE — signature writing animation
 
    The reveal edge is SLANTED to match the forward lean of the script, so the
