@@ -7,6 +7,9 @@ export interface DevotionalLeader {
   avatarTone: string;
   glowColor: string;
   portraitType: 'mata-ji' | 'rajpita-ji';
+  /** Official photograph; when present the card renders it full-bleed
+      instead of the vector portrait. */
+  photoUrl?: string;
 }
 
 export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
@@ -17,6 +20,7 @@ export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
     avatarTone: 'from-amber-500 via-rose-500 to-indigo-900',
     glowColor: '#f59e0b',
     portraitType: 'mata-ji',
+    photoUrl: '/images/satguru-mata-sudiksha-ji.jpg',
   },
   {
     id: 'rajpita-ramit-ji',
@@ -40,6 +44,28 @@ export const DevotionalPhotoCard: React.FC<DevotionalPhotoCardProps> = ({
   isFrontFacing = false,
 }) => {
   const isMataJi = leader.portraitType === 'mata-ji';
+
+  if (leader.photoUrl) {
+    return (
+      <div
+        className={`relative w-full h-full overflow-hidden ${roundedClass} select-none bg-white flex flex-col justify-end`}
+      >
+        <img
+          src={leader.photoUrl}
+          alt={leader.name}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: '50% 18%' }}
+          draggable={false}
+        />
+        {/* Name plaque, same treatment as the vector cards */}
+        <div className="relative z-10 mx-3 mb-3 px-3 py-1.5 rounded-full bg-neutral-900/80 backdrop-blur-sm text-center shadow-lg">
+          <span className="text-white text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap">
+            {leader.name}
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

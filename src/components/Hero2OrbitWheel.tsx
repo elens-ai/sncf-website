@@ -24,17 +24,20 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   onPhotoCardClick,
   onDevotionalFront,
 }) => {
-  const totalCards = 6; // 4 pillar cards + 2 devotional photo cards
+  /* Only Satguru Mata Sudiksha Ji rides the wheel; Rajpita Ji remains in the
+     gallery. 5 cards -> 72-degree steps. */
+  const WHEEL_LEADERS = DEVOTIONAL_LEADERS.filter((l) => l.portraitType === 'mata-ji');
+  const totalCards = 4 + WHEEL_LEADERS.length; // 4 pillar cards + Mata Ji
   const stepAngle = 360 / totalCards; // 60 degrees
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [reducedMotion, setReducedMotion] = useState<boolean>(false);
 
-  /* Start with the Satguru Mata Sudiksha Ji portrait front (card 4 at -240deg).
-     Forward rotation then walks: Mata -> Rajpita Ji -> Heal -> Enrich ->
-     Empower -> Projects -> back to Mata, looping. */
-  const angleRef = useRef<number>(-240);
+  /* Start with the Satguru Mata Sudiksha Ji portrait front (card 4 at -288deg
+     with 72-degree steps). Forward rotation then walks: Mata Ji -> Heal ->
+     Enrich -> Empower -> Projects -> back to Mata Ji, looping. */
+  const angleRef = useRef<number>(-288);
   const drumRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationFrameRef = useRef<number | null>(null);
@@ -318,7 +321,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
       onBlur={() => setIsHovered(false)}
       tabIndex={0}
       role="region"
-      aria-label="Interactive 6-Card Orbital Carousel with 4 Pillars and 2 Spiritual Photo Cards"
+      aria-label="Interactive 5-Card Orbital Carousel with 4 Pillars and Satguru Mata Sudiksha Ji"
     >
       {/* 3D Scene Wrapper */}
       <div
@@ -427,7 +430,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
           })}
 
           {/* 2. The 2 Static Devotional Photo Cards (Indices 4 and 5) */}
-          {DEVOTIONAL_LEADERS.map((leader, idx) => {
+          {WHEEL_LEADERS.map((leader, idx) => {
             const cardIndex = 4 + idx;
             const cardState = getCardTransformState(cardIndex);
             const driftClass = `card-drift-${cardIndex % 6}`;
