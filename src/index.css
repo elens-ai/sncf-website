@@ -1,0 +1,739 @@
+@import "tailwindcss";
+
+/* Define custom properties for smooth CSS gradient transitions */
+@property --accent-a {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1f8a5c;
+}
+
+@property --accent-b {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #6fd19a;
+}
+
+:root {
+  --accent-a: #1f8a5c;
+  --accent-b: #6fd19a;
+  /* Card sizing is expressed as a base x a scale, so the design studio slider
+     can resize the whole carousel while the responsive bases below still apply.
+     Only the *-base values change per breakpoint; the scale composes on top. */
+  --card-scale: 1;
+  --card-w-base: 285px;
+  --card-h-base: 367px;
+  --wheel-radius-base: 323px;
+  --hero2-radius-base: 348px;
+
+  --card-width: calc(var(--card-w-base) * var(--card-scale));
+  --card-height: calc(var(--card-h-base) * var(--card-scale));
+  --wheel-radius: calc(var(--wheel-radius-base) * var(--card-scale));
+  --hero2-radius: calc(var(--hero2-radius-base) * var(--card-scale));
+  --heal: #23a873;
+  --heal-deep: #1c8a5f;
+  --leaf-outer: #2f8f5c;
+  --leaf-inner: #57b37e;
+  --glow: 35 168 115;
+  --shadow: 160 40 20;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --card-w-base: 236px;
+    --card-h-base: 302px;
+    --wheel-radius-base: 276px;
+    --hero2-radius-base: 306px;
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --card-w-base: 173px;
+    --card-h-base: 222px;
+    --wheel-radius-base: 177px;
+    --hero2-radius-base: 217px;
+  }
+}
+
+/* Hero Stage Dynamic Diagonal Gradient with 1000ms calm cubic-bezier transition */
+.hero-canvas-bg {
+  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  transition: --accent-a 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
+              --accent-b 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
+              background 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
+              background-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+.pillar-color-wash {
+  transition: background-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
+              border-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
+              color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
+              box-shadow 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
+              fill 1000ms cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+/* Large Faint Decorative Circle (1 turn / 90s independent rotation) */
+@keyframes celestial-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes celestial-spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.celestial-ring {
+  animation: celestial-spin 90s linear infinite;
+  transform-origin: center center;
+}
+
+.celestial-ring-reverse {
+  animation: celestial-spin-reverse 70s linear infinite;
+  transform-origin: center center;
+}
+
+/* Independent Asynchronous Card Float/Drift Keyframes */
+@keyframes card-orbit-drift-cw {
+  0% {
+    transform: translateY(0px) rotateZ(0deg);
+  }
+  35% {
+    transform: translateY(-8px) rotateZ(1.5deg);
+  }
+  70% {
+    transform: translateY(6px) rotateZ(-1deg);
+  }
+  100% {
+    transform: translateY(0px) rotateZ(0deg);
+  }
+}
+
+@keyframes card-orbit-drift-ccw {
+  0% {
+    transform: translateY(0px) rotateZ(0deg);
+  }
+  40% {
+    transform: translateY(8px) rotateZ(-1.5deg);
+  }
+  75% {
+    transform: translateY(-6px) rotateZ(1.2deg);
+  }
+  100% {
+    transform: translateY(0px) rotateZ(0deg);
+  }
+}
+
+.card-drift-0 {
+  animation: card-orbit-drift-cw 14s ease-in-out infinite;
+}
+.card-drift-1 {
+  animation: card-orbit-drift-ccw 17s ease-in-out infinite;
+  animation-delay: -3s;
+}
+.card-drift-2 {
+  animation: card-orbit-drift-cw 20s ease-in-out infinite;
+  animation-delay: -7s;
+}
+.card-drift-3 {
+  animation: card-orbit-drift-ccw 23s ease-in-out infinite;
+  animation-delay: -11s;
+}
+.card-drift-4 {
+  animation: card-orbit-drift-cw 26s ease-in-out infinite;
+  animation-delay: -5s;
+}
+.card-drift-5 {
+  animation: card-orbit-drift-ccw 29s ease-in-out infinite;
+  animation-delay: -15s;
+}
+
+/* 3D Floating Caption Bobbing Animations with independent phase shifts */
+@keyframes caption-bob-a {
+  0%, 100% {
+    transform: translate3d(-50%, 0px, 15px) perspective(450px) rotateX(10deg);
+  }
+  50% {
+    transform: translate3d(-50%, -4px, 18px) perspective(450px) rotateX(13deg);
+  }
+}
+
+@keyframes caption-bob-b {
+  0%, 100% {
+    transform: translate3d(-50%, 0px, 15px) perspective(450px) rotateX(10deg);
+  }
+  50% {
+    transform: translate3d(-50%, 4px, 12px) perspective(450px) rotateX(7deg);
+  }
+}
+
+.caption-float-0 {
+  animation: caption-bob-a 4.8s ease-in-out infinite;
+}
+.caption-float-1 {
+  animation: caption-bob-b 5.4s ease-in-out infinite;
+  animation-delay: -1.2s;
+}
+.caption-float-2 {
+  animation: caption-bob-a 5.9s ease-in-out infinite;
+  animation-delay: -2.7s;
+}
+.caption-float-3 {
+  animation: caption-bob-b 6.3s ease-in-out infinite;
+  animation-delay: -3.8s;
+}
+.caption-float-4 {
+  animation: caption-bob-a 5.1s ease-in-out infinite;
+  animation-delay: -2.1s;
+}
+.caption-float-5 {
+  animation: caption-bob-b 5.7s ease-in-out infinite;
+  animation-delay: -4.3s;
+}
+
+/* 3D Layered Extruded Text Shadow */
+.text-3d-extruded {
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.95),
+    0 2px 0 rgba(20, 15, 10, 0.9),
+    0 3px 1px rgba(0, 0, 0, 0.85),
+    0 4px 2px rgba(0, 0, 0, 0.7),
+    0 6px 6px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(0, 0, 0, 0.4);
+}
+
+/* Keyframes for modals & smooth entries */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+.animate-scaleUp {
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.font-script,
+.font-dancing-script {
+  font-family: 'Dancing Script', cursive, sans-serif;
+}
+
+/* Signature script for the welcome tagline.
+   'Brittany Signature' is a commercial font and is not served by Google Fonts.
+   local() picks up a system-installed copy with no network request; otherwise the
+   file is loaded from public/fonts/ (see public/fonts/README.md). Until that file
+   exists, 'Sacramento' stands in as the closest freely licensed match. */
+@font-face {
+  font-family: 'Brittany Signature';
+  src:
+    local('Brittany Signature'),
+    local('BrittanySignature'),
+    url('/fonts/BrittanySignature.woff2') format('woff2'),
+    url('/fonts/BrittanySignature.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-signature {
+  font-family: 'Brittany Signature', 'Sacramento', 'Dancing Script', cursive;
+}
+
+/* SNCF brand green, sampled from the logo swoosh */
+:root {
+  --sncf-green: #6cb33f;
+}
+
+@keyframes heal-spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes heal-spin-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* 3D Wheel perspective & GPU acceleration */
+#wheel-3d-stage {
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+#wheel-drum {
+  transform-style: preserve-3d;
+}
+
+.wheel-card {
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  will-change: transform, opacity, filter;
+}
+
+/* Split Flap / Flip Clock 3D Perspective & Animations */
+.flip-tile-wrapper {
+  perspective: 350px;
+  transform-style: preserve-3d;
+}
+
+/* Heal Orbiting Leaves Continuous Rotation */
+@keyframes heal-spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes heal-spin-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.heal-ring-outer {
+  animation: heal-spin-cw 16s linear infinite;
+  transform-origin: 150px 150px;
+  transform-box: view-box;
+}
+
+.heal-ring-inner {
+  animation: heal-spin-ccw 11s linear infinite;
+  transform-origin: 150px 150px;
+  transform-box: view-box;
+}
+
+.heal-orbit-leaf {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.35);
+  transition:
+    opacity 420ms ease var(--pop, 0ms),
+    transform 520ms cubic-bezier(0.3, 1.5, 0.4, 1) var(--pop, 0ms);
+}
+
+.heal-orbit-leaf.outer {
+  fill: var(--leaf-outer, #2f8f5c);
+}
+
+.heal-orbit-leaf.inner {
+  fill: var(--leaf-inner, #57b37e);
+}
+
+.is-hover .heal-orbit-leaf,
+.heal-card-hovered .heal-orbit-leaf {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@keyframes split-flap-top {
+  0% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+  100% {
+    transform: rotateX(-90deg);
+    filter: brightness(0.5);
+  }
+}
+
+@keyframes split-flap-bottom {
+  0% {
+    transform: rotateX(90deg);
+    filter: brightness(1.3);
+  }
+  100% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+}
+
+.animate-split-flap-top {
+  animation: split-flap-top 0.09s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  transform-origin: bottom center;
+  backface-visibility: hidden;
+  will-change: transform, filter;
+}
+
+.animate-split-flap-bottom {
+  animation: split-flap-bottom 0.09s cubic-bezier(0.2, 0, 0.4, 1) 0.08s forwards;
+  transform-origin: top center;
+  backface-visibility: hidden;
+  will-change: transform, filter;
+}
+
+/* Accessibility: prefers-reduced-motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  .celestial-ring {
+    animation: none !important;
+  }
+  .wheel-card {
+    transition: opacity 0.5s ease !important;
+  }
+  .animate-split-flap-top,
+  .animate-split-flap-bottom {
+    animation: none !important;
+  }
+  .empower-card,
+  .empower-glow,
+  .empower-echo,
+  .empower-figure-main,
+  .empower-label,
+  .enrich-tilt,
+  .enrich-glow,
+  .enrich-book-closed,
+  .enrich-book-icon,
+  .enrich-brand-text {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   FUTURISTIC MORPHING HEADER SEARCH
+   Collapsed to a glass orb on the hero, expands into a full field on scroll.
+   Accent colours track the active pillar via --accent-a / --accent-b.
+   ========================================================================== */
+.search-morph {
+  --sm-size: 44px;
+  position: relative;
+  /* Never let the flex parent shrink the field below its intended width. */
+  flex: none;
+  height: var(--sm-size);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+  transition:
+    width 520ms cubic-bezier(0.65, 0, 0.35, 1),
+    background-color 400ms ease,
+    box-shadow 400ms ease,
+    transform 300ms ease;
+}
+
+.search-morph.is-collapsed {
+  width: var(--sm-size);
+}
+
+.search-morph.is-expanded {
+  width: min(420px, 44vw);
+}
+
+/* Tighter cap on phones so the header row never overflows */
+@media (max-width: 639px) {
+  .search-morph.is-expanded {
+    width: min(420px, 38vw);
+  }
+}
+
+.search-morph.is-collapsed:hover {
+  transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Accent-lit gradient hairline ring */
+.search-morph::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    var(--accent-a, #f5c451),
+    var(--accent-b, #ffffff),
+    transparent 72%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 400ms ease;
+}
+
+.search-morph:hover::after,
+.search-morph:focus-within::after {
+  opacity: 1;
+}
+
+.search-morph:focus-within {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 6px 30px rgba(0, 0, 0, 0.35),
+    0 0 0 4px color-mix(in srgb, var(--accent-b, #ffffff) 26%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Slow light sweep across the expanded field */
+.search-sheen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  opacity: 0;
+}
+
+.search-morph.is-expanded .search-sheen {
+  opacity: 1;
+  animation: searchSheen 5s ease-in-out infinite;
+}
+
+@keyframes searchSheen {
+  0% {
+    transform: translateX(-140%);
+  }
+  55%,
+  100% {
+    transform: translateX(340%);
+  }
+}
+
+/* Keyboard-hint chip */
+.search-kbd {
+  font-size: 10px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-morph {
+    transition-duration: 0.01ms;
+  }
+  .search-morph.is-expanded .search-sheen {
+    animation: none;
+    opacity: 0;
+  }
+  .search-morph.is-collapsed:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   WELCOME TAGLINE — automatic colour cycle
+   Walks the full logo palette in hue order and loops back to the start, so the
+   transition from the last stop to the first is as smooth as every other step.
+   Colours sampled from sncf-logo-only.webp.
+   ========================================================================== */
+@keyframes taglineColorCycle {
+  0% {
+    color: #6cb33f; /* leaf green */
+  }
+  16% {
+    color: #5fb934; /* logo green */
+  }
+  33% {
+    color: #1eb7ea; /* sky blue */
+  }
+  50% {
+    color: #043793; /* deep navy */
+  }
+  66% {
+    color: #b359c5; /* violet */
+  }
+  83% {
+    color: #d25aab; /* orchid */
+  }
+  100% {
+    color: #f52388; /* magenta */
+  }
+}
+
+/* `alternate` sweeps the palette forward then back rather than jumping from the
+   last colour to the first. Wrapping magenta -> green directly interpolates
+   through a muddy rose; ping-ponging keeps every leg between adjacent hues. */
+.tagline-color-cycle {
+  animation: taglineColorCycle 14s ease-in-out infinite alternate;
+  will-change: color;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tagline-color-cycle {
+    animation: none;
+    color: var(--sncf-green);
+  }
+}
+
+/* ==========================================================================
+   WELCOME TAGLINE — signature writing animation
+
+   The reveal edge is SLANTED to match the forward lean of the script, so the
+   text emerges the way a nib actually crosses it rather than behind a vertical
+   guillotine. Keyframe spacing (not an easing curve) supplies the rhythm:
+   quick strokes through each word, a brief slow at the word gaps, and a short
+   hesitation before the first mark. Timing is linear so that spacing is what
+   you see.
+   ========================================================================== */
+:root {
+  --sign-duration: 2.6s;
+  --sign-delay: 0.35s;
+}
+
+@keyframes signWrite {
+  /* points: top-left, leading-edge-top, leading-edge-bottom, bottom-left
+     the top of the edge runs ~8% ahead of the bottom, giving the slant */
+  0% {
+    clip-path: polygon(-6% -35%, 2% -35%, -6% 135%, -6% 135%);
+  }
+  7% {
+    clip-path: polygon(-6% -35%, 7% -35%, -1% 135%, -6% 135%);
+  }
+  /* "Service" — the long confident run */
+  30% {
+    clip-path: polygon(-6% -35%, 41% -35%, 33% 135%, -6% 135%);
+  }
+  /* lift between words */
+  36% {
+    clip-path: polygon(-6% -35%, 46% -35%, 38% 135%, -6% 135%);
+  }
+  /* "with" */
+  54% {
+    clip-path: polygon(-6% -35%, 64% -35%, 56% 135%, -6% 135%);
+  }
+  /* second lift */
+  60% {
+    clip-path: polygon(-6% -35%, 68% -35%, 60% 135%, -6% 135%);
+  }
+  /* "Humility" and the trailing flourish */
+  93% {
+    clip-path: polygon(-6% -35%, 112% -35%, 104% 135%, -6% 135%);
+  }
+  100% {
+    clip-path: polygon(-6% -35%, 118% -35%, 110% 135%, -6% 135%);
+  }
+}
+
+.tagline-write {
+  animation: signWrite var(--sign-duration) linear var(--sign-delay) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tagline-write {
+    animation: none;
+    clip-path: none;
+  }
+}
+
+/* ==========================================================================
+   PILLAR SCRIPT NAME ("Heal" / "Enrich" / "Empower" / "Projects")
+   Fluid size: scales continuously with the viewport instead of jumping at
+   breakpoints. --pillar-name-scale is driven by the Hero 2 design studio and
+   multiplies the fluid base, so the control and the responsiveness compose.
+   ========================================================================== */
+:root {
+  --pillar-name-scale: 1;
+}
+
+.pillar-script-name {
+  /* Tuned in the design studio: 148px on a wide screen. The floor is lifted only
+     to 3.5rem rather than scaled by the same factor — a proportional floor would
+     put the name at ~94px on a phone, a quarter of the screen width. */
+  font-size: calc(clamp(3.5rem, 10.9vw, 9.25rem) * var(--pillar-name-scale, 1));
+}
+
+/* ==========================================================================
+   HERO INTRO — plays after the welcome hand-off lands on the header logo.
+   The stage background (gradient, rings, watermark) is visible during the
+   iris reveal; the content itself enters afterwards: copy rises in, then the
+   orbit wheel blooms, so the Heal pillar "starts" rather than just being there.
+   ========================================================================== */
+@keyframes heroIntroRise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes heroIntroBloom {
+  from {
+    opacity: 0;
+    transform: scale(0.93);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-intro-rise {
+  animation: heroIntroRise 640ms cubic-bezier(0.22, 0.9, 0.3, 1) 60ms both;
+}
+
+.hero-intro-bloom {
+  animation: heroIntroBloom 760ms cubic-bezier(0.22, 0.9, 0.3, 1) 220ms both;
+}
+
+/* Pre-intro: content held invisible while the splash is still up */
+.hero-intro-waiting {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-intro-rise,
+  .hero-intro-bloom {
+    animation: none;
+    opacity: 1;
+  }
+}

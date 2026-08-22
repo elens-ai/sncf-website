@@ -1,0 +1,6 @@
+{
+  "name": "Nirankari Foundation Hero Wheel",
+  "description": "Interactive animated 3D hero wheel carousel showcasing the Sant Nirankari Charitable Foundation pillars (Heal, Enrich, Empower, Projects) with dynamic color transitions and touch gestures.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

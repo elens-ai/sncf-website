@@ -1,0 +1,36 @@
+services:
+  web-dev:
+    build:
+      context: .
+      target: dev
+    image: sncf-website:dev
+    container_name: sncf-website-dev
+    profiles: ["dev"]
+    ports:
+      - "${DEV_PORT:-3000}:3000"
+    volumes:
+      # Live-reload source from the host; keep container-installed node_modules.
+      - ./src:/app/src
+      - ./index.html:/app/index.html
+      - ./vite.config.ts:/app/vite.config.ts
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./assets:/app/assets
+      - ./public:/app/public
+      - node_modules:/app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      target: prod
+    image: sncf-website:prod
+    container_name: sncf-website
+    profiles: ["prod"]
+    ports:
+      - "${PROD_PORT:-8080}:80"
+    restart: unless-stopped
+
+volumes:
+  node_modules:
