@@ -440,16 +440,6 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
                     isActive={cardState.isFrontFacing || isCurrentActive}
                   />
 
-                  {/* Active Indicator Badge */}
-                  {cardState.isFrontFacing && pillar.id !== 'empower' && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3.5 py-0.5 rounded-full bg-white text-neutral-900 text-[10px] font-black tracking-widest uppercase shadow-lg flex items-center gap-1.5 z-20 border border-white/90 animate-bounce">
-                      <span
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: pillar.accentA }}
-                      />
-                      <span>ACTIVE</span>
-                    </div>
-                  )}
                 </div>
               </div>
             );
