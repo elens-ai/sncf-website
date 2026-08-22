@@ -568,16 +568,22 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {displayLeaderIdx !== null ? (
               /* DEVOTIONAL QUOTE — shown while the Satguru portraits front.
                  Same shuttle phases as the pillar copy, so pillar -> quote ->
-                 pillar all move as one vertical stream. */
-              <>
+                 pillar all move as one vertical stream. The wrapper reserves
+                 the pillar block's height (~557px at md+) so, in the centered
+                 column, Peace lands on the same line Heal occupies — without
+                 it the shorter quote block re-centers ~100px lower and the
+                 swap visibly jumps. */
+              <div className="flex flex-col md:min-h-[34.8rem]">
+                {/* Same class, size and margins as the pillar script names, so
+                    Heal -> Peace (and back) swap in place instead of jumping. */}
                 <p
-                  className={`font-dancing-script font-bold text-white leading-none text-[clamp(3.4rem,6.4vw,5.5rem)] drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
                   Peace
                 </p>
                 <p
                   style={{ transitionDelay: phase === 'exiting' ? '0ms' : '60ms' }}
-                  className={`font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px] md:leading-snug mt-3 max-w-[520px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px] md:leading-snug mt-1 max-w-[520px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
                   is not the absence of storms,
                 </p>
@@ -601,7 +607,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
                 >
                   — Her Holiness Satguru Mata Sudiksha Ji Maharaj
                 </p>
-              </>
+              </div>
             ) : (
               <>
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
