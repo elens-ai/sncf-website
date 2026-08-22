@@ -69,6 +69,12 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
   /* Multiplies the responsive card bases, so the carousel resizes as a whole —
      cards, orbit radius and the Hero 1 wheel all follow from this one value. */
   const [cardScale, setCardScale] = useState<number>(1);
+  /* Seconds each vertical holds the front before the wheel glides on.
+     Persisted so an exhibition machine keeps its pacing across reloads. */
+  const [pillarDwellSec, setPillarDwellSec] = useState<number>(() => {
+    const stored = Number(localStorage.getItem('sncf:pillar-dwell-ms'));
+    return stored > 0 ? Math.round(stored / 1000) : 300;
+  });
   const [glowIntensity, setGlowIntensity] = useState<number>(0.85);
   const [showMetrics, setShowMetrics] = useState<boolean>(true);
 
@@ -105,6 +111,13 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
   useEffect(() => {
     document.documentElement.style.setProperty('--card-scale', String(cardScale));
   }, [cardScale]);
+
+  useEffect(() => {
+    localStorage.setItem('sncf:pillar-dwell-ms', String(pillarDwellSec * 1000));
+  }, [pillarDwellSec]);
+
+  const formatDwell = (sec: number) =>
+    sec >= 60 ? `${Math.floor(sec / 60)}m ${String(sec % 60).padStart(2, '0')}s` : `${sec}s`;
 
   const currentPillar = pillars[activeIndex] || pillars[0];
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
@@ -422,6 +435,40 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
               </p>
             </div>
 
+            {/* Vertical hold time — how long each pillar stays front */}
+            <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-4">
+              <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center justify-between gap-2">
+                <span className="flex items-center gap-1.5">
+                  <RotateCw className="w-3.5 h-3.5 text-amber-400" /> Vertical Hold Time
+                </span>
+                <span className="text-amber-300 tabular-nums normal-case tracking-normal">
+                  {formatDwell(pillarDwellSec)} per vertical
+                </span>
+              </label>
+              <div className="flex items-center gap-3">
+                <input
+                  id="hero2-dwell-time"
+                  type="range"
+                  min="10"
+                  max="600"
+                  step="5"
+                  value={pillarDwellSec}
+                  onChange={(e) => setPillarDwellSec(Number(e.target.value))}
+                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                />
+                <button
+                  onClick={() => setPillarDwellSec(300)}
+                  className="flex-shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2 cursor-pointer"
+                >
+                  Reset
+                </button>
+              </div>
+              <p className="text-[11px] text-neutral-500 leading-snug">
+                Heal, Enrich, Empower and Projects each hold this long before the
+                wheel glides to the next. Applies immediately and survives reloads.
+              </p>
+            </div>
+
             {/* 2. Sacred Aura Visual Style */}
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
@@ -627,6 +674,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
           }`}
         >
           <Hero2OrbitWheel
+            pillarDwellMs={pillarDwellSec * 1000}
             pillars={pillars}
             activeIndex={activeIndex}
             onActiveIndexChange={onActiveIndexChange}

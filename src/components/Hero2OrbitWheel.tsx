@@ -4,6 +4,9 @@ import { CardIllustration } from './CardIllustration';
 import { DevotionalPhotoCard, DEVOTIONAL_LEADERS, DevotionalLeader } from './DevotionalPhotoCard';
 
 interface Hero2OrbitWheelProps {
+  /** How long the wheel rests on each pillar before gliding on (ms).
+      Overrides the localStorage fallback; driven by the design studio. */
+  pillarDwellMs?: number;
   pillars: PillarState[]; // 4 pillars: HEAL, ENRICH, EMPOWER, PROJECTS
   activeIndex: number; // 0..3 for active pillar
   onActiveIndexChange: (index: number) => void;
@@ -19,6 +22,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   isPaused,
   onCardClick,
   onPhotoCardClick,
+  pillarDwellMs,
 }) => {
   const totalCards = 6; // 4 pillar cards + 2 devotional photo cards
   const stepAngle = 360 / totalCards; // 60 degrees
@@ -60,6 +64,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
      exhibition machine without a rebuild:
        localStorage.setItem('sncf:pillar-dwell-ms', '30000') */
   const PILLAR_DWELL_MS =
+    pillarDwellMs ||
     Number(typeof localStorage !== 'undefined' && localStorage.getItem('sncf:pillar-dwell-ms')) ||
     5 * 60_000;
   const PORTRAIT_DWELL_MS =
@@ -214,7 +219,16 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
     activeIndex,
     pillars.length,
     onActiveIndexChange,
+    dwellForIndex,
+    frontIndexAt,
+    stepAngle,
   ]);
+
+  /* A new dwell setting applies immediately: clearing the deadline makes the
+     next frame re-arm the current card's clock with the new duration. */
+  useEffect(() => {
+    dwellUntilRef.current = null;
+  }, [PILLAR_DWELL_MS]);
 
   // Paint the opening frame so the cards never flash at their unpositioned state
   useEffect(() => {
