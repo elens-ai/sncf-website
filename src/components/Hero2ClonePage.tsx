@@ -571,24 +571,27 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
                  pillar all move as one vertical stream. */
               <>
                 <p
-                  className={`font-signature text-white leading-none text-[clamp(3rem,5.6vw,4.5rem)] drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`font-dancing-script font-bold text-white leading-none text-[clamp(3.4rem,6.4vw,5.5rem)] drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
                   Peace
                 </p>
                 <p
                   style={{ transitionDelay: phase === 'exiting' ? '0ms' : '60ms' }}
-                  className={`font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[34px] md:leading-snug mt-2 max-w-[520px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px] md:leading-snug mt-3 max-w-[520px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
-                  is not the absence of storms, but the
+                  is not the absence of storms,
                 </p>
                 <p
                   style={{ transitionDelay: phase === 'exiting' ? '0ms' : '120ms' }}
-                  className={`transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`flex items-baseline gap-3 mt-1 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
-                  <span className="font-signature text-white leading-none text-[clamp(3.2rem,6vw,5rem)] drop-shadow-md select-none">
+                  <span className="font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px]">
+                    but the
+                  </span>
+                  <span className="font-dancing-script font-bold text-white leading-none text-[clamp(3.6rem,7vw,6rem)] drop-shadow-md select-none">
                     Calm
-                  </span>{' '}
-                  <span className="font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[34px] ml-4 align-middle">
+                  </span>
+                  <span className="font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px]">
                     within
                   </span>
                 </p>
