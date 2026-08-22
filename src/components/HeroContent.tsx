@@ -73,7 +73,7 @@ export const HeroContent: React.FC<HeroContentProps> = ({
         {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
         <h2
           id="hero-script-pillar-name"
-          className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,transform] duration-400 ease-in-out ${
+          className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-400 ease-in-out ${
             isExiting
               ? 'opacity-0 -translate-y-2'
               : 'opacity-100 translate-y-0'

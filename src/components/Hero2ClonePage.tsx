@@ -108,6 +108,16 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
   const currentPillar = pillars[activeIndex] || pillars[0];
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
+
+  /* Vertical shuttle states for the pillar copy. Exit drifts up and out; enter
+     is staged below (transition-suppressed) and rises into place. Distances are
+     big enough to read as motion (12/16px) rather than a twitch. */
+  const copyPhaseClass =
+    phase === 'exiting'
+      ? 'opacity-0 -translate-y-3'
+      : phase === 'entering'
+        ? 'opacity-0 translate-y-4 !transition-none'
+        : 'opacity-100 translate-y-0';
   const [displayPillar, setDisplayPillar] = useState<PillarState>(currentPillar);
   const exitTimerRef = useRef<NodeJS.Timeout | null>(null);
   const enterTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -122,12 +132,15 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
       exitTimerRef.current = setTimeout(() => {
         setDisplayPillar(currentPillar);
+        /* 'entering' stages the new copy BELOW its slot, invisible and with
+           transitions suppressed; two frames later 'idle' releases it to rise
+           up into place. Old copy left upward, new copy arrives from below —
+           one continuous vertical stream instead of a direction reversal. */
         setPhase('entering');
-
         enterTimerRef.current = setTimeout(() => {
           setPhase('idle');
-        }, 500);
-      }, 360);
+        }, 40);
+      }, 380);
     }
   }, [currentPillar, displayPillar.id]);
 
@@ -532,11 +545,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
               id="hero2-script-pillar-name"
-              className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,transform] duration-400 ease-in-out ${
-                phase === 'exiting'
-                  ? 'opacity-0 -translate-y-2'
-                  : 'opacity-100 translate-y-0'
-              }`}
+              className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {getPillarScriptTitle(displayPillar)}
             </h2>
@@ -545,11 +554,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             <h1
               id="hero2-headline"
               style={{ transitionDelay: phase === 'exiting' ? '0ms' : '50ms' }}
-              className={`${getHeadingFontClass()} text-white text-3xl sm:text-4xl md:text-[44px] md:leading-[52px] mb-4 drop-shadow-md transition-all duration-400 ease-in-out ${
-                phase === 'exiting'
-                  ? 'opacity-0 -translate-y-2'
-                  : 'opacity-100 translate-y-0'
-              }`}
+              className={`${getHeadingFontClass()} text-white text-3xl sm:text-4xl md:text-[44px] md:leading-[52px] mb-4 min-h-[2.4em] drop-shadow-md transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.headline}
             </h1>
@@ -558,11 +563,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             <p
               id="hero2-body-text"
               style={{ transitionDelay: phase === 'exiting' ? '0ms' : '100ms' }}
-              className={`font-artistic-serif text-white/95 text-lg sm:text-[19px] md:text-[20px] leading-relaxed mb-6 drop-shadow-sm max-w-[460px] transition-all duration-400 ease-in-out ${
-                phase === 'exiting'
-                  ? 'opacity-0 -translate-y-1.5'
-                  : 'opacity-100 translate-y-0'
-              }`}
+              className={`font-artistic-serif text-white/95 text-lg sm:text-[19px] md:text-[20px] leading-relaxed mb-6 min-h-[6.6em] drop-shadow-sm max-w-[460px] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.body}
             </p>
@@ -571,11 +572,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {showMetrics && (
               <div
                 style={{ transitionDelay: phase === 'exiting' ? '0ms' : '160ms' }}
-                className={`grid grid-cols-2 gap-3 mb-6 p-3.5 rounded-2xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[440px] shadow-lg transition-all duration-400 ease-in-out ${
-                  phase === 'exiting'
-                    ? 'opacity-0 -translate-y-1.5'
-                    : 'opacity-100 translate-y-0'
-                }`}
+                className={`grid grid-cols-2 gap-3 mb-6 p-3.5 rounded-2xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[440px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
               >
                 {displayPillar.stats.slice(0, 2).map((stat, i) => (
                   <div key={i} className="flex flex-col">
@@ -597,11 +594,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {/* 5. Action Button (Delay: 220ms, with 1000ms color transition) */}
             <div
               style={{ transitionDelay: phase === 'exiting' ? '0ms' : '220ms' }}
-              className={`flex flex-wrap items-center gap-3 transition-all duration-400 ease-in-out ${
-                phase === 'exiting'
-                  ? 'opacity-0 -translate-y-1'
-                  : 'opacity-100 translate-y-0'
-              }`}
+              className={`flex flex-wrap items-center gap-3 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               <button
                 id={`hero2-learn-more-${displayPillar.id}-btn`}
