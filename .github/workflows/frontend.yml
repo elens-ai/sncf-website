@@ -11,7 +11,15 @@ on:
     paths-ignore:
       - "backend/**"
       - "**.md"
+  # Manual run — from the Actions tab, or:
+  #   gh workflow run frontend.yml --ref dev
+  #   gh workflow run frontend.yml --ref dev -f deploy=false   (build only)
   workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to sncf.elens.in after a successful build"
+        type: boolean
+        default: true
 
 permissions:
   id-token: write # OIDC token for assuming the AWS deploy role
@@ -54,7 +62,11 @@ jobs:
   # ---------- Deploy: main pushes and manual dispatch ----------
   deploy:
     needs: build
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    # Auto-deploys on pushes to main. A manual run deploys unless it was
+    # dispatched with deploy=false, which builds and typechecks only.
+    if: |
+      (github.event_name == 'workflow_dispatch' && inputs.deploy) ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     environment:
       name: production
