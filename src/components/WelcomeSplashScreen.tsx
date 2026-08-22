@@ -17,7 +17,7 @@ interface ExitGeometry {
   radius: number;
 }
 
-const HOLD_MS = 3600; // signature finishes ~2.95s, then a beat to read it
+const HOLD_MS = 4000; // signature finishes ~3.35s (0.35s delay + 3s write), then a beat to read it
 const EXIT_MS = 1050;
 /* The hand-off starts this long BEFORE touchdown: the header logo is revealed
    and the flying copy begins fading while still gliding its last few pixels.
@@ -46,7 +46,7 @@ const DEFAULT_COLOR = '#043793'; // deep navy, from the logo's outer ring
    sweep is still one click away in the splash tuner. */
 const DEFAULT_AUTO_CYCLE = false;
 const DEFAULT_CYCLE_SECONDS = 14;
-const DEFAULT_SIGN_SECONDS = 2.6;
+const DEFAULT_SIGN_SECONDS = 3;
 const DEFAULT_SIGNING = true;
 
 /* Palette sampled directly from sncf-logo-only.webp — one representative per hue
@@ -66,7 +66,7 @@ export const LOGO_PALETTE: { name: string; hex: string }[] = [
    makes it impossible to iterate on with hot reload. Hold once, tune freely,
    press Resume when done. */
 const HOLD_KEY = 'sncf:splash-hold';
-const TUNE_KEY = 'sncf:splash-tune-v2'; // v2: retires persisted green/auto-cycle
+const TUNE_KEY = 'sncf:splash-tune-v3'; // v3: retires persisted 2.6s write speed
 
 const readHold = (): boolean => {
   try {
