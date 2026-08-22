@@ -134,7 +134,7 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
 
   return (
     <div
-      className={`relative w-full h-full overflow-hidden ${roundedClass} select-none flex flex-col justify-between p-4 sm:p-5`}
+      className={`relative w-full h-full overflow-hidden ${roundedClass} select-none flex items-center justify-center p-4 sm:p-5`}
       style={{
         background: `linear-gradient(158deg, ${pillar.accentA} 0%, ${pillar.accentB} 100%)`,
       }}
@@ -148,9 +148,11 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
         }}
       />
 
-      {/* Vertical mark on a pale disc, as in the supplied artwork */}
-      <div className="relative flex-1 flex items-center justify-center">
-        <div className="relative grid place-items-center w-[52%] aspect-square rounded-full bg-white/95 shadow-sm overflow-hidden">
+      {/* Vertical mark on a pale disc, as in the supplied artwork. The card
+          carries no text — the pillar is named in the hero copy alongside it,
+          so the mark is left to speak on its own. */}
+      <div className="relative w-full flex items-center justify-center">
+        <div className="relative grid place-items-center w-[62%] aspect-square rounded-full bg-white/95 shadow-sm overflow-hidden">
           {mark.img ? (
             /* The artwork carries its own pale disc; the circular container
                clips the square's white corners so it sits on the gradient. */
@@ -178,15 +180,6 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
         </div>
       </div>
 
-      {/* Label + headline */}
-      <div className="relative text-left">
-        <div className="inline-block px-2.5 py-0.5 mb-1.5 rounded-full bg-white/20 border border-white/30 text-[10px] uppercase font-extrabold tracking-widest text-white">
-          <span className="font-artistic-display tracking-widest">{pillar.label}</span>
-        </div>
-        <p className="font-artistic-serif text-white font-bold text-sm sm:text-base leading-snug line-clamp-2 tracking-wide drop-shadow-sm">
-          {pillar.headline}
-        </p>
-      </div>
     </div>
   );
 };
