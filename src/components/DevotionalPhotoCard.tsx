@@ -29,6 +29,7 @@ export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
     avatarTone: 'from-sky-500 via-blue-600 to-slate-900',
     glowColor: '#38bdf8',
     portraitType: 'rajpita-ji',
+    photoUrl: '/images/nirankari-rajpita-ramit-ji.jpg',
   },
 ];
 
@@ -57,12 +58,6 @@ export const DevotionalPhotoCard: React.FC<DevotionalPhotoCardProps> = ({
           style={{ objectPosition: '50% 18%' }}
           draggable={false}
         />
-        {/* Name plaque, same treatment as the vector cards */}
-        <div className="relative z-10 mx-3 mb-3 px-3 py-1.5 rounded-full bg-neutral-900/80 backdrop-blur-sm text-center shadow-lg">
-          <span className="text-white text-xs sm:text-sm font-semibold tracking-wide whitespace-nowrap">
-            {leader.name}
-          </span>
-        </div>
       </div>
     );
   }

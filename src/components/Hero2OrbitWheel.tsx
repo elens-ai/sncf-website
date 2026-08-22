@@ -24,20 +24,20 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   onPhotoCardClick,
   onDevotionalFront,
 }) => {
-  /* Only Satguru Mata Sudiksha Ji rides the wheel; Rajpita Ji remains in the
-     gallery. 5 cards -> 72-degree steps. */
-  const WHEEL_LEADERS = DEVOTIONAL_LEADERS.filter((l) => l.portraitType === 'mata-ji');
-  const totalCards = 4 + WHEEL_LEADERS.length; // 4 pillar cards + Mata Ji
+  /* Both spiritual guides ride the wheel with their official photographs.
+     6 cards -> 60-degree steps. */
+  const WHEEL_LEADERS = DEVOTIONAL_LEADERS;
+  const totalCards = 4 + WHEEL_LEADERS.length;
   const stepAngle = 360 / totalCards; // 60 degrees
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [reducedMotion, setReducedMotion] = useState<boolean>(false);
 
-  /* Start with the Satguru Mata Sudiksha Ji portrait front (card 4 at -288deg
-     with 72-degree steps). Forward rotation then walks: Mata Ji -> Heal ->
-     Enrich -> Empower -> Projects -> back to Mata Ji, looping. */
-  const angleRef = useRef<number>(-288);
+  /* Start with the Satguru Mata Sudiksha Ji portrait front (card 4 at -240deg
+     with 60-degree steps). Forward rotation then walks: Mata Ji -> Rajpita Ji
+     -> Heal -> Enrich -> Empower -> Projects -> back to Mata Ji, looping. */
+  const angleRef = useRef<number>(-240);
   const drumRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationFrameRef = useRef<number | null>(null);
@@ -321,7 +321,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
       onBlur={() => setIsHovered(false)}
       tabIndex={0}
       role="region"
-      aria-label="Interactive 5-Card Orbital Carousel with 4 Pillars and Satguru Mata Sudiksha Ji"
+      aria-label="Interactive 6-Card Orbital Carousel with 4 Pillars and 2 Spiritual Portraits"
     >
       {/* 3D Scene Wrapper */}
       <div
