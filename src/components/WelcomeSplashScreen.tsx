@@ -432,7 +432,12 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                 // A running animation outranks inline styles in the cascade, so
                 // the class is only applied when the cycle is actually wanted —
                 // otherwise the picked colour would never show.
-                !isTuning || autoCycle ? 'tagline-color-cycle' : ''
+                /* Gate on autoCycle ALONE. The old `!isTuning || autoCycle`
+                   meant production (isTuning === false) always got the cycle
+                   class, and a running animation outranks the inline colour —
+                   so the tagline swept the palette from its green first
+                   keyframe no matter what the default colour was set to. */
+                autoCycle ? 'tagline-color-cycle' : ''
               }`}
               style={
                 isTuning
