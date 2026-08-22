@@ -3,12 +3,12 @@ import { Volume2, VolumeX } from 'lucide-react';
 
 const ANTHEM_URL = 'https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3';
 /** The anthem is cued past its intro. */
-const START_AT_SECONDS = 7;
+const START_AT_SECONDS = 5;
 const VOLUME = 0.7;
 const MUTED_KEY = 'sncf:anthem-muted';
 
 /**
- * Plays the SNCF anthem from 0:07 on arrival.
+ * Plays the SNCF anthem from 0:05 on arrival.
  *
  * Browsers block audible autoplay until the visitor has interacted with the
  * page, so a bare play() call is rejected on most first visits. We attempt it
