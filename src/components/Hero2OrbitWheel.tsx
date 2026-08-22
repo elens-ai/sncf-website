@@ -291,25 +291,31 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
     // Normalized distance from front (0 at front, 1 at 180deg back)
     const normalizedDistance = Math.min(absAngle / 180, 1);
 
-    // Scale: 1.15 at front, down to 0.82 at back
-    /* Base depth curve, plus a cosine-eased zoom as a card arrives at the
-       front. Because the bump is a pure function of the wheel angle it is
-       recomputed every animation frame — the card swells and recedes with
-       the rotation itself, with a flat (zero-velocity) peak dead-centre, so
-       there is no discrete "pop" the eye can catch. Peak scale ~1.26. */
-    const base = 1.12 - Math.pow(normalizedDistance, 0.8) * 0.34;
-    const ZOOM_ZONE_DEG = 32;
-    const frontZoom =
-      absAngle < ZOOM_ZONE_DEG
-        ? Math.cos((absAngle / ZOOM_ZONE_DEG) * (Math.PI / 2)) * 0.14
-        : 0;
-    const scale = base + frontZoom;
+    /* Presence: 1 dead-centre, 0 at the back, on a raised cosine.
+       This one basis drives both scale and opacity, and its slope is ZERO at
+       both ends, so a card eases into the front and eases out again.
+
+       It replaces two separate defects. The old curve was
+       `pow(distance, 0.8)` plus a cosine bump that only applied inside 32deg:
+         - pow(d, 0.8) has an INFINITE slope at d = 0, putting a cusp exactly
+           at the front — the card was still accelerating as it crossed dead
+           centre instead of settling.
+         - the bump switched on at the 32deg boundary, where the rate of zoom
+           jumped ~4x in a single degree — a visible hitch as a card began to
+           grow.
+       A raised cosine is smooth everywhere (C-infinity), so neither exists. */
+    const presence = (1 + Math.cos((worldAngle * Math.PI) / 180)) / 2;
+
+    const SCALE_BACK = 0.78;
+    const SCALE_FRONT = 1.26;
+    const scale = SCALE_BACK + (SCALE_FRONT - SCALE_BACK) * Math.pow(presence, 2.6);
     // Opacity: 1.0 at front, down to 0.55 at back
     /* A linear falloff left the two cards flanking the front at ~0.85 opacity and
        the rear card at 0.55 showing through it — mid-rotation that reads as three
        competing cards. The power curve drops the neighbours away quickly so only
        the front card holds attention, and all but retires the rear one. */
-    const opacity = 1 - Math.pow(normalizedDistance, 0.75) * 0.9;
+    const OPACITY_BACK = 0.1;
+    const opacity = OPACITY_BACK + (1 - OPACITY_BACK) * Math.pow(presence, 1.9);
     // Blur: a dead zone keeps the front card perfectly crisp. Previously this
     // ramped straight from 0, so the active card always carried a residual
     // ~0.3px blur because the wheel never rests at exactly 0deg.
