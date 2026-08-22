@@ -20,12 +20,18 @@ interface CardIllustrationProps {
 interface Mark {
   /** Solid colour of the glyph, matching the supplied vertical artwork. */
   color: string;
+  /** Supplied artwork. Optimised local copy of the S3 original: the source
+      PNGs are 2048x2048 (~4 MB each, ~12 MB for the set), which would undo
+      the wheel's decode/raster budget. Resized to 512px WebP = 19 KB total,
+      still 2x the largest size a card ever renders them at. */
+  img?: string;
   art: React.ReactNode;
 }
 
 const MARKS: Record<string, Mark> = {
   // HEAL — sprout: two upper leaves, two lower leaves, vein on the large leaf
   heal: {
+    img: '/images/vertical-heal.webp',
     color: '#2FA96B',
     art: (
       <>
@@ -46,6 +52,7 @@ const MARKS: Record<string, Mark> = {
 
   // ENRICH — open book with white pages
   enrich: {
+    img: '/images/vertical-enrich.webp',
     color: '#3BAFBF',
     art: (
       <>
@@ -58,6 +65,7 @@ const MARKS: Record<string, Mark> = {
 
   // EMPOWER — figure with arms raised
   empower: {
+    img: '/images/vertical-empower.webp',
     color: '#E0459A',
     art: (
       <>
@@ -142,17 +150,31 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
 
       {/* Vertical mark on a pale disc, as in the supplied artwork */}
       <div className="relative flex-1 flex items-center justify-center">
-        <div className="relative grid place-items-center w-[52%] aspect-square rounded-full bg-white/95 shadow-sm">
-          <svg
-            className="w-[58%] h-[58%]"
-            viewBox="0 0 24 24"
-            fill={mark.color}
-            color={mark.color}
-            role="img"
-            aria-label={`${pillar.label} icon`}
-          >
-            {mark.art}
-          </svg>
+        <div className="relative grid place-items-center w-[52%] aspect-square rounded-full bg-white/95 shadow-sm overflow-hidden">
+          {mark.img ? (
+            /* The artwork carries its own pale disc; the circular container
+               clips the square's white corners so it sits on the gradient. */
+            <img
+              src={mark.img}
+              alt={`${pillar.label} icon`}
+              className="w-full h-full object-cover"
+              width={512}
+              height={512}
+              decoding="async"
+              draggable={false}
+            />
+          ) : (
+            <svg
+              className="w-[58%] h-[58%]"
+              viewBox="0 0 24 24"
+              fill={mark.color}
+              color={mark.color}
+              role="img"
+              aria-label={`${pillar.label} icon`}
+            >
+              {mark.art}
+            </svg>
+          )}
         </div>
       </div>
 
