@@ -103,10 +103,19 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
         const el = cardRefs.current[i];
         if (!el) continue;
         const st = getCardTransformState(i, angle);
-        el.style.transform = `rotateY(${i * stepAngle}deg) translateZ(var(--hero2-radius, 408px)) scale(${st.scale})`;
-        el.style.opacity = String(st.opacity);
-        el.style.filter = `blur(${st.blur}px)`;
-        el.style.zIndex = String(st.zIndex);
+        /* Write only what changed. Re-assigning identical style strings still
+           costs style recalculation across six cards every frame. */
+        const nextTransform = `rotateY(${i * stepAngle}deg) translateZ(var(--hero2-radius, 408px)) scale(${st.scale.toFixed(4)})`;
+        if (el.style.transform !== nextTransform) el.style.transform = nextTransform;
+
+        const nextOpacity = st.opacity.toFixed(3);
+        if (el.style.opacity !== nextOpacity) el.style.opacity = nextOpacity;
+
+        const nextFilter = st.blur === 0 ? 'none' : `blur(${st.blur}px)`;
+        if (el.style.filter !== nextFilter) el.style.filter = nextFilter;
+
+        const nextZ = String(st.zIndex);
+        if (el.style.zIndex !== nextZ) el.style.zIndex = nextZ;
       }
     },
     // getCardTransformState is a pure function of its args plus stepAngle
@@ -304,11 +313,17 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
     // Blur: a dead zone keeps the front card perfectly crisp. Previously this
     // ramped straight from 0, so the active card always carried a residual
     // ~0.3px blur because the wheel never rests at exactly 0deg.
+    /* Depth blur, QUANTISED to whole pixels. A continuously-varying blur was
+       the wheel's biggest cost: filter: blur() forces a full re-rasterisation
+       of the layer, and a fresh value every frame meant six large cards
+       repainting 60x a second. Rounding to 1px steps keeps the depth cue but
+       changes the value only a handful of times per revolution. */
     const BLUR_DEAD_ZONE = 0.2;
-    const blur =
+    const rawBlur =
       normalizedDistance <= BLUR_DEAD_ZONE
         ? 0
         : (normalizedDistance - BLUR_DEAD_ZONE) * 3.0;
+    const blur = Math.round(rawBlur);
     // Z-Index: highest for front
     const zIndex = Math.round((1 - normalizedDistance) * 100);
 

@@ -206,14 +206,11 @@ export default function App() {
             className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
           >
             <img
-              src="https://elens-graphics.s3.ap-south-1.amazonaws.com/lotus-bg.png"
+              src="/images/lotus-watermark.png"
               alt=""
               role="presentation"
               aria-hidden="true"
               className="w-[75vw] h-[75vh] object-contain opacity-[0.09]"
-              style={{
-                filter: 'brightness(0) invert(1)',
-              }}
               referrerPolicy="no-referrer"
             />
           </div>
