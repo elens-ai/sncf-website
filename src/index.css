@@ -693,3 +693,25 @@
     opacity: 1;
   }
 }
+
+/* Sound control when autoplay was refused: a slow halo so a visitor notices
+   the anthem is waiting on them. Browser policy cannot be bypassed in JS, so
+   the control has to advertise itself instead. */
+@keyframes anthemWaiting {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+}
+
+.anthem-waiting {
+  animation: anthemWaiting 2.4s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anthem-waiting {
+    animation: none;
+  }
+}

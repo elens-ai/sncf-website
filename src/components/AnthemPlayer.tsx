@@ -30,6 +30,10 @@ export const AnthemPlayer: React.FC = () => {
     }
   });
   const [playing, setPlaying] = useState(false);
+  /* True when the browser refused autoplay. Nothing in JS can override that
+     policy, so the honest response is to make the control visible enough that
+     a visitor knows sound is waiting for them. */
+  const [blocked, setBlocked] = useState(false);
 
   /** Seek to the cue point, once metadata makes duration/seeking available. */
   const cue = useCallback((el: HTMLAudioElement) => {
@@ -62,9 +66,12 @@ export const AnthemPlayer: React.FC = () => {
     const unlock = () => {
       disarm();
       cue(el);
-      void el.play().catch(() => {
-        /* still refused — leave it to the toggle */
-      });
+      void el
+        .play()
+        .then(() => setBlocked(false))
+        .catch(() => {
+          /* still refused — leave it to the toggle */
+        });
     };
 
     const disarm = () => {
@@ -79,13 +86,34 @@ export const AnthemPlayer: React.FC = () => {
       events.forEach((e) => window.addEventListener(e, unlock, { passive: true }));
     };
 
+    const attempt = () =>
+      el
+        .play()
+        .then(() => setBlocked(false))
+        .catch(() => {
+          setBlocked(true);
+          arm(); // refused → start on the visitor's first interaction
+        });
+
     if (!muted) {
       cue(el);
-      void el.play().catch(arm); // refused → start on first interaction
+      void attempt();
     }
+
+    /* Retry when the tab comes back to the foreground: a background tab is
+       refused outright, and without this the anthem would stay silent even
+       after the visitor returns and the policy would allow it. */
+    const onVisible = () => {
+      if (document.visibilityState === 'visible' && el.paused && !muted) {
+        cue(el);
+        void attempt();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
 
     return () => {
       disarm();
+      document.removeEventListener('visibilitychange', onVisible);
       el.removeEventListener('loadedmetadata', onMeta);
       el.removeEventListener('play', onPlay);
       el.removeEventListener('pause', onPause);
@@ -114,6 +142,7 @@ export const AnthemPlayer: React.FC = () => {
     }
     // A click is a user gesture, so this play() is always allowed.
     setMuted(false);
+    setBlocked(false);
     cue(el);
     void el.play().catch(() => undefined);
   };
@@ -124,10 +153,18 @@ export const AnthemPlayer: React.FC = () => {
       <button
         id="anthem-toggle"
         onClick={toggle}
-        title={playing ? 'Mute the anthem' : 'Play the anthem'}
-        aria-label={playing ? 'Mute the anthem' : 'Play the anthem'}
+        title={
+          blocked
+            ? 'Tap for sound — your browser blocked autoplay'
+            : playing
+              ? 'Mute the anthem'
+              : 'Play the anthem'
+        }
+        aria-label={blocked ? 'Play the anthem (autoplay was blocked)' : playing ? 'Mute the anthem' : 'Play the anthem'}
         aria-pressed={playing}
-        className="grid place-items-center w-11 h-11 rounded-full bg-white/10 border border-white/25 backdrop-blur-xl text-white/90 hover:bg-white/20 hover:text-white transition-all cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 flex-none"
+        className={`relative grid place-items-center w-11 h-11 rounded-full bg-white/10 border backdrop-blur-xl text-white/90 hover:bg-white/20 hover:text-white transition-all cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 flex-none ${
+          blocked ? 'border-white/70 anthem-waiting' : 'border-white/25'
+        }`}
       >
         {playing ? <Volume2 className="w-[18px] h-[18px]" /> : <VolumeX className="w-[18px] h-[18px]" />}
       </button>
