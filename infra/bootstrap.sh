@@ -20,6 +20,9 @@ BUCKET="sncf-elens-in-site"
 OAC_NAME="sncf-elens-in-oac"
 ROLE_NAME="sncf-website-deploy"
 GITHUB_REPO="elens-ai/sncf-website"
+# GitHub's immutable OIDC subject for newer repos annotates owner/repo with
+# numeric IDs; older repos emit the classic form. Trust must accept both.
+GITHUB_REPO_IMMUTABLE="elens-ai@270894618/sncf-website@1343110707"
 HOSTED_ZONE_ID="Z04934213J0DEUMSWHR9W" # elens.in public zone
 # *.elens.in certificate in us-east-1 (CloudFront requires us-east-1), ISSUED
 ACM_ARN="arn:aws:acm:us-east-1:025078772718:certificate/266a3561-801c-4b91-8b57-0e02cd6be12e"
@@ -139,7 +142,10 @@ cat > /tmp/sncf-trust.json <<JSON
     "Action": "sts:AssumeRoleWithWebIdentity",
     "Condition": {
       "StringEquals": { "token.actions.githubusercontent.com:aud": "sts.amazonaws.com" },
-      "StringLike": { "token.actions.githubusercontent.com:sub": "repo:$GITHUB_REPO:*" }
+      "StringLike": { "token.actions.githubusercontent.com:sub": [
+        "repo:$GITHUB_REPO:*",
+        "repo:$GITHUB_REPO_IMMUTABLE:*"
+      ]}
     }
   }]
 }
