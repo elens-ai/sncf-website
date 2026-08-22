@@ -1,7 +1,6 @@
 import React from 'react';
 import { PillarState } from '../types';
 import { HealCardMark } from './HealCardMark';
-import { EmpowerCardMark } from './EmpowerCardMark';
 import { EnrichCardMark } from './EnrichCardMark';
 
 interface CardIllustrationProps {
@@ -40,13 +39,48 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
     );
   }
 
-  // 2. DEDICATED EMPOWER CARD (Solid White Background, Centered Figurine Icon, 3D Tilt, Fan Out Echoes, Glow & Wordmark Reveal)
+  // 2. DEDICATED EMPOWER CARD — always-visible SVG figure (arms raised) with
+  //    soft halo rings, badge and headline; mirrors the Heal card's structure.
+  //    Replaces the hover-only EmpowerCardMark, which rendered a nearly blank
+  //    card at rest.
   if (pillar.id === 'empower') {
     return (
       <div
-        className={`relative w-full h-full overflow-hidden ${roundedClass} select-none bg-white flex items-center justify-center shadow-inner`}
+        className={`relative w-full h-full overflow-hidden ${roundedClass} select-none bg-white flex flex-col justify-between p-3.5 sm:p-4 shadow-inner`}
       >
-        <EmpowerCardMark />
+        <div className="relative flex-1 w-full flex items-center justify-center pt-2 pb-1">
+          <div className="relative w-[150px] h-[150px] flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full bg-[#DE4A94]/10" />
+            <div className="absolute inset-5 rounded-full bg-[#DE4A94]/15" />
+            <svg
+              className="relative w-20 h-20 text-[#C93E82]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              role="img"
+              aria-label="Person with arms raised"
+            >
+              <circle cx="12" cy="4.4" r="2.1" fill="currentColor" stroke="none" />
+              <path d="M12 7.6v6.6" />
+              <path d="M12 8.6 6.6 5" />
+              <path d="M12 8.6 17.4 5" />
+              <path d="M12 14.2 8.4 20.6" />
+              <path d="M12 14.2 15.6 20.6" />
+            </svg>
+          </div>
+        </div>
+
+        <div className="relative text-left z-10">
+          <div className="inline-block px-2.5 py-0.5 mb-1 rounded-full bg-[#C93E82]/15 border border-[#C93E82]/30 text-[10px] uppercase font-extrabold tracking-wider text-[#C93E82]">
+            <span className="font-artistic-display tracking-widest">{pillar.label}</span>
+          </div>
+          <p className="font-artistic-serif text-[#C93E82] font-bold text-sm sm:text-base leading-snug line-clamp-2 tracking-wide">
+            {pillar.headline}
+          </p>
+        </div>
       </div>
     );
   }
@@ -126,8 +160,23 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
               {/* Health City & Infrastructure */}
               <div className="absolute w-20 h-20 rounded-full bg-white/25 backdrop-blur-sm border border-white/40 flex items-center justify-center shadow-md">
                 <div className="w-14 h-14 rounded-full bg-amber-600 flex items-center justify-center shadow-inner text-white">
-                  <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" />
+                  {/* Flagship infrastructure: skyline with a health-cross tower */}
+                  <svg
+                    className="w-8 h-8"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    role="img"
+                    aria-label="City skyline with hospital"
+                  >
+                    <path d="M3 20V11l4-1.5V20" />
+                    <path d="M10 20V6.5L15 5v15" />
+                    <path d="M18 20v-9h3v9" />
+                    <path d="M12.5 9.5v3M11 11h3" />
+                    <path d="M2 20h20" />
                   </svg>
                 </div>
               </div>

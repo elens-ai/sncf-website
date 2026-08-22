@@ -283,7 +283,18 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
     const normalizedDistance = Math.min(absAngle / 180, 1);
 
     // Scale: 1.15 at front, down to 0.82 at back
-    const scale = 1.15 - Math.pow(normalizedDistance, 0.8) * 0.36;
+    /* Base depth curve, plus a cosine-eased zoom as a card arrives at the
+       front. Because the bump is a pure function of the wheel angle it is
+       recomputed every animation frame — the card swells and recedes with
+       the rotation itself, with a flat (zero-velocity) peak dead-centre, so
+       there is no discrete "pop" the eye can catch. Peak scale ~1.26. */
+    const base = 1.12 - Math.pow(normalizedDistance, 0.8) * 0.34;
+    const ZOOM_ZONE_DEG = 32;
+    const frontZoom =
+      absAngle < ZOOM_ZONE_DEG
+        ? Math.cos((absAngle / ZOOM_ZONE_DEG) * (Math.PI / 2)) * 0.14
+        : 0;
+    const scale = base + frontZoom;
     // Opacity: 1.0 at front, down to 0.55 at back
     /* A linear falloff left the two cards flanking the front at ~0.85 opacity and
        the rear card at 0.55 showing through it — mid-rotation that reads as three
