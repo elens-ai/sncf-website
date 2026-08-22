@@ -52,37 +52,6 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   }, []);
 
   // Update active card index based on current wheel angle
-  /* Exhibition pacing: the wheel RESTS on each business vertical for five
-     minutes, then glides one step to the next card, looping forever. The two
-     devotional portraits act as brief interludes between Projects and Heal
-     rather than five-minute stops. Hovering or pausing holds the countdown. */
-  /* localStorage overrides let the pacing be tested or retuned on an
-     exhibition machine without a rebuild:
-       localStorage.setItem('sncf:pillar-dwell-ms', '30000') */
-  const PILLAR_DWELL_MS =
-    Number(typeof localStorage !== 'undefined' && localStorage.getItem('sncf:pillar-dwell-ms')) ||
-    5 * 60_000;
-  const PORTRAIT_DWELL_MS =
-    Number(typeof localStorage !== 'undefined' && localStorage.getItem('sncf:portrait-dwell-ms')) ||
-    15_000;
-  const AUTO_SNAP_S = 1.4; // stately glide for auto-advance
-  const DRAG_SNAP_S = 0.7; // brisk settle after a user drag
-  const dwellUntilRef = useRef<number | null>(null);
-  const snapDurationRef = useRef<number>(DRAG_SNAP_S);
-
-  const frontIndexAt = useCallback(
-    (angle: number) => {
-      const positiveAngle = ((-angle % 360) + 360) % 360;
-      return Math.round(positiveAngle / stepAngle) % totalCards;
-    },
-    [stepAngle, totalCards],
-  );
-
-  const dwellForIndex = useCallback(
-    (index: number) => (index < pillars.length ? PILLAR_DWELL_MS : PORTRAIT_DWELL_MS),
-    [pillars.length, PILLAR_DWELL_MS, PORTRAIT_DWELL_MS],
-  );
-
   const updateActiveCardFromAngle = useCallback(
     (angle: number) => {
       const positiveAngle = ((-angle % 360) + 360) % 360;
@@ -129,7 +98,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
         if (!isPaused && !isHovered) {
           onActiveIndexChange((activeIndex + 1) % pillars.length);
         }
-      }, PILLAR_DWELL_MS);
+      }, 4000);
       return () => clearInterval(interval);
     }
 
@@ -146,7 +115,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
           snapStartTimeRef.current = currentTime;
         }
         const snapElapsed = (currentTime - snapStartTimeRef.current) / 1000;
-        const snapDuration = snapDurationRef.current;
+        const snapDuration = 0.7; // 700ms ease-in-out
 
         if (snapElapsed < snapDuration) {
           const progress = snapElapsed / snapDuration;
@@ -163,36 +132,24 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
           applyFrame(currentAngle);
           updateActiveCardFromAngle(currentAngle);
         } else {
-          // Snap finished — start this card's dwell clock
+          // Snap finished
           angleRef.current = snapTargetRef.current;
           applyFrame(snapTargetRef.current);
           updateActiveCardFromAngle(snapTargetRef.current);
-          dwellUntilRef.current =
-            currentTime + dwellForIndex(frontIndexAt(snapTargetRef.current));
           isSnappingRef.current = false;
           snapTargetRef.current = null;
           snapStartTimeRef.current = null;
         }
       } else if (!isDraggingRef.current && !isPaused && !isHovered) {
-        // Dwell-and-advance: rest on the current card until its clock runs out,
-        // then glide exactly one step to the next card.
-        if (dwellUntilRef.current === null) {
-          dwellUntilRef.current =
-            currentTime + dwellForIndex(frontIndexAt(angleRef.current));
-        } else if (currentTime >= dwellUntilRef.current) {
-          const base = Math.round(angleRef.current / stepAngle) * stepAngle;
-          snapStartAngleRef.current = angleRef.current;
-          snapTargetRef.current = base - stepAngle;
-          snapStartTimeRef.current = null;
-          snapDurationRef.current = AUTO_SNAP_S;
-          isSnappingRef.current = true;
-        }
-      } else if (!isDraggingRef.current) {
-        // Hovered or paused: hold the countdown so unhovering never advances
-        // instantly — the viewer always gets a beat before the next glide.
-        if (dwellUntilRef.current !== null) {
-          dwellUntilRef.current = Math.max(dwellUntilRef.current, currentTime + 2000);
-        }
+        // Continuous auto-rotation: 26s for a full 360-degree rotation across 6 cards
+        const isMobile = window.innerWidth < 640;
+        const fullTurnSeconds = isMobile ? 20 : 26;
+        const degreesPerSecond = 360 / fullTurnSeconds;
+
+        const newAngle = angleRef.current - degreesPerSecond * deltaTime;
+        angleRef.current = newAngle;
+        applyFrame(newAngle);
+        updateActiveCardFromAngle(newAngle);
       }
 
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -288,7 +245,6 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
     snapStartAngleRef.current = currentAngle;
     snapTargetRef.current = nearestStep;
     snapStartTimeRef.current = null;
-    snapDurationRef.current = DRAG_SNAP_S;
     isSnappingRef.current = true;
   };
 
