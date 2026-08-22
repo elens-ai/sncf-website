@@ -141,9 +141,11 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
   // Trigger smooth staggered fade-out and fade-in when the front content
   // changes — pillar to pillar, pillar to quote, or quote back to pillar.
-  const targetKey = devotionalIdx !== null ? `L${devotionalIdx}` : `P${currentPillar.id}`;
-  const displayKey =
-    displayLeaderIdx !== null ? `L${displayLeaderIdx}` : `P${displayPillar.id}`;
+  /* Both portraits show the same quote, so they collapse into one 'quote'
+     state — the copy holds steady from Mata Ji through Rajpita Ji and only
+     shuttles again when Heal arrives. */
+  const targetKey = devotionalIdx !== null ? 'quote' : `P${currentPillar.id}`;
+  const displayKey = displayLeaderIdx !== null ? 'quote' : `P${displayPillar.id}`;
 
   useEffect(() => {
     if (targetKey !== displayKey) {
