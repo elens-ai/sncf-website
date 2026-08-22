@@ -41,8 +41,10 @@ const DEFAULT_LOGO_SIZE = 280; // clamp() ceiling
 const DEFAULT_GAP = 59; // clamp() ceiling
 const DEFAULT_TAGLINE_SIZE = 91; // clamp() ceiling
 const DEFAULT_WORD_SPACING = 0.26; // em
-const DEFAULT_COLOR = '#6cb33f';
-const DEFAULT_AUTO_CYCLE = true;
+const DEFAULT_COLOR = '#043793'; // deep navy, from the logo's outer ring
+/* Off by default so the tagline rests on its brand colour. The palette
+   sweep is still one click away in the splash tuner. */
+const DEFAULT_AUTO_CYCLE = false;
 const DEFAULT_CYCLE_SECONDS = 14;
 const DEFAULT_SIGN_SECONDS = 2.6;
 const DEFAULT_SIGNING = true;
@@ -64,7 +66,7 @@ export const LOGO_PALETTE: { name: string; hex: string }[] = [
    makes it impossible to iterate on with hot reload. Hold once, tune freely,
    press Resume when done. */
 const HOLD_KEY = 'sncf:splash-hold';
-const TUNE_KEY = 'sncf:splash-tune';
+const TUNE_KEY = 'sncf:splash-tune-v2'; // v2: retires persisted green/auto-cycle
 
 const readHold = (): boolean => {
   try {
@@ -441,7 +443,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                       animationDuration: `${cycleSeconds}s`,
                     }
                   : {
-                      color: 'var(--sncf-green)',
+                      color: 'var(--sncf-tagline)',
                       fontSize: 'clamp(1.75rem, 7.1vw, 91px)',
                       wordSpacing: '0.26em',
                     }

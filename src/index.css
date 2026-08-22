@@ -268,7 +268,8 @@
 
 /* SNCF brand green, sampled from the logo swoosh */
 :root {
-  --sncf-green: #6cb33f;
+  /* Welcome tagline colour — deep navy, sampled from the logo's outer ring */
+  --sncf-tagline: #043793;
 }
 
 @keyframes heal-spin-cw {
@@ -608,7 +609,7 @@
 @media (prefers-reduced-motion: reduce) {
   .tagline-color-cycle {
     animation: none;
-    color: var(--sncf-green);
+    color: var(--sncf-tagline);
   }
 }
 
