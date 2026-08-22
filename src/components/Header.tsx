@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AnthemPlayer } from './AnthemPlayer';
 import { PillarState } from '../types';
 
 interface HeaderProps {
@@ -63,8 +64,9 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Spacer — the centre column is now empty; controls sit together on the right */}
       <div className="flex-1" />
 
-      {/* RIGHT: Search + Gallery ribbon */}
+      {/* RIGHT: Anthem toggle + search + Gallery ribbon */}
       <div className="flex items-center gap-2 md:gap-3 pointer-events-auto">
+        <AnthemPlayer />
         {/* Futuristic morphing search — glass orb on the hero, full field on scroll */}
           <div
             id="hero-search-morph"
