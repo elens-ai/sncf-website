@@ -119,12 +119,34 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
         ? 'opacity-0 translate-y-4 !transition-none'
         : 'opacity-100 translate-y-0';
   const [displayPillar, setDisplayPillar] = useState<PillarState>(currentPillar);
+  /* The wheel opens on the Satguru Mata Sudiksha Ji portrait, so the copy
+     column opens on the devotional quote. null = a pillar card is front. */
+  const [devotionalIdx, setDevotionalIdx] = useState<number | null>(0);
+  const [displayLeaderIdx, setDisplayLeaderIdx] = useState<number | null>(0);
+
+  /* Serene rose stage while the devotional portraits front — the pillar
+     gradients read as brand verticals; the quote deserves its own mood. */
+  const DEVOTIONAL_ACCENT = { a: '#7d3f66', b: '#c98ab2' };
+  const stageAccentA = devotionalIdx !== null ? DEVOTIONAL_ACCENT.a : currentPillar.accentA;
+  const stageAccentB = devotionalIdx !== null ? DEVOTIONAL_ACCENT.b : currentPillar.accentB;
+
+  /* Header chrome (ribbon, search ring) follows the stage mood too. */
+  useEffect(() => {
+    document.documentElement.style.setProperty('--accent-a', stageAccentA);
+    document.documentElement.style.setProperty('--accent-b', stageAccentB);
+  }, [stageAccentA, stageAccentB]);
+
   const exitTimerRef = useRef<NodeJS.Timeout | null>(null);
   const enterTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Trigger smooth staggered fade-out and fade-in when pillar changes
+  // Trigger smooth staggered fade-out and fade-in when the front content
+  // changes — pillar to pillar, pillar to quote, or quote back to pillar.
+  const targetKey = devotionalIdx !== null ? `L${devotionalIdx}` : `P${currentPillar.id}`;
+  const displayKey =
+    displayLeaderIdx !== null ? `L${displayLeaderIdx}` : `P${displayPillar.id}`;
+
   useEffect(() => {
-    if (currentPillar.id !== displayPillar.id) {
+    if (targetKey !== displayKey) {
       if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
       if (enterTimerRef.current) clearTimeout(enterTimerRef.current);
 
@@ -132,6 +154,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
       exitTimerRef.current = setTimeout(() => {
         setDisplayPillar(currentPillar);
+        setDisplayLeaderIdx(devotionalIdx);
         /* 'entering' stages the new copy BELOW its slot, invisible and with
            transitions suppressed; two frames later 'idle' releases it to rise
            up into place. Old copy left upward, new copy arrives from below —
@@ -142,7 +165,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
         }, 40);
       }, 380);
     }
-  }, [currentPillar, displayPillar.id]);
+  }, [targetKey, displayKey, currentPillar, devotionalIdx]);
 
   useEffect(() => {
     return () => {
@@ -215,7 +238,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
       id="hero2-clone-stage"
       className="relative w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
       style={{
-        background: `linear-gradient(${gradientAngle}deg, ${currentPillar.accentA}, ${currentPillar.accentB})`,
+        background: `linear-gradient(${gradientAngle}deg, ${stageAccentA}, ${stageAccentB})`,
         transition: 'background 900ms cubic-bezier(0.65, 0, 0.35, 1)',
       }}
     >
@@ -542,6 +565,42 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
           }`}
         >
           <div className="w-full flex flex-col">
+            {displayLeaderIdx !== null ? (
+              /* DEVOTIONAL QUOTE — shown while the Satguru portraits front.
+                 Same shuttle phases as the pillar copy, so pillar -> quote ->
+                 pillar all move as one vertical stream. */
+              <>
+                <p
+                  className={`font-signature text-white leading-none text-[clamp(3rem,5.6vw,4.5rem)] drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                >
+                  Peace
+                </p>
+                <p
+                  style={{ transitionDelay: phase === 'exiting' ? '0ms' : '60ms' }}
+                  className={`font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[34px] md:leading-snug mt-2 max-w-[520px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                >
+                  is not the absence of storms, but the
+                </p>
+                <p
+                  style={{ transitionDelay: phase === 'exiting' ? '0ms' : '120ms' }}
+                  className={`transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                >
+                  <span className="font-signature text-white leading-none text-[clamp(3.2rem,6vw,5rem)] drop-shadow-md select-none">
+                    Calm
+                  </span>{' '}
+                  <span className="font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[34px] ml-4 align-middle">
+                    within
+                  </span>
+                </p>
+                <p
+                  style={{ transitionDelay: phase === 'exiting' ? '0ms' : '200ms' }}
+                  className={`font-artistic-modern text-white/85 text-sm sm:text-base tracking-wide mt-7 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                >
+                  — Her Holiness Satguru Mata Sudiksha Ji Maharaj
+                </p>
+              </>
+            ) : (
+              <>
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
               id="hero2-script-pillar-name"
@@ -617,6 +676,8 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
                 </svg>
               </button>
             </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -627,6 +688,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
           }`}
         >
           <Hero2OrbitWheel
+            onDevotionalFront={setDevotionalIdx}
             pillars={pillars}
             activeIndex={activeIndex}
             onActiveIndexChange={onActiveIndexChange}

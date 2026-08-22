@@ -10,6 +10,9 @@ interface Hero2OrbitWheelProps {
   isPaused: boolean;
   onCardClick: (index: number) => void;
   onPhotoCardClick?: (leader: DevotionalLeader) => void;
+  /** Fired once whenever a devotional portrait takes (or leaves) the front:
+      the leader's index, or null when a pillar card fronts again. */
+  onDevotionalFront?: (leaderIdx: number | null) => void;
 }
 
 export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
@@ -19,6 +22,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   isPaused,
   onCardClick,
   onPhotoCardClick,
+  onDevotionalFront,
 }) => {
   const totalCards = 6; // 4 pillar cards + 2 devotional photo cards
   const stepAngle = 360 / totalCards; // 60 degrees
@@ -27,7 +31,10 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [reducedMotion, setReducedMotion] = useState<boolean>(false);
 
-  const angleRef = useRef<number>(0);
+  /* Start with the Satguru Mata Sudiksha Ji portrait front (card 4 at -240deg).
+     Forward rotation then walks: Mata -> Rajpita Ji -> Heal -> Enrich ->
+     Empower -> Projects -> back to Mata, looping. */
+  const angleRef = useRef<number>(-240);
   const drumRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationFrameRef = useRef<number | null>(null);
@@ -52,16 +59,29 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   }, []);
 
   // Update active card index based on current wheel angle
+  const lastDevotionalRef = useRef<number | null>(0);
+
   const updateActiveCardFromAngle = useCallback(
     (angle: number) => {
       const positiveAngle = ((-angle % 360) + 360) % 360;
       const index = Math.round(positiveAngle / stepAngle) % totalCards;
-      // If it's one of the 4 pillar cards, notify parent
-      if (index < pillars.length && index !== activeIndex) {
-        onActiveIndexChange(index);
+      if (index < pillars.length) {
+        // Pillar card front
+        if (index !== activeIndex) onActiveIndexChange(index);
+        if (lastDevotionalRef.current !== null) {
+          lastDevotionalRef.current = null;
+          onDevotionalFront?.(null);
+        }
+      } else {
+        // Devotional portrait front — tell the parent which one, once
+        const leaderIdx = index - pillars.length;
+        if (lastDevotionalRef.current !== leaderIdx) {
+          lastDevotionalRef.current = leaderIdx;
+          onDevotionalFront?.(leaderIdx);
+        }
       }
     },
-    [activeIndex, pillars.length, stepAngle, onActiveIndexChange]
+    [activeIndex, pillars.length, stepAngle, onActiveIndexChange, onDevotionalFront]
   );
 
   /* Writes the frame straight to the DOM. Previously every frame called
