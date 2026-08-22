@@ -1,8 +1,16 @@
-name: Deploy to AWS (sncf.elens.in)
+name: Frontend CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
+    paths-ignore:
+      - "backend/**"
+      - "**.md"
+  pull_request:
+    branches: [main, dev]
+    paths-ignore:
+      - "backend/**"
+      - "**.md"
   workflow_dispatch:
 
 permissions:
@@ -10,15 +18,13 @@ permissions:
   contents: read
 
 concurrency:
-  group: deploy-production
-  cancel-in-progress: false
+  group: frontend-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  deploy:
+  # ---------- CI: every push and PR ----------
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://sncf.elens.in
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,6 +43,31 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 3
+
+  # ---------- Deploy: main pushes and manual dispatch ----------
+  deploy:
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://sncf.elens.in
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4

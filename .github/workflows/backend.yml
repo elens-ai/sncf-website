@@ -1,0 +1,71 @@
+name: Backend CI
+
+# The backend does not exist yet. This workflow activates automatically the
+# moment a backend/ directory lands on any branch — until then it never runs
+# (path filters keep it dormant). When the backend's stack is settled, extend
+# the build job and add a deploy job mirroring frontend.yml's OIDC pattern.
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - "backend/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Guard — backend present?
+        id: guard
+        working-directory: .
+        run: |
+          if [ -f backend/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No backend/package.json yet — nothing to build."
+          fi
+
+      - name: Setup Node
+        if: steps.guard.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        if: steps.guard.outputs.present == 'true'
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Lint & typecheck (if configured)
+        if: steps.guard.outputs.present == 'true'
+        run: |
+          npm run lint --if-present
+          npm run typecheck --if-present
+
+      - name: Test (if configured)
+        if: steps.guard.outputs.present == 'true'
+        run: npm test --if-present
+
+      - name: Build (if configured)
+        if: steps.guard.outputs.present == 'true'
+        run: npm run build --if-present
