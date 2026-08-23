@@ -977,3 +977,51 @@ html {
     animation: none;
   }
 }
+
+/* ==========================================================================
+   EVENT CARDS — solid pillar colour with pointer-reactive depth.
+   ========================================================================== */
+.event-card {
+  --mx: 50%;
+  --my: 0%;
+  transform-style: preserve-3d;
+  /* Only the RETURN is transitioned. While the pointer is over the card the
+     tilt is rewritten every frame, and a transition on that would chase a
+     target it never reaches — the same reason the carousel drum carries no
+     transition on its rotation. */
+  transition: transform 550ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 400ms ease;
+  will-change: transform;
+}
+
+.event-card:hover {
+  transition: box-shadow 400ms ease;
+  box-shadow:
+    0 26px 50px -18px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+/* Specular highlight following the cursor. Fades in on hover so a resting
+   card stays flat and only the one being touched lights up. */
+.event-card-sheen {
+  background: radial-gradient(
+    62% 62% at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.34) 0%,
+    rgba(255, 255, 255, 0.1) 34%,
+    transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.event-card:hover .event-card-sheen {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-card {
+    transition: none;
+  }
+  .event-card-sheen {
+    display: none;
+  }
+}

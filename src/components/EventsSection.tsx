@@ -1,29 +1,43 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { CalendarPlus, Share2, Check, ArrowUpRight, MapPin, Clock, Infinity as InfinityIcon } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  CalendarPlus,
+  Share2,
+  Check,
+  ArrowUpRight,
+  MapPin,
+  Clock,
+  Infinity as InfinityIcon,
+} from 'lucide-react';
 import { EVENTS, SNCFEvent } from '../data/events';
 import { PILLARS } from '../data/pillars';
 
 /**
  * Upcoming events.
  *
- * The design leans on three things that do actual work rather than decorate:
+ * The cards are solid pillar colour — the same accentA -> accentB ramp the
+ * carousel cards use — so an event reads as belonging to Heal or Empower at a
+ * glance and the screen is built from the palette the wheel already cycles
+ * rather than a second one invented for it.
+ *
+ * Three things carry the interaction:
  *
  *  1. A DATE ENGINE. Annual observances store only month and day; the year is
- *     computed, so 24 April rolls forward the instant it passes. The section
- *     cannot rot into advertising a date that has gone by, which is the usual
- *     fate of a hand-maintained events list.
+ *     computed, so 24 April rolls forward the instant it passes and the list
+ *     cannot rot into advertising a date that has gone.
  *
- *  2. A LIVE COUNTDOWN. "In 43 days", "Tomorrow", "Today" — recomputed on a
- *     timer, so the page is never stale even if it is left open overnight.
+ *  2. A LIVE COUNTDOWN, ticking to the second, in the header. It owns its own
+ *     interval and state so a tick repaints the clock alone, never the grid.
+ *     It sits there rather than on every card because five clocks was five
+ *     times the repaint for one fact, and it pushed the screen 292px past the
+ *     fold; the cards carry a compact label instead.
  *
- *  3. ONE-TAP FOLLOW-THROUGH. Add-to-calendar generates a real .ics in the
- *     browser (no backend, no tracking), and Share uses the native share sheet
- *     where it exists. Interest converts to a calendar entry in one tap, which
- *     is the whole point of an events page.
+ *  3. POINTER-REACTIVE DEPTH. Cards tilt toward the cursor and carry a
+ *     specular highlight that follows it. Both are written straight to the
+ *     node inside one rAF, never through React state: a tilt routed through a
+ *     re-render is a re-render per mousemove.
  *
- * Cards borrow the accents of the pillar each event belongs to, so the screen
- * is colourful without inventing a palette — it is the same one the wheel
- * cycles through.
+ * Add-to-calendar builds a real .ics in the browser and Share uses the native
+ * sheet, so interest converts in one tap.
  */
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -34,28 +48,24 @@ const startOfToday = () => {
   return d;
 };
 
-/** The next time this month/day comes round — this year if still ahead, else next. */
 const nextOccurrence = (month: number, day: number): Date => {
   const today = startOfToday();
   const thisYear = new Date(today.getFullYear(), month - 1, day);
-  return thisYear >= today
-    ? thisYear
-    : new Date(today.getFullYear() + 1, month - 1, day);
+  return thisYear >= today ? thisYear : new Date(today.getFullYear() + 1, month - 1, day);
 };
 
 const daysUntil = (date: Date) =>
   Math.round((date.getTime() - startOfToday().getTime()) / 86_400_000);
 
+const pad = (n: number) => String(n).padStart(2, '0');
+
 const countdownLabel = (days: number) => {
   if (days === 0) return 'Today';
   if (days === 1) return 'Tomorrow';
-  if (days <= 7) return `In ${days} days`;
   if (days <= 60) return `In ${days} days`;
   const weeks = Math.round(days / 7);
   return weeks <= 12 ? `In ${weeks} weeks` : `In ${Math.round(days / 30)} months`;
 };
-
-const pad = (n: number) => String(n).padStart(2, '0');
 
 /** A minimal all-day VEVENT. Built in the browser — no backend, nothing logged. */
 const icsFor = (event: SNCFEvent, date: Date) => {
@@ -66,7 +76,7 @@ const icsFor = (event: SNCFEvent, date: Date) => {
   const escape = (s: string) => s.replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
 
   /* DTSTAMP is when the FILE was made, not when the event is. Stamping it with
-     the event date is a common slip that strict parsers can object to. */
+     the event date is a common slip that strict parsers object to. */
   const now = new Date();
   const dtstamp =
     `${now.getUTCFullYear()}${pad(now.getUTCMonth() + 1)}${pad(now.getUTCDate())}` +
@@ -90,6 +100,69 @@ const icsFor = (event: SNCFEvent, date: Date) => {
   ].join('\r\n');
 };
 
+/* ------------------------------------------------------------------ clock */
+
+const parts = (ms: number) => {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  return {
+    d: Math.floor(s / 86_400),
+    h: Math.floor((s % 86_400) / 3_600),
+    m: Math.floor((s % 3_600) / 60),
+    s: s % 60,
+  };
+};
+
+/**
+ * Ticks in isolation. State lives here rather than in the section so one
+ * second of time costs one card's repaint instead of the whole grid's.
+ */
+const CountdownClock: React.FC<{ target: Date; big?: boolean }> = ({ target, big }) => {
+  const [left, setLeft] = useState(() => target.getTime() - Date.now());
+
+  useEffect(() => {
+    const id = window.setInterval(() => setLeft(target.getTime() - Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [target]);
+
+  const { d, h, m, s } = parts(left);
+  const cells: [string, string][] = [
+    [String(d), 'days'],
+    [pad(h), 'hrs'],
+    [pad(m), 'min'],
+    [pad(s), 'sec'],
+  ];
+
+  return (
+    <div className="flex items-stretch gap-1.5" role="timer" aria-live="off">
+      {cells.map(([value, label]) => (
+        <div
+          key={label}
+          className={`flex-1 rounded-xl bg-black/30 border border-white/20 backdrop-blur-sm text-center ${
+            big ? 'px-2.5 py-2' : 'px-1.5 py-1.5'
+          }`}
+        >
+          <p
+            className={`font-artistic-heading font-bold text-white tabular-nums leading-none ${
+              big ? 'text-[26px]' : 'text-[17px]'
+            }`}
+          >
+            {value}
+          </p>
+          <p
+            className={`uppercase tracking-[0.14em] text-white/65 leading-none mt-1 ${
+              big ? 'text-[10px]' : 'text-[8px]'
+            }`}
+          >
+            {label}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* ------------------------------------------------------------------- card */
+
 interface Resolved {
   event: SNCFEvent;
   date: Date | null;
@@ -101,6 +174,55 @@ interface Resolved {
 const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, featured }) => {
   const { event, date, days, accentA, accentB } = item;
   const [shared, setShared] = useState(false);
+  const cardRef = useRef<HTMLElement | null>(null);
+  const frame = useRef<number | null>(null);
+  const pending = useRef<{ x: number; y: number } | null>(null);
+
+  const reduced =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Tilt + specular highlight, written straight to the node. Routing pointer
+     position through state would re-render the card on every mousemove; this
+     coalesces to one write per frame and React never hears about it. */
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (reduced) return;
+    const el = cardRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    pending.current = { x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height };
+    if (frame.current !== null) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = null;
+      const p = pending.current;
+      const node = cardRef.current;
+      if (!p || !node) return;
+      node.style.transform =
+        `perspective(1000px) rotateX(${((0.5 - p.y) * 7).toFixed(2)}deg) ` +
+        `rotateY(${((p.x - 0.5) * 9).toFixed(2)}deg) translateY(-6px)`;
+      node.style.setProperty('--mx', `${(p.x * 100).toFixed(1)}%`);
+      node.style.setProperty('--my', `${(p.y * 100).toFixed(1)}%`);
+    });
+  };
+
+  const onPointerLeave = () => {
+    if (frame.current !== null) {
+      cancelAnimationFrame(frame.current);
+      frame.current = null;
+    }
+    const el = cardRef.current;
+    if (!el) return;
+    el.style.transform = '';
+    el.style.setProperty('--mx', '50%');
+    el.style.setProperty('--my', '0%');
+  };
+
+  useEffect(
+    () => () => {
+      if (frame.current !== null) cancelAnimationFrame(frame.current);
+    },
+    [],
+  );
 
   const share = async () => {
     const url = `${window.location.origin}/#events-section`;
@@ -114,7 +236,7 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
       setShared(true);
       window.setTimeout(() => setShared(false), 2000);
     } catch {
-      /* dismissed the share sheet, or clipboard denied — nothing to report */
+      /* share sheet dismissed, or clipboard denied — nothing to report */
     }
   };
 
@@ -122,42 +244,50 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
 
   return (
     <article
-      className={`group relative flex flex-col rounded-3xl border border-white/15 bg-black/25 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-white/35 hover:-translate-y-1 ${
-        featured ? 'lg:col-span-2 p-6 sm:p-7' : 'p-5'
+      ref={cardRef}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+      className={`event-card group relative flex flex-col rounded-[26px] overflow-hidden border border-white/25 shadow-xl ${
+        featured ? 'lg:col-span-2 p-4 sm:p-5' : 'p-4 sm:p-5'
       }`}
+      style={{
+        /* Solid pillar colour, the same 158deg ramp the carousel cards use. */
+        background: `linear-gradient(158deg, ${accentA} 0%, ${accentB} 100%)`,
+      }}
     >
-      {/* Pillar-tinted glow, strongest at the corner nearest the date. */}
+      {/* Legibility scrim. White copy has to hold at the pale end of every
+          pillar ramp, and Heal's light green is the worst case. */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-70 group-hover:opacity-100 transition-opacity duration-500"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(120% 90% at 0% 0%, ${accentB}2e 0%, transparent 62%)`,
+          background:
+            'linear-gradient(165deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.6) 100%)',
         }}
       />
 
+      {/* Specular highlight that tracks the pointer. */}
+      <div className="event-card-sheen absolute inset-0 pointer-events-none" />
+
       <div className="relative z-10 flex flex-col h-full">
         <div className="flex items-start justify-between gap-3 mb-4">
-          <span
-            className="text-[10px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-1 rounded-full border"
-            style={{
-              color: accentB,
-              borderColor: `${accentB}59`,
-              backgroundColor: `${accentA}33`,
-            }}
-          >
+          <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-1 rounded-full bg-white/20 border border-white/30 text-white backdrop-blur-sm">
             {event.tag}
           </span>
 
           {event.kind === 'ongoing' ? (
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white/80 px-2.5 py-1 rounded-full bg-white/10 border border-white/20">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-white px-2.5 py-1 rounded-full bg-white/15 border border-white/30">
               <InfinityIcon className="w-3.5 h-3.5" />
               Ongoing
             </span>
           ) : (
+            /* A compact label per card; the ticking clock lives once in the
+               section header. Five clocks was five times the repaint for the
+               same information, and it pushed the screen 292px past the fold. */
             <span
-              className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full border tabular-nums ${
+              className={`inline-flex items-center gap-1.5 text-[11px] font-extrabold px-2.5 py-1 rounded-full tabular-nums ${
                 soon
-                  ? 'text-neutral-900 bg-white border-white countdown-pulse'
-                  : 'text-white/85 bg-white/10 border-white/20'
+                  ? 'text-neutral-900 bg-white border border-white countdown-pulse'
+                  : 'text-white bg-white/15 border border-white/30'
               }`}
             >
               {countdownLabel(days as number)}
@@ -165,34 +295,32 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
           )}
         </div>
 
-        {/* The date, at poster scale. */}
         {event.kind === 'annual' && date ? (
-          <div className="flex items-end gap-3 mb-3">
+          <div className="flex items-end gap-3 mb-4">
             <span
-              className={`font-artistic-heading font-bold text-white leading-[0.85] tabular-nums drop-shadow ${
-                featured ? 'text-[72px] sm:text-[92px]' : 'text-[54px]'
+              className={`font-artistic-heading font-bold text-white leading-[0.82] tabular-nums drop-shadow-lg ${
+                featured ? 'text-[54px] sm:text-[62px]' : 'text-[48px]'
               }`}
             >
               {date.getDate()}
             </span>
             <div className="pb-1.5">
               <p
-                className={`font-artistic-heading font-extrabold tracking-[0.1em] leading-none ${
-                  featured ? 'text-[22px]' : 'text-[16px]'
+                className={`font-artistic-heading font-extrabold text-white tracking-[0.12em] leading-none ${
+                  featured ? 'text-[19px]' : 'text-[15px]'
                 }`}
-                style={{ color: accentB }}
               >
                 {MONTHS[date.getMonth()]}
               </p>
-              <p className="text-[12px] text-white/55 tabular-nums leading-none mt-1">
+              <p className="text-[12px] text-white/70 tabular-nums leading-none mt-1">
                 {date.getFullYear()}
               </p>
             </div>
           </div>
         ) : (
           <p
-            className={`font-dancing-script font-bold text-white leading-none mb-3 drop-shadow ${
-              featured ? 'text-[56px]' : 'text-[40px]'
+            className={`font-dancing-script font-bold text-white leading-none mb-4 drop-shadow-lg ${
+              featured ? 'text-[50px]' : 'text-[38px]'
             }`}
           >
             Join anytime
@@ -200,15 +328,15 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
         )}
 
         <h3
-          className={`font-artistic-heading font-bold text-white leading-tight mb-2 ${
-            featured ? 'text-[24px] sm:text-[28px]' : 'text-[18px]'
+          className={`font-artistic-heading font-bold text-white leading-tight mb-2 drop-shadow ${
+            featured ? 'text-[22px] sm:text-[25px]' : 'text-[18px]'
           }`}
         >
           {event.title}
         </h3>
 
         <p
-          className={`font-artistic-serif text-white/80 leading-relaxed ${
+          className={`font-artistic-serif text-white/90 leading-relaxed ${
             featured ? 'text-[15px] max-w-xl' : 'text-[13px]'
           }`}
         >
@@ -218,13 +346,13 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
         {(event.location || event.time) && (
           <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3">
             {event.location && (
-              <p className="flex items-center gap-1.5 text-[12px] text-white/70">
+              <p className="flex items-center gap-1.5 text-[12px] text-white/85">
                 <MapPin className="w-3.5 h-3.5 flex-none" />
                 {event.location}
               </p>
             )}
             {event.time && (
-              <p className="flex items-center gap-1.5 text-[12px] text-white/70">
+              <p className="flex items-center gap-1.5 text-[12px] text-white/85">
                 <Clock className="w-3.5 h-3.5 flex-none" />
                 {event.time}
               </p>
@@ -232,13 +360,12 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
           </div>
         )}
 
-        {/* Actions pinned to the bottom so cards of different heights line up. */}
         <div className="flex flex-wrap items-center gap-2 mt-auto pt-5">
           {event.kind === 'annual' && date && (
             <a
               href={`data:text/calendar;charset=utf-8,${encodeURIComponent(icsFor(event, date))}`}
               download={`${event.id}.ics`}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-bold text-neutral-900 bg-white hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-bold text-neutral-900 bg-white hover:scale-[1.05] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <CalendarPlus className="w-3.5 h-3.5" />
               Add to calendar
@@ -250,7 +377,7 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
               href={event.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-bold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-bold text-white bg-white/20 border border-white/35 hover:bg-white/30 transition-colors cursor-pointer"
             >
               Take part
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -260,7 +387,7 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
           <button
             onClick={share}
             aria-label={`Share ${event.title}`}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-bold text-white/85 bg-white/5 border border-white/15 hover:bg-white/15 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-bold text-white bg-white/10 border border-white/25 hover:bg-white/25 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
             {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
             {shared ? 'Copied' : 'Share'}
@@ -271,9 +398,21 @@ const EventCard: React.FC<{ item: Resolved; featured?: boolean }> = ({ item, fea
   );
 };
 
+/* ---------------------------------------------------------------- section */
+
+type Filter = 'all' | 'dated' | 'ongoing';
+
+const FILTERS: { id: Filter; label: string }[] = [
+  { id: 'all', label: 'Everything' },
+  { id: 'dated', label: 'Save the date' },
+  { id: 'ongoing', label: 'Join anytime' },
+];
+
 export const EventsSection: React.FC = () => {
-  /* Re-resolved on a timer so a page left open overnight does not keep showing
-     yesterday's countdown. Hourly is plenty for a day-granular count. */
+  const [filter, setFilter] = useState<Filter>('all');
+
+  /* Only the calendar DAY matters for ordering, so this refreshes hourly.
+     The second-by-second work belongs to the clocks, which own it themselves. */
   const [tick, setTick] = useState(0);
   useEffect(() => {
     const id = window.setInterval(() => setTick((t) => t + 1), 3_600_000);
@@ -282,10 +421,8 @@ export const EventsSection: React.FC = () => {
 
   const items = useMemo<Resolved[]>(() => {
     void tick;
-    const accentOf = (id: string) => PILLARS.find((p) => p.id === id);
-
     return EVENTS.map((event) => {
-      const pillar = accentOf(event.pillarId);
+      const pillar = PILLARS.find((p) => p.id === event.pillarId);
       const date =
         event.kind === 'annual' && event.month && event.day
           ? nextOccurrence(event.month, event.day)
@@ -298,7 +435,6 @@ export const EventsSection: React.FC = () => {
         accentB: pillar?.accentB ?? '#6fd19a',
       };
     }).sort((a, b) => {
-      // Dated events first, soonest to furthest; ongoing ones close the list.
       if (a.days === null && b.days === null) return 0;
       if (a.days === null) return 1;
       if (b.days === null) return -1;
@@ -306,16 +442,20 @@ export const EventsSection: React.FC = () => {
     });
   }, [tick]);
 
+  const shown = items.filter((i) =>
+    filter === 'all' ? true : filter === 'dated' ? i.days !== null : i.days === null,
+  );
+
   const next = items.find((i) => i.days !== null);
 
   return (
     <section
       id="events-section"
       aria-label="Upcoming events"
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-16 overflow-hidden"
+      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-10 overflow-hidden"
     >
       <div className="relative z-10 w-full max-w-7xl mx-auto">
-        <header className="mb-6 sm:mb-8 flex flex-wrap items-end justify-between gap-4">
+        <header className="mb-5 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
               What&rsquo;s next
@@ -325,26 +465,64 @@ export const EventsSection: React.FC = () => {
             </h2>
           </div>
 
-          {next && next.days !== null && (
-            <p className="text-[13px] text-white/75">
-              Next up{' '}
-              <span className="font-bold text-white">{next.event.title}</span>
-              {' · '}
-              <span className="tabular-nums">{countdownLabel(next.days).toLowerCase()}</span>
-            </p>
+          {next?.date && (
+            <div className="text-right">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-white/60 mb-1">
+                Next up · {next.event.title}
+              </p>
+              <div className="w-[240px] ml-auto">
+                <CountdownClock target={next.date} />
+              </div>
+            </div>
           )}
         </header>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item, i) => (
-            <EventCard key={item.event.id} item={item} featured={i === 0} />
+        {/* Filter rail. Active chip borrows the live stage accent, so the
+            control belongs to whatever colour the hero is showing. */}
+        <div className="flex flex-wrap gap-2 mb-4" role="group" aria-label="Filter events">
+          {FILTERS.map((f) => {
+            const active = filter === f.id;
+            return (
+              <button
+                key={f.id}
+                onClick={() => setFilter(f.id)}
+                aria-pressed={active}
+                className={`px-4 py-2 rounded-full text-[12px] font-bold transition-all duration-300 cursor-pointer border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
+                  active
+                    ? 'text-neutral-900 bg-white border-white shadow-lg'
+                    : 'text-white/80 bg-white/10 border-white/20 hover:bg-white/20 hover:text-white'
+                }`}
+              >
+                {f.label}
+                <span className={`ml-2 tabular-nums ${active ? 'text-neutral-500' : 'text-white/50'}`}>
+                  {f.id === 'all'
+                    ? items.length
+                    : f.id === 'dated'
+                      ? items.filter((i) => i.days !== null).length
+                      : items.filter((i) => i.days === null).length}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map((item, i) => (
+            <EventCard
+              key={item.event.id}
+              item={item}
+              featured={filter === 'all' && i === 0}
+            />
           ))}
         </div>
 
-        <p className="text-[12px] text-white/55 mt-6 max-w-3xl">
+        <p className="text-[11px] text-white/50 mt-3 max-w-3xl">
           Dates shown are the fixed national and international observances. Venues and
           timings vary by city — the SNCF office confirms what is running near you on{' '}
-          <a href="tel:+911147660380" className="text-white/80 underline underline-offset-4 hover:text-white">
+          <a
+            href="tel:+911147660380"
+            className="text-white/80 underline underline-offset-4 hover:text-white"
+          >
             011-47660380
           </a>
           .
