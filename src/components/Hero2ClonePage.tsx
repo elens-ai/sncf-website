@@ -4,7 +4,7 @@ import { PillarState } from '../types';
 import { Hero2OrbitWheel } from '../components/Hero2OrbitWheel';
 import { SocialSidebar } from '../components/SocialSidebar';
 import { DevotionalLightboxModal } from '../components/DevotionalLightboxModal';
-import { DevotionalLeader } from '../components/DevotionalPhotoCard';
+import { DevotionalLeader, DEVOTIONAL_ACCENT } from '../components/DevotionalPhotoCard';
 import { FoundationIntro } from '../components/FoundationIntro';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { ViewSwitcher, HeroView } from '../components/ViewSwitcher';
@@ -125,9 +125,10 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
   const [devotionalIdx, setDevotionalIdx] = useState<number | null>(0);
   const [displayLeaderIdx, setDisplayLeaderIdx] = useState<number | null>(0);
 
-  /* Serene rose stage while the devotional portraits front — the pillar
-     gradients read as brand verticals; the quote deserves its own mood. */
-  const DEVOTIONAL_ACCENT = { a: '#7d3f66', b: '#c98ab2' };
+  /* Serene rose stage while the devotional portrait fronts — the pillar
+     gradients read as brand verticals; this slide deserves its own mood.
+     Imported, not redeclared, so the stage and the portrait card cannot
+     drift to different colours. */
   const stageAccentA = devotionalIdx !== null ? DEVOTIONAL_ACCENT.a : currentPillar.accentA;
   const stageAccentB = devotionalIdx !== null ? DEVOTIONAL_ACCENT.b : currentPillar.accentB;
 

@@ -18,6 +18,16 @@ export interface DevotionalLeader {
   photoAlt?: string;
 }
 
+/**
+ * Stage mood while a devotional portrait fronts the wheel.
+ *
+ * Lives here, beside the leaders, because BOTH the hero stage gradient and the
+ * portrait card's own background are drawn from it. They were briefly two
+ * separate hex pairs and immediately disagreed — a teal card on a rose stage.
+ * One source, so they cannot drift apart again.
+ */
+export const DEVOTIONAL_ACCENT = { a: '#7d3f66', b: '#c98ab2' };
+
 export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
   {
     id: 'mata-sudiksha-ji',
@@ -29,12 +39,12 @@ export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
     photoUrl: '/images/mataji-rajpita-planting.webp',
     photoAlt:
       'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling',
-    /* Teal, not green. The obvious choice for a tree-planting picture is
-       green, but this card sits directly beside the green Heal card in the
-       wheel order — two greens in a row read as a repeat. Teal keeps the
-       nature reading while staying clear of Heal's emerald, Enrich's blue and
-       Projects' gold, and the leader's amber rim glows against it. */
-    cutout: { a: '#0f6f63', b: '#93d5c6' },
+    /* The card carries the same rose the stage does while this portrait
+       fronts, exactly as each pillar card carries its own pillar's accents.
+       A contrasting card colour made the cut-out look pasted onto the scene
+       rather than part of it; the amber rim and the white highlight are what
+       separate card from stage, not a different hue. */
+    cutout: DEVOTIONAL_ACCENT,
   },
   {
     id: 'rajpita-ramit-ji',
