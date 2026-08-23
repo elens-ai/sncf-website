@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { AnthemPlayer } from './AnthemPlayer';
 import { MainNav } from './MainNav';
 import { PillarState } from '../types';
@@ -25,18 +25,11 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDonate,
   hideLogo = false,
 }) => {
-  // The full search field is revealed only once the user scrolls past the hero;
-  // on the hero itself the control stays collapsed to a single glass orb.
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 80);
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const isExpanded = isScrolled || Boolean(searchQuery);
+  /* The search control stays a single glass orb; scrolling no longer opens it.
+     It expands only when there is a query to show, which comes back from the
+     search modal the orb opens — so the field appears because the visitor
+     searched, never because the page moved under them. */
+  const isExpanded = Boolean(searchQuery);
 
   /* Track line 2 out until it spans exactly the width of line 1.
      Computed rather than hand-tuned: the tracking that matches depends on the
