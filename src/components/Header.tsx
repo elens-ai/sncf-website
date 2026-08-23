@@ -41,8 +41,8 @@ export const Header: React.FC<HeaderProps> = ({
       id="site-header"
       className="fixed top-0 left-0 right-0 z-50 h-[72px] px-4 md:px-8 flex items-center justify-between bg-transparent pointer-events-none"
     >
-      {/* LEFT: Circular White Background Logo (No border/edge) */}
-      <div className="flex items-center pointer-events-auto">
+      {/* LEFT: Logo + wordmark */}
+      <div className="flex items-center gap-3 pointer-events-auto flex-none">
         <button
           id="logo-badge-btn"
           onClick={onOpenDetails}
@@ -59,6 +59,26 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
             referrerPolicy="no-referrer"
           />
+        </button>
+
+        {/* Wordmark. Hidden below md, where the nav's hamburger and the right-hand
+            controls already claim the row — the logo alone carries the identity
+            there. It also fades out with the logo during the splash hand-off so
+            the two never separate. */}
+        <button
+          id="site-wordmark"
+          onClick={onOpenDetails}
+          title="Sant Nirankari Charitable Foundation"
+          className={`hidden md:block text-left leading-[1.12] cursor-pointer bg-transparent border-none p-0 transition-opacity duration-300 ${
+            hideLogo ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <span className="block font-artistic-display text-white text-[13px] lg:text-[14px] font-bold tracking-[0.14em] uppercase drop-shadow-sm">
+            Sant Nirankari
+          </span>
+          <span className="block font-artistic-display text-white/85 text-[10px] lg:text-[11px] font-semibold tracking-[0.2em] uppercase drop-shadow-sm">
+            Charitable Foundation
+          </span>
         </button>
       </div>
 
