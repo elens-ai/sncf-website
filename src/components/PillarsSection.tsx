@@ -5,16 +5,13 @@ import { PillarState } from '../types';
 /**
  * The screen below the hero.
  *
- * Its background is the SAME gradient the hero is showing, because both read
- * --accent-a / --accent-b from :root, which the hero rewrites as the wheel
- * turns. Nothing here holds a colour of its own, so the two screens cannot
- * drift apart — scroll down mid-rotation and the colour continues across the
- * boundary rather than cutting to a different palette.
+ * It paints no background at all. A single .accent-canvas layer behind the
+ * whole document carries the gradient for every screen, so the colour runs
+ * unbroken past the fold and keeps changing with the wheel.
  *
- * The 880ms transition matches the hero stage exactly. The hero animates its
- * own inline copy of the variables over 880ms while :root changes instantly;
- * without an equal transition here, this screen would snap to the new colour
- * while the hero was still easing into it.
+ * It also carried its own dark overlay for a while, which the hero does not
+ * have — that alone put a visible step at the boundary even before the two
+ * gradients were merged. The pillar panels supply their own contrast instead.
  *
  * Content is the four pillars as they already exist in the data — label,
  * headline and the two headline stats — and each panel opens the same detail
@@ -43,12 +40,8 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({
   <section
     id="pillars-section"
     aria-label="Our work"
-    className="accent-canvas snap-screen relative w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-16 overflow-hidden"
+    className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-16 overflow-hidden"
   >
-    {/* Same soft darkening the hero uses, so text contrast survives the lighter
-        end of every pillar gradient. */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/20 to-black/45 pointer-events-none" />
-
     <div className="relative z-10 w-full max-w-7xl mx-auto">
       <header className="mb-8 sm:mb-12">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">

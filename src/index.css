@@ -894,9 +894,15 @@
    PAGE SCROLL — the hero and the screen below it.
    ========================================================================== */
 
-/* Any full-screen panel outside the hero that should wear the hero's current
-   colour. It reads --accent-a/--accent-b from :root, which the hero rewrites
-   as the wheel turns, so it can never hold a stale palette of its own.
+/* THE page background — one layer behind every screen, not a per-section fill.
+
+   Sections used to paint their own copy of this gradient. Two 135deg ramps
+   stacked vertically do not join: the hero finished near --accent-b at its
+   bottom edge exactly as the next screen started again at --accent-a, and that
+   step is the seam. One element spanning the whole document has no such edge.
+
+   It reads --accent-a/--accent-b from :root, which the hero rewrites as the
+   wheel turns, so it can never hold a stale palette of its own.
 
    The transition is what makes the colour CHANGE rather than jump. The hero
    animates its own inline copy of these variables over 880ms while the :root
@@ -906,7 +912,22 @@
    custom property is not interpolatable, and a gradient built from raw colour
    strings cannot be transitioned at all. */
 .accent-canvas {
-  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  /* --stage-angle is published by the hero so the design studio's wipe-angle
+     slider still steers the page-wide gradient now that the hero no longer
+     paints one of its own. */
+  background:
+    /* The left-to-right darkening that keeps white copy legible. It lives HERE,
+       not on the hero, because it is uniform down its height and so ended
+       abruptly at the hero's bottom edge — the screen below was left
+       undarkened and the step showed as a band across the fold. Applied to the
+       page-wide layer it shades both screens identically. */
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.65) 0%,
+      rgba(0, 0, 0, 0.2) 60%,
+      rgba(0, 0, 0, 0.45) 100%
+    ),
+    linear-gradient(var(--stage-angle, 135deg), var(--accent-a), var(--accent-b));
   transition:
     --accent-a 880ms cubic-bezier(0.4, 0, 0.2, 1),
     --accent-b 880ms cubic-bezier(0.4, 0, 0.2, 1);

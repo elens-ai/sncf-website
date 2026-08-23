@@ -77,6 +77,12 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none">
+      {/* ONE gradient for the whole page. Absolute, not fixed, so it spans the
+          full document height and the ramp runs continuously from the top of
+          the hero to the bottom of the last screen — the sections themselves
+          paint nothing, so there is no boundary for a seam to appear at. */}
+      <div className="accent-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
+
       {/* 0. WELCOME SPLASH SCREEN — hands off to the hero via a shared-element
              logo flight into the header. */}
       {isSplashUp && (

@@ -127,11 +127,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const stageAccentA = devotionalIdx !== null ? DEVOTIONAL_ACCENT.a : currentPillar.accentA;
   const stageAccentB = devotionalIdx !== null ? DEVOTIONAL_ACCENT.b : currentPillar.accentB;
 
-  /* Header chrome (ribbon, search ring) follows the stage mood too. */
+  /* The single source for the page's colour. The .accent-canvas backdrop, the
+     header ribbon and the donate panel all read these, so publishing them here
+     is what keeps every surface on the same mood. The wipe angle rides along
+     so the design studio's slider still steers the shared gradient. */
   useEffect(() => {
-    document.documentElement.style.setProperty('--accent-a', stageAccentA);
-    document.documentElement.style.setProperty('--accent-b', stageAccentB);
+    const root = document.documentElement.style;
+    root.setProperty('--accent-a', stageAccentA);
+    root.setProperty('--accent-b', stageAccentB);
   }, [stageAccentA, stageAccentB]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--stage-angle', `${gradientAngle}deg`);
+  }, [gradientAngle]);
 
   const exitTimerRef = useRef<NodeJS.Timeout | null>(null);
   const enterTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -237,30 +245,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <main
       id="hero-clone-stage"
-      className="snap-screen relative w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
-      style={{
-        /* The gradient reads the @property-registered colour variables rather
-           than literal colours. CSS cannot interpolate background-image, so a
-           gradient built from raw strings SNAPS between pillars however long
-           the transition is; registered <color> custom properties DO
-           interpolate, and the gradient repaints from them each frame.
-           880ms == the copy shuttle (380ms exit + 500ms rise), so the stage
-           finishes changing exactly as the new text settles. */
-        ['--accent-a' as string]: stageAccentA,
-        ['--accent-b' as string]: stageAccentB,
-        background: `linear-gradient(${gradientAngle}deg, var(--accent-a), var(--accent-b))`,
-        transition:
-          '--accent-a 880ms cubic-bezier(0.4, 0, 0.2, 1), --accent-b 880ms cubic-bezier(0.4, 0, 0.2, 1)',
-      }}
+      /* No background of its own. The page-wide .accent-canvas layer paints
+         the gradient for every screen at once, so it cannot restart at the
+         fold — two sections each running their own 135deg ramp meant the
+         hero ended near accent-b just as the next screen began again at
+         accent-a, which is the seam. */
+      className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
     >
       {/* 1. LEFT SOCIAL SIDEBAR (Fixed & Vertically Centered) */}
       <SocialSidebar />
 
-      {/* Visual Depth Vignette */}
+      {/* Glow behind the wheel. The left-to-right darkening that used to be
+          layered in here now lives on the page-wide .accent-canvas instead:
+          being uniform down the hero's height, it stopped dead at the hero's
+          bottom edge and drew a band across the fold. This radial glow can
+          stay because it fades to transparent well inside its own bounds, so
+          it contributes nothing at the edge. */}
       <div
         className="absolute inset-0 pointer-events-none transition-opacity duration-700 z-0"
         style={{
-          background: `radial-gradient(circle at 75% 50%, rgba(255,255,255,${glowIntensity * 0.15}) 0%, transparent 60%), linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.45) 100%)`,
+          background: `radial-gradient(circle at 75% 50%, rgba(255,255,255,${glowIntensity * 0.15}) 0%, transparent 60%)`,
         }}
       />
 
