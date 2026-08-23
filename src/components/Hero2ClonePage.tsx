@@ -5,6 +5,7 @@ import { Hero2OrbitWheel } from '../components/Hero2OrbitWheel';
 import { SocialSidebar } from '../components/SocialSidebar';
 import { DevotionalLightboxModal } from '../components/DevotionalLightboxModal';
 import { DevotionalLeader } from '../components/DevotionalPhotoCard';
+import { FoundationIntro } from '../components/FoundationIntro';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { ViewSwitcher, HeroView } from '../components/ViewSwitcher';
 import {
@@ -575,54 +576,30 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
         >
           <div className="w-full flex flex-col">
             {displayLeaderIdx !== null ? (
-              /* DEVOTIONAL QUOTE — shown while the Satguru portraits front.
-                 Same shuttle phases as the pillar copy, so pillar -> quote ->
-                 pillar all move as one vertical stream. The wrapper reserves
-                 the pillar block's height via --pillar-copy-height so, in the centered
-                 column, Peace lands on the same line Heal occupies — without
-                 it the shorter quote block re-centers ~100px lower and the
-                 swap visibly jumps. */
+              /* FOUNDATION INTRO — shown while the Satguru Mata Sudiksha Ji
+                 portrait fronts the wheel. Same shuttle phases as the pillar
+                 copy, so pillar -> intro -> pillar all move as one vertical
+                 stream. The wrapper reserves the pillar block's height via
+                 --pillar-copy-height so, in the centered column, Welcome lands
+                 on the same line Heal occupies — without it the shorter block
+                 re-centers ~100px lower and the swap visibly jumps. */
               <div className="flex flex-col md:min-h-[var(--pillar-copy-height)]">
                 {/* Same class, size and margins as the pillar script names, so
-                    Heal -> Peace (and back) swap in place instead of jumping. */}
+                    Heal -> Welcome (and back) swap in place instead of jumping. */}
                 <p
                   className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
-                  Peace
+                  Welcome
                 </p>
-                <p
+                <div
                   style={{ transitionDelay: phase === 'exiting' ? '0ms' : '60ms' }}
-                  className={`font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px] md:leading-snug mt-1 max-w-[470px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
-                  is not the absence of storms,
-                </p>
-                <p
-                  style={{ transitionDelay: phase === 'exiting' ? '0ms' : '120ms' }}
-                  className={`flex items-baseline gap-3 mt-1 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
-                >
-                  <span className="font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px]">
-                    but the
-                  </span>
-                  {/* Sized as a fixed fraction of the pillar name rather than its own
-                      clamp. Calm is the accent word and Peace the heading, so Calm
-                      must stay the smaller of the two — with independent clamps it
-                      overtook Peace the moment the name was scaled down. */}
-                  <span
-                    className="font-dancing-script font-bold text-white leading-none drop-shadow-md select-none"
-                    style={{ fontSize: 'calc(var(--pillar-name-size) * 0.65)' }}
-                  >
-                    Calm
-                  </span>
-                  <span className="font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px]">
-                    within
-                  </span>
-                </p>
-                <p
-                  style={{ transitionDelay: phase === 'exiting' ? '0ms' : '200ms' }}
-                  className={`font-artistic-modern text-white/85 text-[13px] sm:text-[15px] tracking-wide mt-6 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
-                >
-                  — Her Holiness Satguru Mata Sudiksha Ji Maharaj
-                </p>
+                  {/* Typing starts only once the copy has settled into place —
+                      running it during the shuttle would waste the first third
+                      of the sentence behind a moving, half-faded block. */}
+                  <FoundationIntro active={phase === 'idle'} />
+                </div>
               </div>
             ) : (
               <>

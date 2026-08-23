@@ -793,3 +793,36 @@
     opacity: 0;
   }
 }
+
+/* ==========================================================================
+   FOUNDATION INTRO — the typed line beside the Satguru portrait.
+   ========================================================================== */
+.intro-caret {
+  display: inline-block;
+  width: 2px;
+  height: 0.95em;
+  margin-left: 0.08em;
+  vertical-align: -0.08em;
+  background: rgba(255, 255, 255, 0.92);
+  animation: intro-caret-blink 1s steps(1, end) infinite;
+}
+
+/* Once the sentence is written the caret fades out rather than blinking on
+   under finished copy, which reads as an unfinished form field. */
+.intro-caret-done {
+  animation: none;
+  opacity: 0;
+  transition: opacity 500ms ease-out 350ms;
+}
+
+@keyframes intro-caret-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-caret {
+    animation: none;
+    opacity: 0;
+  }
+}
