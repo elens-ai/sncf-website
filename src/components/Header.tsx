@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnthemPlayer } from './AnthemPlayer';
+import { MainNav } from './MainNav';
 import { PillarState } from '../types';
 
 interface HeaderProps {
@@ -61,8 +62,10 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
       </div>
 
-      {/* Spacer — the centre column is now empty; controls sit together on the right */}
-      <div className="flex-1" />
+      {/* CENTRE: main navigation (Gallery lives in the ribbon on the right) */}
+      <div className="flex-1 flex justify-center min-w-0 px-2">
+        <MainNav />
+      </div>
 
       {/* RIGHT: Anthem toggle + search + Gallery ribbon */}
       <div className="flex items-center gap-2 md:gap-3 pointer-events-auto">
