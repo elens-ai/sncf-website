@@ -6,6 +6,8 @@ import { HeroSection } from './components/HeroSection';
 import { PillarsSection } from './components/PillarsSection';
 import { EventsSection } from './components/EventsSection';
 import { AwardsSection } from './components/AwardsSection';
+import { PartnersSection } from './components/PartnersSection';
+import { SiteFooter } from './components/SiteFooter';
 import { PillarModal } from './components/PillarModal';
 import { SearchModal } from './components/SearchModal';
 import { WelcomeSplashScreen } from './components/WelcomeSplashScreen';
@@ -134,6 +136,13 @@ export default function App() {
 
       {/* 5. AWARDS & RECOGNITIONS */}
       <AwardsSection />
+
+      {/* 6. PARTNERS */}
+      <PartnersSection />
+
+      {/* 7. FOOTER — closes the page. Not a snap target: it is a band, not a
+             screen, and snapping to it would strand the reader on links. */}
+      <SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />
 
       {/* Detail Modal for in-depth pillar exploration */}
       <PillarModal
