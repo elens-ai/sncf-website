@@ -3,6 +3,7 @@ import { PILLARS } from './data/pillars';
 import { PillarState } from './types';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
+import { PillarsSection } from './components/PillarsSection';
 import { PillarModal } from './components/PillarModal';
 import { SearchModal } from './components/SearchModal';
 import { WelcomeSplashScreen } from './components/WelcomeSplashScreen';
@@ -75,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden bg-neutral-950 font-sans select-none">
+    <div className="relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none">
       {/* 0. WELCOME SPLASH SCREEN — hands off to the hero via a shared-element
              logo flight into the header. */}
       {isSplashUp && (
@@ -108,6 +109,16 @@ export default function App() {
         onTogglePause={() => setIsPaused((prev) => !prev)}
         onOpenDetails={handleOpenDetails}
         introActive={!isSplashUp}
+      />
+
+      {/* 3. THE SCREEN BELOW THE HERO. It carries no colour of its own — it
+             reads the same --accent-a/--accent-b the hero publishes, so the
+             gradient continues across the scroll boundary and keeps changing
+             with the wheel. */}
+      <PillarsSection
+        pillars={activePillarsList}
+        activeIndex={activeIndex}
+        onOpenDetails={handleOpenDetails}
       />
 
       {/* Detail Modal for in-depth pillar exploration */}

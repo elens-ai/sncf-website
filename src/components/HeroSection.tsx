@@ -237,7 +237,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <main
       id="hero-clone-stage"
-      className="relative w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
+      className="snap-screen relative w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
       style={{
         /* The gradient reads the @property-registered colour variables rather
            than literal colours. CSS cannot interpolate background-image, so a

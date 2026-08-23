@@ -889,3 +889,53 @@
     animation: none;
   }
 }
+
+/* ==========================================================================
+   PAGE SCROLL — the hero and the screen below it.
+   ========================================================================== */
+
+/* Any full-screen panel outside the hero that should wear the hero's current
+   colour. It reads --accent-a/--accent-b from :root, which the hero rewrites
+   as the wheel turns, so it can never hold a stale palette of its own.
+
+   The transition is what makes the colour CHANGE rather than jump. The hero
+   animates its own inline copy of these variables over 880ms while the :root
+   values change instantly; matching the duration and easing here keeps both
+   screens moving through the same colours at the same moment. It only works
+   because --accent-a/--accent-b are registered with @property — an unregistered
+   custom property is not interpolatable, and a gradient built from raw colour
+   strings cannot be transitioned at all. */
+.accent-canvas {
+  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  transition:
+    --accent-a 880ms cubic-bezier(0.4, 0, 0.2, 1),
+    --accent-b 880ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Full-page feel without trapping anyone.
+
+   `proximity`, not `mandatory`: mandatory forces the viewport to a snap point
+   whenever scrolling settles, so on a short screen — where the pillar grid is
+   taller than the viewport — it fights you for the rows it will not let you
+   rest on. Proximity snaps when you are already near a boundary and otherwise
+   leaves scrolling alone. */
+@media (min-width: 640px) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+}
+
+.snap-screen {
+  scroll-snap-align: start;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+}
