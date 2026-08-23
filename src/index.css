@@ -18,12 +18,17 @@
   --accent-b: #6fd19a;
   /* Card sizing is expressed as a base x a scale, so the design studio slider
      can resize the whole carousel while the responsive bases below still apply.
-     Only the *-base values change per breakpoint; the scale composes on top. */
+     Only the *-base values change per breakpoint; the scale composes on top.
+
+     Card size and orbit radius are scaled TOGETHER by the same factor at every
+     breakpoint. That ratio is what makes the wheel read as a cylinder: shrink
+     the cards alone and the drum turns into six lonely cards on a wide circle;
+     shrink the radius alone and they collide. Keep them locked. */
   --card-scale: 1;
-  --card-w-base: 285px;
-  --card-h-base: 367px;
-  --wheel-radius-base: 323px;
-  --hero2-radius-base: 348px;
+  --card-w-base: 262px;
+  --card-h-base: 338px;
+  --wheel-radius-base: 297px;
+  --hero2-radius-base: 320px;
 
   --card-width: calc(var(--card-w-base) * var(--card-scale));
   --card-height: calc(var(--card-h-base) * var(--card-scale));
@@ -40,19 +45,19 @@
 
 @media (max-width: 1200px) {
   :root {
-    --card-w-base: 236px;
-    --card-h-base: 302px;
-    --wheel-radius-base: 276px;
-    --hero2-radius-base: 306px;
+    --card-w-base: 217px;
+    --card-h-base: 278px;
+    --wheel-radius-base: 254px;
+    --hero2-radius-base: 282px;
   }
 }
 
 @media (max-width: 900px) {
   :root {
-    --card-w-base: 173px;
-    --card-h-base: 222px;
-    --wheel-radius-base: 177px;
-    --hero2-radius-base: 217px;
+    --card-w-base: 159px;
+    --card-h-base: 204px;
+    --wheel-radius-base: 163px;
+    --hero2-radius-base: 200px;
   }
 }
 

@@ -306,9 +306,23 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
        A raised cosine is smooth everywhere (C-infinity), so neither exists. */
     const presence = (1 + Math.cos((worldAngle * Math.PI) / 180)) / 2;
 
-    const SCALE_BACK = 0.78;
-    const SCALE_FRONT = 1.26;
-    const scale = SCALE_BACK + (SCALE_FRONT - SCALE_BACK) * Math.pow(presence, 2.6);
+    /* The front card is NOT magnified: SCALE_FRONT is exactly 1, so a card at
+       dead centre renders at precisely its declared --card-width/--card-height
+       and nothing larger. That alone makes the active card ~21% smaller on
+       screen than the old 1.26 magnification did.
+
+       The exponent moved 2.6 -> 1.15 for the same reason. At 2.6 the curve was
+       deliberately top-heavy: almost all of the growth was crammed into the
+       last few degrees before centre, which IS the zoom being removed. At 1.15
+       the size change is spread evenly around the wheel, so across the +-20deg
+       a card spends as the active one its drawn size varies by ~1% (~2.5% once
+       the 3D perspective is counted) — it holds its size instead of breathing.
+
+       Depth is still carried by scale at the back (0.68), plus opacity and
+       blur, so flattening the front does not flatten the wheel. */
+    const SCALE_BACK = 0.68;
+    const SCALE_FRONT = 1.0;
+    const scale = SCALE_BACK + (SCALE_FRONT - SCALE_BACK) * Math.pow(presence, 1.15);
     // Opacity: 1.0 at front, down to 0.55 at back
     /* A linear falloff left the two cards flanking the front at ~0.85 opacity and
        the rear card at 0.55 showing through it — mid-rotation that reads as three
