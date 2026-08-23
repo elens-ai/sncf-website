@@ -72,7 +72,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
   const [glowIntensity, setGlowIntensity] = useState<number>(0.85);
   const [showMetrics, setShowMetrics] = useState<boolean>(true);
 
-  /* Mirrors clamp(3rem, 5.6vw, 4.75rem) so the studio can report the size the
+  /* Mirrors the .pillar-script-name clamp so the studio can report the size the
      heading is actually rendering at on this screen, not just the multiplier. */
   const [viewportWidth, setViewportWidth] = useState<number>(
     typeof window === 'undefined' ? 1280 : window.innerWidth,
@@ -84,14 +84,14 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Mirrors clamp(3.75rem, 14.7vw, 12.5rem)
+  // Mirrors calc(clamp(3.15rem, 9.8vw, 8.3rem) * --pillar-name-scale)
   const pillarNamePx = Math.round(
-    Math.min(148, Math.max(56, viewportWidth * 0.109)) * pillarNameScale,
+    Math.min(133, Math.max(50, viewportWidth * 0.098)) * pillarNameScale,
   );
 
   // Mirrors the responsive --card-*-base values so the studio can report real px
   const cardBase =
-    viewportWidth <= 900 ? { w: 173, h: 222 } : viewportWidth <= 1200 ? { w: 236, h: 302 } : { w: 285, h: 367 };
+    viewportWidth <= 900 ? { w: 159, h: 204 } : viewportWidth <= 1200 ? { w: 217, h: 278 } : { w: 262, h: 338 };
   const cardPx = `${Math.round(cardBase.w * cardScale)}×${Math.round(cardBase.h * cardScale)}`;
 
   /* Published on :root so Hero 1 — which shares this heading — tracks it too. */
@@ -578,11 +578,11 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
               /* DEVOTIONAL QUOTE — shown while the Satguru portraits front.
                  Same shuttle phases as the pillar copy, so pillar -> quote ->
                  pillar all move as one vertical stream. The wrapper reserves
-                 the pillar block's height (~557px at md+) so, in the centered
+                 the pillar block's height via --pillar-copy-height so, in the centered
                  column, Peace lands on the same line Heal occupies — without
                  it the shorter quote block re-centers ~100px lower and the
                  swap visibly jumps. */
-              <div className="flex flex-col md:min-h-[34.8rem]">
+              <div className="flex flex-col md:min-h-[var(--pillar-copy-height)]">
                 {/* Same class, size and margins as the pillar script names, so
                     Heal -> Peace (and back) swap in place instead of jumping. */}
                 <p
@@ -592,7 +592,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
                 </p>
                 <p
                   style={{ transitionDelay: phase === 'exiting' ? '0ms' : '60ms' }}
-                  className={`font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px] md:leading-snug mt-1 max-w-[520px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px] md:leading-snug mt-1 max-w-[470px] drop-shadow-sm transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
                   is not the absence of storms,
                 </p>
@@ -600,19 +600,19 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
                   style={{ transitionDelay: phase === 'exiting' ? '0ms' : '120ms' }}
                   className={`flex items-baseline gap-3 mt-1 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
-                  <span className="font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px]">
+                  <span className="font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px]">
                     but the
                   </span>
-                  <span className="font-dancing-script font-bold text-white leading-none text-[clamp(3.6rem,7vw,6rem)] drop-shadow-md select-none">
+                  <span className="font-dancing-script font-bold text-white leading-none text-[clamp(3.25rem,6.3vw,5.4rem)] drop-shadow-md select-none">
                     Calm
                   </span>
-                  <span className="font-artistic-serif text-white/95 text-2xl sm:text-3xl md:text-[32px]">
+                  <span className="font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px]">
                     within
                   </span>
                 </p>
                 <p
                   style={{ transitionDelay: phase === 'exiting' ? '0ms' : '200ms' }}
-                  className={`font-artistic-modern text-white/85 text-sm sm:text-base tracking-wide mt-7 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                  className={`font-artistic-modern text-white/85 text-[13px] sm:text-[15px] tracking-wide mt-6 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
                 >
                   — Her Holiness Satguru Mata Sudiksha Ji Maharaj
                 </p>
@@ -632,7 +632,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             <h1
               id="hero2-headline"
               style={{ transitionDelay: phase === 'exiting' ? '70ms' : '60ms' }}
-              className={`${getHeadingFontClass()} text-white text-3xl sm:text-4xl md:text-[44px] md:leading-[52px] mb-4 min-h-[2.4em] drop-shadow-md transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+              className={`${getHeadingFontClass()} text-white text-[27px] sm:text-[32px] md:text-[40px] md:leading-[47px] mb-3.5 min-h-[2.4em] drop-shadow-md transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.headline}
             </h1>
@@ -641,7 +641,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             <p
               id="hero2-body-text"
               style={{ transitionDelay: phase === 'exiting' ? '45ms' : '120ms' }}
-              className={`font-artistic-serif text-white/95 text-lg sm:text-[19px] md:text-[20px] leading-relaxed mb-6 min-h-[6.6em] drop-shadow-sm max-w-[460px] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+              className={`font-artistic-serif text-white/95 text-[16px] sm:text-[17px] md:text-[18px] leading-relaxed mb-5 min-h-[6.6em] drop-shadow-sm max-w-[420px] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.body}
             </p>
@@ -650,18 +650,18 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {showMetrics && (
               <div
                 style={{ transitionDelay: phase === 'exiting' ? '20ms' : '180ms' }}
-                className={`grid grid-cols-2 gap-3 mb-6 p-3.5 rounded-2xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[440px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                className={`grid grid-cols-2 gap-3 mb-5 p-3 rounded-2xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[400px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
               >
                 {displayPillar.stats.slice(0, 2).map((stat, i) => (
                   <div key={i} className="flex flex-col">
-                    <span className="font-artistic-heading text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                    <span className="font-artistic-heading text-[22px] sm:text-[27px] font-bold text-white tracking-tight">
                       <OdometerStatCounter
                         key={`${displayPillar.id}-${i}-${stat.value}`}
                         value={stat.value}
                         duration={1800}
                       />
                     </span>
-                    <span className="font-artistic-serif text-sm text-white/80 font-medium leading-tight">
+                    <span className="font-artistic-serif text-[13px] text-white/80 font-medium leading-tight">
                       {stat.label}
                     </span>
                   </div>
@@ -677,7 +677,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
               <button
                 id={`hero2-learn-more-${displayPillar.id}-btn`}
                 onClick={() => onOpenDetails(displayPillar)}
-                className="font-artistic-modern group relative inline-flex items-center gap-3 px-7 py-3.5 rounded-full text-white font-bold text-sm sm:text-base shadow-xl hover:scale-[1.03] active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-4 focus:ring-white/40 overflow-hidden uppercase tracking-wider"
+                className="font-artistic-modern group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full text-white font-bold text-[13px] sm:text-[15px] shadow-xl hover:scale-[1.03] active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-4 focus:ring-white/40 overflow-hidden uppercase tracking-wider"
                 style={{
                   backgroundColor: displayPillar.accentA,
                   boxShadow: `0 10px 25px -5px ${displayPillar.accentA}88`,
