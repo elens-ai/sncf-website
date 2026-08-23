@@ -73,8 +73,15 @@ export const PILLARS: PillarState[] = [
   {
     id: 'projects',
     label: 'PROJECTS',
-    accentA: '#b8860b',
-    accentB: '#f2cf6b',
+    /* Cyan, taken from the logo's own petals (#6ac8ed). The previous gold was
+       not in the logo at all, and on the wheel Projects sits between Empower
+       (pink) and the devotional rose — purple, the other unused logo colour,
+       lands only 59deg and 45deg from those two and would have read as a third
+       pink-ish card, where cyan sits 142deg and 128deg away. It also fixes a
+       real legibility problem: white text on the old gold scored 3.25 contrast,
+       under the 4.5 AA floor; on this it scores 6.07. */
+    accentA: '#0d6a8c',
+    accentB: '#6ac8ed',
     headline: 'Our flagship projects',
     body: 'Sant Nirankari Health City · Oneness Vann · Watershed Program · Project Amrit — large-scale initiatives turning these three pillars into permanent infrastructure.',
     cardImageAlt: 'Sant Nirankari Health City campus',

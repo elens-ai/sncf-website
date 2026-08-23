@@ -10,6 +10,7 @@ import { SearchModal } from './components/SearchModal';
 import { WelcomeSplashScreen } from './components/WelcomeSplashScreen';
 import { ViewSwitcher, HeroView } from './components/ViewSwitcher';
 import { GalleryModal } from './components/GalleryModal';
+import { DonateModal } from './components/DonateModal';
 import { DevotionalLightboxModal } from './components/DevotionalLightboxModal';
 import { DevotionalLeader } from './components/DevotionalPhotoCard';
 import { Settings } from 'lucide-react';
@@ -27,22 +28,34 @@ export default function App() {
   const [selectedPillarForModal, setSelectedPillarForModal] = useState<PillarState | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState<boolean>(false);
+  const [isDonateOpen, setIsDonateOpen] = useState<boolean>(false);
   const [galleryLeader, setGalleryLeader] = useState<DevotionalLeader | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const activePillarsList = PILLARS;
   const currentPillar = activePillarsList[activeIndex] || activePillarsList[0];
 
-  // Update CSS Custom Properties on document root for dynamic 135deg gradient wipe
+  /* --accent-a/--accent-b must have exactly ONE writer at a time.
+
+     Hero 2 owns them whenever it is mounted, because only it knows whether a
+     devotional portrait or a pillar is currently fronting. This effect is the
+     fallback for the Hero 1 only view, where Hero 2 is unmounted and nothing
+     else would set them.
+
+     Both used to write unconditionally. Child effects run before parent
+     effects, so this one always landed last and won — and the header chrome
+     was painted in the front PILLAR's colour even while Hero 2's stage was the
+     devotional rose. That is the colour mismatch on the intro slide. */
   useEffect(() => {
+    if (activeView !== 'hero1') return;
     document.documentElement.style.setProperty('--accent-a', currentPillar.accentA);
     document.documentElement.style.setProperty('--accent-b', currentPillar.accentB);
-  }, [currentPillar]);
+  }, [currentPillar, activeView]);
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isModalOpen || isSearchOpen || isGalleryOpen || isSplashUp) return;
+      if (isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || isSplashUp) return;
 
       if (e.key === 'ArrowRight') {
         setActiveIndex((prev) => (prev + 1) % activePillarsList.length);
@@ -59,7 +72,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, isSearchOpen, isGalleryOpen, isSplashUp, activePillarsList.length]);
+  }, [isModalOpen, isSearchOpen, isGalleryOpen, isDonateOpen, isSplashUp, activePillarsList.length]);
 
   const handleActiveIndexChange = useCallback((newIndex: number) => {
     setActiveIndex(newIndex);
@@ -100,6 +113,7 @@ export default function App() {
         }}
         onOpenDetails={() => handleOpenDetails(currentPillar)}
         onOpenGallery={() => setIsGalleryOpen(true)}
+        onOpenDonate={() => setIsDonateOpen(true)}
         hideLogo={isSplashUp}
       />
 
@@ -250,6 +264,8 @@ export default function App() {
       />
 
       {/* Gallery Modal */}
+      <DonateModal isOpen={isDonateOpen} onClose={() => setIsDonateOpen(false)} />
+
       <GalleryModal
         isOpen={isGalleryOpen}
         onClose={() => setIsGalleryOpen(false)}

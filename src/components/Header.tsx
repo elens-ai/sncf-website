@@ -10,6 +10,7 @@ interface HeaderProps {
   onSearchChange: (query: string) => void;
   onOpenDetails: () => void;
   onOpenGallery: () => void;
+  onOpenDonate: () => void;
   /** Held invisible (but laid out) while the splash logo flies onto it. */
   hideLogo?: boolean;
 }
@@ -21,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   onOpenDetails,
   onOpenGallery,
+  onOpenDonate,
   hideLogo = false,
 }) => {
   // The full search field is revealed only once the user scrolls past the hero;
@@ -145,12 +147,12 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
       </div>
 
-      {/* CENTRE: main navigation (Gallery lives in the ribbon on the right) */}
+      {/* CENTRE: main navigation (Gallery is the icon button on the right) */}
       <div className="flex-1 flex justify-center min-w-0 px-2">
         <MainNav />
       </div>
 
-      {/* RIGHT: Anthem toggle + search + Gallery ribbon */}
+      {/* RIGHT: Anthem toggle + search + Gallery + Donate ribbon */}
       <div className="flex items-center gap-2 md:gap-3 pointer-events-auto">
         <AnthemPlayer />
         {/* Futuristic morphing search — glass orb on the hero, full field on scroll */}
@@ -225,40 +227,68 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
-        {/* Gallery Ribbon — jumps to the photo gallery. Keeps the accent-tinted
-            flag shape, but the label is now a fixed destination, not the pillar. */}
+        {/* Gallery — icon only. It used to own the ribbon; the ribbon is now the
+            donation call to action, and the main nav deliberately has no Gallery
+            entry, so without this button the gallery would have no way in. */}
         <button
-          id="gallery-ribbon-btn"
+          id="gallery-icon-btn"
           onClick={onOpenGallery}
-          className="relative h-[40px] w-[112px] flex items-center justify-start pl-2.5 pr-5 shadow-md select-none cursor-pointer transition-transform duration-200 hover:scale-[1.04] active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
-          style={{
-            backgroundColor: currentPillar.accentA,
-            clipPath: 'polygon(0 0, 100% 0, 84% 50%, 100% 100%, 0 100%)',
-            transition: 'background-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1)',
-          }}
           title="Open the gallery"
           aria-label="Open the gallery"
+          className="grid place-items-center w-11 h-11 rounded-full bg-white/10 border border-white/25 backdrop-blur-xl text-white/90 hover:bg-white/20 hover:text-white transition-all cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 flex-none"
         >
-          {/* Gallery glyph */}
-          <div className="mr-1.5 text-white flex-shrink-0">
+          <svg
+            className="w-[18px] h-[18px]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="M21 15l-5-5L5 21" />
+          </svg>
+        </button>
+
+        {/* Donation ribbon — the header's one call to action.
+
+            The flag shape is a clip-path, but the WAVE is pure transform. An
+            animated clip-path would repaint the element every frame; the same
+            lesson the splash iris taught. Instead the ribbon is rotated a
+            couple of degrees around its left edge, where a real flag is
+            fastened, so the free end travels and the mast end stays put. */}
+        <button
+          id="donate-ribbon-btn"
+          onClick={onOpenDonate}
+          className="donate-ribbon relative h-[40px] w-[124px] flex items-center justify-start pl-2.5 pr-5 shadow-md select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50"
+          style={{
+            /* Follows the stage mood via the shared variable rather than the
+               front pillar, so it stays in step on the devotional slide too. */
+            backgroundColor: 'var(--accent-a)',
+            clipPath: 'polygon(0 0, 100% 0, 84% 50%, 100% 100%, 0 100%)',
+          }}
+          title="Support the foundation"
+          aria-label="Support the foundation — ways to contribute"
+        >
+          <span className="donate-ribbon-sheen" aria-hidden="true" />
+
+          {/* Heart glyph */}
+          <span className="mr-1.5 text-white flex-shrink-0 donate-ribbon-heart">
             <svg
               className="w-[16px] h-[16px]"
               viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              fill="currentColor"
               aria-hidden="true"
             >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <path d="M21 15l-5-5L5 21" />
+              <path d="M12 20.7l-1.4-1.3C5.4 14.8 2 11.7 2 8.1 2 5.4 4.1 3.3 6.8 3.3c1.5 0 3 .7 3.9 1.9l1.3 1.6 1.3-1.6c.9-1.2 2.4-1.9 3.9-1.9 2.7 0 4.8 2.1 4.8 4.8 0 3.6-3.4 6.7-8.6 11.3L12 20.7z" />
             </svg>
-          </div>
+          </span>
 
           <span className="text-[11px] uppercase font-bold text-white tracking-wider">
-            Gallery
+            Donate
           </span>
         </button>
       </div>

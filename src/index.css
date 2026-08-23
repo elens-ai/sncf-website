@@ -826,3 +826,79 @@
     opacity: 0;
   }
 }
+
+/* ==========================================================================
+   DONATE RIBBON — the header's call to action.
+
+   The flag waves by TRANSFORM only. Animating the clip-path that cuts the
+   swallowtail would repaint the ribbon every frame; rotating it around its
+   left edge is GPU-composited and costs nothing. transform-origin sits at the
+   mast (left, centre) so the notched free end travels furthest, which is how
+   a real pennant moves.
+   ========================================================================== */
+.donate-ribbon {
+  transform-origin: 0% 50%;
+  animation: donate-wave 3.2s ease-in-out infinite;
+  transition: background-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1);
+  will-change: transform;
+}
+
+.donate-ribbon:hover {
+  /* Hover hands control back to the pointer: the wave would fight the lift. */
+  animation-play-state: paused;
+  transform: scale(1.04);
+  transition:
+    transform 200ms ease,
+    background-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1);
+}
+
+.donate-ribbon:active {
+  transform: scale(0.96);
+}
+
+@keyframes donate-wave {
+  0%, 100% { transform: rotate(0deg) skewY(0deg); }
+  28%      { transform: rotate(-1.5deg) skewY(-1.1deg); }
+  55%      { transform: rotate(1.1deg) skewY(0.9deg); }
+  78%      { transform: rotate(-0.5deg) skewY(-0.4deg); }
+}
+
+/* A slow highlight travelling the flag, as light catches moving cloth. */
+.donate-ribbon-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 35%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0) 65%
+  );
+  background-size: 260% 100%;
+  animation: donate-sheen 3.2s ease-in-out infinite;
+}
+
+@keyframes donate-sheen {
+  0%, 100% { background-position: 130% 0; }
+  50%      { background-position: -30% 0; }
+}
+
+.donate-ribbon-heart {
+  display: inline-grid;
+  place-items: center;
+  animation: donate-heartbeat 3.2s ease-in-out infinite;
+}
+
+@keyframes donate-heartbeat {
+  0%, 82%, 100% { transform: scale(1); }
+  88%           { transform: scale(1.18); }
+  94%           { transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donate-ribbon,
+  .donate-ribbon-sheen,
+  .donate-ribbon-heart {
+    animation: none;
+  }
+}

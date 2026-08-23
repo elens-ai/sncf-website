@@ -84,7 +84,7 @@ const MARKS: Record<string, Mark> = {
 
   // PROJECTS — skyline with a health cross
   projects: {
-    color: '#C88A16',
+    color: '#0d6a8c',
     art: (
       <>
         <path d="M2.8 20.4v-8l4-1.4v9.4h-4Z" />

@@ -178,11 +178,13 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
     };
   }, []);
 
-  // Update dynamic CSS variables for background
-  useEffect(() => {
-    document.documentElement.style.setProperty('--accent-a', currentPillar.accentA);
-    document.documentElement.style.setProperty('--accent-b', currentPillar.accentB);
-  }, [currentPillar]);
+  /* NOTE: --accent-a/--accent-b are written in exactly ONE place, the effect
+     above. A second effect here used to write currentPillar's accents to the
+     same two variables. Both ran on every mount, the pillar one was declared
+     later so it ran last and won, and the header chrome was therefore painted
+     in the front PILLAR's colour even while a devotional portrait fronted and
+     the stage was rose. That is the colour mismatch at the intro. Anything
+     needing the current mood should read the vars or stageAccentA/B. */
 
   // Keyboard navigation for the 4 pillars
   useEffect(() => {
