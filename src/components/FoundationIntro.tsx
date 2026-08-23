@@ -35,10 +35,12 @@ const SEGMENTS: Segment[] = [
 
 const FULL_TEXT = SEGMENTS.map((s) => s.text).join('');
 
-/* ~3s to write the whole line, matching the welcome signature. The portrait
-   holds the front for roughly 5s (26s per turn / 5 cards), so the sentence
-   finishes with a beat to spare before the copy shuttles away. */
-const TYPE_MS = 26;
+/* The portrait holds the front for ~5.2s (26s per turn / 5 cards) and typing
+   only starts once the copy has settled, so there are roughly 4.6s to write in.
+   115 characters at 32ms = 3.7s leaves about a second for the signature to
+   fade in and be read before the copy shuttles away. Slower than this and the
+   sentence would still be typing as it leaves. */
+const TYPE_MS = 32;
 
 /** Renders the first `count` characters across the segments. */
 const renderSegments = (count: number) => {
@@ -84,22 +86,30 @@ export const FoundationIntro: React.FC<FoundationIntroProps> = ({ active }) => {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  /* Types once, on the first frame this copy is settled in place.
-     Deliberately NOT reset when `active` goes false again: that happens as the
-     block starts shuttling away, and clearing the text there would blank the
-     sentence mid-fade. The component unmounts when a pillar takes the front,
-     so the next arrival is a fresh mount and starts from zero on its own. */
-  const startedRef = useRef(false);
+  /* Starts the moment this copy is settled in place, and restarts cleanly if
+     the effect is re-run.
 
+     There is deliberately NO "have I already started?" ref here. That guard
+     looks right but breaks under StrictMode, which mounts, tears down and
+     remounts effects: the first run would set the flag and create the timer,
+     the teardown would clear the timer, and the second run would see the flag
+     and bail — leaving the sentence permanently unwritten. It only showed on
+     the very first page load, where the intro mounts with active already true;
+     on later visits it mounts mid-transition, so both runs bailed harmlessly
+     and the bug stayed hidden.
+
+     Guarding on `active` alone is enough, and the early return when inactive
+     must NOT reset the count: `active` drops as the block shuttles away, and
+     clearing the text there would blank the sentence mid-fade. */
   useEffect(() => {
-    if (!active || startedRef.current) return;
-    startedRef.current = true;
+    if (!active) return;
 
     if (reducedMotion) {
       setCount(FULL_TEXT.length);
       return;
     }
 
+    setCount(0);
     const id = window.setInterval(() => {
       setCount((c) => {
         if (c >= FULL_TEXT.length) {
@@ -138,9 +148,21 @@ export const FoundationIntro: React.FC<FoundationIntroProps> = ({ active }) => {
         <span className="sr-only">{FULL_TEXT}</span>
       </p>
 
+      {/* The foundation's motto, signing off the introduction in Brittany
+          Signature — the same face that writes it on the welcome screen, so
+          arriving here reads as a callback rather than a new piece of copy.
+
+          Sized from --pillar-name-size rather than the welcome screen's own
+          clamp: that clamp peaks at 91px, which would make the sign-off larger
+          than the Welcome heading above it and invert the hierarchy. At 0.55 it
+          stays comfortably under the heading at every width and through any
+          future rescale. */}
       <p
-        className="font-artistic-modern text-white/85 text-[13px] sm:text-[15px] tracking-wide mt-6 transition-opacity duration-700"
-        style={{ opacity: done ? 1 : 0 }}
+        className="font-signature text-white leading-none mt-6 drop-shadow-md select-none transition-opacity duration-500"
+        style={{
+          fontSize: 'calc(var(--pillar-name-size) * 0.55)',
+          opacity: done ? 1 : 0,
+        }}
       >
         Service with Humility
       </p>

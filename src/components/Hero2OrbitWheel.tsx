@@ -372,7 +372,11 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
       onBlur={() => setIsHovered(false)}
       tabIndex={0}
       role="region"
-      aria-label="Interactive 6-Card Orbital Carousel with 4 Pillars and 2 Spiritual Portraits"
+      /* Derived, not written out: the counts drifted out of date the moment
+         a card was removed from the wheel. */
+      aria-label={`Interactive ${totalCards}-card orbital carousel with ${pillars.length} pillars and ${WHEEL_LEADERS.length} spiritual ${
+        WHEEL_LEADERS.length === 1 ? 'portrait' : 'portraits'
+      }`}
     >
       {/* 3D Scene Wrapper */}
       <div
@@ -388,14 +392,11 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {/* Subtle Orbital Ring Guide Line in Background */}
-        <div
-          className="absolute w-[640px] h-[640px] rounded-full border border-white/10 pointer-events-none"
-          style={{
-            transform: 'rotateX(65deg) scale(1.15)',
-            boxShadow: '0 0 40px rgba(255,255,255,0.05)',
-          }}
-        />
+        {/* No orbital ring guide here. A 640px circle laid flat with
+            rotateX(65deg) projects to a 903x322 ellipse on screen, and with its
+            40px white box-shadow it read as an oval smear behind the cards
+            rather than as a guide line. The orbit is already legible from the
+            cards' own arc. */}
 
         {/* Central Axis Glow */}
         <div className="absolute w-36 h-36 rounded-full bg-white/15 blur-3xl pointer-events-none" />

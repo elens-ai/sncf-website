@@ -7,9 +7,15 @@ export interface DevotionalLeader {
   avatarTone: string;
   glowColor: string;
   portraitType: 'mata-ji' | 'rajpita-ji';
-  /** Official photograph; when present the card renders it full-bleed
-      instead of the vector portrait. */
+  /** Official photograph; when present the card renders it instead of the
+      vector portrait. */
   photoUrl?: string;
+  /** Set when photoUrl is a cut-out with a transparent background: the card
+      paints this gradient behind it and fits the figure rather than cropping
+      it full-bleed. */
+  cutout?: { a: string; b: string };
+  /** Overrides the alt text when the photograph shows more than the leader. */
+  photoAlt?: string;
 }
 
 export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
@@ -20,7 +26,15 @@ export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
     avatarTone: 'from-amber-500 via-rose-500 to-indigo-900',
     glowColor: '#f59e0b',
     portraitType: 'mata-ji',
-    photoUrl: '/images/satguru-mata-sudiksha-ji.jpg',
+    photoUrl: '/images/mataji-rajpita-planting.webp',
+    photoAlt:
+      'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling',
+    /* Teal, not green. The obvious choice for a tree-planting picture is
+       green, but this card sits directly beside the green Heal card in the
+       wheel order — two greens in a row read as a repeat. Teal keeps the
+       nature reading while staying clear of Heal's emerald, Enrich's blue and
+       Projects' gold, and the leader's amber rim glows against it. */
+    cutout: { a: '#0f6f63', b: '#93d5c6' },
   },
   {
     id: 'rajpita-ramit-ji',
@@ -47,15 +61,40 @@ export const DevotionalPhotoCard: React.FC<DevotionalPhotoCardProps> = ({
   const isMataJi = leader.portraitType === 'mata-ji';
 
   if (leader.photoUrl) {
+    const cut = leader.cutout;
     return (
       <div
-        className={`relative w-full h-full overflow-hidden ${roundedClass} select-none bg-white flex flex-col justify-end`}
+        className={`relative w-full h-full overflow-hidden ${roundedClass} select-none flex flex-col justify-end ${
+          cut ? '' : 'bg-white'
+        }`}
+        style={
+          cut
+            ? { background: `linear-gradient(158deg, ${cut.a} 0%, ${cut.b} 100%)` }
+            : undefined
+        }
       >
+        {cut && (
+          /* Same single soft highlight the pillar cards carry, so the two kinds
+             of card catch the light the same way as they orbit. */
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(120% 80% at 25% 12%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 60%)',
+            }}
+          />
+        )}
         <img
           src={leader.photoUrl}
-          alt={leader.name}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: '50% 18%' }}
+          alt={leader.photoAlt ?? leader.name}
+          /* A cut-out is CONTAINed, never covered: the subject is 0.46 wide to
+             tall against a 0.78 card, so object-cover would slice the sapling
+             off the top or the feet off the bottom. Contained, it sits centred
+             with the gradient showing either side. */
+          className={`absolute inset-0 w-full h-full ${
+            cut ? 'object-contain object-bottom' : 'object-cover'
+          }`}
+          style={cut ? undefined : { objectPosition: '50% 18%' }}
           draggable={false}
         />
       </div>
