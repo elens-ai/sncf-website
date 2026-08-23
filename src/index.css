@@ -641,24 +641,28 @@
    ========================================================================== */
 :root {
   --pillar-name-scale: 1;
-  --pillar-name-size: calc(clamp(3.15rem, 9.8vw, 8.3rem) * var(--pillar-name-scale, 1));
+  --pillar-name-size: calc(clamp(2.7rem, 8.35vw, 7.05rem) * var(--pillar-name-scale, 1));
 
   /* Height of the whole pillar copy block (name + headline + body + metrics +
      CTA). The devotional quote reserves this so "Peace" lands on the same line
      "Heal" occupies instead of re-centering ~100px lower as the wheel swaps.
 
-     It is NOT a fixed number any more. Everything below the name is a fixed
-     size at md+ and measures 25.4rem; only the name is fluid, so the reserve
-     is that constant plus the live name size. Measured against the real block
-     at 900/1280/1440px, the constant came out 406.0/406.1/406.1px — the two
-     blocks now track each other at every width instead of only at the one
-     the old 34.8rem was tuned for. */
-  --pillar-copy-height: calc(25.4rem + var(--pillar-name-size));
+     It is NOT a fixed number. Everything below the name is a fixed size at md+
+     and measures 24.675rem; only the name is fluid, so the reserve is that
+     constant plus the live name size. Re-measured against the real block at
+     1000px and 1440px, the constant came out 394.8px at both — genuinely
+     viewport-independent, so the two blocks track each other at every width
+     instead of only at the one a hardcoded value was tuned for.
+
+     Re-measure this constant whenever anything below the script name changes
+     size — it drifts silently otherwise, and the symptom is Peace landing off
+     Heal's line. */
+  --pillar-copy-height: calc(24.675rem + var(--pillar-name-size));
 }
 
 .pillar-script-name {
-  /* 133px on a wide screen. The floor is lifted rather than scaled by the same
-     factor — a proportional floor would put the name at ~85px on a phone, a
+  /* 113px on a wide screen. The floor is lifted rather than scaled by the same
+     factor — a proportional floor would put the name at ~73px on a phone, a
      quarter of the screen width. */
   font-size: var(--pillar-name-size);
 }

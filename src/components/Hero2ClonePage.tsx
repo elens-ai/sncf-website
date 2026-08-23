@@ -84,9 +84,9 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Mirrors calc(clamp(3.15rem, 9.8vw, 8.3rem) * --pillar-name-scale)
+  // Mirrors calc(clamp(2.7rem, 8.35vw, 7.05rem) * --pillar-name-scale)
   const pillarNamePx = Math.round(
-    Math.min(133, Math.max(50, viewportWidth * 0.098)) * pillarNameScale,
+    Math.min(113, Math.max(43, viewportWidth * 0.0835)) * pillarNameScale,
   );
 
   // Mirrors the responsive --card-*-base values so the studio can report real px
@@ -650,18 +650,18 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             {showMetrics && (
               <div
                 style={{ transitionDelay: phase === 'exiting' ? '20ms' : '180ms' }}
-                className={`grid grid-cols-2 gap-3 mb-5 p-3 rounded-2xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[400px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                className={`grid grid-cols-2 gap-2.5 mb-5 px-3 py-2.5 rounded-xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[360px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
               >
                 {displayPillar.stats.slice(0, 2).map((stat, i) => (
                   <div key={i} className="flex flex-col">
-                    <span className="font-artistic-heading text-[22px] sm:text-[27px] font-bold text-white tracking-tight">
+                    <span className="font-artistic-heading text-[19px] sm:text-[23px] font-bold text-white tracking-tight">
                       <OdometerStatCounter
                         key={`${displayPillar.id}-${i}-${stat.value}`}
                         value={stat.value}
                         duration={1800}
                       />
                     </span>
-                    <span className="font-artistic-serif text-[13px] text-white/80 font-medium leading-tight">
+                    <span className="font-artistic-serif text-[12px] text-white/80 font-medium leading-tight">
                       {stat.label}
                     </span>
                   </div>
