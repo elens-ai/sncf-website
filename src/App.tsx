@@ -4,6 +4,8 @@ import { PillarState } from './types';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { PillarsSection } from './components/PillarsSection';
+import { EventsSection } from './components/EventsSection';
+import { AwardsSection } from './components/AwardsSection';
 import { PillarModal } from './components/PillarModal';
 import { SearchModal } from './components/SearchModal';
 import { WelcomeSplashScreen } from './components/WelcomeSplashScreen';
@@ -126,6 +128,12 @@ export default function App() {
         activeIndex={activeIndex}
         onOpenDetails={handleOpenDetails}
       />
+
+      {/* 4. UPCOMING EVENTS */}
+      <EventsSection />
+
+      {/* 5. AWARDS & RECOGNITIONS */}
+      <AwardsSection />
 
       {/* Detail Modal for in-depth pillar exploration */}
       <PillarModal
