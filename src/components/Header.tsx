@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { AnthemPlayer } from './AnthemPlayer';
 import { MainNav } from './MainNav';
 import { PillarState } from '../types';
@@ -36,6 +36,59 @@ export const Header: React.FC<HeaderProps> = ({
 
   const isExpanded = isScrolled || Boolean(searchQuery);
 
+  /* Track line 2 out until it spans exactly the width of line 1.
+     Computed rather than hand-tuned: the tracking that matches depends on the
+     rendered font, and the display face loads asynchronously — a fixed value
+     would be wrong until it arrives, then wrong again at the lg size step.
+     letter-spacing adds a gap AFTER every character including the last, so the
+     divisor is (n - 1) and the trailing gap is pulled back with a negative
+     margin; otherwise the visible right edge overshoots line 1. */
+  const line1Ref = useRef<HTMLSpanElement | null>(null);
+  const line2Ref = useRef<HTMLSpanElement | null>(null);
+
+  useLayoutEffect(() => {
+    const l1 = line1Ref.current;
+    const l2 = line2Ref.current;
+    if (!l1 || !l2) return;
+
+    const fit = () => {
+      l2.style.letterSpacing = 'normal';
+      l2.style.marginRight = '0px';
+      const target = l1.offsetWidth;
+      const natural = l2.offsetWidth;
+      const n = (l2.textContent ?? '').length;
+      if (n < 2 || target <= natural) return;
+      const spacing = (target - natural) / (n - 1);
+      l2.style.letterSpacing = `${spacing}px`;
+      l2.style.marginRight = `${-spacing}px`;
+    };
+
+    fit();
+    // Re-fit once webfonts land, and whenever the lockup is re-laid out.
+    document.fonts?.ready.then(fit).catch(() => undefined);
+    const ro = new ResizeObserver(fit);
+    ro.observe(l1);
+    return () => ro.disconnect();
+  }, []);
+
+  /* Reveal: each line slides out from behind the logo inside its own clipping
+     row. Pure transform, so it stays cheap, and it only runs once the splash
+     has handed off — hideLogo is still true while the flying logo is in the
+     air, so the wordmark cannot appear mid-flight. */
+  const revealRow = 'block overflow-hidden';
+  const revealInner = (delayMs: number): React.CSSProperties => ({
+    /* inline-block, NOT block: a block child fills its parent, so both lines
+       would measure as the container width and the tracking calculation would
+       compare a box against itself. Shrink-wrapping makes offsetWidth the real
+       text width. */
+    display: 'inline-block',
+    transform: hideLogo ? 'translateX(-102%)' : 'translateX(0)',
+    opacity: hideLogo ? 0 : 1,
+    transition: hideLogo
+      ? 'none'
+      : `transform 760ms cubic-bezier(0.22, 1, 0.3, 1) ${delayMs}ms, opacity 420ms ease-out ${delayMs}ms`,
+  });
+
   return (
     <header
       id="site-header"
@@ -69,15 +122,25 @@ export const Header: React.FC<HeaderProps> = ({
           id="site-wordmark"
           onClick={onOpenDetails}
           title="Sant Nirankari Charitable Foundation"
-          className={`hidden md:block text-left leading-[1.12] cursor-pointer bg-transparent border-none p-0 transition-opacity duration-300 ${
-            hideLogo ? 'opacity-0' : 'opacity-100'
-          }`}
+          className="hidden md:block text-left leading-[1.08] cursor-pointer bg-transparent border-none p-0"
         >
-          <span className="block font-artistic-display text-white text-[13px] lg:text-[14px] font-bold tracking-[0.14em] uppercase drop-shadow-sm">
-            Sant Nirankari
+          <span className={revealRow}>
+            <span
+              ref={line1Ref}
+              style={revealInner(120)}
+              className="font-artistic-display text-white text-[19px] lg:text-[22px] font-extrabold tracking-[0.13em] uppercase drop-shadow-sm whitespace-nowrap"
+            >
+              Sant Nirankari
+            </span>
           </span>
-          <span className="block font-artistic-display text-white/85 text-[10px] lg:text-[11px] font-semibold tracking-[0.2em] uppercase drop-shadow-sm">
-            Charitable Foundation
+          <span className={revealRow}>
+            <span
+              ref={line2Ref}
+              style={revealInner(240)}
+              className="font-artistic-display text-white/85 text-[11px] lg:text-[12.5px] font-semibold uppercase drop-shadow-sm whitespace-nowrap"
+            >
+              Charitable Foundation
+            </span>
           </span>
         </button>
       </div>
