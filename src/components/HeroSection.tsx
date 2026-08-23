@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
-import { Hero2OrbitWheel } from '../components/Hero2OrbitWheel';
+import { HeroOrbitWheel } from '../components/HeroOrbitWheel';
 import { SocialSidebar } from '../components/SocialSidebar';
 import { DevotionalLightboxModal } from '../components/DevotionalLightboxModal';
 import { DevotionalLeader, DEVOTIONAL_ACCENT } from '../components/DevotionalPhotoCard';
 import { FoundationIntro } from '../components/FoundationIntro';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
-import { ViewSwitcher, HeroView } from '../components/ViewSwitcher';
 import {
   Sparkles,
   Settings,
@@ -18,14 +17,12 @@ import {
   Flame,
 } from 'lucide-react';
 
-interface Hero2ClonePageProps {
+interface HeroSectionProps {
   activeIndex: number;
   onActiveIndexChange: (newIndex: number) => void;
   isPaused: boolean;
   onTogglePause: () => void;
   onOpenDetails: (pillar: PillarState) => void;
-  activeView: HeroView;
-  onSelectView: (view: HeroView) => void;
   /** False while the welcome splash is still up; flips true when the hand-off
       lands on the header logo, which is when the content plays its entrance. */
   introActive: boolean;
@@ -43,14 +40,12 @@ export type SacredAuraEffect =
   | 'cosmic-nebula'
   | 'minimal-clean';
 
-export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
+export const HeroSection: React.FC<HeroSectionProps> = ({
   activeIndex,
   onActiveIndexChange,
   isPaused,
   onTogglePause,
   onOpenDetails,
-  activeView,
-  onSelectView,
   introActive,
 }) => {
   // Exactly 4 real pillar content items
@@ -59,7 +54,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
   // Selected spiritual leader for the photo card lightbox modal
   const [selectedPhotoLeader, setSelectedPhotoLeader] = useState<DevotionalLeader | null>(null);
 
-  // Hero2 Live Design Studio Controls
+  // Live design studio controls
   const [isStudioOpen, setIsStudioOpen] = useState<boolean>(false);
   const [fontTheme, setFontTheme] = useState<ArtisticFontTheme>('marcellus-editorial');
   const [auraEffect, setAuraEffect] = useState<SacredAuraEffect>('sacred-mandala');
@@ -68,7 +63,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
      responsive at every setting rather than being pinned to one pixel value. */
   const [pillarNameScale, setPillarNameScale] = useState<number>(1);
   /* Multiplies the responsive card bases, so the carousel resizes as a whole —
-     cards, orbit radius and the Hero 1 wheel all follow from this one value. */
+     cards and orbit radius both follow from this one value. */
   const [cardScale, setCardScale] = useState<number>(1);
   const [glowIntensity, setGlowIntensity] = useState<number>(0.85);
   const [showMetrics, setShowMetrics] = useState<boolean>(true);
@@ -95,7 +90,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
     viewportWidth <= 900 ? { w: 127, h: 163 } : viewportWidth <= 1200 ? { w: 174, h: 222 } : { w: 210, h: 270 };
   const cardPx = `${Math.round(cardBase.w * cardScale)}×${Math.round(cardBase.h * cardScale)}`;
 
-  /* Published on :root so Hero 1 — which shares this heading — tracks it too. */
+  /* Published on :root so the stylesheet's clamp can compose with it. */
   useEffect(() => {
     document.documentElement.style.setProperty(
       '--pillar-name-scale',
@@ -241,7 +236,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
   return (
     <main
-      id="hero2-clone-stage"
+      id="hero-clone-stage"
       className="relative w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
       style={{
         /* The gradient reads the @property-registered colour variables rather
@@ -271,7 +266,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
       {/* 2. TOP-LEFT CELESTIAL RING */}
       <div
-        id="hero2-top-left-celestial-ring"
+        id="hero-top-left-celestial-ring"
         className="celestial-ring absolute -left-[20%] -top-[16%] sm:-left-[12%] sm:-top-[12%] md:-left-[6%] md:-top-[8%] w-[58vh] h-[58vh] max-w-[560px] max-h-[560px] rounded-full border border-white/20 pointer-events-none z-0"
         style={{
           boxShadow: 'inset 0 0 60px rgba(255, 255, 255, 0.05), 0 0 80px rgba(255, 255, 255, 0.08)',
@@ -303,7 +298,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
       {/* 4. FADED WHITE LOTUS HERO BACKGROUND GRAPHICS */}
       <div
-        id="hero2-lotus-watermark"
+        id="hero-lotus-watermark"
         className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
       >
         <img
@@ -318,7 +313,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
       {/* DISCREET SETTINGS TRIGGER (Opens the design studio drawer) */}
       <button
-        id="hero2-settings-trigger"
+        id="hero-settings-trigger"
         onClick={() => setIsStudioOpen(!isStudioOpen)}
         aria-label={isStudioOpen ? 'Close hero settings' : 'Open hero settings'}
         aria-expanded={isStudioOpen}
@@ -340,24 +335,19 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
       {/* EXPANDABLE DESIGN STUDIO DRAWER */}
       {isStudioOpen && (
         <div
-          id="hero2-design-studio-drawer"
+          id="hero-design-studio-drawer"
           className="relative z-30 mb-6 p-4 sm:p-6 rounded-3xl bg-neutral-950/80 backdrop-blur-xl border border-white/20 shadow-2xl text-white animate-fadeIn"
         >
           <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-3 mb-4 pr-12">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400" />
               <h3 className="font-artistic-heading text-base sm:text-lg font-bold tracking-wide">
-                Hero 2 Live Style & Motion Customizer
+                Live Style &amp; Motion Customizer
               </h3>
             </div>
             <span className="text-xs text-neutral-400">
-              Interactive design adjustments for the 6-orbit carousel
+              Interactive design adjustments for the orbit carousel
             </span>
-          </div>
-
-          {/* Hero page selector (moved out of the site header) */}
-          <div className="mb-4 pb-4 border-b border-white/10">
-            <ViewSwitcher activeView={activeView} onSelectView={onSelectView} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -402,7 +392,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
               </label>
               <div className="flex items-center gap-3">
                 <input
-                  id="hero2-pillar-name-size"
+                  id="hero-pillar-name-size"
                   type="range"
                   min="0.6"
                   max="2"
@@ -436,7 +426,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
               </label>
               <div className="flex items-center gap-3">
                 <input
-                  id="hero2-card-size"
+                  id="hero-card-size"
                   type="range"
                   min="0.6"
                   max="1.6"
@@ -562,7 +552,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
         </div>
       )}
 
-      {/* MAIN HERO 2 CONTENT GRID */}
+      {/* MAIN HERO CONTENT GRID */}
       <div
         /* Left padding clears the fixed social rail (which only shows at md+),
            so the editorial copy never crowds the icons. */
@@ -608,7 +598,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
               <>
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
-              id="hero2-script-pillar-name"
+              id="hero-script-pillar-name"
               style={{ transitionDelay: phase === 'exiting' ? '90ms' : '0ms' }}
               className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
@@ -617,7 +607,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
             {/* 2. Main Headline (Delay: 50ms) */}
             <h1
-              id="hero2-headline"
+              id="hero-headline"
               style={{ transitionDelay: phase === 'exiting' ? '70ms' : '60ms' }}
               className={`${getHeadingFontClass()} text-white text-[27px] sm:text-[32px] md:text-[40px] md:leading-[47px] mb-3.5 min-h-[2.4em] drop-shadow-md transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
@@ -626,7 +616,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
 
             {/* 3. Body Copy (Delay: 100ms) */}
             <p
-              id="hero2-body-text"
+              id="hero-body-text"
               style={{ transitionDelay: phase === 'exiting' ? '45ms' : '120ms' }}
               className={`font-artistic-serif text-white/95 text-[16px] sm:text-[17px] md:text-[18px] leading-relaxed mb-5 min-h-[6.6em] drop-shadow-sm max-w-[420px] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
@@ -662,7 +652,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
               className={`flex flex-wrap items-center gap-3 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               <button
-                id={`hero2-learn-more-${displayPillar.id}-btn`}
+                id={`hero-learn-more-${displayPillar.id}-btn`}
                 onClick={() => onOpenDetails(displayPillar)}
                 className="font-artistic-modern group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full text-white font-bold text-[13px] sm:text-[15px] shadow-xl hover:scale-[1.03] active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-4 focus:ring-white/40 overflow-hidden uppercase tracking-wider"
                 style={{
@@ -693,7 +683,7 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
             introActive ? 'hero-intro-bloom' : 'hero-intro-waiting'
           }`}
         >
-          <Hero2OrbitWheel
+          <HeroOrbitWheel
             onDevotionalFront={setDevotionalIdx}
             pillars={pillars}
             activeIndex={activeIndex}

@@ -7,7 +7,7 @@ import { DevotionalPhotoCard, DEVOTIONAL_LEADERS, DevotionalLeader } from './Dev
     array identity is stable across renders. */
 const WHEEL_LEADERS = DEVOTIONAL_LEADERS.filter((l) => l.id === 'mata-sudiksha-ji');
 
-interface Hero2OrbitWheelProps {
+interface HeroOrbitWheelProps {
   pillars: PillarState[]; // 4 pillars: HEAL, ENRICH, EMPOWER, PROJECTS
   activeIndex: number; // 0..3 for active pillar
   onActiveIndexChange: (index: number) => void;
@@ -19,7 +19,7 @@ interface Hero2OrbitWheelProps {
   onDevotionalFront?: (leaderIdx: number | null) => void;
 }
 
-export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
+export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
   pillars,
   activeIndex,
   onActiveIndexChange,
@@ -110,7 +110,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
         const st = getCardTransformState(i, angle);
         /* Write only what changed. Re-assigning identical style strings still
            costs style recalculation across six cards every frame. */
-        const nextTransform = `rotateY(${i * stepAngle}deg) translateZ(var(--hero2-radius, 408px)) scale(${st.scale.toFixed(4)})`;
+        const nextTransform = `rotateY(${i * stepAngle}deg) translateZ(var(--hero-radius, 408px)) scale(${st.scale.toFixed(4)})`;
         if (el.style.transform !== nextTransform) el.style.transform = nextTransform;
 
         const nextOpacity = st.opacity.toFixed(3);
@@ -364,7 +364,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
 
   return (
     <div
-      id="hero2-orbit-wheel-container"
+      id="hero-orbit-wheel-container"
       className="relative flex flex-col items-center justify-center w-full max-w-[880px] py-0"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -380,7 +380,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
     >
       {/* 3D Scene Wrapper */}
       <div
-        id="hero2-orbit-3d-stage"
+        id="hero-orbit-3d-stage"
         className={`relative w-[420px] h-[400px] sm:w-[580px] sm:h-[500px] md:w-[720px] md:h-[580px] xl:w-[800px] xl:h-[620px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none ${
           isDragging ? 'cursor-grabbing' : ''
         }`}
@@ -403,7 +403,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
 
         {/* The 3D Wheel Drum for 6 Cards */}
         <div
-          id="hero2-orbit-drum"
+          id="hero-orbit-drum"
           ref={drumRef}
           className="relative w-full h-full flex items-center justify-center will-change-transform"
           style={{
@@ -427,7 +427,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
                 ref={(el) => {
                   cardRefs.current[i] = el;
                 }}
-                id={`hero2-orbit-pillar-card-${pillar.id}`}
+                id={`hero-orbit-pillar-card-${pillar.id}`}
                 onClick={() => onCardClick(i)}
                 className="absolute flex items-center justify-center transition-[box-shadow] duration-300 cursor-pointer"
                 style={{
@@ -435,7 +435,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
                   height: 'var(--card-height, 344px)',
                   transform: reducedMotion
                     ? 'none'
-                    : `rotateY(${i * stepAngle}deg) translateZ(var(--hero2-radius, 408px)) scale(${cardState.scale})`,
+                    : `rotateY(${i * stepAngle}deg) translateZ(var(--hero-radius, 408px)) scale(${cardState.scale})`,
                   opacity: reducedMotion ? (isCurrentActive ? 1 : 0.4) : cardState.opacity,
                   filter: reducedMotion ? 'none' : `blur(${cardState.blur}px)`,
                   zIndex: cardState.zIndex,
@@ -483,7 +483,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
                 ref={(el) => {
                   cardRefs.current[cardIndex] = el;
                 }}
-                id={`hero2-orbit-photo-card-${leader.id}`}
+                id={`hero-orbit-photo-card-${leader.id}`}
                 onClick={() => onPhotoCardClick?.(leader)}
                 className="absolute flex items-center justify-center transition-[box-shadow] duration-300 cursor-pointer"
                 style={{
@@ -491,7 +491,7 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
                   height: 'var(--card-height, 344px)',
                   transform: reducedMotion
                     ? 'none'
-                    : `rotateY(${cardIndex * stepAngle}deg) translateZ(var(--hero2-radius, 408px)) scale(${cardState.scale})`,
+                    : `rotateY(${cardIndex * stepAngle}deg) translateZ(var(--hero-radius, 408px)) scale(${cardState.scale})`,
                   opacity: reducedMotion ? 0.9 : cardState.opacity,
                   filter: reducedMotion ? 'none' : `blur(${cardState.blur}px)`,
                   zIndex: cardState.zIndex,

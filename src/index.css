@@ -22,18 +22,16 @@
 
      Card size and orbit radius are scaled TOGETHER by the same factor at every
      breakpoint. That ratio is what makes the wheel read as a cylinder: shrink
-     the cards alone and the drum turns into six lonely cards on a wide circle;
+     the cards alone and the drum turns into lonely cards adrift on a wide circle;
      shrink the radius alone and they collide. Keep them locked. */
   --card-scale: 1;
   --card-w-base: 210px;
   --card-h-base: 270px;
-  --wheel-radius-base: 238px;
-  --hero2-radius-base: 256px;
+  --hero-radius-base: 256px;
 
   --card-width: calc(var(--card-w-base) * var(--card-scale));
   --card-height: calc(var(--card-h-base) * var(--card-scale));
-  --wheel-radius: calc(var(--wheel-radius-base) * var(--card-scale));
-  --hero2-radius: calc(var(--hero2-radius-base) * var(--card-scale));
+  --hero-radius: calc(var(--hero-radius-base) * var(--card-scale));
   --heal: #23a873;
   --heal-deep: #1c8a5f;
   --leaf-outer: #2f8f5c;
@@ -47,8 +45,7 @@
   :root {
     --card-w-base: 174px;
     --card-h-base: 222px;
-    --wheel-radius-base: 203px;
-    --hero2-radius-base: 226px;
+    --hero-radius-base: 226px;
   }
 }
 
@@ -56,18 +53,8 @@
   :root {
     --card-w-base: 127px;
     --card-h-base: 163px;
-    --wheel-radius-base: 130px;
-    --hero2-radius-base: 160px;
+    --hero-radius-base: 160px;
   }
-}
-
-/* Hero Stage Dynamic Diagonal Gradient with 1000ms calm cubic-bezier transition */
-.hero-canvas-bg {
-  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
-  transition: --accent-a 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
-              --accent-b 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
-              background 1000ms cubic-bezier(0.45, 0.05, 0.25, 1),
-              background-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1);
 }
 
 .pillar-color-wash {
@@ -636,7 +623,7 @@
 /* ==========================================================================
    PILLAR SCRIPT NAME ("Heal" / "Enrich" / "Empower" / "Projects")
    Fluid size: scales continuously with the viewport instead of jumping at
-   breakpoints. --pillar-name-scale is driven by the Hero 2 design studio and
+   breakpoints. --pillar-name-scale is driven by the design studio and
    multiplies the fluid base, so the control and the responsiveness compose.
    ========================================================================== */
 :root {

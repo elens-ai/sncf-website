@@ -55,7 +55,7 @@ export const SocialSidebar: React.FC = () => {
 
   return (
     <aside
-      id="hero2-social-sidebar"
+      id="hero-social-sidebar"
       aria-label="Social Media Connections"
       /* left-[38px] centres the 40px icon column on x=58 — the same vertical axis as
          the 52px header logo (32px inset + 26px radius), so logo and icons read as

@@ -102,7 +102,14 @@ export const PILLARS: PillarState[] = [
   }
 ];
 
-export const HERO2_PILLARS: PillarState[] = [
+/**
+ * PILLARS plus the two programme cards (Amrit, Oneness).
+ *
+ * Not rendered anywhere today — the wheel runs on PILLARS — but kept because
+ * CardIllustration still carries marks for both. Renamed off the old "HERO2"
+ * prefix, which described a hero variant that no longer exists.
+ */
+export const EXTENDED_PILLARS: PillarState[] = [
   ...PILLARS,
   {
     id: 'amrit',
