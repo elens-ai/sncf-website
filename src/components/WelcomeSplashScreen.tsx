@@ -16,7 +16,10 @@ interface ExitGeometry {
   radius: number;
 }
 
-const HOLD_MS = 4000; // signature finishes ~3.35s (0.35s delay + 3s write), then a beat to read it
+/* Signature finishes ~3.35s (0.35s delay + 3s write); the shine sweep then
+   runs 3.45s -> 4.45s. Holding to 4700ms lets the glint finish and leaves a
+   beat before the hand-off — at the old 4000ms the sweep was cut mid-travel. */
+const HOLD_MS = 4700;
 const EXIT_MS = 1050;
 /* The hand-off starts this long BEFORE touchdown: the header logo is revealed
    and the flying copy begins fading while still gliding its last few pixels.
@@ -266,6 +269,20 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
               className="font-signature pb-4 leading-[1.15] whitespace-nowrap"
               style={{
                 color: 'var(--sncf-tagline)',
+                fontSize: 'clamp(1.75rem, 7.1vw, 91px)',
+                wordSpacing: '0.26em',
+              }}
+            >
+              Service with Humility
+            </p>
+
+            {/* Glint layer: the same text, same metrics, sitting exactly over
+                the original with the sweep clipped to the glyphs. aria-hidden
+                so the tagline is not announced twice. */}
+            <p
+              aria-hidden="true"
+              className="tagline-shine font-signature pb-4 leading-[1.15] whitespace-nowrap"
+              style={{
                 fontSize: 'clamp(1.75rem, 7.1vw, 91px)',
                 wordSpacing: '0.26em',
               }}
