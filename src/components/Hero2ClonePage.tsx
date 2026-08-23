@@ -84,14 +84,14 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // Mirrors calc(clamp(2.7rem, 8.35vw, 7.05rem) * --pillar-name-scale)
+  // Mirrors calc(clamp(1.725rem, 5.325vw, 4.5rem) * --pillar-name-scale)
   const pillarNamePx = Math.round(
-    Math.min(113, Math.max(43, viewportWidth * 0.0835)) * pillarNameScale,
+    Math.min(72, Math.max(28, viewportWidth * 0.05325)) * pillarNameScale,
   );
 
   // Mirrors the responsive --card-*-base values so the studio can report real px
   const cardBase =
-    viewportWidth <= 900 ? { w: 159, h: 204 } : viewportWidth <= 1200 ? { w: 217, h: 278 } : { w: 262, h: 338 };
+    viewportWidth <= 900 ? { w: 127, h: 163 } : viewportWidth <= 1200 ? { w: 174, h: 222 } : { w: 210, h: 270 };
   const cardPx = `${Math.round(cardBase.w * cardScale)}×${Math.round(cardBase.h * cardScale)}`;
 
   /* Published on :root so Hero 1 — which shares this heading — tracks it too. */
@@ -603,7 +603,14 @@ export const Hero2ClonePage: React.FC<Hero2ClonePageProps> = ({
                   <span className="font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px]">
                     but the
                   </span>
-                  <span className="font-dancing-script font-bold text-white leading-none text-[clamp(3.25rem,6.3vw,5.4rem)] drop-shadow-md select-none">
+                  {/* Sized as a fixed fraction of the pillar name rather than its own
+                      clamp. Calm is the accent word and Peace the heading, so Calm
+                      must stay the smaller of the two — with independent clamps it
+                      overtook Peace the moment the name was scaled down. */}
+                  <span
+                    className="font-dancing-script font-bold text-white leading-none drop-shadow-md select-none"
+                    style={{ fontSize: 'calc(var(--pillar-name-size) * 0.65)' }}
+                  >
                     Calm
                   </span>
                   <span className="font-artistic-serif text-white/95 text-[21px] sm:text-[26px] md:text-[29px]">

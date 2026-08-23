@@ -131,6 +131,9 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
   roundedClass = 'rounded-[18px]',
 }) => {
   const mark = MARKS[pillar.id] ?? MARKS.oneness;
+  /* Pillar labels are stored upper-case ("HEAL"); the script face wants the
+     same title case the hero uses. Per word, so "PROJECT AMRIT" survives. */
+  const scriptLabel = pillar.label.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
     <div
@@ -148,11 +151,16 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
         }}
       />
 
-      {/* Vertical mark on a pale disc, as in the supplied artwork. The card
-          carries no text — the pillar is named in the hero copy alongside it,
-          so the mark is left to speak on its own. */}
-      <div className="relative w-full flex items-center justify-center">
-        <div className="relative grid place-items-center w-[62%] aspect-square rounded-full bg-white/95 shadow-sm overflow-hidden">
+      {/* Vertical mark on a pale disc, as in the supplied artwork, with the
+          pillar name beneath it.
+
+          The label is sized from --card-width rather than a fixed px value, so
+          it shrinks with the card at every breakpoint and with the studio's
+          size slider. A fixed size would be right on the 262px desktop card
+          and far too heavy on the 159px one. The card's own transform scale
+          then rides on top, so the text stays in proportion as it orbits. */}
+      <div className="relative w-full flex flex-col items-center justify-center">
+        <div className="relative grid place-items-center w-[56%] aspect-square rounded-full bg-white/95 shadow-sm overflow-hidden">
           {mark.img ? (
             /* The artwork carries its own pale disc; the circular container
                clips the square's white corners so it sits on the gradient. */
@@ -178,6 +186,21 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
             </svg>
           )}
         </div>
+
+        {/* Dancing Script, matching the hero's pillar name. No uppercase and no
+            letter-spacing: a script face joins its letters, and both would
+            break those joins apart. It is set larger than a sans label would
+            be (0.16 vs 0.105 of the card) because Dancing Script's small
+            x-height reads noticeably smaller at the same nominal size. */}
+        <span
+          className="font-dancing-script font-bold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] whitespace-nowrap leading-none"
+          style={{
+            fontSize: 'calc(var(--card-width, 210px) * 0.16)',
+            marginTop: 'calc(var(--card-width, 210px) * 0.055)',
+          }}
+        >
+          {scriptLabel}
+        </span>
       </div>
 
     </div>

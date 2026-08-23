@@ -3,6 +3,10 @@ import { PillarState } from '../types';
 import { CardIllustration } from './CardIllustration';
 import { DevotionalPhotoCard, DEVOTIONAL_LEADERS, DevotionalLeader } from './DevotionalPhotoCard';
 
+/** Only Satguru Mata Sudiksha Ji rides the wheel. Hoisted to module scope so the
+    array identity is stable across renders. */
+const WHEEL_LEADERS = DEVOTIONAL_LEADERS.filter((l) => l.id === 'mata-sudiksha-ji');
+
 interface Hero2OrbitWheelProps {
   pillars: PillarState[]; // 4 pillars: HEAL, ENRICH, EMPOWER, PROJECTS
   activeIndex: number; // 0..3 for active pillar
@@ -24,20 +28,21 @@ export const Hero2OrbitWheel: React.FC<Hero2OrbitWheelProps> = ({
   onPhotoCardClick,
   onDevotionalFront,
 }) => {
-  /* Both spiritual guides ride the wheel with their official photographs.
-     6 cards -> 60-degree steps. */
-  const WHEEL_LEADERS = DEVOTIONAL_LEADERS;
+  /* 5 cards -> 72-degree steps. Rajpita Ji's card was removed from the wheel on
+     request; the portrait stays in DEVOTIONAL_LEADERS so the Gallery still
+     shows both guides. */
   const totalCards = 4 + WHEEL_LEADERS.length;
-  const stepAngle = 360 / totalCards; // 60 degrees
+  const stepAngle = 360 / totalCards; // 72 degrees
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [reducedMotion, setReducedMotion] = useState<boolean>(false);
 
-  /* Start with the Satguru Mata Sudiksha Ji portrait front (card 4 at -240deg
-     with 60-degree steps). Forward rotation then walks: Mata Ji -> Rajpita Ji
-     -> Heal -> Enrich -> Empower -> Projects -> back to Mata Ji, looping. */
-  const angleRef = useRef<number>(-240);
+  /* Start with the Satguru Mata Sudiksha Ji portrait front. She is card index 4,
+     so the wheel must sit at -(4 * stepAngle) = -288deg with 72-degree steps.
+     Forward rotation then walks: Mata Ji -> Heal -> Enrich -> Empower ->
+     Projects -> back to Mata Ji, looping. */
+  const angleRef = useRef<number>(-288);
   const drumRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationFrameRef = useRef<number | null>(null);

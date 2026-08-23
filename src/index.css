@@ -25,10 +25,10 @@
      the cards alone and the drum turns into six lonely cards on a wide circle;
      shrink the radius alone and they collide. Keep them locked. */
   --card-scale: 1;
-  --card-w-base: 262px;
-  --card-h-base: 338px;
-  --wheel-radius-base: 297px;
-  --hero2-radius-base: 320px;
+  --card-w-base: 210px;
+  --card-h-base: 270px;
+  --wheel-radius-base: 238px;
+  --hero2-radius-base: 256px;
 
   --card-width: calc(var(--card-w-base) * var(--card-scale));
   --card-height: calc(var(--card-h-base) * var(--card-scale));
@@ -45,19 +45,19 @@
 
 @media (max-width: 1200px) {
   :root {
-    --card-w-base: 217px;
-    --card-h-base: 278px;
-    --wheel-radius-base: 254px;
-    --hero2-radius-base: 282px;
+    --card-w-base: 174px;
+    --card-h-base: 222px;
+    --wheel-radius-base: 203px;
+    --hero2-radius-base: 226px;
   }
 }
 
 @media (max-width: 900px) {
   :root {
-    --card-w-base: 159px;
-    --card-h-base: 204px;
-    --wheel-radius-base: 163px;
-    --hero2-radius-base: 200px;
+    --card-w-base: 127px;
+    --card-h-base: 163px;
+    --wheel-radius-base: 130px;
+    --hero2-radius-base: 160px;
   }
 }
 
@@ -641,7 +641,7 @@
    ========================================================================== */
 :root {
   --pillar-name-scale: 1;
-  --pillar-name-size: calc(clamp(2.7rem, 8.35vw, 7.05rem) * var(--pillar-name-scale, 1));
+  --pillar-name-size: calc(clamp(1.725rem, 5.325vw, 4.5rem) * var(--pillar-name-scale, 1));
 
   /* Height of the whole pillar copy block (name + headline + body + metrics +
      CTA). The devotional quote reserves this so "Peace" lands on the same line
@@ -661,9 +661,9 @@
 }
 
 .pillar-script-name {
-  /* 113px on a wide screen. The floor is lifted rather than scaled by the same
-     factor — a proportional floor would put the name at ~73px on a phone, a
-     quarter of the screen width. */
+  /* 72px above ~1352px wide, where the 4.5rem cap takes over. Below ~518px the
+     1.725rem floor takes over instead: 5.325vw would put the name under 28px
+     there, too small to read as the display element it is. */
   font-size: var(--pillar-name-size);
 }
 
