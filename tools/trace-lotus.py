@@ -6,27 +6,51 @@ lotus-source.png is the lotus cropped out of the foundation's seal. Its five
 figures are separated by white keylines, so a hue classification yields one
 complete mask per figure — no fused-silhouette cutting needed (the white
 watermark version of the mark fuses its blades and cannot be split cleanly).
-Each mask is upscaled 5x, traced by crack-following (chaining the directed
-edges between inside and outside pixels, which cannot oscillate the way
-Moore-neighbour tracing does on one-pixel spurs), Chaikin-smoothed twice to
-melt the pixel staircase, then Douglas-Peucker simplified.
+
+Getting smooth outlines out of a 330px source that will be drawn 1340 units
+wide takes more than upscaling: at 4 units per source pixel the pixel
+staircase is plainly visible, and blurring hard enough to hide it would eat
+the pointed tips.
+
+The staircase is really an information problem — a yes/no mask discards what
+the source already knows. The seal is anti-aliased, so a pixel on the edge of
+a blade is a MIXTURE of that blade's ink and the white behind it, and how far
+it has travelled from white towards the ink says where inside that pixel the
+true edge falls. So each figure's mask is built as a coverage field (that
+projection, per pixel, kept only where this figure is the nearest ink) and
+the field is what gets upscaled and cut at half coverage — recovering the
+edge to a fraction of a source pixel instead of snapping it to pixel corners.
+
+The field is upscaled 8x and lightly blurred, traced by
+crack-following (chaining the directed edges between inside and outside
+pixels, which cannot oscillate the way Moore-neighbour tracing does on
+one-pixel spurs), and then the CONTOUR ITSELF is filtered: a Gaussian along
+the outline erases the staircase, except where a real corner is detected
+(the turn over a short span is sharp), where the original vertex is kept so
+the tips stay tips. The result is simplified and emitted as cubic Beziers,
+not line segments — the curve between vertices is what finally removes the
+faceting a polygon can never lose.
 
 Everything below TRACED is measured from the image. Everything under
 AUTHORED is design intent — edit it here, not in the generated file.
 """
-import json
 import sys
 from collections import deque
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'tools' / 'lotus-source.png'
 TARGET = ROOT / 'src' / 'components' / 'lotusGeometry.ts'
 
-S = 5  # mask upscale factor
+S = 8            # mask upscale factor
+REF = 5          # the scale the viewBox numbers below were fixed at
+BLUR = 0.25 * S  # mask low-pass, upscaled pixels
+SIGMA = 0.7 * S  # contour low-pass along the outline, upscaled pixels
+CORNER_COS = -0.35  # turn sharper than this counts as a corner and is kept
+EPS = 1.6        # simplification tolerance, upscaled pixels (~1 viewBox unit)
 
 # ------------------------------------------------------------------ AUTHORED
 
@@ -50,6 +74,8 @@ PAINT_ORDER = ['indigo', 'purple', 'cyan', 'magenta', 'green']
 # The point every figure converges on, in generated viewBox coordinates. Each
 # petal folds to, and unfolds about, this point.
 BASE = (680, 620)
+OX, OY = 140, 160          # content origin, REF-scale pixels
+VIEW = (1340, 810)
 
 # Bloom windows as fractions of the section's pinned scroll, LEFT TO RIGHT and
 # strictly one at a time: each petal finishes and holds before the next one
@@ -71,6 +97,7 @@ WINDOWS = {
 
 crop = Image.open(SOURCE).convert('RGB')
 W0, H0 = crop.size
+srgb = np.asarray(crop, dtype=float)
 hsv = np.asarray(crop.convert('HSV'), dtype=float)
 hue = hsv[..., 0] * 360 / 255
 sel = (hsv[..., 1] / 255 > 0.25) & (hsv[..., 2] / 255 > 0.25)
@@ -99,14 +126,57 @@ def label8(m):
     return lab, cur
 
 
+WHITE = np.array([255.0, 255.0, 255.0])
+
+
+def coverage(rgb_ink):
+    """Per-pixel ink coverage: how far this pixel has travelled from the
+    white behind the mark towards this figure's ink. 1 inside the blade,
+    0 on the page, and the fraction in between on an anti-aliased edge."""
+    axis = rgb_ink - WHITE
+    return np.clip(((srgb - WHITE) @ axis) / float(axis @ axis), 0, 1)
+
+
+def dilate(m, r):
+    out = m.copy()
+    for _ in range(r):
+        p = np.pad(out, 1, constant_values=False)
+        out = (p[1:-1, 1:-1] | p[:-2, 1:-1] | p[2:, 1:-1]
+               | p[1:-1, :-2] | p[1:-1, 2:])
+    return out
+
+
+def smooth_mask(field):
+    """Coverage field -> soft-edged mask at S times the resolution, cut at
+    half coverage so the boundary lands where the ink half-covers a pixel."""
+    img = (Image.fromarray((field * 255).astype(np.uint8))
+           .resize((W0 * S, H0 * S), Image.BICUBIC)
+           .filter(ImageFilter.GaussianBlur(BLUR)))
+    return np.asarray(img, dtype=np.uint8) > 127
+
+
+def core_colour(comp):
+    """Mean colour of a shape's interior, keylines and anti-aliased rim
+    eroded away so the reading is the ink itself."""
+    core = comp.copy()
+    for _ in range(2):
+        p = np.pad(core, 1, constant_values=False)
+        core = (p[1:-1, 1:-1] & p[:-2, 1:-1] & p[2:, 1:-1]
+                & p[1:-1, :-2] & p[1:-1, 2:])
+    return srgb[core if core.sum() > 20 else comp].mean(axis=0)
+
+
 def trace_boundary(m):
     """Crack-following: the directed edges between inside and outside pixels
     chain into loops. Returns the longest loop as (y, x) vertices."""
     H, W = m.shape
     pad = np.zeros((H + 2, W + 2), dtype=bool)
     pad[1:-1, 1:-1] = m
+    # only edge pixels can contribute cracks — scanning the interior is the
+    # difference between seconds and minutes at this resolution
+    rim = m & ~(pad[:-2, 1:-1] & pad[2:, 1:-1] & pad[1:-1, :-2] & pad[1:-1, 2:])
     edges = {}
-    ys, xs = np.nonzero(m)
+    ys, xs = np.nonzero(rim)
     for y, x in zip(ys.tolist(), xs.tolist()):
         if not pad[y, x + 1]:
             edges[(x, y)] = (x + 1, y)
@@ -129,15 +199,63 @@ def trace_boundary(m):
     return [(y, x) for (x, y) in best]
 
 
-def chaikin(points, rounds=2):
+def relax(points, sigma=SIGMA):
+    """Gaussian low-pass ALONG a closed contour, corners exempted.
+
+    The staircase and the shape live at different frequencies, so filtering
+    the vertex sequence removes the first and leaves the second. Corners are
+    the exception — they are high-frequency on purpose — so vertices whose
+    turn over +/-L is sharp keep their original position, and the blend back
+    to full smoothing is itself ramped so no kink appears at the seam."""
     pts = np.array(points, dtype=float)
-    for _ in range(rounds):
-        a = pts
-        b = np.roll(pts, -1, axis=0)
-        pts = np.empty((len(a) * 2, 2))
-        pts[0::2] = 0.75 * a + 0.25 * b
-        pts[1::2] = 0.25 * a + 0.75 * b
-    return [tuple(p) for p in pts]
+    n = len(pts)
+    r = max(1, int(3 * sigma))
+    k = np.exp(-0.5 * (np.arange(-r, r + 1) / sigma) ** 2)
+    k /= k.sum()
+    idx = (np.arange(n)[:, None] + np.arange(-r, r + 1)[None, :]) % n
+    smoothed = (pts[idx] * k[None, :, None]).sum(axis=1)
+
+    # Corners are found on the SMOOTHED outline and over a span wide enough
+    # to outlast the staircase: measured on the raw contour at a short span,
+    # every pixel step turns a right angle and the whole outline reads as
+    # corner, which exempts it from the very smoothing it needs.
+    L = max(3, int(2.5 * sigma))
+    a = smoothed[(np.arange(n) - L) % n] - smoothed
+    b = smoothed[(np.arange(n) + L) % n] - smoothed
+    cos = ((a * b).sum(1)
+           / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-9))
+    keep = (cos > CORNER_COS).astype(float)          # 1 at corners
+    widx = (np.arange(n)[:, None] + np.arange(-L // 2, L // 2 + 1)[None, :]) % n
+    keep = keep[widx].mean(axis=1)                    # spread the exemption
+    w = np.clip(1 - keep, 0, 1)[:, None]              # 0 at corners, 1 away
+    print(f'    contour {n} pts, {int((w < 0.5).sum())} held as corners',
+          file=sys.stderr)
+    return [tuple(v) for v in pts * (1 - w) + smoothed * w]
+
+
+def bezier_path(points, scale, ox, oy):
+    """Closed Catmull-Rom through the points, written as cubic Beziers.
+
+    Tangents are dropped to zero at corner vertices, so a corner is entered
+    and left along its chords and stays sharp while everything else curves."""
+    pts = np.array([(x * scale - ox, y * scale - oy) for (y, x) in points])
+    n = len(pts)
+    prev = pts[np.arange(n) - 1]
+    nxt = pts[(np.arange(n) + 1) % n]
+    a, b = prev - pts, nxt - pts
+    cos = ((a * b).sum(1)
+           / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-9))
+    sharp = cos > CORNER_COS
+
+    out = [f'M{pts[0][0]:.1f} {pts[0][1]:.1f}']
+    for i in range(n):
+        p0, p1 = pts[i - 1], pts[i]
+        p2, p3 = pts[(i + 1) % n], pts[(i + 2) % n]
+        c1 = p1 if sharp[i] else p1 + (p2 - p0) / 6
+        c2 = p2 if sharp[(i + 1) % n] else p2 - (p3 - p1) / 6
+        out.append(f'C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} '
+                   f'{p2[0]:.1f} {p2[1]:.1f}')
+    return ''.join(out) + 'Z'
 
 
 def dp(points, eps):
@@ -164,7 +282,8 @@ def dp(points, eps):
     return [points[i] for i in idx]
 
 
-figures, dots = {}, []
+# Pass one: find the shapes and read their ink.
+shapes = []
 for cname, (h0, h1) in CLASSES.items():
     lab, n = label8(sel & (hue >= h0) & (hue < h1))
     for cid in range(1, n + 1):
@@ -175,35 +294,76 @@ for cname, (h0, h1) in CLASSES.items():
         ys, xs = np.nonzero(comp)
         if ys.min() == 0 or xs.min() == 0 or ys.max() == H0 - 1 or xs.max() == W0 - 1:
             continue  # the seal's outer ring, clipped by the crop
-        big = np.asarray(
-            Image.fromarray((comp * 255).astype(np.uint8))
-            .resize((W0 * S, H0 * S), Image.LANCZOS), dtype=float) > 127
-        bys, bxs = np.nonzero(big)
-        w, h = bxs.max() - bxs.min(), bys.max() - bys.min()
-        if npx < 700 and max(w, h) / max(1, min(w, h)) < 1.4:
-            dots.append({'cx': float(bxs.mean()), 'cy': float(bys.mean()),
-                         'r': float((w + h) / 4)})
-            continue
-        outer = dp(chaikin(trace_boundary(big)), 2.0)
-        figures[cname] = {'outer': outer,
-                          'centroid': (float(bxs.mean()), float(bys.mean()))}
-        print(f'{cname}: {npx}px, {len(outer)} points', file=sys.stderr)
+        w, h = xs.max() - xs.min(), ys.max() - ys.min()
+        shapes.append({
+            'class': cname, 'comp': comp, 'npx': npx, 'rgb': core_colour(comp),
+            'kind': 'dot' if (npx < 700 and max(w, h) / max(1, min(w, h)) < 1.4)
+                    else 'figure',
+        })
+
+# Pass two: rebuild each shape from its coverage, with every other shape's
+# coverage competing for the same pixels so neighbouring inks cannot bleed
+# across a keyline into each other's edges.
+# Each shape only competes where it actually lies (its own neighbourhood):
+# the teal arch and the teal head share an ink to within 2/255, so a global
+# argmax over colour alone would hand every one of those pixels to whichever
+# came first and leave the other with nothing at all.
+cov = np.stack([np.where(dilate(sh['comp'], 2), coverage(sh['rgb']), 0.0)
+                for sh in shapes])
+owner = cov.argmax(axis=0)
+
+figures, dots = {}, []
+for i, sh in enumerate(shapes):
+    field = np.where(owner == i, cov[i], 0.0)
+    big = smooth_mask(field)
+    bys, bxs = np.nonzero(big)
+    w, h = bxs.max() - bxs.min(), bys.max() - bys.min()
+    if sh['kind'] == 'dot':
+        dots.append({'cx': float(bxs.mean()), 'cy': float(bys.mean()),
+                     'r': float((w + h) / 4), 'rgb': sh['rgb']})
+        continue
+    outer = dp(relax(trace_boundary(big)), EPS)
+    figures[sh['class']] = {
+        'outer': outer, 'rgb': sh['rgb'],
+        'bbox': (float(bxs.min()), float(bys.min()),
+                 float(bxs.max()), float(bys.max())),
+        'centroid': (float(bxs.mean()), float(bys.mean()))}
+    print(f'{sh["class"]}: {sh["npx"]}px source, {len(outer)} points',
+          file=sys.stderr)
 
 missing = set(CLASSES) - set(figures)
 if missing:
     sys.exit(f'figures not found: {sorted(missing)} — check the hue bands')
 
-# Origin: the content's own bounding box, so the viewBox hugs the flower.
-allx = [x for f in figures.values() for _, x in f['outer']] + [d['cx'] - d['r'] for d in dots]
-ally = [y for f in figures.values() for y, _ in f['outer']] + [d['cy'] - d['r'] for d in dots]
-OX, OY = 140, 160  # kept fixed so hand-tuned viewBox numbers stay valid
-VIEW = (1340, 810)
-
-# Dots belong to the figures they float above, left to right.
-dots.sort(key=lambda d: d['cx'])
-dot_of = dict(zip(['magenta', 'purple', 'cyan', 'green'], dots))
+# Each dot belongs to the figure the seal PAINTED it to match, not to the one
+# it happens to float nearest: the heads sit in the gaps between blades, and
+# proximity mis-assigns the right-hand pair (the teal head is a shade nearer
+# the gold crescent than the teal arch whose colour it exactly shares). Ink is
+# unambiguous where geometry is not — three of the four match their figure to
+# within 8/255, and the odd one out, a lighter sky blue, falls to the figure
+# left over: the centre, which the seal gives no head of its own tone. The
+# gold crescent ends up headless, as it is in the seal.
+pairs = sorted(((float(np.linalg.norm(d['rgb'] - f['rgb'])), i, c)
+                for i, d in enumerate(dots) for c, f in figures.items()),
+               key=lambda t: t[0])
+dot_of, taken = {}, set()
+for dist, i, c in pairs:
+    if c in dot_of or i in taken:
+        continue
+    dot_of[c] = dots[i]
+    taken.add(i)
+    print(f'dot at ({dots[i]["cx"] / S:.0f},{dots[i]["cy"] / S:.0f}) -> '
+          f'{NAMES[c]}  (colour distance {dist:.1f}/255)', file=sys.stderr)
+for c in figures:
+    if c not in dot_of:
+        print(f'{NAMES[c]}: no head in the seal', file=sys.stderr)
 
 # ------------------------------------------------------------------- EMIT
+
+def ref(v):
+    """Upscaled pixels -> the REF-scale space the viewBox is fixed in."""
+    return v * REF / S
+
 
 L = [
     "/* GENERATED — run `python3 tools/trace-lotus.py` to rebuild.",
@@ -220,10 +380,15 @@ L = [
     '  /** Resting fan angle about the base, degrees. Geometry is baked at this',
     '      pose, so the unfold runs the rotation from -rest back to 0. */',
     '  rest: number;',
-    '  /** [start, end] window of the section\'s scroll this petal blooms in. */',
+    "  /** [start, end] window of the section's scroll this petal blooms in. */",
     '  window: [number, number];',
-    "  /** The figure's floating dot, if it carries one. */",
+    "  /** The figure's floating dot — the head the seal paints in this",
+    "      figure's own ink. The gold crescent has none. */",
     '  dot: { cx: number; cy: number; r: number } | null;',
+    '  /** Vertical extent [top, bottom], so a dot can be filled from its own',
+    "      petal's ramp at the height it floats rather than from a ramp",
+    '      squeezed into the dot itself. */',
+    '  span: [number, number];',
     '  path: string;',
     '}',
     '',
@@ -239,16 +404,17 @@ for cname in PAINT_ORDER:
     f = figures[cname]
     name = NAMES[cname]
     w = WINDOWS[name]
-    pts = [(x - OX, y - OY) for (y, x) in f['outer']]
-    path = 'M' + 'L'.join(f'{x:.1f} {y:.1f}' for x, y in pts) + 'Z'
-    cx, cy = f['centroid'][0] - OX, f['centroid'][1] - OY
+    path = bezier_path(f['outer'], REF / S, OX, OY)
+    cx, cy = ref(f['centroid'][0]) - OX, ref(f['centroid'][1]) - OY
     rest = round(np.degrees(np.arctan2(cx - BASE[0], BASE[1] - cy)), 1)
     d = dot_of.get(cname)
-    dot = ('null' if d is None else
-           '{ cx: %.1f, cy: %.1f, r: %.1f }' % (d['cx'] - OX, d['cy'] - OY, d['r']))
+    dot = ('null' if d is None else '{ cx: %.1f, cy: %.1f, r: %.1f }'
+           % (ref(d['cx']) - OX, ref(d['cy']) - OY, ref(d['r'])))
+    span = (ref(f['bbox'][1]) - OY, ref(f['bbox'][3]) - OY)
     L += ['  {', f"    id: '{name}',", f'    rest: {rest},',
           f'    window: [{w[0]}, {w[1]}],',
           f'    dot: {dot},',
+          f'    span: [{span[0]:.1f}, {span[1]:.1f}],',
           '    path:', f"      '{path}',", '  },']
 L += ['];', '']
 

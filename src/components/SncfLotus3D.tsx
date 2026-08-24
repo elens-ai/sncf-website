@@ -16,6 +16,12 @@ import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
  * DEVOTIONAL_ACCENT rather than copied, so a card's palette and its petal
  * cannot drift apart (Projects' accents have already moved once).
  *
+ * A dot is filled from ITS OWN PETAL'S ramp, taken in user space across the
+ * petal's height, so it wears the exact tone the petal has at the height it
+ * floats. Squeezing the whole dark-to-light ramp into a 55-unit bead instead
+ * — the obvious way — lands every dot on a different tone from the blade it
+ * belongs to, which reads as the wrong colour entirely.
+ *
  * THE GLOSS is real SVG lighting, not a painted highlight: a specular pass
  * (feSpecularLighting + fePointLight) over the blurred alpha of the whole
  * group, clipped back to the shapes with feComposite and added onto the
@@ -35,15 +41,14 @@ import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
  * Without a track it falls back to reading its own approach up the
  * viewport, which is what a flower placed in an ordinary section wants.
  *
- * THE LEVITATION is time-driven and independent: a slow sine bob (~10px
- * over ~5s) with a gentle sway about the base, computed from
- * performance.now() in the same requestAnimationFrame loop.
+ * THE FLOWER DOES NOT DRIFT: scroll is its only motion. Nothing runs on a
+ * clock, so a settled flower is a still one.
  *
- * No animation libraries. No React state in the hot path — the loop writes
- * transform/opacity straight onto the nodes through refs, and reads its own
- * scroll progress from getBoundingClientRect, so scrolling never re-renders
- * the component. Under prefers-reduced-motion the flower renders fully open
- * and still, and the loop never starts.
+ * No animation libraries. No React state in the hot path — a passive scroll
+ * listener marks the pose dirty and one requestAnimationFrame repaints it
+ * straight onto the nodes through refs, so scrolling never re-renders the
+ * component and an idle page schedules no frames at all. Under
+ * prefers-reduced-motion the flower renders fully open and still.
  */
 
 /** Petal id -> [dark base, light tip], straight from the hero's cards. The
@@ -83,7 +88,6 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
   className,
 }) => {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const floatRef = useRef<SVGGElement | null>(null);
   const petalRefs = useRef<(SVGGElement | null)[]>([]);
   const progressProp = useRef<number | undefined>(scrollProgress);
   progressProp.current = scrollProgress;
@@ -92,13 +96,7 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const { x: bx, y: by } = LOTUS_BASE;
 
-    const pose = (progress: number, floatY: number, sway: number) => {
-      if (floatRef.current) {
-        floatRef.current.setAttribute(
-          'transform',
-          `translate(0 ${floatY.toFixed(2)}) rotate(${sway.toFixed(3)} ${bx} ${by})`,
-        );
-      }
+    const pose = (progress: number) => {
       LOTUS_PETALS.forEach((petal, i) => {
         const node = petalRefs.current[i];
         if (!node) return;
@@ -124,45 +122,52 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
       });
     };
 
+    const readProgress = () => {
+      const given = progressProp.current;
+      if (given !== undefined) return given;
+      const vh = window.innerHeight || 1;
+      const track = trackRef?.current;
+      if (track) {
+        /* Pinned: 0 as the stage takes hold, 1 as the track runs out. Both
+           terms are measured live, so a track sized in vh and a viewport
+           that resizes (phone chrome collapsing, rotation) stay in step
+           without hardcoding either. */
+        const r = track.getBoundingClientRect();
+        const span = r.height - vh;
+        return span > 0 ? clamp01(-r.top / span) : 1;
+      }
+      if (wrapRef.current) {
+        /* Unpinned fallback: 0 while still below the fold, 1 shortly before
+           the flower settles into place. */
+        const r = wrapRef.current.getBoundingClientRect();
+        return clamp01((vh - r.top) / (vh * 0.85));
+      }
+      return 1;
+    };
+
     if (reduced) {
-      pose(1, 0, 0);
+      pose(1);
       return;
     }
 
     let raf = 0;
-    const t0 = performance.now();
-    const loop = (now: number) => {
-      const t = (now - t0) / 1000;
-      const floatY = Math.sin((t / 5) * Math.PI * 2) * 10;
-      const sway = Math.sin((t / 7.3) * Math.PI * 2) * 1.5;
-
-      let progress = progressProp.current;
-      if (progress === undefined) {
-        const track = trackRef?.current;
-        const vh = window.innerHeight || 1;
-        if (track) {
-          /* Pinned: 0 as the stage takes hold, 1 as the track runs out.
-             Both terms are measured live, so a track sized in vh and a
-             viewport that resizes (phone chrome collapsing, rotation) stay
-             in step without hardcoding either. */
-          const r = track.getBoundingClientRect();
-          const span = r.height - vh;
-          progress = span > 0 ? clamp01(-r.top / span) : 1;
-        } else if (wrapRef.current) {
-          /* Unpinned fallback: 0 while still below the fold, 1 shortly
-             before the flower settles into place. */
-          const r = wrapRef.current.getBoundingClientRect();
-          progress = clamp01((vh - r.top) / (vh * 0.85));
-        } else {
-          progress = 1;
-        }
-      }
-      pose(progress, floatY, sway);
-      raf = requestAnimationFrame(loop);
+    const repaint = () => {
+      raf = 0;
+      pose(readProgress());
     };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+    const invalidate = () => {
+      if (!raf) raf = requestAnimationFrame(repaint);
+    };
+
+    repaint();
+    window.addEventListener('scroll', invalidate, { passive: true });
+    window.addEventListener('resize', invalidate);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', invalidate);
+      window.removeEventListener('resize', invalidate);
+    };
+  }, [scrollProgress, trackRef]);
 
   return (
     <div ref={wrapRef} className={className} aria-hidden="true">
@@ -173,11 +178,28 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
         <defs>
           {LOTUS_PETALS.map((p) => {
             const [base, tip] = PETAL_ACCENTS[p.id] ?? ['#1f8a5c', '#6fd19a'];
+            const [top, bottom] = p.span;
             return (
-              <linearGradient key={p.id} id={`lotus-${p.id}`} x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" stopColor={base} />
-                <stop offset="1" stopColor={tip} />
-              </linearGradient>
+              <React.Fragment key={p.id}>
+                <linearGradient id={`lotus-${p.id}`} x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0" stopColor={base} />
+                  <stop offset="1" stopColor={tip} />
+                </linearGradient>
+                {/* the same ramp, pinned to the petal's own height in user
+                    space — a dot drawn with it takes the petal's tone at
+                    whatever height it floats */}
+                <linearGradient
+                  id={`lotus-${p.id}-dot`}
+                  gradientUnits="userSpaceOnUse"
+                  x1="0"
+                  y1={bottom}
+                  x2="0"
+                  y2={top}
+                >
+                  <stop offset="0" stopColor={base} />
+                  <stop offset="1" stopColor={tip} />
+                </linearGradient>
+              </React.Fragment>
             );
           })}
           {/* The glossy plastic: specular light over the group's alpha,
@@ -210,7 +232,7 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
           </filter>
         </defs>
 
-        <g ref={floatRef} filter="url(#lotus-gloss)">
+        <g filter="url(#lotus-gloss)">
           {LOTUS_PETALS.map((p, i) => (
             <g
               key={p.id}
@@ -223,7 +245,12 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
               {/* the figure's floating dot rides its own group, so it fans,
                   fades and settles with its petal */}
               {p.dot && (
-                <circle cx={p.dot.cx} cy={p.dot.cy} r={p.dot.r} fill={`url(#lotus-${p.id})`} />
+                <circle
+                  cx={p.dot.cx}
+                  cy={p.dot.cy}
+                  r={p.dot.r}
+                  fill={`url(#lotus-${p.id}-dot)`}
+                />
               )}
             </g>
           ))}
