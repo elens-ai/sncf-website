@@ -356,8 +356,8 @@ const EventDeck: React.FC<{
   /* Proportional to the stage with generous caps, so on a wide screen the
      piles spread OUT into the empty space flanking the pass instead of
      huddling at fixed offsets near the bottom corners. */
-  const sideX = Math.min(stageW * 0.3, 430);
-  const farX = Math.min(stageW * 0.37, 545);
+  const sideX = Math.min(stageW * 0.22, 300);
+  const farX = Math.min(stageW * 0.27, 360);
 
   /* Only the centre pass stands. Everything else lies back from its bottom
      edge in one DENSE, OPAQUE pile per side: ±1 nearest, every deeper card
@@ -375,10 +375,10 @@ const EventDeck: React.FC<{
       return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 1, z: 20, blur: 0 };
     const d = Math.min(a - 2, 3);
     return {
-      x: sgn * (farX + d * 18),
+      x: sgn * (farX + d * 12),
       y: 44 + d * 7,
       rx: 62,
-      ry: -sgn * (16 + d * 3),
+      ry: -sgn * (14 + d * 2),
       s: 0.72 - d * 0.02,
       o: 0.95,
       z: 12 - d,
@@ -435,9 +435,18 @@ const EventDeck: React.FC<{
           const slideT = reduced
             ? 'none'
             : 'transform 680ms cubic-bezier(0.45, 0.05, 0.25, 1), opacity 500ms ease, filter 500ms ease';
+          /* The overshoot belongs ONLY to the card standing up — a settle past
+             upright reads as a landing. On a card LYING DOWN the same curve
+             overshot the tilt and bobbed it back up off the pile, which is
+             exactly the "pushing up" wobble; descending cards get a pure
+             deceleration instead, so they lie down and stay down. */
           const liftT = reduced
             ? 'none'
-            : 'transform 600ms cubic-bezier(0.34, 1.45, 0.64, 1) 90ms, opacity 600ms ease 90ms';
+            : `transform 600ms ${
+                standing
+                  ? 'cubic-bezier(0.34, 1.45, 0.64, 1)'
+                  : 'cubic-bezier(0.25, 0.8, 0.3, 1)'
+              } 90ms, opacity 600ms ease 90ms`;
 
           return (
             <div
