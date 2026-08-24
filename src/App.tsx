@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { PILLARS } from './data/pillars';
 import { PillarState } from './types';
 import { Header } from './components/Header';
@@ -9,6 +9,9 @@ import { AwardsSection } from './components/AwardsSection';
 import { PartnersSection } from './components/PartnersSection';
 import { SiteFooter } from './components/SiteFooter';
 import { SocialSidebar } from './components/SocialSidebar';
+import { InvitationCard } from './components/InvitationCard';
+import { EVENTS } from './data/events';
+import { resolveEvents } from './utils/events';
 import { PillarModal } from './components/PillarModal';
 import { SearchModal } from './components/SearchModal';
 import { WelcomeSplashScreen } from './components/WelcomeSplashScreen';
@@ -31,6 +34,23 @@ export default function App() {
   const [isDonateOpen, setIsDonateOpen] = useState<boolean>(false);
   const [galleryLeader, setGalleryLeader] = useState<DevotionalLeader | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  /* ?invite=<event-id> — the landing for a scanned event-pass QR. The param
+     is read once on load and cleared on dismiss, so reloading or sharing the
+     address afterwards gives the plain site, not a stuck invitation. */
+  const [inviteId, setInviteId] = useState<string | null>(
+    () => new URLSearchParams(window.location.search).get('invite'),
+  );
+  const inviteItem = useMemo(
+    () => (inviteId ? resolveEvents(EVENTS).find((i) => i.event.id === inviteId) ?? null : null),
+    [inviteId],
+  );
+  const closeInvite = useCallback(() => {
+    setInviteId(null);
+    const u = new URL(window.location.href);
+    u.searchParams.delete('invite');
+    window.history.replaceState({}, '', u.pathname + u.search + u.hash);
+  }, []);
 
   const activePillarsList = PILLARS;
   const currentPillar = activePillarsList[activeIndex] || activePillarsList[0];
@@ -165,6 +185,8 @@ export default function App() {
       />
 
       {/* Donate + Gallery */}
+      {inviteItem && <InvitationCard item={inviteItem} onClose={closeInvite} />}
+
       <DonateModal isOpen={isDonateOpen} onClose={() => setIsDonateOpen(false)} />
 
       <GalleryModal

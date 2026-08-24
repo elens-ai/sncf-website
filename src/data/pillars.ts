@@ -7,14 +7,15 @@ export const PILLARS: PillarState[] = [
     accentA: '#1f8a5c',
     accentB: '#6fd19a',
     headline: 'Healthcare for every doorstep',
-    body: 'Blood donation drives, eye-care camps, and free health checkups — over 8,000 camps and 1.3 million+ units of blood donated so far.',
+    body: 'Blood donation drives, eye-care camps, and free health checkups — over 9,100 camps and 1.5 million+ units of blood donated so far.',
     cardImageAlt: 'Health camp volunteers',
     shortTagline: 'Come for an evening of purpose — see how HEAL comes to life.',
+    /* Figures from the SNCF activity report, March 2026. */
     stats: [
-      { label: 'Blood Donation Camps', value: '8,000+' },
-      { label: 'Blood Units Collected', value: '1.3M+' },
-      { label: 'Free Health Checkups', value: '500,000+' },
-      { label: 'Eye Care Surgeries', value: '75,000+' }
+      { label: 'Blood Donation Camps', value: '9,174+' },
+      { label: 'Blood Units Collected', value: '1.5M+' },
+      { label: 'Patients Treated', value: '454,233+' },
+      { label: 'Cataract Surgeries', value: '15,443+' }
     ],
     keyHighlights: [
       'Nationwide voluntary blood donation camps on Manav Ekta Diwas and year-round.',
@@ -33,11 +34,13 @@ export const PILLARS: PillarState[] = [
     body: 'Skill-development programs and educational support that build self-reliance in underserved communities.',
     cardImageAlt: 'Skill training classroom',
     shortTagline: 'Come for an evening of purpose — see how ENRICH comes to life.',
+    /* Figures from the SNCF activity report, March 2026. Youth skilled sums
+       the NIMA, sewing and beautician programmes (3,257 + 15,300 + 601). */
     stats: [
-      { label: 'Vocational Centers', value: '85+' },
-      { label: 'Youths Certified', value: '120,000+' },
-      { label: 'Scholarships Awarded', value: '45,000+' },
-      { label: 'Adopted Schools', value: '150+' }
+      { label: 'Students Benefitted', value: '209,038+' },
+      { label: 'Youth Skilled', value: '19,150+' },
+      { label: 'Scholarship Students', value: '1,631' },
+      { label: 'Schools & Colleges', value: '14' }
     ],
     keyHighlights: [
       'Sant Nirankari Vocational Training Centers offering tailoring, computer science, and technical skills.',
@@ -56,11 +59,12 @@ export const PILLARS: PillarState[] = [
     body: 'Youth-led disaster relief, environmental conservation, and community support initiatives nationwide.',
     cardImageAlt: 'Youth volunteers planting trees',
     shortTagline: 'Come for an evening of purpose — see how EMPOWER comes to life.',
+    /* Figures from the SNCF activity report, March 2026. */
     stats: [
-      { label: 'Saplings Planted', value: '2.5M+' },
-      { label: 'Disaster Missions', value: '400+' },
-      { label: 'Youth Volunteers', value: '250,000+' },
-      { label: 'Cleanliness Drives', value: '1,200+' }
+      { label: 'Trees Planted', value: '2.6M+' },
+      { label: 'Cleanliness Manhours', value: '35.1M+' },
+      { label: 'Couples Married', value: '5,317' },
+      { label: 'Drives Held', value: '3,900+' }
     ],
     keyHighlights: [
       'Mega cleanliness drives across railway stations, public heritage sites, and riverbanks.',
@@ -86,11 +90,12 @@ export const PILLARS: PillarState[] = [
     body: 'Sant Nirankari Health City · Oneness Vann · Watershed Program · Project Amrit — large-scale initiatives turning these three pillars into permanent infrastructure.',
     cardImageAlt: 'Sant Nirankari Health City campus',
     shortTagline: 'Come for an evening of purpose — see how PROJECTS comes to life.',
+    /* Figures from the SNCF activity report, March 2026. */
     stats: [
-      { label: 'Hospital Beds Planned', value: '1,000+' },
-      { label: 'Water Bodies Cleaned', value: '1,100+' },
-      { label: 'Urban Forests (Vann)', value: '350+' },
-      { label: 'Beneficiary Reach', value: '10M+' }
+      { label: 'Water Bodies Revived', value: '5,962' },
+      { label: 'Oneness Vann Plants', value: '550,000' },
+      { label: 'Cities Reached', value: '3,460' },
+      { label: 'Adopted Villages', value: '4' }
     ],
     keyHighlights: [
       'Sant Nirankari Health City: A 1,000+ bed multispecialty super-hospital in North Delhi.',

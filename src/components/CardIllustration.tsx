@@ -206,3 +206,27 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
     </div>
   );
 };
+
+/**
+ * A vertical's flat mark on its own, for surfaces beyond the wheel cards —
+ * the event passes stamp it beside the vertical's name so an activity's
+ * pillar is readable at a glance. Same paths, same colours, one source.
+ */
+export const PillarGlyph: React.FC<{
+  pillarId: string;
+  className?: string;
+  color?: string;
+}> = ({ pillarId, className = 'w-4 h-4', color }) => {
+  const mark = MARKS[pillarId] ?? MARKS.oneness;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill={color ?? mark.color}
+      color={color ?? mark.color}
+      aria-hidden="true"
+    >
+      {mark.art}
+    </svg>
+  );
+};

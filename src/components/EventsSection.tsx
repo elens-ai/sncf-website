@@ -11,7 +11,10 @@ import {
   ChevronRight,
   Infinity as InfinityIcon,
 } from 'lucide-react';
+import { toDataURL } from 'qrcode';
 import { EVENTS } from '../data/events';
+import { PILLARS } from '../data/pillars';
+import { PillarGlyph } from './CardIllustration';
 import {
   ResolvedEvent,
   resolveEvents,
@@ -24,6 +27,7 @@ import {
   wrapCalendar,
   vevent,
   nowStamp,
+  inviteUrl,
 } from '../utils/events';
 import { EventsCalendarModal } from './EventsCalendarModal';
 
@@ -105,9 +109,38 @@ const CountdownClock: React.FC<{ target: Date }> = ({ target }) => {
 
 /* -------------------------------------------------------------- event pass */
 
+/* One QR per event per session — generation is async canvas work, and the
+   deck re-renders on every step. */
+const qrCache = new Map<string, string>();
+
 const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit }) => {
   const { event, date, days, accentA, accentB } = item;
   const [shared, setShared] = useState(false);
+  const pillarLabel = PILLARS.find((p) => p.id === event.pillarId)?.label ?? event.pillarId;
+
+  const [qr, setQr] = useState<string | null>(qrCache.get(event.id) ?? null);
+  useEffect(() => {
+    if (qr) return;
+    let dead = false;
+    toDataURL(inviteUrl(event.id), {
+      errorCorrectionLevel: 'M',
+      margin: 1,
+      scale: 4,
+      color: { dark: '#171717', light: '#ffffff' },
+    })
+      .then((url) => {
+        if (!dead) {
+          qrCache.set(event.id, url);
+          setQr(url);
+        }
+      })
+      .catch(() => {
+        /* QR stays a placeholder; the pass is still a pass */
+      });
+    return () => {
+      dead = true;
+    };
+  }, [event.id, qr]);
 
   const share = async () => {
     const url = `${window.location.origin}/#events-section`;
@@ -132,22 +165,30 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
         lit ? 'border-white/40 shadow-2xl' : 'border-white/[0.12]'
       }`}
     >
-      {/* The lanyard band — the pillar's one gradient on this pass. */}
+      {/* The vertical OWNS the pass now: its gradient is the whole header,
+          stamped with its mark and name, so which pillar an activity belongs
+          to is the first thing the card says — matching the activity report,
+          where every activity lives under its pillar. */}
       <div
-        aria-hidden="true"
-        className="h-[7px] w-full flex-none"
-        style={{ background: `linear-gradient(90deg, ${accentA}, ${accentB})` }}
-      />
-
-      {/* Punched slot, as on a worn badge. */}
-      <div
-        aria-hidden="true"
-        className="mx-auto mt-2.5 h-[7px] w-12 rounded-full bg-black/70 border border-white/10 flex-none"
-      />
-
-      <p className="text-center text-[8px] font-extrabold uppercase tracking-[0.3em] text-white/40 mt-2">
-        SNCF · Event pass
-      </p>
+        className="relative px-4 pt-2 pb-2.5 flex-none"
+        style={{ background: `linear-gradient(120deg, ${accentA}, ${accentB})` }}
+      >
+        <div
+          aria-hidden="true"
+          className="mx-auto mb-1.5 h-[7px] w-12 rounded-full bg-black/45 border border-white/25"
+        />
+        <div className="flex items-center justify-center gap-2">
+          <span className="grid place-items-center w-6 h-6 rounded-full bg-white/95 shadow">
+            <PillarGlyph pillarId={event.pillarId} className="w-3.5 h-3.5" />
+          </span>
+          <span className="font-artistic-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-white drop-shadow">
+            {pillarLabel}
+          </span>
+        </div>
+        <p className="text-center text-[7px] font-extrabold uppercase tracking-[0.28em] text-white/75 mt-1">
+          SNCF · Event pass
+        </p>
+      </div>
 
       <div className="px-5 pt-3 pb-3 flex flex-col items-center text-center">
         {/* The date page sits where an ID photo would. */}
@@ -245,22 +286,29 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
 
       <div className="px-5 pt-2.5 pb-3.5">
-        {/* Barcode stub. Decorative: it encodes nothing, it is the ticket
-            language — but it carries the event's real id as its legend. */}
-        <div
-          aria-hidden="true"
-          className="h-6 w-full rounded-[3px] text-white/60"
-          style={{
-            backgroundImage:
-              'repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 5px, currentColor 5px 6px, transparent 6px 8px, currentColor 8px 11px, transparent 11px 14px)',
-          }}
-        />
-        <p
-          aria-hidden="true"
-          className="text-center text-[7px] font-bold uppercase tracking-[0.3em] text-white/35 mt-1"
-        >
-          {event.id.replace(/-/g, ' ')}
-        </p>
+        {/* QR stub — a REAL code, generated locally, encoding the ?invite=
+            link for this event: a phone camera pointed at the pass gets the
+            full invitation card on its own screen. White panel because
+            scanners want dark modules on light ground. */}
+        <div className="rounded-xl bg-white p-2 flex items-center gap-2.5 text-left">
+          {qr ? (
+            <img
+              src={qr}
+              alt={`QR code — scan to open the ${event.title} invitation`}
+              className="w-[62px] h-[62px] rounded-[4px] flex-none"
+            />
+          ) : (
+            <div className="w-[62px] h-[62px] rounded-[4px] bg-neutral-200 flex-none" aria-hidden="true" />
+          )}
+          <div className="min-w-0">
+            <p className="text-[8px] font-extrabold uppercase tracking-[0.2em] text-neutral-400">
+              Scan me
+            </p>
+            <p className="text-[10.5px] font-bold text-neutral-800 leading-snug">
+              Opens this invitation on your phone
+            </p>
+          </div>
+        </div>
 
         <div className="flex items-center justify-center gap-1.5 mt-2.5">
           {event.kind === 'annual' && date && (
