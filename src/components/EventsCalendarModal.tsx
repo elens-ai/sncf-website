@@ -199,7 +199,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
         <button
           onClick={onClose}
           aria-label="Close calendar"
-          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white grid place-items-center transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 border border-white/15 text-white/80 hover:text-white grid place-items-center transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         >
           <X className="w-4 h-4" />
         </button>
