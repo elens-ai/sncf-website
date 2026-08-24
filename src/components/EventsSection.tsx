@@ -354,19 +354,23 @@ const EventDeck: React.FC<{
     return () => el.removeEventListener('wheel', onWheel);
   }, [step]);
 
-  const sideX = Math.min(stageW * 0.26, 300);
-  const farX = Math.min(stageW * 0.33, 380);
+  /* Proportional to the stage with generous caps, so on a wide screen the
+     piles spread OUT into the empty space flanking the pass instead of
+     huddling at fixed offsets near the bottom corners. */
+  const sideX = Math.min(stageW * 0.3, 430);
+  const farX = Math.min(stageW * 0.37, 545);
 
-  /* Only the centre pass stands. The piles lie 62–66deg back from their
-     bottom edge, low and close together, so ±1 and ±2 OVERLAP into one
-     resting stack per side instead of reading as four more cards. */
+  /* Only the centre pass stands. The piles lie back from their bottom edge,
+     raised to sit BESIDE the pass — occupying the flanking space at its
+     mid-height rather than sunk to the stage floor — with ±1 and ±2 close
+     enough to OVERLAP into one resting stack per side. */
   const pose = (off: number) => {
     if (off === 0) return { x: 0, y: 0, rx: 0, ry: 0, s: 1, o: 1, z: 30, blur: 0 };
     const a = Math.abs(off);
     const sgn = Math.sign(off);
     if (a === 1)
-      return { x: sgn * sideX, y: 168, rx: 62, ry: -sgn * 10, s: 0.82, o: 0.4, z: 20, blur: 0 };
-    return { x: sgn * farX, y: 186, rx: 66, ry: -sgn * 14, s: 0.74, o: 0.22, z: 10, blur: 1 };
+      return { x: sgn * sideX, y: 84, rx: 56, ry: -sgn * 12, s: 0.84, o: 0.45, z: 20, blur: 0 };
+    return { x: sgn * farX, y: 108, rx: 62, ry: -sgn * 16, s: 0.75, o: 0.25, z: 10, blur: 1 };
   };
 
   return (
