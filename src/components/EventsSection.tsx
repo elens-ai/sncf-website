@@ -9,104 +9,44 @@ import {
   Clock,
   Infinity as InfinityIcon,
 } from 'lucide-react';
-import { EVENTS, SNCFEvent } from '../data/events';
-import { PILLARS } from '../data/pillars';
+import { EVENTS } from '../data/events';
+import {
+  ResolvedEvent,
+  resolveEvents,
+  MONTHS_SHORT,
+  countdownLabel,
+  dayOfYear,
+  startOfToday,
+  pad,
+  icsHref,
+  wrapCalendar,
+  vevent,
+  nowStamp,
+} from '../utils/events';
+import { EventsCalendarModal } from './EventsCalendarModal';
 
 /**
  * Upcoming events, designed as a calendar rather than a poster wall.
  *
- * COLOUR DISCIPLINE is the whole redesign. The previous pass gave every card
- * its pillar's full gradient, and five loud cards sat on a stage that is
- * itself animating between pillar colours — two colour systems fighting. Now
- * the cards are colour-NEUTRAL: a paper-white date page and a dark glass
- * body, the two surfaces that read correctly on every hue the stage passes
- * through. Each pillar contributes exactly one thin accent line and one
- * tinted label, nothing more — the moving background is the colour, the cards
- * are the content.
+ * COLOUR DISCIPLINE: the cards are colour-neutral — a paper-white tear-off
+ * date page on a dark glass body, the two surfaces that read correctly on
+ * every hue the animating stage passes through. Each pillar contributes one
+ * thin accent line and one tinted label, nothing more.
  *
- * The calendar metaphor does the visual work instead:
- *  - each dated event carries a TEAR-OFF DATE PAGE (weekday, numeral, month,
- *    binding holes) like a desk calendar sheet — instantly legible as a date;
- *  - a TIMELINE RAIL spans the next 12 months with every event plotted where
- *    it falls; hovering a dot spotlights its card, so the rail is navigation,
- *    not decoration;
- *  - EXPORT: one click downloads the whole set as a single .ics file, and
- *    each card can be added individually. Built in the browser, nothing
- *    logged.
+ * THE RAIL is the calendar year, JANUARY to DECEMBER, fixed — not rolling
+ * from the current month. TODAY is plotted where it actually falls and every
+ * event sits at its calendar position, so the rail reads the way a wall
+ * calendar does. Hovering a dot spotlights its card; clicking one opens the
+ * full calendar at that month.
+ *
+ * VIEW CALENDAR opens a real month grid with the events plotted in it —
+ * browsing months, picking an event day, adding it to a personal calendar.
+ * The .ics export lives inside that calendar, which is where the "get this
+ * into my calendar" thought happens.
  *
  * The date engine is unchanged: annual observances store month + day only,
  * the year is computed, so the list can never advertise a date that has gone.
  */
-
-const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-
-const startOfToday = () => {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
-};
-
-const nextOccurrence = (month: number, day: number): Date => {
-  const today = startOfToday();
-  const thisYear = new Date(today.getFullYear(), month - 1, day);
-  return thisYear >= today ? thisYear : new Date(today.getFullYear() + 1, month - 1, day);
-};
-
-const daysUntil = (date: Date) =>
-  Math.round((date.getTime() - startOfToday().getTime()) / 86_400_000);
-
-const pad = (n: number) => String(n).padStart(2, '0');
-
-const countdownLabel = (days: number) => {
-  if (days === 0) return 'Today';
-  if (days === 1) return 'Tomorrow';
-  if (days <= 60) return `In ${days} days`;
-  const weeks = Math.round(days / 7);
-  return weeks <= 12 ? `In ${weeks} weeks` : `In ${Math.round(days / 30)} months`;
-};
-
-/* -------------------------------------------------------------------- ics */
-
-const vevent = (event: SNCFEvent, date: Date, dtstamp: string) => {
-  const stamp = `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`;
-  const next = new Date(date);
-  next.setDate(next.getDate() + 1);
-  const end = `${next.getFullYear()}${pad(next.getMonth() + 1)}${pad(next.getDate())}`;
-  const escape = (s: string) => s.replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n');
-  return [
-    'BEGIN:VEVENT',
-    `UID:${event.id}-${stamp}@sncf.elens.in`,
-    `DTSTAMP:${dtstamp}`,
-    `DTSTART;VALUE=DATE:${stamp}`,
-    `DTEND;VALUE=DATE:${end}`,
-    `SUMMARY:${escape(event.title)}`,
-    `DESCRIPTION:${escape(event.blurb)}`,
-    ...(event.location ? [`LOCATION:${escape(event.location)}`] : []),
-    'END:VEVENT',
-  ];
-};
-
-/* DTSTAMP is when the FILE is made, not when the event is — stamping it with
-   the event date is a common slip that strict parsers object to. */
-const nowStamp = () => {
-  const n = new Date();
-  return (
-    `${n.getUTCFullYear()}${pad(n.getUTCMonth() + 1)}${pad(n.getUTCDate())}` +
-    `T${pad(n.getUTCHours())}${pad(n.getUTCMinutes())}${pad(n.getUTCSeconds())}Z`
-  );
-};
-
-const wrapCalendar = (events: string[]) =>
-  [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Sant Nirankari Charitable Foundation//Events//EN',
-    'CALSCALE:GREGORIAN',
-    ...events,
-    'END:VCALENDAR',
-  ].join('\r\n');
-
-const icsHref = (body: string) => `data:text/calendar;charset=utf-8,${encodeURIComponent(body)}`;
 
 /* ------------------------------------------------------------------ clock */
 
@@ -156,15 +96,7 @@ const CountdownClock: React.FC<{ target: Date }> = ({ target }) => {
 
 /* ------------------------------------------------------------------- card */
 
-interface Resolved {
-  event: SNCFEvent;
-  date: Date | null;
-  days: number | null;
-  accentA: string;
-  accentB: string;
-}
-
-const EventCard: React.FC<{ item: Resolved; spotlight: string | null }> = ({
+const EventCard: React.FC<{ item: ResolvedEvent; spotlight: string | null }> = ({
   item,
   spotlight,
 }) => {
@@ -209,7 +141,6 @@ const EventCard: React.FC<{ item: Resolved; spotlight: string | null }> = ({
       {/* Tear-off date page. Paper-white on purpose — paper is the surface
           that reads as itself on every colour the stage passes through. */}
       <div className="relative flex-none w-[86px] self-start rounded-2xl bg-white text-neutral-900 shadow-lg overflow-hidden">
-        {/* Binding strip with punched holes, like a desk calendar sheet. */}
         <div className="h-[14px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
           <span className="w-[5px] h-[5px] rounded-full bg-neutral-300 shadow-inner" />
           <span className="w-[5px] h-[5px] rounded-full bg-neutral-300 shadow-inner" />
@@ -226,7 +157,7 @@ const EventCard: React.FC<{ item: Resolved; spotlight: string | null }> = ({
               {date.getDate()}
             </p>
             <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
-              {MONTHS[date.getMonth()]} &rsquo;{String(date.getFullYear()).slice(2)}
+              {MONTHS_SHORT[date.getMonth()]} &rsquo;{String(date.getFullYear()).slice(2)}
             </p>
           </div>
         ) : (
@@ -340,6 +271,8 @@ const EventCard: React.FC<{ item: Resolved; spotlight: string | null }> = ({
 
 export const EventsSection: React.FC = () => {
   const [spotlight, setSpotlight] = useState<string | null>(null);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [calendarEventId, setCalendarEventId] = useState<string | null>(null);
 
   /* Only the calendar DAY matters for ordering; the seconds belong to the
      clock, which owns its own interval. */
@@ -349,40 +282,22 @@ export const EventsSection: React.FC = () => {
     return () => window.clearInterval(id);
   }, []);
 
-  const items = useMemo<Resolved[]>(() => {
+  const items = useMemo<ResolvedEvent[]>(() => {
     void tick;
-    return EVENTS.map((event) => {
-      const pillar = PILLARS.find((p) => p.id === event.pillarId);
-      const date =
-        event.kind === 'annual' && event.month && event.day
-          ? nextOccurrence(event.month, event.day)
-          : null;
-      return {
-        event,
-        date,
-        days: date ? daysUntil(date) : null,
-        accentA: pillar?.accentA ?? '#1f8a5c',
-        accentB: pillar?.accentB ?? '#6fd19a',
-      };
-    }).sort((a, b) => {
-      if (a.days === null && b.days === null) return 0;
-      if (a.days === null) return 1;
-      if (b.days === null) return -1;
-      return a.days - b.days;
-    });
+    return resolveEvents(EVENTS);
   }, [tick]);
 
   const dated = items.filter((i) => i.days !== null);
   const next = dated[0];
-  const currentMonth = new Date().getMonth();
 
-  /* Every dated event in ONE file, sharing one DTSTAMP. */
-  const exportAllHref = useMemo(() => {
-    const stamp = nowStamp();
-    return icsHref(wrapCalendar(dated.flatMap((i) => vevent(i.event, i.date as Date, stamp))));
-    // dated is derived from items in the same memo pass
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items]);
+  const today = startOfToday();
+  const todayPct =
+    (dayOfYear(today.getMonth() + 1, today.getDate()) / 365) * 100;
+
+  const openCalendarAt = (eventId: string | null) => {
+    setCalendarEventId(eventId);
+    setCalendarOpen(true);
+  };
 
   return (
     <section
@@ -412,37 +327,40 @@ export const EventsSection: React.FC = () => {
                 </div>
               </div>
             )}
-            {/* The whole list as one .ics — into any calendar app in a tap. */}
-            <a
-              href={exportAllHref}
-              download="sncf-events.ics"
+            <button
+              onClick={() => openCalendarAt(null)}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[12px] font-bold text-neutral-900 bg-white shadow-lg hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <CalendarDays className="w-4 h-4" />
-              Export calendar
-            </a>
+              View calendar
+            </button>
           </div>
         </header>
 
-        {/* TIMELINE RAIL — the next 12 months as one line, every dated event
-            plotted where it falls. Hovering a dot spotlights its card below:
-            the rail is a navigation instrument, not a decoration. Hidden from
-            assistive tech — the cards below carry the same facts in full. */}
+        {/* TIMELINE RAIL — the calendar year, January to December, fixed.
+            TODAY is plotted where it actually falls and each event sits at its
+            calendar position, the way a wall calendar reads. Hovering a dot
+            spotlights its card; clicking opens the calendar at that month.
+            Hidden from assistive tech — the cards and the calendar dialog
+            carry the same facts accessibly. */}
         <div className="relative h-[58px] mb-6 select-none hidden sm:block" aria-hidden="true">
           <div className="absolute left-0 right-0 top-[22px] h-px bg-white/20" />
-          {Array.from({ length: 12 }, (_, i) => (
+          {MONTHS_SHORT.map((label, i) => (
             <div
-              key={i}
+              key={label}
               className="absolute top-[18px] flex flex-col items-center"
               style={{ left: `${(i / 12) * 100}%` }}
             >
               <span className="w-px h-[9px] bg-white/25" />
               <span className="text-[9px] font-bold tracking-[0.12em] text-white/45 mt-1.5">
-                {MONTHS[(currentMonth + i) % 12]}
+                {label}
               </span>
             </div>
           ))}
-          <div className="absolute top-0 flex flex-col items-center" style={{ left: '0%' }}>
+          <div
+            className="absolute top-0 flex flex-col items-center -translate-x-1/2"
+            style={{ left: `${todayPct}%` }}
+          >
             <span className="text-[8px] font-extrabold tracking-[0.16em] text-white/80 mb-1">
               TODAY
             </span>
@@ -456,17 +374,16 @@ export const EventsSection: React.FC = () => {
               title={`${i.event.title} · ${countdownLabel(i.days as number)}`}
               onMouseEnter={() => setSpotlight(i.event.id)}
               onMouseLeave={() => setSpotlight(null)}
+              onClick={() => openCalendarAt(i.event.id)}
               className="absolute top-[15px] -translate-x-1/2 w-[15px] h-[15px] rounded-full border-2 border-white/80 cursor-pointer transition-transform hover:scale-125"
               style={{
-                left: `${Math.min(97, ((i.days as number) / 365) * 100)}%`,
+                left: `${
+                  (dayOfYear(i.event.month as number, i.event.day as number) / 365) * 100
+                }%`,
                 backgroundColor: i.accentB,
               }}
             />
           ))}
-          {/* the ongoing programmes live past the end of the line */}
-          <div className="absolute top-[16px] right-0 translate-x-1 text-white/50">
-            <InfinityIcon className="w-3.5 h-3.5" />
-          </div>
         </div>
 
         <div className="grid gap-3.5 md:grid-cols-2 xl:grid-cols-3">
@@ -487,6 +404,13 @@ export const EventsSection: React.FC = () => {
           .
         </p>
       </div>
+
+      <EventsCalendarModal
+        isOpen={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
+        items={items}
+        initialEventId={calendarEventId}
+      />
     </section>
   );
 };
