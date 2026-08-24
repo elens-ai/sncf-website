@@ -38,12 +38,13 @@ import { EventsCalendarModal } from './EventsCalendarModal';
  * Colour discipline holds: dark glass and paper, with the pillar allowed one
  * gradient band and one tinted label.
  *
- * THE DECK: only the centre pass stands and reads. The others LIE ON THE
- * GROUND behind it — tipped 62–66deg back from their bottom edge, low, dim,
- * and overlapping each other like a pile on a table, so the sides read as
- * "there are more" rather than as competing cards. Moving the deck stands
- * the chosen pass up from the pile while the centre one lies down on the
- * other side, wrapping continuously.
+ * THE DECK is a LINE, not a loop: the year runs January to December (the
+ * ongoing programmes close the line), everything before the active event
+ * lies in the LEFT pile, everything after it in the RIGHT, and the ends are
+ * honest — at the year's first event the left pile is empty, at the last
+ * the right one is, and the arrows disable. A card never teleports around
+ * the back. The deck opens on the next upcoming event, so the left pile is
+ * this year's past observances and the right pile what is still to come.
  *
  * Drive it with the arrows, the per-event dots, a click on a pile, a
  * horizontal drag/swipe or wheel gesture, or by hovering a dot on the year
@@ -299,12 +300,6 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
 
 /* ------------------------------------------------------------------- deck */
 
-/** Signed shortest distance from the active card, wrapped: -2..2 for 5 cards. */
-const wrapOffset = (i: number, active: number, n: number) => {
-  const rel = (((i - active) % n) + n) % n;
-  return rel > n / 2 ? rel - n : rel;
-};
-
 const EventDeck: React.FC<{
   items: ResolvedEvent[];
   active: number;
@@ -329,12 +324,16 @@ const EventDeck: React.FC<{
     return () => ro.disconnect();
   }, []);
 
+  const atStart = active === 0;
+  const atEnd = active === items.length - 1;
+
+  /* Clamped, not wrapped: the line has ends and the deck respects them. */
   const step = useCallback(
     (dir: number) => {
       const now = performance.now();
       if (now - stepLock.current < 350) return;
       stepLock.current = now;
-      onActivate((((active + dir) % items.length) + items.length) % items.length);
+      onActivate(Math.min(items.length - 1, Math.max(0, active + dir)));
     },
     [active, items.length, onActivate],
   );
@@ -410,7 +409,7 @@ const EventDeck: React.FC<{
         }}
       >
         {items.map((item, i) => {
-          const off = wrapOffset(i, active, items.length);
+          const off = i - active;
           const p = pose(off);
           return (
             <div
@@ -449,8 +448,9 @@ const EventDeck: React.FC<{
       <div className="relative z-30 flex items-center justify-center gap-3 mt-1">
         <button
           onClick={() => step(-1)}
+          disabled={atStart}
           aria-label="Previous event"
-          className="w-9 h-9 grid place-items-center rounded-full bg-white/10 border border-white/20 text-white/80 hover:bg-white/20 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="w-9 h-9 grid place-items-center rounded-full bg-white/10 border border-white/20 text-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 disabled:opacity-30 disabled:cursor-default enabled:hover:bg-white/20 enabled:hover:text-white enabled:cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -474,8 +474,9 @@ const EventDeck: React.FC<{
         </div>
         <button
           onClick={() => step(1)}
+          disabled={atEnd}
           aria-label="Next event"
-          className="w-9 h-9 grid place-items-center rounded-full bg-white/10 border border-white/20 text-white/80 hover:bg-white/20 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="w-9 h-9 grid place-items-center rounded-full bg-white/10 border border-white/20 text-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 disabled:opacity-30 disabled:cursor-default enabled:hover:bg-white/20 enabled:hover:text-white enabled:cursor-pointer"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
@@ -487,7 +488,9 @@ const EventDeck: React.FC<{
 /* ---------------------------------------------------------------- section */
 
 export const EventsSection: React.FC = () => {
-  const [active, setActive] = useState(0);
+  /* null = "no choice made yet": the deck opens on the next upcoming event,
+     which with January-first ordering is rarely index 0. */
+  const [activeOverride, setActiveOverride] = useState<number | null>(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [calendarEventId, setCalendarEventId] = useState<string | null>(null);
 
@@ -505,7 +508,13 @@ export const EventsSection: React.FC = () => {
   }, [tick]);
 
   const dated = items.filter((i) => i.days !== null);
-  const next = dated[0];
+  /* Soonest by countdown — NOT dated[0], which is now January's event. */
+  const next = dated.length
+    ? dated.reduce((m, i) => ((i.days as number) < (m.days as number) ? i : m), dated[0])
+    : undefined;
+  const active =
+    activeOverride ?? Math.max(0, items.findIndex((i) => i === next));
+  const setActive = setActiveOverride;
 
   const today = startOfToday();
   const todayPct = (dayOfYear(today.getMonth() + 1, today.getDate()) / 365) * 100;

@@ -103,7 +103,7 @@ export interface ResolvedEvent {
   accentB: string;
 }
 
-/** Dated events soonest-first, ongoing programmes after them. */
+/** Calendar order, January first; ongoing programmes close the line. */
 export const resolveEvents = (events: SNCFEvent[]): ResolvedEvent[] =>
   events
     .map((event) => {
@@ -124,5 +124,8 @@ export const resolveEvents = (events: SNCFEvent[]): ResolvedEvent[] =>
       if (a.days === null && b.days === null) return 0;
       if (a.days === null) return 1;
       if (b.days === null) return -1;
-      return a.days - b.days;
+      return (
+        dayOfYear(a.event.month as number, a.event.day as number) -
+        dayOfYear(b.event.month as number, b.event.day as number)
+      );
     });
