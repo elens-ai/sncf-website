@@ -411,24 +411,78 @@ const EventDeck: React.FC<{
         {items.map((item, i) => {
           const off = i - active;
           const p = pose(off);
+          const standing = off === 0;
+
+          /* THE ARC, and why there are three layers. A single transition
+             morphs every property in lockstep, which is why the old motion
+             read as a shape-tween rather than a card being picked up. Split
+             instead:
+
+               outer  — the SLIDE along the ground (X), plus z/opacity/blur,
+                        on a plain ease;
+               lift   — the RISE (Y + scale) and the ground shadow, delayed
+                        90ms behind the slide on an overshoot curve;
+               rotator— the STAND-UP (rotateX/rotateY) about the bottom edge,
+                        sharing the lift's timing.
+
+             The chosen card therefore starts travelling while still flat,
+             rises as it goes, and snaps the last few degrees upright with a
+             small settle as it lands — and a card headed for a pile slides
+             off upright for those same 90ms, then drops flat onto the stack.
+             The shadow lives on the lift layer, OUTSIDE the rotator, so it
+             hugs the ground instead of tilting with the card: wide and soft
+             under a lying card, a narrow strip under a standing one. */
+          const slideT = reduced
+            ? 'none'
+            : 'transform 680ms cubic-bezier(0.45, 0.05, 0.25, 1), opacity 500ms ease, filter 500ms ease';
+          const liftT = reduced
+            ? 'none'
+            : 'transform 600ms cubic-bezier(0.34, 1.45, 0.64, 1) 90ms, opacity 600ms ease 90ms';
+
           return (
             <div
               key={item.event.id}
               className="absolute left-1/2 top-2 w-[min(90vw,340px)]"
               style={{
-                transform: `translateX(calc(-50% + ${p.x}px)) translateY(${p.y}px) rotateY(${p.ry}deg) rotateX(${p.rx}deg) scale(${p.s})`,
-                transformOrigin: '50% 100%',
-                transformStyle: 'preserve-3d',
+                transform: `translateX(calc(-50% + ${p.x}px))`,
                 opacity: p.o,
                 zIndex: p.z,
                 filter: p.blur ? `blur(${p.blur}px)` : 'none',
-                transition: reduced
-                  ? 'none'
-                  : 'transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 500ms ease, filter 500ms ease',
+                transition: slideT,
                 pointerEvents: p.o < 0.2 ? 'none' : 'auto',
               }}
             >
-              <EventPass item={item} lit={off === 0} />
+              <div
+                style={{
+                  transform: `translateY(${p.y}px) scale(${p.s})`,
+                  transformOrigin: '50% 100%',
+                  transformStyle: 'preserve-3d',
+                  transition: liftT,
+                }}
+              >
+                {/* Ground shadow — the realism anchor. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute left-[6%] right-[6%] -bottom-3 h-6 rounded-[50%] pointer-events-none"
+                  style={{
+                    background:
+                      'radial-gradient(closest-side, rgba(0,0,0,0.6), rgba(0,0,0,0) 72%)',
+                    transform: standing ? 'scale(0.85, 0.55)' : 'scale(1.08, 1)',
+                    opacity: standing ? 0.4 : 0.6,
+                    transition: liftT,
+                  }}
+                />
+                <div
+                  style={{
+                    transform: `rotateY(${p.ry}deg) rotateX(${p.rx}deg)`,
+                    transformOrigin: '50% 100%',
+                    transformStyle: 'preserve-3d',
+                    transition: liftT,
+                  }}
+                >
+                  <EventPass item={item} lit={standing} />
+                </div>
+              </div>
               {/* A resting pass's only job is to stand up: this overlay catches
                   the click so its buttons cannot fire from the pile. */}
               {off !== 0 && (
