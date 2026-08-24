@@ -67,7 +67,11 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
 
       <div
         id="invitation-card"
-        className="relative w-full max-w-[380px] my-auto rounded-[28px] bg-neutral-950/85 backdrop-blur-xl border border-white/25 shadow-2xl overflow-hidden text-center"
+        className="relative w-full max-w-[380px] my-auto rounded-[28px] backdrop-blur-xl border border-white/25 shadow-2xl overflow-hidden text-center"
+        style={{
+          /* Same logo-violet ink as the pass it was scanned from. */
+          backgroundColor: 'rgba(47, 29, 82, 0.92)',
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         <button

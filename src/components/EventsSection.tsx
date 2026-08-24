@@ -161,9 +161,15 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
   return (
     <article
       id={`event-card-${event.id}`}
-      className={`relative w-[min(90vw,340px)] mx-auto flex flex-col rounded-[22px] overflow-hidden bg-neutral-950/75 backdrop-blur-md border transition-colors duration-300 ${
+      className={`relative w-[min(90vw,340px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
         lit ? 'border-white/40 shadow-2xl' : 'border-white/[0.12]'
       }`}
+      style={{
+        /* Deep violet from the logo's own purple family (sampled #ac5db8 /
+           #3c3898), darkened until white copy sits at ease on it — the pass
+           reads as the brand's ink rather than plain black. */
+        backgroundColor: 'rgba(47, 29, 82, 0.9)',
+      }}
     >
       {/* The vertical OWNS the pass now: its gradient is the whole header,
           stamped with its mark and name, so which pillar an activity belongs
