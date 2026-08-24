@@ -15,11 +15,18 @@ import { LOTUS_BASE, LOTUS_PETALS, LOTUS_VIEW } from './lotusGeometry';
  * gradient fills, then dropped onto the page with feDropShadow. The filter
  * lives on the GROUP, so one consistent light falls across the flower.
  *
- * THE UNFOLD is scroll-driven and runs left to right: each petal starts
- * folded upright at the flower's base (rotated by -rest about the
- * convergence point, scaled down, nudged back, invisible) and blooms
- * through its own overlapping window with easeOutBack, fading in over the
- * first 35% of the window as it fans out to its baked-in resting pose.
+ * THE UNFOLD is scroll-driven and runs left to right, one petal at a time:
+ * each starts folded upright at the flower's base (rotated by -rest about
+ * the convergence point, scaled down, nudged back, invisible) and blooms
+ * through its own window with easeOutBack, fading in over the first 35% of
+ * the window as it fans out to its baked-in resting pose. The windows do
+ * not overlap, so a petal has finished and settled before the next moves.
+ *
+ * THE PROGRESS comes from the pinned track the flower sits in (trackRef):
+ * 0 where the track's sticky stage takes hold, 1 where it lets go, so the
+ * bloom is spent scrolling while the flower itself stays put on screen.
+ * Without a track it falls back to reading its own approach up the
+ * viewport, which is what a flower placed in an ordinary section wants.
  *
  * THE LEVITATION is time-driven and independent: a slow sine bob (~10px
  * over ~5s) with a gentle sway about the base, computed from
@@ -45,13 +52,21 @@ const easeOutBack = (u: number) => {
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 interface SncfLotus3DProps {
-  /** Optional external drive; when omitted the component reads its own
-      position in the viewport each frame. */
+  /** Optional external drive; when omitted the component works its own
+      progress out each frame. */
   scrollProgress?: number;
+  /** The pinned track this flower is staged in. Progress runs 0 → 1 across
+      the track's travel, so the bloom is driven by scrolling that leaves the
+      flower where it is. */
+  trackRef?: React.RefObject<HTMLElement | null>;
   className?: string;
 }
 
-export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({ scrollProgress, className }) => {
+export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
+  scrollProgress,
+  trackRef,
+  className,
+}) => {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const floatRef = useRef<SVGGElement | null>(null);
   const petalRefs = useRef<(SVGGElement | null)[]>([]);
@@ -108,11 +123,20 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({ scrollProgress, classN
 
       let progress = progressProp.current;
       if (progress === undefined) {
-        const el = wrapRef.current;
-        if (el) {
-          const r = el.getBoundingClientRect();
-          const vh = window.innerHeight || 1;
-          /* 0 while still below the fold, 1 shortly before it settles. */
+        const track = trackRef?.current;
+        const vh = window.innerHeight || 1;
+        if (track) {
+          /* Pinned: 0 as the stage takes hold, 1 as the track runs out.
+             Both terms are measured live, so a track sized in vh and a
+             viewport that resizes (phone chrome collapsing, rotation) stay
+             in step without hardcoding either. */
+          const r = track.getBoundingClientRect();
+          const span = r.height - vh;
+          progress = span > 0 ? clamp01(-r.top / span) : 1;
+        } else if (wrapRef.current) {
+          /* Unpinned fallback: 0 while still below the fold, 1 shortly
+             before the flower settles into place. */
+          const r = wrapRef.current.getBoundingClientRect();
           progress = clamp01((vh - r.top) / (vh * 0.85));
         } else {
           progress = 1;

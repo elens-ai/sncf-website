@@ -950,6 +950,24 @@
   scroll-snap-align: start;
 }
 
+/* The lotus screen is a tall track holding a sticky stage: the extra height
+   IS the bloom's scrub length. 360vh leaves 260vh of pinned travel — about
+   40vh per petal, roughly one deliberate scroll each, with a beat at the end
+   where the whole flower stands before the page moves on. The component
+   measures this height at runtime rather than assuming it, so changing the
+   number here retimes the bloom and nothing else. */
+.lotus-track {
+  height: 360vh;
+}
+
+/* No scrubbing without motion: the track collapses to one screen and the
+   flower is simply open (SncfLotus3D poses it fully under reduced motion). */
+@media (prefers-reduced-motion: reduce) {
+  .lotus-track {
+    height: 100vh;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
