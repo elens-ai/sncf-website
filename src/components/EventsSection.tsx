@@ -162,43 +162,77 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
     <article
       id={`event-card-${event.id}`}
       className={`relative w-[min(90vw,340px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
-        lit ? 'border-white/40 shadow-2xl' : 'border-white/[0.12]'
+        lit ? 'border-white/40' : 'border-white/[0.14]'
       }`}
       style={{
-        /* Deep violet from the logo's own purple family (sampled #ac5db8 /
-           #3c3898), darkened until white copy sits at ease on it — the pass
-           reads as the brand's ink rather than plain black. */
-        backgroundColor: 'rgba(47, 29, 82, 0.9)',
+        /* The logo's violet family as a graded ink — lighter at the head,
+           deepening toward the stub — rather than one flat fill; flat panels
+           are what read as cheap. The standing pass also carries a faint
+           halo of its own pillar colour in the shadow. */
+        backgroundImage:
+          'linear-gradient(172deg, rgba(64, 42, 110, 0.92) 0%, rgba(43, 26, 78, 0.93) 45%, rgba(28, 16, 56, 0.95) 100%)',
+        boxShadow: lit
+          ? `0 26px 55px -18px rgba(0, 0, 0, 0.65), 0 0 42px ${accentB}26`
+          : '0 12px 30px -12px rgba(0, 0, 0, 0.5)',
       }}
     >
+      {/* Quiet furniture the whole site speaks: the lotus watermark and a
+          breath of the pillar colour bleeding down from the header. */}
+      <div aria-hidden="true" className="absolute inset-0 z-0 pointer-events-none">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(90% 36% at 50% 0%, ${accentB}21 0%, transparent 70%)`,
+          }}
+        />
+        <img
+          src="/images/lotus-watermark.png"
+          alt=""
+          className="absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2 w-[82%] opacity-[0.05] select-none"
+        />
+      </div>
+
+      <div className="relative z-[1] flex flex-col flex-1 min-h-0">
       {/* The vertical OWNS the pass now: its gradient is the whole header,
           stamped with its mark and name, so which pillar an activity belongs
           to is the first thing the card says — matching the activity report,
           where every activity lives under its pillar. */}
       <div
-        className="relative px-4 pt-2 pb-2.5 flex-none"
+        className="relative px-4 pt-2 pb-2.5 flex-none border-b border-white/20"
         style={{ background: `linear-gradient(120deg, ${accentA}, ${accentB})` }}
       >
+        {/* Gloss across the band — lacquer, not flat print. */}
         <div
           aria-hidden="true"
-          className="mx-auto mb-1.5 h-[7px] w-12 rounded-full bg-black/45 border border-white/25"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(130% 100% at 16% 0%, rgba(255,255,255,0.3) 0%, transparent 52%)',
+          }}
         />
-        <div className="flex items-center justify-center gap-2">
-          <span className="grid place-items-center w-6 h-6 rounded-full bg-white/95 shadow">
+        <div
+          aria-hidden="true"
+          className="relative mx-auto mb-1.5 h-[7px] w-12 rounded-full bg-black/45 border border-white/25 shadow-inner"
+        />
+        <div className="relative flex items-center justify-center gap-2">
+          <span className="grid place-items-center w-6 h-6 rounded-full bg-white/95 shadow-md ring-1 ring-black/10">
             <PillarGlyph pillarId={event.pillarId} className="w-3.5 h-3.5" />
           </span>
           <span className="font-artistic-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-white drop-shadow">
             {pillarLabel}
           </span>
         </div>
-        <p className="text-center text-[7px] font-extrabold uppercase tracking-[0.28em] text-white/75 mt-1">
+        <p className="relative text-center text-[7px] font-extrabold uppercase tracking-[0.28em] text-white/75 mt-1">
           SNCF · Event pass
         </p>
       </div>
 
       <div className="px-5 pt-3 pb-3 flex flex-col items-center text-center">
         {/* The date page sits where an ID photo would. */}
-        <div className="relative w-[96px] rounded-2xl bg-white text-neutral-900 shadow-lg overflow-hidden">
+        <div
+          className="relative w-[96px] rounded-2xl text-neutral-900 shadow-lg ring-1 ring-black/10 overflow-hidden"
+          style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
+        >
           <div className="h-[13px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
             <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
             <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
@@ -296,12 +330,15 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
             link for this event: a phone camera pointed at the pass gets the
             full invitation card on its own screen. White panel because
             scanners want dark modules on light ground. */}
-        <div className="rounded-xl bg-white p-2 flex items-center gap-2.5 text-left">
+        <div
+          className="rounded-2xl p-2 flex items-center gap-2.5 text-left ring-1 ring-black/10 shadow-lg"
+          style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
+        >
           {qr ? (
             <img
               src={qr}
               alt={`QR code — scan to open the ${event.title} invitation`}
-              className="w-[62px] h-[62px] rounded-[4px] flex-none"
+              className="w-[62px] h-[62px] rounded-lg flex-none"
             />
           ) : (
             <div className="w-[62px] h-[62px] rounded-[4px] bg-neutral-200 flex-none" aria-hidden="true" />
@@ -347,6 +384,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
             {shared ? 'Copied' : 'Share'}
           </button>
         </div>
+      </div>
       </div>
     </article>
   );
