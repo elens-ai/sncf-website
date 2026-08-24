@@ -15,6 +15,7 @@ import { toDataURL } from 'qrcode';
 import { EVENTS } from '../data/events';
 import { PILLARS } from '../data/pillars';
 import { PillarGlyph } from './CardIllustration';
+import { VolunteerWaving } from './VolunteerArt';
 import {
   ResolvedEvent,
   resolveEvents,
@@ -325,7 +326,10 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       {/* Perforation — the stub below is where the pass gets used. */}
       <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
 
-      <div className="px-5 pt-2.5 pb-3.5">
+      <div className="relative px-5 pt-2.5 pb-3.5">
+        {/* A volunteer in the uniform blue waves from the stub's corner —
+            the same figure the invitation carries, tying pass to people. */}
+        <VolunteerWaving className="absolute right-1.5 bottom-0 w-10 h-10 pointer-events-none" />
         {/* QR stub — a REAL code, generated locally, encoding the ?invite=
             link for this event: a phone camera pointed at the pass gets the
             full invitation card on its own screen. The white is confined to

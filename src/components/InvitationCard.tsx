@@ -11,6 +11,7 @@ import {
 } from '../utils/events';
 import { PILLARS } from '../data/pillars';
 import { PillarGlyph } from './CardIllustration';
+import { VolunteerPlanting, VolunteerWaving } from './VolunteerArt';
 
 /**
  * The invitation a scanned pass opens.
@@ -166,9 +167,16 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
             </a>
           </div>
 
-          <p className="font-signature text-white/85 text-[22px] leading-none mt-5">
-            Service with Humility
-          </p>
+          {/* The volunteers flank the sign-off, as the reference poster's
+              figures flank its invitation — the people in SNCF blue are the
+              event, so they belong on its card. */}
+          <div className="mt-4 flex items-end justify-between gap-1">
+            <VolunteerPlanting className="w-16 h-16 -ml-1 -mb-1" />
+            <p className="font-signature text-white/85 text-[21px] leading-none pb-2">
+              Service with Humility
+            </p>
+            <VolunteerWaving className="w-16 h-16 -mr-1 -mb-1" />
+          </div>
         </div>
       </div>
     </div>
