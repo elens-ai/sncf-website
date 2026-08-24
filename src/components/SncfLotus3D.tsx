@@ -20,8 +20,8 @@ import { LOGO_ASPECT, LOGO_BASE, LOGO_HAND, LOGO_PETALS, LOGO_VIEWBOX } from './
  * THE RELIEF is real SVG lighting on top of that: a specular pass
  * (feSpecularLighting + fePointLight) over the same smoothed alpha, so one
  * light falls across the whole petal rather than across each of its bands. A
- * soft cast shadow sits under the hand, and the emblem tilts from 12 to 4
- * degrees as it opens.
+ * soft cast shadow sits under the hand, and the emblem carries a slight
+ * tilt.
  *
  * THE BLOOM runs left to right, one petal at a time. The hand arrives first
  * — the flower has to open out of something. Each petal is then wound back
@@ -29,6 +29,15 @@ import { LOGO_ASPECT, LOGO_BASE, LOGO_HAND, LOGO_PETALS, LOGO_VIEWBOX } from './
  * swings clockwise into place as it grows and fades in: every petal turning
  * the same way, so the whole reads as one opening gesture travelling across
  * the screen rather than five separate entrances.
+ *
+ * ONLY TRANSFORM AND OPACITY MOVE. Every filter in here is expensive — two
+ * blurs, a specular pass and a shadow per group — and a filter re-renders
+ * whenever the geometry it is drawn from changes. So the glow and the ground
+ * shadow keep a fixed radius and are scaled by transform instead of having
+ * their radii rewritten each frame, and the emblem's tilt is set once rather
+ * than eased, which otherwise re-rasterises the whole filtered emblem on
+ * every frame of the scroll. That is the difference between a bloom that
+ * plays and one that stutters.
  *
  * NOTHING RUNS ON A CLOCK. Progress arrives through the imperative handle,
  * the loop eases towards it and stops on arrival, and the DOM is written
@@ -106,12 +115,11 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   const rafRef = useRef<number | null>(null);
 
   const updateDOM = (s: number) => {
-    if (svgRef.current) {
-      svgRef.current.style.transform = `rotateX(${lerp(12, 4, easeOut(s)).toFixed(2)}deg)`;
-    }
     if (shadowRef.current) {
-      shadowRef.current.setAttribute('rx', lerp(40, 128, easeOut(s)).toFixed(1));
-      shadowRef.current.setAttribute('ry', lerp(4, 11, easeOut(s)).toFixed(1));
+      const k = easeOut(s);
+      shadowRef.current.style.transform =
+        `scale(${lerp(0.34, 1, k).toFixed(3)}, ${lerp(0.4, 1, k).toFixed(3)})`;
+      shadowRef.current.style.opacity = lerp(0.1, 0.3, k).toFixed(3);
     }
 
     /* The hand arrives first: it rises the last of its own travel and
@@ -157,9 +165,9 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
        warms whichever screen colour the hero is publishing. */
     const g = Math.pow(clamp01(s), 2.4);
     if (glowRef.current) {
-      glowRef.current.setAttribute('r', lerp(30, 150, g).toFixed(1));
-      glowRef.current.setAttribute('opacity',
-        clamp01(lerp(0.03, 0.45, g) + maxSnap * 0.08).toFixed(3));
+      glowRef.current.style.transform = `scale(${lerp(0.2, 1, g).toFixed(3)})`;
+      glowRef.current.style.opacity =
+        clamp01(lerp(0.03, 0.45, g) + maxSnap * 0.08).toFixed(3);
     }
   };
 
@@ -231,7 +239,11 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         viewBox={LOGO_VIEWBOX}
         width="100%"
         height="100%"
-        style={{ overflow: 'visible', transformStyle: 'preserve-3d' }}
+        style={{
+          overflow: 'visible',
+          transformStyle: 'preserve-3d',
+          transform: 'rotateX(6deg)',
+        }}
       >
         <defs>
           {/* Lit surface: one light across a whole group, not across each of
@@ -271,7 +283,8 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
               k4="0"
               result="lit"
             />
-            <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.32" />
+            {/* a soft contact shadow, cheap enough to keep on every petal */}
+            <feDropShadow dx="0" dy="3" stdDeviation="2.4" floodColor="#000" floodOpacity="0.3" />
           </filter>
 
           {/* the palm is one broad surface: its banding is the coarsest and
@@ -331,22 +344,32 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
           ref={glowRef}
           cx={LOGO_BASE.x}
           cy={LOGO_BASE.y - 60}
-          r="30"
+          r="150"
           fill="url(#logoAmbient)"
-          opacity="0.03"
           filter="url(#logoGlowBlur)"
-          style={{ pointerEvents: 'none' }}
+          style={{
+            pointerEvents: 'none',
+            opacity: 0.03,
+            transform: 'scale(0.2)',
+            transformOrigin: `${LOGO_BASE.x}px ${LOGO_BASE.y - 60}px`,
+            willChange: 'transform, opacity',
+          }}
         />
 
         <ellipse
           ref={shadowRef}
           cx={LOGO_BASE.x}
           cy={LOGO_BASE.y + 118}
-          rx="40"
-          ry="4"
+          rx="128"
+          ry="11"
           fill="#000"
-          opacity={0.3}
           filter="url(#logoCast)"
+          style={{
+            opacity: 0.1,
+            transform: 'scale(0.34, 0.4)',
+            transformOrigin: `${LOGO_BASE.x}px ${LOGO_BASE.y + 118}px`,
+            willChange: 'transform, opacity',
+          }}
         />
 
         {/* the hand, under everything the flower does */}
