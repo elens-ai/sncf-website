@@ -1,13 +1,20 @@
 import React, { useEffect, useRef } from 'react';
 import { LOTUS_BASE, LOTUS_PETALS, LOTUS_VIEW } from './lotusGeometry';
+import { PILLARS } from '../data/pillars';
+import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
 
 /**
  * The SNCF lotus, glossy and three-dimensional, unfolding on scroll.
  *
  * The geometry is the logo's own: each figure traced from the colour mark
  * (see lotusGeometry.ts), so the five swoosh-ribbon petals and their four
- * dots are exactly the shapes on the foundation's seal. Colours follow the
- * glossy reference render — rose, green, periwinkle, blue, gold.
+ * dots are exactly the shapes on the foundation's seal.
+ *
+ * THE COLOURS are the hero cards' own. Each petal is named for a card and
+ * wears that card's two accents — welcome's devotional rose, Heal's green,
+ * Enrich's blue, Empower's pink, Projects' cyan — read from PILLARS and
+ * DEVOTIONAL_ACCENT rather than copied, so a card's palette and its petal
+ * cannot drift apart (Projects' accents have already moved once).
  *
  * THE GLOSS is real SVG lighting, not a painted highlight: a specular pass
  * (feSpecularLighting + fePointLight) over the blurred alpha of the whole
@@ -38,6 +45,14 @@ import { LOTUS_BASE, LOTUS_PETALS, LOTUS_VIEW } from './lotusGeometry';
  * the component. Under prefers-reduced-motion the flower renders fully open
  * and still, and the loop never starts.
  */
+
+/** Petal id -> [dark base, light tip], straight from the hero's cards. The
+    welcome petal takes the devotional portrait's accents, the other four
+    their pillar's. */
+const PETAL_ACCENTS: Record<string, [string, string]> = {
+  welcome: [DEVOTIONAL_ACCENT.a, DEVOTIONAL_ACCENT.b],
+  ...Object.fromEntries(PILLARS.map((p) => [p.id, [p.accentA, p.accentB]])),
+};
 
 const HIDDEN_SCALE_X = 0.45;
 const HIDDEN_SCALE_Y = 0.62;
@@ -156,12 +171,15 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
         className="w-full h-auto block overflow-visible"
       >
         <defs>
-          {LOTUS_PETALS.map((p) => (
-            <linearGradient key={p.id} id={`lotus-${p.id}`} x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0" stopColor={p.colors[0]} />
-              <stop offset="1" stopColor={p.colors[1]} />
-            </linearGradient>
-          ))}
+          {LOTUS_PETALS.map((p) => {
+            const [base, tip] = PETAL_ACCENTS[p.id] ?? ['#1f8a5c', '#6fd19a'];
+            return (
+              <linearGradient key={p.id} id={`lotus-${p.id}`} x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" stopColor={base} />
+                <stop offset="1" stopColor={tip} />
+              </linearGradient>
+            );
+          })}
           {/* The glossy plastic: specular light over the group's alpha,
               clipped to the shapes, added onto the gradients, then given
               depth with a soft drop shadow. */}
@@ -205,12 +223,7 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({
               {/* the figure's floating dot rides its own group, so it fans,
                   fades and settles with its petal */}
               {p.dot && (
-                <circle
-                  cx={p.dot.cx}
-                  cy={p.dot.cy}
-                  r={p.dot.r}
-                  fill={`url(#lotus-${p.dotFill ?? p.id})`}
-                />
+                <circle cx={p.dot.cx} cy={p.dot.cy} r={p.dot.r} fill={`url(#lotus-${p.id})`} />
               )}
             </g>
           ))}

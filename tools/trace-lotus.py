@@ -55,14 +55,16 @@ BASE = (680, 620)
 # strictly one at a time: each petal finishes and holds before the next one
 # starts, and the whole flower stands through the last stretch before the
 # section releases the page.
-SPEC = {
-    'welcome':  {'window': [0.03, 0.19], 'colors': ['#bb3e73', '#f19cc0']},
-    'heal':     {'window': [0.21, 0.37], 'colors': ['#33935e', '#96d4b2']},
-    'enrich':   {'window': [0.39, 0.55], 'colors': ['#4f74c2', '#b3c9f0']},
-    'empower':  {'window': [0.57, 0.73], 'colors': ['#3a5eb5', '#8fb0e8']},
-    # the gold crescent's dot is periwinkle in the reference render
-    'projects': {'window': [0.75, 0.91], 'colors': ['#b57f1e', '#e9c66f'],
-                 'dotFill': 'empower'},
+#
+# Colours are deliberately absent: each petal wears its own hero card's
+# accents, read from PILLARS / DEVOTIONAL_ACCENT at render time, so the
+# flower cannot drift from the cards it names.
+WINDOWS = {
+    'welcome':  [0.03, 0.19],
+    'heal':     [0.21, 0.37],
+    'enrich':   [0.39, 0.55],
+    'empower':  [0.57, 0.73],
+    'projects': [0.75, 0.91],
 }
 
 # -------------------------------------------------------------------- TRACED
@@ -208,8 +210,10 @@ L = [
     " *",
     " * The petal outlines are the foundation seal's own lotus, traced from",
     " * tools/lotus-source.png rather than drawn by hand, so the shapes on the",
-    " * page are the shapes on the seal. Bloom windows, colours and paint order",
-    " * are authored in the generator's AUTHORED block — edit them there. */",
+    " * page are the shapes on the seal. Bloom windows and paint order are",
+    " * authored in the generator's AUTHORED block — edit them there. Colours",
+    " * are not here at all: each petal wears its hero card's accents, which",
+    " * SncfLotus3D reads from PILLARS / DEVOTIONAL_ACCENT. */",
     '',
     'export interface LotusPetal {',
     '  id: string;',
@@ -218,12 +222,8 @@ L = [
     '  rest: number;',
     '  /** [start, end] window of the section\'s scroll this petal blooms in. */',
     '  window: [number, number];',
-    '  /** Gradient stops: [dark base, light tip]. */',
-    '  colors: [string, string];',
     "  /** The figure's floating dot, if it carries one. */",
     '  dot: { cx: number; cy: number; r: number } | null;',
-    '  /** Petal id whose gradient the dot borrows (render-accurate). */',
-    '  dotFill?: string;',
     '  path: string;',
     '}',
     '',
@@ -238,7 +238,7 @@ L = [
 for cname in PAINT_ORDER:
     f = figures[cname]
     name = NAMES[cname]
-    s = SPEC[name]
+    w = WINDOWS[name]
     pts = [(x - OX, y - OY) for (y, x) in f['outer']]
     path = 'M' + 'L'.join(f'{x:.1f} {y:.1f}' for x, y in pts) + 'Z'
     cx, cy = f['centroid'][0] - OX, f['centroid'][1] - OY
@@ -247,12 +247,9 @@ for cname in PAINT_ORDER:
     dot = ('null' if d is None else
            '{ cx: %.1f, cy: %.1f, r: %.1f }' % (d['cx'] - OX, d['cy'] - OY, d['r']))
     L += ['  {', f"    id: '{name}',", f'    rest: {rest},',
-          f"    window: [{s['window'][0]}, {s['window'][1]}],",
-          f"    colors: ['{s['colors'][0]}', '{s['colors'][1]}'],",
-          f'    dot: {dot},']
-    if 'dotFill' in s:
-        L.append(f"    dotFill: '{s['dotFill']}',")
-    L += ['    path:', f"      '{path}',", '  },']
+          f'    window: [{w[0]}, {w[1]}],',
+          f'    dot: {dot},',
+          '    path:', f"      '{path}',", '  },']
 L += ['];', '']
 
 TARGET.write_text('\n'.join(L))
