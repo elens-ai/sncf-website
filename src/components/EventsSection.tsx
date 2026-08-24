@@ -536,21 +536,25 @@ const EventDeck: React.FC<{
              The shadow lives on the lift layer, OUTSIDE the rotator, so it
              hugs the ground instead of tilting with the card: wide and soft
              under a lying card, a narrow strip under a standing one. */
+          /* Filter is deliberately NOT in the transition list: animating
+             blur re-rasterises every pile card on every frame for the whole
+             tween — the hero wheel's old jank, relearned — so the blur snaps
+             while the transforms glide. Longer, ease-out curves and a softer
+             overshoot read calmer than the old timing. */
           const slideT = reduced
             ? 'none'
-            : 'transform 680ms cubic-bezier(0.45, 0.05, 0.25, 1), opacity 500ms ease, filter 500ms ease';
+            : 'transform 760ms cubic-bezier(0.33, 1, 0.68, 1), opacity 560ms ease';
           /* The overshoot belongs ONLY to the card standing up — a settle past
              upright reads as a landing. On a card LYING DOWN the same curve
-             overshot the tilt and bobbed it back up off the pile, which is
-             exactly the "pushing up" wobble; descending cards get a pure
-             deceleration instead, so they lie down and stay down. */
+             overshot the tilt and bobbed it back up off the pile; descending
+             cards get a pure deceleration, so they lie down and stay down. */
           const liftT = reduced
             ? 'none'
-            : `transform 600ms ${
+            : `transform 650ms ${
                 standing
-                  ? 'cubic-bezier(0.34, 1.45, 0.64, 1)'
+                  ? 'cubic-bezier(0.34, 1.28, 0.64, 1)'
                   : 'cubic-bezier(0.25, 0.8, 0.3, 1)'
-              } 90ms, opacity 600ms ease 90ms`;
+              } 80ms, opacity 650ms ease 80ms`;
 
           return (
             <div
@@ -787,17 +791,6 @@ export const EventsSection: React.FC = () => {
 
         <EventDeck items={items} active={active} onActivate={setActive} />
 
-        <p className="relative z-30 text-[11px] text-white/50 mt-1 max-w-3xl">
-          Dates shown are the fixed national and international observances. Venues and
-          timings vary by city — the SNCF office confirms what is running near you on{' '}
-          <a
-            href="tel:+911147660380"
-            className="text-white/80 underline underline-offset-4 hover:text-white"
-          >
-            011-47660380
-          </a>
-          .
-        </p>
       </div>
 
       <EventsCalendarModal
