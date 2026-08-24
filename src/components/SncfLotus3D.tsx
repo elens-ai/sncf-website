@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useImperativeHandle, forwardRef } from 'react';
-import { LOTUS_ASPECT, LOTUS_PETALS, LOTUS_VIEWBOX } from './lotusPetalPaths';
+import { LOTUS_ASPECT, LOTUS_HAND, LOTUS_PETALS, LOTUS_VIEWBOX } from './lotusPetalPaths';
 import { PILLARS } from '../data/pillars';
 import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
 
@@ -8,7 +8,9 @@ import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
  *
  * The geometry is the foundation seal's own (see lotusPetalPaths.ts), drawn
  * about the flower's base at the origin — which is the point every petal
- * unfolds around.
+ * unfolds around. The seal's cupping HAND is traced from the same logo and
+ * mapped through the same transform, so it sits under the flower exactly as
+ * the seal has it: the hand opens first and the petals rise out of the cup.
  *
  * THE COLOURS are the hero cards': each petal is named for a card and wears
  * that card's two accents, read from PILLARS and DEVOTIONAL_ACCENT rather
@@ -29,9 +31,12 @@ import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
  * next moves.
  *
  * NOTHING RUNS ON A CLOCK. Progress arrives through the imperative handle,
- * the loop damps towards it and stops on arrival, and the DOM is written
+ * the loop eases towards it and stops on arrival, and the DOM is written
  * directly through refs — so scrolling never re-renders, and a settled
- * flower schedules no frames at all.
+ * flower schedules no frames at all. The easing is measured in SECONDS, not
+ * frames: a fixed fraction per frame runs at whatever speed the display
+ * happens to tick at, which is the difference between film and flicker on a
+ * 120Hz screen or a throttled tab.
  */
 
 export interface SncfLotus3DHandle {
@@ -83,6 +88,12 @@ const PETAL_TONES: Record<string, [string, string]> = {
 };
 const toneOf = (id: string) => PETAL_TONES[id] ?? ['#1f8a5c', '#6fd19a'];
 
+/** The hand is the seal's, not a card's, so it keeps the seal's own ink:
+    magenta at the wrist running to blush at the fingertips, with the thumb
+    curl in the seal's blue. */
+const HAND_TONES: [string, string] = ['#c04c9c', '#e9a7ce'];
+const HAND_CURL = '#5cc0ea';
+
 /** depth of the extruded edge, in user units */
 const DEPTH_STEPS = 4;
 const DEPTH_DX = 0.85;
@@ -90,6 +101,13 @@ const DEPTH_DY = 1.15;
 
 /** how far a folded petal is tucked back towards the base, in user units */
 const BACK_NUDGE = 14;
+
+/** how far the hand rises into place, in user units */
+const HAND_RISE = 26;
+
+/** Seconds for the eased value to close ~63% of its gap. Time-based, so the
+    motion is identical at 60Hz, 120Hz or a throttled tab. */
+const EASE_TAU = 0.16;
 
 /** How far back each petal is wound before it opens, in degrees. Every petal
     winds the SAME way — anticlockwise of its resting bearing — so all of them
@@ -109,6 +127,7 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   const glowRef = useRef<SVGCircleElement | null>(null);
   const shadowRef = useRef<SVGEllipseElement | null>(null);
   const petalRefs = useRef<Record<string, SVGGElement | null>>({});
+  const handRef = useRef<SVGGElement | null>(null);
 
   const smoothRef = useRef(scrollProgress ?? 0);
   const targetRef = useRef(scrollProgress ?? 0);
@@ -120,8 +139,20 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
       svgRef.current.style.transform = `rotateX(${lerp(12, 4, easeOut(s)).toFixed(2)}deg)`;
     }
     if (shadowRef.current) {
-      shadowRef.current.setAttribute('rx', lerp(40, 150, easeOut(s)).toFixed(1));
-      shadowRef.current.setAttribute('ry', lerp(6, 16, easeOut(s)).toFixed(1));
+      shadowRef.current.setAttribute('rx', lerp(60, 210, easeOut(s)).toFixed(1));
+      shadowRef.current.setAttribute('ry', lerp(7, 18, easeOut(s)).toFixed(1));
+    }
+
+    /* The hand arrives first: it rises the last of its own travel and
+       settles, so the flower has something to open out of. */
+    if (handRef.current) {
+      const [h0, h1] = LOTUS_HAND.window;
+      const hu = clamp01((s - h0) / (h1 - h0));
+      const he = easeOutBack(hu);
+      handRef.current.style.transform =
+        `translate(0px, ${(HAND_RISE * (1 - he)).toFixed(2)}px) ` +
+        `scale(${lerp(0.86, 1, he).toFixed(3)})`;
+      handRef.current.style.opacity = clamp01(hu / 0.4).toFixed(3);
     }
 
     let maxSnap = 0;
@@ -166,10 +197,15 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
      as soon as it lands, so an idle flower costs nothing. */
   const pump = () => {
     if (rafRef.current !== null) return;
-    const tick = () => {
+    let last = performance.now();
+    const tick = (now: number) => {
+      /* dt is clamped so a tab that was throttled or backgrounded resumes
+         smoothly instead of teleporting on its first frame back. */
+      const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
+      last = now;
       const diff = targetRef.current - smoothRef.current;
-      if (Math.abs(diff) > 0.0005) {
-        smoothRef.current += diff * 0.18;
+      if (Math.abs(diff) > 0.0004) {
+        smoothRef.current += diff * (1 - Math.exp(-dt / EASE_TAU));
         updateDOM(smoothRef.current);
         rafRef.current = requestAnimationFrame(tick);
       } else {
@@ -302,6 +338,17 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
             );
           })}
 
+          {/* the seal's own hand ink: magenta at the wrist, blush at the tip */}
+          <linearGradient id="lotusHand" x1="6%" y1="0%" x2="94%" y2="60%">
+            <stop offset="0%" stopColor={HAND_TONES[0]} />
+            <stop offset="62%" stopColor={mix(HAND_TONES[0], HAND_TONES[1], 0.65)} />
+            <stop offset="100%" stopColor={HAND_TONES[1]} />
+          </linearGradient>
+          <linearGradient id="lotusHandCurl" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={tint(HAND_CURL, 0.28)} />
+            <stop offset="100%" stopColor={shade(HAND_CURL, 0.86)} />
+          </linearGradient>
+
           <radialGradient id="lotusAmbientGlow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="var(--accent-b, #6fd19a)" stopOpacity="0.95" />
             <stop offset="38%" stopColor="var(--accent-b, #6fd19a)" stopOpacity="0.55" />
@@ -326,13 +373,44 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         <ellipse
           ref={shadowRef}
           cx="0"
-          cy="62"
+          cy={LOTUS_HAND.span[1] + 16}
           rx="40"
           ry="6"
           fill="#000"
           opacity={0.32}
           filter="url(#lotusCast)"
         />
+
+        {/* the hand, under everything the flower does */}
+        <g
+          ref={handRef}
+          style={{ willChange: 'transform, opacity', transformOrigin: '0px 40px', opacity: 0 }}
+        >
+          <g filter="url(#lotusBevel)">
+            {Array.from({ length: DEPTH_STEPS }).map((_, i) => {
+              const k = DEPTH_STEPS - i;
+              return (
+                <path
+                  key={i}
+                  d={LOTUS_HAND.d}
+                  fill={mix(shade(HAND_TONES[0], 0.45), shade(HAND_TONES[0], 0.62), i / DEPTH_STEPS)}
+                  transform={`translate(${(DEPTH_DX * k).toFixed(2)} ${(DEPTH_DY * k).toFixed(2)})`}
+                />
+              );
+            })}
+            <path d={LOTUS_HAND.d} fill="url(#lotusHand)" />
+            {/* the thumb curl the seal draws inside the palm */}
+            <path d={LOTUS_HAND.curl} fill="url(#lotusHandCurl)" />
+          </g>
+          <path
+            d={LOTUS_HAND.d}
+            fill="none"
+            stroke={tint(HAND_TONES[1], 0.5)}
+            strokeWidth={1.2}
+            opacity={0.3}
+            transform="translate(-0.8 -1.1)"
+          />
+        </g>
 
         {/* petals, painted back to front */}
         {LOTUS_PETALS.map((p) => {

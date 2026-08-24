@@ -43,6 +43,7 @@ from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'tools' / 'lotus-source.png'
+HAND_SOURCE = ROOT / 'tools' / 'hand-source.png'
 TARGET = ROOT / 'src' / 'components' / 'lotusPetalPaths.ts'
 
 S = 8            # mask upscale factor
@@ -83,6 +84,17 @@ OX, OY = 140, 160          # content origin, REF-scale pixels
 SCALE = 0.25
 PAD = 12
 
+# The seal's cupping hand, cropped from the same logo at (272, 534). Both
+# crops are mapped through the SAME logo-pixel transform, so the hand lands
+# under the flower exactly as the seal has it — then lifted by HAND_LIFT so
+# the petals rise straight out of the cup instead of floating above a gap.
+HAND_ORIGIN = (272, 534)
+LOTUS_ORIGIN = (350, 380)
+HAND_LIFT = -54
+
+# The hand blooms open before the first petal does.
+HAND_WINDOW = [0.0, 0.07]
+
 # Bloom windows as fractions of the section's pinned scroll, LEFT TO RIGHT and
 # strictly one at a time: each petal finishes and holds before the next one
 # starts, and the whole flower stands through the last stretch before the
@@ -92,11 +104,11 @@ PAD = 12
 # accents, read from PILLARS / DEVOTIONAL_ACCENT at render time, so the
 # flower cannot drift from the cards it names.
 WINDOWS = {
-    'welcome':  [0.03, 0.19],
-    'heal':     [0.21, 0.37],
-    'enrich':   [0.39, 0.55],
-    'empower':  [0.57, 0.73],
-    'projects': [0.75, 0.91],
+    'welcome':  [0.09, 0.25],
+    'heal':     [0.27, 0.43],
+    'enrich':   [0.45, 0.61],
+    'empower':  [0.63, 0.79],
+    'projects': [0.81, 0.97],
 }
 
 # -------------------------------------------------------------------- TRACED
@@ -347,10 +359,13 @@ def relax(points, sigma=SIGMA):
     n = len(pts)
     idxs = find_corners(pts, sigma)
     if len(idxs) < 2:
+        # A shape with no corners to cut at — the thumb curl is one — still
+        # has to be simplified, or every traced vertex ships.
         k, r = _kernel(sigma)
         idx = (np.arange(n)[:, None] + np.arange(-r, r + 1)[None, :]) % n
-        return [tuple(v) for v in (pts[idx] * k[None, :, None]).sum(axis=1)], \
-               [False] * n
+        smooth = [tuple(v) for v in (pts[idx] * k[None, :, None]).sum(axis=1)]
+        smooth = dp(smooth, EPS)
+        return smooth, [False] * len(smooth)
 
     spans = _corner_runs(idxs, n, gap=max(3, int(1.5 * sigma)))
     verts = [_corner_point(pts, a, b, sigma) for a, b in spans]
@@ -511,6 +526,67 @@ for c in figures:
     if c not in dot_of:
         print(f'{NAMES[c]}: no head in the seal', file=sys.stderr)
 
+# --------------------------------------------------------------------- HAND
+
+def local_max(a, r):
+    """Largest value within roughly r pixels — the local ink strength."""
+    out = a.copy()
+    for _ in range(r):
+        out = np.maximum(np.maximum(out, np.roll(out, 1, 0)), np.roll(out, -1, 0))
+        out = np.maximum(np.maximum(out, np.roll(out, 1, 1)), np.roll(out, -1, 1))
+    return out
+
+
+def close(m, r):
+    out = m.copy()
+    for _ in range(r):
+        p = np.pad(out, 1, constant_values=False)
+        out = (p[1:-1, 1:-1] | p[:-2, 1:-1] | p[2:, 1:-1]
+               | p[1:-1, :-2] | p[1:-1, 2:])
+    for _ in range(r):
+        p = np.pad(out, 1, constant_values=True)
+        out = (p[1:-1, 1:-1] & p[:-2, 1:-1] & p[2:, 1:-1]
+               & p[1:-1, :-2] & p[1:-1, 2:])
+    return out
+
+
+hand_img = Image.open(HAND_SOURCE).convert('RGB')
+HW, HH = hand_img.size
+hhsv = np.asarray(hand_img.convert('HSV'), dtype=float)
+hhue, hsat = hhsv[..., 0] * 360 / 255, hhsv[..., 1] / 255
+
+_lab, _ = label8((hsat > 0.2) & (hhue > 280) & (hhue < 355))
+hand_mask = _lab == int(np.argmax(np.bincount(_lab.ravel())[1:]) + 1)
+
+# The thumb curl is not enclosed by the hand — its channel opens out to the
+# rim — so it cannot be found as a hole. Closing the hand seals that channel,
+# and the blue inside the sealed shape is the curl.
+_blue = (hsat > 0.2) & (hhue > 170) & (hhue < 250) & close(hand_mask, 20) & ~hand_mask
+_lb, _ = label8(_blue)
+swoosh_mask = _lb == int(np.argmax(np.bincount(_lb.ravel())[1:]) + 1)
+
+# The hand is painted in a gradient, so coverage cannot be measured against
+# one ink. Normalising each pixel's saturation by the strongest saturation
+# around it recovers the same 0..1 coverage against the white behind it,
+# whatever the local colour happens to be.
+hstrength = np.maximum(local_max(np.where(hand_mask | swoosh_mask, hsat, 0.0), 8), 0.05)
+
+
+def hand_shape(mask):
+    field = np.where(dilate(mask, 3), np.clip(hsat / hstrength, 0, 1), 0.0)
+    img = (Image.fromarray((field * 255).astype(np.uint8))
+           .resize((HW * S, HH * S), Image.BICUBIC)
+           .filter(ImageFilter.GaussianBlur(BLUR)))
+    big = np.asarray(img, dtype=np.uint8) > 127
+    pts, sharp = relax(trace_boundary(big))
+    ys = [y for (y, _) in pts]
+    return pts, sharp, (min(ys), max(ys))
+
+
+hand_pts, hand_sharp, hand_yspan = hand_shape(hand_mask)
+swoosh_pts, swoosh_sharp, _ = hand_shape(swoosh_mask)
+print(f'hand: {len(hand_pts)} points, curl: {len(swoosh_pts)} points', file=sys.stderr)
+
 # ------------------------------------------------------------------- EMIT
 
 def out_xy(x, y):
@@ -519,10 +595,25 @@ def out_xy(x, y):
             (y * REF / S - OY - BASE[1]) * SCALE)
 
 
+# Where the flower's base sits in the logo, so the hand crop can be mapped
+# into the same space: base_x = crop_x + (OX + BASE.x)/REF, likewise y.
+LOGO_BASE = (LOTUS_ORIGIN[0] + (OX + BASE[0]) / REF,
+             LOTUS_ORIGIN[1] + (OY + BASE[1]) / REF)
+
+
+def hand_xy(x, y):
+    """Upscaled hand-crop pixels -> the same emitted user units."""
+    return ((HAND_ORIGIN[0] + x / S - LOGO_BASE[0]) * REF * SCALE,
+            (HAND_ORIGIN[1] + y / S - LOGO_BASE[1]) * REF * SCALE + HAND_LIFT)
+
+
 bounds = []
 for f in figures.values():
     for (y, x) in f['outer']:
         bounds.append(out_xy(x, y))
+hand_out = [hand_xy(x, y) for (y, x) in hand_pts]
+swoosh_out = [hand_xy(x, y) for (y, x) in swoosh_pts]
+bounds += hand_out
 for d in dots:
     x, y = out_xy(d['cx'], d['cy'])
     r = d['r'] * REF / S * SCALE
@@ -560,6 +651,15 @@ L = [
     '  dot: { x: number; y: number; r: number } | null;',
     '  d: string;',
     '}',
+    '',
+    '/** The seal\'s cupping hand, and the thumb curl inside it. The flower',
+    '    opens out of it. */',
+    'export const LOTUS_HAND = {',
+    f"  d: '{bezier_path([(x, y) for (x, y) in hand_out], hand_sharp)}',",
+    f"  curl: '{bezier_path([(x, y) for (x, y) in swoosh_out], swoosh_sharp)}',",
+    '  span: [%.1f, %.1f],' % (min(y for _, y in hand_out), max(y for _, y in hand_out)),
+    f'  window: [{HAND_WINDOW[0]}, {HAND_WINDOW[1]}] as [number, number],',
+    '};',
     '',
     f"export const LOTUS_VIEWBOX = '{vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f}';",
     f'export const LOTUS_ASPECT = {vw / vh:.4f};',
