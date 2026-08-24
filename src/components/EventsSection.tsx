@@ -328,26 +328,30 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       <div className="px-5 pt-2.5 pb-3.5">
         {/* QR stub — a REAL code, generated locally, encoding the ?invite=
             link for this event: a phone camera pointed at the pass gets the
-            full invitation card on its own screen. White panel because
-            scanners want dark modules on light ground. */}
-        <div
-          className="rounded-2xl p-2 flex items-center gap-2.5 text-left ring-1 ring-black/10 shadow-lg"
-          style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
-        >
-          {qr ? (
-            <img
-              src={qr}
-              alt={`QR code — scan to open the ${event.title} invitation`}
-              className="w-[62px] h-[62px] rounded-lg flex-none"
-            />
-          ) : (
-            <div className="w-[62px] h-[62px] rounded-[4px] bg-neutral-200 flex-none" aria-hidden="true" />
-          )}
+            full invitation card on its own screen. The white is confined to
+            a small chip hugging the code — scanners only need light ground
+            behind the modules, and a full white slab broke the card's ink.
+            The caption sits on the violet like everything else. */}
+        <div className="flex items-center gap-3 text-left">
+          <div className="flex-none rounded-xl bg-white p-1.5 ring-1 ring-white/30 shadow-lg">
+            {qr ? (
+              <img
+                src={qr}
+                alt={`QR code — scan to open the ${event.title} invitation`}
+                className="w-[58px] h-[58px] rounded-md"
+              />
+            ) : (
+              <div className="w-[58px] h-[58px] rounded-md bg-neutral-200" aria-hidden="true" />
+            )}
+          </div>
           <div className="min-w-0">
-            <p className="text-[8px] font-extrabold uppercase tracking-[0.2em] text-neutral-400">
+            <p
+              className="text-[8px] font-extrabold uppercase tracking-[0.22em]"
+              style={{ color: accentB }}
+            >
               Scan me
             </p>
-            <p className="text-[10.5px] font-bold text-neutral-800 leading-snug">
+            <p className="text-[10.5px] font-bold text-white/85 leading-snug mt-0.5">
               Opens this invitation on your phone
             </p>
           </div>
