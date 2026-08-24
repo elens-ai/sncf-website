@@ -20,8 +20,9 @@ import { LOGO_ASPECT, LOGO_BASE, LOGO_HAND, LOGO_PETALS, LOGO_VIEWBOX } from './
  * THE RELIEF is real SVG lighting on top of that: a specular pass
  * (feSpecularLighting + fePointLight) over the same smoothed alpha, so one
  * light falls across the whole petal rather than across each of its bands. A
- * soft cast shadow sits under the hand, and the emblem carries a slight
- * tilt.
+ * soft cast shadow sits under the hand, and the emblem tilts from 15 to 4
+ * degrees as it opens — on a wrapper layer of its own, so the turn costs a
+ * composite rather than a re-render of every filter inside it.
  *
  * THE BLOOM runs left to right, one petal at a time. The hand arrives first
  * — the flower has to open out of something. Each petal is then wound back
@@ -34,9 +35,8 @@ import { LOGO_ASPECT, LOGO_BASE, LOGO_HAND, LOGO_PETALS, LOGO_VIEWBOX } from './
  * blurs, a specular pass and a shadow per group — and a filter re-renders
  * whenever the geometry it is drawn from changes. So the glow and the ground
  * shadow keep a fixed radius and are scaled by transform instead of having
- * their radii rewritten each frame, and the emblem's tilt is set once rather
- * than eased, which otherwise re-rasterises the whole filtered emblem on
- * every frame of the scroll. That is the difference between a bloom that
+ * their radii rewritten each frame, and the tilt turns a promoted wrapper
+ * rather than the <svg> itself. That is the difference between a bloom that
  * plays and one that stutters.
  *
  * NOTHING RUNS ON A CLOCK. Progress arrives through the imperative handle,
@@ -84,12 +84,12 @@ const EASE_TAU = 0.16;
     swing clockwise into place; folding each one up to the vertical instead
     sends the left half one way and the right half the other, which reads as
     petals arriving rather than a flower opening. */
-const SWEEP_DEG = 62;
+const SWEEP_DEG = 88;
 
 /** tucked back towards the base while folded, and the hand's rise, in the
     file's own units */
-const BACK_NUDGE = 7;
-const HAND_RISE = 13;
+const BACK_NUDGE = 11;
+const HAND_RISE = 16;
 
 /** The seal sets its hand a little below the flower, with the ring's white
     band between them. Closing that gap is what makes the flower read as
@@ -104,7 +104,7 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   maxWidth = 620,
   className,
 }, ref) => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
+  const tiltRef = useRef<HTMLDivElement | null>(null);
   const shadowRef = useRef<SVGEllipseElement | null>(null);
   const glowRef = useRef<SVGCircleElement | null>(null);
   const handRef = useRef<SVGGElement | null>(null);
@@ -115,6 +115,12 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   const rafRef = useRef<number | null>(null);
 
   const updateDOM = (s: number) => {
+    /* The tilt rides a wrapper of its own rather than the <svg>: turning the
+       SVG itself re-rasterises every filter inside it on each frame, while
+       turning a promoted layer is just the compositor moving a texture. */
+    if (tiltRef.current) {
+      tiltRef.current.style.transform = `rotateX(${lerp(15, 4, easeOut(s)).toFixed(2)}deg)`;
+    }
     if (shadowRef.current) {
       const k = easeOut(s);
       shadowRef.current.style.transform =
@@ -150,8 +156,8 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
       /* Wound back anticlockwise, then swung clockwise home. */
       const eased = easeOutBack(raw);
       const fold = -SWEEP_DEG * (1 - eased);
-      const sx = lerp(0.45, 1, eased);
-      const sy = lerp(0.62, 1, eased);
+      const sx = lerp(0.28, 1, eased);
+      const sy = lerp(0.46, 1, eased);
       const tx = p.dir.x * (1 - eased) * -BACK_NUDGE;
       const ty = p.dir.y * (1 - eased) * -BACK_NUDGE;
 
@@ -234,16 +240,21 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
       }}
       aria-hidden="true"
     >
+      <div
+        ref={tiltRef}
+        style={{
+          width: '100%',
+          height: '100%',
+          transformStyle: 'preserve-3d',
+          transform: 'rotateX(15deg)',
+          willChange: 'transform',
+        }}
+      >
       <svg
-        ref={svgRef}
         viewBox={LOGO_VIEWBOX}
         width="100%"
         height="100%"
-        style={{
-          overflow: 'visible',
-          transformStyle: 'preserve-3d',
-          transform: 'rotateX(6deg)',
-        }}
+        style={{ overflow: 'visible' }}
       >
         <defs>
           {/* Lit surface: one light across a whole group, not across each of
@@ -411,6 +422,7 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
           </g>
         ))}
       </svg>
+      </div>
     </div>
   );
 });
