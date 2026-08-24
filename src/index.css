@@ -950,6 +950,31 @@
   scroll-snap-align: start;
 }
 
+/* THE ONE LIGHT SCREEN. The lotus section turns white so its beams have
+   something to divide, and the fixed chrome is drawn for dark ground: white
+   ink on a 40%-black scrim is legible over the hero's gradient and nearly
+   gone over white. So while that screen holds the viewport, the scrims behind
+   the chrome deepen and the rail's hairlines darken — the ink itself never
+   changes, only what sits behind it. */
+html[data-on-light] .chrome-scrim {
+  background-color: rgba(9, 9, 11, 0.82);
+}
+
+html[data-on-light] .social-rail a {
+  background-color: rgba(9, 9, 11, 0.7);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+html[data-on-light] .social-rail .rail-line {
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(9, 9, 11, 0.35),
+    rgba(9, 9, 11, 0.5)
+  );
+}
+
 /* The lotus screen is a tall track holding a sticky stage: the extra height
    IS the bloom's scrub length. 420vh leaves 320vh of pinned travel — about
    50vh per petal, so each swing is watched rather than glimpsed, with a beat

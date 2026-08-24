@@ -43,8 +43,8 @@ import {
  * territories into one wash, and the division is the point. The beams are
  * drawn in the emblem's own coordinates and simply run past the viewBox (the
  * svg does not clip), which is what keeps them anchored to the flower at any
- * size, and they screen onto the page rather than painting over it, so they
- * read as light rather than as paint.
+ * size. They multiply onto the section's white ground, which is what keeps
+ * a wedge the colour of its petal instead of a wash.
  *
  * THE BLOOM runs left to right, one petal at a time. The hand arrives first
  * — the flower has to open out of something. Each petal is then wound back
@@ -444,7 +444,10 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         />
 
         {/* the lamp: one wedge of light per petal, out past the frame */}
-        <g style={{ mixBlendMode: 'screen', pointerEvents: 'none' }}>
+        {/* Multiply, not screen: the section turns white under the emblem, and
+            screening onto white is a no-op — the wedges would vanish exactly
+            where they are meant to be clearest. */}
+        <g style={{ mixBlendMode: 'multiply', pointerEvents: 'none' }}>
           <defs>
             {BEAMS.map((b) => (
               <radialGradient

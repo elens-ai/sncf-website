@@ -20,8 +20,10 @@ import { SncfLotus3D, SncfLotus3DHandle } from './SncfLotus3D';
  * handle, so the scroll path never re-renders React: a passive listener
  * marks it dirty, one frame reads the track and the flower damps towards it.
  *
- * It paints no background of its own; the page-wide .accent-canvas carries
- * the gradient through, as on every screen.
+ * IT PAINTS ITSELF WHITE, alone among the screens: a white wash fades in as
+ * the section takes the viewport over from the hero, so the beams have
+ * something to divide. The page-wide .accent-canvas still runs underneath,
+ * and shows through for as long as the hero is still on screen.
  */
 
 interface PillarsSectionProps {
@@ -33,6 +35,7 @@ interface PillarsSectionProps {
 export const PillarsSection: React.FC<PillarsSectionProps> = () => {
   const trackRef = useRef<HTMLElement | null>(null);
   const lotusRef = useRef<SncfLotus3DHandle | null>(null);
+  const washRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     let raf = 0;
@@ -45,9 +48,28 @@ export const PillarsSection: React.FC<PillarsSectionProps> = () => {
          terms are measured live, so a track sized in vh and a viewport that
          resizes — phone chrome collapsing, rotation — stay in step without
          hardcoding either. */
+      const vh = window.innerHeight || 1;
       const r = track.getBoundingClientRect();
-      const span = r.height - (window.innerHeight || 1);
+      const span = r.height - vh;
       lotusRef.current?.updateProgress(span > 0 ? -r.top / span : 1);
+
+      /* The screen goes white as the section takes the viewport over from the
+         hero: 0 while the section's top is still at the bottom of the screen,
+         1 the moment it reaches the top and pins. The beams need it — they
+         are colour laid on light, and on the hero's dark gradient the
+         divisions between verticals barely read. */
+      if (washRef.current) {
+        const covered = Math.max(0, Math.min(1, (vh - r.top) / vh));
+        washRef.current.style.opacity = (covered * covered).toFixed(3);
+        /* Tell the fixed chrome it is over light ground; its own styles
+           handle the rest. */
+        /* Only once the ground is actually pale — switching at half cover
+           deepens the scrim while the hero's dark gradient still shows. */
+        const light = covered > 0.85 && r.bottom > vh * 0.5;
+        if (light !== document.documentElement.hasAttribute('data-on-light')) {
+          document.documentElement.toggleAttribute('data-on-light', light);
+        }
+      }
     };
     const invalidate = () => {
       if (!raf) raf = requestAnimationFrame(read);
@@ -60,6 +82,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = () => {
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener('scroll', invalidate);
       window.removeEventListener('resize', invalidate);
+      document.documentElement.removeAttribute('data-on-light');
     };
   }, []);
 
@@ -71,6 +94,12 @@ export const PillarsSection: React.FC<PillarsSectionProps> = () => {
       className="snap-screen lotus-track relative z-10 w-full"
     >
       <div className="sticky top-0 h-screen w-full flex items-end justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[96px] pb-0 overflow-hidden">
+        <div
+          ref={washRef}
+          aria-hidden="true"
+          className="absolute inset-0 bg-white pointer-events-none"
+          style={{ opacity: 0, willChange: 'opacity' }}
+        />
         <SncfLotus3D ref={lotusRef} maxWidth={230} className="mx-auto" />
       </div>
     </section>

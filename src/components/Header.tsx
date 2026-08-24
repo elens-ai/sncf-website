@@ -108,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
           stacking context (fixed, z-50) stops it escaping underneath. */}
       <div
         aria-hidden="true"
-        className={`absolute inset-0 -z-10 bg-neutral-950/40 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.25)] transition-opacity duration-500 ${
+        className={`chrome-scrim absolute inset-0 -z-10 bg-neutral-950/40 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.25)] transition-opacity duration-500 ${
           scrolled ? 'opacity-100' : 'opacity-0'
         }`}
       />
