@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { PillarState } from '../types';
+import { SncfLotus3D } from './SncfLotus3D';
 
 /**
  * The screen below the hero.
@@ -40,10 +41,10 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({
   <section
     id="pillars-section"
     aria-label="Our work"
-    className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-16 overflow-hidden"
+    className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[84px] pb-10 overflow-hidden"
   >
     <div className="relative z-10 w-full max-w-7xl mx-auto">
-      <header className="mb-8 sm:mb-12">
+      <header className="mb-3 sm:mb-4">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
           Our work
         </p>
@@ -51,6 +52,10 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({
           Four pillars, one intention — service offered without condition.
         </h2>
       </header>
+
+      {/* The lotus unfolds as this screen scrolls in — the site's own moods
+          fanning open from the Enrich centre — and floats once it has. */}
+      <SncfLotus3D className="mx-auto w-[min(56vw,300px)] -my-2" />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {pillars.map((pillar, i) => {
