@@ -28,29 +28,32 @@ import {
 import { EventsCalendarModal } from './EventsCalendarModal';
 
 /**
- * Upcoming events as a 3D DECK.
+ * Upcoming events as a deck of EVENT PASSES.
  *
- * One card stands upright in the centre — the active event — while its
- * neighbours lie back toward the ground at either side, smaller and dimmer,
- * like cards resting on a table behind the one being read. Moving the deck
- * (arrows, a horizontal scroll or drag, a click on a resting card, or
- * hovering a dot on the year rail) glides the chosen card up from the side
- * into the centre while the centre card lays itself down on the other side.
+ * THE CARD is a vertical pass — the thing you'd wear on a lanyard at the
+ * event itself: an accent band at the head, a punched lanyard slot, the
+ * tear-off date page sitting where an ID photo would, a dashed perforation,
+ * and a barcode stub carrying the event's own id. The barcode is decorative
+ * and encodes nothing — it is the ticket language, not a scannable claim.
+ * Colour discipline holds: dark glass and paper, with the pillar allowed one
+ * gradient band and one tinted label.
  *
- * The lying-back look is transform-origin: bottom + rotateX — the card tips
- * backward from its bottom edge exactly the way a standing card falls flat,
- * so the motion between the two states reads as one physical action, not two
- * unrelated poses. All motion is transform/opacity only, GPU-composited, and
- * only the RETURN glide is transitioned — the same rules the hero wheel
- * follows.
+ * THE DECK: only the centre pass stands and reads. The others LIE ON THE
+ * GROUND behind it — tipped 62–66deg back from their bottom edge, low, dim,
+ * and overlapping each other like a pile on a table, so the sides read as
+ * "there are more" rather than as competing cards. Moving the deck stands
+ * the chosen pass up from the pile while the centre one lies down on the
+ * other side, wrapping continuously.
  *
- * Vertical scrolling is never hijacked: only clearly-horizontal wheel gestures
- * turn the deck, so the page's own scroll and snap keep working over it.
+ * Drive it with the arrows, the per-event dots, a click on a pile, a
+ * horizontal drag/swipe or wheel gesture, or by hovering a dot on the year
+ * rail. Vertical scrolling is never hijacked — the wheel handler acts only
+ * when deltaX clearly dominates, attached natively because React registers
+ * wheel listeners as passive.
  *
- * COLOUR DISCIPLINE, DATE ENGINE, RAIL and CALENDAR are unchanged from the
- * previous passes: colour-neutral paper-and-glass cards on the animating
- * stage, computed years that can never go stale, the fixed JAN–DEC rail, and
- * the month-grid calendar modal carrying the .ics exports.
+ * DATE ENGINE, RAIL and CALENDAR are unchanged: computed years that cannot
+ * go stale, the fixed JAN–DEC rail, and the month-grid modal with the .ics
+ * exports.
  */
 
 /* ------------------------------------------------------------------ clock */
@@ -99,10 +102,10 @@ const CountdownClock: React.FC<{ target: Date }> = ({ target }) => {
   );
 };
 
-/* ------------------------------------------------------------------- card */
+/* -------------------------------------------------------------- event pass */
 
-const EventCard: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit }) => {
-  const { event, date, days, accentB } = item;
+const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit }) => {
+  const { event, date, days, accentA, accentB } = item;
   const [shared, setShared] = useState(false);
 
   const share = async () => {
@@ -124,111 +127,141 @@ const EventCard: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
   return (
     <article
       id={`event-card-${event.id}`}
-      className={`relative flex gap-4 rounded-3xl bg-neutral-950/70 backdrop-blur-md border p-4 transition-colors duration-300 ${
+      className={`relative w-[248px] mx-auto flex flex-col rounded-[22px] overflow-hidden bg-neutral-950/75 backdrop-blur-md border transition-colors duration-300 ${
         lit ? 'border-white/40 shadow-2xl' : 'border-white/[0.12]'
       }`}
     >
-      {/* The pillar's entire colour budget on this card: one line. */}
-      <span
+      {/* The lanyard band — the pillar's one gradient on this pass. */}
+      <div
         aria-hidden="true"
-        className="absolute left-0 top-5 bottom-5 w-[3px] rounded-full"
-        style={{ backgroundColor: accentB }}
+        className="h-[7px] w-full flex-none"
+        style={{ background: `linear-gradient(90deg, ${accentA}, ${accentB})` }}
       />
 
-      {/* Tear-off date page. Paper-white on purpose — paper is the surface
-          that reads as itself on every colour the stage passes through. */}
-      <div className="relative flex-none w-[86px] self-start rounded-2xl bg-white text-neutral-900 shadow-lg overflow-hidden">
-        <div className="h-[14px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
-          <span className="w-[5px] h-[5px] rounded-full bg-neutral-300 shadow-inner" />
-          <span className="w-[5px] h-[5px] rounded-full bg-neutral-300 shadow-inner" />
-        </div>
-        {event.kind === 'annual' && date ? (
-          <div className="px-2 pt-1.5 pb-2 text-center">
-            <p
-              className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
-              style={{ color: accentB }}
-            >
-              {date.toLocaleDateString('en-US', { weekday: 'long' })}
-            </p>
-            <p className="font-artistic-heading font-bold text-[34px] leading-none tabular-nums mt-0.5">
-              {date.getDate()}
-            </p>
-            <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
-              {MONTHS_SHORT[date.getMonth()]} &rsquo;{String(date.getFullYear()).slice(2)}
-            </p>
-          </div>
-        ) : (
-          <div className="px-2 pt-1.5 pb-2 text-center">
-            <p
-              className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
-              style={{ color: accentB }}
-            >
-              Every day
-            </p>
-            <p className="font-artistic-heading font-bold text-[30px] leading-none mt-1">∞</p>
-            <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-1">
-              Year-round
-            </p>
-          </div>
-        )}
-      </div>
+      {/* Punched slot, as on a worn badge. */}
+      <div
+        aria-hidden="true"
+        className="mx-auto mt-2.5 h-[7px] w-12 rounded-full bg-black/70 border border-white/10 flex-none"
+      />
 
-      <div className="min-w-0 flex flex-col">
-        <div className="flex flex-wrap items-center gap-2 mb-1.5">
-          <span
-            className="text-[9px] font-extrabold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border"
-            style={{
-              color: accentB,
-              borderColor: `${accentB}4d`,
-              backgroundColor: `${accentB}14`,
-            }}
-          >
-            {event.tag}
-          </span>
-          {event.kind === 'ongoing' ? (
-            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-white/70">
-              <InfinityIcon className="w-3 h-3" />
-              Ongoing
-            </span>
+      <p className="text-center text-[8px] font-extrabold uppercase tracking-[0.3em] text-white/40 mt-2">
+        SNCF · Event pass
+      </p>
+
+      <div className="px-5 pt-3 pb-3 flex flex-col items-center text-center">
+        {/* The date page sits where an ID photo would. */}
+        <div className="relative w-[96px] rounded-2xl bg-white text-neutral-900 shadow-lg overflow-hidden">
+          <div className="h-[13px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
+            <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
+            <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
+          </div>
+          {event.kind === 'annual' && date ? (
+            <div className="px-2 pt-1.5 pb-2">
+              <p
+                className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
+                style={{ color: accentB }}
+              >
+                {date.toLocaleDateString('en-US', { weekday: 'long' })}
+              </p>
+              <p className="font-artistic-heading font-bold text-[34px] leading-none tabular-nums mt-0.5">
+                {date.getDate()}
+              </p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
+                {MONTHS_SHORT[date.getMonth()]} &rsquo;{String(date.getFullYear()).slice(2)}
+              </p>
+            </div>
           ) : (
-            <span
-              className={`text-[10px] font-bold tabular-nums ${
-                days !== null && days <= 7
-                  ? 'text-white countdown-pulse px-2 py-0.5 rounded-full bg-white/15'
-                  : 'text-white/70'
-              }`}
-            >
-              {countdownLabel(days as number)}
-            </span>
+            <div className="px-2 pt-1.5 pb-2">
+              <p
+                className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
+                style={{ color: accentB }}
+              >
+                Every day
+              </p>
+              <p className="font-artistic-heading font-bold text-[30px] leading-none mt-0.5">∞</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
+                Year-round
+              </p>
+            </div>
           )}
         </div>
 
-        <h3 className="font-artistic-heading font-bold text-white text-[17px] leading-tight mb-1">
+        <span
+          className="mt-3 text-[9px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-0.5 rounded-full border"
+          style={{
+            color: accentB,
+            borderColor: `${accentB}4d`,
+            backgroundColor: `${accentB}14`,
+          }}
+        >
+          {event.tag}
+        </span>
+
+        <h3 className="font-artistic-heading font-bold text-white text-[16px] leading-tight mt-2">
           {event.title}
         </h3>
 
-        <p className="font-artistic-serif text-white/75 text-[12.5px] leading-relaxed line-clamp-2">
+        <p className="font-artistic-serif text-white/70 text-[11.5px] leading-relaxed mt-1 line-clamp-2">
           {event.blurb}
         </p>
 
+        {event.kind === 'ongoing' ? (
+          <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-white/70">
+            <InfinityIcon className="w-3 h-3" />
+            Ongoing · join anytime
+          </span>
+        ) : (
+          <span
+            className={`mt-2 text-[10px] font-bold tabular-nums ${
+              days !== null && days <= 7
+                ? 'text-white countdown-pulse px-2 py-0.5 rounded-full bg-white/15'
+                : 'text-white/70'
+            }`}
+          >
+            {countdownLabel(days as number)}
+          </span>
+        )}
+
         {(event.location || event.time) && (
-          <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5">
+          <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-1.5">
             {event.location && (
-              <p className="flex items-center gap-1 text-[11px] text-white/65">
+              <p className="flex items-center gap-1 text-[10px] text-white/60">
                 <MapPin className="w-3 h-3 flex-none" />
                 {event.location}
               </p>
             )}
             {event.time && (
-              <p className="flex items-center gap-1 text-[11px] text-white/65">
+              <p className="flex items-center gap-1 text-[10px] text-white/60">
                 <Clock className="w-3 h-3 flex-none" />
                 {event.time}
               </p>
             )}
           </div>
         )}
+      </div>
 
-        <div className="flex flex-wrap items-center gap-1.5 mt-auto pt-3">
+      {/* Perforation — the stub below is where the pass gets used. */}
+      <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
+
+      <div className="px-5 pt-2.5 pb-3.5">
+        {/* Barcode stub. Decorative: it encodes nothing, it is the ticket
+            language — but it carries the event's real id as its legend. */}
+        <div
+          aria-hidden="true"
+          className="h-6 w-full rounded-[3px] text-white/60"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 5px, currentColor 5px 6px, transparent 6px 8px, currentColor 8px 11px, transparent 11px 14px)',
+          }}
+        />
+        <p
+          aria-hidden="true"
+          className="text-center text-[7px] font-bold uppercase tracking-[0.3em] text-white/35 mt-1"
+        >
+          {event.id.replace(/-/g, ' ')}
+        </p>
+
+        <div className="flex items-center justify-center gap-1.5 mt-2.5">
           {event.kind === 'annual' && date && (
             <a
               href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
@@ -321,26 +354,26 @@ const EventDeck: React.FC<{
     return () => el.removeEventListener('wheel', onWheel);
   }, [step]);
 
-  const sideX = Math.min(stageW * 0.34, 380);
-  const farX = Math.min(stageW * 0.55, 620);
+  const sideX = Math.min(stageW * 0.26, 300);
+  const farX = Math.min(stageW * 0.33, 380);
 
-  /* The five poses. Sides tip backward from their BOTTOM edge — the way a
-     standing card lies down — which is what sells the ground. */
+  /* Only the centre pass stands. The piles lie 62–66deg back from their
+     bottom edge, low and close together, so ±1 and ±2 OVERLAP into one
+     resting stack per side instead of reading as four more cards. */
   const pose = (off: number) => {
-    if (off === 0)
-      return { x: 0, y: 0, rx: 0, ry: 0, s: 1, o: 1, z: 30, blur: 0 };
+    if (off === 0) return { x: 0, y: 0, rx: 0, ry: 0, s: 1, o: 1, z: 30, blur: 0 };
     const a = Math.abs(off);
     const sgn = Math.sign(off);
     if (a === 1)
-      return { x: sgn * sideX, y: 58, rx: 32, ry: -sgn * 26, s: 0.78, o: 0.55, z: 20, blur: 0 };
-    return { x: sgn * farX, y: 96, rx: 44, ry: -sgn * 36, s: 0.62, o: 0.18, z: 10, blur: 2 };
+      return { x: sgn * sideX, y: 168, rx: 62, ry: -sgn * 10, s: 0.82, o: 0.4, z: 20, blur: 0 };
+    return { x: sgn * farX, y: 186, rx: 66, ry: -sgn * 14, s: 0.74, o: 0.22, z: 10, blur: 1 };
   };
 
   return (
     <div className="relative">
       <div
         ref={stageRef}
-        className="relative h-[300px] sm:h-[290px] select-none"
+        className="relative h-[440px] select-none"
         style={{ perspective: '1500px' }}
         role="group"
         aria-roledescription="carousel"
@@ -364,7 +397,7 @@ const EventDeck: React.FC<{
           return (
             <div
               key={item.event.id}
-              className="absolute left-1/2 top-2 w-[min(88vw,470px)]"
+              className="absolute left-1/2 top-2 w-[248px]"
               style={{
                 transform: `translateX(calc(-50% + ${p.x}px)) translateY(${p.y}px) rotateY(${p.ry}deg) rotateX(${p.rx}deg) scale(${p.s})`,
                 transformOrigin: '50% 100%',
@@ -378,15 +411,15 @@ const EventDeck: React.FC<{
                 pointerEvents: p.o < 0.2 ? 'none' : 'auto',
               }}
             >
-              <EventCard item={item} lit={off === 0} />
-              {/* A resting card's only job is to come forward: this overlay
-                  catches the click so its buttons cannot fire from the side. */}
+              <EventPass item={item} lit={off === 0} />
+              {/* A resting pass's only job is to stand up: this overlay catches
+                  the click so its buttons cannot fire from the pile. */}
               {off !== 0 && (
                 <button
                   type="button"
                   aria-label={`Bring ${item.event.title} to the front`}
                   onClick={() => onActivate(i)}
-                  className="absolute inset-0 rounded-3xl cursor-pointer bg-transparent"
+                  className="absolute inset-0 rounded-[22px] cursor-pointer bg-transparent"
                 />
               )}
             </div>
@@ -395,7 +428,7 @@ const EventDeck: React.FC<{
       </div>
 
       {/* Deck controls: arrows and one dot per card. */}
-      <div className="flex items-center justify-center gap-3 mt-1">
+      <div className="relative z-30 flex items-center justify-center gap-3 mt-1">
         <button
           onClick={() => step(-1)}
           aria-label="Previous event"
@@ -473,15 +506,15 @@ export const EventsSection: React.FC = () => {
     <section
       id="events-section"
       aria-label="Upcoming events"
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-10 overflow-hidden"
+      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-8 overflow-hidden"
     >
       <div className="relative z-10 w-full max-w-7xl mx-auto">
-        <header className="mb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+        <header className="mb-3 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div>
             <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
               What&rsquo;s next
             </p>
-            <h2 className="font-artistic-heading text-white text-[28px] sm:text-[36px] md:text-[42px] leading-tight drop-shadow">
+            <h2 className="font-artistic-heading text-white text-[28px] sm:text-[34px] md:text-[40px] leading-tight drop-shadow">
               Show up, pitch in
             </h2>
           </div>
@@ -508,10 +541,11 @@ export const EventsSection: React.FC = () => {
         </header>
 
         {/* TIMELINE RAIL — the calendar year, January to December, fixed.
-            Hovering a dot glides that event's card to the front of the deck;
-            clicking opens the calendar at its month. Hidden from assistive
-            tech — the cards and the calendar dialog carry the same facts. */}
-        <div className="relative h-[54px] mb-4 select-none hidden sm:block" aria-hidden="true">
+            Hovering a dot stands that event's pass up at the front of the
+            deck; clicking opens the calendar at its month. Hidden from
+            assistive tech — the passes and the calendar dialog carry the
+            same facts. */}
+        <div className="relative h-[50px] mb-2 select-none hidden sm:block" aria-hidden="true">
           <div className="absolute left-0 right-0 top-[22px] h-px bg-white/20" />
           {MONTHS_SHORT.map((label, i) => (
             <div
@@ -555,7 +589,7 @@ export const EventsSection: React.FC = () => {
 
         <EventDeck items={items} active={active} onActivate={setActive} />
 
-        <p className="text-[11px] text-white/50 mt-3 max-w-3xl">
+        <p className="relative z-30 text-[11px] text-white/50 mt-2 max-w-3xl">
           Dates shown are the fixed national and international observances. Venues and
           timings vary by city — the SNCF office confirms what is running near you on{' '}
           <a
