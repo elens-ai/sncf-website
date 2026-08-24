@@ -1,46 +1,46 @@
-import React, { useEffect, useMemo, useRef, useImperativeHandle, forwardRef } from 'react';
-import { LOTUS_ASPECT, LOTUS_HAND, LOTUS_PETALS, LOTUS_VIEWBOX } from './lotusPetalPaths';
-import { PILLARS } from '../data/pillars';
-import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
+import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import { LOGO_ASPECT, LOGO_BASE, LOGO_HAND, LOGO_PETALS, LOGO_VIEWBOX } from './logoShapes';
 
 /**
- * The SNCF lotus, extruded and lit, assembling as the screen scrolls.
+ * The SNCF seal, assembling as the screen scrolls.
  *
- * The geometry is the foundation seal's own (see lotusPetalPaths.ts), drawn
- * about the flower's base at the origin — which is the point every petal
- * unfolds around. The seal's cupping HAND is traced from the same logo and
- * mapped through the same transform, so it sits under the flower exactly as
- * the seal has it: the hand opens first and the petals rise out of the cup.
+ * THE ART IS THE LOGO'S OWN — the foundation's vector file, grouped by
+ * logoShapes.ts into a hand and five petals so each can be moved. Every
+ * outline and every colour comes from that file, gradients and all; nothing
+ * here is traced, matched by eye, or repainted. What this component adds is
+ * relief and motion.
  *
- * THE COLOURS are the hero cards': each petal is named for a card and wears
- * that card's two accents, read from PILLARS and DEVOTIONAL_ACCENT rather
- * than copied, so a card's palette and its petal cannot drift apart. The
- * light accent lights the top face, the deep one grounds it, and the side
- * walls and rim are shaded and tinted from the same pair.
+ * THE ART IS ALSO CLEANED UP on the way through. The file is itself an
+ * auto-trace: its outlines carry a pixel staircase and its gradients are cut
+ * into bands that meet in hairline seams — both plainly visible at the size
+ * this is drawn, worst across the broad palm. So each group passes through a
+ * filter that blurs the colour and re-clips it to a blurred, re-sharpened
+ * alpha: the seams melt, the staircase goes, and the silhouette stays crisp.
  *
- * THE RELIEF is real: each petal is stacked DEPTH_STEPS times behind itself
- * in darkening ink to build a side wall, and the whole petal passes through
- * one specular-lighting filter so a single light falls across the flower.
+ * THE RELIEF is real SVG lighting on top of that: a specular pass
+ * (feSpecularLighting + fePointLight) over the same smoothed alpha, so one
+ * light falls across the whole petal rather than across each of its bands. A
+ * soft cast shadow sits under the hand, and the emblem tilts from 12 to 4
+ * degrees as it opens.
  *
- * THE BLOOM is scroll-driven and runs left to right, one petal at a time.
- * Each petal is folded back COUNTER-CLOCKWISE of where it belongs, small and
- * tucked into the base, and swings CLOCKWISE into place as it grows and
- * fades in — every petal turning the same way, so the flower reads as one
- * opening gesture travelling left to right rather than five separate
- * entrances. The windows do not overlap, so a petal has finished before the
- * next moves.
+ * THE BLOOM runs left to right, one petal at a time. The hand arrives first
+ * — the flower has to open out of something. Each petal is then wound back
+ * anticlockwise of where it belongs, small and tucked into the base, and
+ * swings clockwise into place as it grows and fades in: every petal turning
+ * the same way, so the whole reads as one opening gesture travelling across
+ * the screen rather than five separate entrances.
  *
  * NOTHING RUNS ON A CLOCK. Progress arrives through the imperative handle,
  * the loop eases towards it and stops on arrival, and the DOM is written
  * directly through refs — so scrolling never re-renders, and a settled
- * flower schedules no frames at all. The easing is measured in SECONDS, not
- * frames: a fixed fraction per frame runs at whatever speed the display
+ * emblem schedules no frames at all. The easing is measured in SECONDS, not
+ * frames: a fixed fraction per frame runs at whatever rate the display
  * happens to tick at, which is the difference between film and flicker on a
  * 120Hz screen or a throttled tab.
  */
 
 export interface SncfLotus3DHandle {
-  /** Drive the assembly. The flower eases towards the value given. */
+  /** Drive the assembly. The emblem eases towards the value given. */
   updateProgress: (s: number) => void;
 }
 
@@ -48,24 +48,10 @@ export interface SncfLotus3DProps {
   /** Optional declarative drive; the handle is the hot-path route. */
   scrollProgress?: number;
   activePillarId?: string | null;
-  /** Largest width the flower may take; it scales down to fit. */
+  /** Largest width the emblem may take; it scales down to fit. */
   maxWidth?: number;
   className?: string;
 }
-
-/* ---------------- colour helpers ---------------- */
-const hex2rgb = (h: string): [number, number, number] => {
-  const s = h.replace('#', '');
-  return [parseInt(s.slice(0, 2), 16), parseInt(s.slice(2, 4), 16), parseInt(s.slice(4, 6), 16)];
-};
-const rgb2hex = (c: number[]) =>
-  '#' + c.map((v) => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
-const shade = (h: string, f: number) => rgb2hex(hex2rgb(h).map((v) => v * f));
-const tint = (h: string, f: number) => rgb2hex(hex2rgb(h).map((v) => v + (255 - v) * f));
-const mix = (a: string, b: string, t: number) => {
-  const A = hex2rgb(a), B = hex2rgb(b);
-  return rgb2hex([0, 1, 2].map((i) => A[i] + (B[i] - A[i]) * t));
-};
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -80,31 +66,6 @@ const easeOutBack = (t: number) => {
   return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 };
 
-/** Petal id -> the hero card's [deep, light] accents. welcome takes the
-    devotional portrait's pair, the other four their pillar's. */
-const PETAL_TONES: Record<string, [string, string]> = {
-  welcome: [DEVOTIONAL_ACCENT.a, DEVOTIONAL_ACCENT.b],
-  ...Object.fromEntries(PILLARS.map((p) => [p.id, [p.accentA, p.accentB]])),
-};
-const toneOf = (id: string) => PETAL_TONES[id] ?? ['#1f8a5c', '#6fd19a'];
-
-/** The hand is the seal's, not a card's, so it keeps the seal's own ink:
-    magenta at the wrist running to blush at the fingertips, with the thumb
-    curl in the seal's blue. */
-const HAND_TONES: [string, string] = ['#c04c9c', '#e9a7ce'];
-const HAND_CURL = '#5cc0ea';
-
-/** depth of the extruded edge, in user units */
-const DEPTH_STEPS = 4;
-const DEPTH_DX = 0.85;
-const DEPTH_DY = 1.15;
-
-/** how far a folded petal is tucked back towards the base, in user units */
-const BACK_NUDGE = 14;
-
-/** how far the hand rises into place, in user units */
-const HAND_RISE = 26;
-
 /** Seconds for the eased value to close ~63% of its gap. Time-based, so the
     motion is identical at 60Hz, 120Hz or a throttled tab. */
 const EASE_TAU = 0.16;
@@ -112,10 +73,21 @@ const EASE_TAU = 0.16;
 /** How far back each petal is wound before it opens, in degrees. Every petal
     winds the SAME way — anticlockwise of its resting bearing — so all of them
     swing clockwise into place; folding each one up to the vertical instead
-    (the obvious reading of "unfold") sends the left half one way and the
-    right half the other, which reads as petals arriving rather than a flower
-    opening. */
+    sends the left half one way and the right half the other, which reads as
+    petals arriving rather than a flower opening. */
 const SWEEP_DEG = 62;
+
+/** tucked back towards the base while folded, and the hand's rise, in the
+    file's own units */
+const BACK_NUDGE = 7;
+const HAND_RISE = 13;
+
+/** The seal sets its hand a little below the flower, with the ring's white
+    band between them. Closing that gap is what makes the flower read as
+    opening OUT of the palm rather than hovering over it. */
+const HAND_LIFT = -22;
+
+const PIVOT = `${LOGO_BASE.x}px ${LOGO_BASE.y}px`;
 
 export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   scrollProgress,
@@ -124,46 +96,44 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   className,
 }, ref) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const glowRef = useRef<SVGCircleElement | null>(null);
   const shadowRef = useRef<SVGEllipseElement | null>(null);
-  const petalRefs = useRef<Record<string, SVGGElement | null>>({});
+  const glowRef = useRef<SVGCircleElement | null>(null);
   const handRef = useRef<SVGGElement | null>(null);
+  const petalRefs = useRef<Record<string, SVGGElement | null>>({});
 
   const smoothRef = useRef(scrollProgress ?? 0);
   const targetRef = useRef(scrollProgress ?? 0);
   const rafRef = useRef<number | null>(null);
 
-  /* Write straight to the DOM — no React state on the scroll path. */
   const updateDOM = (s: number) => {
     if (svgRef.current) {
       svgRef.current.style.transform = `rotateX(${lerp(12, 4, easeOut(s)).toFixed(2)}deg)`;
     }
     if (shadowRef.current) {
-      shadowRef.current.setAttribute('rx', lerp(60, 210, easeOut(s)).toFixed(1));
-      shadowRef.current.setAttribute('ry', lerp(7, 18, easeOut(s)).toFixed(1));
+      shadowRef.current.setAttribute('rx', lerp(40, 128, easeOut(s)).toFixed(1));
+      shadowRef.current.setAttribute('ry', lerp(4, 11, easeOut(s)).toFixed(1));
     }
 
     /* The hand arrives first: it rises the last of its own travel and
        settles, so the flower has something to open out of. */
     if (handRef.current) {
-      const [h0, h1] = LOTUS_HAND.window;
+      const [h0, h1] = LOGO_HAND.window;
       const hu = clamp01((s - h0) / (h1 - h0));
       const he = easeOutBack(hu);
       handRef.current.style.transform =
-        `translate(0px, ${(HAND_RISE * (1 - he)).toFixed(2)}px) ` +
-        `scale(${lerp(0.86, 1, he).toFixed(3)})`;
+        `translate(0px, ${(HAND_LIFT + HAND_RISE * (1 - he)).toFixed(2)}px) ` +
+        `scale(${lerp(0.9, 1, he).toFixed(3)})`;
       handRef.current.style.opacity = clamp01(hu / 0.4).toFixed(3);
     }
 
     let maxSnap = 0;
 
-    for (const p of LOTUS_PETALS) {
+    for (const p of LOGO_PETALS) {
       const el = petalRefs.current[p.id];
       if (!el) continue;
 
       const [w0, w1] = p.window;
       const raw = clamp01((s - w0) / (w1 - w0));
-
       if (raw >= 0.8 && raw <= 1) {
         const snap = Math.sin(((raw - 0.8) / 0.2) * Math.PI);
         if (snap > maxSnap) maxSnap = snap;
@@ -183,18 +153,16 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
       el.style.opacity = clamp01(eased / 0.35).toFixed(3);
     }
 
-    /* The radiance behind the flower rides the page's live accent, so it
-       warms whichever screen colour the hero is publishing rather than
-       fighting it. */
+    /* The radiance behind the emblem rides the page's live accent, so it
+       warms whichever screen colour the hero is publishing. */
     const g = Math.pow(clamp01(s), 2.4);
     if (glowRef.current) {
-      glowRef.current.setAttribute('r', lerp(40, 210, g).toFixed(1));
-      glowRef.current.setAttribute('opacity', clamp01(lerp(0.03, 0.5, g) + maxSnap * 0.08).toFixed(3));
+      glowRef.current.setAttribute('r', lerp(30, 150, g).toFixed(1));
+      glowRef.current.setAttribute('opacity',
+        clamp01(lerp(0.03, 0.45, g) + maxSnap * 0.08).toFixed(3));
     }
   };
 
-  /* One damped loop, shared by the handle and the optional prop. It stops
-     as soon as it lands, so an idle flower costs nothing. */
   const pump = () => {
     if (rafRef.current !== null) return;
     let last = performance.now();
@@ -231,7 +199,7 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   }, [scrollProgress]);
 
   useEffect(() => {
-    /* Without motion the flower is simply assembled, and the loop that would
+    /* Without motion the emblem is simply assembled, and the loop that would
        have carried it there never starts. */
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       smoothRef.current = 1;
@@ -246,18 +214,13 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
     };
   }, []);
 
-  const tones = useMemo(
-    () => Object.fromEntries(LOTUS_PETALS.map((p) => [p.id, toneOf(p.id)])),
-    [],
-  );
-
   return (
     <div
       className={className}
       style={{
         width: '100%',
         maxWidth,
-        aspectRatio: LOTUS_ASPECT,
+        aspectRatio: LOGO_ASPECT,
         perspective: 900,
         perspectiveOrigin: '50% 62%',
       }}
@@ -265,28 +228,75 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
     >
       <svg
         ref={svgRef}
-        viewBox={LOTUS_VIEWBOX}
+        viewBox={LOGO_VIEWBOX}
         width="100%"
         height="100%"
         style={{ overflow: 'visible', transformStyle: 'preserve-3d' }}
       >
         <defs>
-          {/* Lit-surface bevel — one light for the whole petal */}
-          <filter id="lotusBevel" x="-25%" y="-25%" width="150%" height="150%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b" />
+          {/* Lit surface: one light across a whole group, not across each of
+              its gradient bands. */}
+          {/* Smooth, then light. feGaussianBlur on the colour melts the
+              band seams; blurring the alpha and steepening it back with
+              feComponentTransfer smooths the traced staircase without
+              softening the silhouette, and the specular is taken from that
+              same cleaned alpha so the highlight follows the shape rather
+              than the trace's wobble. */}
+          <filter id="logoBevel" x="-25%" y="-25%" width="150%" height="150%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.9" result="soft" />
+            <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="ab" />
+            <feComponentTransfer in="ab" result="mask">
+              <feFuncA type="linear" slope="18" intercept="-8" />
+            </feComponentTransfer>
+            <feComposite in="soft" in2="mask" operator="in" result="art" />
+            <feGaussianBlur in="mask" stdDeviation="2.6" result="b" />
             <feSpecularLighting
               in="b"
-              surfaceScale="5.5"
-              specularConstant="0.95"
-              specularExponent="19"
+              surfaceScale="3.2"
+              specularConstant="0.62"
+              specularExponent="22"
               lightingColor="#ffffff"
               result="spec"
             >
-              <fePointLight x="-300" y="-420" z="270" />
+              <fePointLight x="-160" y="-220" z="160" />
             </feSpecularLighting>
-            <feComposite in="spec" in2="SourceAlpha" operator="in" result="specClip" />
+            <feComposite in="spec" in2="mask" operator="in" result="specClip" />
             <feComposite
-              in="SourceGraphic"
+              in="art"
+              in2="specClip"
+              operator="arithmetic"
+              k1="0"
+              k2="1"
+              k3="1"
+              k4="0"
+              result="lit"
+            />
+            <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.32" />
+          </filter>
+
+          {/* the palm is one broad surface: its banding is the coarsest and
+              its light the gentlest, or the magenta washes out to pale */}
+          <filter id="logoBevelSoft" x="-25%" y="-25%" width="150%" height="150%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="soft" />
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2.1" result="ab" />
+            <feComponentTransfer in="ab" result="mask">
+              <feFuncA type="linear" slope="20" intercept="-9" />
+            </feComponentTransfer>
+            <feComposite in="soft" in2="mask" operator="in" result="art" />
+            <feGaussianBlur in="mask" stdDeviation="3.4" result="b" />
+            <feSpecularLighting
+              in="b"
+              surfaceScale="2.4"
+              specularConstant="0.34"
+              specularExponent="26"
+              lightingColor="#ffffff"
+              result="spec"
+            >
+              <fePointLight x="-160" y="-240" z="190" />
+            </feSpecularLighting>
+            <feComposite in="spec" in2="mask" operator="in" result="specClip" />
+            <feComposite
+              in="art"
               in2="specClip"
               operator="arithmetic"
               k1="0"
@@ -294,196 +304,89 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
               k3="1"
               k4="0"
             />
+            <feDropShadow dx="0" dy="5" stdDeviation="5" floodColor="#000" floodOpacity="0.3" />
           </filter>
 
-          <filter id="lotusCast" x="-40%" y="-40%" width="180%" height="200%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="9" />
-            <feOffset dy="14" result="o" />
+          <filter id="logoCast" x="-40%" y="-40%" width="180%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="6" />
+            <feOffset dy="8" result="o" />
             <feComponentTransfer in="o">
               <feFuncA type="linear" slope="0.42" />
             </feComponentTransfer>
           </filter>
 
-          <filter id="glowBlur" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="22" />
+          <filter id="logoGlowBlur" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="16" />
           </filter>
 
-          {LOTUS_PETALS.map((p) => {
-            const [deep, light] = tones[p.id];
-            const [top, bottom] = p.span;
-            return (
-              <React.Fragment key={p.id}>
-                <linearGradient id={`lg-${p.id}`} x1="18%" y1="0%" x2="86%" y2="100%">
-                  <stop offset="0%" stopColor={tint(light, 0.34)} />
-                  <stop offset="46%" stopColor={light} />
-                  <stop offset="100%" stopColor={deep} />
-                </linearGradient>
-                {/* The same ink, pinned to the petal's own height in user
-                    space: a dot drawn with it takes the tone its petal has
-                    at the height it floats, instead of squeezing the whole
-                    ramp into a bead and reading as another colour. */}
-                <linearGradient
-                  id={`lg-${p.id}-dot`}
-                  gradientUnits="userSpaceOnUse"
-                  x1="0"
-                  y1={bottom}
-                  x2="0"
-                  y2={top}
-                >
-                  <stop offset="0%" stopColor={deep} />
-                  <stop offset="54%" stopColor={light} />
-                  <stop offset="100%" stopColor={tint(light, 0.34)} />
-                </linearGradient>
-              </React.Fragment>
-            );
-          })}
-
-          {/* the seal's own hand ink: magenta at the wrist, blush at the tip */}
-          <linearGradient id="lotusHand" x1="6%" y1="0%" x2="94%" y2="60%">
-            <stop offset="0%" stopColor={HAND_TONES[0]} />
-            <stop offset="62%" stopColor={mix(HAND_TONES[0], HAND_TONES[1], 0.65)} />
-            <stop offset="100%" stopColor={HAND_TONES[1]} />
-          </linearGradient>
-          <linearGradient id="lotusHandCurl" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={tint(HAND_CURL, 0.28)} />
-            <stop offset="100%" stopColor={shade(HAND_CURL, 0.86)} />
-          </linearGradient>
-
-          <radialGradient id="lotusAmbientGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="var(--accent-b, #6fd19a)" stopOpacity="0.95" />
-            <stop offset="38%" stopColor="var(--accent-b, #6fd19a)" stopOpacity="0.55" />
-            <stop offset="72%" stopColor="var(--accent-a, #1f8a5c)" stopOpacity="0.22" />
+          <radialGradient id="logoAmbient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="var(--accent-b, #6fd19a)" stopOpacity="0.9" />
+            <stop offset="38%" stopColor="var(--accent-b, #6fd19a)" stopOpacity="0.5" />
+            <stop offset="72%" stopColor="var(--accent-a, #1f8a5c)" stopOpacity="0.2" />
             <stop offset="100%" stopColor="var(--accent-a, #1f8a5c)" stopOpacity="0" />
           </radialGradient>
         </defs>
 
-        {/* radiance behind the flower */}
         <circle
           ref={glowRef}
-          cx="0"
-          cy="-70"
-          r="40"
-          fill="url(#lotusAmbientGlow)"
+          cx={LOGO_BASE.x}
+          cy={LOGO_BASE.y - 60}
+          r="30"
+          fill="url(#logoAmbient)"
           opacity="0.03"
-          filter="url(#glowBlur)"
+          filter="url(#logoGlowBlur)"
           style={{ pointerEvents: 'none' }}
         />
 
-        {/* ground shadow */}
         <ellipse
           ref={shadowRef}
-          cx="0"
-          cy={LOTUS_HAND.span[1] + 16}
+          cx={LOGO_BASE.x}
+          cy={LOGO_BASE.y + 118}
           rx="40"
-          ry="6"
+          ry="4"
           fill="#000"
-          opacity={0.32}
-          filter="url(#lotusCast)"
+          opacity={0.3}
+          filter="url(#logoCast)"
         />
 
         {/* the hand, under everything the flower does */}
         <g
           ref={handRef}
-          style={{ willChange: 'transform, opacity', transformOrigin: '0px 40px', opacity: 0 }}
+          style={{ willChange: 'transform, opacity', transformOrigin: PIVOT, opacity: 0 }}
         >
-          <g filter="url(#lotusBevel)">
-            {Array.from({ length: DEPTH_STEPS }).map((_, i) => {
-              const k = DEPTH_STEPS - i;
-              return (
-                <path
-                  key={i}
-                  d={LOTUS_HAND.d}
-                  fill={mix(shade(HAND_TONES[0], 0.45), shade(HAND_TONES[0], 0.62), i / DEPTH_STEPS)}
-                  transform={`translate(${(DEPTH_DX * k).toFixed(2)} ${(DEPTH_DY * k).toFixed(2)})`}
-                />
-              );
-            })}
-            <path d={LOTUS_HAND.d} fill="url(#lotusHand)" />
-            {/* the thumb curl the seal draws inside the palm */}
-            <path d={LOTUS_HAND.curl} fill="url(#lotusHandCurl)" />
+          <g filter="url(#logoBevelSoft)">
+            {LOGO_HAND.palm.map((sh, i) => (
+              <path key={i} d={sh.d} fill={sh.fill} />
+            ))}
           </g>
-          <path
-            d={LOTUS_HAND.d}
-            fill="none"
-            stroke={tint(HAND_TONES[1], 0.5)}
-            strokeWidth={1.2}
-            opacity={0.3}
-            transform="translate(-0.8 -1.1)"
-          />
+          <g filter="url(#logoBevelSoft)">
+            {LOGO_HAND.curl.map((sh, i) => (
+              <path key={i} d={sh.d} fill={sh.fill} />
+            ))}
+          </g>
         </g>
 
         {/* petals, painted back to front */}
-        {LOTUS_PETALS.map((p) => {
-          const [deep, light] = tones[p.id];
-          const wall = shade(deep, 0.45);
-          const isActive = activePillarId === p.id;
-
-          return (
-            <g
-              key={p.id}
-              ref={(el) => {
-                petalRefs.current[p.id] = el;
-              }}
-              style={{
-                willChange: 'transform, opacity',
-                transformOrigin: '0px 0px',
-                opacity: 0,
-              }}
-            >
-              <g filter="url(#lotusBevel)">
-                {/* extruded side walls */}
-                {Array.from({ length: DEPTH_STEPS }).map((_, i) => {
-                  const k = DEPTH_STEPS - i;
-                  return (
-                    <path
-                      key={i}
-                      d={p.d}
-                      fill={mix(wall, shade(deep, 0.62), i / DEPTH_STEPS)}
-                      transform={`translate(${(DEPTH_DX * k).toFixed(2)} ${(DEPTH_DY * k).toFixed(2)})`}
-                    />
-                  );
-                })}
-
-                {/* lit top face */}
-                <path d={p.d} fill={`url(#lg-${p.id})`} />
-
-                {/* the head this figure carries in the seal */}
-                {p.dot && (
-                  <g>
-                    <circle
-                      cx={p.dot.x + DEPTH_DX * DEPTH_STEPS}
-                      cy={p.dot.y + DEPTH_DY * DEPTH_STEPS}
-                      r={p.dot.r}
-                      fill={shade(deep, 0.5)}
-                    />
-                    <circle cx={p.dot.x} cy={p.dot.y} r={p.dot.r} fill={`url(#lg-${p.id}-dot)`} />
-                  </g>
-                )}
-              </g>
-
-              {/* rim light along the upper edge */}
-              <path
-                d={p.d}
-                fill="none"
-                stroke={tint(light, 0.55)}
-                strokeWidth={1.2}
-                opacity={0.32 + (isActive ? 0.4 : 0)}
-                transform="translate(-0.8 -1.1)"
-              />
-
-              {isActive && (
-                <path
-                  d={p.d}
-                  fill="none"
-                  stroke={tint(light, 0.6)}
-                  strokeWidth={5}
-                  opacity={0.3}
-                  style={{ filter: 'blur(5px)' }}
-                />
-              )}
+        {LOGO_PETALS.map((p) => (
+          <g
+            key={p.id}
+            ref={(el) => {
+              petalRefs.current[p.id] = el;
+            }}
+            style={{
+              willChange: 'transform, opacity',
+              transformOrigin: PIVOT,
+              opacity: 0,
+              filter: activePillarId === p.id ? 'brightness(1.08)' : undefined,
+            }}
+          >
+            <g filter="url(#logoBevel)">
+              {p.shapes.map((sh, i) => (
+                <path key={i} d={sh.d} fill={sh.fill} />
+              ))}
             </g>
-          );
-        })}
+          </g>
+        ))}
       </svg>
     </div>
   );
