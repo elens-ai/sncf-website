@@ -49,8 +49,9 @@ S = 8            # mask upscale factor
 REF = 5          # the scale the viewBox numbers below were fixed at
 BLUR = 0.25 * S  # mask low-pass, upscaled pixels
 SIGMA = 0.7 * S  # contour low-pass along the outline, upscaled pixels
-CORNER_COS = -0.35  # turn sharper than this counts as a corner and is kept
+CORNER_COS = -0.55  # turn sharper than this counts as a corner and is kept
 EPS = 1.6        # simplification tolerance, upscaled pixels (~1 viewBox unit)
+TIP = 1.0 * S    # furthest a corner may be extended to a point, upscaled px
 
 # ------------------------------------------------------------------ AUTHORED
 
@@ -199,63 +200,165 @@ def trace_boundary(m):
     return [(y, x) for (x, y) in best]
 
 
-def relax(points, sigma=SIGMA):
-    """Gaussian low-pass ALONG a closed contour, corners exempted.
-
-    The staircase and the shape live at different frequencies, so filtering
-    the vertex sequence removes the first and leaves the second. Corners are
-    the exception — they are high-frequency on purpose — so vertices whose
-    turn over +/-L is sharp keep their original position, and the blend back
-    to full smoothing is itself ramped so no kink appears at the seam."""
-    pts = np.array(points, dtype=float)
-    n = len(pts)
+def _kernel(sigma):
     r = max(1, int(3 * sigma))
     k = np.exp(-0.5 * (np.arange(-r, r + 1) / sigma) ** 2)
-    k /= k.sum()
+    return k / k.sum(), r
+
+
+def _turn_cos(pts, L):
+    """cos of the angle at each vertex between the chords to +/-L along the
+    contour: -1 on a straight run, towards 0 and above at a corner."""
+    n = len(pts)
+    a = pts[(np.arange(n) - L) % n] - pts
+    b = pts[(np.arange(n) + L) % n] - pts
+    return ((a * b).sum(1)
+            / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-9))
+
+
+def find_corners(pts, sigma):
+    """Where the outline genuinely turns a corner, one index per corner.
+
+    Measured on a SMOOTHED copy and over a span wider than the staircase:
+    on the raw contour every pixel step turns a right angle, so short-span
+    detection calls the whole outline a corner and exempts it from the very
+    smoothing it needs."""
+    n = len(pts)
+    k, r = _kernel(sigma)
     idx = (np.arange(n)[:, None] + np.arange(-r, r + 1)[None, :]) % n
     smoothed = (pts[idx] * k[None, :, None]).sum(axis=1)
-
-    # Corners are found on the SMOOTHED outline and over a span wide enough
-    # to outlast the staircase: measured on the raw contour at a short span,
-    # every pixel step turns a right angle and the whole outline reads as
-    # corner, which exempts it from the very smoothing it needs.
-    L = max(3, int(2.5 * sigma))
-    a = smoothed[(np.arange(n) - L) % n] - smoothed
-    b = smoothed[(np.arange(n) + L) % n] - smoothed
-    cos = ((a * b).sum(1)
-           / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-9))
-    keep = (cos > CORNER_COS).astype(float)          # 1 at corners
-    widx = (np.arange(n)[:, None] + np.arange(-L // 2, L // 2 + 1)[None, :]) % n
-    keep = keep[widx].mean(axis=1)                    # spread the exemption
-    w = np.clip(1 - keep, 0, 1)[:, None]              # 0 at corners, 1 away
-    print(f'    contour {n} pts, {int((w < 0.5).sum())} held as corners',
-          file=sys.stderr)
-    return [tuple(v) for v in pts * (1 - w) + smoothed * w]
-
-
-def bezier_path(points, scale, ox, oy):
-    """Closed Catmull-Rom through the points, written as cubic Beziers.
-
-    Tangents are dropped to zero at corner vertices, so a corner is entered
-    and left along its chords and stays sharp while everything else curves."""
-    pts = np.array([(x * scale - ox, y * scale - oy) for (y, x) in points])
-    n = len(pts)
-    prev = pts[np.arange(n) - 1]
-    nxt = pts[(np.arange(n) + 1) % n]
-    a, b = prev - pts, nxt - pts
-    cos = ((a * b).sum(1)
-           / (np.linalg.norm(a, axis=1) * np.linalg.norm(b, axis=1) + 1e-9))
+    cos = _turn_cos(smoothed, max(3, int(2.5 * sigma)))
     sharp = cos > CORNER_COS
+    if not sharp.any():
+        return []
+    # a corner shows up as a run of sharp vertices; keep the sharpest of each
+    runs, cur = [], []
+    for i in np.roll(np.arange(n), -int(np.argmin(sharp))):
+        if sharp[i]:
+            cur.append(int(i))
+        elif cur:
+            runs.append(cur)
+            cur = []
+    if cur:
+        runs.append(cur)
+    return sorted(max(run, key=lambda i: cos[i]) for run in runs)
 
-    out = [f'M{pts[0][0]:.1f} {pts[0][1]:.1f}']
-    for i in range(n):
-        p0, p1 = pts[i - 1], pts[i]
-        p2, p3 = pts[(i + 1) % n], pts[(i + 2) % n]
-        c1 = p1 if sharp[i] else p1 + (p2 - p0) / 6
-        c2 = p2 if sharp[(i + 1) % n] else p2 - (p3 - p1) / 6
-        out.append(f'C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} '
-                   f'{p2[0]:.1f} {p2[1]:.1f}')
-    return ''.join(out) + 'Z'
+
+def smooth_arc(arc, sigma):
+    """Gaussian along an OPEN arc with its ends pinned.
+
+    Smoothing the closed contour and merely down-weighting the filter near
+    corners is not enough — the filter still drags the corner vertices, and
+    the outline crosses the corner on a chamfer instead of going into it.
+    Cutting the contour AT the corners and filtering each arc with clamped
+    ends keeps every corner exactly where the seal put it."""
+    m = len(arc)
+    if m < 5:
+        return arc.copy()
+    k, r = _kernel(sigma)
+    idx = np.clip(np.arange(m)[:, None] + np.arange(-r, r + 1)[None, :], 0, m - 1)
+    sm = (arc[idx] * k[None, :, None]).sum(axis=1)
+    ends = np.minimum(np.arange(m), m - 1 - np.arange(m))
+    t = np.clip(ends / (2 * sigma), 0, 1)[:, None]
+    return arc * (1 - t) + sm * t
+
+
+def _fit_dir(seg):
+    """Principal direction of a short run of contour points."""
+    c = seg - seg.mean(0)
+    return np.linalg.svd(c, full_matrices=False)[2][0]
+
+
+def _corner_runs(idxs, n, gap):
+    """Group corner indices that are really the two lips of one blunt cap."""
+    runs, cur = [], [idxs[0]]
+    for i in idxs[1:]:
+        if i - cur[-1] <= gap:
+            cur.append(i)
+        else:
+            runs.append((cur[0], cur[-1]))
+            cur = [i]
+    runs.append((cur[0], cur[-1]))
+    if len(runs) > 1 and (runs[0][0] + n - runs[-1][1]) <= gap:
+        runs[0] = (runs[-1][0] - n, runs[0][1])   # the seam falls inside a cap
+        runs.pop()
+    return runs
+
+
+def _corner_point(pts, a, b, sigma):
+    """Where the two arcs meeting at a corner actually cross.
+
+    A tail thinner than half a pixel at its very end has no ink left to
+    trace, so it comes out as a tiny flat cap rather than a point, and a
+    right-angled end is rounded by the source's own anti-aliasing. Fitting
+    the arcs either side and taking their intersection restores the point
+    the seal draws.
+
+    A right angle crosses within a fraction of a pixel and simply lands on
+    its true corner. A slender tail is the awkward case: its sides converge
+    so gradually that they cross far beyond where the ink gave out, so the
+    crossing is followed only as far as TIP — a single source pixel — so a
+    tail comes to a point rather than a cap without inventing length the
+    seal never drew. A crossing that would pull the
+    vertex INWARD is not a corner being recovered at all, and is dropped."""
+    n = len(pts)
+    # Fit the straight sides BEYOND the rounded end, not across it: sampling
+    # from the corner outwards fits the curve of the cap itself and barely
+    # moves the vertex at all.
+    near, far = max(3, int(1.5 * sigma)), max(8, int(5 * sigma))
+    before = pts[[(a - t) % n for t in range(near, far)]]
+    after = pts[[(b + t) % n for t in range(near, far)]]
+    mid = (pts[a % n] + pts[b % n]) / 2
+    # Anchor each line on its OWN arc. Anchoring both at the corner vertex
+    # makes them cross there by construction, which is how a "sharpened"
+    # corner silently stays exactly as blunt as it was traced.
+    q1, q2 = before.mean(0), after.mean(0)
+    d1, d2 = _fit_dir(before), _fit_dir(after)
+    m = np.array([d1, -d2]).T
+    if abs(np.linalg.det(m)) < 1e-6:
+        return mid
+    x = q1 + np.linalg.solve(m, q2 - q1)[0] * d1
+    out = x - mid
+    reach = float(np.linalg.norm(out))
+    if reach < 1e-9 or np.dot(out, mid - np.vstack([before, after]).mean(0)) <= 0:
+        return mid
+    return x if reach <= TIP else mid + out / reach * TIP
+
+
+def _arc(a, b, n):
+    return np.arange(a, b + 1) % n if b >= a else np.concatenate(
+        [np.arange(a, n), np.arange(0, b + 1)])
+
+
+def relax(points, sigma=SIGMA):
+    """Contour -> (smoothed vertices, corner flags), corners intact.
+
+    Smoothing the closed contour and merely down-weighting the filter near
+    corners is not enough: the filter still drags the corner vertices, and
+    the outline crosses each corner on a chamfer instead of going into it.
+    So the contour is CUT at its corners and each arc is filtered with its
+    ends pinned, which leaves every corner exactly where the seal put it."""
+    pts = np.array(points, dtype=float)
+    n = len(pts)
+    idxs = find_corners(pts, sigma)
+    if len(idxs) < 2:
+        k, r = _kernel(sigma)
+        idx = (np.arange(n)[:, None] + np.arange(-r, r + 1)[None, :]) % n
+        return [tuple(v) for v in (pts[idx] * k[None, :, None]).sum(axis=1)], \
+               [False] * n
+
+    spans = _corner_runs(idxs, n, gap=max(3, int(1.5 * sigma)))
+    verts = [_corner_point(pts, a, b, sigma) for a, b in spans]
+
+    out, flags = [], []
+    for i, (_, b) in enumerate(spans):
+        j = (i + 1) % len(spans)
+        arc = pts[_arc(b % n, spans[j][0] % n, n)].copy()
+        arc[0], arc[-1] = verts[i], verts[j]
+        arc = dp_open(smooth_arc(arc, sigma), EPS)
+        out.extend(tuple(v) for v in arc[:-1])   # the end is the next arc's start
+        flags.extend([True] + [False] * (len(arc) - 2))
+    return out, flags
 
 
 def dp(points, eps):
@@ -280,6 +383,29 @@ def dp(points, eps):
     far = int(np.argmax(((pts - pts[0]) ** 2).sum(axis=1)))
     idx = [0] + rec(0, far) + [far] + rec(far, len(pts) - 1) + [len(pts) - 1]
     return [points[i] for i in idx]
+
+
+def dp_open(points, eps):
+    """Douglas-Peucker on an open arc; both ends are always kept."""
+    pts = np.array(points, dtype=float)
+    if len(pts) < 3:
+        return pts
+
+    def rec(i, j):
+        if j <= i + 1:
+            return []
+        p, q = pts[i], pts[j]
+        seg = q - p
+        L = np.hypot(*seg) or 1.0
+        rel = pts[i + 1:j] - p
+        d = np.abs(seg[0] * rel[:, 1] - seg[1] * rel[:, 0]) / L
+        k = int(np.argmax(d))
+        if d[k] > eps:
+            k += i + 1
+            return rec(i, k) + [k] + rec(k, j)
+        return []
+
+    return pts[[0] + rec(0, len(pts) - 1) + [len(pts) - 1]]
 
 
 # Pass one: find the shapes and read their ink.
@@ -312,6 +438,28 @@ cov = np.stack([np.where(dilate(sh['comp'], 2), coverage(sh['rgb']), 0.0)
                 for sh in shapes])
 owner = cov.argmax(axis=0)
 
+def bezier_path(points, sharp, scale, ox, oy):
+    """Closed Catmull-Rom through the points, written as cubic Beziers.
+
+    Tangents are dropped to zero at the flagged corners, so a corner is
+    entered and left along its chords and stays sharp, while every other
+    vertex carries a curve — which is what finally removes the faceting a
+    polygon can never lose."""
+    pts = np.array([(x * scale - ox, y * scale - oy) for (y, x) in points])
+    n = len(pts)
+    sharp = np.array(sharp, dtype=bool)
+
+    out = [f'M{pts[0][0]:.1f} {pts[0][1]:.1f}']
+    for i in range(n):
+        p0, p1 = pts[i - 1], pts[i]
+        p2, p3 = pts[(i + 1) % n], pts[(i + 2) % n]
+        c1 = p1 if sharp[i] else p1 + (p2 - p0) / 6
+        c2 = p2 if sharp[(i + 1) % n] else p2 - (p3 - p1) / 6
+        out.append(f'C{c1[0]:.1f} {c1[1]:.1f} {c2[0]:.1f} {c2[1]:.1f} '
+                   f'{p2[0]:.1f} {p2[1]:.1f}')
+    return ''.join(out) + 'Z'
+
+
 figures, dots = {}, []
 for i, sh in enumerate(shapes):
     field = np.where(owner == i, cov[i], 0.0)
@@ -322,9 +470,9 @@ for i, sh in enumerate(shapes):
         dots.append({'cx': float(bxs.mean()), 'cy': float(bys.mean()),
                      'r': float((w + h) / 4), 'rgb': sh['rgb']})
         continue
-    outer = dp(relax(trace_boundary(big)), EPS)
+    outer, sharp = relax(trace_boundary(big))
     figures[sh['class']] = {
-        'outer': outer, 'rgb': sh['rgb'],
+        'outer': outer, 'sharp': sharp, 'rgb': sh['rgb'],
         'bbox': (float(bxs.min()), float(bys.min()),
                  float(bxs.max()), float(bys.max())),
         'centroid': (float(bxs.mean()), float(bys.mean()))}
@@ -404,7 +552,7 @@ for cname in PAINT_ORDER:
     f = figures[cname]
     name = NAMES[cname]
     w = WINDOWS[name]
-    path = bezier_path(f['outer'], REF / S, OX, OY)
+    path = bezier_path(f['outer'], f['sharp'], REF / S, OX, OY)
     cx, cy = ref(f['centroid'][0]) - OX, ref(f['centroid'][1]) - OY
     rest = round(np.degrees(np.arctan2(cx - BASE[0], BASE[1] - cy)), 1)
     d = dot_of.get(cname)
