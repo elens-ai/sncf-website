@@ -20,7 +20,6 @@ import {
   vevent,
   nowStamp,
   startOfToday,
-  pad,
 } from '../utils/events';
 
 /**
@@ -32,14 +31,16 @@ import {
  * visitor pages to — the detail pane always speaks about the next real
  * occurrence, so a visitor looking at a past month is still told the truth.
  *
- * The detail pane is a BANNER CARD: behind the text sits a full-card scene
- * for the selected event — a wash of its pillar colour, a ghost numeral of
- * its date, and a drawn motif (linked rings and a blood drop for Manav Ekta
- * Diwas, a sapling for World Environment Day, a meditator for Yoga Day).
- * Everything back there is deliberately quiet — 4–16% opacity — because the
- * banner's job is atmosphere, and the details must keep the floor. The motifs
- * are inline SVG, not images: crisp at any size, tinted from the pillar
- * palette, and zero network weight.
+ * The detail pane is a BANNER CARD: behind the text sits a scene for the
+ * selected event — one soft wash of its pillar colour and a drawn motif
+ * (linked rings and a blood drop for Manav Ekta Diwas, a sapling for World
+ * Environment Day, a meditator for Yoga Day). The motif follows the hero's
+ * lotus-watermark rule: COMPLETE and very faint, never cropped by an edge —
+ * a half-shape sliced off by the card boundary reads as an accident and the
+ * eye keeps snagging on it. One tint direction, no ghost numerals competing
+ * with the close button; the pillar's accent bar on the left edge ties the
+ * card to the event cards outside. Motifs are inline SVG: crisp at any size,
+ * tinted via currentColor, zero network weight.
  *
  * Quick-jump chips under the grid go straight to each event's month. Export
  * of the whole set as .ics lives here too — the calendar is where the "get
@@ -335,29 +336,29 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                  crossfade together instead of morphing in place. */
               <div
                 key={selected.event.id}
-                className="relative flex-1 rounded-2xl overflow-hidden border border-white/10 p-5 animate-fadeIn"
+                className="relative flex-1 rounded-2xl overflow-hidden border border-white/10 bg-white/[0.04] p-5 pl-6 animate-fadeIn"
                 style={{
-                  /* The event's scene: a diagonal wash of its pillar colour and
-                     a glow in the corner the motif occupies. Quiet by design —
-                     the numbers below are alpha 0x14–0x2e. */
-                  background: `linear-gradient(135deg, ${selected.accentA}2e 0%, rgba(0,0,0,0.25) 55%), radial-gradient(85% 70% at 82% 78%, ${selected.accentB}26 0%, transparent 62%)`,
+                  /* ONE tint, one direction, gone by mid-card. The earlier
+                     two-gradient scene lit the card from opposing corners and
+                     the uneven light was itself unsettling. */
+                  backgroundImage: `linear-gradient(120deg, ${selected.accentA}21 0%, transparent 55%)`,
                 }}
               >
-                {/* Ghost numeral of the date — calendar identity at whisper
-                    volume. */}
-                <p
+                {/* The same single accent line the event cards carry. */}
+                <span
                   aria-hidden="true"
-                  className="absolute -top-4 right-2 font-artistic-heading font-bold text-[118px] leading-none text-white/[0.06] select-none pointer-events-none tabular-nums"
-                >
-                  {pad(selected.date.getDate())}
-                </p>
+                  className="absolute left-0 top-5 bottom-5 w-[3px] rounded-full"
+                  style={{ backgroundColor: selected.accentB }}
+                />
 
-                {/* The drawn motif, tinted from the pillar palette. */}
+                {/* The motif, watermark-style: complete, centred in the card's
+                    right half, and faint — the hero's lotus rule. Cropping it
+                    at an edge made it read as an accident. */}
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 200 200"
-                  className="absolute -bottom-6 -right-5 w-[190px] h-[190px] pointer-events-none"
-                  style={{ color: selected.accentB, opacity: 0.16 }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-[150px] h-[150px] pointer-events-none"
+                  style={{ color: selected.accentB, opacity: 0.09 }}
                 >
                   {MOTIFS[selected.event.id] ?? DEFAULT_MOTIF}
                 </svg>
