@@ -435,10 +435,10 @@ const EventDeck: React.FC<{
   };
 
   return (
-    <div className="relative">
+    <div className="relative flex-1 flex flex-col min-h-0">
       <div
         ref={stageRef}
-        className="relative h-[440px] select-none"
+        className="relative h-[475px] my-auto select-none"
         style={{ perspective: '1500px' }}
         role="group"
         aria-roledescription="carousel"
@@ -556,7 +556,11 @@ const EventDeck: React.FC<{
       </div>
 
       {/* Deck controls: arrows and one dot per card. */}
-      <div className="relative z-30 flex items-center justify-center gap-3 mt-1">
+      {/* Pinned to the bottom of the screen with the footnote below it, so
+          the deck's chrome sits on the section's floor — and leaves with the
+          section when the next screen scrolls in, since everything here lives
+          inside this overflow-hidden, one-viewport section. */}
+      <div className="relative z-30 flex items-center justify-center gap-3 mt-auto pt-2">
         <button
           onClick={() => step(-1)}
           disabled={atStart}
@@ -644,9 +648,9 @@ export const EventsSection: React.FC = () => {
     <section
       id="events-section"
       aria-label="Upcoming events"
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-8 overflow-hidden"
+      className="snap-screen relative z-10 w-full min-h-screen flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 py-6 overflow-hidden"
     >
-      <div className="relative z-10 w-full max-w-7xl mx-auto">
+      <div className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col min-h-0">
         <header className="mb-3 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div>
             <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
@@ -727,7 +731,7 @@ export const EventsSection: React.FC = () => {
 
         <EventDeck items={items} active={active} onActivate={setActive} />
 
-        <p className="relative z-30 text-[11px] text-white/50 mt-2 max-w-3xl">
+        <p className="relative z-30 text-[11px] text-white/50 mt-3 max-w-3xl">
           Dates shown are the fixed national and international observances. Venues and
           timings vary by city — the SNCF office confirms what is running near you on{' '}
           <a
