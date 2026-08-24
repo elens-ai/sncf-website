@@ -249,9 +249,13 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
               ))}
             </div>
 
+            {/* Always 42 cells — six weeks — whatever the month needs.
+                A month starting late uses six rows and one starting early
+                uses four, so a grid sized to the month makes the whole panel
+                change height as the visitor pages; trailing blanks pin it. */}
             <div className="grid grid-cols-7 gap-1">
               {Array.from({ length: firstWeekday }, (_, i) => (
-                <div key={`lead-${i}`} />
+                <div key={`lead-${i}`} className="h-11" />
               ))}
               {Array.from({ length: daysInMonth }, (_, i) => {
                 const day = i + 1;
@@ -298,6 +302,9 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                   </button>
                 );
               })}
+              {Array.from({ length: 42 - firstWeekday - daysInMonth }, (_, i) => (
+                <div key={`tail-${i}`} className="h-11" />
+              ))}
             </div>
 
             {/* Quick jumps — nobody should page eight months to find an event. */}
