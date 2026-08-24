@@ -223,85 +223,92 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
         </div>
       </div>
 
-      <div className="px-5 pt-2 pb-1.5 flex flex-col items-center text-center">
-        {/* The date page sits where an ID photo would. */}
-        <div
-          className="relative w-[88px] rounded-2xl text-neutral-900 shadow-lg ring-1 ring-black/10 overflow-hidden"
-          style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
-        >
-          <div className="h-[11px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
-            <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
-            <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
+      <div className="px-4 pt-2.5 pb-2 text-left">
+        {/* ID-card anatomy: the date page in the TOP CORNER where a badge
+            carries its photo, the event's identity beside it, everything
+            ranged left. The centred column spent a full row on the page;
+            this layout shares it. */}
+        <div className="flex items-start gap-3">
+          <div
+            className="relative w-[84px] flex-none rounded-2xl text-neutral-900 shadow-lg ring-1 ring-black/10 overflow-hidden"
+            style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
+          >
+            <div className="h-[11px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
+              <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
+              <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
+            </div>
+            {event.kind === 'annual' && date ? (
+              <div className="px-2 pt-1 pb-1.5 text-center">
+                <p
+                  className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
+                  style={{ color: accentB }}
+                >
+                  {date.toLocaleDateString('en-US', { weekday: 'long' })}
+                </p>
+                <p className="font-artistic-heading font-bold text-[26px] leading-none tabular-nums mt-0.5">
+                  {date.getDate()}
+                </p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
+                  {MONTHS_SHORT[date.getMonth()]} &rsquo;{String(date.getFullYear()).slice(2)}
+                </p>
+              </div>
+            ) : (
+              <div className="px-2 pt-1 pb-1.5 text-center">
+                <p
+                  className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
+                  style={{ color: accentB }}
+                >
+                  Every day
+                </p>
+                <p className="font-artistic-heading font-bold text-[26px] leading-none mt-0.5">∞</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
+                  Year-round
+                </p>
+              </div>
+            )}
           </div>
-          {event.kind === 'annual' && date ? (
-            <div className="px-2 pt-1 pb-1.5">
-              <p
-                className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
-                style={{ color: accentB }}
+
+          <div className="min-w-0 pt-0.5">
+            <span
+              className="inline-block text-[9px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-0.5 rounded-full border"
+              style={{
+                color: accentB,
+                borderColor: `${accentB}4d`,
+                backgroundColor: `${accentB}14`,
+              }}
+            >
+              {event.tag}
+            </span>
+
+            <h3 className="font-artistic-heading font-bold text-white text-[16px] leading-tight mt-1.5">
+              {event.title}
+            </h3>
+
+            {event.kind === 'ongoing' ? (
+              <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-white/70">
+                <InfinityIcon className="w-3 h-3" />
+                Ongoing · join anytime
+              </span>
+            ) : (
+              <span
+                className={`mt-1.5 inline-block text-[10px] font-bold tabular-nums ${
+                  days !== null && days <= 7
+                    ? 'text-white countdown-pulse px-2 py-0.5 rounded-full bg-white/15'
+                    : 'text-white/70'
+                }`}
               >
-                {date.toLocaleDateString('en-US', { weekday: 'long' })}
-              </p>
-              <p className="font-artistic-heading font-bold text-[26px] leading-none tabular-nums mt-0.5">
-                {date.getDate()}
-              </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
-                {MONTHS_SHORT[date.getMonth()]} &rsquo;{String(date.getFullYear()).slice(2)}
-              </p>
-            </div>
-          ) : (
-            <div className="px-2 pt-1 pb-1.5">
-              <p
-                className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
-                style={{ color: accentB }}
-              >
-                Every day
-              </p>
-              <p className="font-artistic-heading font-bold text-[26px] leading-none mt-0.5">∞</p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
-                Year-round
-              </p>
-            </div>
-          )}
+                {countdownLabel(days as number)}
+              </span>
+            )}
+          </div>
         </div>
 
-        <span
-          className="mt-2 text-[9px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-0.5 rounded-full border"
-          style={{
-            color: accentB,
-            borderColor: `${accentB}4d`,
-            backgroundColor: `${accentB}14`,
-          }}
-        >
-          {event.tag}
-        </span>
-
-        <h3 className="font-artistic-heading font-bold text-white text-[15px] leading-tight mt-1.5">
-          {event.title}
-        </h3>
-
-        <p className="font-artistic-serif text-white/70 text-[11.5px] leading-relaxed mt-1 line-clamp-1">
+        <p className="font-artistic-serif text-white/70 text-[11.5px] leading-relaxed mt-2 line-clamp-2">
           {event.blurb}
         </p>
 
-        {event.kind === 'ongoing' ? (
-          <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold text-white/70">
-            <InfinityIcon className="w-3 h-3" />
-            Ongoing · join anytime
-          </span>
-        ) : (
-          <span
-            className={`mt-2 text-[10px] font-bold tabular-nums ${
-              days !== null && days <= 7
-                ? 'text-white countdown-pulse px-2 py-0.5 rounded-full bg-white/15'
-                : 'text-white/70'
-            }`}
-          >
-            {countdownLabel(days as number)}
-          </span>
-        )}
-
         {(event.location || event.time) && (
-          <div className="flex flex-wrap justify-center gap-x-3 gap-y-0.5 mt-1.5">
+          <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1.5">
             {event.location && (
               <p className="flex items-center gap-1 text-[10px] text-white/60">
                 <MapPin className="w-3 h-3 flex-none" />
