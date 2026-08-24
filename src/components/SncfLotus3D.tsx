@@ -35,16 +35,16 @@ import {
  * circle grows in behind the flower — sized to the flower, so the palm still
  * carries it the way the hand carries the circle in the seal.
  *
- * THEN THE LIGHT GOES OUT. Each petal throws a beam of its own ink from the
- * flower's base to the edge of the screen, the wedges meeting halfway between
- * neighbouring petals so the whole screen is divided between the verticals —
- * a lighthouse turning its lamp on. The beams are drawn in the emblem's own
- * coordinates and simply run past the viewBox (the svg does not clip), which
- * is why they stay anchored to the flower at any size. They screen onto the
- * page rather than painting over it, and carry a wide blur so the seams
- * between wedges read as light rather than as cut paper — which is also why
- * only their opacity animates, since scaling a blurred layer would re-render
- * that blur on every frame.
+ * EACH PETAL BRINGS ITS OWN LIGHT. As a petal swings up, a wedge of its ink
+ * throws from the flower's base out past the edge of the screen, so the
+ * screen is claimed one vertical at a time and stands divided between the
+ * five once the flower is open. Neighbouring wedges meet halfway between
+ * their petals, and the seams are left HARD — a blur turns five clear
+ * territories into one wash, and the division is the point. The beams are
+ * drawn in the emblem's own coordinates and simply run past the viewBox (the
+ * svg does not clip), which is what keeps them anchored to the flower at any
+ * size, and they screen onto the page rather than painting over it, so they
+ * read as light rather than as paint.
  *
  * THE BLOOM runs left to right, one petal at a time. The hand arrives first
  * — the flower has to open out of something. Each petal is then wound back
@@ -99,8 +99,8 @@ const easeOutBack = (t: number) => {
 
 /** When the white disc grows in — after the last petal has landed. */
 const DISC_WINDOW: [number, number] = [0.88, 0.97];
-/** When the beams sweep out, just behind the disc. */
-const BEAM_WINDOW: [number, number] = [0.9, 1];
+/** How bright a fully-thrown beam is. */
+const BEAM_MAX = 0.5;
 /** Far enough past the viewBox to leave any screen. */
 const BEAM_REACH = 1600;
 
@@ -166,7 +166,7 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   const glowRef = useRef<SVGCircleElement | null>(null);
   const handRef = useRef<SVGGElement | null>(null);
   const discRef = useRef<SVGCircleElement | null>(null);
-  const beamRef = useRef<SVGGElement | null>(null);
+  const beamRefs = useRef<Record<string, SVGPathElement | null>>({});
   const petalRefs = useRef<Record<string, SVGGElement | null>>({});
 
   const smoothRef = useRef(scrollProgress ?? 0);
@@ -185,14 +185,6 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
       shadowRef.current.style.transform =
         `scale(${lerp(0.34, 1, k).toFixed(3)}, ${lerp(0.4, 1, k).toFixed(3)})`;
       shadowRef.current.style.opacity = lerp(0.1, 0.3, k).toFixed(3);
-    }
-
-    if (beamRef.current) {
-      const [b0, b1] = BEAM_WINDOW;
-      const bu = easeOut(clamp01((s - b0) / (b1 - b0)));
-      /* Opacity only. The beams carry a wide blur to soften their seams, and
-         scaling a blurred layer would re-render that blur every frame. */
-      beamRef.current.style.opacity = (bu * 0.46).toFixed(3);
     }
 
     if (discRef.current) {
@@ -242,6 +234,13 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
          third, so the petal is visible for most of its travel instead of
          arriving already half-open. */
       el.style.opacity = clamp01(eased / 0.2).toFixed(3);
+
+      /* The petal's beam comes up with it, a beat behind the swing so the
+         light follows the petal rather than announcing it. */
+      const beam = beamRefs.current[p.id];
+      if (beam) {
+        beam.style.opacity = (clamp01((eased - 0.12) / 0.88) * BEAM_MAX).toFixed(3);
+      }
     }
 
     /* The radiance behind the emblem rides the page's live accent, so it
@@ -445,17 +444,7 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         />
 
         {/* the lamp: one wedge of light per petal, out past the frame */}
-        <g
-          ref={beamRef}
-          style={{
-            opacity: 0,
-            /* the seams between wedges are hard edges; light has none */
-            filter: 'blur(13px)',
-            mixBlendMode: 'screen',
-            willChange: 'opacity',
-            pointerEvents: 'none',
-          }}
-        >
+        <g style={{ mixBlendMode: 'screen', pointerEvents: 'none' }}>
           <defs>
             {BEAMS.map((b) => (
               <radialGradient
@@ -474,7 +463,15 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
             ))}
           </defs>
           {BEAMS.map((b) => (
-            <path key={b.id} d={b.d} fill={`url(#beam-${b.id})`} />
+            <path
+              key={b.id}
+              ref={(el) => {
+                beamRefs.current[b.id] = el;
+              }}
+              d={b.d}
+              fill={`url(#beam-${b.id})`}
+              style={{ opacity: 0, willChange: 'opacity' }}
+            />
           ))}
         </g>
 

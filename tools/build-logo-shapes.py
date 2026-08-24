@@ -318,9 +318,13 @@ fbox = np.array([p['bbox'] for v in petals.values() for p in v])
 fx0, fy0, fx1, fy1 = (fbox[:, 0].min(), fbox[:, 1].min(),
                       fbox[:, 2].max(), fbox[:, 3].max())
 dcx, dcy = (fx0 + fx1) / 2, (fy0 + fy1) / 2
-DISC = (dcx, dcy, float(np.hypot(fx1 - dcx, fy1 - dcy) * 1.06))
-print('disc on the palm: centre %.1f,%.1f radius %.1f  (the seal\'s own is '
-      '%.1f, around both hands)' % (*DISC, SEAL_DISC[2]), file=sys.stderr)
+# Set by hand, not derived: 115 sits just inside the flower's own reach, so
+# the outermost tips break the circle's edge as they do in the seal.
+DISC = (dcx, dcy, 115.0)
+print('disc on the palm: centre %.1f,%.1f radius %.1f  (flower reaches %.1f; '
+      'the seal\'s own disc is %.1f, around both hands)'
+      % (*DISC, float(np.hypot(fx1 - dcx, fy1 - dcy)), SEAL_DISC[2]),
+      file=sys.stderr)
 
 pad = 10
 vx0 = min(ex0, DISC[0] - DISC[2]) - pad

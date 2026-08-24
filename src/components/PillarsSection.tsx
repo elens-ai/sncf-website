@@ -6,8 +6,8 @@ import { SncfLotus3D, SncfLotus3DHandle } from './SncfLotus3D';
  * The screen below the hero: the SNCF lotus alone, assembling.
  *
  * The section is a TALL TRACK holding a STICKY stage. Arriving at it, the
- * stage pins to the viewport with the flower centred and every petal still
- * folded away; the scrolling that follows does not move the flower at all —
+ * stage pins to the viewport with the emblem standing on the foot of the
+ * screen — flush to it, no gap — and every petal still folded away; the scrolling that follows does not move the flower at all —
  * it builds it, one petal at a time, left to right. Once the last petal has
  * landed and the flower has held for a beat, the track runs out and the page
  * carries on to the next screen.
@@ -70,8 +70,8 @@ export const PillarsSection: React.FC<PillarsSectionProps> = () => {
       aria-label="Our work"
       className="snap-screen lotus-track relative z-10 w-full"
     >
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[96px] pb-10 overflow-hidden">
-        <SncfLotus3D ref={lotusRef} maxWidth={460} className="mx-auto" />
+      <div className="sticky top-0 h-screen w-full flex items-end justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[96px] pb-0 overflow-hidden">
+        <SncfLotus3D ref={lotusRef} maxWidth={230} className="mx-auto" />
       </div>
     </section>
   );

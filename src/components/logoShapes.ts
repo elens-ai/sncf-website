@@ -22,13 +22,13 @@ export interface LogoPetal {
   shapes: LogoShape[];
 }
 
-export const LOGO_VIEWBOX = '106 114 286 318';
-export const LOGO_ASPECT = 0.8996;
+export const LOGO_VIEWBOX = '106 122 286 310';
+export const LOGO_ASPECT = 0.9233;
 /** The point every petal unfolds about, in the file's own units. */
 export const LOGO_BASE = { x: 251.8, y: 278.4 };
 
 /** The seal's inner white disc, which the emblem settles into. */
-export const LOGO_DISC = { cx: 249.3, cy: 246.9, r: 123.1 };
+export const LOGO_DISC = { cx: 249.3, cy: 246.9, r: 115.0 };
 
 export const LOGO_PETALS: LogoPetal[] = [
   {
