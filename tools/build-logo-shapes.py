@@ -38,6 +38,14 @@ CLASSES = {'magenta': (305, 355), 'purple': (262, 305), 'indigo': (225, 262),
            'cyan': (175, 225), 'green': (70, 165)}
 PAINT_ORDER = ['enrich', 'heal', 'empower', 'welcome', 'projects']
 
+# Paths the seal carries that the emblem does not want, matched on ink and
+# bounding box so a rebuild cannot quietly bring them back.
+EXCLUDE = [
+    # a thin blue rim highlight that runs along the top of the thumb curl and
+    # off the palm's right edge — part of the seal's ring shading, not the hand
+    ('#3BADE1', (224, 337, 371, 375)),
+]
+
 # Bloom windows: the hand opens first, then one petal at a time, left to right.
 HAND_WINDOW = [0.0, 0.07]
 WINDOWS = {'welcome': [0.09, 0.25], 'heal': [0.27, 0.43], 'enrich': [0.45, 0.61],
@@ -233,10 +241,19 @@ def in_box(p, box):
 # this test they ride along into the petals as floating debris.
 MAX_GAP = 5.0        # logo pixels
 
+def excluded(p):
+    return any(p['fill'].upper() == fill.upper()
+               and all(abs(a - b) < 2 for a, b in zip(p['bbox'], box))
+               for fill, box in EXCLUDE)
+
+
 petals = {name: [] for name in NAMES.values()}
-palm, curl, dropped = [], [], 0
+palm, curl, dropped, cut = [], [], 0, 0
 for p in paths:
     if p['sat'] < 0.12:
+        continue
+    if excluded(p):
+        cut += 1
         continue
     if in_box(p, LOTUS_BOX):
         who, votes = nearest(figures, sample(p))
@@ -254,7 +271,10 @@ for p in paths:
 for k, v in petals.items():
     print(f'  {k}: {len(v)} paths', file=sys.stderr)
 print(f'  palm: {len(palm)} paths, curl: {len(curl)} paths, '
-      f'{dropped} dropped as not on any shape', file=sys.stderr)
+      f'{dropped} dropped as not on any shape, {cut} excluded by name',
+      file=sys.stderr)
+if cut != len(EXCLUDE):
+    sys.exit(f'EXCLUDE matched {cut} of {len(EXCLUDE)} paths — the art moved')
 
 # --------------------------------------------------------------------- emit
 
