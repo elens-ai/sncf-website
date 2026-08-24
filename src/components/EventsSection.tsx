@@ -718,6 +718,30 @@ export const EventsSection: React.FC = () => {
             same facts. */}
         <div className="relative z-30 h-[50px] mt-auto pt-1 select-none hidden sm:block" aria-hidden="true">
           <div className="absolute left-0 right-0 top-[22px] h-px bg-white/20" />
+          {/* The year so far: a brighter thread drawing itself from JAN to
+              TODAY when the section arrives. */}
+          <div
+            className="rail-grow absolute left-0 top-[22px] h-px bg-white/45"
+            style={{ width: `${todayPct}%` }}
+          />
+          {/* The deck's position, ON the rail: a spotlight ring that glides
+              to whichever event is standing, the same travelling-highlight
+              idea the main nav uses. It fades out when an ongoing programme
+              (which has no date, so no dot) holds the deck. */}
+          <span
+            className="absolute top-[12px] -translate-x-1/2 w-[21px] h-[21px] rounded-full border-2 border-white pointer-events-none"
+            style={{
+              left: `${
+                items[active]?.days !== null && items[active]?.event.month
+                  ? (dayOfYear(items[active].event.month as number, items[active].event.day as number) / 365) * 100
+                  : todayPct
+              }%`,
+              opacity: items[active]?.days !== null ? 1 : 0,
+              boxShadow: '0 0 12px rgba(255,255,255,0.45)',
+              transition:
+                'left 550ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease',
+            }}
+          />
           {MONTHS_SHORT.map((label, i) => (
             <div
               key={label}
@@ -737,7 +761,10 @@ export const EventsSection: React.FC = () => {
             <span className="text-[8px] font-extrabold tracking-[0.16em] text-white/80 mb-1">
               TODAY
             </span>
-            <span className="w-[9px] h-[9px] rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            <span className="relative grid place-items-center">
+              <span className="rail-ping absolute w-[9px] h-[9px] rounded-full bg-white/80" aria-hidden="true" />
+              <span className="relative w-[9px] h-[9px] rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            </span>
           </div>
           {dated.map((i) => (
             <button

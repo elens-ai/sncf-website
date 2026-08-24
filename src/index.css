@@ -978,3 +978,31 @@ html {
   }
 }
 
+
+/* ==========================================================================
+   TIMELINE RAIL — living pieces.
+   ========================================================================== */
+
+/* The elapsed year draws itself in, JAN up to TODAY, once on arrival. */
+@keyframes rail-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.rail-grow {
+  transform-origin: 0 50%;
+  animation: rail-grow 1100ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+}
+
+/* TODAY is a beacon: a ring breathes out of the dot, radar-style. */
+@keyframes rail-ping {
+  0%        { transform: scale(1);   opacity: 0.7; }
+  70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+.rail-ping {
+  animation: rail-ping 2.6s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-grow { animation: none; transform: none; }
+  .rail-ping { animation: none; opacity: 0; }
+}
