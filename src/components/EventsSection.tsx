@@ -161,7 +161,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
   return (
     <article
       id={`event-card-${event.id}`}
-      className={`relative w-[min(90vw,340px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
+      className={`relative w-[min(90vw,320px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
         lit ? 'border-white/40' : 'border-white/[0.14]'
       }`}
       style={{
@@ -228,13 +228,13 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
         </p>
       </div>
 
-      <div className="px-5 pt-2 pb-2 flex flex-col items-center text-center">
+      <div className="px-5 pt-2 pb-1.5 flex flex-col items-center text-center">
         {/* The date page sits where an ID photo would. */}
         <div
-          className="relative w-[96px] rounded-2xl text-neutral-900 shadow-lg ring-1 ring-black/10 overflow-hidden"
+          className="relative w-[88px] rounded-2xl text-neutral-900 shadow-lg ring-1 ring-black/10 overflow-hidden"
           style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
         >
-          <div className="h-[13px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
+          <div className="h-[11px] bg-neutral-100 border-b border-neutral-200 flex items-center justify-center gap-4">
             <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
             <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
           </div>
@@ -246,7 +246,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               >
                 {date.toLocaleDateString('en-US', { weekday: 'long' })}
               </p>
-              <p className="font-artistic-heading font-bold text-[30px] leading-none tabular-nums mt-0.5">
+              <p className="font-artistic-heading font-bold text-[26px] leading-none tabular-nums mt-0.5">
                 {date.getDate()}
               </p>
               <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
@@ -261,7 +261,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               >
                 Every day
               </p>
-              <p className="font-artistic-heading font-bold text-[30px] leading-none mt-0.5">∞</p>
+              <p className="font-artistic-heading font-bold text-[26px] leading-none mt-0.5">∞</p>
               <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
                 Year-round
               </p>
@@ -280,11 +280,11 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           {event.tag}
         </span>
 
-        <h3 className="font-artistic-heading font-bold text-white text-[16px] leading-tight mt-1.5">
+        <h3 className="font-artistic-heading font-bold text-white text-[15px] leading-tight mt-1.5">
           {event.title}
         </h3>
 
-        <p className="font-artistic-serif text-white/70 text-[11.5px] leading-relaxed mt-1 line-clamp-2">
+        <p className="font-artistic-serif text-white/70 text-[11.5px] leading-relaxed mt-1 line-clamp-1">
           {event.blurb}
         </p>
 
@@ -327,38 +327,31 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
 
       <div className="relative px-5 pt-2 pb-2">
-        {/* QR stub — a REAL code, generated locally, encoding the ?invite=
-            link for this event: a phone camera pointed at the pass gets the
-            full invitation card on its own screen. The white is confined to
-            a small chip hugging the code — scanners only need light ground
-            behind the modules, and a full white slab broke the card's ink.
-            The caption sits on the violet like everything else. */}
-        <div className="flex items-center gap-3 text-left">
-          <div className="flex-none rounded-xl bg-white p-1.5 ring-1 ring-white/30 shadow-lg">
-            {qr ? (
-              <img
-                src={qr}
-                alt={`QR code — scan to open the ${event.title} invitation`}
-                className="w-[52px] h-[52px] rounded-md"
-              />
-            ) : (
-              <div className="w-[52px] h-[52px] rounded-md bg-neutral-200" aria-hidden="true" />
-            )}
-          </div>
-          <div className="min-w-0">
+        {/* One-row stub: the QR chip (a REAL code — the ?invite= link, scanned
+            straight to the invitation) beside the actions, so the full
+            planning scene below gets the height the old two-row stub spent.
+            The caption compresses to the SCAN ME microlabel under the chip. */}
+        <div className="flex items-center justify-center gap-2.5">
+          <div className="flex-none text-center">
+            <div className="rounded-xl bg-white p-1.5 ring-1 ring-white/30 shadow-lg">
+              {qr ? (
+                <img
+                  src={qr}
+                  alt={`QR code — scan to open the ${event.title} invitation`}
+                  className="w-[50px] h-[50px] rounded-md"
+                />
+              ) : (
+                <div className="w-[50px] h-[50px] rounded-md bg-neutral-200" aria-hidden="true" />
+              )}
+            </div>
             <p
-              className="text-[8px] font-extrabold uppercase tracking-[0.22em]"
+              className="text-[7px] font-extrabold uppercase tracking-[0.2em] mt-1"
               style={{ color: accentB }}
             >
               Scan me
             </p>
-            <p className="text-[10.5px] font-bold text-white/85 leading-snug mt-0.5">
-              Opens this invitation on your phone
-            </p>
           </div>
-        </div>
-
-        <div className="flex items-center justify-center gap-1.5 mt-2.5">
+          <div className="flex items-center gap-1.5">
           {event.kind === 'annual' && date && (
             <a
               href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
@@ -388,17 +381,18 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
             {shared ? <Check className="w-3 h-3" /> : <Share2 className="w-3 h-3" />}
             {shared ? 'Copied' : 'Share'}
           </button>
+          </div>
         </div>
       </div>
 
-      {/* The planning table peeks from the pass's foot — a band of the same
-          volunteer artwork the invitation closes with, cropped to the board
-          and the team so pass and invitation are visibly one family. */}
+      {/* The planning table closes the pass — the SAME full scene the
+          invitation ends on, uncropped, so the two are one object at two
+          sizes. Everything above was compressed to buy it this room. */}
       <img
         src="/images/volunteers-planning.webp"
         alt=""
         aria-hidden="true"
-        className="w-full h-[58px] object-cover object-[50%_20%] block select-none flex-none"
+        className="w-full h-auto block select-none flex-none mt-auto"
         draggable={false}
       />
       </div>
@@ -498,7 +492,7 @@ const EventDeck: React.FC<{
     <div className="relative flex-1 flex flex-col min-h-0">
       <div
         ref={stageRef}
-        className="relative h-[475px] my-auto select-none"
+        className="relative h-[535px] my-auto select-none"
         style={{ perspective: '1500px' }}
         role="group"
         aria-roledescription="carousel"
@@ -559,7 +553,7 @@ const EventDeck: React.FC<{
           return (
             <div
               key={item.event.id}
-              className="absolute left-1/2 top-2 w-[min(90vw,340px)]"
+              className="absolute left-1/2 top-2 w-[min(90vw,320px)]"
               style={{
                 transform: `translateX(calc(-50% + ${p.x}px))`,
                 opacity: p.o,
@@ -620,7 +614,7 @@ const EventDeck: React.FC<{
           the deck's chrome sits on the section's floor — and leaves with the
           section when the next screen scrolls in, since everything here lives
           inside this overflow-hidden, one-viewport section. */}
-      <div className="relative z-30 flex items-center justify-center gap-3 mt-auto pt-2">
+      <div className="relative z-30 flex items-center justify-center gap-3 mt-auto pt-1">
         <button
           onClick={() => step(-1)}
           disabled={atStart}
@@ -708,10 +702,10 @@ export const EventsSection: React.FC = () => {
     <section
       id="events-section"
       aria-label="Upcoming events"
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 pt-[92px] pb-4 overflow-hidden"
+      className="snap-screen relative z-10 w-full min-h-screen flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 pt-[78px] pb-2 overflow-hidden"
     >
       <div className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col min-h-0">
-        <header className="mb-3 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+        <header className="mb-1 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div>
             <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
               What&rsquo;s next
@@ -747,7 +741,7 @@ export const EventsSection: React.FC = () => {
             deck; clicking opens the calendar at its month. Hidden from
             assistive tech — the passes and the calendar dialog carry the
             same facts. */}
-        <div className="relative h-[50px] mb-2 select-none hidden sm:block" aria-hidden="true">
+        <div className="relative h-[46px] mb-0 select-none hidden sm:block" aria-hidden="true">
           <div className="absolute left-0 right-0 top-[22px] h-px bg-white/20" />
           {MONTHS_SHORT.map((label, i) => (
             <div
@@ -791,7 +785,7 @@ export const EventsSection: React.FC = () => {
 
         <EventDeck items={items} active={active} onActivate={setActive} />
 
-        <p className="relative z-30 text-[11px] text-white/50 mt-3 max-w-3xl">
+        <p className="relative z-30 text-[11px] text-white/50 mt-1 max-w-3xl">
           Dates shown are the fixed national and international observances. Venues and
           timings vary by city — the SNCF office confirms what is running near you on{' '}
           <a
