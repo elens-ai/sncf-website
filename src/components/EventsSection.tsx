@@ -475,8 +475,12 @@ const EventDeck: React.FC<{
     if (off === 0) return { x: 0, y: 0, rx: 0, ry: 0, s: 1, o: 1, z: 30, blur: 0 };
     const a = Math.abs(off);
     const sgn = Math.sign(off);
+    /* Blur values are set BELOW what looks right flat, because the piles
+       are tipped toward the viewer and perspective magnifies the blur with
+       the card — 1px near/2px deep smeared the card bottoms and made the
+       nearest title illegible. Fractional blurs render fine. */
     if (a === 1)
-      return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 1, z: 20, blur: 1 };
+      return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 1, z: 20, blur: 0.5 };
     const d = Math.min(a - 2, 3);
     return {
       x: sgn * (farX + d * 12),
@@ -486,7 +490,7 @@ const EventDeck: React.FC<{
       s: 0.72 - d * 0.02,
       o: 0.95,
       z: 12 - d,
-      blur: 2,
+      blur: 1.2,
     };
   };
 
