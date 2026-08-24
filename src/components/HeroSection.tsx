@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { HeroOrbitWheel } from '../components/HeroOrbitWheel';
-import { SocialSidebar } from '../components/SocialSidebar';
 import { DevotionalLightboxModal } from '../components/DevotionalLightboxModal';
 import { DevotionalLeader, DEVOTIONAL_ACCENT } from '../components/DevotionalPhotoCard';
 import { FoundationIntro } from '../components/FoundationIntro';
@@ -252,9 +251,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
          accent-a, which is the seam. */
       className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
     >
-      {/* 1. LEFT SOCIAL SIDEBAR (Fixed & Vertically Centered) */}
-      <SocialSidebar />
-
       {/* Glow behind the wheel. The left-to-right darkening that used to be
           layered in here now lives on the page-wide .accent-canvas instead:
           being uniform down the hero's height, it stopped dead at the hero's

@@ -8,6 +8,7 @@ import { EventsSection } from './components/EventsSection';
 import { AwardsSection } from './components/AwardsSection';
 import { PartnersSection } from './components/PartnersSection';
 import { SiteFooter } from './components/SiteFooter';
+import { SocialSidebar } from './components/SocialSidebar';
 import { PillarModal } from './components/PillarModal';
 import { SearchModal } from './components/SearchModal';
 import { WelcomeSplashScreen } from './components/WelcomeSplashScreen';
@@ -110,6 +111,16 @@ export default function App() {
         onOpenDonate={() => setIsDonateOpen(true)}
         hideLogo={isSplashUp}
       />
+
+      {/* Social sidebar — a viewport fixture, so it lives at ROOT level, not
+          inside the hero. Inside it sat in the hero's stacking context
+          (relative z-10), where its own z-40 counted for nothing against the
+          footer: a later sibling at the same z-10 paints over the entire hero
+          context, fixed children included, which is exactly how the icons
+          ended up sliced off behind the footer. Out here its z-40 is real —
+          above the sections and footer (z-10), below the header and modals
+          (z-50). */}
+      <SocialSidebar />
 
       {/* 2. HERO — the site's single hero. */}
       <HeroSection
