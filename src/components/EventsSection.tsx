@@ -476,7 +476,7 @@ const EventDeck: React.FC<{
     const a = Math.abs(off);
     const sgn = Math.sign(off);
     if (a === 1)
-      return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 1, z: 20, blur: 0 };
+      return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 1, z: 20, blur: 1 };
     const d = Math.min(a - 2, 3);
     return {
       x: sgn * (farX + d * 12),
@@ -486,7 +486,7 @@ const EventDeck: React.FC<{
       s: 0.72 - d * 0.02,
       o: 0.95,
       z: 12 - d,
-      blur: d >= 2 ? 1 : 0,
+      blur: 2,
     };
   };
 
