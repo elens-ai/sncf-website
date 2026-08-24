@@ -7,8 +7,6 @@ import {
   ArrowUpRight,
   MapPin,
   Clock,
-  ChevronLeft,
-  ChevronRight,
   Infinity as InfinityIcon,
 } from 'lucide-react';
 import { toDataURL } from 'qrcode';
@@ -50,9 +48,9 @@ import { EventsCalendarModal } from './EventsCalendarModal';
  * the back. The deck opens on the next upcoming event, so the left pile is
  * this year's past observances and the right pile what is still to come.
  *
- * Drive it with the arrows, the per-event dots, a click on a pile, a
- * horizontal drag/swipe or wheel gesture, or by hovering a dot on the year
- * rail. Vertical scrolling is never hijacked — the wheel handler acts only
+ * Drive it with the year rail at the deck's floor (hovering a dot stands
+ * that event's pass up; clicking opens the calendar), a click on a pile, or
+ * a horizontal drag/swipe or wheel gesture. Vertical scrolling is never hijacked — the wheel handler acts only
  * when deltaX clearly dominates, attached natively because React registers
  * wheel listeners as passive.
  *
@@ -428,9 +426,6 @@ const EventDeck: React.FC<{
     return () => ro.disconnect();
   }, []);
 
-  const atStart = active === 0;
-  const atEnd = active === items.length - 1;
-
   /* Clamped, not wrapped: the line has ends and the deck respects them. */
   const step = useCallback(
     (dir: number) => {
@@ -481,7 +476,14 @@ const EventDeck: React.FC<{
        nearest title illegible. Fractional blurs render fine. */
     if (a === 1)
       return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 1, z: 20, blur: 0.5 };
-    const d = Math.min(a - 2, 3);
+    /* The FAN caps at three steps so the pile stays compact, but the
+       Z-ORDER must not cap with it: cards past the cap all carried z 9, and
+       with equal z the paint order falls back to DOM order — correct by
+       luck on the left pile (deeper = earlier in DOM) and inverted on the
+       right, where the deepest card painted ON TOP and stuck out of the
+       stack. Depth is uncapped for z, so farther is always underneath. */
+    const depth = a - 2;
+    const d = Math.min(depth, 3);
     return {
       x: sgn * (farX + d * 12),
       y: 44 + d * 7,
@@ -489,7 +491,7 @@ const EventDeck: React.FC<{
       ry: -sgn * (14 + d * 2),
       s: 0.72 - d * 0.02,
       o: 0.95,
-      z: 12 - d,
+      z: Math.max(1, 12 - depth),
       blur: 1.2,
     };
   };
@@ -619,47 +621,6 @@ const EventDeck: React.FC<{
         })}
       </div>
 
-      {/* Deck controls: arrows and one dot per card. */}
-      {/* Pinned to the bottom of the screen with the footnote below it, so
-          the deck's chrome sits on the section's floor — and leaves with the
-          section when the next screen scrolls in, since everything here lives
-          inside this overflow-hidden, one-viewport section. */}
-      <div className="relative z-30 flex items-center justify-center gap-3 mt-auto pt-1">
-        <button
-          onClick={() => step(-1)}
-          disabled={atStart}
-          aria-label="Previous event"
-          className="w-9 h-9 grid place-items-center rounded-full bg-white/10 border border-white/20 text-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 disabled:opacity-30 disabled:cursor-default enabled:hover:bg-white/20 enabled:hover:text-white enabled:cursor-pointer"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-        <div className="flex items-center gap-2">
-          {items.map((item, i) => (
-            <button
-              key={item.event.id}
-              onClick={() => onActivate(i)}
-              aria-label={`Show ${item.event.title}`}
-              aria-current={i === active ? 'true' : 'false'}
-              className="p-1 cursor-pointer"
-            >
-              <span
-                className={`block rounded-full transition-all duration-300 ${
-                  i === active ? 'w-6 h-2' : 'w-2 h-2 opacity-50 hover:opacity-90'
-                }`}
-                style={{ backgroundColor: item.accentB }}
-              />
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={() => step(1)}
-          disabled={atEnd}
-          aria-label="Next event"
-          className="w-9 h-9 grid place-items-center rounded-full bg-white/10 border border-white/20 text-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 disabled:opacity-30 disabled:cursor-default enabled:hover:bg-white/20 enabled:hover:text-white enabled:cursor-pointer"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 };
@@ -746,12 +707,16 @@ export const EventsSection: React.FC = () => {
           </div>
         </header>
 
-        {/* TIMELINE RAIL — the calendar year, January to December, fixed.
+        <EventDeck items={items} active={active} onActivate={setActive} />
+
+        {/* TIMELINE RAIL — now the deck's ONLY chrome, moved to the floor
+            where the arrows and dots used to sit. The calendar year, fixed
+            January to December.
             Hovering a dot stands that event's pass up at the front of the
             deck; clicking opens the calendar at its month. Hidden from
             assistive tech — the passes and the calendar dialog carry the
             same facts. */}
-        <div className="relative h-[46px] mb-0 select-none hidden sm:block" aria-hidden="true">
+        <div className="relative z-30 h-[50px] mt-auto pt-1 select-none hidden sm:block" aria-hidden="true">
           <div className="absolute left-0 right-0 top-[22px] h-px bg-white/20" />
           {MONTHS_SHORT.map((label, i) => (
             <div
@@ -793,7 +758,6 @@ export const EventsSection: React.FC = () => {
           ))}
         </div>
 
-        <EventDeck items={items} active={active} onActivate={setActive} />
 
       </div>
 
