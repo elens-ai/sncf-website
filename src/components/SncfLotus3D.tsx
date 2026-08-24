@@ -20,10 +20,13 @@ import { DEVOTIONAL_ACCENT } from './DevotionalPhotoCard';
  * in darkening ink to build a side wall, and the whole petal passes through
  * one specular-lighting filter so a single light falls across the flower.
  *
- * THE ASSEMBLY is scroll-driven and runs left to right, one petal at a time:
- * each starts folded upright at the base, invisible, and swings out to its
- * bearing through its own window. The windows do not overlap, so a petal has
- * finished before the next moves.
+ * THE BLOOM is scroll-driven and runs left to right, one petal at a time.
+ * Each petal is folded back COUNTER-CLOCKWISE of where it belongs, small and
+ * tucked into the base, and swings CLOCKWISE into place as it grows and
+ * fades in — every petal turning the same way, so the flower reads as one
+ * opening gesture travelling left to right rather than five separate
+ * entrances. The windows do not overlap, so a petal has finished before the
+ * next moves.
  *
  * NOTHING RUNS ON A CLOCK. Progress arrives through the imperative handle,
  * the loop damps towards it and stops on arrival, and the DOM is written
@@ -88,6 +91,14 @@ const DEPTH_DY = 1.15;
 /** how far a folded petal is tucked back towards the base, in user units */
 const BACK_NUDGE = 14;
 
+/** How far back each petal is wound before it opens, in degrees. Every petal
+    winds the SAME way — anticlockwise of its resting bearing — so all of them
+    swing clockwise into place; folding each one up to the vertical instead
+    (the obvious reading of "unfold") sends the left half one way and the
+    right half the other, which reads as petals arriving rather than a flower
+    opening. */
+const SWEEP_DEG = 62;
+
 export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   scrollProgress,
   activePillarId,
@@ -127,11 +138,9 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         if (snap > maxSnap) maxSnap = snap;
       }
 
-      /* Folded means upright: the petal's own bearing rotated back to
-         straight up, tucked towards the base and squeezed thin. */
-      const natural = (Math.atan2(p.dir.y, p.dir.x) * 180) / Math.PI;
+      /* Wound back anticlockwise, then swung clockwise home. */
       const eased = easeOutBack(raw);
-      const fold = (-90 - natural) * (1 - eased);
+      const fold = -SWEEP_DEG * (1 - eased);
       const sx = lerp(0.45, 1, eased);
       const sy = lerp(0.62, 1, eased);
       const tx = p.dir.x * (1 - eased) * -BACK_NUDGE;
