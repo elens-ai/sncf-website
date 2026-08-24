@@ -268,7 +268,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
             )}
           </div>
 
-          <div className="min-w-0 pt-0.5">
+          <div className="min-w-0 flex-1 pt-0.5">
             <span
               className="inline-block text-[9px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-0.5 rounded-full border"
               style={{
@@ -301,6 +301,42 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               </span>
             )}
           </div>
+
+          {/* The actions live in the TOP-RIGHT CORNER as a compact stack —
+              where a badge carries its clip — freeing the stub for the QR
+              alone. Labels stay in aria/title. */}
+          <div className="flex-none flex flex-col gap-1.5">
+            {event.kind === 'annual' && date ? (
+              <a
+                href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
+                download={`${event.id}.ics`}
+                aria-label="Add to calendar"
+                title="Add to calendar"
+                className="grid place-items-center w-8 h-8 rounded-full text-neutral-900 bg-white shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                <CalendarPlus className="w-4 h-4" />
+              </a>
+            ) : (
+              <a
+                href={event.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Take part in ${event.title}`}
+                title="Take part"
+                className="grid place-items-center w-8 h-8 rounded-full text-neutral-900 bg-white shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
+            )}
+            <button
+              onClick={share}
+              aria-label={`Share ${event.title}`}
+              title={shared ? 'Copied' : 'Share'}
+              className="grid place-items-center w-8 h-8 rounded-full text-white/85 bg-white/10 border border-white/20 hover:bg-white/20 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+            >
+              {shared ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
 
         <p className="font-artistic-serif text-white/70 text-[11.5px] leading-relaxed mt-2 line-clamp-2">
@@ -328,66 +364,27 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       {/* Perforation — the stub below is where the pass gets used. */}
       <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
 
-      <div className="relative px-5 pt-2 pb-2">
-        {/* The stub as a boarding-pass action bar: the QR chip anchors the
-            left edge and the two actions stack beside it, stretched to the
-            chip's exact height — one rectangle of controls instead of a chip
-            and two pills floating at different heights. Every event has
-            exactly two actions (Add + Share, or Take part + Share), so the
-            stack is always balanced. */}
-        <div className="flex items-stretch gap-2.5">
-          <div className="flex-none self-center text-center">
-            <div className="rounded-xl bg-white p-1.5 ring-1 ring-white/30 shadow-lg">
-              {qr ? (
-                <img
-                  src={qr}
-                  alt={`QR code — scan to open the ${event.title} invitation`}
-                  className="w-[50px] h-[50px] rounded-md"
-                />
-              ) : (
-                <div className="w-[50px] h-[50px] rounded-md bg-neutral-200" aria-hidden="true" />
-              )}
-            </div>
-            <p
-              className="text-[7px] font-extrabold uppercase tracking-[0.2em] mt-1"
-              style={{ color: accentB }}
-            >
-              Scan me
-            </p>
-          </div>
-
-          <div className="flex-1 flex flex-col gap-1.5 min-w-0">
-            {event.kind === 'annual' && date ? (
-              <a
-                href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
-                download={`${event.id}.ics`}
-                aria-label="Add to calendar"
-                title="Add to calendar"
-                className="flex-1 inline-flex items-center justify-center rounded-xl text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              >
-                <CalendarPlus className="w-[18px] h-[18px]" />
-              </a>
+      <div className="relative px-5 pt-2 pb-2.5">
+        {/* The stub is the QR alone now, centred — the pass's one
+            scannable focus, with the actions moved to the top corner. */}
+        <div className="flex flex-col items-center">
+          <div className="rounded-xl bg-white p-1.5 ring-1 ring-white/30 shadow-lg">
+            {qr ? (
+              <img
+                src={qr}
+                alt={`QR code — scan to open the ${event.title} invitation`}
+                className="w-[54px] h-[54px] rounded-md"
+              />
             ) : (
-              <a
-                href={event.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Take part in ${event.title}`}
-                title="Take part"
-                className="flex-1 inline-flex items-center justify-center rounded-xl text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              >
-                <ArrowUpRight className="w-[18px] h-[18px]" />
-              </a>
+              <div className="w-[54px] h-[54px] rounded-md bg-neutral-200" aria-hidden="true" />
             )}
-            <button
-              onClick={share}
-              aria-label={`Share ${event.title}`}
-              title={shared ? 'Copied' : 'Share'}
-              className="flex-1 inline-flex items-center justify-center rounded-xl text-white/85 bg-white/10 border border-white/20 hover:bg-white/20 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-            >
-              {shared ? <Check className="w-[18px] h-[18px]" /> : <Share2 className="w-[18px] h-[18px]" />}
-            </button>
           </div>
+          <p
+            className="text-[7px] font-extrabold uppercase tracking-[0.2em] mt-1"
+            style={{ color: accentB }}
+          >
+            Scan me
+          </p>
         </div>
       </div>
 
