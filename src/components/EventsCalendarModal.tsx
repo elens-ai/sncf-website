@@ -119,7 +119,11 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
   const ongoing = useMemo(() => items.filter((i) => i.days === null), [items]);
 
   const today = startOfToday();
-  const fallback = dated[0] ?? null;
+  /* Soonest upcoming — items arrive in January-first calendar order now, so
+     dated[0] is the year's first event, not the next one. */
+  const fallback = dated.length
+    ? dated.reduce((m, i) => ((i.days as number) < (m.days as number) ? i : m), dated[0])
+    : null;
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [view, setView] = useState<{ year: number; month: number }>({

@@ -950,6 +950,24 @@
   scroll-snap-align: start;
 }
 
+/* The lotus screen is a tall track holding a sticky stage: the extra height
+   IS the bloom's scrub length. 360vh leaves 260vh of pinned travel — about
+   40vh per petal, roughly one deliberate scroll each, with a beat at the end
+   where the whole flower stands before the page moves on. The component
+   measures this height at runtime rather than assuming it, so changing the
+   number here retimes the bloom and nothing else. */
+.lotus-track {
+  height: 360vh;
+}
+
+/* No scrubbing without motion: the track collapses to one screen and the
+   flower is simply open (SncfLotus3D poses it fully under reduced motion). */
+@media (prefers-reduced-motion: reduce) {
+  .lotus-track {
+    height: 100vh;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -978,3 +996,31 @@ html {
   }
 }
 
+
+/* ==========================================================================
+   TIMELINE RAIL — living pieces.
+   ========================================================================== */
+
+/* The elapsed year draws itself in, JAN up to TODAY, once on arrival. */
+@keyframes rail-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.rail-grow {
+  transform-origin: 0 50%;
+  animation: rail-grow 1100ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+}
+
+/* TODAY is a beacon: a ring breathes out of the dot, radar-style. */
+@keyframes rail-ping {
+  0%        { transform: scale(1);   opacity: 0.7; }
+  70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+.rail-ping {
+  animation: rail-ping 2.6s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-grow { animation: none; transform: none; }
+  .rail-ping { animation: none; opacity: 0; }
+}

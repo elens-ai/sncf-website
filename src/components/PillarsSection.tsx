@@ -1,96 +1,45 @@
-import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import React, { useRef } from 'react';
 import { PillarState } from '../types';
+import { SncfLotus3D } from './SncfLotus3D';
 
 /**
- * The screen below the hero.
+ * The screen below the hero: the SNCF lotus alone, blooming.
  *
- * It paints no background at all. A single .accent-canvas layer behind the
- * whole document carries the gradient for every screen, so the colour runs
- * unbroken past the fold and keeps changing with the wheel.
+ * The section is a TALL TRACK holding a STICKY stage. Arriving at it, the
+ * stage pins to the viewport with the flower centred and every petal still
+ * hidden; the scrolling that follows does not move the flower at all — it
+ * runs the bloom, one petal at a time, left to right. Once the last petal
+ * has opened and the flower has held for a beat, the track runs out and the
+ * page carries on to the next screen. So the reader spends their scroll on
+ * the flower opening rather than on the flower sliding past.
  *
- * It also carried its own dark overlay for a while, which the hero does not
- * have — that alone put a visible step at the boundary even before the two
- * gradients were merged. The pillar panels supply their own contrast instead.
+ * The track's height (.lotus-track) is what buys that scroll: 360vh leaves
+ * 260vh of pinned travel, about 40vh per petal. Under prefers-reduced-motion
+ * the track collapses to a single screen and the flower is simply open.
  *
- * Content is the four pillars as they already exist in the data — label,
- * headline and the two headline stats — and each panel opens the same detail
- * modal the hero's button opens.
+ * It paints no background of its own; the page-wide .accent-canvas carries
+ * the gradient through, as on every screen.
  */
 
 interface PillarsSectionProps {
   pillars: PillarState[];
-  /** The pillar the hero is currently on, highlighted to tie the screens together. */
   activeIndex: number;
   onOpenDetails: (pillar: PillarState) => void;
 }
 
-const SCRIPT_TITLES: Record<string, string> = {
-  heal: 'Heal',
-  enrich: 'Enrich',
-  empower: 'Empower',
-  projects: 'Projects',
-};
+export const PillarsSection: React.FC<PillarsSectionProps> = () => {
+  const trackRef = useRef<HTMLElement | null>(null);
 
-export const PillarsSection: React.FC<PillarsSectionProps> = ({
-  pillars,
-  activeIndex,
-  onOpenDetails,
-}) => (
-  <section
-    id="pillars-section"
-    aria-label="Our work"
-    className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 py-16 overflow-hidden"
-  >
-    <div className="relative z-10 w-full max-w-7xl mx-auto">
-      <header className="mb-8 sm:mb-12">
-        <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
-          Our work
-        </p>
-        <h2 className="font-artistic-heading text-white text-[28px] sm:text-[36px] md:text-[42px] leading-tight max-w-3xl drop-shadow">
-          Four pillars, one intention — service offered without condition.
-        </h2>
-      </header>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {pillars.map((pillar, i) => {
-          const isActive = i === activeIndex;
-          return (
-            <button
-              key={pillar.id}
-              onClick={() => onOpenDetails(pillar)}
-              aria-current={isActive ? 'true' : 'false'}
-              className={`group text-left rounded-3xl border p-5 backdrop-blur-md transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 hover:-translate-y-1 ${
-                isActive
-                  ? 'bg-black/35 border-white/45 shadow-xl'
-                  : 'bg-black/20 border-white/15 hover:bg-black/30 hover:border-white/30'
-              }`}
-            >
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <span className="font-dancing-script font-bold text-white text-[34px] leading-none drop-shadow">
-                  {SCRIPT_TITLES[pillar.id] ?? pillar.label}
-                </span>
-                <ArrowUpRight className="w-4 h-4 text-white/50 group-hover:text-white transition-colors mt-1.5 flex-none" />
-              </div>
-
-              <p className="font-artistic-serif text-white/95 text-[15px] leading-snug mb-4 min-h-[2.6em]">
-                {pillar.headline}
-              </p>
-
-              <div className="grid grid-cols-2 gap-2 pt-3 border-t border-white/15">
-                {pillar.stats.slice(0, 2).map((stat) => (
-                  <div key={stat.label}>
-                    <p className="font-artistic-heading text-white font-bold text-[19px] tracking-tight">
-                      {stat.value}
-                    </p>
-                    <p className="text-[11px] text-white/70 leading-tight">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </button>
-          );
-        })}
+  return (
+    <section
+      id="pillars-section"
+      ref={trackRef}
+      aria-label="Our work"
+      className="snap-screen lotus-track relative z-10 w-full"
+    >
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[96px] pb-10 overflow-hidden">
+        <SncfLotus3D trackRef={trackRef} className="w-[min(78vw,600px)]" />
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
