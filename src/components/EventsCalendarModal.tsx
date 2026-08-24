@@ -20,6 +20,7 @@ import {
   vevent,
   nowStamp,
   startOfToday,
+  pad,
 } from '../utils/events';
 
 /**
@@ -31,13 +32,18 @@ import {
  * visitor pages to — the detail pane always speaks about the next real
  * occurrence, so a visitor looking at a past month is still told the truth.
  *
- * Quick-jump chips under the grid go straight to each event's month with the
- * event selected, so nobody has to page eight months to find one. Export of
- * the whole set as .ics lives here too — the calendar is where you think
- * "get this into my calendar", so that is where the button is.
+ * The detail pane is a BANNER CARD: behind the text sits a full-card scene
+ * for the selected event — a wash of its pillar colour, a ghost numeral of
+ * its date, and a drawn motif (linked rings and a blood drop for Manav Ekta
+ * Diwas, a sapling for World Environment Day, a meditator for Yoga Day).
+ * Everything back there is deliberately quiet — 4–16% opacity — because the
+ * banner's job is atmosphere, and the details must keep the floor. The motifs
+ * are inline SVG, not images: crisp at any size, tinted from the pillar
+ * palette, and zero network weight.
  *
- * Follows the site's modal pattern exactly (gallery, donate): fixed backdrop,
- * Escape closes, body scroll locked while open.
+ * Quick-jump chips under the grid go straight to each event's month. Export
+ * of the whole set as .ics lives here too — the calendar is where the "get
+ * this into my calendar" thought happens.
  */
 
 interface EventsCalendarModalProps {
@@ -49,6 +55,58 @@ interface EventsCalendarModalProps {
 }
 
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+/* ----------------------------------------------------------------- motifs */
+
+/** Drawn per event, inherited colour via currentColor. viewBox 0 0 200 200. */
+const MOTIFS: Record<string, React.ReactNode> = {
+  // Unity rings above, a blood drop within — human oneness, given as blood.
+  'manav-ekta-diwas': (
+    <>
+      <g fill="none" stroke="currentColor" strokeWidth="7">
+        <circle cx="76" cy="112" r="38" />
+        <circle cx="124" cy="112" r="38" />
+      </g>
+      <path
+        fill="currentColor"
+        d="M100 34c-15 22-24 37-24 51a24 24 0 0 0 48 0c0-14-9-29-24-51z"
+      />
+    </>
+  ),
+  // A sapling — the same leaf language as the Heal mark, grown large.
+  'world-environment-day': (
+    <g fill="currentColor" transform="translate(8 8) scale(7.6)">
+      <path d="M12 13.1c0-5.6 3.9-10 9.6-10.6.4 5.8-3.4 10.2-9.6 10.6Z" />
+      <path d="M11.4 13.1c0-4.5-3.2-8-8.1-8.4-.3 4.7 3 8.1 8.1 8.4Z" />
+      <path d="M11.4 13.7c-3.5 0-6.1 2.7-6.1 6.2 3.6 0 6.1-2.7 6.1-6.2Z" />
+      <path d="M12.2 13.7c2.9 0 5.2 2.4 5.2 5.2-2.8 0-5.2-2.3-5.2-5.2Z" />
+    </g>
+  ),
+  // A meditator inside an aura ring.
+  'international-yoga-day': (
+    <>
+      <circle cx="100" cy="98" r="66" fill="none" stroke="currentColor" strokeWidth="5" opacity="0.55" />
+      <circle cx="100" cy="58" r="15" fill="currentColor" />
+      <path
+        fill="currentColor"
+        d="M100 78c-17 0-29 12-35 30l-19 22c-5 6-1 14 7 14h94c8 0 12-8 7-14l-19-22c-6-18-18-30-35-30z"
+      />
+      <path
+        fill="currentColor"
+        d="M52 140c14 8 34 12 48 12s34-4 48-12l-6 14c-12 6-28 9-42 9s-30-3-42-9l-6-14z"
+        opacity="0.7"
+      />
+    </>
+  ),
+};
+
+/** Fallback — the lotus-adjacent ring the site already speaks in. */
+const DEFAULT_MOTIF = (
+  <g fill="none" stroke="currentColor" strokeWidth="6">
+    <circle cx="100" cy="100" r="58" />
+    <circle cx="100" cy="100" r="34" opacity="0.6" />
+  </g>
+);
 
 export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
   isOpen,
@@ -140,7 +198,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
         <button
           onClick={onClose}
           aria-label="Close calendar"
-          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white grid place-items-center transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white grid place-items-center transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         >
           <X className="w-4 h-4" />
         </button>
@@ -271,74 +329,111 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
           </div>
 
           {/* ------------------------------------------------ detail pane */}
-          <div className="flex flex-col md:border-l md:border-white/10 md:pl-6">
+          <div className="flex flex-col">
             {selected && selected.date ? (
-              <>
-                <span
-                  className="self-start text-[9px] font-extrabold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border mb-3"
-                  style={{
-                    color: selected.accentB,
-                    borderColor: `${selected.accentB}4d`,
-                    backgroundColor: `${selected.accentB}14`,
-                  }}
+              /* Banner card. key remounts it per event so the scene and copy
+                 crossfade together instead of morphing in place. */
+              <div
+                key={selected.event.id}
+                className="relative flex-1 rounded-2xl overflow-hidden border border-white/10 p-5 animate-fadeIn"
+                style={{
+                  /* The event's scene: a diagonal wash of its pillar colour and
+                     a glow in the corner the motif occupies. Quiet by design —
+                     the numbers below are alpha 0x14–0x2e. */
+                  background: `linear-gradient(135deg, ${selected.accentA}2e 0%, rgba(0,0,0,0.25) 55%), radial-gradient(85% 70% at 82% 78%, ${selected.accentB}26 0%, transparent 62%)`,
+                }}
+              >
+                {/* Ghost numeral of the date — calendar identity at whisper
+                    volume. */}
+                <p
+                  aria-hidden="true"
+                  className="absolute -top-4 right-2 font-artistic-heading font-bold text-[118px] leading-none text-white/[0.06] select-none pointer-events-none tabular-nums"
                 >
-                  {selected.event.tag}
-                </span>
-
-                <h3 className="font-artistic-heading text-white font-bold text-[22px] leading-tight mb-1">
-                  {selected.event.title}
-                </h3>
-
-                {/* Always the NEXT real occurrence — paging back to a past
-                    month must not produce a date that has already gone. */}
-                <p className="text-[13px] text-white/70 mb-3 tabular-nums">
-                  {selected.date.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                  })}{' '}
-                  · {countdownLabel(daysUntil(nextOccurrence(
-                    selected.event.month as number,
-                    selected.event.day as number,
-                  )))}
-                  <span className="text-white/45"> · every year</span>
+                  {pad(selected.date.getDate())}
                 </p>
 
-                <p className="font-artistic-serif text-white/80 text-[14px] leading-relaxed mb-4">
-                  {selected.event.blurb}
-                </p>
+                {/* The drawn motif, tinted from the pillar palette. */}
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 200 200"
+                  className="absolute -bottom-6 -right-5 w-[190px] h-[190px] pointer-events-none"
+                  style={{ color: selected.accentB, opacity: 0.16 }}
+                >
+                  {MOTIFS[selected.event.id] ?? DEFAULT_MOTIF}
+                </svg>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <a
-                    href={icsHref(
-                      wrapCalendar(vevent(selected.event, selected.date, nowStamp())),
-                    )}
-                    download={`${selected.event.id}.ics`}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold text-neutral-900 bg-white hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                <div className="relative z-10 flex flex-col h-full">
+                  <span
+                    className="self-start text-[9px] font-extrabold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border mb-3"
+                    style={{
+                      color: selected.accentB,
+                      borderColor: `${selected.accentB}4d`,
+                      backgroundColor: `${selected.accentB}14`,
+                    }}
                   >
-                    <CalendarPlus className="w-3.5 h-3.5" />
-                    Add to my calendar
-                  </a>
-                  {selected.event.href && (
+                    {selected.event.tag}
+                  </span>
+
+                  <h3 className="font-artistic-heading text-white font-bold text-[22px] leading-tight mb-1">
+                    {selected.event.title}
+                  </h3>
+
+                  {/* Always the NEXT real occurrence — paging back to a past
+                      month must not produce a date that has already gone. */}
+                  <p className="text-[13px] text-white/70 mb-3 tabular-nums">
+                    {selected.date.toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}{' '}
+                    ·{' '}
+                    {countdownLabel(
+                      daysUntil(
+                        nextOccurrence(
+                          selected.event.month as number,
+                          selected.event.day as number,
+                        ),
+                      ),
+                    )}
+                    <span className="text-white/45"> · every year</span>
+                  </p>
+
+                  <p className="font-artistic-serif text-white/85 text-[14px] leading-relaxed mb-4">
+                    {selected.event.blurb}
+                  </p>
+
+                  <div className="flex flex-wrap items-center gap-2 mt-auto">
                     <a
-                      href={selected.event.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-[12px] font-bold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
+                      href={icsHref(
+                        wrapCalendar(vevent(selected.event, selected.date, nowStamp())),
+                      )}
+                      download={`${selected.event.id}.ics`}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold text-neutral-900 bg-white hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     >
-                      Take part
-                      <ArrowUpRight className="w-3.5 h-3.5" />
+                      <CalendarPlus className="w-3.5 h-3.5" />
+                      Add to my calendar
                     </a>
-                  )}
+                    {selected.event.href && (
+                      <a
+                        href={selected.event.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-[12px] font-bold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
+                      >
+                        Take part
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </>
+              </div>
             ) : (
               <p className="text-[14px] text-white/60">Pick a highlighted day.</p>
             )}
 
             {/* Programmes with no date — running whatever month is showing. */}
-            <div className="mt-auto pt-5">
+            <div className="pt-5">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/45 mb-2 flex items-center gap-1.5">
                 <InfinityIcon className="w-3 h-3" />
                 Running all year
