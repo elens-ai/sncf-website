@@ -76,6 +76,61 @@ export const EVENTS: SNCFEvent[] = [
     pillarId: 'heal',
   },
   {
+    id: 'world-water-day',
+    title: 'World Water Day',
+    kind: 'annual',
+    month: 3,
+    day: 22,
+    tag: 'United Nations',
+    blurb:
+      'The UN’s day for water — awareness drives and clean-up work along local ponds, lakes and riverbanks.',
+    pillarId: 'projects',
+  },
+  {
+    id: 'world-health-day',
+    title: 'World Health Day',
+    kind: 'annual',
+    month: 4,
+    day: 7,
+    tag: 'WHO',
+    blurb:
+      'Free health checkup camps and awareness sessions marking the World Health Organization’s founding day.',
+    pillarId: 'heal',
+  },
+  {
+    id: 'world-blood-donor-day',
+    title: 'World Blood Donor Day',
+    kind: 'annual',
+    month: 6,
+    day: 14,
+    tag: 'WHO',
+    blurb:
+      'Voluntary blood donation camps thanking the donors the blood banks run on.',
+    pillarId: 'heal',
+  },
+  {
+    id: 'international-day-of-peace',
+    title: 'International Day of Peace',
+    kind: 'annual',
+    month: 9,
+    day: 21,
+    tag: 'United Nations',
+    blurb:
+      'Prayers for peace and community outreach on the UN’s day of peace.',
+    pillarId: 'empower',
+  },
+  {
+    id: 'international-volunteer-day',
+    title: 'International Volunteer Day',
+    kind: 'annual',
+    month: 12,
+    day: 5,
+    tag: 'United Nations',
+    blurb:
+      'A day for sewa itself — volunteer drives and gratitude for selfless service, on the UN’s day for volunteers.',
+    pillarId: 'empower',
+  },
+  {
     id: 'oneness-vann',
     title: 'Oneness Vann',
     kind: 'ongoing',

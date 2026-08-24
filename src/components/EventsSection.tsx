@@ -127,7 +127,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
   return (
     <article
       id={`event-card-${event.id}`}
-      className={`relative w-[304px] mx-auto flex flex-col rounded-[22px] overflow-hidden bg-neutral-950/75 backdrop-blur-md border transition-colors duration-300 ${
+      className={`relative w-[min(90vw,340px)] mx-auto flex flex-col rounded-[22px] overflow-hidden bg-neutral-950/75 backdrop-blur-md border transition-colors duration-300 ${
         lit ? 'border-white/40 shadow-2xl' : 'border-white/[0.12]'
       }`}
     >
@@ -360,17 +360,31 @@ const EventDeck: React.FC<{
   const sideX = Math.min(stageW * 0.3, 430);
   const farX = Math.min(stageW * 0.37, 545);
 
-  /* Only the centre pass stands. The piles lie back from their bottom edge,
-     raised to sit BESIDE the pass — occupying the flanking space at its
-     mid-height rather than sunk to the stage floor — with ±1 and ±2 close
-     enough to OVERLAP into one resting stack per side. */
+  /* Only the centre pass stands. Everything else lies back from its bottom
+     edge in one DENSE, OPAQUE pile per side: ±1 nearest, every deeper card
+     fanned a few px further out and down with a slightly stronger turn, so
+     ten events read as two thick stacks of passes rather than a row of
+     ghosts. Solid on purpose — the cards themselves are dark glass, and
+     wrapper transparency made the piles read as reflections instead of
+     objects. Depth comes from z-order, the fan and a touch of blur on the
+     deepest cards, not from fading them out. */
   const pose = (off: number) => {
     if (off === 0) return { x: 0, y: 0, rx: 0, ry: 0, s: 1, o: 1, z: 30, blur: 0 };
     const a = Math.abs(off);
     const sgn = Math.sign(off);
     if (a === 1)
-      return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 0.45, z: 20, blur: 0 };
-    return { x: sgn * farX, y: 44, rx: 62, ry: -sgn * 16, s: 0.72, o: 0.25, z: 10, blur: 1 };
+      return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 1, z: 20, blur: 0 };
+    const d = Math.min(a - 2, 3);
+    return {
+      x: sgn * (farX + d * 18),
+      y: 44 + d * 7,
+      rx: 62,
+      ry: -sgn * (16 + d * 3),
+      s: 0.72 - d * 0.02,
+      o: 0.95,
+      z: 12 - d,
+      blur: d >= 2 ? 1 : 0,
+    };
   };
 
   return (
@@ -401,7 +415,7 @@ const EventDeck: React.FC<{
           return (
             <div
               key={item.event.id}
-              className="absolute left-1/2 top-2 w-[304px]"
+              className="absolute left-1/2 top-2 w-[min(90vw,340px)]"
               style={{
                 transform: `translateX(calc(-50% + ${p.x}px)) translateY(${p.y}px) rotateY(${p.ry}deg) rotateX(${p.rx}deg) scale(${p.s})`,
                 transformOrigin: '50% 100%',
