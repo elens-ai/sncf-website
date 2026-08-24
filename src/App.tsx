@@ -20,10 +20,25 @@ import { DonateModal } from './components/DonateModal';
 import { DevotionalLightboxModal } from './components/DevotionalLightboxModal';
 import { DevotionalLeader } from './components/DevotionalPhotoCard';
 
+/** The invite id from the URL. Tolerates the mangled ?invite-<id> form some
+    scanner apps and hand-typed addresses produce alongside the canonical
+    ?invite=<id>. */
+const parseInviteParam = (): string | null => {
+  const clean = new URLSearchParams(window.location.search).get('invite');
+  if (clean) return clean;
+  const m = window.location.search.match(/[?&]invite[-=]([a-z0-9-]+)/i);
+  return m ? m[1] : null;
+};
+
 export default function App() {
   /* 'showing' -> 'exiting' (logo flies to the header) -> 'done'.
-     The hero is mounted underneath the whole time so the handoff is seamless. */
-  const [splashPhase, setSplashPhase] = useState<'showing' | 'exiting' | 'done'>('showing');
+     The hero is mounted underneath the whole time so the handoff is seamless.
+     A visitor arriving from a scanned pass (?invite=...) skips the splash
+     entirely — they came for an invitation, and 5.7s of signature animation
+     between scan and invitation reads as the page not opening at all. */
+  const [splashPhase, setSplashPhase] = useState<'showing' | 'exiting' | 'done'>(() =>
+    parseInviteParam() ? 'done' : 'showing',
+  );
   const isSplashUp = splashPhase !== 'done';
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -38,9 +53,7 @@ export default function App() {
   /* ?invite=<event-id> — the landing for a scanned event-pass QR. The param
      is read once on load and cleared on dismiss, so reloading or sharing the
      address afterwards gives the plain site, not a stuck invitation. */
-  const [inviteId, setInviteId] = useState<string | null>(
-    () => new URLSearchParams(window.location.search).get('invite'),
-  );
+  const [inviteId, setInviteId] = useState<string | null>(parseInviteParam);
   const inviteItem = useMemo(
     () => (inviteId ? resolveEvents(EVENTS).find((i) => i.event.id === inviteId) ?? null : null),
     [inviteId],
@@ -48,7 +61,12 @@ export default function App() {
   const closeInvite = useCallback(() => {
     setInviteId(null);
     const u = new URL(window.location.href);
-    u.searchParams.delete('invite');
+    /* Strip the mangled ?invite-<id> key too, not just the canonical one —
+       otherwise dismissing a tolerated URL leaves it behind and a reload
+       reopens the invitation. */
+    [...u.searchParams.keys()]
+      .filter((k) => /^invite/i.test(k))
+      .forEach((k) => u.searchParams.delete(k));
     window.history.replaceState({}, '', u.pathname + u.search + u.hash);
   }, []);
 
