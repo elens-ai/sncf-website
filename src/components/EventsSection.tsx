@@ -327,12 +327,14 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
 
       <div className="relative px-5 pt-2 pb-2">
-        {/* One-row stub: the QR chip (a REAL code — the ?invite= link, scanned
-            straight to the invitation) beside the actions, so the full
-            planning scene below gets the height the old two-row stub spent.
-            The caption compresses to the SCAN ME microlabel under the chip. */}
-        <div className="flex items-center justify-center gap-2.5">
-          <div className="flex-none text-center">
+        {/* The stub as a boarding-pass action bar: the QR chip anchors the
+            left edge and the two actions stack beside it, stretched to the
+            chip's exact height — one rectangle of controls instead of a chip
+            and two pills floating at different heights. Every event has
+            exactly two actions (Add + Share, or Take part + Share), so the
+            stack is always balanced. */}
+        <div className="flex items-stretch gap-2.5">
+          <div className="flex-none self-center text-center">
             <div className="rounded-xl bg-white p-1.5 ring-1 ring-white/30 shadow-lg">
               {qr ? (
                 <img
@@ -351,36 +353,36 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               Scan me
             </p>
           </div>
-          <div className="flex items-center gap-1.5">
-          {event.kind === 'annual' && date && (
-            <a
-              href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
-              download={`${event.id}.ics`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold text-neutral-900 bg-white hover:scale-[1.05] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+
+          <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+            {event.kind === 'annual' && date ? (
+              <a
+                href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
+                download={`${event.id}.ics`}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl text-[11.5px] font-bold text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                <CalendarPlus className="w-3.5 h-3.5" />
+                Add to calendar
+              </a>
+            ) : (
+              <a
+                href={event.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl text-[11.5px] font-bold text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                Take part
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+            )}
+            <button
+              onClick={share}
+              aria-label={`Share ${event.title}`}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl text-[11.5px] font-bold text-white/85 bg-white/10 border border-white/20 hover:bg-white/20 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             >
-              <CalendarPlus className="w-3 h-3" />
-              Add
-            </a>
-          )}
-          {event.href && (
-            <a
-              href={event.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-bold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
-            >
-              Take part
-              <ArrowUpRight className="w-3 h-3" />
-            </a>
-          )}
-          <button
-            onClick={share}
-            aria-label={`Share ${event.title}`}
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-bold text-white/80 bg-white/5 border border-white/15 hover:bg-white/15 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-          >
-            {shared ? <Check className="w-3 h-3" /> : <Share2 className="w-3 h-3" />}
-            {shared ? 'Copied' : 'Share'}
-          </button>
+              {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
+              {shared ? 'Copied' : 'Share'}
+            </button>
           </div>
         </div>
       </div>
