@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnthemPlayer } from './AnthemPlayer';
 import { MainNav } from './MainNav';
 import { PillarState } from '../types';
@@ -30,6 +30,18 @@ export const Header: React.FC<HeaderProps> = ({
      search modal the orb opens — so the field appears because the visitor
      searched, never because the page moved under them. */
   const isExpanded = Boolean(searchQuery);
+
+  /* True once the page has scrolled off the hero's top. Drives ONLY the
+     header's ground — a blur-and-tint underlay so content sliding beneath the
+     fixed header stops mixing with the nav. Deliberately not reused for the
+     search control, which stays collapsed on scroll by explicit request. */
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   /* Track line 2 out until it spans exactly the width of line 1.
      Computed rather than hand-tuned: the tracking that matches depends on the
@@ -89,6 +101,17 @@ export const Header: React.FC<HeaderProps> = ({
       id="site-header"
       className="fixed top-0 left-0 right-0 z-50 h-[72px] px-4 md:px-8 flex items-center justify-between bg-transparent pointer-events-none"
     >
+      {/* Ground that appears on scroll. The blur is constant and only OPACITY
+          animates: backdrop-filter itself is expensive to transition, and an
+          invisible (opacity 0) layer simply skips its backdrop work. Negative
+          z keeps it under every header control while the header's own
+          stacking context (fixed, z-50) stops it escaping underneath. */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 -z-10 bg-neutral-950/40 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.25)] transition-opacity duration-500 ${
+          scrolled ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
       {/* LEFT: Logo + wordmark */}
       <div className="flex items-center gap-3 pointer-events-auto flex-none">
         <button
