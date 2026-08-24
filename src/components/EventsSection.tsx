@@ -221,9 +221,6 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
             {pillarLabel}
           </span>
         </div>
-        <p className="relative text-center text-[7px] font-extrabold uppercase tracking-[0.28em] text-white/75 mt-0.5">
-          SNCF · Event pass
-        </p>
       </div>
 
       <div className="px-5 pt-2 pb-1.5 flex flex-col items-center text-center">
@@ -357,29 +354,31 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               <a
                 href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
                 download={`${event.id}.ics`}
-                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl text-[11.5px] font-bold text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                aria-label="Add to calendar"
+                title="Add to calendar"
+                className="flex-1 inline-flex items-center justify-center rounded-xl text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                <CalendarPlus className="w-3.5 h-3.5" />
-                Add to calendar
+                <CalendarPlus className="w-[18px] h-[18px]" />
               </a>
             ) : (
               <a
                 href={event.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl text-[11.5px] font-bold text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                aria-label={`Take part in ${event.title}`}
+                title="Take part"
+                className="flex-1 inline-flex items-center justify-center rounded-xl text-neutral-900 bg-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                Take part
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <ArrowUpRight className="w-[18px] h-[18px]" />
               </a>
             )}
             <button
               onClick={share}
               aria-label={`Share ${event.title}`}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl text-[11.5px] font-bold text-white/85 bg-white/10 border border-white/20 hover:bg-white/20 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+              title={shared ? 'Copied' : 'Share'}
+              className="flex-1 inline-flex items-center justify-center rounded-xl text-white/85 bg-white/10 border border-white/20 hover:bg-white/20 hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             >
-              {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
-              {shared ? 'Copied' : 'Share'}
+              {shared ? <Check className="w-[18px] h-[18px]" /> : <Share2 className="w-[18px] h-[18px]" />}
             </button>
           </div>
         </div>
