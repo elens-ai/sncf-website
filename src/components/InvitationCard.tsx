@@ -70,9 +70,9 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
         id="invitation-card"
         className="relative w-full max-w-[380px] my-auto rounded-[28px] backdrop-blur-xl border border-white/25 shadow-2xl overflow-hidden text-center"
         style={{
-          /* Same graded logo-violet ink as the pass it was scanned from. */
+          /* Same graded volunteer-blue ink as the pass it was scanned from. */
           backgroundImage:
-            'linear-gradient(172deg, rgba(64, 42, 110, 0.94) 0%, rgba(43, 26, 78, 0.95) 45%, rgba(28, 16, 56, 0.96) 100%)',
+            'linear-gradient(172deg, rgba(42, 84, 179, 0.94) 0%, rgba(28, 62, 138, 0.95) 45%, rgba(16, 38, 92, 0.96) 100%)',
         }}
         onClick={(e) => e.stopPropagation()}
       >

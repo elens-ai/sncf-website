@@ -166,12 +166,13 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
         lit ? 'border-white/40' : 'border-white/[0.14]'
       }`}
       style={{
-        /* The logo's violet family as a graded ink — lighter at the head,
-           deepening toward the stub — rather than one flat fill; flat panels
-           are what read as cheap. The standing pass also carries a faint
+        /* The volunteers' t-shirt blue as a graded ink — VOLUNTEER_BLUE
+           (#2456c0, sampled from the uniforms) lightened at the head and
+           deepened toward the stub, so the pass wears the same blue the
+           people at the drive do. The standing pass also carries a faint
            halo of its own pillar colour in the shadow. */
         backgroundImage:
-          'linear-gradient(172deg, rgba(64, 42, 110, 0.92) 0%, rgba(43, 26, 78, 0.93) 45%, rgba(28, 16, 56, 0.95) 100%)',
+          'linear-gradient(172deg, rgba(42, 84, 179, 0.92) 0%, rgba(28, 62, 138, 0.93) 45%, rgba(16, 38, 92, 0.95) 100%)',
         boxShadow: lit
           ? `0 26px 55px -18px rgba(0, 0, 0, 0.65), 0 0 42px ${accentB}26`
           : '0 12px 30px -12px rgba(0, 0, 0, 0.5)',
