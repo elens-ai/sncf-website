@@ -38,8 +38,8 @@ import React, { useEffect, useRef } from 'react';
    flower's base. Swap in bespoke vectors here if the logo's exact petal
    outlines become available. */
 const PETAL_D =
-  'M0 0 C -12 -10 -30 -30 -37 -68 C -45 -112 -30 -158 -2 -192 ' +
-  'C 3 -198 9 -197 11 -190 C 27 -148 31 -100 18 -58 C 12 -36 6 -14 0 0 Z';
+  'M-38 0 C -48 -66 -32 -130 0 -158 C 27 -135 38 -95 33 -54 ' +
+  'L 24 -47 C 27 -88 17 -118 0 -134 C -17 -114 -26 -66 -23 -4 Z';
 
 interface PetalSpec {
   id: string;
@@ -47,20 +47,22 @@ interface PetalSpec {
   rest: number;
   /** Mirror the petal's asymmetry for the right-hand side. */
   mirror: boolean;
-  /** [start, end] window of scrollProgress this petal unfolds in. */
-  window: [number, number] | null;
+  /** [start, end] window of scrollProgress this petal blooms in. */
+  window: [number, number];
   /** Gradient stops: [dark base, light tip]. */
   colors: [string, string];
 }
 
-/* Unfold order is inner pair then outer pair — a fan, not a queue. */
+/* The bloom runs LEFT TO RIGHT, one petal after another — welcome first,
+   projects last — each window overlapping the next so the flower opens as a
+   wave rather than a queue of separate entrances. The centre is simply the
+   third petal in that wave (it still paints LAST, on top). */
 const PETALS: PetalSpec[] = [
-  { id: 'welcome', rest: -64, mirror: false, window: [0.4, 0.7], colors: ['#7d3f66', '#c98ab2'] },
-  { id: 'heal', rest: -33, mirror: false, window: [0.1, 0.4], colors: ['#1f8a5c', '#6fd19a'] },
-  { id: 'empower', rest: 33, mirror: true, window: [0.25, 0.55], colors: ['#c2185b', '#f48fb1'] },
-  { id: 'projects', rest: 64, mirror: true, window: [0.55, 0.85], colors: ['#0d6a8c', '#6ac8ed'] },
-  /* Centre LAST in the DOM so it paints on top of every other petal. */
-  { id: 'enrich', rest: 0, mirror: false, window: null, colors: ['#1565c0', '#64b5f6'] },
+  { id: 'welcome', rest: -64, mirror: false, window: [0.05, 0.35], colors: ['#7d3f66', '#c98ab2'] },
+  { id: 'heal', rest: -33, mirror: false, window: [0.2, 0.5], colors: ['#1f8a5c', '#6fd19a'] },
+  { id: 'empower', rest: 33, mirror: true, window: [0.5, 0.8], colors: ['#c2185b', '#f48fb1'] },
+  { id: 'projects', rest: 64, mirror: true, window: [0.65, 0.95], colors: ['#0d6a8c', '#6ac8ed'] },
+  { id: 'enrich', rest: 0, mirror: false, window: [0.35, 0.65], colors: ['#1565c0', '#64b5f6'] },
 ];
 
 const HIDDEN_SCALE_X = 0.45;
@@ -103,12 +105,7 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({ scrollProgress, classN
         const node = petalRefs.current[i];
         if (!node) return;
         const mirror = petal.mirror ? -1 : 1;
-        if (!petal.window) {
-          node.setAttribute('transform', `scale(${mirror} 1)`);
-          node.style.opacity = '1';
-          return;
-        }
-        const [w0, w1] = petal.window;
+        const [w0, w1] = petal.window as [number, number];
         const u = clamp01((progress - w0) / (w1 - w0));
         const e = easeOutBack(u);
         const opacity = clamp01(u / 0.35);
@@ -204,12 +201,12 @@ export const SncfLotus3D: React.FC<SncfLotus3DProps> = ({ scrollProgress, classN
               ref={(el) => {
                 petalRefs.current[i] = el;
               }}
-              style={p.window ? { opacity: 0 } : undefined}
+              style={{ opacity: 0 }}
             >
               <path d={PETAL_D} fill={`url(#lotus-${p.id})`} />
               {/* the petal's floating dot rides its own group, so it fans,
                   fades and settles with its petal */}
-              <circle cx="14" cy="-212" r="13" fill={`url(#lotus-${p.id})`} />
+              <circle cx="7" cy="-180" r="12" fill={`url(#lotus-${p.id})`} />
             </g>
           ))}
         </g>
