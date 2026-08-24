@@ -209,6 +209,29 @@ hand_ref['curl'] = curl_reference()
 print('reference clouds:', {k: len(v) for k, v in
                             {**figures, **hand_ref}.items()}, file=sys.stderr)
 
+# ------------------------------------------------------------------ the disc
+
+def seal_disc():
+    """The seal's inner white disc, in the vector file's units.
+
+    Measured as the reach of the white inside the ring rather than by fitting
+    the white region itself: the two hands cut across the disc, so its pixels
+    are not a circle, but the FURTHEST white pixel from the seal's centre
+    still lands on the ring's inner edge."""
+    im = Image.open(ROOT.parent / 'sncf-logo.png').convert('RGB')
+    hsv = np.asarray(im.convert('HSV'), dtype=float)
+    sat, val = hsv[..., 1] / 255, hsv[..., 2] / 255
+    cx, cy = (px0 + px1) / 2, (py0 + py1) / 2
+    ys, xs = np.nonzero((val > 0.93) & (sat < 0.08))
+    d = np.hypot(xs - cx, ys - cy)
+    inner = d < (px1 - px0) / 2          # inside the ring
+    r = float(np.quantile(d[inner], 0.999))
+    return ((cx - OFF[0]) / SCALE, (cy - OFF[1]) / SCALE, r / SCALE)
+
+
+SEAL_DISC = seal_disc()
+print('seal disc: centre %.1f,%.1f radius %.1f' % SEAL_DISC, file=sys.stderr)
+
 # ------------------------------------------------------------------ classify
 
 def nearest(cloudset, pts_png):
@@ -280,8 +303,30 @@ if cut != len(EXCLUDE):
 
 kept = [p for v in petals.values() for p in v] + palm + curl
 box = np.array([p['bbox'] for p in kept])
-vx0, vy0 = box[:, 0].min() - 6, box[:, 1].min() - 6
-vx1, vy1 = box[:, 2].max() + 6, box[:, 3].max() + 6
+ex0, ey0 = box[:, 0].min(), box[:, 1].min()
+ex1, ey1 = box[:, 2].max(), box[:, 3].max()
+
+# The disc is drawn around what WE draw, not around the whole seal: the seal's
+# own circle also holds the upper hand, and centred on our emblem it would
+# leave a bare white crescent where that hand should be. Same idea, same snug
+# proportion — the seal's content fills its disc to within a few percent — but
+# sized to the lotus and the palm.
+# The disc holds the FLOWER, and the palm holds the disc. Sizing it to the
+# whole emblem instead pushes it out past the hand, which is the one thing it
+# must not do — in the seal the circle is what the hand carries.
+fbox = np.array([p['bbox'] for v in petals.values() for p in v])
+fx0, fy0, fx1, fy1 = (fbox[:, 0].min(), fbox[:, 1].min(),
+                      fbox[:, 2].max(), fbox[:, 3].max())
+dcx, dcy = (fx0 + fx1) / 2, (fy0 + fy1) / 2
+DISC = (dcx, dcy, float(np.hypot(fx1 - dcx, fy1 - dcy) * 1.06))
+print('disc on the palm: centre %.1f,%.1f radius %.1f  (the seal\'s own is '
+      '%.1f, around both hands)' % (*DISC, SEAL_DISC[2]), file=sys.stderr)
+
+pad = 10
+vx0 = min(ex0, DISC[0] - DISC[2]) - pad
+vy0 = min(ey0, DISC[1] - DISC[2]) - pad
+vx1 = max(ex1, DISC[0] + DISC[2]) + pad
+vy1 = max(ey1, DISC[1] + DISC[2]) + pad
 
 # The point the petals converge on, carried over from the raster work
 # (logo pixel 514, 536) and expressed in the vector file's own units.
@@ -313,6 +358,8 @@ L = ["/* GENERATED — run `python3 tools/build-logo-shapes.py` to rebuild.",
      '  id: string;',
      '  /** Unit vector from the base out along this petal. */',
      '  dir: { x: number; y: number };',
+     "  /** This petal's leading ink — the colour its beam carries. */",
+     '  tone: string;',
      "  /** [start, end] window of the section's scroll this petal blooms in. */",
      '  window: [number, number];',
      '  shapes: LogoShape[];',
@@ -323,14 +370,20 @@ L = ["/* GENERATED — run `python3 tools/build-logo-shapes.py` to rebuild.",
      '/** The point every petal unfolds about, in the file\'s own units. */',
      'export const LOGO_BASE = { x: %.1f, y: %.1f };' % BASE,
      '',
+     "/** The seal's inner white disc, which the emblem settles into. */",
+     'export const LOGO_DISC = { cx: %.1f, cy: %.1f, r: %.1f };' % DISC,
+     '',
      'export const LOGO_PETALS: LogoPetal[] = [']
 for name in PAINT_ORDER:
     group = petals[name]
     c = np.array([p['pts'].mean(0) for p in group]).mean(0)
     v = c - np.array(BASE)
     v = v / (np.hypot(*v) or 1)
+    lead = max(group, key=lambda q: (q['bbox'][2] - q['bbox'][0])
+               * (q['bbox'][3] - q['bbox'][1]))
     L += ['  {', f"    id: '{name}',",
           '    dir: { x: %.4f, y: %.4f },' % (v[0], v[1]),
+          f"    tone: '{lead['fill']}',",
           f'    window: [{WINDOWS[name][0]}, {WINDOWS[name][1]}],',
           f'    shapes: {shapes(group)},', '  },']
 L += ['];', '',

@@ -71,7 +71,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = () => {
       className="snap-screen lotus-track relative z-10 w-full"
     >
       <div className="sticky top-0 h-screen w-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[96px] pb-10 overflow-hidden">
-        <SncfLotus3D ref={lotusRef} maxWidth={340} className="mx-auto" />
+        <SncfLotus3D ref={lotusRef} maxWidth={460} className="mx-auto" />
       </div>
     </section>
   );

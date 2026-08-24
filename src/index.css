@@ -951,13 +951,13 @@
 }
 
 /* The lotus screen is a tall track holding a sticky stage: the extra height
-   IS the bloom's scrub length. 360vh leaves 260vh of pinned travel — about
-   40vh per petal, roughly one deliberate scroll each, with a beat at the end
-   where the whole flower stands before the page moves on. The component
+   IS the bloom's scrub length. 420vh leaves 320vh of pinned travel — about
+   50vh per petal, so each swing is watched rather than glimpsed, with a beat
+   at the end where the seal's circle closes before the page moves on. The component
    measures this height at runtime rather than assuming it, so changing the
    number here retimes the bloom and nothing else. */
 .lotus-track {
-  height: 360vh;
+  height: 420vh;
 }
 
 /* No scrubbing without motion: the track collapses to one screen and the

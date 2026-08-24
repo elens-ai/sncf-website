@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
-import { LOGO_ASPECT, LOGO_BASE, LOGO_HAND, LOGO_PETALS, LOGO_VIEWBOX } from './logoShapes';
+import {
+  LOGO_ASPECT,
+  LOGO_BASE,
+  LOGO_DISC,
+  LOGO_HAND,
+  LOGO_PETALS,
+  LOGO_VIEWBOX,
+} from './logoShapes';
 
 /**
  * The SNCF seal, assembling as the screen scrolls.
@@ -23,6 +30,21 @@ import { LOGO_ASPECT, LOGO_BASE, LOGO_HAND, LOGO_PETALS, LOGO_VIEWBOX } from './
  * soft cast shadow sits under the hand, and the emblem tilts from 15 to 4
  * degrees as it opens — on a wrapper layer of its own, so the turn costs a
  * composite rather than a re-render of every filter inside it.
+ *
+ * THE DISC CLOSES IT. Once the last petal has landed, the seal's white
+ * circle grows in behind the flower — sized to the flower, so the palm still
+ * carries it the way the hand carries the circle in the seal.
+ *
+ * THEN THE LIGHT GOES OUT. Each petal throws a beam of its own ink from the
+ * flower's base to the edge of the screen, the wedges meeting halfway between
+ * neighbouring petals so the whole screen is divided between the verticals —
+ * a lighthouse turning its lamp on. The beams are drawn in the emblem's own
+ * coordinates and simply run past the viewBox (the svg does not clip), which
+ * is why they stay anchored to the flower at any size. They screen onto the
+ * page rather than painting over it, and carry a wide blur so the seams
+ * between wedges read as light rather than as cut paper — which is also why
+ * only their opacity animates, since scaling a blurred layer would re-render
+ * that blur on every frame.
  *
  * THE BLOOM runs left to right, one petal at a time. The hand arrives first
  * — the flower has to open out of something. Each petal is then wound back
@@ -75,6 +97,41 @@ const easeOutBack = (t: number) => {
   return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 };
 
+/** When the white disc grows in — after the last petal has landed. */
+const DISC_WINDOW: [number, number] = [0.88, 0.97];
+/** When the beams sweep out, just behind the disc. */
+const BEAM_WINDOW: [number, number] = [0.9, 1];
+/** Far enough past the viewBox to leave any screen. */
+const BEAM_REACH = 1600;
+
+/** One wedge per petal, meeting its neighbours halfway. The petals only fan
+    across the top, so the two outermost split the whole lower half between
+    them — the screen ends up divided between the five, with each wedge
+    starting at the petal whose colour it carries. */
+const BEAMS = (() => {
+  const bearing = (p: (typeof LOGO_PETALS)[number]) =>
+    Math.atan2(p.dir.y, p.dir.x);
+  const sorted = [...LOGO_PETALS].sort((a, b) => bearing(a) - bearing(b));
+  const angles = sorted.map(bearing);
+  const mid = (a: number, b: number) => a + (((b - a) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / 2;
+  return sorted.map((p, i) => {
+    const prev = angles[(i - 1 + angles.length) % angles.length];
+    const next = angles[(i + 1) % angles.length];
+    const from = mid(prev, angles[i]);
+    const to = mid(angles[i], next);
+    const arc = (((to - from) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+    const pt = (a: number) =>
+      `${(LOGO_BASE.x + Math.cos(a) * BEAM_REACH).toFixed(1)} ` +
+      `${(LOGO_BASE.y + Math.sin(a) * BEAM_REACH).toFixed(1)}`;
+    return {
+      id: p.id,
+      tone: p.tone,
+      d: `M${LOGO_BASE.x} ${LOGO_BASE.y} L${pt(from)} ` +
+         `A${BEAM_REACH} ${BEAM_REACH} 0 ${arc > Math.PI ? 1 : 0} 1 ${pt(to)} Z`,
+    };
+  });
+})();
+
 /** Seconds for the eased value to close ~63% of its gap. Time-based, so the
     motion is identical at 60Hz, 120Hz or a throttled tab. */
 const EASE_TAU = 0.16;
@@ -108,6 +165,8 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   const shadowRef = useRef<SVGEllipseElement | null>(null);
   const glowRef = useRef<SVGCircleElement | null>(null);
   const handRef = useRef<SVGGElement | null>(null);
+  const discRef = useRef<SVGCircleElement | null>(null);
+  const beamRef = useRef<SVGGElement | null>(null);
   const petalRefs = useRef<Record<string, SVGGElement | null>>({});
 
   const smoothRef = useRef(scrollProgress ?? 0);
@@ -126,6 +185,21 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
       shadowRef.current.style.transform =
         `scale(${lerp(0.34, 1, k).toFixed(3)}, ${lerp(0.4, 1, k).toFixed(3)})`;
       shadowRef.current.style.opacity = lerp(0.1, 0.3, k).toFixed(3);
+    }
+
+    if (beamRef.current) {
+      const [b0, b1] = BEAM_WINDOW;
+      const bu = easeOut(clamp01((s - b0) / (b1 - b0)));
+      /* Opacity only. The beams carry a wide blur to soften their seams, and
+         scaling a blurred layer would re-render that blur every frame. */
+      beamRef.current.style.opacity = (bu * 0.46).toFixed(3);
+    }
+
+    if (discRef.current) {
+      const [d0, d1] = DISC_WINDOW;
+      const du = easeOut(clamp01((s - d0) / (d1 - d0)));
+      discRef.current.style.transform = `scale(${lerp(0.82, 1, du).toFixed(3)})`;
+      discRef.current.style.opacity = du.toFixed(3);
     }
 
     /* The hand arrives first: it rises the last of its own travel and
@@ -164,7 +238,10 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
       el.style.transform =
         `rotate(${fold.toFixed(2)}deg) translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) ` +
         `scale(${sx.toFixed(3)}, ${sy.toFixed(3)})`;
-      el.style.opacity = clamp01(eased / 0.35).toFixed(3);
+      /* Faded up over the first fifth of the swing rather than the first
+         third, so the petal is visible for most of its travel instead of
+         arriving already half-open. */
+      el.style.opacity = clamp01(eased / 0.2).toFixed(3);
     }
 
     /* The radiance behind the emblem rides the page's live accent, so it
@@ -354,15 +431,64 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         <circle
           ref={glowRef}
           cx={LOGO_BASE.x}
-          cy={LOGO_BASE.y - 60}
-          r="150"
+          cy={LOGO_DISC.cy}
+          r="230"
           fill="url(#logoAmbient)"
           filter="url(#logoGlowBlur)"
           style={{
             pointerEvents: 'none',
             opacity: 0.03,
             transform: 'scale(0.2)',
-            transformOrigin: `${LOGO_BASE.x}px ${LOGO_BASE.y - 60}px`,
+            transformOrigin: `${LOGO_DISC.cx}px ${LOGO_DISC.cy}px`,
+            willChange: 'transform, opacity',
+          }}
+        />
+
+        {/* the lamp: one wedge of light per petal, out past the frame */}
+        <g
+          ref={beamRef}
+          style={{
+            opacity: 0,
+            /* the seams between wedges are hard edges; light has none */
+            filter: 'blur(13px)',
+            mixBlendMode: 'screen',
+            willChange: 'opacity',
+            pointerEvents: 'none',
+          }}
+        >
+          <defs>
+            {BEAMS.map((b) => (
+              <radialGradient
+                key={b.id}
+                id={`beam-${b.id}`}
+                gradientUnits="userSpaceOnUse"
+                cx={LOGO_BASE.x}
+                cy={LOGO_BASE.y}
+                r={BEAM_REACH}
+              >
+                <stop offset="0%" stopColor={b.tone} stopOpacity="0.85" />
+                <stop offset="14%" stopColor={b.tone} stopOpacity="0.5" />
+                <stop offset="55%" stopColor={b.tone} stopOpacity="0.12" />
+                <stop offset="100%" stopColor={b.tone} stopOpacity="0" />
+              </radialGradient>
+            ))}
+          </defs>
+          {BEAMS.map((b) => (
+            <path key={b.id} d={b.d} fill={`url(#beam-${b.id})`} />
+          ))}
+        </g>
+
+        {/* the seal's white circle, closing the emblem */}
+        <circle
+          ref={discRef}
+          cx={LOGO_DISC.cx}
+          cy={LOGO_DISC.cy}
+          r={LOGO_DISC.r}
+          fill="#ffffff"
+          style={{
+            opacity: 0,
+            transform: 'scale(0.82)',
+            transformOrigin: `${LOGO_DISC.cx}px ${LOGO_DISC.cy}px`,
             willChange: 'transform, opacity',
           }}
         />
