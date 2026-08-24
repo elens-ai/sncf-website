@@ -127,7 +127,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
   return (
     <article
       id={`event-card-${event.id}`}
-      className={`relative w-[248px] mx-auto flex flex-col rounded-[22px] overflow-hidden bg-neutral-950/75 backdrop-blur-md border transition-colors duration-300 ${
+      className={`relative w-[304px] mx-auto flex flex-col rounded-[22px] overflow-hidden bg-neutral-950/75 backdrop-blur-md border transition-colors duration-300 ${
         lit ? 'border-white/40 shadow-2xl' : 'border-white/[0.12]'
       }`}
     >
@@ -369,8 +369,8 @@ const EventDeck: React.FC<{
     const a = Math.abs(off);
     const sgn = Math.sign(off);
     if (a === 1)
-      return { x: sgn * sideX, y: 84, rx: 56, ry: -sgn * 12, s: 0.84, o: 0.45, z: 20, blur: 0 };
-    return { x: sgn * farX, y: 108, rx: 62, ry: -sgn * 16, s: 0.75, o: 0.25, z: 10, blur: 1 };
+      return { x: sgn * sideX, y: 26, rx: 56, ry: -sgn * 12, s: 0.8, o: 0.45, z: 20, blur: 0 };
+    return { x: sgn * farX, y: 44, rx: 62, ry: -sgn * 16, s: 0.72, o: 0.25, z: 10, blur: 1 };
   };
 
   return (
@@ -401,7 +401,7 @@ const EventDeck: React.FC<{
           return (
             <div
               key={item.event.id}
-              className="absolute left-1/2 top-2 w-[248px]"
+              className="absolute left-1/2 top-2 w-[304px]"
               style={{
                 transform: `translateX(calc(-50% + ${p.x}px)) translateY(${p.y}px) rotateY(${p.ry}deg) rotateX(${p.rx}deg) scale(${p.s})`,
                 transformOrigin: '50% 100%',
