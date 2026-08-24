@@ -15,7 +15,6 @@ import { toDataURL } from 'qrcode';
 import { EVENTS } from '../data/events';
 import { PILLARS } from '../data/pillars';
 import { PillarGlyph } from './CardIllustration';
-import { VolunteerPlanting, VolunteerWaving } from './VolunteerArt';
 import {
   ResolvedEvent,
   resolveEvents,
@@ -200,7 +199,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           to is the first thing the card says — matching the activity report,
           where every activity lives under its pillar. */}
       <div
-        className="relative px-4 pt-2 pb-2.5 flex-none border-b border-white/20"
+        className="relative px-4 pt-1.5 pb-2 flex-none border-b border-white/20"
         style={{ background: `linear-gradient(120deg, ${accentA}, ${accentB})` }}
       >
         {/* Gloss across the band — lacquer, not flat print. */}
@@ -214,7 +213,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
         />
         <div
           aria-hidden="true"
-          className="relative mx-auto mb-1.5 h-[7px] w-12 rounded-full bg-black/45 border border-white/25 shadow-inner"
+          className="relative mx-auto mb-1 h-[6px] w-12 rounded-full bg-black/45 border border-white/25 shadow-inner"
         />
         <div className="relative flex items-center justify-center gap-2">
           <span className="grid place-items-center w-6 h-6 rounded-full bg-white/95 shadow-md ring-1 ring-black/10">
@@ -224,18 +223,13 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
             {pillarLabel}
           </span>
         </div>
-        <p className="relative text-center text-[7px] font-extrabold uppercase tracking-[0.28em] text-white/75 mt-1">
+        <p className="relative text-center text-[7px] font-extrabold uppercase tracking-[0.28em] text-white/75 mt-0.5">
           SNCF · Event pass
         </p>
       </div>
 
-      <div className="px-5 pt-3 pb-3 flex flex-col items-center text-center">
-        {/* The date page sits where an ID photo would — with two volunteers
-            in the uniform standing beside it on the card's empty shoulders,
-            one with a sapling, one waving the reader in. */}
-        <div className="relative">
-          <VolunteerPlanting className="absolute -left-[72px] bottom-0 w-14 h-14" />
-          <VolunteerWaving className="absolute -right-[72px] bottom-0 w-14 h-14" />
+      <div className="px-5 pt-2 pb-2 flex flex-col items-center text-center">
+        {/* The date page sits where an ID photo would. */}
         <div
           className="relative w-[96px] rounded-2xl text-neutral-900 shadow-lg ring-1 ring-black/10 overflow-hidden"
           style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
@@ -245,14 +239,14 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
             <span className="w-[4px] h-[4px] rounded-full bg-neutral-300 shadow-inner" />
           </div>
           {event.kind === 'annual' && date ? (
-            <div className="px-2 pt-1.5 pb-2">
+            <div className="px-2 pt-1 pb-1.5">
               <p
                 className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
                 style={{ color: accentB }}
               >
                 {date.toLocaleDateString('en-US', { weekday: 'long' })}
               </p>
-              <p className="font-artistic-heading font-bold text-[34px] leading-none tabular-nums mt-0.5">
+              <p className="font-artistic-heading font-bold text-[30px] leading-none tabular-nums mt-0.5">
                 {date.getDate()}
               </p>
               <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
@@ -260,7 +254,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               </p>
             </div>
           ) : (
-            <div className="px-2 pt-1.5 pb-2">
+            <div className="px-2 pt-1 pb-1.5">
               <p
                 className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
                 style={{ color: accentB }}
@@ -275,10 +269,8 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           )}
         </div>
 
-        </div>
-
         <span
-          className="mt-3 text-[9px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-0.5 rounded-full border"
+          className="mt-2 text-[9px] font-extrabold uppercase tracking-[0.16em] px-2.5 py-0.5 rounded-full border"
           style={{
             color: accentB,
             borderColor: `${accentB}4d`,
@@ -288,7 +280,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           {event.tag}
         </span>
 
-        <h3 className="font-artistic-heading font-bold text-white text-[16px] leading-tight mt-2">
+        <h3 className="font-artistic-heading font-bold text-white text-[16px] leading-tight mt-1.5">
           {event.title}
         </h3>
 
@@ -334,7 +326,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       {/* Perforation — the stub below is where the pass gets used. */}
       <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
 
-      <div className="relative px-5 pt-2.5 pb-3.5">
+      <div className="relative px-5 pt-2 pb-2">
         {/* QR stub — a REAL code, generated locally, encoding the ?invite=
             link for this event: a phone camera pointed at the pass gets the
             full invitation card on its own screen. The white is confined to
@@ -347,10 +339,10 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               <img
                 src={qr}
                 alt={`QR code — scan to open the ${event.title} invitation`}
-                className="w-[58px] h-[58px] rounded-md"
+                className="w-[52px] h-[52px] rounded-md"
               />
             ) : (
-              <div className="w-[58px] h-[58px] rounded-md bg-neutral-200" aria-hidden="true" />
+              <div className="w-[52px] h-[52px] rounded-md bg-neutral-200" aria-hidden="true" />
             )}
           </div>
           <div className="min-w-0">
@@ -398,6 +390,17 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           </button>
         </div>
       </div>
+
+      {/* The planning table peeks from the pass's foot — a band of the same
+          volunteer artwork the invitation closes with, cropped to the board
+          and the team so pass and invitation are visibly one family. */}
+      <img
+        src="/images/volunteers-planning.webp"
+        alt=""
+        aria-hidden="true"
+        className="w-full h-[58px] object-cover object-[50%_20%] block select-none flex-none"
+        draggable={false}
+      />
       </div>
     </article>
   );

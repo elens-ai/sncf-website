@@ -11,7 +11,6 @@ import {
 } from '../utils/events';
 import { PILLARS } from '../data/pillars';
 import { PillarGlyph } from './CardIllustration';
-import { VolunteersPlanning } from './VolunteerArt';
 
 /**
  * The invitation a scanned pass opens.
@@ -172,11 +171,17 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
           </p>
 
           {/* The planning table closes the card, as the reference poster's
-              team closes its invitation: volunteers in the uniform blue
-              around a whiteboard, working out the next drive. Full-bleed to
-              the card's foot. */}
+              team closes its invitation — the supplied volunteer artwork,
+              background keyed out so it sits straight on the card's ink,
+              full-bleed to the foot. */}
           <div className="mt-3 -mx-6 -mb-6">
-            <VolunteersPlanning className="w-full h-auto block" />
+            <img
+              src="/images/volunteers-planning.webp"
+              alt=""
+              aria-hidden="true"
+              className="w-full h-auto block select-none"
+              draggable={false}
+            />
           </div>
         </div>
       </div>
