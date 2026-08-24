@@ -700,7 +700,7 @@ export const EventsSection: React.FC = () => {
     <section
       id="events-section"
       aria-label="Upcoming events"
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 py-6 overflow-hidden"
+      className="snap-screen relative z-10 w-full min-h-screen flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 pt-[92px] pb-4 overflow-hidden"
     >
       <div className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col min-h-0">
         <header className="mb-3 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
