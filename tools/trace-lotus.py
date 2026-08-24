@@ -43,7 +43,7 @@ from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'tools' / 'lotus-source.png'
-TARGET = ROOT / 'src' / 'components' / 'lotusGeometry.ts'
+TARGET = ROOT / 'src' / 'components' / 'lotusPetalPaths.ts'
 
 S = 8            # mask upscale factor
 REF = 5          # the scale the viewBox numbers below were fixed at
@@ -76,7 +76,12 @@ PAINT_ORDER = ['indigo', 'purple', 'cyan', 'magenta', 'green']
 # petal folds to, and unfolds about, this point.
 BASE = (680, 620)
 OX, OY = 140, 160          # content origin, REF-scale pixels
-VIEW = (1340, 810)
+# Emitted coordinates put the BASE AT THE ORIGIN, because that is what every
+# petal rotates about when it unfolds, and scale the mark to about 350 units
+# wide — small enough that the component's hand-set depths, rim widths and
+# shadow radii are the handful of units they read as.
+SCALE = 0.25
+PAD = 12
 
 # Bloom windows as fractions of the section's pinned scroll, LEFT TO RIGHT and
 # strictly one at a time: each petal finishes and holds before the next one
@@ -438,14 +443,14 @@ cov = np.stack([np.where(dilate(sh['comp'], 2), coverage(sh['rgb']), 0.0)
                 for sh in shapes])
 owner = cov.argmax(axis=0)
 
-def bezier_path(points, sharp, scale, ox, oy):
+def bezier_path(points, sharp):
     """Closed Catmull-Rom through the points, written as cubic Beziers.
 
     Tangents are dropped to zero at the flagged corners, so a corner is
     entered and left along its chords and stays sharp, while every other
     vertex carries a curve — which is what finally removes the faceting a
     polygon can never lose."""
-    pts = np.array([(x * scale - ox, y * scale - oy) for (y, x) in points])
+    pts = np.array(points, dtype=float)
     n = len(pts)
     sharp = np.array(sharp, dtype=bool)
 
@@ -508,10 +513,23 @@ for c in figures:
 
 # ------------------------------------------------------------------- EMIT
 
-def ref(v):
-    """Upscaled pixels -> the REF-scale space the viewBox is fixed in."""
-    return v * REF / S
+def out_xy(x, y):
+    """Upscaled pixels -> emitted user units, base at the origin."""
+    return ((x * REF / S - OX - BASE[0]) * SCALE,
+            (y * REF / S - OY - BASE[1]) * SCALE)
 
+
+bounds = []
+for f in figures.values():
+    for (y, x) in f['outer']:
+        bounds.append(out_xy(x, y))
+for d in dots:
+    x, y = out_xy(d['cx'], d['cy'])
+    r = d['r'] * REF / S * SCALE
+    bounds += [(x - r, y - r), (x + r, y + r)]
+xs_, ys_ = zip(*bounds)
+vx, vy = min(xs_) - PAD, min(ys_) - PAD
+vw, vh = max(xs_) - vx + PAD, max(ys_) - vy + PAD
 
 L = [
     "/* GENERATED — run `python3 tools/trace-lotus.py` to rebuild.",
@@ -521,28 +539,30 @@ L = [
     " * page are the shapes on the seal. Bloom windows and paint order are",
     " * authored in the generator's AUTHORED block — edit them there. Colours",
     " * are not here at all: each petal wears its hero card's accents, which",
-    " * SncfLotus3D reads from PILLARS / DEVOTIONAL_ACCENT. */",
+    " * SncfLotus3D reads from PILLARS / DEVOTIONAL_ACCENT.",
+    " *",
+    " * Coordinates put the flower's BASE AT THE ORIGIN — every petal unfolds",
+    " * by rotating about it, so that is the only origin a transform wants. */",
     '',
     'export interface LotusPetal {',
     '  id: string;',
-    '  /** Resting fan angle about the base, degrees. Geometry is baked at this',
-    '      pose, so the unfold runs the rotation from -rest back to 0. */',
-    '  rest: number;',
+    '  /** Unit vector from the base out along this petal. The unfold swings it',
+    '      from upright to this bearing. */',
+    '  dir: { x: number; y: number };',
     "  /** [start, end] window of the section's scroll this petal blooms in. */",
     '  window: [number, number];',
-    "  /** The figure's floating dot — the head the seal paints in this",
-    "      figure's own ink. The gold crescent has none. */",
-    '  dot: { cx: number; cy: number; r: number } | null;',
     '  /** Vertical extent [top, bottom], so a dot can be filled from its own',
     "      petal's ramp at the height it floats rather than from a ramp",
     '      squeezed into the dot itself. */',
     '  span: [number, number];',
-    '  path: string;',
+    "  /** The figure's floating dot — the head the seal paints in this",
+    "      figure's own ink. The gold crescent has none. */",
+    '  dot: { x: number; y: number; r: number } | null;',
+    '  d: string;',
     '}',
     '',
-    f'export const LOTUS_VIEW = {{ w: {VIEW[0]}, h: {VIEW[1]} }} as const;',
-    '/** The point all five figures converge on — every unfold pivots here. */',
-    f'export const LOTUS_BASE = {{ x: {BASE[0]}, y: {BASE[1]} }} as const;',
+    f"export const LOTUS_VIEWBOX = '{vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f}';",
+    f'export const LOTUS_ASPECT = {vw / vh:.4f};',
     '',
     '/* Array order is PAINT order, back to front; bloom order lives in the',
     '   windows. */',
@@ -552,20 +572,26 @@ for cname in PAINT_ORDER:
     f = figures[cname]
     name = NAMES[cname]
     w = WINDOWS[name]
-    path = bezier_path(f['outer'], f['sharp'], REF / S, OX, OY)
-    cx, cy = ref(f['centroid'][0]) - OX, ref(f['centroid'][1]) - OY
-    rest = round(np.degrees(np.arctan2(cx - BASE[0], BASE[1] - cy)), 1)
+    pts = [out_xy(x, y) for (y, x) in f['outer']]
+    path = bezier_path(pts, f['sharp'])
+    cx, cy = out_xy(*f['centroid'])
+    norm = np.hypot(cx, cy) or 1.0
+    _, top = out_xy(0, f['bbox'][1])
+    _, bottom = out_xy(0, f['bbox'][3])
     d = dot_of.get(cname)
-    dot = ('null' if d is None else '{ cx: %.1f, cy: %.1f, r: %.1f }'
-           % (ref(d['cx']) - OX, ref(d['cy']) - OY, ref(d['r'])))
-    span = (ref(f['bbox'][1]) - OY, ref(f['bbox'][3]) - OY)
-    L += ['  {', f"    id: '{name}',", f'    rest: {rest},',
+    if d is None:
+        dot = 'null'
+    else:
+        dx, dy = out_xy(d['cx'], d['cy'])
+        dot = '{ x: %.1f, y: %.1f, r: %.1f }' % (dx, dy, d['r'] * REF / S * SCALE)
+    L += ['  {', f"    id: '{name}',",
+          '    dir: { x: %.4f, y: %.4f },' % (cx / norm, cy / norm),
           f'    window: [{w[0]}, {w[1]}],',
+          '    span: [%.1f, %.1f],' % (top, bottom),
           f'    dot: {dot},',
-          f'    span: [{span[0]:.1f}, {span[1]:.1f}],',
-          '    path:', f"      '{path}',", '  },']
+          '    d:', f"      '{path}',", '  },']
 L += ['];', '']
 
 TARGET.write_text('\n'.join(L))
-print(f'wrote {TARGET.relative_to(ROOT)} — {len(figures)} figures, {len(dots)} dots',
+print(f'wrote {TARGET.relative_to(ROOT)} — viewBox {vx:.0f} {vy:.0f} {vw:.0f} {vh:.0f}',
       file=sys.stderr)
