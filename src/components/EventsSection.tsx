@@ -15,7 +15,7 @@ import { toDataURL } from 'qrcode';
 import { EVENTS } from '../data/events';
 import { PILLARS } from '../data/pillars';
 import { PillarGlyph } from './CardIllustration';
-import { VolunteerWaving } from './VolunteerArt';
+import { VolunteerPlanting, VolunteerWaving } from './VolunteerArt';
 import {
   ResolvedEvent,
   resolveEvents,
@@ -230,7 +230,12 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       </div>
 
       <div className="px-5 pt-3 pb-3 flex flex-col items-center text-center">
-        {/* The date page sits where an ID photo would. */}
+        {/* The date page sits where an ID photo would — with two volunteers
+            in the uniform standing beside it on the card's empty shoulders,
+            one with a sapling, one waving the reader in. */}
+        <div className="relative">
+          <VolunteerPlanting className="absolute -left-[72px] bottom-0 w-14 h-14" />
+          <VolunteerWaving className="absolute -right-[72px] bottom-0 w-14 h-14" />
         <div
           className="relative w-[96px] rounded-2xl text-neutral-900 shadow-lg ring-1 ring-black/10 overflow-hidden"
           style={{ backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f4f5f8 100%)' }}
@@ -268,6 +273,8 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               </p>
             </div>
           )}
+        </div>
+
         </div>
 
         <span
@@ -328,9 +335,6 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
       <div aria-hidden="true" className="mx-4 border-t border-dashed border-white/20" />
 
       <div className="relative px-5 pt-2.5 pb-3.5">
-        {/* A volunteer in the uniform blue waves from the stub's corner —
-            the same figure the invitation carries, tying pass to people. */}
-        <VolunteerWaving className="absolute right-1.5 bottom-0 w-10 h-10 pointer-events-none" />
         {/* QR stub — a REAL code, generated locally, encoding the ?invite=
             link for this event: a phone camera pointed at the pass gets the
             full invitation card on its own screen. The white is confined to
