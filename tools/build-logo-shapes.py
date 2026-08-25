@@ -46,10 +46,26 @@ EXCLUDE = [
     ('#3BADE1', (224, 337, 371, 375)),
 ]
 
-# Bloom windows: the hand opens first, then one petal at a time, left to right.
+# Bloom windows. The hand opens first, then the seal's white disc (its window
+# lives in SncfLotus3D.tsx), then one petal at a time.
+#
+# ASSIGNED BY POSITION, LEFT TO RIGHT — keys below are in ascending dir.x.
+# The flower opens as one gesture travelling across the screen, and each
+# petal is TINTED to the vertical whose turn it is (see POSITION_TINT in
+# SncfLotus3D.tsx): leftmost Heal green, then Enrich blue, Empower pink,
+# Projects teal, and the rose last. PillarsSection steps the ground through
+# the same five on these same frames, so petal and screen always agree.
+#
+# NOTE THE KEYS ARE POSITION LABELS the grouper assigned, not verticals. The
+# petal keyed 'welcome' is simply the leftmost one and now wears Heal green.
+# Read the position, not the key.
 HAND_WINDOW = [0.0, 0.07]
-WINDOWS = {'welcome': [0.09, 0.25], 'heal': [0.27, 0.43], 'enrich': [0.45, 0.61],
-           'empower': [0.63, 0.79], 'projects': [0.81, 0.97]}
+# The first 0.10 of the scrub belongs to the HALL'S THRESHOLD — the seal is
+# still landing and the entrance panel is still leaving. Nothing of the flower
+# may start before it, which is why these do not begin at 0.20 any more. The
+# last petal keeps its 0.82 start and each window is 0.13 rather than 0.14, so
+# the shift is absorbed by the early windows and the tail is untouched.
+WINDOWS = {'welcome': [0.24, 0.37], 'heal': [0.385, 0.515], 'enrich': [0.53, 0.66], 'empower': [0.675, 0.805], 'projects': [0.82, 0.95]}
 
 # ---------------------------------------------------------------- the vector
 

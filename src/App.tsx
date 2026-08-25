@@ -170,14 +170,13 @@ export default function App() {
         introActive={!isSplashUp}
       />
 
-      {/* 3. THE SCREEN BELOW THE HERO. It carries no colour of its own — it
-             reads the same --accent-a/--accent-b the hero publishes, so the
-             gradient continues across the scroll boundary and keeps changing
-             with the wheel. */}
+      {/* 3. THE SCREEN BELOW THE HERO. It carries the current pillar's accent
+             colors to maintain color continuity from the hero section. */}
       <PillarsSection
         pillars={activePillarsList}
         activeIndex={activeIndex}
         onOpenDetails={handleOpenDetails}
+        currentPillar={currentPillar}
       />
 
       {/* 4. UPCOMING EVENTS */}

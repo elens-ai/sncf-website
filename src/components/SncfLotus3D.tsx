@@ -7,6 +7,7 @@ import {
   LOGO_PETALS,
   LOGO_VIEWBOX,
 } from './logoShapes';
+import { TINTED_FILLS } from './logoTint';
 
 /**
  * The SNCF seal, assembling as the screen scrolls.
@@ -31,23 +32,26 @@ import {
  * degrees as it opens — on a wrapper layer of its own, so the turn costs a
  * composite rather than a re-render of every filter inside it.
  *
- * THE DISC CLOSES IT. Once the last petal has landed, the seal's white
- * circle grows in behind the flower — sized to the flower, so the palm still
- * carries it the way the hand carries the circle in the seal.
+ * THE DISC OPENS IT, AND THE DISC IS A WORLD. The seal's white circle grows
+ * in behind the flower FIRST, straight after the palm and before any petal —
+ * sized to the flower, so the palm still carries it the way the hand carries
+ * the circle in the seal. It is the ground the flower is then built on.
  *
- * EACH PETAL BRINGS ITS OWN LIGHT. As a petal swings up, a wedge of its ink
- * throws from the flower's base out past the edge of the screen, so the
- * screen is claimed one vertical at a time and stands divided between the
- * five once the flower is open. Neighbouring wedges meet halfway between
- * their petals, and the seams are left HARD — a blur turns five clear
- * territories into one wash, and the division is the point. The beams are
- * drawn in the emblem's own coordinates and simply run past the viewBox (the
- * svg does not clip), which is what keeps them anchored to the flower at any
- * size. They multiply onto the section's white ground, which is what keeps
- * a wedge the colour of its petal instead of a wash.
+ * It is shaded as a sphere rather than filled flat: lit from the upper left
+ * where the emblem's own light already is, darkened at the limb, wrapped in
+ * an atmosphere that takes the colour of whichever vertical is showing, and
+ * crossed by a meridian grid that turns as the page is scrubbed. It stays
+ * white, because the flower has to read against it — the roundness is
+ * carried by the rim and the grid, not by tinting the disc. What the emblem
+ * says with it is the whole point: a flower opening out of a world, held.
  *
- * THE BLOOM runs left to right, one petal at a time. The hand arrives first
- * — the flower has to open out of something. Each petal is then wound back
+ * THE BLOOM runs left to right, one petal at a time, out of a palm that is
+ * already standing: the hand rises as the SECTION arrives rather than on the
+ * scrub, so the screen never belongs to this section without it. Each petal is then wound back
+ *
+ * THE BLOOM runs left to right, one petal at a time, out of a palm that is
+ * already standing: the hand rises as the SECTION arrives rather than on the
+ * scrub, so the screen never belongs to this section without it. Each petal is then wound back
  * anticlockwise of where it belongs, small and tucked into the base, and
  * swings clockwise into place as it grows and fades in: every petal turning
  * the same way, so the whole reads as one opening gesture travelling across
@@ -71,8 +75,11 @@ import {
  */
 
 export interface SncfLotus3DHandle {
-  /** Drive the assembly. The emblem eases towards the value given. */
-  updateProgress: (s: number) => void;
+  /** Drive the assembly. The emblem eases towards the value given.
+      `entry` is how far the section has taken the viewport (0..1) — the hand
+      rides that rather than the scrub, so it is already standing by the time
+      the screen belongs to this section. */
+  updateProgress: (s: number, entry?: number) => void;
 }
 
 export interface SncfLotus3DProps {
@@ -97,40 +104,32 @@ const easeOutBack = (t: number) => {
   return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 };
 
-/** When the white disc grows in — after the last petal has landed. */
-const DISC_WINDOW: [number, number] = [0.88, 0.97];
-/** How bright a fully-thrown beam is. */
-const BEAM_MAX = 0.5;
-/** Far enough past the viewBox to leave any screen. */
-const BEAM_REACH = 1600;
+/** When the white disc grows in — on the APPROACH, not the scrub.
 
-/** One wedge per petal, meeting its neighbours halfway. The petals only fan
-    across the top, so the two outermost split the whole lower half between
-    them — the screen ends up divided between the five, with each wedge
-    starting at the petal whose colour it carries. */
-const BEAMS = (() => {
-  const bearing = (p: (typeof LOGO_PETALS)[number]) =>
-    Math.atan2(p.dir.y, p.dir.x);
-  const sorted = [...LOGO_PETALS].sort((a, b) => bearing(a) - bearing(b));
-  const angles = sorted.map(bearing);
-  const mid = (a: number, b: number) => a + (((b - a) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / 2;
-  return sorted.map((p, i) => {
-    const prev = angles[(i - 1 + angles.length) % angles.length];
-    const next = angles[(i + 1) % angles.length];
-    const from = mid(prev, angles[i]);
-    const to = mid(angles[i], next);
-    const arc = (((to - from) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-    const pt = (a: number) =>
-      `${(LOGO_BASE.x + Math.cos(a) * BEAM_REACH).toFixed(1)} ` +
-      `${(LOGO_BASE.y + Math.sin(a) * BEAM_REACH).toFixed(1)}`;
-    return {
-      id: p.id,
-      tone: p.tone,
-      d: `M${LOGO_BASE.x} ${LOGO_BASE.y} L${pt(from)} ` +
-         `A${BEAM_REACH} ${BEAM_REACH} 0 ${arc > Math.PI ? 1 : 0} 1 ${pt(to)} Z`,
-    };
-  });
-})();
+    IT HAS TO BE WHOLE BEFORE THE PETALS ARRIVE. The petals now fly in off the
+    hero's own artwork and merge INTO this disc; a disc still opening when
+    they land would be catching them in something half-built, and the moment
+    reads as a full moon receiving them or it reads as nothing.
+
+    So it rides `entry` — the section taking the screen — and finishes at 0.92
+    of it, comfortably before the stage pins and the merge begins. It used to
+    open on the first fraction of the scrub, back when the seal simply landed
+    beside it and nothing had to be caught. */
+const DISC_WINDOW_ENTRY: [number, number] = [0.58, 0.92];
+
+/** When the palm rises, on the APPROACH.
+
+    Ordered ahead of DISC_WINDOW_ENTRY and closing before it opens: the disc
+    is the seal's ground and sits IN the hand, so a disc arriving first would
+    hang unsupported for a beat. Palm, then moon, then the petals that merge
+    into it. */
+const HAND_WINDOW_ENTRY: [number, number] = [0.3, 0.62];
+/** The globe's grid. Parallels are placed as a fraction of the radius and
+    drawn as straight chords, because an untilted globe's parallels ARE
+    straight in silhouette; the curvature you read comes from the meridians
+    and the limb, not from bending these. */
+const EARTH_PARALLELS = [-0.66, -0.36, 0, 0.36, 0.66];
+const EARTH_MERIDIANS = 5;
 
 /** Seconds for the eased value to close ~63% of its gap. Time-based, so the
     motion is identical at 60Hz, 120Hz or a throttled tab. */
@@ -155,6 +154,39 @@ const HAND_LIFT = -22;
 
 const PIVOT = `${LOGO_BASE.x}px ${LOGO_BASE.y}px`;
 
+/** How far back each petal is wound before it swings home, keyed by id.
+
+    EACH PETAL COMES OUT FROM BEHIND THE ONE BEFORE IT. Rather than winding
+    every petal back by the same fixed angle, each is wound back to where its
+    PREDECESSOR IN THE BLOOM ORDER rests, so it starts the swing sitting over
+    that petal and emerges out of it. The bearings run monotonically left to
+    right (-169, -139, -64, -55, +5), which is what makes this work at all:
+    each petal's predecessor is always the one immediately anticlockwise of
+    it, so winding back is always winding back INTO the flower.
+
+    Clamped, because the raw gaps are wildly uneven — 8.8 degrees between
+    empower and enrich against 74.7 between enrich and heal. Unclamped, the
+    close pairs would barely travel and their emergence would not read at
+    all, while the far ones would swing in from somewhere off the bloom.
+    The floor is what guarantees every petal gets a visible swing.
+
+    The first petal has no predecessor and keeps the original full sweep. */
+const WIND_BACK_DEG: Record<string, number> = (() => {
+  const order = [...LOGO_PETALS].sort((a, b) => a.window[0] - b.window[0]);
+  const bearing = (p: (typeof LOGO_PETALS)[number]) =>
+    (Math.atan2(p.dir.y, p.dir.x) * 180) / Math.PI;
+  const out: Record<string, number> = {};
+  order.forEach((p, i) => {
+    if (i === 0) {
+      out[p.id] = SWEEP_DEG;
+      return;
+    }
+    const gap = bearing(p) - bearing(order[i - 1]);
+    out[p.id] = Math.max(34, Math.min(SWEEP_DEG, gap));
+  });
+  return out;
+})();
+
 export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   scrollProgress,
   activePillarId,
@@ -165,10 +197,16 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
   const shadowRef = useRef<SVGEllipseElement | null>(null);
   const glowRef = useRef<SVGCircleElement | null>(null);
   const handRef = useRef<SVGGElement | null>(null);
-  const discRef = useRef<SVGCircleElement | null>(null);
-  const beamRefs = useRef<Record<string, SVGPathElement | null>>({});
+  const discRef = useRef<SVGGElement | null>(null);
+  const meridianRefs = useRef<(SVGEllipseElement | null)[]>([]);
+  const swayRef = useRef<SVGGElement | null>(null);
+  /* Whether the sway is currently ticking, so play-state is written on a
+     change rather than every frame. */
+  const swayOnRef = useRef<boolean>(false);
+
   const petalRefs = useRef<Record<string, SVGGElement | null>>({});
 
+  const entryRef = useRef(1);
   const smoothRef = useRef(scrollProgress ?? 0);
   const targetRef = useRef(scrollProgress ?? 0);
   const rafRef = useRef<number | null>(null);
@@ -188,22 +226,46 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
     }
 
     if (discRef.current) {
-      const [d0, d1] = DISC_WINDOW;
-      const du = easeOut(clamp01((s - d0) / (d1 - d0)));
+      const [d0, d1] = DISC_WINDOW_ENTRY;
+      const du = easeOut(clamp01((entryRef.current - d0) / (d1 - d0)));
       discRef.current.style.transform = `scale(${lerp(0.82, 1, du).toFixed(3)})`;
       discRef.current.style.opacity = du.toFixed(3);
+
+      /* THE WORLD TURNS ON THE SCRUB, not on a clock. A meridian seen from
+         the side is an ellipse whose width is the cosine of how far round it
+         has gone, so spinning the globe is just rewriting rx: full width
+         facing you, zero — a straight line — edge on. Driving it from the
+         scroll keeps the whole screen one mechanism, and means the globe is
+         still whenever the reader is. */
+      const spin = s * Math.PI * 1.15;
+      for (let i = 0; i < EARTH_MERIDIANS; i++) {
+        const el = meridianRefs.current[i];
+        if (!el) continue;
+        const rx = Math.abs(Math.cos(spin + (i * Math.PI) / EARTH_MERIDIANS)) * LOGO_DISC.r;
+        el.setAttribute('rx', rx.toFixed(2));
+      }
     }
 
-    /* The hand arrives first: it rises the last of its own travel and
-       settles, so the flower has something to open out of. */
+    /* THE PALM STANDS DURING THE APPROACH, waiting.
+
+       This has moved twice, and the reason it is back on `entry` is the
+       merge. When a whole seal was flying to the corner, a palm already
+       waiting there meant two emblems on screen at once, so the palm was
+       held back to the threshold. Now what flies is the artwork's own petals
+       and they are merging INTO the globe — so the hand and its moon have to
+       be there already, holding the thing that will catch them. */
     if (handRef.current) {
-      const [h0, h1] = LOGO_HAND.window;
-      const hu = clamp01((s - h0) / (h1 - h0));
-      const he = easeOutBack(hu);
+      const hp = clamp01(
+        (entryRef.current - HAND_WINDOW_ENTRY[0]) / (HAND_WINDOW_ENTRY[1] - HAND_WINDOW_ENTRY[0]),
+      );
+      const he = easeOutBack(hp);
+      /* Reaches full just before the window closes, so it is solid as the
+         seal vanishes rather than after it. */
+      const hu = clamp01(hp / 0.85);
       handRef.current.style.transform =
         `translate(0px, ${(HAND_LIFT + HAND_RISE * (1 - he)).toFixed(2)}px) ` +
         `scale(${lerp(0.9, 1, he).toFixed(3)})`;
-      handRef.current.style.opacity = clamp01(hu / 0.4).toFixed(3);
+      handRef.current.style.opacity = hu.toFixed(3);
     }
 
     let maxSnap = 0;
@@ -219,9 +281,10 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         if (snap > maxSnap) maxSnap = snap;
       }
 
-      /* Wound back anticlockwise, then swung clockwise home. */
+      /* Wound back anticlockwise onto the previous petal, then swung
+         clockwise home — see WIND_BACK_DEG. */
       const eased = easeOutBack(raw);
-      const fold = -SWEEP_DEG * (1 - eased);
+      const fold = -WIND_BACK_DEG[p.id] * (1 - eased);
       const sx = lerp(0.28, 1, eased);
       const sy = lerp(0.46, 1, eased);
       const tx = p.dir.x * (1 - eased) * -BACK_NUDGE;
@@ -235,11 +298,31 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
          arriving already half-open. */
       el.style.opacity = clamp01(eased / 0.2).toFixed(3);
 
-      /* The petal's beam comes up with it, a beat behind the swing so the
-         light follows the petal rather than announcing it. */
-      const beam = beamRefs.current[p.id];
-      if (beam) {
-        beam.style.opacity = (clamp01((eased - 0.12) / 0.88) * BEAM_MAX).toFixed(3);
+
+    }
+
+    /* THE BLOOM SWAYS ONLY ONCE IT IS WHOLE. The last petal lands at the end
+       of its window, and from there to the end of the track the flower is
+       complete and simply held — that beat is where the sway lives.
+
+       It rides a WRAPPER, never the petals themselves. The petals' transform
+       belongs to the scroll handler above, and an animation on them would
+       take it away; rotating their common parent leaves every one of those
+       writes intact and sways all five as one piece, which is what keeps
+       them in sync — there is no per-petal phase to drift.
+
+       --sway is the amplitude, ramped rather than switched, so the flower
+       eases into the motion instead of snapping into it. Play-state is
+       written only on a change: at amplitude 0 the animation is a no-op that
+       would still tick the compositor every frame for the whole scroll. */
+    if (swayRef.current) {
+      const lastEnd = Math.max(...LOGO_PETALS.map((p) => p.window[1]));
+      const sway = clamp01((s - lastEnd) / (1 - lastEnd));
+      swayRef.current.style.setProperty('--sway', sway.toFixed(3));
+      const on = sway > 0;
+      if (on !== swayOnRef.current) {
+        swayOnRef.current = on;
+        swayRef.current.style.animationPlayState = on ? 'running' : 'paused';
       }
     }
 
@@ -271,13 +354,16 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         updateDOM(smoothRef.current);
         rafRef.current = null;
       }
+      /* entry moves on its own clock (the section arriving), so a settled
+         scrub must still repaint once for it. */
     };
     rafRef.current = requestAnimationFrame(tick);
   };
 
   useImperativeHandle(ref, () => ({
-    updateProgress: (s: number) => {
+    updateProgress: (s: number, entry = 1) => {
       targetRef.current = clamp01(s);
+      entryRef.current = clamp01(entry);
       pump();
     },
   }), []);
@@ -333,6 +419,47 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         style={{ overflow: 'visible' }}
       >
         <defs>
+          {/* THE DISC IS A WORLD. It is still the seal's white circle — the
+              flower has to read against it — but it is lit and banded as a
+              sphere rather than filled flat, so the emblem becomes a flower
+              opening out of a world the palm is carrying.
+
+              Everything here is keyed to light from the UPPER LEFT, which is
+              where the emblem's own fePointLight already sits (-160, -220).
+              A globe lit from anywhere else would sit in the same picture as
+              a flower lit from over your shoulder, and the two would read as
+              cut from different images. */}
+          <radialGradient id="earthBody" cx="34%" cy="30%" r="82%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="52%" stopColor="#fcfeff" />
+            <stop offset="100%" stopColor="#dbe7ef" />
+          </radialGradient>
+
+          {/* Limb darkening: nothing until the outer fifth, then a cool
+              shade right at the rim. This is the whole difference between a
+              white circle and a sphere — the eye reads a disc that is
+              uniform to its edge as flat no matter how it is shaded inside. */}
+          <radialGradient id="earthLimb" cx="50%" cy="50%" r="50%">
+            <stop offset="78%" stopColor="#6f8ea6" stopOpacity="0" />
+            <stop offset="94%" stopColor="#6f8ea6" stopOpacity="0.16" />
+            <stop offset="100%" stopColor="#5b7c95" stopOpacity="0.34" />
+          </radialGradient>
+
+          {/* Atmosphere, in whichever vertical is showing. --lotus-b is set
+              on the stage and eased over 880ms, so the world's air changes
+              colour with the screen as the flower opens on it: Heal, Enrich,
+              Empower, Projects, and the rose. The fallback matters — this
+              renders before the first scroll writes the pair. */}
+          <radialGradient id="earthAtmo" cx="50%" cy="50%" r="50%">
+            <stop offset="72%" stopColor="var(--lotus-b, #6fd19a)" stopOpacity="0" />
+            <stop offset="88%" stopColor="var(--lotus-b, #6fd19a)" stopOpacity="0.42" />
+            <stop offset="96%" stopColor="var(--lotus-b, #6fd19a)" stopOpacity="0.20" />
+            <stop offset="100%" stopColor="var(--lotus-b, #6fd19a)" stopOpacity="0" />
+          </radialGradient>
+
+          <clipPath id="earthClip">
+            <circle cx={LOGO_DISC.cx} cy={LOGO_DISC.cy} r={LOGO_DISC.r} />
+          </clipPath>
           {/* Lit surface: one light across a whole group, not across each of
               its gradient bands. */}
           {/* Smooth, then light. feGaussianBlur on the colour melts the
@@ -344,8 +471,19 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
           <filter id="logoBevel" x="-25%" y="-25%" width="150%" height="150%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="0.9" result="soft" />
             <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="ab" />
+            {/* The alpha stays blurred — that is what melts the trace's
+                staircase — and the SLOPE is what decides how much of that
+                blur survives as a soft edge. It maps the blurred alpha
+                through 0 at 0.484 and 1 at 0.516: a 3%-wide ramp, so the
+                staircase is gone but the silhouette lands hard. A shallower
+                slope leaves the whole blur visible as a feathered edge,
+                which is what made the emblem look out of focus up close.
+                Intercept is -(slope / 2) + 0.5, which keeps the edge on the
+                0.5 contour — the traced outline's true position. Change the
+                slope and this must move with it or the shape gains or loses
+                weight. */}
             <feComponentTransfer in="ab" result="mask">
-              <feFuncA type="linear" slope="18" intercept="-8" />
+              <feFuncA type="linear" slope="31" intercept="-15" />
             </feComponentTransfer>
             <feComposite in="soft" in2="mask" operator="in" result="art" />
             <feGaussianBlur in="mask" stdDeviation="2.6" result="b" />
@@ -379,16 +517,29 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
           <filter id="logoBevelSoft" x="-25%" y="-25%" width="150%" height="150%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="soft" />
             <feGaussianBlur in="SourceAlpha" stdDeviation="2.1" result="ab" />
+            {/* Same tight ramp as the petals — see the note there. The palm
+                blurs its alpha harder still (2.1), so without this it was
+                the softest edge in the emblem by some way. */}
             <feComponentTransfer in="ab" result="mask">
-              <feFuncA type="linear" slope="20" intercept="-9" />
+              <feFuncA type="linear" slope="31" intercept="-15" />
             </feComponentTransfer>
             <feComposite in="soft" in2="mask" operator="in" result="art" />
-            <feGaussianBlur in="mask" stdDeviation="3.4" result="b" />
+            {/* THE PALM'S COLOUR IS THE LOGO'S, and this is what was hiding
+                it. The specular is ADDED (k2/k3 arithmetic) over a blurred
+                alpha, and on a petal — narrow, curved — that blur leaves a
+                highlight along the rim. The palm is one broad flat surface,
+                so its blurred alpha is near-solid across the middle and the
+                same pass laid a sheet of white over the whole hand: the
+                logo's pink (#CB5CA7..#E3AACE) came out a pale lavender.
+                Tightening the blur puts the highlight back on the rim where
+                it belongs, and halving the constant stops it bleaching the
+                surface it sits on. The fills were never wrong. */}
+            <feGaussianBlur in="mask" stdDeviation="2.2" result="b" />
             <feSpecularLighting
               in="b"
               surfaceScale="2.4"
-              specularConstant="0.34"
-              specularExponent="26"
+              specularConstant="0.17"
+              specularExponent="34"
               lightingColor="#ffffff"
               result="spec"
             >
@@ -447,51 +598,91 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
         {/* Multiply, not screen: the section turns white under the emblem, and
             screening onto white is a no-op — the wedges would vanish exactly
             where they are meant to be clearest. */}
-        <g style={{ mixBlendMode: 'multiply', pointerEvents: 'none' }}>
-          <defs>
-            {BEAMS.map((b) => (
-              <radialGradient
-                key={b.id}
-                id={`beam-${b.id}`}
-                gradientUnits="userSpaceOnUse"
-                cx={LOGO_BASE.x}
-                cy={LOGO_BASE.y}
-                r={BEAM_REACH}
-              >
-                <stop offset="0%" stopColor={b.tone} stopOpacity="0.85" />
-                <stop offset="14%" stopColor={b.tone} stopOpacity="0.5" />
-                <stop offset="55%" stopColor={b.tone} stopOpacity="0.12" />
-                <stop offset="100%" stopColor={b.tone} stopOpacity="0" />
-              </radialGradient>
-            ))}
-          </defs>
-          {BEAMS.map((b) => (
-            <path
-              key={b.id}
-              ref={(el) => {
-                beamRefs.current[b.id] = el;
-              }}
-              d={b.d}
-              fill={`url(#beam-${b.id})`}
-              style={{ opacity: 0, willChange: 'opacity' }}
-            />
-          ))}
-        </g>
 
-        {/* the seal's white circle, closing the emblem */}
-        <circle
+
+        {/* the seal's white circle — a world, opening the emblem */}
+        <g
           ref={discRef}
-          cx={LOGO_DISC.cx}
-          cy={LOGO_DISC.cy}
-          r={LOGO_DISC.r}
-          fill="#ffffff"
           style={{
             opacity: 0,
             transform: 'scale(0.82)',
             transformOrigin: `${LOGO_DISC.cx}px ${LOGO_DISC.cy}px`,
             willChange: 'transform, opacity',
           }}
-        />
+        >
+          {/* air first, so the planet's edge sits on top of its own glow */}
+          <circle cx={LOGO_DISC.cx} cy={LOGO_DISC.cy} r={LOGO_DISC.r * 1.085} fill="url(#earthAtmo)" />
+          <circle cx={LOGO_DISC.cx} cy={LOGO_DISC.cy} r={LOGO_DISC.r} fill="url(#earthBody)" />
+
+          {/* The grid is held DELIBERATELY FAINT. The flower has to read
+              against this disc, and that is the disc's first job; a graticule
+              strong enough to admire on its own competes with the petals for
+              the same few hundred pixels. It is meant to be felt, not read.
+
+              DOTTED, NOT DRAWN, because that is this site's own line. The
+              hero rings the wheel in `border-dashed border-white/15`, and a
+              solid meridian grid read as a stock wireframe globe against it —
+              the one motif on the screen that looked bought rather than
+              made. Same geometry, broken into dots, and it belongs. */}
+          <g
+            clipPath="url(#earthClip)"
+            fill="none"
+            stroke="var(--lotus-a, #1f8a5c)"
+            strokeWidth="1.05"
+            strokeLinecap="round"
+            strokeDasharray="0.5 6.5"
+          >
+            {EARTH_PARALLELS.map((f, i) => {
+              const y = LOGO_DISC.cy + f * LOGO_DISC.r;
+              const w = LOGO_DISC.r * Math.sqrt(1 - f * f);
+              return (
+                <line
+                  key={`p${i}`}
+                  x1={LOGO_DISC.cx - w}
+                  x2={LOGO_DISC.cx + w}
+                  y1={y}
+                  y2={y}
+                  strokeOpacity={f === 0 ? 0.17 : 0.1}
+                />
+              );
+            })}
+            {Array.from({ length: EARTH_MERIDIANS }, (_, i) => (
+              <ellipse
+                key={`m${i}`}
+                ref={(el) => {
+                  meridianRefs.current[i] = el;
+                }}
+                cx={LOGO_DISC.cx}
+                cy={LOGO_DISC.cy}
+                rx={LOGO_DISC.r}
+                ry={LOGO_DISC.r}
+                strokeOpacity={0.13}
+              />
+            ))}
+          </g>
+
+          {/* Lights on the orbit — the hero scatters small glowing nodes along
+              its rings, and a few here tie the world to that same sky. Placed
+              on the limb rather than the face so they never sit behind a
+              petal, and carrying the vertical's own colour. */}
+          {[-62, -18, 34, 118].map((deg, i) => {
+            const rad = (deg * Math.PI) / 180;
+            return (
+              <circle
+                key={`node${i}`}
+                cx={LOGO_DISC.cx + Math.cos(rad) * LOGO_DISC.r}
+                cy={LOGO_DISC.cy + Math.sin(rad) * LOGO_DISC.r}
+                r={i % 2 ? 2.1 : 3.1}
+                fill="var(--lotus-b, #6fd19a)"
+                opacity={0.55}
+              />
+            );
+          })}
+
+          {/* the rim, last: it has to darken the grid too, or the lines run
+              flat over a curve that is bending away from them */}
+          <circle cx={LOGO_DISC.cx} cy={LOGO_DISC.cy} r={LOGO_DISC.r} fill="url(#earthLimb)" />
+        </g>
 
         <ellipse
           ref={shadowRef}
@@ -526,27 +717,43 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
           </g>
         </g>
 
-        {/* petals, painted back to front */}
-        {LOGO_PETALS.map((p) => (
-          <g
-            key={p.id}
-            ref={(el) => {
-              petalRefs.current[p.id] = el;
-            }}
-            style={{
-              willChange: 'transform, opacity',
-              transformOrigin: PIVOT,
-              opacity: 0,
-              filter: activePillarId === p.id ? 'brightness(1.08)' : undefined,
-            }}
-          >
-            <g filter="url(#logoBevel)">
-              {p.shapes.map((sh, i) => (
-                <path key={i} d={sh.d} fill={sh.fill} />
-              ))}
+        {/* petals, painted back to front.
+
+            EVERY PETAL IS DRIVEN BY THE SCROLL, never by a CSS animation.
+            A CSS animation beats an inline style in the cascade, so an
+            `animation` on these groups — even one that only meant to add
+            character — overrides the transform and opacity updateProgress
+            writes each frame. With `both` fill it also holds its last
+            keyframe forever, which forced every petal to opacity 1 and stood
+            the whole flower up the moment the section mounted, regardless of
+            where the reader had scrolled to. The one-at-a-time bloom IS the
+            scroll handler; nothing here may write transform or opacity. */}
+        <g
+          ref={swayRef}
+          className="lotus-sway"
+          style={{ transformOrigin: PIVOT }}
+        >
+          {LOGO_PETALS.map((p) => (
+            <g
+              key={p.id}
+              ref={(el) => {
+                petalRefs.current[p.id] = el;
+              }}
+              style={{
+                willChange: 'transform, opacity',
+                transformOrigin: PIVOT,
+                opacity: 0,
+                filter: activePillarId === p.id ? 'brightness(1.08)' : undefined,
+              }}
+            >
+              <g filter="url(#logoBevel)">
+                {p.shapes.map((sh, i) => (
+                  <path key={i} d={sh.d} fill={TINTED_FILLS[p.id][i]} />
+                ))}
+              </g>
             </g>
-          </g>
-        ))}
+          ))}
+        </g>
       </svg>
       </div>
     </div>
