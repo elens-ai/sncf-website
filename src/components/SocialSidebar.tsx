@@ -60,10 +60,10 @@ export const SocialSidebar: React.FC = () => {
       /* left-[38px] centres the 40px icon column on x=58 — the same vertical axis as
          the 52px header logo (32px inset + 26px radius), so logo and icons read as
          one aligned rail down the left edge. */
-      className="fixed left-3 sm:left-5 md:left-[15px] top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-3.5 select-none pointer-events-auto"
+      className="social-rail fixed left-3 sm:left-5 md:left-[15px] top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-3.5 select-none pointer-events-auto"
     >
       {/* Top Vertical Divider Line */}
-      <div className="w-[1px] h-12 lg:h-16 bg-gradient-to-b from-transparent via-white/35 to-white/60" />
+      <div className="rail-line w-[1px] h-12 lg:h-16 bg-gradient-to-b from-transparent via-white/35 to-white/60" />
 
       {/* Social Icons Stack */}
       <div className="flex flex-col items-center gap-2.5">
@@ -88,7 +88,7 @@ export const SocialSidebar: React.FC = () => {
       </div>
 
       {/* Bottom Vertical Divider Line */}
-      <div className="w-[1px] h-12 lg:h-16 bg-gradient-to-b from-white/60 via-white/35 to-transparent" />
+      <div className="rail-line w-[1px] h-12 lg:h-16 bg-gradient-to-b from-white/60 via-white/35 to-transparent" />
     </aside>
   );
 };

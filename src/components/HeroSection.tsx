@@ -254,13 +254,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Glow behind the wheel. The left-to-right darkening that used to be
           layered in here now lives on the page-wide .accent-canvas instead:
           being uniform down the hero's height, it stopped dead at the hero's
-          bottom edge and drew a band across the fold. This radial glow can
-          stay because it fades to transparent well inside its own bounds, so
-          it contributes nothing at the edge. */}
+          bottom edge and drew a band across the fold.
+
+          This glow has to clear that edge too, and the SIZE KEYWORD is what
+          decides whether it does. An unsized `circle` is farthest-corner, so
+          its radius grows with the WIDTH: on a wide, short screen the 60%
+          transparent stop landed below the hero's bottom edge, the glow was
+          still bright where the section ended, and it was sliced off — the
+          same band across the fold, just one that only appeared at certain
+          window shapes. Sizing the ellipse in PERCENTAGES OF THE BOX ties it
+          to the height as well, so the fade always completes inside its own
+          bounds: the last stop sits at 60% of a 60%-of-height radius, i.e.
+          36% from the centre line, clear of the edge at every aspect ratio. */}
       <div
         className="absolute inset-0 pointer-events-none transition-opacity duration-700 z-0"
         style={{
-          background: `radial-gradient(circle at 75% 50%, rgba(255,255,255,${glowIntensity * 0.15}) 0%, transparent 60%)`,
+          background: `radial-gradient(ellipse 60% 60% at 75% 50%, rgba(255,255,255,${glowIntensity * 0.15}) 0%, transparent 60%)`,
         }}
       />
 

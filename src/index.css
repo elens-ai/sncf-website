@@ -13,6 +13,360 @@
   initial-value: #6fd19a;
 }
 
+/* The lotus ground's own pair. Registered for the same reason --accent-a/-b
+   are: an unregistered custom property cannot be interpolated, so a gradient
+   built from one snaps between values instead of easing. The lotus screen
+   steps this pair through the verticals as the flower opens, and it is these
+   registrations that let each step be a fade rather than a cut. */
+@property --lotus-a {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1f8a5c;
+}
+
+/* THE HALL'S THRESHOLD — see HallEntrance.tsx for the sequence.
+
+   All three layers are driven per frame from the scroll handler; the values
+   here are only what they look like, never when they happen. */
+
+/* The light ahead. An ELLIPSE sized in percentages, not a circle: an unsized
+   circle is farthest-corner, so its radius grows with the box's WIDTH, and on
+   a wide short screen the transparent stop lands outside the box and the glow
+   is sliced off at the edge. The hero learned this the hard way at the fold. */
+.hall-light {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform, opacity;
+  background: radial-gradient(
+    ellipse 62% 58% at 50% 46%,
+    rgb(255 255 255 / 0.2) 0%,
+    rgb(255 255 255 / 0.07) 42%,
+    rgb(255 255 255 / 0) 72%
+  );
+}
+
+/* The petals in flight. Fixed, because they travel from the hero's own
+   background artwork — which scrolls — into a stage that scrolls differently.
+   z-40 puts them UNDER the header (z-50): they cross in front of the page but
+   behind the site's chrome.
+
+   transform-origin/box are SET, not inherited. The initial transform-box for
+   SVG is `view-box`, whose origin is the viewBox corner — which is why the
+   emblem's own `251.8px 278.4px` pivot actually resolves to (357.8, 400.4) in
+   user space. That ambiguity is baked into SncfLotus3D's tuned bloom and is
+   left alone there, but nothing here should inherit it. */
+.hall-petals {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  pointer-events: none;
+  overflow: visible;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+  /* A GLOW, not a shadow. These are white and heading into a white moon;
+     a cast shadow would have them read as cut paper crossing the screen,
+     and the artwork they leave has no shadow either. */
+  filter: drop-shadow(0 0 20px rgb(255 255 255 / 0.38));
+}
+.hall-petals > g {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+}
+
+/* The entrance panel, the way a gallery prints one at its door. Sits below
+   the seal's landing mark so the two read as one object. */
+.hall-panel {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  z-index: 2;
+  /* Centring lives in the JS transform, NOT here: the scroll handler writes
+     `transform` every frame, so a translateX(-50%) declared in CSS would be
+     wiped on the first frame and the panel would jump to the right. */
+  width: min(520px, 82vw);
+  text-align: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.hall-panel > * {
+  margin-left: auto;
+  margin-right: auto;
+}
+.hall-panel-rule {
+  display: block;
+  width: 54px;
+  height: 1px;
+  margin: 12px auto 13px;
+  background: rgb(255 255 255 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hall-light,
+  .hall-petals,
+  .hall-panel {
+    transition: none;
+  }
+}
+
+/* ROOMS. All five are rendered and stacked; the scroll handler crossfades
+   between them. Rendering only the live one would mean a React re-render on
+   every handover, and the whole point of the imperative handle is that the
+   scroll path never re-renders — stacking also gives the crossfade for free,
+   since the outgoing room is still there to fade against. */
+.lotus-room {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+.lotus-room[data-live='true'] {
+  pointer-events: auto;
+}
+
+/* THE FRAMES.
+
+   Three treatments, assigned per slot so a wall reads as a collection that
+   was hung rather than a component that was repeated: `mat` is a mounted
+   print — a white board with the image inset, the most formal; `frame` is a
+   dark moulding with the image to its edge; `print` is unframed, a canvas
+   standing off the wall on its shadow alone.
+
+   THE SHADOW IS THE REALISM. Every frame casts DOWN AND RIGHT, because the
+   emblem's own light has come from the upper left since it was built, and a
+   wall lit from somewhere else sits in a different photograph from the seal
+   beside it. The frames also carry a hairline top edge — the lit lip of the
+   moulding — which is what stops them reading as flat rectangles. */
+.lotus-plate {
+  display: block;
+  overflow: visible;
+  will-change: transform;
+}
+.lotus-plate-art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.07);
+  box-shadow:
+    7px 11px 26px -9px rgb(0 0 0 / 0.62),
+    2px 3px 7px -3px rgb(0 0 0 / 0.4),
+    inset 0 1px 0 rgb(255 255 255 / 0.22);
+}
+.lotus-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* mounted print: a board, with the image inset inside it */
+.lotus-plate[data-style='mat'] .lotus-plate-art {
+  background: #f4f1ea;
+  border: 1px solid rgb(255 255 255 / 0.55);
+  padding: 9%;
+  border-radius: 2px;
+}
+.lotus-plate[data-style='mat'] .lotus-plate-art > * {
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.18);
+}
+
+/* dark moulding, image to the edge */
+.lotus-plate[data-style='frame'] .lotus-plate-art {
+  border: 5px solid #2a2320;
+  border-radius: 1px;
+}
+
+/* unframed canvas, standing off the wall on its shadow */
+.lotus-plate[data-style='print'] .lotus-plate-art {
+  border-radius: 1px;
+  box-shadow:
+    9px 14px 30px -8px rgb(0 0 0 / 0.66),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
+}
+
+/* An unhung frame still holds its place, so the room does not re-lay-out
+   when a photograph finally lands in it. */
+.lotus-plate[data-empty='true'] .lotus-plate-art {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(255 255 255 / 0.075) 0 8px,
+    rgb(255 255 255 / 0.015) 8px 16px
+  );
+}
+.lotus-plate[data-style='mat'][data-empty='true'] .lotus-plate-art {
+  background-color: rgb(244 241 234 / 0.16);
+}
+
+/* The whole piece is the control, so the button fills the frame and carries
+   no chrome of its own — a gallery does not put a button under a painting. */
+.lotus-plate-hit {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: block;
+  transition: transform 280ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.lotus-plate-hit:hover,
+.lotus-plate-hit:focus-visible {
+  transform: scale(1.028);
+}
+.lotus-plate-hit:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 5px;
+}
+
+/* The headline figure, printed on the work. It sits low and stays quiet
+   until the piece is approached — a wall of competing numbers would read as
+   a dashboard, which is exactly what this screen is not. */
+.lotus-plate-headline {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 8%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+  opacity: 0.62;
+  transition: opacity 280ms ease;
+}
+.lotus-plate-hit:hover .lotus-plate-headline,
+.lotus-plate-hit:focus-visible .lotus-plate-headline {
+  opacity: 1;
+}
+.lotus-plate-value {
+  font-size: clamp(13px, 1.35vw, 19px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgb(0 0 0 / 0.65);
+}
+.lotus-plate-metric {
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.8);
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.7);
+}
+
+/* THE WALL LABEL sits BESIDE the work, not across it. A caption bar laid
+   over the bottom of a picture is a media card; a gallery prints a small
+   card on the wall under the piece, and that one move does more for the
+   exhibition read than any amount of framing. */
+.lotus-plate-label {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 7px);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* The wall label: a stat, engraved. */
+.lotus-plaque {
+  background: rgb(0 0 0 / 0.24);
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lotus-plate {
+    transform: none !important;
+  }
+}
+
+/* The copy rises as the screen becomes this section's. Transform and opacity
+   only, and the whole block moves as one piece — five separately-delayed
+   children on a scroll-pinned screen read as a queue forming, not a reveal. */
+.lotus-copy {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 620ms cubic-bezier(0.33, 1, 0.68, 1),
+    transform 620ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.lotus-stage[data-entered='true'] .lotus-copy {
+  opacity: 1;
+  transform: none;
+}
+
+/* Each vertical lights when its petal opens. --legend-accent is that
+   vertical's own accent-b, set per item, so the strip ends up spelling out
+   the same chronology the screen behind it is walking through. */
+.lotus-legend li {
+  color: rgb(255 255 255 / 0.45);
+  transition: color 520ms ease;
+}
+.lotus-legend li[data-on='true'] {
+  color: #fff;
+}
+.lotus-legend .legend-bar {
+  background: rgb(255 255 255 / 0.18);
+  transition:
+    background-color 520ms ease,
+    box-shadow 520ms ease;
+}
+.lotus-legend li[data-on='true'] .legend-bar {
+  background: var(--legend-accent, #fff);
+  box-shadow: 0 0 12px -2px var(--legend-accent, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lotus-copy {
+    transition: none;
+  }
+}
+
+/* THE FULLY-OPEN BLOOM SWAYS, as one piece. Amplitude comes in through
+   --sway (set by SncfLotus3D once the last petal has landed) rather than
+   being baked into the keyframes, so the motion can be ramped in instead of
+   switched on; at --sway 0 every keyframe is rotate(0deg) and the animation
+   is inert. Rotating the petals' shared parent is what holds them in sync —
+   one transform, five petals, no phase to drift — and it leaves the
+   per-petal transforms the scroll handler writes completely alone. */
+@keyframes lotus-sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--sway, 0) * 2.6deg));
+  }
+  50% {
+    transform: rotate(calc(var(--sway, 0) * -2.6deg));
+  }
+}
+
+.lotus-sway {
+  animation: lotus-sway 2600ms ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lotus-sway {
+    animation: none;
+  }
+}
+
+@property --lotus-b {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #6fd19a;
+}
+
 :root {
   --accent-a: #1f8a5c;
   --accent-b: #6fd19a;
@@ -933,6 +1287,41 @@
     --accent-b 880ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* THE LOTUS SCREEN'S GROUND — built exactly like .accent-canvas above,
+   because it has to look like the same page, only settled on one vertical.
+
+   It was briefly a flat #6fd19a, which is merely accent-b, the LIGHT END of
+   the Heal pair. Every other screen is a two-stop ramp under a left-to-right
+   darkening, so a single flat mint filling the viewport read as a slab that
+   had nothing to do with the rest of the site. Same two layers, same angle
+   variable, same darkening — only the pair is its own, so the lotus screen
+   can walk it through the verticals as the flower opens without touching
+   --accent-a/--accent-b, which stay the hero's alone to write. Keep this in
+   step with .accent-canvas if that changes.
+
+   The 880ms matches .accent-canvas exactly: when this screen hands its
+   colour back to the page, both are moving through colour at the same rate,
+   so the handover cannot be seen as one layer overtaking another. */
+.lotus-ground {
+  background:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.65) 0%,
+      rgba(0, 0, 0, 0.2) 60%,
+      rgba(0, 0, 0, 0.45) 100%
+    ),
+    linear-gradient(var(--stage-angle, 135deg), var(--lotus-a), var(--lotus-b));
+}
+
+/* The pair is SET on the stage and inherited by both the ground and the
+   emblem's globe, so the ease has to live here too — a transition only runs
+   on the element whose value actually changes. */
+.lotus-stage {
+  transition:
+    --lotus-a 880ms cubic-bezier(0.4, 0, 0.2, 1),
+    --lotus-b 880ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Full-page feel without trapping anyone.
 
    `proximity`, not `mandatory`: mandatory forces the viewport to a snap point
@@ -950,14 +1339,25 @@
   scroll-snap-align: start;
 }
 
+/* THE CHROME IS THE SAME ON EVERY SCREEN. The lotus section was once white,
+   and while it held the viewport the header scrim deepened and the social
+   rail's hairlines darkened so the white ink stayed legible. That ground is
+   no longer white — it carries the hero's colour through and settles on Heal
+   — so the override is gone: the header and the rail are painted once, in
+   one place, and read identically from the hero through the lotus to every
+   screen below it. */
+
 /* The lotus screen is a tall track holding a sticky stage: the extra height
-   IS the bloom's scrub length. 360vh leaves 260vh of pinned travel — about
-   40vh per petal, roughly one deliberate scroll each, with a beat at the end
-   where the whole flower stands before the page moves on. The component
+   IS the bloom's scrub length. 420vh leaves 320vh of pinned travel — about
+   50vh per petal, so each swing is watched rather than glimpsed, with a beat
+   at the end where the seal's circle closes before the page moves on. The component
    measures this height at runtime rather than assuming it, so changing the
    number here retimes the bloom and nothing else. */
 .lotus-track {
-  height: 360vh;
+  /* Five rooms, ~100vh of pinned dwell each plus entry and exit. It was
+     420vh when the screen held nothing but the emblem; content needs time
+     to arrive, be read, and leave before the next room takes over. */
+  height: 620vh;
 }
 
 /* No scrubbing without motion: the track collapses to one screen and the
@@ -1023,4 +1423,196 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .rail-grow { animation: none; transform: none; }
   .rail-ping { animation: none; opacity: 0; }
+}
+
+
+/* ---------------------------------------------------------- THE CASE ---
+   The piece, stepped up to. Fixed and full-viewport: the room behind is a
+   scroll-driven build, so anything that let the page move under this would
+   rewind the flower and swap the room out mid-read. */
+.activity-case {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 3vw, 40px);
+  animation: case-in 260ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+@keyframes case-in {
+  from {
+    opacity: 0;
+  }
+}
+.activity-case-scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background:
+    radial-gradient(120% 90% at 50% 45%, rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.9)),
+    color-mix(in srgb, var(--case-a) 30%, #05070a);
+  backdrop-filter: blur(9px);
+}
+.activity-case-body {
+  position: relative;
+  width: min(1120px, 100%);
+  max-height: 88vh;
+  overflow: auto;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--case-a) 22%, #0d1014);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  box-shadow: 0 40px 110px -30px rgb(0 0 0 / 0.85);
+  animation: case-rise 320ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+@keyframes case-rise {
+  from {
+    transform: translateY(16px) scale(0.985);
+  }
+}
+.activity-case-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  background: rgb(0 0 0 / 0.4);
+  color: #fff;
+  cursor: pointer;
+}
+.activity-case-close:hover {
+  background: rgb(0 0 0 / 0.65);
+}
+.activity-case-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 2.4vw, 30px);
+  padding: clamp(18px, 2.6vw, 34px);
+}
+@media (min-width: 860px) {
+  .activity-case-grid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.activity-case-art {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 3px;
+  background: #f4f1ea;
+  padding: 3.5%;
+  box-shadow:
+    8px 13px 34px -10px rgb(0 0 0 / 0.7),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+.activity-case-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.activity-case-art[data-empty='true'] {
+  background-color: rgb(244 241 234 / 0.12);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(255 255 255 / 0.08) 0 9px,
+    rgb(255 255 255 / 0.02) 9px 18px
+  );
+}
+.activity-case-strip {
+  display: flex;
+  gap: 9px;
+  margin-top: 12px;
+}
+.activity-case-thumb {
+  margin: 0;
+  width: 78px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 2px;
+  border: 2px solid rgb(255 255 255 / 0.8);
+}
+.activity-case-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.activity-case-period {
+  font-size: 10px;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--case-b);
+  margin: 0 0 7px;
+}
+.activity-case-title {
+  font-size: clamp(21px, 2.5vw, 31px);
+  line-height: 1.15;
+  color: #fff;
+  margin: 0 0 9px;
+}
+.activity-case-blurb {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.82);
+  margin: 0 0 20px;
+  max-width: 46ch;
+}
+.activity-case-figures-head {
+  font-size: 9.5px;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.5);
+  margin: 0 0 6px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.16);
+}
+/* A ruled list, not a grid of cards: a card grid competes with the picture,
+   a list reads as caption. */
+.activity-case-figures {
+  margin: 0;
+}
+.activity-case-figure {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+.activity-case-figure dt {
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.72);
+}
+.activity-case-figure dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.activity-case-source {
+  font-size: 10.5px;
+  color: rgb(255 255 255 / 0.42);
+  margin: 14px 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-case,
+  .activity-case-body {
+    animation: none;
+  }
+  .lotus-plate-hit {
+    transition: none;
+  }
 }
