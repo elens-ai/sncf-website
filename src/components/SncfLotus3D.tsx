@@ -3,11 +3,36 @@ import {
   LOGO_ASPECT,
   LOGO_BASE,
   LOGO_DISC,
-  LOGO_HAND,
   LOGO_PETALS,
   LOGO_VIEWBOX,
 } from './logoShapes';
-import { TINTED_FILLS } from './logoTint';
+import { PETAL_ART, PALM_ART } from './petalArt';
+
+/** Looked up by id at render time — see petalArt.ts for why the flower is
+    raster now, and what that traded away. */
+const PETAL_ART_BY_ID: Record<string, (typeof PETAL_ART)[number]> = Object.fromEntries(
+  PETAL_ART.map((a) => [a.id, a]),
+);
+
+/** THE GLOW IS CUT OFF AT THE PALM, and this is the box its fade is measured
+    in — the glow circle's own extent (r 230 plus room for its 16-unit blur),
+    centred like the circle itself. */
+const GLOW_BOX = { x: LOGO_BASE.x - 260, y: LOGO_DISC.cy - 260, w: 520, h: 520 };
+/** Where that fade starts and finishes, as fractions of GLOW_BOX — derived
+    from the palm's own top edge rather than hardcoded, so it follows the
+    artwork if the palm is ever replaced again. Full strength until a little
+    above the hand, gone by just inside its top edge: the light reads as
+    coming from the moon the hand is holding, not from behind the hand. */
+const GLOW_FADE_FROM = (PALM_ART.y - 34 - GLOW_BOX.y) / GLOW_BOX.h;
+const GLOW_FADE_TO = (PALM_ART.y + 6 - GLOW_BOX.y) / GLOW_BOX.h;
+/** Spread onto both the mask and its rect — SVG wants x/y/width/height, not
+    the w/h the box is defined with. */
+const GLOW_BOX_ATTRS = {
+  x: GLOW_BOX.x,
+  y: GLOW_BOX.y,
+  width: GLOW_BOX.w,
+  height: GLOW_BOX.h,
+};
 
 /**
  * The SNCF seal, assembling as the screen scrolls.
@@ -576,23 +601,46 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
             <stop offset="72%" stopColor="var(--accent-a, #1f8a5c)" stopOpacity="0.2" />
             <stop offset="100%" stopColor="var(--accent-a, #1f8a5c)" stopOpacity="0" />
           </radialGradient>
+
+          {/* Cuts the radiance off at the hand. The glow used to be a full
+              circle, so it spilled out below the palm and the hand read as
+              sitting in fog rather than holding a lit moon. A soft ramp
+              rather than a hard edge — this is a 16-unit blur, and a clean
+              rect cut across it shows as a visible straight line. */}
+          <linearGradient id="logoGlowFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fff" stopOpacity="1" />
+            <stop offset={GLOW_FADE_FROM.toFixed(4)} stopColor="#fff" stopOpacity="1" />
+            <stop offset={GLOW_FADE_TO.toFixed(4)} stopColor="#fff" stopOpacity="0" />
+            <stop offset="1" stopColor="#fff" stopOpacity="0" />
+          </linearGradient>
+          <mask id="logoGlowMask" maskUnits="userSpaceOnUse" {...GLOW_BOX_ATTRS}>
+            <rect {...GLOW_BOX_ATTRS} fill="url(#logoGlowFade)" />
+          </mask>
         </defs>
 
-        <circle
-          ref={glowRef}
-          cx={LOGO_BASE.x}
-          cy={LOGO_DISC.cy}
-          r="230"
-          fill="url(#logoAmbient)"
-          filter="url(#logoGlowBlur)"
-          style={{
-            pointerEvents: 'none',
-            opacity: 0.03,
-            transform: 'scale(0.2)',
-            transformOrigin: `${LOGO_DISC.cx}px ${LOGO_DISC.cy}px`,
-            willChange: 'transform, opacity',
-          }}
-        />
+        {/* THE MASK SITS ON THE WRAPPER, not on the circle. The circle scales
+            0.2 -> 1 as the disc opens; a mask on the circle itself would be
+            resolved in that same scaled space and the fade line would ride
+            up and down with it, only meeting the palm at full scale. On a
+            wrapper with no transform of its own, the cut stays pinned in
+            user space where the hand actually is. */}
+        <g mask="url(#logoGlowMask)">
+          <circle
+            ref={glowRef}
+            cx={LOGO_BASE.x}
+            cy={LOGO_DISC.cy}
+            r="230"
+            fill="url(#logoAmbient)"
+            filter="url(#logoGlowBlur)"
+            style={{
+              pointerEvents: 'none',
+              opacity: 0.03,
+              transform: 'scale(0.2)',
+              transformOrigin: `${LOGO_DISC.cx}px ${LOGO_DISC.cy}px`,
+              willChange: 'transform, opacity',
+            }}
+          />
+        </g>
 
         {/* the lamp: one wedge of light per petal, out past the frame */}
         {/* Multiply, not screen: the section turns white under the emblem, and
@@ -700,21 +748,22 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
           }}
         />
 
-        {/* the hand, under everything the flower does */}
+        {/* the hand, under everything the flower does — the artwork's own
+            palm, already 3D-shaded, in place of the vector palm+curl pair.
+            No bevel filter: that existed to fake the shading a flat vector
+            fill doesn't have, and this raster already carries its own. */}
         <g
           ref={handRef}
           style={{ willChange: 'transform, opacity', transformOrigin: PIVOT, opacity: 0 }}
         >
-          <g filter="url(#logoBevelSoft)">
-            {LOGO_HAND.palm.map((sh, i) => (
-              <path key={i} d={sh.d} fill={sh.fill} />
-            ))}
-          </g>
-          <g filter="url(#logoBevelSoft)">
-            {LOGO_HAND.curl.map((sh, i) => (
-              <path key={i} d={sh.d} fill={sh.fill} />
-            ))}
-          </g>
+          <image
+            href={PALM_ART.src}
+            x={PALM_ART.x}
+            y={PALM_ART.y}
+            width={PALM_ART.w}
+            height={PALM_ART.h}
+            preserveAspectRatio="xMidYMid meet"
+          />
         </g>
 
         {/* petals, painted back to front.
@@ -746,11 +795,19 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
                 filter: activePillarId === p.id ? 'brightness(1.08)' : undefined,
               }}
             >
-              <g filter="url(#logoBevel)">
-                {p.shapes.map((sh, i) => (
-                  <path key={i} d={sh.d} fill={TINTED_FILLS[p.id][i]} />
-                ))}
-              </g>
+              {(() => {
+                const art = PETAL_ART_BY_ID[p.id];
+                return art ? (
+                  <image
+                    href={art.src}
+                    x={art.x}
+                    y={art.y}
+                    width={art.w}
+                    height={art.h}
+                    preserveAspectRatio="xMidYMid meet"
+                  />
+                ) : null;
+              })()}
             </g>
           ))}
         </g>

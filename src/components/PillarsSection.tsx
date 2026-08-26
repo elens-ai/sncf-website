@@ -98,6 +98,41 @@ const ROOM_IDS = ['heal', 'enrich', 'empower', 'projects'];
    the data — "Sewa" is the name the Mission itself gives that service. */
 const LEGEND_LABELS = ['HEAL', 'ENRICH', 'EMPOWER', 'PROJECTS', 'SEWA'];
 
+/** THE ARCH'S GEOMETRY, shared by the ambient ring and the lettering laid
+    along it — one object so the two can never drift apart. The inscription
+    only works because it sits exactly on a line already on screen, and that
+    stops being true the moment either side is sized independently.
+
+    `min(96vh, 96vw)` rather than a flat 96vh. On any landscape viewport the
+    height term wins and this is identical to what it always was; on a
+    portrait or mobile one, 96vh is far wider than the screen, so the arch's
+    shoulders — and with them the first and last words of the name — fall off
+    both edges and are clipped away by the overflow-hidden parent.
+
+    The bottom offset then has to follow the size, or clamping just drops the
+    arch to the floor. Solving `apex = H - bottom - size` for a crown that
+    stays at 42% of the stage height gives `bottom = 58vh - size`, which
+    reduces to the original -38vh whenever the height term wins. */
+const GATE_SIZE = 'min(96vh, 96vw)';
+/** The gate's floor. Clears the legend rail by a hair so the piers land ON
+    the floor plan rather than through it — which is the right reading
+    anyway: the plan IS this exhibition's floor. */
+const GATE_FLOOR = '34px';
+/** The SPRINGING LINE — where a real arch stops rising and its piers begin,
+    which on a circle is its widest point, half a diameter up from its base.
+    Measured from the stage floor so the piers can be sized against it. */
+const GATE_SPRING = `calc(58vh - ${GATE_SIZE} / 2)`;
+
+const GATE_ARCH_BOX: React.CSSProperties = {
+  width: GATE_SIZE,
+  height: GATE_SIZE,
+  bottom: `calc(58vh - ${GATE_SIZE})`,
+};
+
+/** Both piers and the sill share one line weight and dash, so they read as
+    one built object rather than three strokes that happen to meet. */
+const GATE_LINE = '1px dashed rgb(255 255 255 / 0.3)';
+
 const VERTICAL_SEQUENCE: { at: number; a: string; b: string }[] = (() => {
   const byId = Object.fromEntries(PILLARS.map((p) => [p.id, p]));
   const order = ['heal', 'enrich', 'empower', 'projects'];
@@ -182,6 +217,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
   const enteredRef = useRef<boolean>(false);
   const roomRefs = useRef<(HTMLDivElement | null)[]>([]);
   const entranceRef = useRef<HallEntranceHandle | null>(null);
+  const gateTextRef = useRef<SVGSVGElement | null>(null);
   /* The emblem's corner container — the seal's landing point. */
   const postRef = useRef<HTMLDivElement | null>(null);
   /* Which piece the visitor has stepped up to. State, not a ref: this is a
@@ -210,6 +246,50 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
          consumers, so the seal and the emblem can never disagree by a frame. */
       entranceRef.current?.update(covered, scrub);
 
+      /* THE HERO FALLS BACK as the exhibition rises over it.
+
+         Without this the hero simply slides away and the next screen slides
+         in — two flat planes passing, no relationship between them. Easing
+         it back into depth instead makes the exhibition read as arriving in
+         FRONT of the hero rather than merely after it, which is the whole
+         point of giving this handover a full viewport of scroll.
+
+         Written straight to the hero's DOM by id, exactly as the entrance
+         already does for the lotus watermark, and for the same reason:
+         routing it through React state would re-render that entire tree on
+         the scroll path. It starts at 0.12 rather than 0 so it does not
+         begin while the petals are still lifting off the hero's own
+         artwork — that handover finishes by 0.09, and the hero must hold
+         still underneath it. Restored on the way back up because `covered`
+         runs backwards too. */
+      const heroStage = document.getElementById('hero-clone-stage');
+      if (heroStage) {
+        const t = Math.max(0, Math.min(1, (covered - 0.12) / 0.88));
+        const k = 1 - Math.pow(1 - t, 3);
+        heroStage.style.transform = `scale(${(1 - 0.06 * k).toFixed(4)})`;
+        heroStage.style.opacity = (1 - 0.55 * k).toFixed(3);
+      }
+
+      /* THE GATE'S INSCRIPTION lives in the PAUSE — the stretch after the
+         entrance panel has gone and before the first room arrives, which
+         until now was dead scroll with nothing in it but the emblem.
+
+         The window is bounded by two timings that already exist and must
+         not be crowded: HallEntrance's panel is clear by scrub 0.08
+         (THRESHOLD_END * 0.8), and Heal's ground begins its crossfade at
+         VERTICAL_SEQUENCE[0].at - FADE = 0.205. So this opens at 0.085 and
+         is gone by 0.20, holding the screen alone in between rather than
+         double-printing against either neighbour — the mistake the
+         foundation card made when it ran to 0.4 and sat on top of Heal's
+         own headline. Inlined rather than shared with `ramp` below, which
+         is declared later in this function and is not in scope yet. */
+      if (gateTextRef.current) {
+        const gClamp = (v: number, a: number, b: number) =>
+          Math.max(0, Math.min(1, (v - a) / (b - a)));
+        const gateIn = gClamp(scrub, 0.085, 0.135);
+        const gateOut = gClamp(scrub, 0.17, 0.2);
+        gateTextRef.current.style.opacity = (gateIn * (1 - gateOut)).toFixed(3);
+      }
       /* The copy rises once the screen is genuinely this section's, not the
          moment a pixel of it appears — at a third covered the reader has
          committed to it. One attribute write, CSS does the motion. */
@@ -331,7 +411,16 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
       id="pillars-section"
       ref={trackRef}
       aria-label="Our work"
-      className="snap-screen lotus-track relative z-10 w-full"
+      /* NOT a snap point, unlike every other screen. `scroll-snap-align:
+         start` would put a snap target where this track's top meets the
+         viewport top — which is exactly `covered === 1`, the END of the
+         approach. So resting anywhere mid-approach, while the petals are
+         still lifting off the hero's artwork and gathering, let proximity
+         snap yank the reader forward through the rest of that flight. The
+         other sections are screens and snap correctly; this is a 620vh
+         scrub track, not a screen, and it has to be restable at any point
+         along its length. */
+      className="lotus-track relative z-10 w-full"
     >
       <div
         ref={stageElRef}
@@ -347,14 +436,132 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
           }}
         />
 
+        <HallEntrance ref={entranceRef} postRef={postRef} stageRef={stageElRef} />
+
         {/* Ambient rings, borrowed verbatim from the hero's wheel
             (`border-dashed border-white/15`) so this screen sits in the same
             sky as the one above it rather than inventing its own. */}
-        <HallEntrance ref={entranceRef} postRef={postRef} stageRef={stageElRef} />
-
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 bottom-[-38vh] -translate-x-1/2 w-[96vh] h-[96vh] rounded-full border border-dashed border-white/10" />
+          <div
+            className="absolute left-1/2 -translate-x-1/2 rounded-full border border-dashed border-white/10"
+            style={GATE_ARCH_BOX}
+          />
           <div className="absolute left-1/2 bottom-[-52vh] -translate-x-1/2 w-[132vh] h-[132vh] rounded-full border border-dashed border-white/[0.07]" />
+
+          {/* THE GATE, lettered on the arch that is already there.
+
+              Earlier attempts at this moment invented new geometry — a card,
+              then a rainbow of arcs — and both read as something dropped on
+              top of the screen. This draws on the ring the screen already
+              has: same box, same centre, same radius, so the inscription
+              curves along a line the reader has been looking at since the
+              hero. It only has to be lettered to become a gate.
+
+              Squared box (96vh x 96vh) against a square viewBox is what
+              keeps the letterforms undistorted — a full-bleed SVG stretched
+              to the stage would need preserveAspectRatio="none" and the type
+              would smear with the viewport's aspect. */}
+          <div
+            ref={gateTextRef}
+            className="absolute inset-0"
+            style={{ opacity: 0, willChange: 'opacity' }}
+          >
+            {/* LIGHT IN THE OPENING. An arch drawn as a line is a line; an
+                arch with light inside it is a doorway. Warmer at 66% down
+                rather than dead centre, so the brightest part sits where a
+                room beyond would actually be lit — at eye level through the
+                opening, not up in the vault. */}
+            <span
+              className="absolute left-1/2 -translate-x-1/2 rounded-full"
+              style={{
+                ...GATE_ARCH_BOX,
+                background:
+                  'radial-gradient(circle at 50% 66%, rgb(255 255 255 / 0.10) 0%, rgb(255 255 255 / 0.04) 42%, rgb(255 255 255 / 0) 68%)',
+              }}
+            />
+
+            {/* LIGHT FALLING THROUGH IT, pooled on the floor between the
+                piers. This is the cue that does the most work: a lit opening
+                could still be a window, but light spilling out of it onto the
+                ground in front is unmistakably something you walk through. */}
+            <span
+              className="absolute left-1/2 -translate-x-1/2"
+              style={{
+                bottom: GATE_FLOOR,
+                width: `calc(${GATE_SIZE} * 0.78)`,
+                height: '22vh',
+                background:
+                  'radial-gradient(ellipse 52% 100% at 50% 100%, rgb(255 255 255 / 0.11) 0%, rgb(255 255 255 / 0.03) 45%, rgb(255 255 255 / 0) 72%)',
+              }}
+            />
+
+            {/* THE PIERS. The arch used to simply stop where the ring curved
+                out of frame, so it read as a circle passing behind the screen
+                rather than a structure standing on it. These drop from the
+                springing line to the floor and give it feet. */}
+            <span
+              className="absolute"
+              style={{
+                left: `calc(50% - ${GATE_SIZE} / 2)`,
+                bottom: GATE_FLOOR,
+                height: `calc(${GATE_SPRING} - ${GATE_FLOOR})`,
+                borderLeft: GATE_LINE,
+              }}
+            />
+            <span
+              className="absolute"
+              style={{
+                left: `calc(50% + ${GATE_SIZE} / 2)`,
+                bottom: GATE_FLOOR,
+                height: `calc(${GATE_SPRING} - ${GATE_FLOOR})`,
+                borderLeft: GATE_LINE,
+              }}
+            />
+
+            {/* THE SILL — the line you cross. */}
+            <span
+              className="absolute left-1/2 -translate-x-1/2"
+              style={{
+                bottom: GATE_FLOOR,
+                width: GATE_SIZE,
+                borderTop: GATE_LINE,
+                opacity: 0.72,
+              }}
+            />
+
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute left-1/2 -translate-x-1/2"
+              style={{ ...GATE_ARCH_BOX, overflow: 'visible' }}
+            >
+              <defs>
+                {/* Sweep flag 1, left point to right point: in SVG's y-down
+                    space that is the arc over the TOP, so the name reads
+                    left-to-right and upright across the crown of the arch. */}
+                <path id="lotus-gate-arc" d="M 4,50 A 46,46 0 0 1 96,50" fill="none" />
+              </defs>
+
+              {/* The arch's own line, brightened. Laid exactly over the ring
+                  div's border (r=50 in these units IS that div's edge), so the
+                  existing arc appears to strengthen as the gate lights rather
+                  than a second line appearing beside it. 0.12 user units is
+                  about the 1px that border renders at this box size. */}
+              <path
+                d="M 0.4,50 A 49.6,49.6 0 0 1 99.6,50"
+                fill="none"
+                stroke="rgb(255 255 255 / 0.3)"
+                strokeWidth="0.12"
+                strokeDasharray="1.1 1.7"
+                strokeLinecap="round"
+              />
+
+              <text className="lotus-gate-text font-artistic-display" textAnchor="middle">
+                <textPath href="#lotus-gate-arc" startOffset="50%">
+                  SANT NIRANKARI CHARITABLE FOUNDATION
+                </textPath>
+              </text>
+            </svg>
+          </div>
         </div>
 
         {/* THE SCREEN IS A PAGE, not a pause. Every other screen on this site

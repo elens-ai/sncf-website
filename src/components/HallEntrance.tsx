@@ -1,6 +1,11 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { ACTIVITIES } from '../data/activities';
 import { LOGO_PETALS } from './logoShapes';
+import { PETAL_ART } from './petalArt';
+
+const PETAL_ART_BY_ID: Record<string, (typeof PETAL_ART)[number]> = Object.fromEntries(
+  PETAL_ART.map((a) => [a.id, a]),
+);
 
 /**
  * CROSSING INTO THE HALL.
@@ -84,12 +89,18 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
     const lightRef = useRef<HTMLDivElement | null>(null);
     const sealRef = useRef<SVGSVGElement | null>(null);
     const petalRefs = useRef<Record<string, SVGGElement | null>>({});
+    const moonFlashRef = useRef<HTMLDivElement | null>(null);
     const panelRef = useRef<HTMLDivElement | null>(null);
 
     const reducedRef = useRef<boolean>(
       typeof window !== 'undefined' &&
         window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
     );
+    /* Whether the live (non-`done`) branch has run since the last time we
+       were past the threshold. See the note beside `done` below — this is
+       what replaced a single-element opacity check as the "does anything
+       need zeroing" test. */
+    const wasLiveRef = useRef(false);
 
     useImperativeHandle(ref, () => ({
       update: (covered: number, scrub: number) => {
@@ -99,16 +110,40 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
         if (!seal || !post || !stage) return;
 
         /* Past the threshold there is nothing left to do, and the layer must
-           stop costing anything for the remaining 90% of the track. */
+           stop costing anything for the remaining 90% of the track.
+
+           Guarded on WHETHER THE LIVE BRANCH RAN LAST TIME, not on any one
+           element's opacity. That was tried twice and broke twice, for the
+           same underlying reason: a single element is only a valid proxy
+           for "everything is clean" if it is provably the LAST thing to
+           reach zero, in every scenario — and there is always another
+           scenario. Keying it on seal missed the flash (the flash decays
+           slightly later). Keying it on the flash missed THIS: a page load
+           that settles near scrub~0 for a moment (setting the ghost petals
+           to some faint non-zero opacity, `covered` already a little into
+           its own rise) and then jumps straight to a high scrub in one hop
+           — skipping the flash's rise-then-decay window entirely, so the
+           flash never becomes non-zero at all, and a flash-keyed guard sees
+           "already 0" and never cleans up the petals that WERE touched.
+           There is no single element immune to being the wrong proxy in
+           some jump. Tracking "did the live branch run" sidesteps the whole
+           class of bug: it is true exactly when there is something to clean,
+           regardless of which element happens to hold a stray value. */
         const done = scrub > THRESHOLD_END + 0.02;
         if (done) {
-          if (seal.style.opacity !== '0') {
+          if (wasLiveRef.current) {
             seal.style.opacity = '0';
             if (panelRef.current) panelRef.current.style.opacity = '0';
             if (lightRef.current) lightRef.current.style.opacity = '0';
+            if (moonFlashRef.current) moonFlashRef.current.style.opacity = '0';
+            Object.values(petalRefs.current).forEach((g) => {
+              if (g) g.style.opacity = '0';
+            });
+            wasLiveRef.current = false;
           }
           return;
         }
+        wasLiveRef.current = true;
 
         /* --- the light: opens across the approach, holds, then goes as the
            hall's own ground comes up --- */
@@ -155,15 +190,31 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
         const unit = postBox.width / 286.22;
         const moonX = postBox.left + (249.3 - 106) * unit;
         const moonY = postBox.top + (246.9 - 122) * unit;
-        const moonD = 115 * 2 * unit;
 
-        /* THE MERGE. They do not land beside the globe, they go INTO it:
-           the flower shrinks past the moon's own width as it arrives, so the
-           last thing that happens is five petals disappearing inside a disc
-           rather than settling onto one. Ending at the moon's size exactly
-           would read as a lid closing; going under it reads as absorbed. */
+        /* THE BLOOM SHRINKS TO THE EMBLEM'S OWN SCALE, AND NOTHING ELSE.
+
+           An earlier version span the petals out around the moon on an
+           invented bearing-and-radius circle — deliberate motion, but wrong,
+           because it fought geometry that already does this job. The union of
+           the five petals' bounding boxes sits at (249.2, 246.4); LOGO_DISC —
+           the moon's own centre, in the SAME coordinate space the paths are
+           drawn in — sits at (249.3, 246.9). Under a percent apart. The
+           petals were always going to wrap a disc there; that is what their
+           artwork IS. Adding a second, artificial spread on top just pushed
+           them off the shape they were already drawn to make, into a wider
+           flower floating beside the moon instead of resting on it.
+
+           So the only thing this does is bring them to TRUE SCALE — the same
+           px-per-user-unit the assembled emblem uses — and centre that same
+           union point on the moon. Every petal below then arrives at its own
+           IDENTITY transform (no offset at all): the raw path data, at the
+           emblem's own size, already sits exactly where it needs to. */
         const settle = easeOut(ramp(scrub, 0, THRESHOLD_END));
-        const gs = lerp(1, (moonD * 0.62) / markW, settle);
+        /* Target width, in px, of the SAME 197.7-user-unit span the real
+           emblem draws at this viewport's scale — `unit` is its px-per-unit
+           figure, already derived above from the post box. */
+        const trueW = PETAL_UNION.w * unit;
+        const gs = lerp(1, trueW / markW, settle);
         const gx = lerp(markX, moonX - (markW * gs) / 2, settle);
         const gy = lerp(markY, moonY - (markH * gs) / 2, settle);
 
@@ -243,8 +294,15 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
                registration has to be exact. Zero at t=1 for the same reason
                at the other end. */
             const roll = Math.sin(t * Math.PI) * (i % 2 ? 7 : -6);
+
+            /* ARRIVAL IS IDENTITY. `dx, dy` collapse to (0, 0) as `t` reaches
+               1 — the petal's own raw path, un-offset — and the group above
+               is already registered so that path sits correctly around the
+               moon at true scale. Nothing further to add: the artwork's own
+               drawing is what wraps the disc, the same way it wraps
+               LOGO_DISC in the assembled emblem. */
             g.style.transform =
-              `translate(${(lerp(dx, 0, t)).toFixed(2)}px, ${(lerp(dy, 0, t)).toFixed(2)}px) ` +
+              `translate(${lerp(dx, 0, t).toFixed(2)}px, ${lerp(dy, 0, t).toFixed(2)}px) ` +
               `rotate(${roll.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
             /* STARTS AT THE ARTWORK'S OWN GHOST STRENGTH. The watermark
                renders at opacity 0.09, so a vector copy at full strength
@@ -252,7 +310,12 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
                point of laying them on top is that the substitution cannot be
                seen. They brighten as they leave, which is also the only
                thing that makes them read as lifting off rather than sliding
-               across. */
+               across.
+
+               THEY DO NOT DIM AGAIN ON THE BLOOM: once they have taken over
+               from the artwork there is nothing further to be a ghost of, so
+               opacity simply holds at full through the threshold while colour
+               is what carries the rest of the change. */
             g.style.opacity = (swap * (reducedRef.current ? 0.92 : lerp(0.09, 0.92, t))).toFixed(3);
           });
 
@@ -266,22 +329,44 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
           if (host) host.style.opacity = (1 - swap).toFixed(3);
         }
 
-        /* Hands off BEFORE it arrives: the fade starts while the flower is
-           still gliding its last pixels, because blending the fade into the
-           motion reads far smoother than landing and then fading, and it
-           hides any sub-pixel misregistration against the emblem beneath. */
         /* Held almost to the end. When the flower was landing BESIDE the
            emblem this fade started early, so the motion and the fade blended.
            A merge is the opposite: they have to still be there while they
            shrink into the moon, and go out only once they are inside it. */
         const handoff = ramp(scrub, THRESHOLD_END * 0.72, THRESHOLD_END);
         seal.style.opacity = (1 - handoff).toFixed(3);
+
+        /* THE MOON LIGHTENS AS THEY GO IN. Nothing marked the instant the
+           petals actually merged — the flower simply faded while the moon
+           sat there unchanged underneath it, so nothing on screen confirmed
+           an arrival happened. This is that confirmation: a bloom of light
+           at the moon's own position, timed to the SAME handoff curve the
+           flower's own fade already uses (rise across the same window,
+           `handoff` itself), so the flash and the fade are one event, not
+           two coincidentally close ones — then a quick decay back to
+           nothing, entirely inside the window the `done` cutoff above
+           already budgets for, so this costs nothing once the merge is
+           past. */
+        if (moonFlashRef.current) {
+          const decay = ramp(scrub, THRESHOLD_END, THRESHOLD_END + 0.02);
+          const flash = handoff * (1 - decay);
+          const flashD = 230 * unit * 1.7;
+          moonFlashRef.current.style.width = `${flashD.toFixed(1)}px`;
+          moonFlashRef.current.style.height = `${flashD.toFixed(1)}px`;
+          moonFlashRef.current.style.transform =
+            `translate(${(moonX - flashD / 2).toFixed(1)}px, ${(moonY - flashD / 2).toFixed(1)}px)`;
+          moonFlashRef.current.style.opacity = flash.toFixed(3);
+        }
       },
     }));
 
     return (
       <>
         <div ref={lightRef} className="hall-light" aria-hidden="true" style={{ opacity: 0 }} />
+
+        {/* The flash at the merge — see the note beside where it is driven.
+            z-40, level with the petals it is confirming the arrival of. */}
+        <div ref={moonFlashRef} className="hall-moon-flash" aria-hidden="true" style={{ opacity: 0 }} />
 
         {/* The petals are FIXED and sit under the header (z-40 against its
             z-50): they should read as crossing in front of the page but
@@ -309,14 +394,34 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
             >
               {/* WHITE, because that is what they are while they are in the
                   air. They leave a white ghost on the hero and they merge
-                  into a white moon; carrying the verticals' colours across
-                  the gap made them arrive as five finished brand marks and
-                  land on something that could not absorb them. The colour is
-                  what the globe GIVES BACK, one petal per room, once the
-                  exhibition starts opening them. */}
-              {petal.shapes.map((sh, i) => (
-                <path key={i} d={sh.d} fill="#ffffff" />
-              ))}
+                  into a white moon; carrying the artwork's own saturated
+                  colours across the gap made them arrive as five finished
+                  brand marks and land on something that could not absorb
+                  them. The colour is what the globe GIVES BACK, one petal
+                  per room, once the exhibition starts opening them.
+
+                  Forced white via filter, not by swapping in a plain fill:
+                  this is the SAME raster silhouette that lands in the
+                  assembled emblem (see SncfLotus3D, petalArt.ts), so the
+                  shape a visitor sees mid-flight is the shape it settles
+                  into — only the colour is suppressed here and given back
+                  there. brightness(0) flattens every pixel to black while
+                  leaving alpha alone; invert(1) turns that black white. */}
+              {(() => {
+                const art = PETAL_ART_BY_ID[petal.id];
+                if (!art) return null;
+                return (
+                  <image
+                    href={art.src}
+                    x={art.x}
+                    y={art.y}
+                    width={art.w}
+                    height={art.h}
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{ filter: 'brightness(0) invert(1)' }}
+                  />
+                );
+              })()}
             </g>
           ))}
         </svg>

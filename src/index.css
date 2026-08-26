@@ -29,6 +29,22 @@
    All three layers are driven per frame from the scroll handler; the values
    here are only what they look like, never when they happen. */
 
+/* THE GATE'S INSCRIPTION — the foundation's name lettered along the ambient
+   arch, during the pause between the entrance and the first room.
+
+   Sized in USER UNITS, not rem. This SVG carries a 0..100 viewBox mapped
+   onto a 96vh box, so `2.45px` here means 2.45 of those units — roughly
+   2.4vh — and the type scales with the arch instead of drifting out of
+   proportion with it the way a rem size would. Wide tracking because the
+   letters sit on a curve: at this radius, tight spacing makes the outer
+   edges of adjacent glyphs converge and the word looks pinched. */
+.lotus-gate-text {
+  font-size: 2.45px;
+  letter-spacing: 1.05px;
+  font-weight: 600;
+  fill: rgb(255 255 255 / 0.62);
+}
+
 /* The light ahead. An ELLIPSE sized in percentages, not a circle: an unsized
    circle is farthest-corner, so its radius grows with the box's WIDTH, and on
    a wide short screen the transparent stop lands outside the box and the glow
@@ -44,6 +60,32 @@
     rgb(255 255 255 / 0.2) 0%,
     rgb(255 255 255 / 0.07) 42%,
     rgb(255 255 255 / 0) 72%
+  );
+}
+
+/* The flash at the merge. FIXED, like the petals it confirms the arrival
+   of — its position is computed from the same viewport-relative post box
+   they use, so it has to share their coordinate space, not the page's.
+
+   `screen` blend mode rather than plain opacity: the ground under the moon
+   at this point in the track is still a saturated colour (whichever
+   vertical is about to open), and a flat white circle blended normally would
+   sit as a visible disc on top of it. Screen only ever brightens — it reads
+   as the moon itself lighting up, not as a shape laid over the scene. */
+.hall-moon-flash {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  pointer-events: none;
+  border-radius: 999px;
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+  background: radial-gradient(
+    circle,
+    rgb(255 255 255 / 0.9) 0%,
+    rgb(255 255 255 / 0.5) 38%,
+    rgb(255 255 255 / 0) 70%
   );
 }
 
@@ -103,6 +145,7 @@
   margin: 12px auto 13px;
   background: rgb(255 255 255 / 0.4);
 }
+
 
 @media (prefers-reduced-motion: reduce) {
   .hall-light,
@@ -1368,14 +1411,19 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* NO `scroll-behavior: smooth` HERE, deliberately. It was added earlier in
+   the belief that it smooths wheel and touchpad scrolling — it does not.
+   `scroll-behavior` only affects PROGRAMMATIC scrolls (scrollTo,
+   scrollIntoView) and in-page anchor jumps; wheel and touch input are
+   untouched by it. This site has neither — no scrollTo, no scrollIntoView,
+   no `href="#..."` anywhere — so the rule governed nothing at all, while
+   still routing scroll-snap's own settle through the smooth-scroll path,
+   which makes snapping feel sluggish rather than smooth. The transition
+   between screens is animated in the sections themselves instead. */
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-snap-type: none;
-    scroll-behavior: auto;
   }
 }
 

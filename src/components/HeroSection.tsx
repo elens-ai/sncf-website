@@ -249,7 +249,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
          fold — two sections each running their own 135deg ramp meant the
          hero ended near accent-b just as the next screen began again at
          accent-a, which is the seam. */
-      className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
+      /* NO `transition-all` here any more. It was vestigial — this element
+         has no background and no inline style, nothing on it ever changes,
+         so it transitioned nothing (see the note above: the gradient moved
+         out to .accent-canvas). It was not harmless, though: PillarsSection
+         now writes this element's transform and opacity every frame to
+         recede the hero as the exhibition rises over it, and a 700ms
+         transition-all would have smeared each of those writes across
+         700ms — the reader's scroll and the hero's motion permanently out
+         of step. */
+      className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none"
+      style={{ willChange: 'transform, opacity', transformOrigin: '50% 42%' }}
     >
       {/* Glow behind the wheel. The left-to-right darkening that used to be
           layered in here now lives on the page-wide .accent-canvas instead:
