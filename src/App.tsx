@@ -38,7 +38,11 @@ export default function App() {
      entirely — they came for an invitation, and 5.7s of signature animation
      between scan and invitation reads as the page not opening at all. */
   const [splashPhase, setSplashPhase] = useState<'showing' | 'exiting' | 'done'>(() =>
-    parseInviteParam() ? 'done' : 'showing',
+    /* partner-invite: the CSR desk's personalised links (PartnersSection)
+       skip the splash for the same reason event passes do */
+    parseInviteParam() || new URLSearchParams(window.location.search).has('partner-invite')
+      ? 'done'
+      : 'showing',
   );
   const isSplashUp = splashPhase !== 'done';
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -85,6 +89,25 @@ export default function App() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || isSplashUp) return;
 
+      /* the search chord works from anywhere, fields included */
+      if (e.key === '/' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setIsSearchOpen(true);
+        return;
+      }
+      /* Never hijack keys aimed at an interactive element: Space in the
+         partner desk's text field must insert a space (not toggle the hero),
+         arrows must move the caret (not switch the pillar), and Space/Enter
+         on a focused button must activate it. */
+      const t = e.target as HTMLElement | null;
+      if (
+        t &&
+        (t.isContentEditable ||
+          /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(t.tagName))
+      ) {
+        return;
+      }
+
       if (e.key === 'ArrowRight') {
         setActiveIndex((prev) => (prev + 1) % activePillarsList.length);
       } else if (e.key === 'ArrowLeft') {
@@ -92,9 +115,6 @@ export default function App() {
       } else if (e.key === ' ') {
         e.preventDefault();
         setIsPaused((prev) => !prev);
-      } else if (e.key === '/' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setIsSearchOpen(true);
       }
     };
 
@@ -193,7 +213,14 @@ export default function App() {
       <AwardsSection />
 
       {/* 6. PARTNERS */}
-      <PartnersSection />
+      <PartnersSection
+        onOpenDonate={() => setIsDonateOpen(true)}
+        escapeSuspended={
+          /* while any overlay is up, Escape belongs to the overlay — the
+             desk beneath it must not collapse on the same keypress */
+          isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || galleryLeader !== null
+        }
+      />
 
       {/* 7. FOOTER — closes the page. Not a snap target: it is a band, not a
              screen, and snapping to it would strand the reader on links. */}

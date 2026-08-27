@@ -253,6 +253,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedPhotoLeader) return;
+      /* keys aimed at an interactive element (the partner desk's text
+         field, any focused button) are not carousel commands */
+      const t = e.target as HTMLElement | null;
+      if (
+        t &&
+        (t.isContentEditable ||
+          /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(t.tagName))
+      ) {
+        return;
+      }
       if (e.key === 'ArrowRight') {
         onActiveIndexChange((activeIndex + 1) % pillars.length);
       } else if (e.key === 'ArrowLeft') {
