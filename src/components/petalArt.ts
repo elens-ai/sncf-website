@@ -40,6 +40,24 @@
  * relative proportion inside the artwork survives by construction, because
  * nothing inside it is ever scaled on its own.
  */
+/** THE ARTWORK'S OWN FIVE INKS, in its own left-to-right order — the same
+    order the flower opens in and the floor plan lists. Read off the supplied
+    illustration by the segmentation that separated the petals (the cluster
+    centroids), not sampled by eye or copied from the pillar accents, so these
+    are literally the colours the logo is painted in.
+
+    Kept here rather than in `pillars.ts` because they belong to the ARTWORK.
+    The pillar accents are a parallel set tuned for legible cards and page
+    gradients; these are the inks. Confusing the two is how a mark starts
+    drifting from its own brand. */
+export const LOGO_INK = [
+  '#f81170', // magenta — the leftmost petal
+  '#b357ad', // purple
+  '#6663b5', // indigo
+  '#09a6cf', // cyan
+  '#69b947', // green — the rightmost
+];
+
 export interface PetalArt {
   /** Matches LOGO_PETALS' own id — welcome, heal, enrich, empower, projects. */
   id: string;
@@ -162,3 +180,68 @@ const PETAL_LIFT = Math.max(
 );
 
 export const PETAL_ART: PetalArt[] = RAW_PETALS.map((p) => ({ ...p, y: p.y - PETAL_LIFT }));
+
+/** THE DOT-FINDER. Each vector petal's shapes include its accent dot — the
+    "head" above the figure — as its own small subpath. This walks a path's
+    control points for a bounding box (the data is absolute M/C/z only, so
+    every number pair is a coordinate) and calls a shape a dot when its box
+    is small and round-ish: the petal's shading bands are also small in AREA
+    but always long in one dimension, so a max-side test separates the two
+    cleanly. Used to lift the dots off the flower for the consolidation
+    (HallEntrance) and to strip them from the flying brushes (the petals
+    paint the gate WITHOUT their heads — the heads went to the palm). */
+export const shapeBBox = (d: string) => {
+  const nums = (d.match(/-?\d*\.?\d+/g) ?? []).map(Number);
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (let i = 0; i + 1 < nums.length; i += 2) {
+    minX = Math.min(minX, nums[i]);
+    maxX = Math.max(maxX, nums[i]);
+    minY = Math.min(minY, nums[i + 1]);
+    maxY = Math.max(maxY, nums[i + 1]);
+  }
+  return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+};
+
+export const isDotShape = (d: string) => {
+  /* Measured, not guessed: the four dots are 17-19.7 units on a side and
+     nearly round; every other small shape is either a sliver band (aspect
+     well over 1.4) or an under-12-unit fleck. The centre petal (enrich) has
+     NO dot in the artwork — four heads, not five — so a petal without a
+     match is correct, not a failure. */
+  const b = shapeBBox(d);
+  const mx = Math.max(b.w, b.h);
+  const mn = Math.min(b.w, b.h);
+  return mx < 26 && mn > 12 && mx / mn < 1.4;
+};
+
+/** THE DOTS, AS THE RASTER ACTUALLY PAINTS THEM. The vector and the raster
+    disagree here — the vector puts heads on welcome/heal/empower/projects,
+    the AI-redrawn raster on welcome/heal/enrich/empower — and what is on
+    screen is the raster, so these are the truth for masking and lifting.
+    Centres and radii come from the segmentation's connected-component pass
+    over the artwork's alpha (full-resolution pixel coordinates), carried
+    into viewBox units through each petal's own crop-to-placement mapping —
+    the same transform the images themselves render through, so the mask
+    hole and the sprite land exactly on the painted dot. */
+const RASTER_DOT_PX: Record<string, { x: number; y: number; r: number }> = {
+  welcome: { x: 373, y: 1268, r: 158 },
+  heal: { x: 1431, y: 400, r: 165 },
+  enrich: { x: 2744, y: 361, r: 162 },
+  empower: { x: 3683, y: 1259, r: 165 },
+};
+
+export const PETAL_DOTS: Record<string, { cx: number; cy: number; r: number }> = (() => {
+  const out: Record<string, { cx: number; cy: number; r: number }> = {};
+  for (const art of PETAL_ART) {
+    const dot = RASTER_DOT_PX[art.id];
+    const crop = CROP_PX[art.id];
+    if (!dot || !crop) continue;
+    const k = art.w / (crop.x1 - crop.x0);
+    out[art.id] = {
+      cx: art.x + (dot.x - crop.x0) * k,
+      cy: art.y + (dot.y - crop.y0) * k,
+      r: dot.r * k,
+    };
+  }
+  return out;
+})();

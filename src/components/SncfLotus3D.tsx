@@ -129,22 +129,32 @@ const easeOutBack = (t: number) => {
   return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 };
 
-/** When the white disc grows in — on the APPROACH, not the scrub.
-
-    IT HAS TO BE WHOLE BEFORE THE PETALS ARRIVE. The petals now fly in off the
-    hero's own artwork and merge INTO this disc; a disc still opening when
-    they land would be catching them in something half-built, and the moment
-    reads as a full moon receiving them or it reads as nothing.
-
-    So it rides `entry` — the section taking the screen — and finishes at 0.92
-    of it, comfortably before the stage pins and the merge begins. It used to
-    open on the first fraction of the scrub, back when the seal simply landed
-    beside it and nothing had to be caught. */
-const DISC_WINDOW_ENTRY: [number, number] = [0.58, 0.92];
+/** When the moon grows in — ON THE SCRUB now, and late enough to be BORN
+    from the landing: the flower's five dots consolidate and descend into
+    the palm across scrub 0.01..0.048 (HallEntrance), handing the sprite off
+    over 0.046..0.054 — and this window opens after ALL of that, at 0.055:
+    the head lands, is briefly just a small white seed sitting in the palm,
+    and THEN the world grows out of it. Opening at 0.048 (where this sat)
+    started the growth on the exact frame of contact, with no beat between
+    arrival and expansion, so the two read as one blur; opening under the
+    descent — where it sat before that — was worse still, a glowing sphere
+    already waiting in the palm while the head was visibly still in the air.
+    The landing has to be the event — and the ORDER of the handover is the
+    event's grammar: the disc is born the instant the head touches the palm
+    (0.046, the same beat the orbit's `land` used to start), grows out from
+    under it while the head still sits there solid, and only once the world
+    has clearly outgrown its seed does the head fade away behind it (see
+    HallEntrance's `land`, 0.058-0.07). Grow-then-hide; the reverse read as
+    the head vanishing and a globe appearing in its place. It rode `entry`
+    before, when
+    the moon had to pre-exist for a whole seal to sink into; nothing
+    pre-exists now — the emblem is assembled on stage, piece by piece, and
+    every piece arrives from somewhere the reader watched. */
+const DISC_WINDOW_SCRUB: [number, number] = [0.046, 0.086];
 
 /** When the palm rises, on the APPROACH.
 
-    Ordered ahead of DISC_WINDOW_ENTRY and closing before it opens: the disc
+    Ordered ahead of the disc (see DISC_WINDOW_SCRUB) so the palm stands first: the disc
     is the seal's ground and sits IN the hand, so a disc arriving first would
     hang unsupported for a beat. Palm, then moon, then the petals that merge
     into it. */
@@ -251,10 +261,22 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
     }
 
     if (discRef.current) {
-      const [d0, d1] = DISC_WINDOW_ENTRY;
-      const du = easeOut(clamp01((entryRef.current - d0) / (d1 - d0)));
-      discRef.current.style.transform = `scale(${lerp(0.82, 1, du).toFixed(3)})`;
-      discRef.current.style.opacity = du.toFixed(3);
+      const [d0, d1] = DISC_WINDOW_SCRUB;
+      const du = easeOut(clamp01((s - d0) / (d1 - d0)));
+      /* STARTS AT THE HEAD'S OWN SIZE. The landing sprite is 34% of the
+         disc's radius (HallEntrance sets exactly that), so the world begins
+         at 0.34 and grows from there — the seed the reader watched land IS
+         the first frame of the moon, not a smaller ghost of it that pops to
+         a different size. It was 0.82 when the disc merely faded in behind
+         a seal, and 0.5 when this beat was first rewired; both left a step
+         at birth.
+
+         Opacity leads the scale a little (cubed against du), so the seed is
+         solid from the outset and only its SIZE animates — a sphere that
+         fades in while growing reads as an apparition, and this one is
+         meant to read as something already there, expanding. */
+      discRef.current.style.transform = `scale(${lerp(0.34, 1, du).toFixed(3)})`;
+      discRef.current.style.opacity = Math.min(1, du * 3).toFixed(3);
 
       /* THE WORLD TURNS ON THE SCRUB, not on a clock. A meridian seen from
          the side is an ellipse whose width is the cosine of how far round it

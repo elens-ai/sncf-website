@@ -39,10 +39,65 @@
    letters sit on a curve: at this radius, tight spacing makes the outer
    edges of adjacent glyphs converge and the word looks pinched. */
 .lotus-gate-text {
-  font-size: 2.45px;
-  letter-spacing: 1.05px;
+  /* CINZEL — a face drawn from Roman inscriptional capitals, which is what
+     lettering cut into an arch actually is. The generic classes this text
+     wore before (`font-artistic-display`) turn out to be defined nowhere in
+     the stylesheet, so the inscription had been falling through to the
+     body's Jakarta Sans — a UI face, wrong register entirely for a monument.
+
+     Size holds at 2.1 units: the band still carries the carving above the
+     name, and the clearance between the two was measured per-glyph and is
+     not generous. Cinzel reads larger than Jakarta at equal size anyway —
+     inscriptional capitals have no lowercase and sit full-height. */
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  /* Sized for the DEEPER band (inner edge 32.5, was 36): the name sits on a
+     recentred arc (r 40.5) with real air on both sides now. WHITE over the
+     five-ink band — every ink in it is mid-dark, so one white passes on
+     all of them. */
+  font-size: 2.25px;
+  letter-spacing: 0.92px;
   font-weight: 600;
-  fill: rgb(255 255 255 / 0.62);
+  fill: rgb(255 255 255 / 0.92);
+}
+
+/* Between the motto and the founding year: the invitation. It listed the
+   five rooms once, but an itinerary at the door reads as a table of
+   contents — "JOURNEY BEGINS" says the one thing a threshold needs to. */
+.lotus-gate-journey {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 1.55px;
+  letter-spacing: 0.72px;
+  font-weight: 500;
+  fill: rgb(255 255 255 / 0.58);
+}
+
+/* The farewell's salutation, in Devanagari — the Mission's own greeting.
+   None of the site's display faces carry the script, so this leans on the
+   system stack deliberately rather than pretending otherwise. */
+.lotus-gate-dhan {
+  font-size: 2.4px;
+  font-weight: 600;
+  fill: rgb(255 255 255 / 0.6);
+}
+
+/* The motto in the gate's opening, and the founding year beneath it. Sized
+   in the SVG's user units like the inscription, so both scale with the arch.
+   The script line is the site's own eyebrow face — the gate signs itself the
+   way every room does. */
+.lotus-gate-motto {
+  font-size: 5px;
+  font-weight: 700;
+  /* Blue, per the design — but the ENRICH accent's light blue, not the
+     event-card navy: the motto hangs over the dark ground of the opening,
+     and the card's deep blue vanished against it. This is the site's own
+     legible blue, from the pillar palette. */
+  fill: rgb(100 181 246 / 0.95);
+}
+.lotus-gate-since {
+  font-size: 1.6px;
+  letter-spacing: 0.55px;
+  font-weight: 600;
+  fill: rgb(255 255 255 / 0.42);
 }
 
 /* The light ahead. An ELLIPSE sized in percentages, not a circle: an unsized
@@ -63,32 +118,6 @@
   );
 }
 
-/* The flash at the merge. FIXED, like the petals it confirms the arrival
-   of — its position is computed from the same viewport-relative post box
-   they use, so it has to share their coordinate space, not the page's.
-
-   `screen` blend mode rather than plain opacity: the ground under the moon
-   at this point in the track is still a saturated colour (whichever
-   vertical is about to open), and a flat white circle blended normally would
-   sit as a visible disc on top of it. Screen only ever brightens — it reads
-   as the moon itself lighting up, not as a shape laid over the scene. */
-.hall-moon-flash {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 40;
-  pointer-events: none;
-  border-radius: 999px;
-  mix-blend-mode: screen;
-  will-change: transform, opacity;
-  background: radial-gradient(
-    circle,
-    rgb(255 255 255 / 0.9) 0%,
-    rgb(255 255 255 / 0.5) 38%,
-    rgb(255 255 255 / 0) 70%
-  );
-}
-
 /* The petals in flight. Fixed, because they travel from the hero's own
    background artwork — which scrolls — into a stage that scrolls differently.
    z-40 puts them UNDER the header (z-50): they cross in front of the page but
@@ -103,7 +132,14 @@
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 40;
+  /* BELOW the content column (z-10), deliberately. At 40 this layer painted
+     over the emblem, and the dissolving flower's white glow washed across
+     the landed sphere — the "glow over the head". Under the column, the
+     flower tucks BEHIND the palm as it arrives (delivered into the hand,
+     which is the story anyway) and the sphere keeps its solid face. Still
+     above the gate svg and the panel (both z-auto/2, and positive z beats
+     auto between positioned siblings). */
+  z-index: 5;
   pointer-events: none;
   overflow: visible;
   transform-origin: 0 0;
@@ -117,6 +153,30 @@
   transform-box: view-box;
   transform-origin: 0 0;
   will-change: transform, opacity;
+}
+
+/* The orbiting dots — fixed full-viewport overlay.
+
+   BEHIND THE EMBLEM (z-10 against the emblem container's z-20), which is the
+   whole point of the layer choice: the sphere they close into lands IN the
+   palm, and a hand cradles what it holds — it does not have it laid on top
+   of its fingers. At z-40, level with the flying petals, the landed head sat
+   over the hand and the illusion broke at the exact moment it mattered. This
+   also puts it on the same side of the palm as the disc it becomes (the
+   emblem paints disc, then shadow, then hand), so the handover from sprite
+   to disc never crosses a layer.
+
+   Still above the gate (z-2) and the entrance panel, so the orbit reads
+   clearly while it crosses the open screen. */
+.hall-dots {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  overflow: visible;
+  filter: drop-shadow(0 0 14px rgb(255 255 255 / 0.45));
 }
 
 /* The entrance panel, the way a gallery prints one at its door. Sits below
@@ -145,6 +205,38 @@
   margin: 12px auto 13px;
   background: rgb(255 255 255 / 0.4);
 }
+/* The panel's one control. The panel itself stays pointer-events:none (the
+   handler flips it to auto only while the panel is readable — see
+   HallEntrance); the button just has to look like an invitation: a quiet
+   pill in the panel's own type, brightening under the hand. */
+.hall-panel-browse {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  background: rgb(255 255 255 / 0.07);
+  color: rgb(255 255 255 / 0.92);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background-color 250ms ease, border-color 250ms ease, transform 250ms ease;
+}
+.hall-panel-browse:hover {
+  background: rgb(255 255 255 / 0.16);
+  border-color: rgb(255 255 255 / 0.6);
+  transform: translateY(-1px);
+}
+.hall-panel-browse:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.7);
+  outline-offset: 3px;
+}
+.hall-panel-browse-count {
+  padding-left: 10px;
+  border-left: 1px solid rgb(255 255 255 / 0.3);
+  color: rgb(255 255 255 / 0.6);
+}
 
 
 @media (prefers-reduced-motion: reduce) {
@@ -169,6 +261,73 @@
   opacity: 0;
   will-change: opacity, transform;
   pointer-events: none;
+  padding: clamp(14px, 2vw, 30px);
+  /* The room's own transform makes it a stacking context, so the ::before
+     at z -1 stays inside the room — behind its content, above the stage. */
+  z-index: 0;
+}
+/* THE WALL IS A FULL-SCREEN SURFACE. Each room paints its own wall in its
+   own accents (--wall-a/b, set per room), deep enough toward ink to hold
+   white type. Against the black the hall exposes mid-turn (hallVoidRef), a
+   coloured wall visibly SWINGS — content floating on a shared ground never
+   could, which is why the camera angles were hard to see.
+
+   It is a ::before rather than a background on the room because the room is
+   a padded CONTENT box inside the page column, and the wall must be the
+   whole screen: the pseudo bleeds past the viewport on every side (the
+   classic 50% - 50vw escape, plus margin so a rotated wall's edges never
+   swing into view) and rides the room's transform; the pinned stage's
+   overflow-hidden clips the excess. */
+/* Corner shading: the wall darkens as it turns past the corner, out of the
+   room's light — driven per frame via --wall-shade. A full-cover overlay
+   whose only animated property is opacity. */
+.lotus-room::after {
+  content: '';
+  position: absolute;
+  z-index: 5;
+  top: -150px;
+  bottom: -280px;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  background: #04060a;
+  opacity: var(--wall-shade, 0);
+  pointer-events: none;
+}
+.lotus-room::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  /* The TOP bleed is deliberately shallow. At rest the wall's top edge only
+     needs to clear the header band (the surface starts 184px down the
+     stage, so -150px parks the edge ~34px from the viewport top, behind
+     the chrome) — and during the fold, when the whole wall recedes and
+     shrinks toward the eye line, that near edge swings INTO view and
+     tapers toward the seam exactly as the bottom one does. The old -260px
+     kept it so far offscreen the fold could never reveal it, which is why
+     the corner had depth below but not above. */
+  top: -150px;
+  bottom: -280px;
+  /* EXACTLY the viewport, no side bleed: the hinge lines sit on these very
+     edges (see the seam note in PillarsSection), so any horizontal overhang
+     would lie across the neighbouring wall at the corner. Vertical bleed
+     stays — Y-rotation never spends it. */
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
+  background: linear-gradient(
+    176deg,
+    color-mix(in srgb, var(--wall-a, #1f8a5c) 34%, #0b0e13),
+    color-mix(in srgb, var(--wall-b, #1f8a5c) 22%, #080a0e) 82%
+  );
+  box-shadow: 0 30px 90px -30px rgb(0 0 0 / 0.8);
+}
+/* The room's content is CENTRED in this box, so padding at the foot lifts
+   the whole wall — label, plaques and frames together — off the rail. The
+   plates' parallax drift runs downward from wherever they start, and at
+   dead centre the lowest of them crowded the legend. */
+@media (min-width: 768px) {
+  .lotus-room {
+    padding-bottom: 7vh;
+  }
 }
 .lotus-room[data-live='true'] {
   pointer-events: auto;
@@ -191,6 +350,11 @@
   display: block;
   overflow: visible;
   will-change: transform;
+  /* Overridden per plate with one of LOGO_INK's five petal colours; the
+     white fallback keeps a frame legible if a plate is ever rendered
+     without one. */
+  --plate-ink: #ffffff;
+  transition: opacity 420ms ease;
 }
 .lotus-plate-art {
   position: absolute;
@@ -213,7 +377,7 @@
 /* mounted print: a board, with the image inset inside it */
 .lotus-plate[data-style='mat'] .lotus-plate-art {
   background: #f4f1ea;
-  border: 1px solid rgb(255 255 255 / 0.55);
+  border: 4px solid var(--plate-ink);
   padding: 9%;
   border-radius: 2px;
 }
@@ -221,14 +385,16 @@
   box-shadow: 0 0 0 1px rgb(0 0 0 / 0.18);
 }
 
-/* dark moulding, image to the edge */
+/* moulding in the petal's own ink, image to the edge */
 .lotus-plate[data-style='frame'] .lotus-plate-art {
-  border: 5px solid #2a2320;
+  border: 5px solid var(--plate-ink);
   border-radius: 1px;
 }
 
-/* unframed canvas, standing off the wall on its shadow */
+/* near-unframed canvas — a hairline of ink, standing off the wall on its
+   shadow */
 .lotus-plate[data-style='print'] .lotus-plate-art {
+  border: 2px solid var(--plate-ink);
   border-radius: 1px;
   box-shadow:
     9px 14px 30px -8px rgb(0 0 0 / 0.66),
@@ -368,6 +534,62 @@
 .lotus-legend li[data-on='true'] .legend-bar {
   background: var(--legend-accent, #fff);
   box-shadow: 0 0 12px -2px var(--legend-accent, transparent);
+}
+
+/* THE STATIONS ON THE LINE — the active stop's works, unfolding beneath its
+   label like a metro line opening its station list.
+
+   ABSOLUTE, taking no layout space: an earlier max-height version grew the
+   rail itself, so every room handover re-flowed the legend, the rooms box
+   above it and the emblem — labels and hand visibly bobbing as the works
+   count changed between verticals. Now the ul reserves a CONSTANT band
+   below the labels (its md padding-bottom) and the stations merely fade
+   into it: nothing above or beside them ever moves. */
+.lotus-legend .legend-works {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity 380ms ease, transform 380ms ease;
+}
+.lotus-legend li[data-current='true'] .legend-works {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.legend-work {
+  border: 0;
+  padding: 0 0 1px;
+  background: transparent;
+  font-size: 9px;
+  white-space: nowrap;
+  color: rgb(255 255 255 / 0.68);
+  border-bottom: 1px solid rgb(255 255 255 / 0.22);
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+/* Each station wears a dot in its line's colour. */
+.legend-work::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: 1px;
+  background: var(--legend-accent, #fff);
+}
+.legend-work:hover {
+  color: #fff;
+  border-bottom-color: var(--legend-accent, #fff);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lotus-legend .legend-works {
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1100,6 +1322,46 @@
   }
 }
 
+/* The floating "jump to next section" chevron — a small, slow bob so it
+   reads as an invitation to scroll rather than a static icon. Opacity and
+   position are driven imperatively from HeroSection's scroll effect (they
+   need to track scroll position exactly, not run on a timer), so this
+   keyframe only ever touches the chevron glyph's own transform. */
+@keyframes heroJumpBob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes heroJumpBobUp {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.hero-jump-chevron {
+  animation: heroJumpBob 1.8s ease-in-out infinite;
+}
+
+/* The return-to-top state bobs the other way, so the direction reads before
+   the glyph itself is parsed. */
+.hero-jump-chevron-up {
+  animation: heroJumpBobUp 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-jump-chevron,
+  .hero-jump-chevron-up {
+    animation: none;
+  }
+}
+
 /* Sound control when autoplay was refused: a slow halo so a visitor notices
    the anthem is waiting on them. Browser policy cannot be bypassed in JS, so
    the control has to advertise itself instead. */
@@ -1478,6 +1740,209 @@
    The piece, stepped up to. Fixed and full-viewport: the room behind is a
    scroll-driven build, so anything that let the page move under this would
    rewind the flower and swap the room out mid-read. */
+/* THE DOCENT (ExhibitionNav.tsx) — the exhibition's floating navigator.
+   Tinted by the live room through --nav-a/--nav-b so it walks the same
+   colour sequence the screen does. */
+/* Page mode carries no room accent — the pill falls back to a neutral white
+   mix so color-mix() never sees an undefined variable (which would drop the
+   whole declaration and leave the pill borderless). */
+.section-nav {
+  --nav-a: #ffffff;
+  --nav-b: #ffffff;
+}
+.exhibition-nav-pill {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--nav-a) 55%, rgb(255 255 255 / 0.35));
+  background: color-mix(in srgb, var(--nav-a) 26%, rgb(0 0 0 / 0.45));
+  color: rgb(255 255 255 / 0.94);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.7);
+}
+.exhibition-nav-cta {
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background-color 250ms ease, border-color 250ms ease, transform 250ms ease;
+}
+.exhibition-nav-cta:hover {
+  background: color-mix(in srgb, var(--nav-a) 40%, rgb(0 0 0 / 0.4));
+  transform: translateY(-1px);
+}
+.exhibition-nav-arrow {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  background: transparent;
+  color: rgb(255 255 255 / 0.85);
+  cursor: pointer;
+  transition: color 200ms ease, transform 200ms ease;
+}
+.exhibition-nav-arrow:hover:not(:disabled) {
+  color: #fff;
+  transform: scale(1.15);
+}
+.exhibition-nav-name {
+  padding: 10px 14px;
+  border: 0;
+  border-left: 1px solid rgb(255 255 255 / 0.2);
+  border-right: 1px solid rgb(255 255 255 / 0.2);
+  background: transparent;
+  color: rgb(255 255 255 / 0.94);
+  cursor: pointer;
+  min-width: 96px;
+  text-align: center;
+}
+.exhibition-nav-name:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgb(255 255 255 / 0.5);
+}
+.exhibition-nav-chip {
+  font-size: 9px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--nav-a) 45%, rgb(255 255 255 / 0.25));
+  background: rgb(0 0 0 / 0.38);
+  color: rgb(255 255 255 / 0.85);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  max-width: 158px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.exhibition-nav-chip:hover {
+  background: color-mix(in srgb, var(--nav-a) 35%, rgb(0 0 0 / 0.35));
+  color: #fff;
+}
+/* The nav rides above the section jump button; on a phone that stack eats
+   into the room copy, so the works row caps its height and scrolls. */
+@media (max-width: 640px) {
+  .exhibition-nav-works {
+    max-height: 88px;
+    overflow-y: auto;
+  }
+}
+
+/* THE CATALOGUE — the browse-everything overlay (GalleryCatalogue.tsx).
+   Deliberately one layer BELOW the ActivityCase (70 vs 80): stepping up to a
+   piece opens the case over the open catalogue, and stepping back returns to
+   the page you were browsing. Visual language borrowed from the case — same
+   scrim treatment, same rise — so the two read as one gallery, not two UIs. */
+.gallery-catalogue {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: clamp(10px, 2.5vw, 32px);
+  animation: case-in 260ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.gallery-catalogue-scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: radial-gradient(120% 90% at 50% 40%, rgb(0 0 0 / 0.72), rgb(0 0 0 / 0.94));
+  backdrop-filter: blur(10px);
+}
+.gallery-catalogue-body {
+  position: relative;
+  width: min(1180px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 16px;
+  background: #0d1014;
+  border: 1px solid rgb(255 255 255 / 0.13);
+  box-shadow: 0 40px 110px -30px rgb(0 0 0 / 0.85);
+  padding: clamp(22px, 3.4vw, 44px) clamp(16px, 3vw, 40px) 14px;
+  animation: case-rise 320ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.gallery-catalogue-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  background: rgb(0 0 0 / 0.4);
+  color: #fff;
+  cursor: pointer;
+}
+.gallery-catalogue-close:hover {
+  background: rgb(0 0 0 / 0.65);
+}
+.gallery-catalogue-head {
+  text-align: center;
+  margin-bottom: clamp(20px, 3vw, 34px);
+}
+/* Each room's stretch of the catalogue is washed faintly in its own accent,
+   so paging down the book walks the same colour sequence the exhibition
+   itself does. */
+.gallery-catalogue-room {
+  border-radius: 12px;
+  padding: clamp(14px, 2vw, 22px);
+  margin-bottom: clamp(14px, 2vw, 22px);
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--room-a) 16%, transparent),
+    color-mix(in srgb, var(--room-b) 7%, transparent) 70%
+  );
+  border: 1px solid color-mix(in srgb, var(--room-a) 28%, rgb(255 255 255 / 0.08));
+}
+.gallery-catalogue-room-head {
+  margin-bottom: 14px;
+}
+.gallery-catalogue-room-rule {
+  display: block;
+  width: 54px;
+  height: 2px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--room-a), var(--room-b));
+}
+.gallery-catalogue-shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+  /* Row gap clears the plates' hung labels: .lotus-plate-label hangs 7px
+     below its frame at ~10px type, so anything under ~24px of row gap runs
+     the caption into the next row's frame. */
+  gap: 30px 12px;
+  /* ...and the last row's labels need the same clearance from the room's
+     own bottom edge. */
+  padding-bottom: 22px;
+}
+@media (min-width: 860px) {
+  .gallery-catalogue-shelf {
+    grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
+    gap: 32px 14px;
+  }
+}
+/* The wall hangs its labels flush left and lets them run — over a wall there
+   is open space beside most frames. On the catalogue's packed grid a long
+   caption runs under the neighbouring plate, so here it stays inside its own
+   column and ellipsizes. */
+.gallery-catalogue-shelf .lotus-plate-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-catalogue,
+  .gallery-catalogue-body {
+    animation: none;
+  }
+}
+
 .activity-case {
   position: fixed;
   inset: 0;
@@ -1663,4 +2128,60 @@
   .lotus-plate-hit {
     transition: none;
   }
+}
+
+
+/* THE HAND LIGHTS THE FRAME, not the scroll. An earlier cut walked a
+   spotlight across the wall as the reader scrolled — frames switching on
+   by themselves read as the page acting, not the visitor. Now a piece
+   lights only under the pointer, and opens only on click. */
+.lotus-plate .lotus-plate-art {
+  transition: box-shadow 280ms ease;
+}
+.lotus-plate .lotus-plate-hit:hover .lotus-plate-art {
+  box-shadow:
+    0 0 0 1px var(--plate-ink),
+    0 0 30px -4px var(--plate-ink),
+    7px 11px 26px -9px rgb(0 0 0 / 0.62);
+}
+.lotus-plate:hover .lotus-plate-label {
+  color: #fff;
+}
+.legend-work:hover {
+  color: #fff;
+  border-bottom-color: var(--legend-accent, #fff);
+}
+
+/* THE DOORWAY'S SHADOW (PillarsSection.thresholdShadeRef). Passing under the
+   formed arch, the view darkens from the edges inward and reopens inside the
+   first room — the light change of stepping indoors. Opacity is the only
+   thing that ever moves; the gradient itself is static and cheap. */
+.lotus-threshold-shade {
+  background: radial-gradient(
+    ellipse 72% 58% at 50% 44%,
+    transparent 42%,
+    rgb(2 6 10 / 0.52) 78%,
+    rgb(2 6 10 / 0.82) 100%
+  );
+}
+
+/* The activity's wall arrives the way a case used to open — one soft fade —
+   and the room fades back the same way when it returns. */
+.activity-wall {
+  animation: case-in 340ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .activity-wall {
+    animation: none;
+  }
+}
+
+/* THE HALL HAS DEPTH. The rooms box is the camera: its perspective is what
+   turns the walls' rotateY into a real turn of the head, with the vanishing
+   point held a little above centre where a standing visitor's eye is. */
+.lotus-copy {
+  /* Tight enough that the corner fold visibly pinches into depth — 1500px
+     read as near-orthographic once the walls went full-screen. */
+  perspective: 950px;
+  perspective-origin: 50% 42%;
 }
