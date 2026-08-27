@@ -15,6 +15,7 @@ import { resolveEvents } from './utils/events';
 import { PillarModal } from './components/PillarModal';
 import { SearchModal } from './components/SearchModal';
 import { WelcomeSplashScreen } from './components/WelcomeSplashScreen';
+import { SectionJumpButton } from './components/SectionJumpButton';
 import { GalleryModal } from './components/GalleryModal';
 import { DonateModal } from './components/DonateModal';
 import { DevotionalLightboxModal } from './components/DevotionalLightboxModal';
@@ -159,6 +160,12 @@ export default function App() {
           above the sections and footer (z-10), below the header and modals
           (z-50). */}
       <SocialSidebar />
+
+      {/* Floating section-to-section jump. Root level for the same reason the
+          social rail is: it is a viewport fixture, and inside a section its
+          `position: fixed` would be captured by that section's transform /
+          will-change containing block. Hidden while the splash is up. */}
+      {!isSplashUp && <SectionJumpButton />}
 
       {/* 2. HERO — the site's single hero. */}
       <HeroSection
