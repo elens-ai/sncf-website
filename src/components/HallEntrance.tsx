@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { ACTIVITIES } from '../data/activities';
 import { LOGO_PETALS } from './logoShapes';
-import { PETAL_ART } from './petalArt';
+import { PETAL_ART, PETAL_DOTS } from './petalArt';
 
 const PETAL_ART_BY_ID: Record<string, (typeof PETAL_ART)[number]> = Object.fromEntries(
   PETAL_ART.map((a) => [a.id, a]),
@@ -33,7 +33,10 @@ const PETAL_ART_BY_ID: Record<string, (typeof PETAL_ART)[number]> = Object.fromE
  * PillarsSection and SncfLotus3D.
  */
 export interface HallEntranceHandle {
-  update: (covered: number, scrub: number) => void;
+  /** `gateForm` is the gate's paint progress (0..1) from PillarsSection —
+      clock-driven, not a scroll value — so the flower's dissolve can follow
+      the brush that is spending it rather than the scroll bar. */
+  update: (covered: number, scrub: number, gateForm?: number) => void;
 }
 
 interface HallEntranceProps {
@@ -42,6 +45,9 @@ interface HallEntranceProps {
   /** The pinned stage, for the centre mark. Measured live: it is still
       travelling while `covered` < 1, so the landing point cannot be cached. */
   stageRef: React.RefObject<HTMLDivElement | null>;
+  /** Opens the exhibition catalogue (all rooms, all works) — the panel's
+      one interactive element. */
+  onBrowse?: () => void;
 }
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
@@ -85,11 +91,15 @@ const PETAL_VIEWBOX = `${PETAL_UNION.x} ${PETAL_UNION.y} ${PETAL_UNION.w} ${PETA
 const LIFT_ORDER = ['welcome', 'heal', 'enrich', 'empower', 'projects'];
 
 export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
-  ({ postRef, stageRef }, ref) => {
+  ({ postRef, stageRef, onBrowse }, ref) => {
     const lightRef = useRef<HTMLDivElement | null>(null);
     const sealRef = useRef<SVGSVGElement | null>(null);
     const petalRefs = useRef<Record<string, SVGGElement | null>>({});
-    const moonFlashRef = useRef<HTMLDivElement | null>(null);
+    /* The coloured copy stacked over each white petal — its opacity IS the
+       awakening. */
+    const petalColorRefs = useRef<Record<string, SVGImageElement | null>>({});
+    /* The five consolidating dots, free-flying in screen space. */
+    const dotSpriteRefs = useRef<Record<string, SVGCircleElement | null>>({});
     const panelRef = useRef<HTMLDivElement | null>(null);
 
     const reducedRef = useRef<boolean>(
@@ -103,7 +113,7 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
     const wasLiveRef = useRef(false);
 
     useImperativeHandle(ref, () => ({
-      update: (covered: number, scrub: number) => {
+      update: (covered: number, scrub: number, gateForm = 1) => {
         const seal = sealRef.current;
         const post = postRef.current;
         const stage = stageRef.current;
@@ -133,11 +143,16 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
         if (done) {
           if (wasLiveRef.current) {
             seal.style.opacity = '0';
-            if (panelRef.current) panelRef.current.style.opacity = '0';
+            if (panelRef.current) {
+              panelRef.current.style.opacity = '0';
+              panelRef.current.style.pointerEvents = 'none';
+            }
             if (lightRef.current) lightRef.current.style.opacity = '0';
-            if (moonFlashRef.current) moonFlashRef.current.style.opacity = '0';
             Object.values(petalRefs.current).forEach((g) => {
-              if (g) g.style.opacity = '0';
+              if (g instanceof SVGGElement) g.style.opacity = '0';
+            });
+            Object.values(dotSpriteRefs.current).forEach((c) => {
+              if (c instanceof SVGCircleElement) c.setAttribute('opacity', '0');
             });
             wasLiveRef.current = false;
           }
@@ -157,8 +172,23 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
            threshold, matching the rooms' own arrive-below/leave-up stream --- */
         if (panelRef.current) {
           const inK = easeOut(ramp(covered, 0.3, 0.95));
-          const outK = easeOut(ramp(scrub, 0, THRESHOLD_END * 0.8));
-          panelRef.current.style.opacity = (inK * (1 - outK)).toFixed(3);
+          /* Spent by the paint as well as the scroll: the gate finishes on
+             its own clock once latched, and a scroll-only fade left "Our
+             work" faintly double-printed behind the finished gate's motto
+             for a reader paused at the latch. Same max-of-two-clocks rule
+             the flower's dissolve uses. */
+          const outK = Math.max(
+            easeOut(ramp(scrub, 0, THRESHOLD_END * 0.8)),
+            easeOut(ramp(gateForm, 0.1, 0.45)),
+          );
+          const panelVis = inK * (1 - outK);
+          panelRef.current.style.opacity = panelVis.toFixed(3);
+          /* The panel's base CSS is pointer-events:none (it overlays the
+             whole stage), but its browse button must be pressable while the
+             panel is actually readable — and must NOT be an invisible click
+             target once it has faded. Same threshold the hero uses for its
+             own fading foreground. */
+          panelRef.current.style.pointerEvents = panelVis > 0.5 ? 'auto' : 'none';
           /* The -50% is part of THIS string. The panel is centred by
              `left: 50%` plus this translate, and since the handler owns
              `transform` outright, declaring the centring in CSS would have it
@@ -182,41 +212,117 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
         const markX = stageBox.left + stageBox.width / 2 - markW / 2;
         const markY = stageBox.top + stageBox.height * 0.34;
 
-        /* WHERE THE MOON IS. Derived from the emblem's own numbers rather
-           than probed: its viewBox is `106 122 286 310` and the disc sits at
-           (249.3, 246.9) r115 inside it, so the post's box is all that is
-           needed. Probing the live circle would mean reaching through
-           SncfLotus3D's internals for something arithmetic already gives. */
-        const unit = postBox.width / 286.22;
-        const moonX = postBox.left + (249.3 - 106) * unit;
-        const moonY = postBox.top + (246.9 - 122) * unit;
+        /* THE FLOWER RISES TO MEET THE ARCH, AND DISSOLVES INTO IT.
 
-        /* THE BLOOM SHRINKS TO THE EMBLEM'S OWN SCALE, AND NOTHING ELSE.
+           It used to glide to the corner and sink into the palm's moon, and
+           the gate was then painted by light sent back from that corner —
+           the protagonist leaving the stage and mailing in a proxy. Now the
+           flower IS the gate's material: it lifts a little from its mark,
+           toward the crown of the arch that is about to exist directly
+           above it, and fades exactly as the ghost-white sweeps (driven in
+           PillarsSection) carry its substance both ways along the band.
+           The palm's moon is not abandoned — it earns its petals room by
+           room through the bloom, as it always did. */
+        const rise = easeOut(ramp(scrub, 0, 0.06));
+        /* Colour returns WITH the rise and is complete before the brushes
+           leave — the petal must know its ink before it can paint with it.
+           Floored by gateForm so a fast flick can never launch a still-white
+           brush. */
+        const awaken = Math.max(rise, ramp(gateForm, 0, 0.18));
+        Object.values(petalColorRefs.current).forEach((img) => {
+          if (img instanceof SVGImageElement) img.style.opacity = awaken.toFixed(3);
+        });
+        /* Spent BY THE PAINT, not by the scroll: the gate draws itself on a
+           clock once latched, and a scroll-driven fade left the flower
+           standing at full strength beside an already-finished gate when
+           the reader paused. The scroll term stays as a floor so rolling
+           back still restores the flower. */
+        const dissolve = Math.max(ramp(scrub, 0.05, 0.1), ramp(gateForm, 0.08, 0.6));
+        const gs = lerp(1, 1.08, rise);
+        const gx = markX - (markW * (gs - 1)) / 2;
+        const gy = markY - rise * stageBox.height * 0.09 - (markH * (gs - 1)) / 2;
 
-           An earlier version span the petals out around the moon on an
-           invented bearing-and-radius circle — deliberate motion, but wrong,
-           because it fought geometry that already does this job. The union of
-           the five petals' bounding boxes sits at (249.2, 246.4); LOGO_DISC —
-           the moon's own centre, in the SAME coordinate space the paths are
-           drawn in — sits at (249.3, 246.9). Under a percent apart. The
-           petals were always going to wrap a disc there; that is what their
-           artwork IS. Adding a second, artificial spread on top just pushed
-           them off the shape they were already drawn to make, into a wider
-           flower floating beside the moon instead of resting on it.
+        /* THE ORBIT. The four heads do not simply pool into a blob and
+           drop — they leave the flower and begin to CIRCLE a common centre,
+           the way the emblem's own figures stand around its moon, and the
+           circle travels toward the palm while it tightens: about one and
+           three-quarter revolutions, radius decaying with each, until the
+           four close into one sphere just as they arrive — and the disc
+           swells out of the touch-down underneath them (SncfLotus3D's disc
+           window sits right there on the scrub). People revolving around a
+           shared centre becoming a world: that is the emblem read aloud.
 
-           So the only thing this does is bring them to TRUE SCALE — the same
-           px-per-user-unit the assembled emblem uses — and centre that same
-           union point on the moon. Every petal below then arrives at its own
-           IDENTITY transform (no offset at all): the raw path data, at the
-           emblem's own size, already sits exactly where it needs to. */
-        const settle = easeOut(ramp(scrub, 0, THRESHOLD_END));
-        /* Target width, in px, of the SAME 197.7-user-unit span the real
-           emblem draws at this viewport's scale — `unit` is its px-per-unit
-           figure, already derived above from the post box. */
-        const trueW = PETAL_UNION.w * unit;
-        const gs = lerp(1, trueW / markW, settle);
-        const gx = lerp(markX, moonX - (markW * gs) / 2, settle);
-        const gy = lerp(markY, moonY - (markH * gs) / 2, settle);
+             lift    0.004..0.012  mask holes open, sprites take over
+             orbit   0.010..0.048  circling, tightening, travelling
+             rest    0.046..       the disc is born under the seated head
+             fade    0.058..0.070  the head melts into the grown world
+
+           Each dot's starting angle and radius are taken from its OWN live
+           position around the group's centroid every frame — so the orbit
+           begins exactly where the dots stand (no jump at lift-off, even
+           while the flower is still rising under them) and the spin is just
+           an angle added on top. */
+        const unitAll = (markW / PETAL_UNION.w) * gs;
+        const toScreen = (ux: number, uy: number) => ({
+          x: gx + (ux - PETAL_UNION.x) * unitAll,
+          y: gy + (uy - PETAL_UNION.y) * unitAll,
+        });
+        const postUnit = postBox.width / 286.22;
+        const moonC = {
+          x: postBox.left + (249.3 - 106) * postUnit,
+          y: postBox.top + (246.9 - 122) * postUnit,
+        };
+        const moonRpx = 115 * postUnit;
+
+        const dotsAway = reducedRef.current ? 1 : ramp(scrub, 0.004, 0.012);
+        seal.style.setProperty('--dots-away', dotsAway.toFixed(3));
+        const orbitRaw = ramp(scrub, 0.01, 0.048);
+        /* smoothstep: eases both ends, so the circling starts gently and
+           the arrival does not slam */
+        const orbitT = orbitRaw * orbitRaw * (3 - 2 * orbitRaw);
+        /* GROW FIRST, HIDE AFTER. The disc is born at 0.046 — the moment
+           the head seats — and by 0.058 has visibly outgrown it; only then
+           does the head fade, absorbed by the world it started. Fading it
+           earlier (it was 0.05-0.06 against a 0.055 disc) put the hide
+           BEFORE the growth and the handover read as a swap, not a birth. */
+        const land = ramp(scrub, 0.058, 0.07);
+
+        const dotIds = LOGO_PETALS.filter((pp) => PETAL_DOTS[pp.id]).map((pp) => pp.id);
+        const homes = dotIds.map((id) => toScreen(PETAL_DOTS[id].cx, PETAL_DOTS[id].cy));
+        const c0 = {
+          x: homes.reduce((a, h) => a + h.x, 0) / Math.max(1, homes.length),
+          y: homes.reduce((a, h) => a + h.y, 0) / Math.max(1, homes.length),
+        };
+        /* The circle's centre travels to the palm on a slight upward arc —
+           thrown, not dropped. */
+        const cx = lerp(c0.x, moonC.x, orbitT);
+        const cy = lerp(c0.y, moonC.y, orbitT) - Math.sin(orbitT * Math.PI) * 46;
+        const SPINS = 1.75;
+
+        dotIds.forEach((id, i) => {
+          const el = dotSpriteRefs.current[id];
+          const dot = PETAL_DOTS[id];
+          if (!el || !dot) return;
+          const home = homes[i];
+          const offX = home.x - c0.x;
+          const offY = home.y - c0.y;
+          const phase = Math.atan2(offY, offX);
+          const radius0 = Math.hypot(offX, offY);
+          /* tightening: each revolution smaller, closed by arrival */
+          const radius = radius0 * Math.pow(1 - orbitT, 1.35);
+          const ang = phase + SPINS * orbitT * Math.PI * 2;
+          const px = cx + Math.cos(ang) * radius;
+          const py = cy + Math.sin(ang) * radius;
+          /* Ends at ~the newborn disc's own visual radius (it is born at
+             half scale), so the seed and the first frame of the world are
+             the same size — the growth continues from the head, not from a
+             different, larger thing. */
+          const rr = lerp(dot.r * unitAll, Math.max(dot.r * unitAll, moonRpx * 0.45), orbitT);
+          el.setAttribute('cx', px.toFixed(1));
+          el.setAttribute('cy', py.toFixed(1));
+          el.setAttribute('r', Math.max(0.5, rr).toFixed(1));
+          el.setAttribute('opacity', (reducedRef.current ? 0 : dotsAway * (1 - land)).toFixed(3));
+        });
 
         seal.style.width = `${markW.toFixed(1)}px`;
         seal.style.height = `${markH.toFixed(1)}px`;
@@ -329,44 +435,17 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
           if (host) host.style.opacity = (1 - swap).toFixed(3);
         }
 
-        /* Held almost to the end. When the flower was landing BESIDE the
-           emblem this fade started early, so the motion and the fade blended.
-           A merge is the opposite: they have to still be there while they
-           shrink into the moon, and go out only once they are inside it. */
-        const handoff = ramp(scrub, THRESHOLD_END * 0.72, THRESHOLD_END);
-        seal.style.opacity = (1 - handoff).toFixed(3);
+        /* Fades on the SAME window the gate sweeps open across — the
+           flower is not leaving, it is being spent: its substance runs out
+           along the band as the brush carries it. */
+        seal.style.opacity = (1 - dissolve).toFixed(3);
 
-        /* THE MOON LIGHTENS AS THEY GO IN. Nothing marked the instant the
-           petals actually merged — the flower simply faded while the moon
-           sat there unchanged underneath it, so nothing on screen confirmed
-           an arrival happened. This is that confirmation: a bloom of light
-           at the moon's own position, timed to the SAME handoff curve the
-           flower's own fade already uses (rise across the same window,
-           `handoff` itself), so the flash and the fade are one event, not
-           two coincidentally close ones — then a quick decay back to
-           nothing, entirely inside the window the `done` cutoff above
-           already budgets for, so this costs nothing once the merge is
-           past. */
-        if (moonFlashRef.current) {
-          const decay = ramp(scrub, THRESHOLD_END, THRESHOLD_END + 0.02);
-          const flash = handoff * (1 - decay);
-          const flashD = 230 * unit * 1.7;
-          moonFlashRef.current.style.width = `${flashD.toFixed(1)}px`;
-          moonFlashRef.current.style.height = `${flashD.toFixed(1)}px`;
-          moonFlashRef.current.style.transform =
-            `translate(${(moonX - flashD / 2).toFixed(1)}px, ${(moonY - flashD / 2).toFixed(1)}px)`;
-          moonFlashRef.current.style.opacity = flash.toFixed(3);
-        }
       },
     }));
 
     return (
       <>
         <div ref={lightRef} className="hall-light" aria-hidden="true" style={{ opacity: 0 }} />
-
-        {/* The flash at the merge — see the note beside where it is driven.
-            z-40, level with the petals it is confirming the arrival of. */}
-        <div ref={moonFlashRef} className="hall-moon-flash" aria-hidden="true" style={{ opacity: 0 }} />
 
         {/* The petals are FIXED and sit under the header (z-40 against its
             z-50): they should read as crossing in front of the page but
@@ -384,6 +463,54 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
           aria-hidden="true"
           style={{ opacity: 0 }}
         >
+          <defs>
+            {/* SOLID WHITE OUTLINE for the awakened petals: the alpha is
+                dilated and flooded white, then the artwork is drawn back
+                over it — a true silhouette contour, not a stroke on every
+                internal band. The ghost needed no outline (white on any
+                ground carries itself); colour does, or its soft raster edge
+                dissolves into whatever ground it crosses — which is exactly
+                what the assembled emblem's own artwork solves with the
+                baked white rim around its palm. One unit here is about
+                1.8px at the entrance mark. */}
+            <filter id="hall-petal-outline" x="-12%" y="-12%" width="124%" height="124%">
+              <feMorphology in="SourceAlpha" operator="dilate" radius="1" result="fat" />
+              <feFlood floodColor="#ffffff" result="white" />
+              <feComposite in="white" in2="fat" operator="in" result="rim" />
+              <feMerge>
+                <feMergeNode in="rim" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            {/* One mask per petal: a hole that opens over the baked dot as
+                the free sprite lifts off it. The hole's own opacity rides
+                --dots-away, so before the consolidation the images are
+                untouched, and scrolling back re-seats the dots into the
+                flower. */}
+            {LOGO_PETALS.map((petal) => {
+              const dot = PETAL_DOTS[petal.id];
+              if (!dot) return null;
+              return (
+                <mask key={petal.id} id={`hall-dotless-${petal.id}`}>
+                  <rect
+                    x={PETAL_UNION.x - 10}
+                    y={PETAL_UNION.y - 10}
+                    width={PETAL_UNION.w + 20}
+                    height={PETAL_UNION.h + 20}
+                    fill="#fff"
+                  />
+                  <circle
+                    cx={dot.cx}
+                    cy={dot.cy}
+                    r={dot.r + 2.6}
+                    fill="#000"
+                    style={{ opacity: 'var(--dots-away, 0)' }}
+                  />
+                </mask>
+              );
+            })}
+          </defs>
           {LOGO_PETALS.map((petal) => (
             <g
               key={petal.id}
@@ -411,19 +538,62 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
                 const art = PETAL_ART_BY_ID[petal.id];
                 if (!art) return null;
                 return (
-                  <image
-                    href={art.src}
-                    x={art.x}
-                    y={art.y}
-                    width={art.w}
-                    height={art.h}
-                    preserveAspectRatio="xMidYMid meet"
-                    style={{ filter: 'brightness(0) invert(1)' }}
-                  />
+                  <g mask={PETAL_DOTS[petal.id] ? `url(#hall-dotless-${petal.id})` : undefined}>
+                    <image
+                      href={art.src}
+                      x={art.x}
+                      y={art.y}
+                      width={art.w}
+                      height={art.h}
+                      preserveAspectRatio="xMidYMid meet"
+                      style={{ filter: 'brightness(0) invert(1)' }}
+                    />
+                    {/* THE AWAKENING. The same artwork again, unfiltered —
+                        its own inks — stacked exactly over the white copy
+                        and faded in as the flower rises to paint the gate.
+                        The ghost that crossed from the hero remembers what
+                        colour it is at the moment it goes to work: each
+                        petal recovers ITS OWN ink, and then lays exactly
+                        that ink into the band (the gate's gradient is the
+                        record of who painted where). Same silhouette above
+                        and below, so the crossfade never shows an edge. */}
+                    <image
+                      ref={(el) => {
+                        petalColorRefs.current[petal.id] = el;
+                      }}
+                      href={art.src}
+                      x={art.x}
+                      y={art.y}
+                      width={art.w}
+                      height={art.h}
+                      preserveAspectRatio="xMidYMid meet"
+                      style={{ opacity: 0, filter: 'url(#hall-petal-outline)' }}
+                    />
+                  </g>
                 );
               })()}
             </g>
           ))}
+        </svg>
+
+        {/* THE FIVE DOTS, free of the flower — screen-space sprites that
+            orbit a common centre and close into the globe. Fixed like
+            the petals, because they travel from the flower's box to the
+            emblem's corner, which scroll differently. White with the same
+            soft glow the petals carry. */}
+        <svg className="hall-dots" aria-hidden="true">
+          {LOGO_PETALS.map((petal) =>
+            PETAL_DOTS[petal.id] ? (
+              <circle
+                key={petal.id}
+                ref={(el) => {
+                  dotSpriteRefs.current[petal.id] = el;
+                }}
+                fill="#ffffff"
+                opacity="0"
+              />
+            ) : null,
+          )}
         </svg>
 
         <div ref={panelRef} className="hall-panel" style={{ opacity: 0 }}>
@@ -437,6 +607,21 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
           <p className="font-artistic-serif text-white/65 text-[11.5px] mt-1.5">
             Figures as reported · March 2026
           </p>
+          {/* The second door in. Scrolling on walks the rooms in sequence —
+              this opens the catalogue and lets a visitor browse all of them
+              at once, stepping up to any piece directly. */}
+          {onBrowse && (
+            <button
+              type="button"
+              onClick={onBrowse}
+              className="hall-panel-browse font-artistic-display uppercase tracking-[0.2em] text-[10.5px] sm:text-[11.5px]"
+            >
+              Browse the catalogue
+              <span aria-hidden="true" className="hall-panel-browse-count">
+                {ACTIVITIES.length} works
+              </span>
+            </button>
+          )}
         </div>
       </>
     );
