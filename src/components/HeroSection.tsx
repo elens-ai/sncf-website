@@ -103,6 +103,67 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   const currentPillar = pillars[activeIndex] || pillars[0];
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
+  /* Holds the wheel's auto-rotation off until the welcome sentence
+     (FoundationIntro) has actually finished writing itself out, so the cards
+     don't start spinning while the visitor is still mid-read. Sticky once
+     true — later pillar-to-pillar shuttles must not re-pause the wheel. */
+  const [introTextDone, setIntroTextDone] = useState(false);
+
+  /* THE FOREGROUND HIDES EARLY ON SCROLL. `#hero-clone-stage` (this whole
+     <main>) already recedes as the exhibition entrance rises over it, but
+     that fade is driven by PillarsSection's `covered` and only starts once
+     its section is nearly in view — for the first stretch of ordinary
+     scrolling the copy and the orbit wheel just travel up the page fully
+     opaque, which reads as clutter once the next screen starts arriving
+     underneath. So the copy+wheel grid gets its OWN, much quicker fade,
+     tied to nothing but how far the reader has scrolled past the hero's own
+     top — while the rings, the watermark and the glow (all siblings of this
+     grid, still on #hero-clone-stage) are untouched and keep the background
+     showing right up until the slower recede takes over. */
+  const contentGridRef = useRef<HTMLDivElement | null>(null);
+  const reducedMotionRef = useRef(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reducedMotionRef.current = mq.matches;
+    const onMotionChange = (e: MediaQueryListEvent) => {
+      reducedMotionRef.current = e.matches;
+    };
+    mq.addEventListener('change', onMotionChange);
+
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const el = contentGridRef.current;
+      const stage = document.getElementById('hero-clone-stage');
+      if (!stage) return;
+      const h = stage.offsetHeight || window.innerHeight;
+      /* Fully gone by 10% of the hero's own height scrolled — the first
+         nudge of the wheel should be enough to clear it, not a third of the
+         screen's worth of scrolling. */
+      const t = reducedMotionRef.current
+        ? window.scrollY > 4
+          ? 1
+          : 0
+        : Math.max(0, Math.min(1, window.scrollY / (h * 0.1)));
+      if (el) {
+        el.style.opacity = (1 - t).toFixed(3);
+        el.style.transform = t > 0 ? `translateY(${(-t * 24).toFixed(1)}px)` : '';
+        el.style.pointerEvents = t > 0.85 ? 'none' : '';
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(read);
+    };
+    read();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      mq.removeEventListener('change', onMotionChange);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   /* Vertical shuttle states for the pillar copy. Exit drifts up and out; enter
      is staged below (transition-suppressed) and rises into place. Distances are
@@ -192,6 +253,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedPhotoLeader) return;
+      /* keys aimed at an interactive element (the partner desk's text
+         field, any focused button) are not carousel commands */
+      const t = e.target as HTMLElement | null;
+      if (
+        t &&
+        (t.isContentEditable ||
+          /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(t.tagName))
+      ) {
+        return;
+      }
       if (e.key === 'ArrowRight') {
         onActiveIndexChange((activeIndex + 1) % pillars.length);
       } else if (e.key === 'ArrowLeft') {
@@ -249,7 +320,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
          fold — two sections each running their own 135deg ramp meant the
          hero ended near accent-b just as the next screen began again at
          accent-a, which is the seam. */
-      className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden transition-all duration-700 select-none"
+      /* NO `transition-all` here any more. It was vestigial — this element
+         has no background and no inline style, nothing on it ever changes,
+         so it transitioned nothing (see the note above: the gradient moved
+         out to .accent-canvas). It was not harmless, though: PillarsSection
+         now writes this element's transform and opacity every frame to
+         recede the hero as the exhibition rises over it, and a 700ms
+         transition-all would have smeared each of those writes across
+         700ms — the reader's scroll and the hero's motion permanently out
+         of step. */
+      className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none"
+      style={{ willChange: 'transform, opacity', transformOrigin: '50% 42%' }}
     >
       {/* Glow behind the wheel. The left-to-right darkening that used to be
           layered in here now lives on the page-wide .accent-canvas instead:
@@ -563,9 +644,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* MAIN HERO CONTENT GRID */}
       <div
+        id="hero-foreground-content"
+        ref={contentGridRef}
         /* Left padding clears the fixed social rail (which only shows at md+),
            so the editorial copy never crowds the icons. */
         className="relative z-10 w-full flex-1 flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-12 my-auto pl-0 md:pl-14 lg:pl-16 xl:pl-20"
+        style={{ willChange: 'opacity, transform' }}
       >
         {/* Left Editorial Copy Area */}
         {/* z-20 keeps the copy above the orbit: at this card size the outer cards
@@ -600,7 +684,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   {/* Typing starts only once the copy has settled into place —
                       running it during the shuttle would waste the first third
                       of the sentence behind a moving, half-faded block. */}
-                  <FoundationIntro active={phase === 'idle'} />
+                  <FoundationIntro
+                    active={phase === 'idle' && introActive}
+                    onComplete={() => setIntroTextDone(true)}
+                  />
                 </div>
               </div>
             ) : (
@@ -697,7 +784,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             pillars={pillars}
             activeIndex={activeIndex}
             onActiveIndexChange={onActiveIndexChange}
-            isPaused={isPaused}
+            isPaused={isPaused || !introTextDone}
             onCardClick={(clickedIndex) => {
               // Clicking a pillar card opens that pillar's details
               if (clickedIndex < pillars.length) {
@@ -718,6 +805,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         leader={selectedPhotoLeader}
         onClose={() => setSelectedPhotoLeader(null)}
       />
+
     </main>
+
   );
 };
