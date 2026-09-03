@@ -3,177 +3,120 @@ import { AWARDS, Award, AwardPhoto } from '../data/awards';
 import { AwardLightbox, LightboxTarget } from './AwardLightbox';
 
 /**
- * Awards and recognitions.
+ * Awards and recognitions — the turning ring.
  *
- * PHOTOGRAPHS ARE THE PAGE. The honours exist as pictures — ceremonies,
- * citations being handed over, trophies — so the wall carries the pictures and
- * nothing else. No caption sits on a photograph: press one and the detail
- * opens. A wall of images each wearing a label is a list with pictures on it,
- * which is not what this section is.
+ * The honours are set around a cylinder that turns continuously. Each picture
+ * sits at its own angle on the ring, so the ones at the centre face the reader
+ * squarely and the ones toward the edges angle away — the band bows, and the
+ * whole thing reads as a solid object rotating rather than a strip sliding.
  *
- * The hall is dark and a warm pool of light follows the pointer across it, so
- * the wall is lit from wherever the visitor is looking. That is one CSS
- * radial driven by two custom properties — no canvas, no per-tile listener.
+ * It is the hero's orbit wheel by another name, which is the point: this screen
+ * should belong to the same journey.
  *
- * Bands are justified: a tile's flex-grow IS its aspect ratio, so each band
- * fills the width exactly and no photograph is cropped to fit a cell.
+ * THE RADIUS IS MEASURED, NOT GUESSED. For pictures of width w placed every
+ * `step` degrees, the ring's radius is (w / 2) / tan(step / 2) — that is the
+ * only radius at which neighbours meet edge to edge. Hard-code it and the
+ * pictures either overlap or leave gaps at every viewport width.
+ *
+ * SPEED IS PER PICTURE, NOT PER TURN. The rotation's duration is the number of
+ * pictures times a constant, so four honours and forty turn at the same pace.
+ * A fixed duration would make a long list a blur and a short one a crawl.
  *
  * AWARDS is empty until the real honours are supplied and NOTHING HERE INVENTS
- * ONE. While it is empty the wall hangs the foundation's own documented
- * pictures and the note beneath says exactly that.
+ * ONE; while it is empty the ring carries the foundation's own pictures.
  */
 
-interface Tile {
+interface Slide {
   key: string;
   src: string;
   alt: string;
-  ar: number;
   focal?: string;
-  /** Shown only once the tile is pressed. */
   award: Award;
   photos: AwardPhoto[];
-  /** True while these are stand-ins rather than confirmed honours. */
-  placeholder?: boolean;
-  /** Emblems and diagram art need a warm wash; photographs do not. */
   emblem?: boolean;
 }
 
 const standIn = (
-  key: string,
-  src: string,
-  alt: string,
-  ar: number,
-  title: string,
-  awardedBy: string,
-  note: string,
+  key: string, src: string, alt: string,
+  title: string, awardedBy: string, note: string,
   extra?: { focal?: string; emblem?: boolean },
-): Tile => {
-  const photo: AwardPhoto = { src, alt, width: 1600, height: Math.round(1600 / ar), ...extra };
-  return {
-    key,
-    src,
-    alt,
-    ar,
-    focal: extra?.focal,
-    emblem: extra?.emblem,
-    placeholder: true,
-    photos: [photo],
-    award: { id: key, title, awardedBy, year: '', note },
-  };
-};
+): Slide => ({
+  key, src, alt,
+  focal: extra?.focal,
+  emblem: extra?.emblem,
+  photos: [{ src, alt, width: 1200, height: 1500, focal: extra?.focal }],
+  award: { id: key, title, awardedBy, year: '', note },
+});
 
-/* The foundation's own documented pictures, standing in until the honours are
-   supplied. Every line here describes something real; none of it claims an
-   award, a conferring body or a year. */
-const STANDIN: Tile[] = [
-  standIn(
-    'volunteers',
-    '/images/volunteers-planning.webp',
-    'Foundation volunteers gathered around a table planning a service drive',
-    1.76,
-    'Volunteers planning a service drive',
-    'Documented service',
-    'A picture from the foundation’s own library, standing in until the honours are catalogued.',
-    { emblem: true },
-  ),
-  standIn(
-    'satguru',
-    '/images/satguru-mata-sudiksha-ji.jpg',
+const STANDIN: Slide[] = [
+  standIn('satguru', '/images/satguru-mata-sudiksha-ji.jpg',
     'Portrait of Satguru Mata Sudiksha Ji Maharaj',
-    0.99,
-    'Satguru Mata Sudiksha Ji Maharaj',
-    'Sixth spiritual guide, Sant Nirankari Mission',
-    'The Mission’s guiding force.',
-    { focal: '50% 30%' },
-  ),
-  standIn(
-    'planting',
-    '/images/mataji-rajpita-planting.webp',
+    'Satguru Mata Sudiksha Ji Maharaj', 'Sixth spiritual guide, Sant Nirankari Mission',
+    'The Mission’s guiding force.', { focal: '50% 24%' }),
+  standIn('planting', '/images/mataji-rajpita-planting.webp',
     'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling',
-    0.46,
-    'Planting a sapling',
-    'Oneness Vann',
+    'Planting a sapling', 'Oneness Vann',
     'Native saplings planted and tended until they grow into community forests.',
-    { focal: '50% 38%' },
-  ),
-  standIn(
-    'rajpita',
-    '/images/nirankari-rajpita-ramit-ji.jpg',
+    { focal: '50% 34%' }),
+  standIn('rajpita', '/images/nirankari-rajpita-ramit-ji.jpg',
     'Portrait of Nirankari Rajpita Ramit Ji',
-    0.73,
-    'Nirankari Rajpita Ramit Ji',
-    'Spiritual guide, Sant Nirankari Mission',
-    'The Mission’s guiding force.',
-    { focal: '50% 20%' },
-  ),
-  standIn(
-    'heal',
-    '/images/vertical-heal.webp',
-    'Emblem for the foundation’s Heal programme',
-    1,
-    'Heal',
-    'Health and blood donation',
-    'Blood donation drives, eye-care camps and free health checkups.',
-    { emblem: true },
-  ),
-  standIn(
-    'lotus',
-    '/images/lotus-watermark.png',
-    'The foundation’s lotus emblem, held in an open palm',
-    1.78,
-    'The lotus, held in an open palm',
-    'Service with humility',
-    'The foundation’s emblem.',
-    { focal: '50% 45%', emblem: true },
-  ),
+    'Nirankari Rajpita Ramit Ji', 'Spiritual guide, Sant Nirankari Mission',
+    'The Mission’s guiding force.', { focal: '50% 14%' }),
+  standIn('volunteers', '/images/volunteers-planning.webp',
+    'Foundation volunteers planning a service drive',
+    'Volunteers planning a service drive', 'Documented service',
+    'From the foundation’s own library, standing in until the honours are catalogued.',
+    { focal: '50% 45%', emblem: true }),
+  standIn('heal', '/images/vertical-heal.webp', 'Emblem for the Heal programme',
+    'Heal', 'Health and blood donation',
+    'Blood donation drives, eye-care camps and free health checkups.', { emblem: true }),
+  standIn('enrich', '/images/vertical-enrich.webp', 'Emblem for the Enrich programme',
+    'Enrich', 'Education and skills', 'Schools, scholarships and skill development.',
+    { emblem: true }),
+  standIn('empower', '/images/vertical-empower.webp', 'Emblem for the Empower programme',
+    'Empower', 'Youth and environment',
+    'Youth empowerment, plantation drives and disaster relief.', { emblem: true }),
 ];
 
-const tilesFromAwards = (awards: Award[]): Tile[] =>
-  awards
-    .map((award): Tile | null => {
-      const photo = award.photos?.[0];
-      if (!photo) return null;
-      return {
-        key: award.id,
-        src: photo.src,
-        alt: photo.alt,
-        ar: photo.width / photo.height,
-        focal: photo.focal,
-        award,
-        photos: award.photos ?? [],
-      };
-    })
-    .filter((t): t is Tile => t !== null);
-
-/** Packs tiles into bands whose aspect ratios sum to roughly one screen-width. */
-const intoBands = (tiles: Tile[], targetPerBand = 3.4): Tile[][] => {
-  const bands: Tile[][] = [];
-  let band: Tile[] = [];
-  let sum = 0;
-
-  tiles.forEach((tile) => {
-    band.push(tile);
-    sum += tile.ar;
-    if (sum >= targetPerBand) {
-      bands.push(band);
-      band = [];
-      sum = 0;
-    }
-  });
-  if (band.length) bands.push(band);
-  return bands;
-};
+/** Fewest pictures the ring may carry. Too few and the step between them is
+    wide, only three or four face the reader, and the band reads as a fan
+    rather than the shallow bow of a cylinder seen edge-on. */
+const MIN_ON_RING = 24;
+/** Seconds of rotation contributed by each picture. */
+const SECONDS_EACH = 3.6;
 
 export const AwardsSection: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
-  const wallRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(false);
   const [calm, setCalm] = useState(false);
   const [target, setTarget] = useState<LightboxTarget | null>(null);
 
   const hasAwards = AWARDS.length > 0;
-  const tiles = useMemo(() => (hasAwards ? tilesFromAwards(AWARDS) : STANDIN), [hasAwards]);
-  const bands = useMemo(() => intoBands(tiles), [tiles]);
+
+  const source: Slide[] = useMemo(() => {
+    if (!hasAwards) return STANDIN;
+    return AWARDS.filter((a) => a.photos?.length).map((a) => {
+      const p = a.photos![0];
+      return {
+        key: a.id, src: p.src, alt: p.alt, focal: p.focal,
+        award: a, photos: a.photos!,
+      };
+    });
+  }, [hasAwards]);
+
+  /* A ring needs enough pictures to close; a short list repeats until it does,
+     the way a marquee repeats its sequence. Duplicates carry the same honour,
+     so pressing one opens the same citation. */
+  const slides = useMemo(() => {
+    if (source.length === 0) return [];
+    const out: (Slide & { ringKey: string })[] = [];
+    const laps = Math.max(1, Math.ceil(MIN_ON_RING / source.length));
+    for (let lap = 0; lap < laps; lap++) {
+      source.forEach((s) => out.push({ ...s, ringKey: `${s.key}-${lap}` }));
+    }
+    return out;
+  }, [source]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -186,128 +129,105 @@ export const AwardsSection: React.FC = () => {
   useEffect(() => {
     const node = rootRef.current;
     if (!node) return;
-    if (typeof IntersectionObserver === 'undefined') {
-      setShown(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setShown(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
+    if (typeof IntersectionObserver === 'undefined') { setShown(true); return; }
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setShown(true); io.disconnect(); }
+    }, { threshold: 0.15 });
+    io.observe(node);
+    return () => io.disconnect();
   }, []);
 
-  /* The lamp the visitor carries. Two properties on the wall, read by one
-     radial gradient — nothing per tile. Not bound under reduced motion. */
+  /* The measured radius. Pictures are laid every `step` degrees around the
+     ring, so they only meet edge to edge at r = (w / 2) / tan(step / 2). */
   useEffect(() => {
-    const wall = wallRef.current;
-    if (!wall || calm) return;
+    const stage = stageRef.current;
+    if (!stage || slides.length === 0) return;
 
-    let frame = 0;
-    let next: { x: number; y: number } | null = null;
-
-    const apply = () => {
-      frame = 0;
-      if (!next) return;
-      wall.style.setProperty('--mx', `${next.x}%`);
-      wall.style.setProperty('--my', `${next.y}%`);
+    const measure = () => {
+      const card = stage.querySelector<HTMLElement>('.award-slide');
+      if (!card) return;
+      /* offsetWidth, NOT getBoundingClientRect(). The rect is the box AFTER
+         transform, and the transform is derived from this measurement — so
+         reading the rect feeds the radius back into itself and the ring blows
+         up to thousands of pixels. offsetWidth is the layout width and ignores
+         transforms entirely. */
+      const w = card.offsetWidth;
+      const step = 360 / slides.length;
+      /* Solving for w alone seats the pictures edge to edge. Solving for
+         w + GAP opens an even gap between every neighbour, all the way round,
+         at any viewport width. */
+      const GAP = 16;
+      const r = (w + GAP) / 2 / Math.tan((step * Math.PI) / 360);
+      stage.style.setProperty('--step', `${step}`);
+      stage.style.setProperty('--r', `${r}px`);
     };
 
-    const onMove = (e: PointerEvent) => {
-      const r = wall.getBoundingClientRect();
-      next = { x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 };
-      if (!frame) frame = requestAnimationFrame(apply);
-    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(stage);
+    return () => ro.disconnect();
+  }, [slides.length]);
 
-    wall.addEventListener('pointermove', onMove);
-    return () => {
-      wall.removeEventListener('pointermove', onMove);
-      if (frame) cancelAnimationFrame(frame);
-    };
-  }, [calm]);
-
-  const open = useCallback((tile: Tile) => {
-    setTarget({ award: tile.award, photos: tile.photos, index: 0 });
+  const open = useCallback((s: Slide) => {
+    setTarget({ award: s.award, photos: s.photos, index: 0 });
   }, []);
-
-  let order = 0;
 
   return (
     <section
       id="awards-section"
       aria-label="Awards and recognitions"
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-28 pb-16 overflow-hidden"
+      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center overflow-hidden pt-28 pb-16"
     >
       <div className="award-room" aria-hidden="true" />
 
       <div ref={rootRef} className={`award-hall${shown ? ' is-in' : ''}`}>
         <header className="award-head">
-          <div>
-            <p className="award-eyebrow">Recognition</p>
-            <h2 className="award-title">
-              Awards &amp; <em>Recognitions</em>
-            </h2>
-          </div>
+          <p className="award-eyebrow">Recognition</p>
+          <h2 className="award-title">
+            Awards &amp; <em>Recognitions</em>
+          </h2>
           <p className="award-standfirst">
             Your appreciation makes us stronger to serve humanity.
-            <span className="award-count">
-              {hasAwards
-                ? `${AWARDS.length} ${AWARDS.length === 1 ? 'honour' : 'honours'} · press any picture`
-                : 'Press any picture'}
-            </span>
           </p>
         </header>
 
-        <div className="award-wall" ref={wallRef}>
-          <span className="award-lamp" aria-hidden="true" />
-
-          {bands.map((band, b) => (
-            <div className="award-band" key={b}>
-              {band.map((tile) => {
-                const i = order++;
-                return (
-                  <button
-                    key={tile.key}
-                    type="button"
-                    className={`award-tile${tile.emblem ? ' award-tile--emblem' : ''}`}
-                    style={{
-                      ['--ar' as string]: tile.ar,
-                      ['--i' as string]: i,
-                      ...(tile.focal ? { ['--focal' as string]: tile.focal } : {}),
-                    }}
-                    onClick={() => open(tile)}
-                    aria-label={`${tile.award.title} — open details`}
-                  >
-                    <img
-                      src={tile.src}
-                      alt={tile.alt}
-                      loading={i < 3 ? 'eager' : 'lazy'}
-                      decoding="async"
-                    />
-                    {/* The only thing a picture wears: a hairline that draws in
-                        under it as it is looked at. Everything else waits for
-                        the press. */}
-                    <span className="award-underline" aria-hidden="true" />
-                  </button>
-                );
-              })}
+        {/* THE RING. The stage holds the perspective; the ring turns inside it;
+            each picture sits at its own angle on the ring's surface. */}
+        <div className="award-stage" ref={stageRef}>
+          {/* Two elements, two transforms. The outer one pushes the ring back by
+              its own radius so the pictures at the front land at z = 0 and
+              render at their true size; the inner one turns. Put both on one
+              element and the animation's transform replaces the push, the
+              front of the ring sits a radius from the camera, and perspective
+              blows every front picture up by more than twice. */}
+          <div className="award-ring-push">
+            <div
+              className="award-ring"
+              style={{ ['--spin' as string]: `${(slides.length * SECONDS_EACH).toFixed(1)}s` }}
+            >
+              {slides.map((s, i) => (
+                <button
+                key={s.ringKey}
+                type="button"
+                className={`award-slide${s.emblem ? ' award-slide--emblem' : ''}`}
+                style={{ ['--i' as string]: i }}
+                onClick={() => open(s)}
+                aria-label={`${s.award.title} — ${s.award.awardedBy}. Press to read.`}
+              >
+                <img src={s.src} alt={s.alt} loading={i < 6 ? 'eager' : 'lazy'} decoding="async" />
+              </button>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
-        {!hasAwards && (
-          <p className="award-note">
-            The honours are still being catalogued — each will be hung here with
-            the body that conferred it and the year it was given. These are the
-            foundation&rsquo;s own pictures, standing in until then.
+        <footer className="award-foot">
+          <p className="award-standfirst award-standfirst--wide">
+            {hasAwards
+              ? 'Press any picture to read its citation, the body that conferred it and the year it was given.'
+              : 'The honours are still being catalogued — each will take its place here with the body that conferred it and the year it was given. These are the foundation’s own pictures, standing in until then.'}
           </p>
-        )}
+        </footer>
       </div>
 
       <AwardLightbox
