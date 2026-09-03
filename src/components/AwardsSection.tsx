@@ -1,126 +1,139 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AWARDS, Award, AwardPhoto } from '../data/awards';
+import { AWARDS, Award } from '../data/awards';
 import { AwardLightbox, LightboxTarget } from './AwardLightbox';
 
 /**
- * Awards and recognitions — the hall of honour.
+ * Awards and recognitions — the deepmala.
  *
- * This screen has to belong to the same journey as the orbit wheel, the
- * opening lotus and the pinned rooms above it, so the wall is not a flat grid
- * of pictures: it is hung in depth, it assembles as you arrive, and it answers
- * the pointer.
+ * Not a wall of pictures. An honour is a light somebody else lit for you, so
+ * the honours stand as lamps on a tiered stand, the way a deep stambh stands
+ * in a temple courtyard: arcs of flames rising out of the dark.
  *
- * THREE TRANSFORMS, THREE ELEMENTS. Parallax, entrance and hover each drive a
- * transform, and one element cannot carry three — an animation's transform
- * replaces a transition's outright. So .award-mount takes the pointer
- * parallax, .award-mount-inner takes the entrance, and .award-mount-art takes
- * the hover lift. Collapse them and whichever lands last silently wins.
+ * The stand is deliberately NOT FULL. The lamps the foundation has earned
+ * burn; the places still to be filled sit unlit in brass. That is the honest
+ * shape of the data — the honours are still being catalogued — and it is also
+ * the whole argument of the screen, so it is drawn rather than apologised for.
  *
- * The room is a wash that fades to nothing at both edges (see .award-room), so
- * the screen reads as its own lit hall without cutting the page-wide gradient
- * that runs unbroken from the hero to the footer.
+ * Flame is drawn on a canvas, not with CSS: fifteen independently flickering
+ * lights with additive glow is a compositing job, and a stack of blurred divs
+ * would cost far more for a worse flame. The canvas is decoration only —
+ * every lamp is a real <button> in the DOM above it, so the stand is fully
+ * keyboard operable and screen readers get the honours as a list.
  *
- * AWARDS is empty until the real honours are supplied and nothing here invents
- * one; while it is empty the wall hangs the foundation's own documented
- * service photographs and the curator's note says exactly that.
+ * The room paints no block; the page-wide .accent-canvas runs one unbroken
+ * gradient from the hero to the footer and an opaque panel here would seam it.
  */
 
-interface Mount {
-  key: string;
-  src: string;
-  alt: string;
-  /** Intrinsic aspect ratio — this is also the mount's flex-grow. */
-  ar: number;
-  /** Where this mount sits in the hall's depth, in px of translateZ. */
-  z: number;
-  focal?: string;
-  title: string;
-  tag: string;
+interface Lamp {
+  /** Normalised position on the stand, 0..1 within the stage. */
+  x: number;
+  y: number;
+  /** Flame size multiplier — inner tiers burn a touch smaller. */
+  scale: number;
+  /** Per-lamp flicker offset, so no two flames breathe together. */
+  phase: number;
+  lit: boolean;
+  title?: string;
+  tag?: string;
   sub?: string;
   year?: string;
-  emblem?: boolean;
   award?: Award;
-  photos?: AwardPhoto[];
 }
 
-const STANDIN: Mount[][] = [
-  [
-    {
-      key: 'volunteers',
-      src: '/images/volunteers-planning.webp',
-      alt: 'Foundation volunteers gathered around a table planning a service drive',
-      ar: 1.76,
-      z: 0,
-      title: 'Volunteers planning a service drive',
-      tag: 'Sewa',
-      sub: 'Documented service',
-      emblem: true,
-    },
-    {
-      key: 'satguru',
-      src: '/images/satguru-mata-sudiksha-ji.jpg',
-      alt: 'Portrait of Satguru Mata Sudiksha Ji Maharaj',
-      ar: 0.99,
-      z: 38,
-      focal: '50% 32%',
-      title: 'Satguru Mata Sudiksha Ji Maharaj',
-      tag: 'Guiding force',
-      sub: 'Sixth spiritual guide',
-    },
-    {
-      key: 'planting',
-      src: '/images/mataji-rajpita-planting.webp',
-      alt: 'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling',
-      ar: 0.46,
-      z: -26,
-      focal: '50% 40%',
-      title: 'Planting a sapling',
-      tag: 'Oneness Vann',
-    },
-  ],
-  [
-    {
-      key: 'rajpita',
-      src: '/images/nirankari-rajpita-ramit-ji.jpg',
-      alt: 'Portrait of Nirankari Rajpita Ramit Ji',
-      ar: 0.73,
-      z: 22,
-      focal: '50% 22%',
-      title: 'Nirankari Rajpita Ramit Ji',
-      tag: 'Guiding force',
-    },
-    {
-      key: 'heal',
-      src: '/images/vertical-heal.webp',
-      alt: "Emblem for the foundation's Heal programme",
-      ar: 1,
-      z: -34,
-      title: 'Heal',
-      tag: 'Pillar',
-      sub: 'Health & blood donation',
-      emblem: true,
-    },
-    {
-      key: 'lotus',
-      src: '/images/lotus-watermark.png',
-      alt: "The foundation's lotus emblem, held in an open palm",
-      ar: 1.78,
-      z: 14,
-      focal: '50% 45%',
-      title: 'The lotus, held in an open palm',
-      tag: 'Emblem',
-      sub: 'Service with humility',
-      emblem: true,
-    },
-  ],
+/** The stand: three arcs, 3 / 5 / 7 — odd counts, as lamp tiers are set. */
+const TIERS = [
+  { count: 3, radius: 0.45, scale: 0.92 },
+  { count: 5, radius: 0.72, scale: 1.0 },
+  { count: 7, radius: 1.0, scale: 1.08 },
+];
+const SPREAD = 1.15; // radians either side of vertical
+
+/* The arcs are struck from a centre below the floor of the stage. X and Y are
+   scaled differently because the stage is wide: struck as true circles the
+   tiers would run off both edges long before the top one cleared the bottom. */
+const ARC = { cx: 0.5, cy: 1.02, rx: 0.30, ry: 0.52 };
+
+/**
+ * What the lit lamps say while AWARDS is empty. These are the foundation's own
+ * documented programmes — nothing here invents an honour or a conferring body.
+ */
+const STANDIN = [
+  { title: 'Heal', tag: 'Pillar', sub: 'Blood donation, eye care, health camps' },
+  { title: 'Enrich', tag: 'Pillar', sub: 'Education and skill development' },
+  { title: 'Empower', tag: 'Pillar', sub: 'Youth, environment, disaster relief' },
+  { title: 'Project Amrit', tag: 'Programme', sub: 'Reviving ponds, lakes and riverbanks' },
+  { title: 'Oneness Vann', tag: 'Programme', sub: 'Native saplings tended into forests' },
+  { title: 'Sant Nirankari Health City', tag: 'Project', sub: 'Charitable medical infrastructure' },
+  { title: 'Manav Ekta Diwas', tag: 'Observance', sub: 'The Mission’s day of human oneness' },
 ];
 
-const useRevealOnce = <T extends Element>() => {
-  const ref = useRef<T>(null);
+const buildLamps = (entries: Omit<Lamp, 'x' | 'y' | 'scale' | 'phase' | 'lit'>[]): Lamp[] => {
+  const lamps: Lamp[] = [];
+  let placed = 0;
+
+  TIERS.forEach((tier) => {
+    for (let i = 0; i < tier.count; i++) {
+      /* Spread along the arc; a single lamp on a tier sits at its crown. */
+      const t = tier.count === 1 ? 0 : (i / (tier.count - 1)) * 2 - 1;
+      const angle = t * SPREAD;
+      const entry = entries[placed];
+      lamps.push({
+        x: ARC.cx + Math.sin(angle) * tier.radius * ARC.rx,
+        y: ARC.cy - Math.cos(angle) * tier.radius * ARC.ry,
+        scale: tier.scale,
+        phase: (placed * 2.399) % (Math.PI * 2),
+        lit: Boolean(entry),
+        ...entry,
+      });
+      placed++;
+    }
+  });
+
+  return lamps;
+};
+
+export const AwardsSection: React.FC = () => {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+
   const [shown, setShown] = useState(false);
+  const [calm, setCalm] = useState(false);
+  const [active, setActive] = useState<number | null>(null);
+  const [target, setTarget] = useState<LightboxTarget | null>(null);
+
+  const hasAwards = AWARDS.length > 0;
+
+  const lamps = useMemo(
+    () =>
+      buildLamps(
+        hasAwards
+          ? AWARDS.map((a) => ({
+              title: a.title,
+              tag: a.awardedBy,
+              year: a.year,
+              sub: a.note,
+              award: a,
+            }))
+          : STANDIN,
+      ),
+    [hasAwards],
+  );
+
+  /* How many lamps are alight — animated up as the stand is lit, and read out
+     beneath the plate. With no honours yet this counts the programmes. */
+  const litCount = lamps.filter((l) => l.lit).length;
 
   useEffect(() => {
-    const node = ref.current;
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setCalm(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  useEffect(() => {
+    const node = rootRef.current;
     if (!node) return;
     if (typeof IntersectionObserver === 'undefined') {
       setShown(true);
@@ -133,176 +146,193 @@ const useRevealOnce = <T extends Element>() => {
           observer.disconnect();
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.25 },
     );
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
 
-  return { ref, shown };
-};
-
-/**
- * The hall leans toward the pointer. Two custom properties on the wall are all
- * it takes — they inherit, so every mount reads them and applies its own depth
- * against them without a listener of its own.
- *
- * Nothing is bound when the visitor asks for reduced motion: a wall that tilts
- * under the cursor is precisely what that setting is asking us not to do.
- */
-const usePointerLean = (enabled: boolean) => {
-  const wallRef = useRef<HTMLDivElement>(null);
+  /* ---------- the flame ---------------------------------------------------
+     One rAF loop for the whole stand. Lamps light in sequence once the stand
+     is in view; each keeps its own flicker phase so the arcs never pulse in
+     unison. Under reduced motion the loop never starts: the stand is drawn
+     once, fully lit and perfectly steady.
+     --------------------------------------------------------------------- */
+  const activeRef = useRef<number | null>(null);
+  activeRef.current = active;
 
   useEffect(() => {
-    const wall = wallRef.current;
-    if (!wall || !enabled) return;
+    const canvas = canvasRef.current;
+    const stage = stageRef.current;
+    if (!canvas || !stage) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    let frame = 0;
-    let pending: { x: number; y: number } | null = null;
+    let w = 0;
+    let h = 0;
+    const resize = () => {
+      const r = stage.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = r.width;
+      h = r.height;
+      canvas.width = Math.max(1, Math.round(w * dpr));
+      canvas.height = Math.max(1, Math.round(h * dpr));
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
 
-    const apply = () => {
-      frame = 0;
-      if (!pending) return;
-      wall.style.setProperty('--px', pending.x.toFixed(3));
-      wall.style.setProperty('--py', pending.y.toFixed(3));
+    const ro = new ResizeObserver(resize);
+    ro.observe(stage);
+
+    const start = performance.now();
+    /* Lamps take their light one after another, inner tier first. */
+    const IGNITE_STEP = 190;
+
+    /* The tier rails. Without them the lamps read as a scatter of flames in
+       the dark; with them they read as a stand, which is the point. */
+    const drawStand = () => {
+      ctx.globalCompositeOperation = 'source-over';
+      TIERS.forEach((tier) => {
+        ctx.beginPath();
+        ctx.ellipse(
+          ARC.cx * w,
+          ARC.cy * h,
+          tier.radius * ARC.rx * w,
+          tier.radius * ARC.ry * h,
+          0,
+          -SPREAD - Math.PI / 2,
+          SPREAD - Math.PI / 2,
+        );
+        ctx.strokeStyle = 'rgba(150, 108, 62, 0.30)';
+        ctx.lineWidth = Math.max(1, Math.min(w, h) * 0.004);
+        ctx.stroke();
+      });
     };
 
-    const onMove = (e: PointerEvent) => {
-      const r = wall.getBoundingClientRect();
-      pending = {
-        x: ((e.clientX - r.left) / r.width) * 2 - 1,
-        y: ((e.clientY - r.top) / r.height) * 2 - 1,
-      };
-      if (!frame) frame = requestAnimationFrame(apply);
+    const drawLamp = (lamp: Lamp, i: number, time: number, litAmount: number) => {
+      const x = lamp.x * w;
+      const y = lamp.y * h;
+      const unit = Math.min(w, h);
+      const isActive = activeRef.current === i;
+
+      /* The brass cup. Drawn for every position, lit or not — an empty place
+         on the stand is a lamp waiting, not a hole. */
+      ctx.globalCompositeOperation = 'source-over';
+      const cupW = unit * 0.030 * lamp.scale;
+      const cupH = cupW * 0.52;
+      const cup = ctx.createLinearGradient(x - cupW, y, x + cupW, y + cupH);
+      cup.addColorStop(0, 'rgba(78, 54, 34, 0.95)');
+      cup.addColorStop(0.5, isActive ? 'rgba(196, 146, 74, 0.95)' : 'rgba(140, 100, 56, 0.9)');
+      cup.addColorStop(1, 'rgba(52, 36, 24, 0.95)');
+      ctx.fillStyle = cup;
+      ctx.beginPath();
+      ctx.ellipse(x, y + cupH * 0.4, cupW, cupH, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (litAmount <= 0.001) return;
+
+      const flicker = calm
+        ? 1
+        : 0.86 +
+          0.11 * Math.sin(time * 6.1 + lamp.phase) +
+          0.05 * Math.sin(time * 14.7 + lamp.phase * 2.3) +
+          0.03 * Math.sin(time * 23.1 + lamp.phase * 0.7);
+
+      const boost = isActive ? 1.5 : 1;
+      const power = litAmount * flicker * boost;
+
+      /* Additive light: the pool on the brass, then the flame body. */
+      ctx.globalCompositeOperation = 'lighter';
+
+      const glowR = unit * 0.17 * lamp.scale * power;
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, glowR);
+      glow.addColorStop(0, `rgba(255, 196, 108, ${0.34 * power})`);
+      glow.addColorStop(0.35, `rgba(232, 140, 60, ${0.15 * power})`);
+      glow.addColorStop(1, 'rgba(180, 90, 40, 0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(x, y, glowR, 0, Math.PI * 2);
+      ctx.fill();
+
+      const fh = unit * 0.052 * lamp.scale * power;
+      const fw = fh * 0.42;
+      const tipY = y - fh;
+
+      const body = ctx.createLinearGradient(x, y, x, tipY);
+      body.addColorStop(0, `rgba(255, 138, 40, ${0.9 * power})`);
+      body.addColorStop(0.45, `rgba(255, 206, 120, ${0.95 * power})`);
+      body.addColorStop(1, `rgba(255, 250, 235, ${0.9 * power})`);
+      ctx.fillStyle = body;
+
+      /* A teardrop that leans a little as it burns. */
+      const lean = calm ? 0 : Math.sin(time * 3.4 + lamp.phase) * fw * 0.3;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x - fw, y - fh * 0.34, x - fw * 0.72 + lean, y - fh * 0.72, x + lean, tipY);
+      ctx.bezierCurveTo(x + fw * 0.72 + lean, y - fh * 0.72, x + fw, y - fh * 0.34, x, y);
+      ctx.fill();
+
+      /* The white heart of the flame. */
+      const coreH = fh * 0.42;
+      const core = ctx.createLinearGradient(x, y, x, y - coreH);
+      core.addColorStop(0, `rgba(255, 240, 200, ${0.5 * power})`);
+      core.addColorStop(1, `rgba(255, 255, 250, 0)`);
+      ctx.fillStyle = core;
+      ctx.beginPath();
+      ctx.ellipse(x, y - coreH * 0.45, fw * 0.34, coreH * 0.62, 0, 0, Math.PI * 2);
+      ctx.fill();
     };
 
-    const onLeave = () => {
-      pending = { x: 0, y: 0 };
-      if (!frame) frame = requestAnimationFrame(apply);
+    let raf = 0;
+
+    const frame = (now: number) => {
+      const elapsed = now - start;
+      const time = elapsed / 1000;
+      ctx.clearRect(0, 0, w, h);
+      drawStand();
+
+      lamps.forEach((lamp, i) => {
+        if (!lamp.lit) {
+          drawLamp(lamp, i, time, 0);
+          return;
+        }
+        /* Ease each lamp up as its turn comes. */
+        const t = (elapsed - i * IGNITE_STEP) / 620;
+        const litAmount = Math.max(0, Math.min(1, t));
+        drawLamp(lamp, i, time, litAmount * litAmount * (3 - 2 * litAmount));
+      });
+
+      raf = requestAnimationFrame(frame);
     };
 
-    wall.addEventListener('pointermove', onMove);
-    wall.addEventListener('pointerleave', onLeave);
+    if (!shown) {
+      /* Before the stand is reached, show the brass only. */
+      ctx.clearRect(0, 0, w, h);
+      drawStand();
+      lamps.forEach((lamp, i) => drawLamp(lamp, i, 0, 0));
+    } else if (calm) {
+      ctx.clearRect(0, 0, w, h);
+      drawStand();
+      lamps.forEach((lamp, i) => drawLamp(lamp, i, 0, lamp.lit ? 1 : 0));
+    } else {
+      raf = requestAnimationFrame(frame);
+    }
+
     return () => {
-      wall.removeEventListener('pointermove', onMove);
-      wall.removeEventListener('pointerleave', onLeave);
-      if (frame) cancelAnimationFrame(frame);
+      if (raf) cancelAnimationFrame(raf);
+      ro.disconnect();
     };
-  }, [enabled]);
+  }, [lamps, shown, calm]);
 
-  return wallRef;
-};
-
-const bandsFromAwards = (awards: Award[]): Mount[][] => {
-  const depths = [0, 34, -28, 20, -36, 12];
-  const mounts: Mount[] = awards.map((award, i) => {
-    const photo = award.photos?.[0];
-    return {
-      key: award.id,
-      src: photo?.src ?? '',
-      alt: photo?.alt ?? '',
-      ar: photo ? photo.width / photo.height : 1.45,
-      z: depths[i % depths.length],
-      focal: photo?.focal,
-      title: award.title,
-      tag: award.awardedBy,
-      year: award.year,
-      award,
-      photos: award.photos,
-    };
-  });
-
-  const bands: Mount[][] = [];
-  for (let i = 0; i < mounts.length; i += 3) bands.push(mounts.slice(i, i + 3));
-  return bands;
-};
-
-const MountTile: React.FC<{ mount: Mount; order: number; onOpen: (t: LightboxTarget) => void }> = ({
-  mount,
-  order,
-  onOpen,
-}) => (
-  <figure
-    className={`award-mount${mount.emblem ? ' award-mount--emblem' : ''}`}
-    style={{
-      ['--ar' as string]: mount.ar,
-      ['--i' as string]: order,
-      ['--z' as string]: mount.z,
-      ...(mount.focal ? { ['--focal' as string]: mount.focal } : {}),
-    }}
-  >
-    <div className="award-mount-inner">
-      <div className="award-mount-art">
-        {mount.src && (
-          <img
-            src={mount.src}
-            alt={mount.alt}
-            loading={order < 3 ? 'eager' : 'lazy'}
-            decoding="async"
-          />
-        )}
-        <span className="award-gleam" aria-hidden="true" />
-
-        <figcaption className="award-plate">
-          <p className="award-plate-title">{mount.title}</p>
-          <p className="award-plate-meta">
-            <span className="award-plate-tag">{mount.tag}</span>
-            {mount.year && <span className="award-plate-year">{mount.year}</span>}
-            {mount.sub && <span>{mount.sub}</span>}
-          </p>
-        </figcaption>
-      </div>
-    </div>
-
-    {mount.award && mount.photos && mount.photos.length > 0 && (
-      <button
-        type="button"
-        className="award-hit"
-        onClick={() => onOpen({ award: mount.award!, photos: mount.photos!, index: 0 })}
-        aria-label={`${mount.title} — open ${mount.photos.length} photograph${
-          mount.photos.length === 1 ? '' : 's'
-        }`}
-      />
-    )}
-  </figure>
-);
-
-/** The seal draws itself as the hall opens, the way the welcome signature does. */
-const HonourSeal: React.FC = () => (
-  <svg className="award-seal" viewBox="0 0 120 120" aria-hidden="true">
-    <circle className="award-seal-ring" cx="60" cy="60" r="52" pathLength="1" />
-    <circle className="award-seal-ring award-seal-ring--in" cx="60" cy="60" r="43" pathLength="1" />
-    <path
-      className="award-seal-mark"
-      pathLength="1"
-      d="M60 38c7 9 10 16 10 23a10 10 0 0 1-20 0c0-7 3-14 10-23Z
-         M42 52c9 2 15 6 18 11-5 5-12 7-19 5s-11-8-11-14c3-1 7-2 12-2Z
-         M78 52c-9 2-15 6-18 11 5 5 12 7 19 5s11-8 11-14c-3-1-7-2-12-2Z"
-    />
-  </svg>
-);
-
-export const AwardsSection: React.FC = () => {
-  const { ref, shown } = useRevealOnce<HTMLDivElement>();
-  const [target, setTarget] = useState<LightboxTarget | null>(null);
-  const [calm, setCalm] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => setCalm(mq.matches);
-    sync();
-    mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
+  const openAward = useCallback((lamp: Lamp) => {
+    if (lamp.award?.photos && lamp.award.photos.length > 0) {
+      setTarget({ award: lamp.award, photos: lamp.award.photos, index: 0 });
+    }
   }, []);
 
-  const wallRef = usePointerLean(shown && !calm);
-
-  const hasAwards = AWARDS.length > 0;
-  const bands = useMemo(() => (hasAwards ? bandsFromAwards(AWARDS) : STANDIN), [hasAwards]);
-
-  const setLightbox = useCallback((t: LightboxTarget) => setTarget(t), []);
-
-  let order = 1;
+  const reading = active !== null ? lamps[active] : null;
 
   return (
     <section
@@ -312,50 +342,78 @@ export const AwardsSection: React.FC = () => {
     >
       <div className="award-room" aria-hidden="true" />
 
-      <div ref={ref} className={`relative z-10 w-full max-w-7xl mx-auto${shown ? ' is-in' : ''}`}>
-        <header className="award-head">
-          <HonourSeal />
-          <div className="award-head-text">
-            <p className="award-eyebrow">Recognition</p>
-            <h2 className="award-title">
-              Awards &amp; <em>Recognitions</em>
-            </h2>
-            <p className="award-standfirst">
-              Your appreciation makes us stronger to serve humanity. The honours the
-              foundation has received are hung here as they are confirmed — each with
-              the body that conferred it and the year it was given.
-            </p>
+      <div ref={rootRef} className={`award-hall${shown ? ' is-in' : ''}`}>
+        {/* THE READING SIDE — the plate a visitor actually reads. */}
+        <div className="award-read">
+          <p className="award-eyebrow">Recognition</p>
+          <h2 className="award-title">
+            Every honour is <em>a lamp</em> somebody lit
+          </h2>
+          <p className="award-standfirst">
+            Your appreciation makes us stronger to serve humanity. The stand is not
+            full — the honours are still being catalogued, and each will take its
+            place with the body that conferred it and the year it was given.
+          </p>
+
+          {/* The label changes to whichever lamp is being looked at. */}
+          <div className="award-plate" aria-live="polite">
+            {reading ? (
+              <>
+                <p className="award-plate-tag">
+                  {reading.lit ? reading.tag : 'An empty place'}
+                </p>
+                <p className="award-plate-title">
+                  {reading.lit ? reading.title : 'Waiting to be lit'}
+                </p>
+                <p className="award-plate-sub">
+                  {reading.lit
+                    ? reading.sub ?? 'Documented service'
+                    : 'An honour yet to be confirmed will stand here.'}
+                </p>
+                {reading.year && <p className="award-plate-year">{reading.year}</p>}
+              </>
+            ) : (
+              <>
+                <p className="award-plate-tag">The stand</p>
+                <p className="award-plate-title">
+                  {litCount} alight, {lamps.length - litCount} waiting
+                </p>
+                <p className="award-plate-sub">
+                  Move across the lamps to read each one.
+                </p>
+              </>
+            )}
           </div>
-        </header>
-        <hr className="award-rule" />
+        </div>
 
-        <div className="award-wall" ref={wallRef}>
-          <span className="award-sweep" aria-hidden="true" />
+        {/* THE STAND — canvas is decoration; the lamps themselves are buttons. */}
+        <div className="award-stage" ref={stageRef}>
+          <canvas ref={canvasRef} className="award-canvas" aria-hidden="true" />
 
-          {bands.map((band, b) => (
-            <div className="award-band" key={b}>
-              {b === 1 && !hasAwards && (
-                <section
-                  className="award-label"
-                  style={{ ['--i' as string]: order++, ['--z' as string]: 8 }}
-                  aria-label="About this wall"
-                >
-                  <div className="award-mount-inner">
-                    <span className="award-label-kicker">Curator&rsquo;s note</span>
-                    <span className="award-label-mark" />
-                    <p>
-                      The honours are being catalogued — each will be hung with the
-                      body that conferred it and the year it was given. The mounts
-                      presently hold the foundation&rsquo;s own service photographs.
-                    </p>
-                  </div>
-                </section>
-              )}
-              {band.map((mount) => (
-                <MountTile key={mount.key} mount={mount} order={order++} onOpen={setLightbox} />
-              ))}
-            </div>
-          ))}
+          <ul className="award-lamps">
+            {lamps.map((lamp, i) => (
+              <li
+                key={i}
+                className="award-lamp"
+                style={{ left: `${lamp.x * 100}%`, top: `${lamp.y * 100}%` }}
+              >
+                <button
+                  type="button"
+                  className={`award-lamp-hit${active === i ? ' is-active' : ''}`}
+                  onPointerEnter={() => setActive(i)}
+                  onPointerLeave={() => setActive((cur) => (cur === i ? null : cur))}
+                  onFocus={() => setActive(i)}
+                  onBlur={() => setActive((cur) => (cur === i ? null : cur))}
+                  onClick={() => openAward(lamp)}
+                  aria-label={
+                    lamp.lit
+                      ? `${lamp.title}${lamp.tag ? ` — ${lamp.tag}` : ''}`
+                      : 'An empty place on the stand, waiting for an honour yet to be confirmed'
+                  }
+                />
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
