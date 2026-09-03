@@ -1,25 +1,113 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Medal } from 'lucide-react';
-import { AWARDS, Award } from '../data/awards';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { AWARDS, Award, AwardPhoto } from '../data/awards';
 import { AwardLightbox, LightboxTarget } from './AwardLightbox';
 
 /**
- * Awards and recognitions — the screen after upcoming events.
+ * Awards and recognitions — the recognition wall.
  *
- * Paints no background of its own; the page-wide .accent-canvas carries the
- * gradient so the colour continues unbroken from the screens above. Surfaces
- * here are translucent for the same reason — an opaque panel would read as a
- * seam across an otherwise continuous ramp.
+ * A salon hang. The honours are photographs first, so the mount carries the
+ * picture and the plate sits over its foot as a caption. Mounts are hung to
+ * their true proportions and packed close: within each band a mount's
+ * flex-grow IS its aspect ratio, so the band fills the width exactly with
+ * nothing cropped to fit a box and no dead wall between pictures.
  *
- * The recognitions are photographs first. The foundation's own honours page
- * is a wall of ceremony and certificate photos, so the tile leads with the
- * image and the text sits under it as caption, not the other way round.
+ * The room is a wash that fades up from nothing at the section's top edge and
+ * back to nothing at its foot (see .award-room), so this screen reads as its
+ * own lit room without cutting the page-wide gradient that runs unbroken from
+ * the hero to the footer.
  *
- * Until the real list is supplied, AWARDS is empty and the archival state
- * below renders instead — a designed state, not a broken one.
+ * AWARDS is empty until the real honours are supplied, and nothing here
+ * invents one. While it is empty the wall hangs the foundation's own
+ * documented service photographs, and the curator's note among them says so.
  */
 
-/** Reveal-on-scroll. Fires once, then stops watching. */
+interface Mount {
+  key: string;
+  src: string;
+  alt: string;
+  /** Intrinsic aspect ratio — this is also the mount's flex-grow. */
+  ar: number;
+  focal?: string;
+  title: string;
+  tag: string;
+  sub?: string;
+  year?: string;
+  /** Emblems and diagram art take a warm wash; photographs do not. */
+  emblem?: boolean;
+  award?: Award;
+  photos?: AwardPhoto[];
+}
+
+/* The stand-in hang. Real, documented pictures from the foundation's own
+   library — never a fabricated honour. Captions describe what each picture
+   shows, which is all that can honestly be said of it here. */
+const STANDIN: Mount[][] = [
+  [
+    {
+      key: 'volunteers',
+      src: '/images/volunteers-planning.webp',
+      alt: 'Foundation volunteers gathered around a table planning a service drive',
+      ar: 1.76,
+      title: 'Volunteers planning a service drive',
+      tag: 'Sewa',
+      sub: 'Documented service',
+      emblem: true,
+    },
+    {
+      key: 'satguru',
+      src: '/images/satguru-mata-sudiksha-ji.jpg',
+      alt: 'Portrait of Satguru Mata Sudiksha Ji Maharaj',
+      ar: 0.99,
+      focal: '50% 32%',
+      title: 'Satguru Mata Sudiksha Ji Maharaj',
+      tag: 'Guiding force',
+      sub: 'Sixth spiritual guide',
+    },
+    {
+      key: 'planting',
+      src: '/images/mataji-rajpita-planting.webp',
+      alt: 'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling',
+      ar: 0.46,
+      focal: '50% 40%',
+      title: 'Planting a sapling',
+      tag: 'Oneness Vann',
+    },
+  ],
+  [
+    {
+      key: 'rajpita',
+      src: '/images/nirankari-rajpita-ramit-ji.jpg',
+      alt: 'Portrait of Nirankari Rajpita Ramit Ji',
+      ar: 0.73,
+      focal: '50% 22%',
+      title: 'Nirankari Rajpita Ramit Ji',
+      tag: 'Guiding force',
+    },
+    {
+      key: 'heal',
+      src: '/images/vertical-heal.webp',
+      alt: "Emblem for the foundation's Heal programme",
+      ar: 1,
+      title: 'Heal',
+      tag: 'Pillar',
+      sub: 'Health & blood donation',
+      emblem: true,
+    },
+    {
+      key: 'lotus',
+      src: '/images/lotus-watermark.png',
+      alt: "The foundation's lotus emblem, held in an open palm",
+      ar: 1.78,
+      focal: '50% 45%',
+      title: 'The lotus, held in an open palm',
+      tag: 'Emblem',
+      sub: 'Service with humility',
+      emblem: true,
+    },
+  ],
+];
+
+/** Fires once, then stops watching. */
 const useRevealOnce = <T extends Element>() => {
   const ref = useRef<T>(null);
   const [shown, setShown] = useState(false);
@@ -27,14 +115,12 @@ const useRevealOnce = <T extends Element>() => {
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
-
-    /* No IntersectionObserver (old Safari, some test runners) means no reveal
-       animation — but the content must still be there, so show it outright. */
+    /* No IntersectionObserver means no reveal — but the wall must still be
+       there, so show it outright rather than leaving it at opacity 0. */
     if (typeof IntersectionObserver === 'undefined') {
       setShown(true);
       return;
     }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -51,67 +137,83 @@ const useRevealOnce = <T extends Element>() => {
   return { ref, shown };
 };
 
-/** The mounts in the archival state — deliberate empty plates, not missing images. */
-const ARCHIVE_MOUNTS = [
-  { tilt: -7, delay: 0 },
-  { tilt: 2.5, delay: 220 },
-  { tilt: 8, delay: 440 },
-];
+/** Hangs the real honours three to a band, each to its photograph's shape. */
+const bandsFromAwards = (awards: Award[]): Mount[][] => {
+  const mounts: Mount[] = awards.map((award) => {
+    const photo = award.photos?.[0];
+    return {
+      key: award.id,
+      src: photo?.src ?? '',
+      alt: photo?.alt ?? '',
+      /* A mount with no photograph still needs a shape to be hung to; a
+         gentle landscape sits it among the pictures without a hole. */
+      ar: photo ? photo.width / photo.height : 1.45,
+      focal: photo?.focal,
+      title: award.title,
+      tag: award.awardedBy,
+      year: award.year,
+      award,
+      photos: award.photos,
+    };
+  });
 
-const AwardTile: React.FC<{
-  award: Award;
-  order: number;
-  onOpen: (target: LightboxTarget) => void;
-}> = ({ award, order, onOpen }) => {
-  const photos = award.photos ?? [];
-  const cover = photos[0];
-
-  return (
-    <li
-      className={`award-tile${award.featured ? ' award-tile--featured' : ''}`}
-      style={{ ['--i' as string]: order }}
-    >
-      {cover ? (
-        <button
-          type="button"
-          className="award-plate"
-          onClick={() => onOpen({ award, photos, index: 0 })}
-          aria-label={`${award.title} — open ${photos.length} photograph${
-            photos.length === 1 ? '' : 's'
-          }`}
-        >
-          <img
-            src={cover.src}
-            alt={cover.alt}
-            width={cover.width}
-            height={cover.height}
-            loading="lazy"
-            decoding="async"
-            className="award-plate-img"
-          />
-          {photos.length > 1 && (
-            <span className="award-plate-count tabular-nums">{photos.length}</span>
-          )}
-        </button>
-      ) : (
-        <div className="award-plate award-plate--textonly" aria-hidden="true">
-          <Medal className="w-7 h-7 text-white/45" />
-        </div>
-      )}
-
-      <div className="award-tile-body">
-        <p className="award-tile-year tabular-nums">{award.year}</p>
-        <h3 className="award-tile-title text-balance">{award.title}</h3>
-        <p className="award-tile-by">{award.awardedBy}</p>
-        {award.note && <p className="award-tile-note">{award.note}</p>}
-      </div>
-    </li>
-  );
+  const bands: Mount[][] = [];
+  for (let i = 0; i < mounts.length; i += 3) bands.push(mounts.slice(i, i + 3));
+  return bands;
 };
+
+const MountTile: React.FC<{ mount: Mount; order: number; onOpen: (t: LightboxTarget) => void }> = ({
+  mount,
+  order,
+  onOpen,
+}) => (
+  <figure
+    className={`award-mount award-reveal${mount.emblem ? ' award-mount--emblem' : ''}`}
+    style={{
+      ['--ar' as string]: mount.ar,
+      ['--i' as string]: order,
+      ...(mount.focal ? { ['--focal' as string]: mount.focal } : {}),
+    }}
+  >
+    {mount.src && (
+      <img
+        src={mount.src}
+        alt={mount.alt}
+        loading={order < 3 ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    )}
+
+    <figcaption className="award-plate">
+      <p className="award-plate-title">{mount.title}</p>
+      <p className="award-plate-meta">
+        <span className="award-plate-tag">{mount.tag}</span>
+        {mount.year && <span className="award-plate-year">{mount.year}</span>}
+        {mount.sub && <span>{mount.sub}</span>}
+      </p>
+    </figcaption>
+
+    {mount.award && mount.photos && mount.photos.length > 0 && (
+      <button
+        type="button"
+        className="award-hit"
+        onClick={() => onOpen({ award: mount.award!, photos: mount.photos!, index: 0 })}
+        aria-label={`${mount.title} — open ${mount.photos.length} photograph${
+          mount.photos.length === 1 ? '' : 's'
+        }`}
+      />
+    )}
+  </figure>
+);
 
 export const AwardsSection: React.FC = () => {
   const { ref, shown } = useRevealOnce<HTMLDivElement>();
   const [target, setTarget] = useState<LightboxTarget | null>(null);
+
+  const hasAwards = AWARDS.length > 0;
+  const bands = useMemo(() => (hasAwards ? bandsFromAwards(AWARDS) : STANDIN), [hasAwards]);
+
+  let order = 1;
 
   return (
     <section
@@ -119,67 +221,46 @@ export const AwardsSection: React.FC = () => {
       aria-label="Awards and recognitions"
       className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-28 pb-16 overflow-hidden"
     >
+      <div className="award-room" aria-hidden="true" />
+
       <div ref={ref} className={`relative z-10 w-full max-w-7xl mx-auto${shown ? ' is-in' : ''}`}>
-        <header className="award-reveal mb-8 sm:mb-12" style={{ ['--i' as string]: 0 }}>
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
-            Recognition
-          </p>
-          <h2 className="text-white font-extrabold text-[28px] sm:text-[36px] md:text-[42px] leading-tight max-w-3xl drop-shadow text-balance">
-            Awards &amp; recognitions
+        <header className="award-reveal" style={{ ['--i' as string]: 0 }}>
+          <p className="award-eyebrow">Recognition</p>
+          <h2 className="award-title">
+            Awards &amp; <em>Recognitions</em>
           </h2>
-          <p className="text-white/80 text-[15px] sm:text-[17px] leading-relaxed mt-3 max-w-2xl">
-            Your appreciation makes us stronger to serve humanity.
+          <p className="award-standfirst">
+            Your appreciation makes us stronger to serve humanity. The honours the
+            foundation has received are hung here as they are confirmed — each with
+            the body that conferred it and the year it was given.
           </p>
+          <hr className="award-rule" />
         </header>
 
-        {AWARDS.length === 0 ? (
-          <div className="award-archive">
-            <div className="award-archive-note award-reveal" style={{ ['--i' as string]: 1 }}>
-              <Medal className="w-6 h-6 text-white/70 mb-4" />
-              <p className="text-white/95 text-[17px] leading-relaxed mb-2">
-                The honours the foundation has received are being catalogued.
-              </p>
-              <p className="text-[14px] text-white/70 leading-relaxed">
-                Each is listed here with its conferring body and the year it was
-                given, as it is confirmed — so nothing appears without its source.
-              </p>
-            </div>
-
-            {/* Empty mounts. Corner ticks and a hairline read as plates waiting
-                for their photographs, which is what they are. */}
-            {/* The reveal lives on the <li> and the drift on the plate inside
-                it. Both on one element and the second `animation` shorthand
-                would simply replace the first, so only one would ever run. */}
-            <ul className="award-fan" aria-hidden="true">
-              {ARCHIVE_MOUNTS.map((mount, i) => (
-                <li
-                  key={i}
-                  className="award-mount award-reveal"
-                  style={{
-                    ['--i' as string]: i + 2,
-                    ['--tilt' as string]: `${mount.tilt}deg`,
-                  }}
+        <div className="award-wall">
+          {bands.map((band, b) => (
+            <div className="award-band" key={b}>
+              {b === 1 && !hasAwards && (
+                <section
+                  className="award-label award-reveal"
+                  style={{ ['--i' as string]: order++ }}
+                  aria-label="About this wall"
                 >
-                  <div
-                    className="award-mount-plate"
-                    style={{ ['--drift-delay' as string]: `${mount.delay}ms` }}
-                  >
-                    <span className="award-mount-tick award-mount-tick--tl" />
-                    <span className="award-mount-tick award-mount-tick--tr" />
-                    <span className="award-mount-tick award-mount-tick--bl" />
-                    <span className="award-mount-tick award-mount-tick--br" />
-                  </div>
-                </li>
+                  <span className="award-label-kicker">Curator&rsquo;s note</span>
+                  <span className="award-label-mark" />
+                  <p>
+                    The honours are being catalogued — each will be hung with the
+                    body that conferred it and the year it was given. The mounts
+                    presently hold the foundation&rsquo;s own service photographs.
+                  </p>
+                </section>
+              )}
+              {band.map((mount) => (
+                <MountTile key={mount.key} mount={mount} order={order++} onOpen={setTarget} />
               ))}
-            </ul>
-          </div>
-        ) : (
-          <ul className="award-grid">
-            {AWARDS.map((award, i) => (
-              <AwardTile key={award.id} award={award} order={i + 1} onOpen={setTarget} />
-            ))}
-          </ul>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
 
       <AwardLightbox

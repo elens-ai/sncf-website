@@ -27,6 +27,12 @@ export interface AwardPhoto {
    */
   width: number;
   height: number;
+  /**
+   * CSS object-position, e.g. '50% 30%'. The wall hangs mounts to their true
+   * proportions but still crops with object-fit: cover, so without this a
+   * portrait in a wide mount crops to somebody's chest.
+   */
+  focal?: string;
   /** Optional line shown beneath the photo in the lightbox. */
   caption?: string;
 }
@@ -64,6 +70,7 @@ export const AWARDS: Award[] = [
   //       alt: 'Foundation volunteers receiving the citation on stage',
   //       width: 1600,
   //       height: 1067,
+  //       focal: '50% 35%',
   //       caption: 'The citation being conferred at the annual ceremony.',
   //     },
   //   ],

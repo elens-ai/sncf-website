@@ -4195,375 +4195,266 @@
 }
 
 /* ===========================================================================
-   AWARDS & RECOGNITIONS
+   AWARDS & RECOGNITIONS — THE RECOGNITION WALL
    ---------------------------------------------------------------------------
-   Photo-led. The plate carries the weight and the type sits under it, so the
-   wall reads as an archive rather than a list of cards with pictures on top.
+   A salon hang: photographs mounted close, each kept to its true proportions.
 
-   Everything here is translucent: the section sits on the page-wide
-   .accent-canvas and an opaque surface would draw a seam across a gradient
-   that is meant to run unbroken from the hero to the footer.
+   THE HANG IS JUSTIFIED, NOT GRIDDED. Every mount's flex-grow IS its aspect
+   ratio, so within a band of fixed height each picture keeps its shape and the
+   band fills the width exactly. A grid of fixed spans leaves holes wherever a
+   picture does not fill its cell — dead wall, which is what a mosaic must
+   never have.
 
-   --accent-a / --accent-b are READ here and never assigned. They belong to
-   the hero, which is the only thing that knows whether a pillar or the
-   devotional portrait is fronting.
+   THE ROOM DOES NOT PAINT A BLOCK. The page-wide .accent-canvas runs one
+   unbroken gradient from the hero to the footer, so an opaque panel here would
+   read as a seam. Instead the room is a wash that fades up from nothing at the
+   section's top edge and back to nothing at its bottom — the light dims as you
+   walk in and lifts as you leave, and the ramp underneath is never cut.
+
+   --accent-a/--accent-b are the hero's to write. Nothing here assigns them.
    ======================================================================== */
 
-/* ---------- reveal on scroll ---------- */
-@keyframes award-rise {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 18px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
+.award-room {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 55% at 50% 8%, rgb(232 163 61 / 0.10), transparent 62%),
+    radial-gradient(70% 45% at 12% 20%, rgb(196 120 143 / 0.08), transparent 58%),
+    linear-gradient(
+      to bottom,
+      rgb(23 16 26 / 0) 0%,
+      rgb(23 16 26 / 0.72) 14%,
+      rgb(23 16 26 / 0.82) 50%,
+      rgb(23 16 26 / 0.72) 86%,
+      rgb(23 16 26 / 0) 100%
+    );
 }
 
-.award-reveal {
-  opacity: 0;
+/* ---------- masthead ---------- */
+.award-eyebrow {
+  margin: 0 0 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #e8a33d;
 }
 
-/* The stagger is capped: with a long list the last tile would otherwise land
-   seconds after the first and the section would read as still loading. */
-.is-in .award-reveal {
-  animation: award-rise 620ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: min(calc(var(--i, 0) * 60ms), 500ms);
-}
-
-/* ---------- the mosaic ---------- */
-.award-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  list-style: none;
+.award-title {
   margin: 0;
-  padding: 0;
+  font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+  font-weight: 500;
+  font-size: clamp(26px, 3.4vw, 44px);
+  line-height: 1.06;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+  color: #f2e8e4;
+}
+.award-title em {
+  font-style: normal;
+  font-weight: 600;
+  color: #e8a33d;
 }
 
-@media (min-width: 640px) {
-  .award-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .award-tile--featured {
-    grid-column: span 2;
-  }
+.award-standfirst {
+  margin: 12px 0 0;
+  max-width: 46ch;
+  font-size: clamp(13.5px, 1.3vw, 15.5px);
+  line-height: 1.6;
+  color: rgb(242 232 228 / 0.74);
 }
 
-@media (min-width: 1024px) {
-  .award-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.award-tile {
-  display: flex;
-  flex-direction: column;
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 0.15);
-  background: rgb(0 0 0 / 0.2);
-  backdrop-filter: blur(12px);
-  transition:
-    border-color 300ms ease,
-    background-color 300ms ease;
-}
-
-.award-tile:hover {
-  border-color: rgb(255 255 255 / 0.3);
-  background: rgb(0 0 0 / 0.3);
-}
-
-/* The plate is a button, so the whole photograph is one hit target. */
-.award-plate {
-  position: relative;
-  display: block;
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  overflow: hidden;
+.award-rule {
+  margin: clamp(16px, 2.4vw, 26px) 0 clamp(14px, 2vw, 20px);
+  height: 1px;
   border: 0;
-  padding: 0;
-  background: rgb(0 0 0 / 0.25);
-  cursor: pointer;
+  background: linear-gradient(to right, rgb(232 163 61 / 0.55), rgb(242 232 228 / 0.12) 34%, transparent);
 }
 
-.award-tile--featured .award-plate {
-  aspect-ratio: 2 / 1;
+/* ---------- the hang ---------- */
+.award-wall { display: flex; flex-direction: column; gap: 10px; }
+.award-band { display: flex; gap: 10px; height: var(--h, clamp(112px, 15.5vh, 200px)); }
+
+.award-mount {
+  position: relative;
+  flex: var(--ar, 1) 1 0;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgb(42 30 46 / 0.55);
+  box-shadow: 0 18px 40px -26px rgb(0 0 0 / 0.9);
+  transition:
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 420ms ease,
+    filter 420ms ease,
+    box-shadow 420ms ease;
 }
 
-.award-plate-img {
+.award-mount img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  transition: transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
+  object-position: var(--focal, 50% 50%);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.award-plate:hover .award-plate-img,
-.award-plate:focus-visible .award-plate-img {
-  transform: scale(1.04);
-}
-
-.award-plate--textonly {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: default;
-}
-
-.award-plate-count {
+/* The plate. Its scrim is tuned once and applied to every mount — never trust
+   a photograph to be dark enough at the bottom to carry white type. */
+.award-plate {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
-  min-width: 26px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: rgb(0 0 0 / 0.55);
-  border: 1px solid rgb(255 255 255 / 0.22);
-  backdrop-filter: blur(6px);
-  color: #fff;
-  font-size: 11.5px;
-  font-weight: 700;
+  z-index: 2;
+  inset: auto 0 0 0;
+  padding: 26px 13px 11px;
+  background: linear-gradient(
+    to top,
+    rgb(23 16 26 / 0.95) 0%,
+    rgb(23 16 26 / 0.8) 42%,
+    rgb(23 16 26 / 0) 100%
+  );
 }
 
-.award-tile-body {
-  padding: 16px 18px 18px;
-}
-
-.award-tile-year {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  /* Reads the hero's current accent — never writes it. */
-  color: color-mix(in srgb, var(--accent-b, #ffffff) 78%, #ffffff);
-}
-
-.award-tile-title {
-  margin: 0 0 4px;
-  color: #fff;
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.award-tile-by {
+.award-plate-title {
   margin: 0;
-  font-size: 13px;
-  line-height: 1.35;
-  color: rgb(255 255 255 / 0.75);
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(12px, 1.05vw, 14.5px);
+  line-height: 1.24;
+  color: #f2e8e4;
+  text-wrap: balance;
 }
 
-.award-tile-note {
-  margin: 8px 0 0;
-  padding-top: 8px;
-  border-top: 1px solid rgb(255 255 255 / 0.1);
-  font-size: 13px;
-  line-height: 1.5;
-  color: rgb(255 255 255 / 0.65);
-}
-
-/* ---------- the archival state (AWARDS empty) ---------- */
-.award-archive {
-  display: grid;
-  gap: 28px;
-  align-items: center;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 1024px) {
-  .award-archive {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 48px;
-  }
-}
-
-.award-archive-note {
-  border-radius: 28px;
-  border: 1px solid rgb(255 255 255 / 0.15);
-  background: rgb(0 0 0 / 0.22);
-  backdrop-filter: blur(12px);
-  padding: 32px;
-  max-width: 34rem;
-}
-
-@media (min-width: 640px) {
-  .award-archive-note {
-    padding: 40px;
-  }
-}
-
-/* Plates fanned out like photographs laid on a table, waiting to be mounted.
-   A neat grid of empty boxes reads as broken images; overlapping and tilted,
-   they read as deliberate. */
-.award-fan {
+.award-plate-meta {
+  margin: 4px 0 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  list-style: none;
-  margin: 0;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(242 232 228 / 0.5);
+}
+.award-plate-tag { color: #c4788f; font-weight: 700; }
+.award-plate-year { font-variant-numeric: tabular-nums; color: #e8a33d; font-weight: 700; }
+
+/* THE LIGHT — the mount under the pointer comes up warm while the rest of the
+   wall falls into shade. Keyboard focus does exactly the same, or the wall
+   goes dark for anyone who is not using a mouse. */
+.award-wall:has(.award-mount:hover) .award-mount:not(:hover),
+.award-wall:has(.award-mount:focus-within) .award-mount:not(:focus-within) {
+  opacity: 0.44;
+  filter: saturate(0.5) brightness(0.7);
+}
+
+.award-mount:hover,
+.award-mount:focus-within {
+  transform: translateY(-3px);
+  box-shadow:
+    0 26px 54px -22px rgb(0 0 0 / 0.95),
+    0 0 0 1px rgb(232 163 61 / 0.32),
+    0 0 46px -8px rgb(232 163 61 / 0.22);
+}
+.award-mount:hover img,
+.award-mount:focus-within img { transform: scale(1.045); }
+
+.award-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border: 0;
   padding: 0;
-}
-
-/* The <li> carries the tilt and the reveal. `rotate` is its own property, so
-   the reveal's `transform: translate3d(...)` cannot overwrite it — written as
-   `transform: rotate()` the tilt was silently dropped the moment the reveal
-   animation landed. */
-.award-mount {
-  rotate: var(--tilt, 0deg);
-  flex: 0 0 auto;
-  width: clamp(120px, 21vw, 178px);
-}
-
-.award-mount + .award-mount {
-  margin-left: clamp(-52px, -7vw, -30px);
-}
-
-/* An empty plate: hairline edge, corner ticks, nothing pretending to be a
-   photograph. It reads as a mount waiting for one, which is the truth. */
-.award-mount-plate {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  border-radius: 14px;
-  border: 1px solid rgb(255 255 255 / 0.18);
-  box-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.85);
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      rgb(255 255 255 / 0.03) 0 8px,
-      transparent 8px 16px
-    ),
-    rgb(0 0 0 / 0.22);
-  animation: award-mount-drift 9s ease-in-out infinite;
-  animation-delay: var(--drift-delay, 0ms);
-}
-
-@keyframes award-mount-drift {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: 0 -6px;
-  }
-}
-
-.award-mount-tick {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border: 0 solid color-mix(in srgb, var(--accent-b, #ffffff) 60%, #ffffff);
-  opacity: 0.55;
-}
-
-.award-mount-tick--tl {
-  top: 8px;
-  left: 8px;
-  border-top-width: 1.5px;
-  border-left-width: 1.5px;
-}
-.award-mount-tick--tr {
-  top: 8px;
-  right: 8px;
-  border-top-width: 1.5px;
-  border-right-width: 1.5px;
-}
-.award-mount-tick--bl {
-  bottom: 8px;
-  left: 8px;
-  border-bottom-width: 1.5px;
-  border-left-width: 1.5px;
-}
-.award-mount-tick--br {
-  bottom: 8px;
-  right: 8px;
-  border-bottom-width: 1.5px;
-  border-right-width: 1.5px;
-}
-
-/* ---------- lightbox ---------- */
-@keyframes award-lightbox-in {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.award-lightbox-card {
-  animation: award-lightbox-in 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.award-lightbox-stage {
-  width: 100%;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 0.18);
-  background: rgb(0 0 0 / 0.4);
-}
-
-.award-lightbox-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 70vh;
-  object-fit: contain;
-  margin: 0 auto;
-}
-
-.award-year-inline {
-  font-variant-numeric: tabular-nums;
-}
-
-.award-icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: rgb(255 255 255 / 0.75);
-  background: rgb(255 255 255 / 0.1);
-  border: 1px solid rgb(255 255 255 / 0.18);
+  background: transparent;
   cursor: pointer;
-  transition:
-    background-color 200ms ease,
-    color 200ms ease;
+}
+.award-hit:focus-visible { outline: 2px solid #e8a33d; outline-offset: -3px; }
+
+/* Emblems and diagram art are not photographs. Left untreated they glare white
+   out of a dusk wall and break the hang; a warm wash sits them in the same
+   light as the photographs beside them. Drop this the day the mounts hold real
+   ceremony photographs — it rescues non-photographic art, it is not the look. */
+.award-mount--emblem img { filter: saturate(0.7) brightness(0.86) contrast(1.03); }
+.award-mount--emblem::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background: linear-gradient(158deg,
+    rgb(232 163 61 / 0.34) 0%,
+    rgb(196 120 143 / 0.30) 48%,
+    rgb(42 30 46 / 0.52) 100%);
 }
 
-.award-icon-btn:hover {
-  background: rgb(255 255 255 / 0.2);
-  color: #fff;
+/* ---------- the curator's note, hung among the mounts ---------- */
+.award-label {
+  flex: 1.3 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 9px;
+  padding: clamp(11px, 1.5vw, 20px);
+  overflow: hidden;
+  border-radius: 3px;
+  border: 1px solid rgb(242 232 228 / 0.12);
+  background:
+    linear-gradient(150deg, rgb(232 163 61 / 0.08), transparent 62%),
+    rgb(31 22 34 / 0.6);
+  backdrop-filter: blur(6px);
+}
+.award-label-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #e8a33d;
+}
+.award-label-mark { width: 28px; height: 1px; background: rgb(232 163 61 / 0.5); }
+.award-label p {
+  margin: 0;
+  font-size: clamp(11px, 1vw, 12.5px);
+  line-height: 1.52;
+  color: rgb(242 232 228 / 0.76);
+}
+.award-label p + p { color: rgb(242 232 228 / 0.5); font-size: clamp(10.5px, 0.95vw, 12px); }
+
+/* ---------- reveal ---------- */
+@keyframes award-rise {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.award-reveal { opacity: 0; }
+/* Capped, so the last mount of a long wall is never seconds behind the first —
+   an uncapped stagger reads as a page still loading. */
+.is-in .award-reveal {
+  animation: award-rise 620ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: min(calc(var(--i, 0) * 55ms), 460ms);
 }
 
-/* Keyboard focus has to be visible on every control in here — the lightbox is
-   fully keyboard operable and an invisible focus ring makes it unusable. */
-.award-plate:focus-visible,
-.award-icon-btn:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
+/* ---------- narrow screens: the hang becomes one column ---------- */
+@media (max-width: 820px) {
+  .award-band { flex-direction: column; height: auto; }
+  .award-mount { aspect-ratio: var(--ar, 1); }
+  .award-label { aspect-ratio: auto; padding: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .award-reveal,
-  .is-in .award-reveal {
-    animation: none;
+  .is-in .award-reveal { animation: none; opacity: 1; }
+  .award-mount,
+  .award-mount img { transition: none; }
+  .award-mount:hover,
+  .award-mount:focus-within { transform: none; }
+  .award-mount:hover img,
+  .award-mount:focus-within img { transform: none; }
+  .award-wall:has(.award-mount:hover) .award-mount:not(:hover),
+  .award-wall:has(.award-mount:focus-within) .award-mount:not(:focus-within) {
     opacity: 1;
-  }
-  .award-mount-plate {
-    animation: none;
-  }
-  .award-lightbox-card {
-    animation: none;
-  }
-  .award-plate-img,
-  .award-plate:hover .award-plate-img,
-  .award-plate:focus-visible .award-plate-img {
-    transition: none;
-    transform: none;
+    filter: none;
   }
 }
