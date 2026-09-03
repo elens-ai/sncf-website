@@ -5,10 +5,11 @@ import { AwardLightbox, LightboxTarget } from './AwardLightbox';
 /**
  * Awards and recognitions — the turning ring.
  *
- * The honours are set around a cylinder that turns continuously. Each picture
- * sits at its own angle on the ring, so the ones at the centre face the reader
- * squarely and the ones toward the edges angle away — the band bows, and the
- * whole thing reads as a solid object rotating rather than a strip sliding.
+ * The honours are set around a cylinder that turns continuously, and the
+ * reader stands INSIDE it: the centre of the band is furthest away and its
+ * ends curve forward toward the screen, so the two pictures at the edges are
+ * the nearest and largest things on it. The band bows toward you rather than
+ * away.
  *
  * It is the hero's orbit wheel by another name, which is the point: this screen
  * should belong to the same journey.
@@ -178,8 +179,6 @@ export const AwardsSection: React.FC = () => {
       aria-label="Awards and recognitions"
       className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center overflow-hidden pt-28 pb-16"
     >
-      <div className="award-room" aria-hidden="true" />
-
       <div ref={rootRef} className={`award-hall${shown ? ' is-in' : ''}`}>
         <header className="award-head">
           <p className="award-eyebrow">Recognition</p>
@@ -194,12 +193,12 @@ export const AwardsSection: React.FC = () => {
         {/* THE RING. The stage holds the perspective; the ring turns inside it;
             each picture sits at its own angle on the ring's surface. */}
         <div className="award-stage" ref={stageRef}>
-          {/* Two elements, two transforms. The outer one pushes the ring back by
-              its own radius so the pictures at the front land at z = 0 and
-              render at their true size; the inner one turns. Put both on one
-              element and the animation's transform replaces the push, the
-              front of the ring sits a radius from the camera, and perspective
-              blows every front picture up by more than twice. */}
+          {/* Two elements, two transforms. The outer brings the ring forward by
+              its own radius so the picture at the centre of the band lands at
+              z = 0 and draws at its true size, with everything either side of
+              it nearer the camera; the inner one turns. Put both on one
+              element and the animation's transform replaces the placement
+              outright, and the ring collapses onto the stage plane. */}
           <div className="award-ring-push">
             <div
               className="award-ring"

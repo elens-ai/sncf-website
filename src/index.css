@@ -4214,22 +4214,11 @@
    --accent-a/--accent-b are the hero's to write. Nothing here assigns them.
    ======================================================================== */
 
-.award-room {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(60% 40% at 50% 50%, rgb(232 163 61 / 0.10), transparent 70%),
-    linear-gradient(
-      to bottom,
-      rgb(14 9 16 / 0) 0%,
-      rgb(14 9 16 / 0.86) 12%,
-      rgb(14 9 16 / 0.94) 48%,
-      rgb(14 9 16 / 0.88) 86%,
-      rgb(14 9 16 / 0) 100%
-    );
-}
+/* NO ROOM IS PAINTED HERE. Earlier cuts laid a dark wash over this screen so
+   the pictures had something to sit on; it made the section a black band in
+   the middle of a page whose gradient is meant to run unbroken from the hero
+   to the footer. The ring now stands on the page's own colour, like every
+   other screen. */
 
 .award-hall {
   position: relative;
@@ -4308,11 +4297,15 @@
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
-  /* Push the whole ring back by its own radius, so the pictures at the front
-     of it sit at z = 0 and are drawn at their true size. Without this the
-     front of the ring is a radius nearer the camera than the stage and
-     perspective magnifies every front picture by more than twice. */
-  transform: translateZ(calc(var(--r, 900px) * -1));
+  /* Bring the ring forward by its own radius. Paired with the -r on each
+     picture below, this seats the middle of the band at z = 0 — true size —
+     and swings everything either side of it TOWARD the camera, so the band
+     curves out at the ends instead of away. */
+  transform: translateZ(var(--r, 900px));
+  /* ...which also puts THIS box a whole radius in front of every picture on
+     the ring, where it silently ate every click. It carries no ink, so it
+     takes no pointer either; the pictures take their own back below. */
+  pointer-events: none;
 }
 
 .award-ring {
@@ -4320,6 +4313,7 @@
   inset: 0;
   transform-style: preserve-3d;
   animation: award-turn var(--spin, 40s) linear infinite;
+  pointer-events: none;
 }
 
 /* Held still while a picture is being considered — it cannot be pressed
@@ -4338,15 +4332,19 @@
   border: 0;
   border-radius: 3px;
   overflow: hidden;
-  background: rgb(30 21 32 / 0.6);
+  background: rgb(28 20 30 / 0.55);
   cursor: pointer;
+  pointer-events: auto;
   box-shadow: 0 26px 60px -28px rgb(0 0 0 / 0.95);
   /* Its own place on the ring. The centring translate has to come first, or
      the rotation swings the picture around the stage's corner. */
+  /* translateZ is NEGATIVE here: it seats the picture a radius behind the
+     ring's centre, which is what turns the band concave. Positive puts the
+     centre of the arc nearest the reader and bows it the other way. */
   transform:
     translate(-50%, -50%)
     rotateY(calc(var(--i) * var(--step, 24) * 1deg))
-    translateZ(var(--r, 900px));
+    translateZ(calc(var(--r, 900px) * -1));
   /* Pictures on the far side of the ring face away and are simply not drawn. */
   backface-visibility: hidden;
   transition: box-shadow 300ms ease, filter 300ms ease;
