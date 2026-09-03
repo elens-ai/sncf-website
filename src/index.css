@@ -4195,236 +4195,246 @@
 }
 
 /* ===========================================================================
-   AWARDS & RECOGNITIONS — THE TURNING RING
+   AWARDS & RECOGNITIONS — THE STAGE
    ---------------------------------------------------------------------------
-   The honours are set around a cylinder that turns. Each picture sits at its
-   own angle on the ring, so the ones at the centre face the reader squarely
-   and the ones toward the edges angle away: the band bows, and the whole thing
-   reads as a solid object rotating rather than a strip sliding past.
+   One honour stands at the centre, large; its neighbours wait small and
+   blurred either side, one more sits further back. Stepping the carousel
+   rotates those roles and the whole screen crossfades together.
 
-   --r and --step are MEASURED in the component, never written here. Pictures
-   of width w laid every `step` degrees only meet edge to edge at
-   r = (w / 2) / tan(step / 2); a hard-coded radius overlaps or gaps at every
-   viewport width but the one it was tuned on.
+   Card placement — position, scale, blur, opacity, z — is written by the
+   component as inline style, because it is derived per role. NOTHING HERE may
+   set transform on .award-card: an inline transform is the highest-priority
+   declaration short of !important, so a rule here would either be overwritten
+   or, if forced, would fight the step mid-flight.
 
-   THE ROOM PAINTS NO BLOCK. The page-wide .accent-canvas runs one unbroken
-   gradient from the hero to the footer, so an opaque panel here would draw a
-   seam; the room is a wash that fades to nothing at both edges instead.
+   THE GROUND IS A WASH, NOT A BLOCK. The page-wide .accent-canvas runs one
+   unbroken gradient from the hero to the footer, so a solid colour here would
+   cut it in two. The honour's colour is laid OVER the gradient and faded to
+   nothing at the top and bottom edges — the colour still turns with the
+   carousel, and the ramp underneath is never severed.
 
    --accent-a/--accent-b are the hero's to write. Nothing here assigns them.
    ======================================================================== */
 
-/* NO ROOM IS PAINTED HERE. Earlier cuts laid a dark wash over this screen so
-   the pictures had something to sit on; it made the section a black band in
-   the middle of a page whose gradient is meant to run unbroken from the hero
-   to the footer. The ring now stands on the page's own colour, like every
-   other screen. */
+.award-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.82;
+  /* The fade that keeps this from being a hard band across the page. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 13%, #000 87%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 13%, #000 87%, transparent);
+}
 
-.award-hall {
+/* Film grain, so a flat field of colour has a surface. */
+.award-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+}
+
+.award-screen {
   position: relative;
-  z-index: 10;
+  z-index: 2;
   width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* The word set huge behind the stage. It is decoration, so it is hidden from
+   assistive tech and never takes a pointer. */
+.award-ghost {
+  position: absolute;
+  inset-inline: 0;
+  top: 20%;
+  z-index: 2;
+  margin: 0;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: clamp(18px, 3vw, 40px);
-}
-
-/* ---------- masthead ---------- */
-.award-head {
-  text-align: center;
-  padding: 0 clamp(16px, 5vw, 64px);
-  max-width: 46rem;
-}
-
-.award-eyebrow {
-  margin: 0 0 10px;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #e8a33d;
-  opacity: 0;
-}
-.is-in .award-eyebrow { animation: award-fade 700ms ease-out 80ms forwards; }
-
-.award-title {
-  margin: 0;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
   font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
-  font-weight: 500;
-  font-size: clamp(26px, 4.2vw, 56px);
-  line-height: 1.05;
-  color: #f6ece2;
-  text-wrap: balance;
-  opacity: 0;
+  font-size: clamp(72px, 22vw, 300px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgb(255 255 255 / 0.16);
 }
-.award-title em { font-style: normal; font-weight: 600; color: #ffc46c; }
-.is-in .award-title { animation: award-rise-sm 820ms cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards; }
 
-.award-standfirst {
-  margin: 12px auto 0;
-  max-width: 44ch;
-  font-size: clamp(13px, 1.2vw, 15.5px);
-  line-height: 1.6;
-  color: rgb(246 236 226 / 0.66);
-  opacity: 0;
-}
-.is-in .award-standfirst { animation: award-fade 820ms ease-out 300ms forwards; }
-.award-standfirst--wide { max-width: 58ch; }
-
-.award-foot {
-  padding: 0 clamp(16px, 5vw, 64px);
-  text-align: center;
-}
-.is-in .award-foot .award-standfirst { animation-delay: 620ms; }
-
-/* ---------- the ring ---------- */
+/* ---------- the stage ---------- */
 .award-stage {
-  position: relative;
-  width: 100%;
-  height: clamp(250px, 38vh, 400px);
-  /* The camera. Sitting well back keeps the bow gentle — a short perspective
-     turns the band into a fisheye. */
-  perspective: 1700px;
-  perspective-origin: 50% 50%;
-  /* The band runs off both edges of the screen, so its ends are faded rather
-     than cut, and nothing is clipped mid-picture at the viewport edge. */
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
-}
-
-.award-ring-push {
   position: absolute;
   inset: 0;
-  transform-style: preserve-3d;
-  /* Bring the ring forward by its own radius. Paired with the -r on each
-     picture below, this seats the middle of the band at z = 0 — true size —
-     and swings everything either side of it TOWARD the camera, so the band
-     curves out at the ends instead of away. */
-  transform: translateZ(var(--r, 900px));
-  /* ...which also puts THIS box a whole radius in front of every picture on
-     the ring, where it silently ate every click. It carries no ink, so it
-     takes no pointer either; the pictures take their own back below. */
-  pointer-events: none;
+  z-index: 3;
 }
 
-.award-ring {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  animation: award-turn var(--spin, 40s) linear infinite;
-  pointer-events: none;
-}
-
-/* Held still while a picture is being considered — it cannot be pressed
-   accurately while it is travelling. */
-.award-stage:hover .award-ring,
-.award-stage:focus-within .award-ring { animation-play-state: paused; }
-
-.award-slide {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(128px, 13vw, 196px);
-  aspect-ratio: 3 / 4;
-  margin: 0;
+.award-card {
   padding: 0;
   border: 0;
-  border-radius: 3px;
+  border-radius: 6px;
   overflow: hidden;
-  background: rgb(28 20 30 / 0.55);
+  background: rgb(20 14 22 / 0.45);
   cursor: pointer;
-  pointer-events: auto;
-  box-shadow: 0 26px 60px -28px rgb(0 0 0 / 0.95);
-  /* Its own place on the ring. The centring translate has to come first, or
-     the rotation swings the picture around the stage's corner. */
-  /* translateZ is NEGATIVE here: it seats the picture a radius behind the
-     ring's centre, which is what turns the band concave. Positive puts the
-     centre of the arc nearest the reader and bows it the other way. */
-  transform:
-    translate(-50%, -50%)
-    rotateY(calc(var(--i) * var(--step, 24) * 1deg))
-    translateZ(calc(var(--r, 900px) * -1));
-  /* Pictures on the far side of the ring face away and are simply not drawn. */
-  backface-visibility: hidden;
-  transition: box-shadow 300ms ease, filter 300ms ease;
+  box-shadow: 0 40px 80px -32px rgb(0 0 0 / 0.85);
 }
-
-.award-slide img {
+.award-card img {
   display: block;
   width: 100%;
   height: 100%;
+  /* The layout this follows was built for cut-out figurines on transparent
+     grounds. Photographs are rectangular, so they fill their frame rather
+     than floating inside it. */
   object-fit: cover;
   object-position: var(--focal, 50% 50%);
 }
+.award-card--center { box-shadow: 0 56px 110px -36px rgb(0 0 0 / 0.9); }
+.award-card:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 
-.award-slide:hover,
-.award-slide:focus-visible {
-  box-shadow:
-    0 34px 70px -24px rgb(0 0 0 / 0.98),
-    0 0 0 1px rgb(255 196 108 / 0.5),
-    0 0 56px -6px rgb(255 196 108 / 0.35);
+/* ---------- the reading side ---------- */
+.award-say {
+  position: absolute;
+  z-index: 60;
+  left: 1rem;
+  bottom: 1.5rem;
+  max-width: 21rem;
 }
-.award-slide:focus-visible { outline: 2px solid #ffc46c; outline-offset: 3px; }
-
-/* The ring cools around whichever picture is being considered. */
-.award-ring:has(.award-slide:hover) .award-slide:not(:hover),
-.award-ring:has(.award-slide:focus-visible) .award-slide:not(:focus-visible) {
-  filter: brightness(0.6) saturate(0.6);
-}
-
-/* Emblems and diagram art are not photographs; a warm wash sits them in the
-   same light. Drop it once the ring carries real ceremony photographs. */
-.award-slide--emblem img { filter: saturate(0.74) brightness(0.86) contrast(1.04); }
-
-@keyframes award-turn {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(-360deg); }
-}
-@keyframes award-fade { to { opacity: 1; } }
-@keyframes award-rise-sm {
-  from { opacity: 0; transform: translate3d(0, 14px, 0); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+@media (min-width: 640px) {
+  .award-say { left: 4rem; bottom: 4.5rem; }
 }
 
-@media (max-width: 720px) {
-  .award-stage { height: clamp(200px, 30vh, 280px); }
-  .award-slide { width: clamp(124px, 34vw, 170px); }
+.award-eyebrow {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.8);
 }
 
-/* ---------- reduced motion: no ring at all ----------
-   Not a slowed carousel — a still, readable row that can be scrolled by hand.
-   Every 3D transform is dropped, so nothing is edge-on or hidden by its own
-   backface. */
+.award-title {
+  margin: 0 0 12px;
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(20px, 2.3vw, 30px);
+  line-height: 1.1;
+  color: #fff;
+  text-wrap: balance;
+}
+.award-title em { font-style: normal; font-weight: 600; }
+
+.award-name {
+  margin: 0;
+  font-size: clamp(15px, 1.6vw, 21px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+  text-wrap: balance;
+}
+.award-by {
+  margin: 5px 0 0;
+  font-size: clamp(11.5px, 1.05vw, 13px);
+  line-height: 1.5;
+  color: rgb(255 255 255 / 0.82);
+}
+
+.award-nav {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.award-arrow {
+  width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid rgb(255 255 255 / 0.9);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+@media (min-width: 640px) {
+  .award-arrow { width: 4rem; height: 4rem; }
+}
+.award-arrow:hover {
+  transform: scale(1.08);
+  background: rgb(255 255 255 / 0.12);
+}
+.award-arrow:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+.award-count {
+  margin: 0 0 0 4px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+  color: rgb(255 255 255 / 0.75);
+}
+.award-count b { color: #fff; font-weight: 700; }
+
+/* ---------- the read link ---------- */
+.award-read {
+  position: absolute;
+  z-index: 60;
+  right: 1rem;
+  bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: clamp(20px, 3.4vw, 46px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.95);
+  transition: opacity 200ms ease;
+}
+@media (min-width: 640px) {
+  /* Clear of the exhibition chip, which is parked in this same corner. */
+  .award-read { right: 2.5rem; bottom: 7.5rem; }
+}
+.award-read:hover { color: #fff; }
+.award-read:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+
+.award-note {
+  position: absolute;
+  z-index: 60;
+  top: 7.5rem;
+  left: 1rem;
+  right: 1rem;
+  margin: 0;
+  max-width: 32rem;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.62);
+}
+@media (min-width: 640px) {
+  .award-note { left: 4rem; right: auto; }
+}
+
+/* ---------- reduced motion ----------
+   No crossfade and no blur: the component drops the transitions, and the
+   blurred waiting cards would be unreadable held still, so they are sharpened.
+   The stage still works — it simply changes between states rather than
+   travelling between them. */
 @media (prefers-reduced-motion: reduce) {
-  .award-eyebrow,
-  .award-title,
-  .award-standfirst { opacity: 1; animation: none; }
-
-  .award-stage {
-    height: auto;
-    perspective: none;
-    overflow-x: auto;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-  .award-ring {
-    position: static;
-    display: flex;
-    gap: 10px;
-    padding: 0 clamp(16px, 5vw, 64px);
-    transform-style: flat;
-    animation: none;
-  }
-  .award-slide {
-    position: static;
-    flex: 0 0 auto;
-    transform: none;
-    backface-visibility: visible;
-    transition: none;
-  }
-  .award-ring:has(.award-slide:hover) .award-slide:not(:hover),
-  .award-ring:has(.award-slide:focus-visible) .award-slide:not(:focus-visible) {
-    filter: none;
-  }
+  .award-card { filter: none !important; }
+  .award-arrow:hover { transform: none; }
 }
