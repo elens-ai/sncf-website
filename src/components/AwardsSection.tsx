@@ -177,7 +177,7 @@ export const AwardsSection: React.FC = () => {
     <section
       id="awards-section"
       aria-label="Awards and recognitions"
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center overflow-hidden pt-28 pb-16"
+      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center overflow-hidden pt-24 pb-10"
     >
       <div ref={rootRef} className={`award-hall${shown ? ' is-in' : ''}`}>
         <header className="award-head">

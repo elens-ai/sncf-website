@@ -4227,7 +4227,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(18px, 3vw, 40px);
+  /* Tight enough that the screen holds head, band and note inside one
+     viewport — the band standing alone in a field of empty colour was the
+     other half of what looked wrong here. */
+  gap: clamp(10px, 1.6vw, 22px);
 }
 
 /* ---------- masthead ---------- */
@@ -4282,15 +4285,28 @@
 .award-stage {
   position: relative;
   width: 100%;
-  height: clamp(250px, 38vh, 400px);
-  /* The camera. Sitting well back keeps the bow gentle — a short perspective
-     turns the band into a fisheye. */
-  perspective: 1700px;
+  /* Tall enough to hold the pictures at their magnified size. A mask clips to
+     the box it is on, so any picture taller than this stage was sliced across
+     with a hard horizontal edge — which is precisely what a short stage did:
+     three cut along the top and three along the bottom. */
+  height: clamp(300px, 46vh, 450px);
+  /* The camera, further back than it was. Perspective magnifies the pictures
+     as the ring's ends swing toward it, and a nearer camera magnifies them
+     enough to outgrow any stage worth giving them. */
+  perspective: 2400px;
   perspective-origin: 50% 50%;
-  /* The band runs off both edges of the screen, so its ends are faded rather
-     than cut, and nothing is clipped mid-picture at the viewport edge. */
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 11%, #000 89%, transparent);
+  /* The band runs off all four edges, so it is faded on all four rather than
+     cut on any: the horizontal fade hides its ends, and the vertical one
+     feathers the few pictures swung close enough to still overrun the stage.
+     Two masks, intersected — a single shorthand would replace the other. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 11%, #000 89%, transparent),
+    linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 11%, #000 89%, transparent),
+    linear-gradient(to bottom, transparent, #000 7%, #000 93%, transparent);
+  mask-composite: intersect;
 }
 
 .award-ring-push {
