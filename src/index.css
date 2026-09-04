@@ -4293,7 +4293,7 @@
   /* The camera, further back than it was. Perspective magnifies the pictures
      as the ring's ends swing toward it, and a nearer camera magnifies them
      enough to outgrow any stage worth giving them. */
-  perspective: 2400px;
+  perspective: 2150px;
   perspective-origin: 50% 50%;
   /* The band runs off all four edges, so it is faded on all four rather than
      cut on any: the horizontal fade hides its ends, and the vertical one
@@ -4341,7 +4341,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(128px, 13vw, 196px);
+  width: clamp(128px, 14vw, 196px);
   aspect-ratio: 3 / 4;
   margin: 0;
   padding: 0;

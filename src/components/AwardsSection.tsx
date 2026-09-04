@@ -79,12 +79,17 @@ const STANDIN: Slide[] = [
     'Youth empowerment, plantation drives and disaster relief.', { emblem: true }),
 ];
 
-/** Fewest pictures the ring may carry. Too few and the step between them is
-    wide, only three or four face the reader, and the band reads as a fan
-    rather than the shallow bow of a cylinder seen edge-on. */
-const MIN_ON_RING = 24;
-/** Seconds of rotation contributed by each picture. */
-const SECONDS_EACH = 3.6;
+/** How many places the ring carries — settled on the bench. Too few and the
+    step between them is wide, only three or four face the reader, and the band
+    reads as a fan rather than the shallow bow of a cylinder seen edge-on. When
+    there are more honours than this the ring carries them all; it is a floor,
+    never a cap. */
+const RING_SLOTS = 25;
+/** Seconds of rotation contributed by each place, so the pace holds however
+    many honours there are. */
+const SECONDS_EACH = 3;
+/** Space between neighbours, which the radius is solved to open. */
+const GAP = 25;
 
 export const AwardsSection: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -106,17 +111,16 @@ export const AwardsSection: React.FC = () => {
     });
   }, [hasAwards]);
 
-  /* A ring needs enough pictures to close; a short list repeats until it does,
-     the way a marquee repeats its sequence. Duplicates carry the same honour,
-     so pressing one opens the same citation. */
+  /* A ring needs enough pictures to close; a short list cycles to fill the
+     places, the way a marquee repeats its sequence. A repeat carries the same
+     honour, so pressing one opens the same citation. */
   const slides = useMemo(() => {
     if (source.length === 0) return [];
-    const out: (Slide & { ringKey: string })[] = [];
-    const laps = Math.max(1, Math.ceil(MIN_ON_RING / source.length));
-    for (let lap = 0; lap < laps; lap++) {
-      source.forEach((s) => out.push({ ...s, ringKey: `${s.key}-${lap}` }));
-    }
-    return out;
+    const slots = Math.max(RING_SLOTS, source.length);
+    return Array.from({ length: slots }, (_, i) => ({
+      ...source[i % source.length],
+      ringKey: `${source[i % source.length].key}-${i}`,
+    }));
   }, [source]);
 
   useEffect(() => {
@@ -157,7 +161,6 @@ export const AwardsSection: React.FC = () => {
       /* Solving for w alone seats the pictures edge to edge. Solving for
          w + GAP opens an even gap between every neighbour, all the way round,
          at any viewport width. */
-      const GAP = 16;
       const r = (w + GAP) / 2 / Math.tan((step * Math.PI) / 360);
       stage.style.setProperty('--step', `${step}`);
       stage.style.setProperty('--r', `${r}px`);
