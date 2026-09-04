@@ -82,6 +82,8 @@ const STANDIN = [
 ];
 
 const STEP_MS = 650;
+/** How long each honour holds the centre before the stage turns itself. */
+const HOLD_MS = 2000;
 const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 export const AwardsSection: React.FC = () => {
@@ -95,6 +97,7 @@ export const AwardsSection: React.FC = () => {
   const [calm, setCalm] = useState(false);
   const [shown, setShown] = useState(false);
   const [target, setTarget] = useState<LightboxTarget | null>(null);
+  const [held, setHeld] = useState(false);
 
   const hasAwards = AWARDS.length > 0;
 
@@ -155,6 +158,17 @@ export const AwardsSection: React.FC = () => {
     setActive((i) => (dir === 'next' ? (i + 1) % n : (i + n - 1) % n));
     timer.current = window.setTimeout(() => { lock.current = false; }, STEP_MS);
   }, [n]);
+
+  /* The stage turns itself. It is held while the citation is open — the screen
+     behind an open dialog changing on its own is disorienting — while the
+     pointer rests on a picture, so a reader can reach one, and entirely
+     under reduced motion, where an unbidden change every two seconds is the
+     whole thing that setting asks us not to do. */
+  useEffect(() => {
+    if (calm || target || held || n < 2) return;
+    const id = window.setInterval(() => navigate('next'), HOLD_MS);
+    return () => window.clearInterval(id);
+  }, [calm, target, held, n, navigate]);
 
   /* Arrow keys drive the stage while it is the screen in view. Bound in the
      CAPTURE phase and stopped there, because App binds ArrowLeft/Right on
@@ -250,6 +264,13 @@ export const AwardsSection: React.FC = () => {
                 style={styleFor(role)}
                 tabIndex={role === 'off' ? -1 : 0}
                 aria-hidden={role === 'off' ? 'true' : undefined}
+                /* The hold belongs on the pictures, not on the screen. On the
+                   screen it covers the whole viewport, so a pointer resting
+                   anywhere over this section froze the stage for good. */
+                onPointerEnter={() => setHeld(true)}
+                onPointerLeave={() => setHeld(false)}
+                onFocus={() => setHeld(true)}
+                onBlur={() => setHeld(false)}
                 onClick={() => {
                   if (role === 'center') setTarget({ award: it.award, photos: it.photos, index: 0 });
                   else setActive(i);
@@ -272,7 +293,10 @@ export const AwardsSection: React.FC = () => {
           <h2 className="award-title">
             Awards &amp; <em>Recognitions</em>
           </h2>
-          <p className="award-name" aria-live="polite">{current?.award.title}</p>
+          {/* No live region: the stage turns itself every couple of seconds, and
+              a live region here would read a new honour aloud that often,
+              over whatever the visitor was actually doing. */}
+          <p className="award-name">{current?.award.title}</p>
           <p className="award-by">
             {current?.award.awardedBy}
             {current?.award.year ? ` · ${current.award.year}` : ''}

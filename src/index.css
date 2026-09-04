@@ -4369,20 +4369,21 @@
    which is the affordance the stage already had — a second control saying the
    same thing in the corner was one too many. */
 
+/* The catalogue note, centred at the foot of the screen. It sits below the
+   reading block on the left and clears the exhibition chip on the right, so
+   it needs neither of their corners. */
 .award-note {
   position: absolute;
   z-index: 60;
-  top: 7.5rem;
-  left: 1rem;
-  right: 1rem;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  width: min(42rem, calc(100% - 2rem));
   margin: 0;
-  max-width: 32rem;
+  text-align: center;
   font-size: 11.5px;
   line-height: 1.6;
-  color: rgb(255 255 255 / 0.62);
-}
-@media (min-width: 640px) {
-  .award-note { left: 4rem; right: auto; }
+  color: rgb(255 255 255 / 0.66);
 }
 
 /* ---------- reduced motion ----------
