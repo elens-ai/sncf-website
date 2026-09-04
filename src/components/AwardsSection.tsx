@@ -83,7 +83,7 @@ const STANDIN = [
 
 const STEP_MS = 650;
 /** How long each honour holds the centre before the stage turns itself. */
-const HOLD_MS = 2000;
+const HOLD_MS = 3000;
 const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 export const AwardsSection: React.FC = () => {
@@ -162,7 +162,7 @@ export const AwardsSection: React.FC = () => {
   /* The stage turns itself. It is held while the citation is open — the screen
      behind an open dialog changing on its own is disorienting — while the
      pointer rests on a picture, so a reader can reach one, and entirely
-     under reduced motion, where an unbidden change every two seconds is the
+     under reduced motion, where an unbidden change every few seconds is the
      whole thing that setting asks us not to do. */
   useEffect(() => {
     if (calm || target || held || n < 2) return;
@@ -210,10 +210,13 @@ export const AwardsSection: React.FC = () => {
     };
     switch (role) {
       case 'center':
+        /* Sized and seated to clear the masthead above it. Scale grows the
+           card about its centre, so it climbs as it grows — a card scaled
+           1.18 reached the standfirst however low it was placed. */
         return { ...base,
-          left: '50%', bottom: narrow ? '30%' : '16%',
-          height: narrow ? '40%' : '58%',
-          transform: `translateX(-50%) scale(${narrow ? 1.05 : 1.18})`,
+          left: '50%', bottom: narrow ? '28%' : '14%',
+          height: narrow ? '38%' : '52%',
+          transform: `translateX(-50%) scale(${narrow ? 1.04 : 1.08})`,
           filter: 'none', opacity: 1, zIndex: 20 };
       case 'left':
         return { ...base,
@@ -288,11 +291,19 @@ export const AwardsSection: React.FC = () => {
         </div>
 
         {/* The reading side, and the controls. */}
-        <div className="award-say">
+        {/* The masthead, centred at the top as the ring had it. The bottom-left
+            block keeps only what changes with the carousel. */}
+        <header className="award-head">
           <p className="award-eyebrow">Recognition</p>
           <h2 className="award-title">
             Awards &amp; <em>Recognitions</em>
           </h2>
+          <p className="award-standfirst">
+            Your appreciation makes us stronger to serve humanity.
+          </p>
+        </header>
+
+        <div className="award-say">
           {/* No live region: the stage turns itself every couple of seconds, and
               a live region here would read a new honour aloud that often,
               over whatever the visitor was actually doing. */}
