@@ -17,11 +17,11 @@ import { AwardLightbox, LightboxTarget } from './AwardLightbox';
  * four things to keep in step, and they drift the first time a step is
  * interrupted.
  *
- * THE GROUND IS A WASH, NOT A BLOCK. The page-wide .accent-canvas runs one
- * unbroken gradient from the hero to the footer, so a solid colour here would
- * cut it in two. The honour's colour is laid over that gradient and faded to
- * nothing at the top and bottom edges of the screen — the colour still turns
- * with the carousel, and the ramp underneath is never severed.
+ * THE SCREEN PAINTS NO GROUND OF ITS OWN. It shows the page-wide
+ * .accent-canvas, exactly as every other screen does, so the gradient runs
+ * unbroken from the hero to the footer. An earlier cut turned a colour with
+ * the carousel; it made this one screen the only one on the page wearing a
+ * colour of its own.
  *
  * The figurine layout this follows assumes cut-out subjects on transparent
  * grounds, standing on the floor. Award photographs are rectangular, so they
@@ -40,19 +40,14 @@ interface Item {
   focal?: string;
   /** The word set huge behind the stage — a year where there is one. */
   ghost: string;
-  /** This honour's colour, washed over the page beneath it. */
-  tint: string;
   award: Award;
   photos: AwardPhoto[];
 }
 
-/** Drawn from the site's own pillar accents, so the turn stays in the family. */
-const TINTS = ['#1f8a5c', '#1565c0', '#7d3f66', '#b8722a', '#2f6f6a', '#8e3b52'];
-
 const standIn = (
   key: string, src: string, alt: string, ghost: string,
   title: string, awardedBy: string, note: string, focal?: string,
-): Omit<Item, 'tint'> => ({
+): Item => ({
   key, src, alt, ghost, focal,
   photos: [{ src, alt, width: 1200, height: 1500, focal }],
   award: { id: key, title, awardedBy, year: '', note },
@@ -104,8 +99,8 @@ export const AwardsSection: React.FC = () => {
   const hasAwards = AWARDS.length > 0;
 
   const items: Item[] = useMemo(() => {
-    const base = hasAwards
-      ? AWARDS.filter((a) => a.photos?.length).map((a): Omit<Item, 'tint'> => {
+    return hasAwards
+      ? AWARDS.filter((a) => a.photos?.length).map((a): Item => {
           const p = a.photos![0];
           return {
             key: a.id, src: p.src, alt: p.alt, focal: p.focal,
@@ -114,7 +109,6 @@ export const AwardsSection: React.FC = () => {
           };
         })
       : STANDIN;
-    return base.map((b, i) => ({ ...b, tint: TINTS[i % TINTS.length] }));
   }, [hasAwards]);
 
   const n = items.length;
@@ -241,15 +235,6 @@ export const AwardsSection: React.FC = () => {
       aria-label="Awards and recognitions"
       className="snap-screen relative z-10 w-full min-h-screen overflow-hidden"
     >
-      {/* The honour's colour, washed over the page's own gradient and faded to
-          nothing at both edges so the ramp underneath is never cut. */}
-      <div
-        className="award-wash"
-        style={{ backgroundColor: current?.tint, transition: `background-color ${STEP_MS}ms ${EASE}` }}
-        aria-hidden="true"
-      />
-      <div className="award-grain" aria-hidden="true" />
-
       <div ref={rootRef} className={`award-screen${shown ? ' is-in' : ''}`}>
         {/* The word behind the stage — the year where an honour has one. */}
         <p className="award-ghost" aria-hidden="true">{current?.ghost}</p>
@@ -305,15 +290,6 @@ export const AwardsSection: React.FC = () => {
             </p>
           </div>
         </div>
-
-        <button
-          type="button"
-          className="award-read"
-          onClick={() => current && setTarget({ award: current.award, photos: current.photos, index: 0 })}
-        >
-          Read it
-          <ArrowRight className="w-5 h-5 sm:w-8 sm:h-8" strokeWidth={2.25} />
-        </button>
 
         {!hasAwards && (
           <p className="award-note">

@@ -4207,37 +4207,18 @@
    declaration short of !important, so a rule here would either be overwritten
    or, if forced, would fight the step mid-flight.
 
-   THE GROUND IS A WASH, NOT A BLOCK. The page-wide .accent-canvas runs one
-   unbroken gradient from the hero to the footer, so a solid colour here would
-   cut it in two. The honour's colour is laid OVER the gradient and faded to
-   nothing at the top and bottom edges — the colour still turns with the
-   carousel, and the ramp underneath is never severed.
+   THE SCREEN PAINTS NO GROUND. It shows the page-wide .accent-canvas like
+   every other screen, so the one gradient runs unbroken from the hero to the
+   footer and this screen is not the only one wearing a colour of its own.
 
    --accent-a/--accent-b are the hero's to write. Nothing here assigns them.
    ======================================================================== */
 
-.award-wash {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.82;
-  /* The fade that keeps this from being a hard band across the page. */
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 13%, #000 87%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 13%, #000 87%, transparent);
-}
-
-/* Film grain, so a flat field of colour has a surface. */
-.award-grain {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.4;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-  background-repeat: repeat;
-}
+/* NO GROUND IS PAINTED HERE. This screen shows the page-wide .accent-canvas,
+   exactly as every other screen does, so the one gradient runs unbroken from
+   the hero to the footer. An earlier cut washed the active honour's colour
+   over it and turned that colour with the carousel — which made this the only
+   screen on the page wearing a colour of its own. */
 
 .award-screen {
   position: relative;
@@ -4384,34 +4365,9 @@
 }
 .award-count b { color: #fff; font-weight: 700; }
 
-/* ---------- the read link ---------- */
-.award-read {
-  position: absolute;
-  z-index: 60;
-  right: 1rem;
-  bottom: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  font-family: 'Cinzel', Georgia, serif;
-  font-size: clamp(20px, 3.4vw, 46px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-  color: rgb(255 255 255 / 0.95);
-  transition: opacity 200ms ease;
-}
-@media (min-width: 640px) {
-  /* Clear of the exhibition chip, which is parked in this same corner. */
-  .award-read { right: 2.5rem; bottom: 7.5rem; }
-}
-.award-read:hover { color: #fff; }
-.award-read:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+/* The read link is gone. Pressing the centre picture opens the citation,
+   which is the affordance the stage already had — a second control saying the
+   same thing in the corner was one too many. */
 
 .award-note {
   position: absolute;
