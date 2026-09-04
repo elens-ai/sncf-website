@@ -4444,3 +4444,42 @@
     filter: none;
   }
 }
+
+/* ---------- READ IT ----------
+   The band's own call to action. It opens whichever honour is fronting the
+   ring at the moment it is pressed — see readFront in the component. */
+.award-read {
+  position: absolute;
+  z-index: 20;
+  right: 1rem;
+  bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(19px, 3vw, 40px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: rgb(246 236 226 / 0.9);
+  opacity: 0;
+  transition: color 200ms ease, transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.is-in .award-read { animation: award-fade 800ms ease-out 760ms forwards; }
+.award-read:hover { color: #ffc46c; transform: translateX(3px); }
+.award-read:focus-visible { outline: 2px solid #ffc46c; outline-offset: 5px; }
+
+@media (min-width: 640px) {
+  /* Clear of the exhibition chip, which is parked in this same corner. */
+  .award-read { right: 2.5rem; bottom: 7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .award-read { opacity: 1; animation: none; transition: none; }
+  .award-read:hover { transform: none; }
+}

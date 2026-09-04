@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { AWARDS, Award, AwardPhoto } from '../data/awards';
 import { AwardLightbox, LightboxTarget } from './AwardLightbox';
 
@@ -176,6 +177,40 @@ export const AwardsSection: React.FC = () => {
     setTarget({ award: s.award, photos: s.photos, index: 0 });
   }, []);
 
+  /**
+   * READ IT opens whichever honour is fronting the band at the moment it is
+   * pressed. The ring turns continuously, so there is no stored "current" —
+   * asking the DOM once, on the press, is both simpler and exact, where
+   * tracking the front picture every frame would cost a measurement per frame
+   * to answer a question nobody asks until the button is hit.
+   *
+   * Pictures on the far side face away and are drawn at almost no width, so a
+   * width floor keeps the search among the ones actually facing the reader.
+   */
+  const readFront = useCallback(() => {
+    const stage = stageRef.current;
+    if (!stage || slides.length === 0) return;
+
+    const band = stage.getBoundingClientRect();
+    const middle = band.left + band.width / 2;
+
+    let bestIndex = -1;
+    let bestDistance = Infinity;
+
+    stage.querySelectorAll<HTMLElement>('.award-slide').forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.width < 60) return;
+      const d = Math.abs(r.left + r.width / 2 - middle);
+      if (d < bestDistance) {
+        bestDistance = d;
+        bestIndex = Number(el.dataset.slide);
+      }
+    });
+
+    const slide = slides[bestIndex];
+    if (slide) open(slide);
+  }, [slides, open]);
+
   return (
     <section
       id="awards-section"
@@ -213,6 +248,7 @@ export const AwardsSection: React.FC = () => {
                 type="button"
                 className={`award-slide${s.emblem ? ' award-slide--emblem' : ''}`}
                 style={{ ['--i' as string]: i }}
+                data-slide={i}
                 onClick={() => open(s)}
                 aria-label={`${s.award.title} — ${s.award.awardedBy}. Press to read.`}
               >
@@ -222,6 +258,11 @@ export const AwardsSection: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <button type="button" className="award-read" onClick={readFront}>
+          Read it
+          <ArrowRight className="w-5 h-5 sm:w-8 sm:h-8" strokeWidth={2.25} aria-hidden="true" />
+        </button>
 
         <footer className="award-foot">
           <p className="award-standfirst award-standfirst--wide">
