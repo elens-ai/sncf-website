@@ -129,31 +129,6 @@ export const CoreValuesPage: React.FC = () => {
         }))}
       />
 
-      {/* THE CONTENTS — three doors, one per cornerstone */}
-      <nav className="cv-contents" aria-label="Jump to a cornerstone">
-        {CORNERSTONES.map((id) => {
-          const p = PILLARS.find((x) => x.id === id)!;
-          const n = ACTIVITIES.filter((a) => a.pillarId === id).length;
-          return (
-            <a
-              key={id}
-              href={`#${id}`}
-              className="cv-door"
-              style={
-                {
-                  '--ink-a': p.accentA,
-                  '--ink-b': p.accentB,
-                } as React.CSSProperties
-              }
-            >
-              <span className="cv-door-label font-artistic-display">{p.label}</span>
-              <span className="cv-door-head font-artistic-serif">{p.headline}</span>
-              <span className="cv-door-count">{n} activities on record</span>
-            </a>
-          );
-        })}
-      </nav>
-
       {/* THE CHAPTERS */}
       {CORNERSTONES.map((id, chapterIndex) => {
         const pillar = PILLARS.find((x) => x.id === id)!;

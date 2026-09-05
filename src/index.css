@@ -4536,53 +4536,10 @@
 
 /* ---- CORE VALUES ------------------------------------------------------ */
 
-/* the three doors */
-.cv-contents {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  margin-bottom: clamp(26px, 5vh, 46px);
-}
-.cv-door {
-  display: block;
-  padding: 18px 20px;
-  border-radius: 16px;
-  text-decoration: none;
-  border: 1px solid color-mix(in srgb, var(--ink-b, #888) 30%, var(--line));
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--ink-a, #888) 8%, #ffffff),
-    #ffffff 70%
-  );
-  transition: transform 300ms cubic-bezier(0.33, 1, 0.68, 1), border-color 300ms ease,
-    box-shadow 300ms ease;
-}
-.cv-door:hover {
-  transform: translateY(-3px);
-  border-color: var(--ink-b);
-  box-shadow: 0 18px 36px -20px var(--ink-a);
-}
-.cv-door-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  color: var(--ink-b);
-  margin-bottom: 5px;
-}
-.cv-door-head {
-  display: block;
-  font-size: 15px;
-  color: var(--ink-900);
-  line-height: 1.35;
-  margin-bottom: 7px;
-}
-.cv-door-count {
-  font-size: 10.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-500);
-}
+/* The three "door" cards that used to sit here — one per cornerstone, with
+   its headline and activity count — are gone. They were a jump list directly
+   beneath the sticky rail, which is also a jump list of the same three
+   cornerstones, and each room now announces itself at its own threshold. */
 
 /* a chapter */
 .cv-chapter {
@@ -5364,7 +5321,6 @@
   .pj-spread {
     animation: none;
   }
-  .cv-door,
   .cv-record,
   .cv-record-body,
   .pj-tab {
@@ -5911,13 +5867,8 @@ button.mgal-plate:focus-visible {
 .reading-room[data-surface='light'] #heal.cv-chapter { --ink-type: #15694a; }
 .reading-room[data-surface='light'] #enrich.cv-chapter { --ink-type: #1565c0; }
 .reading-room[data-surface='light'] #empower.cv-chapter { --ink-type: #b3164f; }
-/* the doors carry the same three, in order */
-.reading-room[data-surface='light'] .cv-door:nth-child(1) { --ink-type: #15694a; }
-.reading-room[data-surface='light'] .cv-door:nth-child(2) { --ink-type: #1565c0; }
-.reading-room[data-surface='light'] .cv-door:nth-child(3) { --ink-type: #b3164f; }
 /* anything else falls back to the deep accent, darkened toward the page ink
    so a pale accent can never become pale type */
-.reading-room[data-surface='light'] .cv-door-label,
 .reading-room[data-surface='light'] .cv-chapter-eyebrow,
 .reading-room[data-surface='light'] .cv-record-value,
 .reading-room[data-surface='light'] .pj-scope,
@@ -6031,8 +5982,7 @@ html:has(.reading-room[data-surface='light']) {
 .reading-room[data-surface='light'] .cv-record-head:focus-visible {
   outline-color: var(--ink-type, #16182b);
 }
-.reading-room[data-surface='light'] .pj-tab:focus-visible,
-.reading-room[data-surface='light'] .cv-door:focus-visible {
+.reading-room[data-surface='light'] .pj-tab:focus-visible {
   outline: 2px solid #16182b;
   outline-offset: 2px;
 }
