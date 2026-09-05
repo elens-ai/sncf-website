@@ -6280,10 +6280,12 @@ html:has(.reading-room[data-surface='light']) {
    between two rooms. A band of plain paper before each new threshold gives
    the door something to open out of, and lets the ambient light for the
    incoming room be seen on its own before the band states it. */
-.reading-room[data-surface='light'] .cv-room + .cv-room {
-  margin-top: clamp(34px, 7vh, 84px);
-}
-/* and the last room does not butt into the footer either */
-.reading-room[data-surface='light'] .cv-room:last-of-type {
-  margin-bottom: clamp(20px, 4vh, 44px);
+/* One margin on the trailing edge of every room, rather than a margin-top on
+   `.cv-room + .cv-room` plus a special case for the last one. The special
+   case was `:last-of-type`, which matches by ELEMENT type and not by class —
+   on Projects the last <section> is the Health City block, so the last room
+   there matched nothing and kept butting into what followed. A single
+   trailing margin has no last-element case to get wrong. */
+.reading-room[data-surface='light'] .cv-room {
+  margin-bottom: clamp(34px, 7vh, 84px);
 }
