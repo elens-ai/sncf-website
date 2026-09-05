@@ -5627,7 +5627,13 @@
   gap: 16px;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: x proximity;
+  /* NO SCROLL SNAPPING. The band drifts by moving its own scrollLeft a
+     fraction of a pixel per frame, and a snap container re-snaps to the
+     nearest plate after every one of those writes — so the drift was being
+     cancelled as fast as it was applied and the band simply never moved.
+     Measured: 40 drift-sized steps advanced it 0px with snapping on and 20px
+     with it off. Snapping also fights a flick's own momentum, so a band meant
+     to glide is better without it entirely. */
   scrollbar-width: thin;
   scrollbar-color: rgb(22 24 43 / 0.18) transparent;
   /* the strip scrolls; the page never scrolls sideways because of it */
@@ -5643,7 +5649,6 @@
 .mgal-cell {
   flex: 0 0 auto;
   width: clamp(168px, 21vw, 232px);
-  scroll-snap-align: start;
   /* the reference's hand-laid look: every other plate leans the other way, so
      the band reads as photographs set down rather than as a filmstrip */
   rotate: -2.6deg;

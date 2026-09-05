@@ -120,7 +120,19 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
 
     let raf = 0;
     let last = 0;
-    const SPEED = 22; /* px per second — a reel passing a gate, not a hoarding */
+    /* The drift's own position, carried as a float.
+       `scrollLeft` is quantised — half a pixel on this display, a whole pixel
+       on a 1x one — so writing `scrollLeft + 0.37` each frame and reading it
+       back rounds the increment away and the band either crawls at the wrong
+       speed or never moves at all. The intended position is kept here at full
+       precision and written out; the element rounds it for display only. */
+    let pos = el.scrollLeft;
+    let lastWritten = pos;
+    /* 40 px/s. At 22 a full pass took 69 seconds and a plate crossed every
+       nine — slow enough that the band read as static unless you watched it.
+       At 40 a plate passes about every five seconds: unmistakably moving,
+       still a reel rather than a hoarding. */
+    const SPEED = 40;
 
     const step = (t: number) => {
       const dt = last ? Math.min(64, t - last) : 16;
@@ -148,9 +160,14 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
       const period = echo.offsetLeft - first.offsetLeft;
       if (period <= 1) return;
 
-      let next = el.scrollLeft + (SPEED * dt) / 1000;
-      if (next >= period) next -= period;
-      el.scrollLeft = next;
+      /* If the reader moved it — wheel, drag, flick, keyboard — the element
+         and our float have diverged. Theirs wins; we pick up from there. */
+      if (Math.abs(el.scrollLeft - lastWritten) > 1.5) pos = el.scrollLeft;
+
+      pos += (SPEED * dt) / 1000;
+      if (pos >= period) pos -= period;
+      el.scrollLeft = pos;
+      lastWritten = el.scrollLeft;
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
