@@ -5622,9 +5622,9 @@
 .mgal-strip {
   list-style: none;
   margin: 0;
-  padding: 2px 2px 10px;
+  padding: 16px 2px 20px;
   display: flex;
-  gap: 14px;
+  gap: 16px;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x proximity;
@@ -5644,6 +5644,18 @@
   flex: 0 0 auto;
   width: clamp(168px, 21vw, 232px);
   scroll-snap-align: start;
+  /* the reference's hand-laid look: every other plate leans the other way, so
+     the band reads as photographs set down rather than as a filmstrip */
+  rotate: -2.6deg;
+  transition: rotate 300ms ease, translate 300ms ease;
+}
+.mgal-cell:nth-child(even) {
+  rotate: 2.6deg;
+  translate: 0 10px;
+}
+.mgal-cell:hover {
+  rotate: 0deg;
+  translate: 0 -2px;
 }
 /* a plate the manifest marks as wide gets a landscape cell */
 .mgal-cell[data-wide='true'] {
@@ -5695,34 +5707,49 @@ button.mgal-plate:focus-visible {
   padding-left: 3px;
   backdrop-filter: blur(3px);
 }
-/* the awaiting plate — inert, and honest about being empty */
+/* THE AWAITING PLATE. It was diagonal grey hatching — a hole with a label,
+   which is fine in a grid and dismal in a band that is meant to be looked at.
+   It is a plate now: the room's own ink laid on paper, its subject named
+   beneath, so a wall being hung still reads as a wall rather than as a fault.
+   Still inert, still unfocusable, still says plainly that the photograph has
+   not arrived. */
 .mgal-plate-awaiting {
   display: grid;
   place-items: center;
   align-content: center;
-  gap: 7px;
+  gap: 9px;
   cursor: default;
+  border: 1px solid color-mix(in srgb, var(--ink-a, #626981) 22%, transparent);
   box-shadow: none;
-  border-style: dashed;
-  border-color: rgb(22 24 43 / 0.22);
   background:
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0 9px,
-      rgb(22 24 43 / 0.022) 9px 18px
+    radial-gradient(
+      120% 90% at 50% 8%,
+      color-mix(in srgb, var(--ink-b, #9aa0b8) 26%, transparent),
+      transparent 70%
     ),
-    #fbfaf8;
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ink-a, #626981) 9%, #ffffff) 0%,
+      color-mix(in srgb, var(--ink-a, #626981) 4%, #ffffff) 100%
+    );
 }
 .mgal-await-mark {
-  font-size: 17px;
-  color: var(--ink-400);
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: color-mix(in srgb, var(--ink-a, #626981) 62%, #16182b);
+  background: rgb(255 255 255 / 0.72);
+  border: 1px solid color-mix(in srgb, var(--ink-a, #626981) 20%, transparent);
 }
 .mgal-await-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--ink-400);
+  color: color-mix(in srgb, var(--ink-a, #626981) 58%, #16182b);
 }
 .mgal-caption {
   margin: 8px 2px 0;

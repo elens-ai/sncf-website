@@ -69,6 +69,8 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const stripRef = useRef<HTMLUListElement | null>(null);
+  /* true while a reader has the band — pointer over it, or focus inside */
+  const heldRef = useRef(false);
 
   const hasPhoto = items.some((m) => m.kind === 'photo' && m.src);
   const hasFilm = items.some((m) => m.kind === 'film' && m.src);
@@ -96,6 +98,63 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     },
     [openable.length],
   );
+
+  /* THE DRIFT.
+     The band travels right to left on its own, and it does it by moving the
+     strip's own scrollLeft rather than by translating a track. That one
+     choice is what lets the drift coexist with everything else: the wheel,
+     a drag, a touch flick and the keyboard all act on the same scrollLeft,
+     so there is no second coordinate system to reconcile and no jump when a
+     reader takes hold of it.
+
+     The plates are rendered TWICE — the second set aria-hidden and out of
+     the tab order — so when the scroll passes the halfway mark it can be
+     rewound by exactly half the track and the seam is invisible.
+
+     It stops when a pointer is over it, when focus is inside it, when the
+     gallery is off screen, and entirely under prefers-reduced-motion. */
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let raf = 0;
+    let last = 0;
+    const SPEED = 22; /* px per second — a reel passing a gate, not a hoarding */
+
+    const step = (t: number) => {
+      const dt = last ? Math.min(64, t - last) : 16;
+      last = t;
+      raf = requestAnimationFrame(step);
+
+      if (heldRef.current) return;
+      /* off screen: nothing to watch, so nothing to spend */
+      const r = el.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > window.innerHeight) return;
+
+      /* THE PERIOD IS MEASURED, NOT DIVIDED.
+         `scrollWidth / 2` looks like the length of one pass and is not: the
+         track carries padding at both ends and a gap between the last plate
+         of the first set and the first of the echo, so the halves are not
+         equal. Rewinding by that figure put the first plate where the last
+         had been — a visible jolt once a loop. The true period is the
+         distance from a plate to its own echo, which the DOM knows. */
+      const cells = el.children;
+      const n = cells.length / 2;
+      if (n < 1) return;
+      const first = cells[0] as HTMLElement;
+      const echo = cells[n] as HTMLElement;
+      if (!echo) return;
+      const period = echo.offsetLeft - first.offsetLeft;
+      if (period <= 1) return;
+
+      let next = el.scrollLeft + (SPEED * dt) / 1000;
+      if (next >= period) next -= period;
+      el.scrollLeft = next;
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   /* THE WHEEL DRIVES THE STRIP SIDEWAYS.
      A vertical wheel gesture over the strip scrolls it horizontally — but
@@ -197,28 +256,10 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
 
   if (!items.length) return null;
 
-  /* THE ROOM WITH NOTHING IN IT YET.
-     Four of the nine galleries have no photograph at all, and a strip of
-     "photograph to come" cards under a filter offering to sort them between
-     photographs and films is not a gallery — it is furniture standing in an
-     empty room, and it makes the page look broken rather than unfinished.
-     Say the true thing in one line instead, and put the gallery up when
-     there is something to hang in it. */
-  const anyReal = items.some((m) => m.src);
-  if (!anyReal) {
-    return (
-      <section className="mgal mgal-empty" aria-label={title}>
-        <Heading className="mgal-title font-artistic-display">{title}</Heading>
-        <p className="mgal-empty-line font-artistic-serif">
-          {items.length} {items.length === 1 ? 'plate is' : 'plates are'} reserved
-          here — {items.map((m) => m.caption.replace(/^Film — /, '')).slice(0, 2).join(', ')}
-          {items.length > 2 ? ' and more' : ''} — and they go up as the
-          foundation’s archive is catalogued.
-        </p>
-      </section>
-    );
-  }
-
+  /* Every room gets the band, including the ones whose photographs have not
+     arrived. An awaiting plate is a designed object — the room's ink, the
+     subject it is reserved for — not a grey hole, so a wall being hung still
+     reads as a wall. */
   const current = viewing !== null ? openable[viewing] : null;
   /* counted over what is ON SCREEN, not over the whole set — under the Films
      filter, "3 of 12 hung" describes a grid the reader cannot see */
@@ -274,16 +315,30 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         )}
       </header>
 
-      <ul className="mgal-strip" ref={stripRef}>
-        {shown.map((m) => {
+      <ul
+        className="mgal-strip"
+        ref={stripRef}
+        onPointerEnter={() => { heldRef.current = true; }}
+        onPointerLeave={() => { heldRef.current = false; }}
+        onFocusCapture={() => { heldRef.current = true; }}
+        onBlurCapture={() => { heldRef.current = false; }}
+      >
+        {[...shown, ...shown].map((m, dupIndex) => {
+          const echo = dupIndex >= shown.length;
           const awaiting = !m.src;
           return (
             <li
-              key={m.id}
+              key={`${m.id}-${dupIndex}`}
               className="mgal-cell"
               data-wide={m.wide ? 'true' : undefined}
               data-kind={m.kind}
               data-awaiting={awaiting ? 'true' : undefined}
+              /* the second pass is the seam's echo: seen, never read, never
+                 tabbed into */
+              aria-hidden={echo || undefined}
+              /* a real boolean: React 19 takes `inert` as one, and an empty
+                 string was being dropped, leaving the echo tabbable */
+              inert={echo}
             >
               {awaiting ? (
                 /* inert on purpose — there is nothing behind it to open */
