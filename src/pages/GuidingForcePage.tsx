@@ -1,51 +1,21 @@
 import React from 'react';
 import { PageShell } from '../components/PageShell';
+import { SubsectionNav } from '../components/SubsectionNav';
+import { MediaGallery } from '../components/MediaGallery';
 
 /**
  * OUR GUIDING FORCE — where the work gets its direction.
  *
  * The foundation's own page on this subject is about Satguru Mata Sudiksha
- * Ji Maharaj, and this page keeps that centre of gravity: the present
- * Satguru first, at length, with the initiatives that carry Her guidance
- * into the world; then the succession that led here, named plainly.
+ * Ji Maharaj, and this page holds that centre of gravity exactly: the
+ * present Satguru, at length, with the initiatives that carry Her guidance
+ * into the world.
  *
- * The succession is stated as fact — who, in what order, and what each is
- * known for. It is deliberately not embroidered: this is a living spiritual
- * lineage, and the site's job is to point towards Satsang and the Mission's
- * own literature, never to interpret on their behalf. Portraits exist in the
- * repository for the present Satguru and Nirankari Rajpita Ji only; the
- * earlier Satgurus are given their place in the line without invented
- * imagery.
+ * It carried two more sections once — a second portrait and the five-Satguru
+ * succession — and both were removed at the foundation's request. A living
+ * spiritual lineage is not this site's to narrate; the page points towards
+ * Satsang and the Mission's own literature instead.
  */
-
-const LINEAGE = [
-  {
-    name: 'Baba Buta Singh Ji',
-    era: 'Founder · 1929',
-    note: 'Began the Mission, teaching that God is formless and knowable in this life.',
-  },
-  {
-    name: 'Baba Avtar Singh Ji',
-    era: 'Second Satguru',
-    note: 'Gave the Mission its scale and its sacred verses, the Avtar Bani.',
-  },
-  {
-    name: 'Baba Gurbachan Singh Ji',
-    era: 'Third Satguru',
-    note: 'Carried the message beyond India and gave his life for it.',
-  },
-  {
-    name: 'Baba Hardev Singh Ji',
-    era: 'Fourth Satguru',
-    note: 'Turned the Mission decisively towards service — the charge this foundation was founded on.',
-  },
-  {
-    name: 'Satguru Mata Sudiksha Ji Maharaj',
-    era: 'Present Satguru',
-    note: 'Guides the Mission today, with a particular emphasis on youth, health and the environment.',
-    present: true,
-  },
-];
 
 const UNDER_HER_GUIDANCE = [
   {
@@ -74,9 +44,19 @@ export const GuidingForcePage: React.FC = () => (
     standfirst="Every camp, classroom and forest in this site traces back to spiritual
       guidance rather than a strategy document. This page says plainly where
       that guidance comes from."
+    rail={
+      <SubsectionNav
+        label="On this page"
+        links={[
+          { id: 'satguru', label: 'The present Satguru', ink: '#b357ad' },
+          { id: 'guidance', label: 'Under Her guidance', ink: '#09a6cf' },
+          { id: 'gf-media', label: 'Photographs & films', ink: '#69b947' },
+        ]}
+      />
+    }
   >
     {/* THE PRESENT SATGURU */}
-    <section className="gf-present">
+    <section className="gf-present" id="satguru">
       <figure className="gf-portrait">
         <img
           src="/images/satguru-mata-sudiksha-ji.jpg"
@@ -112,7 +92,7 @@ export const GuidingForcePage: React.FC = () => (
     </section>
 
     {/* WHAT FOLLOWS FROM IT */}
-    <section>
+    <section id="guidance">
       <h2 className="gf-section-title font-artistic-display">
         Under Her guidance
       </h2>
@@ -126,44 +106,8 @@ export const GuidingForcePage: React.FC = () => (
       </ul>
     </section>
 
-    {/* RAJPITA JI */}
-    <section className="gf-second">
-      <figure className="gf-portrait gf-portrait-sm">
-        <img
-          src="/images/nirankari-rajpita-ramit-ji.jpg"
-          alt="Portrait of Nirankari Rajpita Ramit Ji"
-          loading="lazy"
-        />
-      </figure>
-      <div>
-        <h2 className="gf-name gf-name-sm font-artistic-heading">
-          Nirankari Rajpita Ramit Ji
-        </h2>
-        <p className="font-artistic-serif">
-          A guiding presence alongside Satguru Mata Sudiksha Ji Maharaj, seen
-          throughout the Mission’s service work — including the plantation
-          drives that have become one of its most visible commitments.
-        </p>
-      </div>
-    </section>
-
-    {/* THE LINE */}
-    <section>
-      <h2 className="gf-section-title font-artistic-display">The succession</h2>
-      <p className="gf-lede font-artistic-serif">
-        Five Satgurus have led the Sant Nirankari Mission since 1929. The line
-        is given here as it stands; what each taught belongs to the Mission’s
-        own literature and to Satsang, not to a website.
-      </p>
-      <ol className="gf-line">
-        {LINEAGE.map((l) => (
-          <li key={l.name} data-present={l.present ? 'true' : undefined}>
-            <span className="gf-line-era font-artistic-display">{l.era}</span>
-            <span className="gf-line-name font-artistic-heading">{l.name}</span>
-            <span className="gf-line-note font-artistic-serif">{l.note}</span>
-          </li>
-        ))}
-      </ol>
+    <section id="gf-media">
+      <MediaGallery section="guiding-force" />
     </section>
 
     <p className="gf-footnote font-artistic-serif">

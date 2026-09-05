@@ -1677,8 +1677,8 @@
    the belief that it smooths wheel and touchpad scrolling — it does not.
    `scroll-behavior` only affects PROGRAMMATIC scrolls (scrollTo,
    scrollIntoView) and in-page anchor jumps; wheel and touch input are
-   untouched by it. This site has neither — no scrollTo, no scrollIntoView,
-   no `href="#..."` anywhere — so the rule governed nothing at all, while
+   untouched by it. The HALL has none of those — no scrollTo, no
+   scrollIntoView, no `href="#..."` — so the rule governed nothing here, while
    still routing scroll-snap's own settle through the smooth-scroll path,
    which makes snapping feel sluggish rather than smooth. The transition
    between screens is animated in the sections themselves instead. */
@@ -4458,14 +4458,14 @@
   font-weight: 800;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.6);
+  color: var(--ink-500);
   margin: 0 0 6px;
 }
 .page-title {
   font-size: clamp(38px, 7vw, 68px);
   font-weight: 700;
   line-height: 1;
-  color: #fff;
+  color: var(--ink-900);
   margin: 0;
   text-shadow: 0 6px 30px rgb(0 0 0 / 0.4);
 }
@@ -4487,7 +4487,7 @@
   margin: 0 auto;
   font-size: clamp(14px, 1.7vw, 16.5px);
   line-height: 1.7;
-  color: rgb(255 255 255 / 0.82);
+  color: var(--ink-700);
 }
 
 /* a shared surface for every panel on these pages */
@@ -4499,10 +4499,10 @@
 .gf-present,
 .gf-second {
   border-radius: 18px;
-  border: 1px solid rgb(255 255 255 / 0.13);
-  background: rgb(8 16 30 / 0.42);
-  backdrop-filter: blur(9px);
-  box-shadow: 0 24px 50px -34px rgb(0 0 0 / 0.8);
+  border: 1px solid var(--line);
+  background: var(--card);
+  
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.04), 0 12px 28px -18px rgb(22 24 43 / 0.18);
 }
 
 /* ---- CORE VALUES ------------------------------------------------------ */
@@ -4519,11 +4519,11 @@
   padding: 18px 20px;
   border-radius: 16px;
   text-decoration: none;
-  border: 1px solid color-mix(in srgb, var(--ink-b, #fff) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink-b, #888) 30%, var(--line));
   background: linear-gradient(
     145deg,
-    color-mix(in srgb, var(--ink-a, #333) 30%, rgb(255 255 255 / 0.04)),
-    rgb(6 12 24 / 0.5)
+    color-mix(in srgb, var(--ink-a, #888) 8%, #ffffff),
+    #ffffff 70%
   );
   transition: transform 300ms cubic-bezier(0.33, 1, 0.68, 1), border-color 300ms ease,
     box-shadow 300ms ease;
@@ -4544,7 +4544,7 @@
 .cv-door-head {
   display: block;
   font-size: 15px;
-  color: #fff;
+  color: var(--ink-900);
   line-height: 1.35;
   margin-bottom: 7px;
 }
@@ -4552,7 +4552,7 @@
   font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.5);
+  color: var(--ink-500);
 }
 
 /* a chapter */
@@ -4572,7 +4572,7 @@
 .cv-chapter-title {
   font-size: clamp(23px, 3.4vw, 34px);
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   line-height: 1.15;
   margin: 0 0 10px;
 }
@@ -4580,7 +4580,7 @@
   max-width: 70ch;
   font-size: 14.5px;
   line-height: 1.7;
-  color: rgb(255 255 255 / 0.8);
+  color: var(--ink-700);
   margin: 0;
 }
 
@@ -4596,15 +4596,15 @@
 .cv-ledger li {
   padding: 14px 16px;
   border-radius: 13px;
-  background: rgb(255 255 255 / 0.05);
-  border: 1px solid rgb(255 255 255 / 0.1);
+  background: #f7f5f1;
+  border: 1px solid var(--line);
   border-left: 3px solid var(--ink-b);
 }
 .cv-ledger-value {
   display: block;
   font-size: clamp(20px, 2.8vw, 27px);
   font-weight: 800;
-  color: #fff;
+  color: var(--ink-900);
   line-height: 1.05;
   font-variant-numeric: tabular-nums;
 }
@@ -4614,12 +4614,12 @@
   font-size: 10.5px;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.6);
+  color: var(--ink-500);
 }
 .cv-subtext {
   font-size: 13.5px;
   font-style: italic;
-  color: rgb(255 255 255 / 0.62);
+  color: var(--ink-500);
   margin: 0 0 22px;
   max-width: 70ch;
 }
@@ -4638,7 +4638,7 @@
   font-weight: 800;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.55);
+  color: var(--ink-500);
   margin: 0 0 12px;
 }
 .cv-sub-wide { margin-top: 4px; }
@@ -4654,7 +4654,7 @@
   margin-bottom: 11px;
   font-size: 13.5px;
   line-height: 1.6;
-  color: rgb(255 255 255 / 0.8);
+  color: var(--ink-700);
 }
 .cv-highlights li::before {
   content: '';
@@ -4682,7 +4682,7 @@
 }
 .cv-bar-name {
   font-size: 12px;
-  color: rgb(255 255 255 / 0.78);
+  color: var(--ink-700);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4690,7 +4690,7 @@
 .cv-bar-track {
   height: 9px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.09);
+  background: rgb(22 24 43 / 0.07);
   overflow: hidden;
 }
 .cv-bar-fill {
@@ -4708,14 +4708,14 @@
 .cv-bar-value {
   font-size: 12.5px;
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 .cv-scale-note {
   font-size: 10.5px;
   line-height: 1.5;
-  color: rgb(255 255 255 / 0.42);
+  color: var(--ink-400);
   margin: 0;
   max-width: 52ch;
 }
@@ -4728,15 +4728,15 @@
 }
 .cv-record {
   border-radius: 13px;
-  border: 1px solid rgb(255 255 255 / 0.11);
-  background: rgb(255 255 255 / 0.035);
+  border: 1px solid var(--line);
+  background: #f8f6f2;
   margin-bottom: 9px;
   overflow: hidden;
   transition: border-color 240ms ease, background 240ms ease;
 }
 .cv-record[data-open='true'] {
   border-color: color-mix(in srgb, var(--ink-b) 55%, transparent);
-  background: rgb(255 255 255 / 0.06);
+  background: #f4f2ee;
 }
 .cv-record-head {
   width: 100%;
@@ -4758,12 +4758,12 @@
   display: block;
   font-size: 14.5px;
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
 }
 .cv-record-blurb {
   display: block;
   font-size: 12.5px;
-  color: rgb(255 255 255 / 0.62);
+  color: var(--ink-500);
   margin-top: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -4786,7 +4786,7 @@
   font-size: 9.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.45);
+  color: var(--ink-400);
 }
 .cv-record-chev {
   flex: none;
@@ -4795,8 +4795,8 @@
   display: grid;
   place-items: center;
   border-radius: 999px;
-  border: 1px solid rgb(255 255 255 / 0.2);
-  color: rgb(255 255 255 / 0.7);
+  border: 1px solid var(--line);
+  color: var(--ink-500);
   font-size: 15px;
   line-height: 1;
 }
@@ -4823,14 +4823,14 @@
   font-size: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.5);
+  color: var(--ink-500);
   margin-bottom: 2px;
 }
 .cv-points dd {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   font-variant-numeric: tabular-nums;
 }
 .cv-period {
@@ -4839,12 +4839,12 @@
   font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.4);
+  color: var(--ink-400);
 }
 .cv-footnote {
   text-align: center;
   font-size: 12px;
-  color: rgb(255 255 255 / 0.45);
+  color: var(--ink-400);
   max-width: 60ch;
   margin: 8px auto 0;
 }
@@ -4863,15 +4863,15 @@
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
-  color: rgb(255 255 255 / 0.7);
-  background: rgb(255 255 255 / 0.06);
-  border: 1px solid rgb(255 255 255 / 0.15);
+  color: var(--ink-500);
+  background: #f4f2ee;
+  border: 1px solid var(--line);
   transition: color 240ms ease, background 240ms ease, border-color 240ms ease,
     transform 240ms ease;
 }
-.pj-tab:hover { color: #fff; transform: translateY(-1px); }
+.pj-tab:hover { color: var(--ink-900); transform: translateY(-1px); }
 .pj-tab[data-on='true'] {
-  color: #fff;
+  color: var(--ink-900);
   border-color: var(--ink-b);
   background: linear-gradient(135deg, var(--ink-a), var(--ink-b));
   box-shadow: 0 12px 26px -14px var(--ink-a);
@@ -4898,14 +4898,14 @@
 .pj-title {
   font-size: clamp(26px, 4vw, 40px);
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   line-height: 1.1;
   margin: 0 0 9px;
 }
 .pj-blurb {
   font-size: 15px;
   line-height: 1.65;
-  color: rgb(255 255 255 / 0.8);
+  color: var(--ink-700);
   margin: 0 0 22px;
   max-width: 62ch;
 }
@@ -4921,7 +4921,7 @@
 .pj-plate-value {
   font-size: clamp(30px, 5.5vw, 46px);
   font-weight: 800;
-  color: #fff;
+  color: var(--ink-900);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -4931,7 +4931,7 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.85);
+  color: var(--ink-700);
 }
 .pj-points {
   display: grid;
@@ -4943,14 +4943,14 @@
   font-size: 10px;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.5);
+  color: var(--ink-500);
   margin-bottom: 3px;
 }
 .pj-points dd {
   margin: 0;
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   font-variant-numeric: tabular-nums;
 }
 .pj-foot {
@@ -4959,13 +4959,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  border-top: 1px solid rgb(255 255 255 / 0.12);
+  border-top: 1px solid var(--line);
   padding-top: 14px;
 }
 .pj-period {
   font-size: 12px;
   font-style: italic;
-  color: rgb(255 255 255 / 0.5);
+  color: var(--ink-500);
 }
 .pj-link {
   font-size: 12.5px;
@@ -4975,7 +4975,7 @@
   border-bottom: 1px solid color-mix(in srgb, var(--ink-b, #6ac8ed) 45%, transparent);
   transition: color 200ms ease, border-color 200ms ease;
 }
-.pj-link:hover { color: #fff; border-color: #fff; }
+.pj-link:hover { color: var(--ink-900); border-color: var(--ink-900); }
 
 .pj-forthcoming {
   margin-top: clamp(22px, 4vh, 40px);
@@ -4988,19 +4988,19 @@
   font-weight: 800;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.5);
+  color: var(--ink-500);
   margin: 0 0 6px;
 }
 .pj-forthcoming-title {
   font-size: clamp(20px, 3vw, 28px);
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   margin: 0 0 10px;
 }
 .pj-forthcoming p {
   font-size: 14px;
   line-height: 1.7;
-  color: rgb(255 255 255 / 0.75);
+  color: var(--ink-700);
   max-width: 66ch;
   margin: 0 0 14px;
 }
@@ -5010,10 +5010,10 @@
 .ww-prose p {
   font-size: 15px;
   line-height: 1.8;
-  color: rgb(255 255 255 / 0.84);
+  color: var(--ink-700);
   margin: 0 0 16px;
 }
-.ww-prose em { color: #fff; font-style: italic; }
+.ww-prose em { color: var(--ink-900); font-style: italic; }
 
 .ww-facts {
   list-style: none;
@@ -5026,8 +5026,8 @@
 .ww-facts li {
   padding: 15px 17px;
   border-radius: 14px;
-  background: rgb(255 255 255 / 0.05);
-  border: 1px solid rgb(255 255 255 / 0.12);
+  background: #f7f5f1;
+  border: 1px solid var(--line);
   border-left: 3px solid var(--accent-b, #64b5f6);
 }
 .ww-fact-k {
@@ -5036,10 +5036,10 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.55);
+  color: var(--ink-500);
   margin-bottom: 5px;
 }
-.ww-fact-v { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.35; }
+.ww-fact-v { font-size: 15px; font-weight: 700; color: var(--ink-900); line-height: 1.35; }
 
 .ww-pair {
   display: grid;
@@ -5051,13 +5051,13 @@
 .ww-card-title {
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   margin: 0 0 10px;
 }
 .ww-card p {
   font-size: 14px;
   line-height: 1.75;
-  color: rgb(255 255 255 / 0.8);
+  color: var(--ink-700);
   margin: 0;
 }
 
@@ -5066,15 +5066,15 @@
   font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.6);
+  color: var(--ink-500);
   margin: 0 0 16px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  border-bottom: 1px solid var(--line);
 }
 .ww-lede {
   font-size: 14.5px;
   line-height: 1.7;
-  color: rgb(255 255 255 / 0.78);
+  color: var(--ink-700);
   margin: 0 0 16px;
   max-width: 66ch;
 }
@@ -5083,14 +5083,14 @@
   list-style: none;
   margin: 0 0 clamp(24px, 4vh, 42px);
   padding: 0 0 0 22px;
-  border-left: 2px solid rgb(255 255 255 / 0.15);
+  border-left: 2px solid var(--line);
 }
 .ww-timeline li {
   position: relative;
   padding-bottom: 18px;
   font-size: 14px;
   line-height: 1.65;
-  color: rgb(255 255 255 / 0.8);
+  color: var(--ink-700);
 }
 .ww-timeline li::before {
   content: '';
@@ -5101,13 +5101,13 @@
   height: 10px;
   border-radius: 999px;
   background: var(--accent-b, #64b5f6);
-  box-shadow: 0 0 0 3px rgb(8 16 30 / 0.9);
+  box-shadow: 0 0 0 3px var(--paper);
 }
 .ww-year {
   display: block;
   font-size: 15px;
   font-weight: 800;
-  color: #fff;
+  color: var(--ink-900);
   margin-bottom: 2px;
 }
 
@@ -5122,19 +5122,19 @@
 .ww-partners li {
   padding: 13px 15px;
   border-radius: 12px;
-  background: rgb(255 255 255 / 0.04);
-  border: 1px solid rgb(255 255 255 / 0.1);
+  background: #f8f6f2;
+  border: 1px solid var(--line);
 }
 .ww-partners strong {
   display: block;
   font-size: 13.5px;
-  color: #fff;
+  color: var(--ink-900);
   margin-bottom: 3px;
 }
 .ww-partners span {
   font-size: 12px;
   line-height: 1.55;
-  color: rgb(255 255 255 / 0.65);
+  color: var(--ink-500);
 }
 
 .ww-contact { padding: clamp(18px, 3vw, 28px); }
@@ -5147,15 +5147,15 @@
 .ww-contact-grid p {
   font-size: 13.5px;
   line-height: 1.65;
-  color: rgb(255 255 255 / 0.8);
+  color: var(--ink-700);
   margin: 0;
 }
 .ww-contact-grid a {
-  color: rgb(255 255 255 / 0.85);
+  color: var(--ink-700);
   text-decoration: none;
   border-bottom: 1px solid rgb(255 255 255 / 0.25);
 }
-.ww-contact-grid a:hover { color: #fff; border-color: #fff; }
+.ww-contact-grid a:hover { color: var(--ink-900); border-color: var(--ink-900); }
 
 /* ---- OUR GUIDING FORCE ------------------------------------------------ */
 .gf-present {
@@ -5173,7 +5173,7 @@
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 0.18);
-  box-shadow: 0 26px 52px -28px rgb(0 0 0 / 0.9);
+  box-shadow: 0 2px 4px rgb(22 24 43 / 0.05), 0 18px 40px -22px rgb(22 24 43 / 0.28);
 }
 .gf-portrait img {
   display: block;
@@ -5195,7 +5195,7 @@
 .gf-name {
   font-size: clamp(23px, 3.5vw, 33px);
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   line-height: 1.15;
   margin: 0 0 14px;
 }
@@ -5204,7 +5204,7 @@
 .gf-second p {
   font-size: 14.5px;
   line-height: 1.78;
-  color: rgb(255 255 255 / 0.82);
+  color: var(--ink-700);
   margin: 0 0 14px;
   max-width: 68ch;
 }
@@ -5214,7 +5214,7 @@
   border-left: 3px solid var(--accent-b, #f48fb1);
   font-size: clamp(17px, 2.6vw, 23px);
   line-height: 1.5;
-  color: #fff;
+  color: var(--ink-900);
 }
 
 .gf-section-title {
@@ -5222,10 +5222,10 @@
   font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.6);
+  color: var(--ink-500);
   margin: 0 0 16px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  border-bottom: 1px solid var(--line);
 }
 .gf-works {
   list-style: none;
@@ -5238,20 +5238,20 @@
 .gf-works li {
   padding: 16px 18px;
   border-radius: 14px;
-  background: rgb(255 255 255 / 0.045);
-  border: 1px solid rgb(255 255 255 / 0.11);
+  background: #f7f5f1;
+  border: 1px solid var(--line);
   border-top: 3px solid var(--accent-b, #f48fb1);
 }
 .gf-works strong {
   display: block;
   font-size: 14.5px;
-  color: #fff;
+  color: var(--ink-900);
   margin-bottom: 5px;
 }
 .gf-works span {
   font-size: 13px;
   line-height: 1.6;
-  color: rgb(255 255 255 / 0.72);
+  color: var(--ink-700);
 }
 
 .gf-second {
@@ -5267,7 +5267,7 @@
 .gf-lede {
   font-size: 14.5px;
   line-height: 1.7;
-  color: rgb(255 255 255 / 0.78);
+  color: var(--ink-700);
   margin: 0 0 18px;
   max-width: 68ch;
 }
@@ -5275,7 +5275,7 @@
   list-style: none;
   margin: 0 0 clamp(20px, 3.5vh, 34px);
   padding: 0 0 0 24px;
-  border-left: 2px solid rgb(255 255 255 / 0.15);
+  border-left: 2px solid var(--line);
 }
 .gf-line li {
   position: relative;
@@ -5289,13 +5289,13 @@
   width: 11px;
   height: 11px;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.35);
-  box-shadow: 0 0 0 3px rgb(8 16 30 / 0.9);
+  background: rgb(22 24 43 / 0.22);
+  box-shadow: 0 0 0 3px var(--paper);
 }
 /* the present Satguru's mark is lit; the rest are the line behind Her */
 .gf-line li[data-present='true']::before {
   background: var(--accent-b, #f48fb1);
-  box-shadow: 0 0 0 3px rgb(8 16 30 / 0.9), 0 0 14px 2px var(--accent-b, #f48fb1);
+  box-shadow: 0 0 0 3px var(--paper), 0 0 14px 2px var(--accent-b, #b357ad);
 }
 .gf-line-era {
   display: block;
@@ -5303,28 +5303,28 @@
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.5);
+  color: var(--ink-500);
   margin-bottom: 3px;
 }
 .gf-line-name {
   display: block;
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: var(--ink-900);
   margin-bottom: 3px;
 }
 .gf-line-note {
   display: block;
   font-size: 13px;
   line-height: 1.6;
-  color: rgb(255 255 255 / 0.68);
+  color: var(--ink-500);
   max-width: 62ch;
 }
 .gf-footnote {
   text-align: center;
   font-size: 13px;
   font-style: italic;
-  color: rgb(255 255 255 / 0.5);
+  color: var(--ink-500);
   max-width: 54ch;
   margin: 0 auto;
 }
@@ -5341,4 +5341,616 @@
   .pj-tab {
     transition: none;
   }
+}
+
+/* ====================================================================== */
+/* THE LIGHT SURFACE — the reading rooms' paper.                          */
+/*                                                                        */
+/* The hall on "/" keeps its colour-shifting accent canvas. These four     */
+/* pages are lit the other way: warm paper, the emblem's five inks used as */
+/* light rather than as pigment, and the record laid out on top in true    */
+/* white cards. One attribute — data-surface="light" — separates the two   */
+/* states, and the hall is never touched by anything in this block.        */
+/* ====================================================================== */
+
+.reading-room[data-surface='light'] {
+  /* THE PAPER. Not #fff: pure white glares beneath the dark brand bar and
+     leaves a card nowhere to go. Cards sit at true white ABOVE this, and
+     that half-step is the whole sense of elevation. */
+  --paper: #fbfaf8;
+  --card: #ffffff;
+
+  /* THE INK. One near-black with a little indigo in it, stepped down by
+     opacity rather than by mixing toward grey — greyed text on warm paper
+     reads as faded, tinted text reads as considered. */
+  --ink-900: #16182b;
+  --ink-700: #3a3f57;
+  --ink-500: #626981;
+  --ink-400: #838aa8;
+
+  /* THE RULES. */
+  --line: rgb(22 24 43 / 0.1);
+  --line-soft: rgb(22 24 43 / 0.06);
+
+  /* THE FIVE PETALS — the emblem's own inks, unchanged. */
+  --petal-1: #f81170;
+  --petal-2: #b357ad;
+  --petal-3: #6663b5;
+  --petal-4: #09a6cf;
+  --petal-5: #69b947;
+
+  color: var(--ink-700);
+  background: var(--paper);
+}
+
+/* THE BRAND BAR. Header.tsx is white type on transparency — built to float
+   over the dark hall. Rather than fork it, the light pages give that type
+   the dark ground it expects: a deep band painted underneath it.
+   `#site-header` is an id (1-0-0); the component's own `bg-transparent` is a
+   class (0-1-0). The bar wins, and Header.tsx is not edited at all. */
+.reading-room[data-surface='light'] #site-header {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(248 17 112 / 0.16) 0%,
+      rgb(179 87 173 / 0.14) 26%,
+      rgb(102 99 181 / 0.13) 50%,
+      rgb(9 166 207 / 0.14) 74%,
+      rgb(105 185 71 / 0.16) 100%
+    ),
+    linear-gradient(180deg, #171334 0%, #120f2a 100%);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.08), 0 10px 30px -18px rgb(18 15 42 / 0.8);
+}
+
+/* THE GROUND. Petal light, not petal pigment: five very soft radial washes
+   placed off-centre so the page never reads as symmetrical wallpaper, over a
+   paper base. Opacities are single-digit percentages — at anything stronger
+   this stops being a ground and starts competing with the type. */
+.paper-canvas {
+  /* the ground's decorations are deliberately bled off the edges, and a bleed
+     that is not clipped is just horizontal overflow — the page grew 157px
+     wider than the viewport at 1280 until this was added */
+  overflow: hidden;
+  background:
+    radial-gradient(58vw 46vw at 8% -6%, rgb(248 17 112 / 0.07), transparent 62%),
+    radial-gradient(50vw 40vw at 96% 4%, rgb(9 166 207 / 0.08), transparent 60%),
+    radial-gradient(46vw 44vw at 88% 52%, rgb(179 87 173 / 0.06), transparent 62%),
+    radial-gradient(52vw 42vw at 4% 74%, rgb(105 185 71 / 0.06), transparent 60%),
+    radial-gradient(44vw 38vw at 60% 104%, rgb(102 99 181 / 0.07), transparent 62%),
+    var(--paper);
+}
+/* the emblem's own petal, bled off the top-right corner, very faint — the
+   brand as a watermark on the paper rather than as an ornament on it */
+.paper-canvas::after {
+  content: '';
+  position: absolute;
+  top: -6vw;
+  right: -8vw;
+  width: min(46vw, 620px);
+  aspect-ratio: 1;
+  background: url('/images/petals/petal-welcome.webp') center / contain no-repeat;
+  opacity: 0.05;
+  rotate: -12deg;
+  pointer-events: none;
+}
+
+/* Paper needs dark type. The reading-room CSS below was written for the dark
+   hall, so the light surface restates the few global roles here and the rest
+   is inverted in place. */
+.reading-room[data-surface='light'] .page-title,
+.reading-room[data-surface='light'] .page-eyebrow,
+.reading-room[data-surface='light'] .page-standfirst {
+  color: var(--ink-900);
+  text-shadow: none;
+}
+.reading-room[data-surface='light'] .page-eyebrow {
+  color: var(--ink-500);
+}
+.reading-room[data-surface='light'] .page-standfirst {
+  color: var(--ink-700);
+}
+
+/* ---- THE COVER ------------------------------------------------------- */
+/* A band of the hall's own dark stone across the top of every reading room.
+   It gives the white header and the masthead the ground they were drawn for,
+   and it is the seam that says the daylit pages and the dark hall are one
+   building. Paper starts underneath it. */
+.page-cover {
+  position: relative;
+  z-index: 10;
+  padding: 104px clamp(16px, 5vw, 64px) clamp(34px, 5vh, 56px);
+  text-align: center;
+  background:
+    radial-gradient(70% 120% at 50% 0%, rgb(255 255 255 / 0.07), transparent 70%),
+    linear-gradient(180deg, #171334 0%, #120f2a 100%);
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+}
+/* the five inks, laid as a hairline along the cover's foot — the emblem
+   signing the page */
+.page-cover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #f81170 0%, #f81170 20%,
+    #b357ad 20%, #b357ad 40%,
+    #6663b5 40%, #6663b5 60%,
+    #09a6cf 60%, #09a6cf 80%,
+    #69b947 80%, #69b947 100%
+  );
+}
+.page-cover-inks {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.page-cover-inks span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+/* on the cover the masthead is back on dark, so it keeps its original inks */
+.reading-room[data-surface='light'] .page-cover .page-title {
+  color: #fff;
+  text-shadow: 0 6px 30px rgb(0 0 0 / 0.4);
+}
+.reading-room[data-surface='light'] .page-cover .page-eyebrow {
+  color: rgb(255 255 255 / 0.62);
+}
+.reading-room[data-surface='light'] .page-cover .page-standfirst {
+  color: rgb(255 255 255 / 0.84);
+}
+.page-masthead {
+  margin-bottom: 0;
+}
+
+/* ---- THE SUBSECTION RAIL --------------------------------------------- */
+/* Parks flush under the fixed header once the cover has scrolled away. */
+.subnav {
+  position: sticky;
+  top: 72px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px clamp(16px, 5vw, 64px);
+  background: rgb(251 250 248 / 0.88);
+  backdrop-filter: blur(14px) saturate(1.3);
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.subnav::-webkit-scrollbar { display: none; }
+.subnav-label {
+  flex: none;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+.subnav-list {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.subnav-chip {
+  --chip-ink: #6663b5;
+  white-space: nowrap;
+  padding: 7px 15px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-500);
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+}
+.subnav-chip:hover {
+  color: var(--ink-900);
+  background: rgb(22 24 43 / 0.04);
+}
+.subnav-chip[data-on='true'] {
+  color: #fff;
+  background: var(--chip-ink);
+  border-color: var(--chip-ink);
+}
+.subnav-chip:focus-visible {
+  outline: 2px solid var(--chip-ink);
+  outline-offset: 2px;
+}
+/* the rail is sticky, so anchored sections must clear it AND the header */
+.reading-room[data-surface='light'] main section[id],
+.reading-room[data-surface='light'] main div[id] {
+  scroll-margin-top: 132px;
+}
+
+/* ---- THE GALLERY ----------------------------------------------------- */
+.mgal {
+  margin-top: clamp(22px, 4vh, 38px);
+}
+.mgal-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+}
+.mgal-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin: 0;
+}
+.mgal-filter {
+  display: flex;
+  gap: 5px;
+}
+.mgal-chip {
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-500);
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+}
+.mgal-chip:hover { color: var(--ink-900); }
+.mgal-chip[data-on='true'] {
+  color: #fff;
+  background: var(--ink-900);
+  border-color: var(--ink-900);
+}
+.mgal-chip:focus-visible { outline: 2px solid var(--petal-3); outline-offset: 2px; }
+
+.mgal-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+.mgal-cell[data-wide='true'] {
+  grid-column: span 2;
+}
+@media (max-width: 460px) {
+  .mgal-cell[data-wide='true'] { grid-column: span 1; }
+}
+.mgal-plate {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.04), 0 10px 24px -18px rgb(22 24 43 / 0.25);
+  transition: transform 300ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 300ms ease;
+}
+button.mgal-plate:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgb(22 24 43 / 0.05), 0 20px 38px -20px rgb(22 24 43 / 0.35);
+}
+button.mgal-plate:focus-visible {
+  outline: 2px solid var(--petal-3);
+  outline-offset: 3px;
+}
+.mgal-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mgal-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgb(22 24 43 / 0.72);
+  color: #fff;
+  font-size: 15px;
+  padding-left: 3px;
+  backdrop-filter: blur(3px);
+}
+/* the awaiting plate — inert, and honest about being empty */
+.mgal-plate-awaiting {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  cursor: default;
+  box-shadow: none;
+  border-style: dashed;
+  border-color: rgb(22 24 43 / 0.22);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 9px,
+      rgb(22 24 43 / 0.022) 9px 18px
+    ),
+    #fbfaf8;
+}
+.mgal-await-mark {
+  font-size: 17px;
+  color: var(--ink-400);
+}
+.mgal-await-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+.mgal-caption {
+  margin: 8px 2px 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-500);
+}
+.mgal-note {
+  margin: 14px 0 0;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--ink-400);
+}
+
+/* the viewer */
+.mgal-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 5vw, 60px);
+  background: rgb(14 12 28 / 0.92);
+  backdrop-filter: blur(6px);
+  animation: mgal-fade 220ms ease-out both;
+}
+@keyframes mgal-fade { from { opacity: 0; } to { opacity: 1; } }
+.mgal-viewer-figure {
+  margin: 0;
+  max-width: min(1100px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mgal-viewer-figure img,
+.mgal-viewer-figure video,
+.mgal-viewer-figure iframe {
+  max-width: 100%;
+  max-height: 76vh;
+  width: auto;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+  background: #000;
+  border: 0;
+}
+.mgal-viewer-figure iframe {
+  width: min(1100px, 90vw);
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+.mgal-viewer-figure figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.82);
+  text-align: left;
+}
+.mgal-viewer-count {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 0.5);
+}
+.mgal-viewer-close,
+.mgal-viewer-arrow {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 200ms ease;
+}
+.mgal-viewer-close:hover,
+.mgal-viewer-arrow:hover { background: rgb(255 255 255 / 0.2); }
+.mgal-viewer-close {
+  top: 20px;
+  right: 22px;
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+}
+.mgal-viewer-arrow {
+  top: 50%;
+  translate: 0 -50%;
+  width: 46px;
+  height: 46px;
+  font-size: 26px;
+}
+.mgal-viewer-prev { left: 16px; }
+.mgal-viewer-next { right: 16px; }
+.mgal-viewer-close:focus-visible,
+.mgal-viewer-arrow:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mgal-plate,
+  .mgal-viewer,
+  .subnav-chip,
+  .mgal-chip { transition: none; animation: none; }
+}
+
+/* THE SOCIAL RAIL on paper. It is white-on-transparent for the dark hall;
+   on the reading rooms it needs the opposite ink. Same approach as the
+   header: restated here rather than forked into a light variant. */
+.reading-room[data-surface='light'] .social-rail a,
+.reading-room[data-surface='light'] .social-rail button {
+  color: var(--ink-500);
+  border-color: rgb(22 24 43 / 0.18);
+  background: rgb(255 255 255 / 0.7);
+}
+.reading-room[data-surface='light'] .social-rail a:hover,
+.reading-room[data-surface='light'] .social-rail button:hover {
+  color: var(--ink-900);
+  border-color: rgb(22 24 43 / 0.4);
+  background: #fff;
+  box-shadow: 0 0 14px rgb(22 24 43 / 0.12);
+}
+.reading-room[data-surface='light'] .social-rail .rail-line {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(22 24 43 / 0.2),
+    rgb(22 24 43 / 0.34)
+  );
+}
+.reading-room[data-surface='light'] .social-rail span {
+  color: var(--ink-400);
+}
+
+/* The project spreads are stacked now rather than tabbed, so they need air
+   between them — and their entrance animation was written for a tab swap,
+   where only one was ever on screen. Stacked, four of them animating at once
+   on load reads as a flinch. */
+.reading-room[data-surface='light'] .pj-spread {
+  margin-bottom: clamp(26px, 5vh, 52px);
+  animation: none;
+  scroll-margin-top: 132px;
+}
+/* the tab rail is retired — the page rail replaced it */
+.pj-rail { display: none; }
+
+/* ---- PAPER-SAFE INK, AND THE FACES ----------------------------------- */
+
+/* THE INK PROBLEM. Each pillar carries two colours: accentA (deep) and
+   accentB (bright). The reading rooms were written for the dark hall, where
+   the BRIGHT one is the readable one — Heal's #6fd19a glows on near-black.
+   On paper it measures 1.86:1 against white, which is not text, it is a
+   watermark. Type therefore switches to a paper cut of each ink, and the
+   bright one keeps only the jobs where contrast does not apply: bar fills,
+   rules, borders, active chips.
+
+   Measured against #ffffff:
+     heal    #15694a  6.3:1   (its own #1f8a5c is 4.1 — just under)
+     enrich  #1565c0  5.4:1
+     empower #b3164f  5.9:1
+     projects#0d6a8c  5.8:1 */
+.reading-room[data-surface='light'] #heal.cv-chapter { --ink-type: #15694a; }
+.reading-room[data-surface='light'] #enrich.cv-chapter { --ink-type: #1565c0; }
+.reading-room[data-surface='light'] #empower.cv-chapter { --ink-type: #b3164f; }
+/* the doors carry the same three, in order */
+.reading-room[data-surface='light'] .cv-door:nth-child(1) { --ink-type: #15694a; }
+.reading-room[data-surface='light'] .cv-door:nth-child(2) { --ink-type: #1565c0; }
+.reading-room[data-surface='light'] .cv-door:nth-child(3) { --ink-type: #b3164f; }
+/* anything else falls back to the deep accent, darkened toward the page ink
+   so a pale accent can never become pale type */
+.reading-room[data-surface='light'] .cv-door-label,
+.reading-room[data-surface='light'] .cv-chapter-eyebrow,
+.reading-room[data-surface='light'] .cv-record-value,
+.reading-room[data-surface='light'] .pj-scope,
+.reading-room[data-surface='light'] .pj-link,
+.reading-room[data-surface='light'] .gf-eyebrow {
+  color: var(--ink-type, color-mix(in srgb, var(--ink-a, #3a3f57) 82%, #16182b));
+}
+.reading-room[data-surface='light'] .pj-link {
+  border-bottom-color: color-mix(in srgb, var(--ink-type, var(--ink-a, #3a3f57)) 40%, transparent);
+}
+.reading-room[data-surface='light'] .pj-link:hover {
+  color: var(--ink-900);
+  border-bottom-color: var(--ink-900);
+}
+/* the chapter's top rule and the highlight bullets keep the bright ink —
+   they are marks, not text */
+.reading-room[data-surface='light'] .cv-chapter {
+  border-top-color: var(--ink-type, var(--ink-a));
+}
+
+/* THE FACES. `.font-artistic-display`, `-heading` and `-serif` are used on
+   almost every element of these pages and were defined NOWHERE — they fell
+   through to the body stack, so the intended hierarchy never existed. They
+   are defined here SCOPED TO THE READING ROOMS on purpose: the same classes
+   are used across the home page, and giving the hall a new set of faces is
+   not what was asked for. */
+.reading-room[data-surface='light'] .font-artistic-display {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-weight: 600;
+}
+.reading-room[data-surface='light'] .font-artistic-heading {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.reading-room[data-surface='light'] .font-artistic-serif {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+/* THE BLIND STAMP — the emblem debossed into the sheet. Fixed, so it belongs
+   to the stock rather than to the layout, and multiplied so it darkens the
+   paper instead of sitting on it. */
+.paper-canvas::before {
+  content: '';
+  /* fixed, so it belongs to the stock rather than the layout — which also
+     means no ancestor's overflow can clip it, so it stays inside the
+     viewport under its own steam and leans out by translation instead */
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  translate: 60px 40px;
+  width: min(520px, 42vw);
+  aspect-ratio: 1;
+  background: url('/images/lotus-watermark.png') center / contain no-repeat;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* SNAP BELONGS TO THE HALL, NOT TO THE READING ROOMS.
+   `html { scroll-snap-type: y proximity }` is set globally for the home
+   page, where each screen is a `.snap-screen` and settling on a boundary is
+   the whole point. The reading rooms are long documents with no snap
+   children, and snapping a document you are READING — mid-paragraph, mid
+   figure table — is the opposite of what proximity snapping is for. It also
+   now has something to fight: the subsection rail scrolls with
+   scrollIntoView and the chapter doors are real '#id' anchors, neither of
+   which existed when that rule was written (its comment still says the site
+   has none). */
+html:has(.reading-room[data-surface='light']) {
+  scroll-snap-type: none;
+}
+
+/* A film tile with a file but no still: an ink ground for the play mark to
+   sit on, rather than a broken image. */
+.mgal-plate[data-poster='none'] {
+  background: linear-gradient(140deg, #22263f 0%, #16182b 100%);
 }

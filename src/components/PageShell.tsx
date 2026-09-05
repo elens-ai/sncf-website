@@ -18,26 +18,41 @@ interface PageShellProps {
   title: string;
   /** One paragraph under the title — what this page is for. */
   standfirst: string;
+  /** Rendered under the cover, pinned — the page's own table of contents. */
+  rail?: React.ReactNode;
   children: React.ReactNode;
 }
 
 /**
  * THE READING ROOMS' CHROME.
  *
- * The exhibition's own furniture, reused: the page-wide accent canvas, the
- * header with its search / gallery / donate ribbons, the social rail and the
- * footer. A page passes the pillar whose inks it should wear, and the ground
- * ramps to those two colours the same way the hero's does between rooms.
+ * The hall on "/" is a dark room you walk through. These four pages are the
+ * desk you sit at afterwards, and they are lit differently on purpose: the
+ * colour-shifting accent canvas belongs to the home page alone, and this
+ * shell paints a warm paper ground instead.
  *
- * The masthead below the header is deliberately quiet — an eyebrow, the name
- * in Dancing Script, a rule that draws itself, and one paragraph. The hall
- * is where the site performs; these pages are where it answers questions.
+ * `data-surface="light"` on the root is the switch. Everything downstream —
+ * the ground, the reading-room CSS, and the header — keys off it, so the two
+ * lighting states are one attribute apart and the hall is never touched.
+ *
+ * THE HEADER stays exactly as written: it is white type on transparency,
+ * built to float over the dark hall. Rather than fork it into a light
+ * variant, the light surface paints a deep brand bar UNDERNEATH it. The
+ * white type then has the dark ground it was designed for, on a page that is
+ * otherwise paper. `#site-header` is an id (1-0-0) and the component's own
+ * `bg-transparent` is a class (0-1-0), so the bar wins without one edit to
+ * Header.tsx.
+ *
+ * The paper is #fbfaf8, not #ffffff: pure white glares under the dark bar,
+ * and it leaves cards nowhere to go. Cards sit at true white ABOVE it, which
+ * is what reads as elevation.
  */
 export const PageShell: React.FC<PageShellProps> = ({
   accentPillarId = 'projects',
   eyebrow,
   title,
   standfirst,
+  rail,
   children,
 }) => {
   const pillar: PillarState =
@@ -57,8 +72,9 @@ export const PageShell: React.FC<PageShellProps> = ({
     navigate(`/core-values#${id}`);
   };
 
-  /* The accent canvas reads these two variables. The hero publishes them on
-     the home page; here the page itself does, once, from its own pillar. */
+  /* The page's ink. The hero publishes these on the home page; here the page
+     publishes its own, once. They tint the rail, the rules and the active
+     states — never the ground, which stays paper. */
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty('--accent-a', pillar.accentA);
@@ -66,8 +82,12 @@ export const PageShell: React.FC<PageShellProps> = ({
   }, [pillar.accentA, pillar.accentB]);
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans">
-      <div className="accent-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
+    <div
+      className="reading-room relative min-h-screen w-full flex flex-col font-sans"
+      data-surface="light"
+    >
+      {/* the paper, and the petal light laid on it */}
+      <div className="paper-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
 
       <Header
         currentPillar={pillar}
@@ -84,18 +104,30 @@ export const PageShell: React.FC<PageShellProps> = ({
 
       <SocialSidebar />
 
-      <main className="relative z-10 flex-1 w-full px-4 sm:px-8 md:px-12 lg:px-16 pt-[112px] pb-16">
-        <div className="max-w-6xl mx-auto">
-          {/* THE MASTHEAD */}
-          <header className="page-masthead">
-            <p className="page-eyebrow">{eyebrow}</p>
-            <h1 className="page-title font-dancing-script">{title}</h1>
-            <div className="page-rule" aria-hidden="true" />
-            <p className="page-standfirst font-artistic-serif">{standfirst}</p>
-          </header>
-
-          {children}
+      {/* THE COVER. A band of the hall's own dark stone across the top of
+          every reading room. It is what the white header was built to float
+          over, it gives the masthead a ground to be set on, and it is the
+          visual seam that says the daylit pages and the dark hall are one
+          building. The paper starts underneath it. */}
+      <div className="page-cover">
+        <div className="page-cover-inks" aria-hidden="true">
+          {['#f81170', '#b357ad', '#6663b5', '#09a6cf', '#69b947'].map((ink) => (
+            <span key={ink} style={{ background: ink }} />
+          ))}
         </div>
+        <header className="page-masthead">
+          <p className="page-eyebrow">{eyebrow}</p>
+          <h1 className="page-title font-dancing-script">{title}</h1>
+          <div className="page-rule" aria-hidden="true" />
+          <p className="page-standfirst font-artistic-serif">{standfirst}</p>
+        </header>
+      </div>
+
+      {/* THE RAIL — parks under the header once the cover scrolls away */}
+      {rail}
+
+      <main className="relative z-10 flex-1 w-full px-4 sm:px-8 md:px-12 lg:px-16 pb-16">
+        <div className="max-w-6xl mx-auto">{children}</div>
       </main>
 
       <SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />

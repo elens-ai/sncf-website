@@ -1,5 +1,7 @@
 import React from 'react';
 import { PageShell } from '../components/PageShell';
+import { SubsectionNav } from '../components/SubsectionNav';
+import { MediaGallery } from '../components/MediaGallery';
 import { PARTNERS } from '../data/partners';
 
 /**
@@ -39,9 +41,22 @@ export const WhoWeArePage: React.FC = () => (
     standfirst="The Sant Nirankari Charitable Foundation is the Mission’s working hands
       — the part of it that builds hospitals, funds classrooms, plants forests
       and turns up after a flood."
+    rail={
+      <SubsectionNav
+        label="On this page"
+        links={[
+          { id: 'account', label: 'The account', ink: '#6663b5' },
+          { id: 'mission', label: 'Mission & vision', ink: '#09a6cf' },
+          { id: 'road', label: 'The road so far', ink: '#69b947' },
+          { id: 'partners', label: 'Who walks with us', ink: '#b357ad' },
+          { id: 'wwa-media', label: 'Photographs & films', ink: '#f81170' },
+          { id: 'contact', label: 'Where to find us', ink: '#6663b5' },
+        ]}
+      />
+    }
   >
     {/* THE ACCOUNT */}
-    <section className="ww-prose">
+    <section className="ww-prose" id="account">
       <p className="font-artistic-serif">
         The foundation was set up in 2010 to act on a single line of Baba
         Hardev Singh Ji’s: that a life gets its meaning if it is lived for
@@ -75,7 +90,7 @@ export const WhoWeArePage: React.FC = () => (
     </ul>
 
     {/* MISSION & VISION */}
-    <div className="ww-pair">
+    <div className="ww-pair" id="mission">
       <section className="ww-card">
         <h2 className="ww-card-title font-artistic-heading">Our mission</h2>
         <p className="font-artistic-serif">
@@ -98,7 +113,7 @@ export const WhoWeArePage: React.FC = () => (
     </div>
 
     {/* THE ROAD SO FAR */}
-    <section>
+    <section id="road">
       <h2 className="ww-section-title font-artistic-display">The road so far</h2>
       <ol className="ww-timeline">
         {MILESTONES.map((m) => (
@@ -111,7 +126,7 @@ export const WhoWeArePage: React.FC = () => (
     </section>
 
     {/* WHO WALKS WITH US */}
-    <section>
+    <section id="partners">
       <h2 className="ww-section-title font-artistic-display">Who walks with us</h2>
       <p className="ww-lede font-artistic-serif">
         {PARTNERS.length} organisations have put their name beside the
@@ -128,8 +143,12 @@ export const WhoWeArePage: React.FC = () => (
       </ul>
     </section>
 
+    <section id="wwa-media">
+      <MediaGallery section="who-we-are" />
+    </section>
+
     {/* WHERE TO FIND US */}
-    <section className="ww-contact">
+    <section className="ww-contact" id="contact">
       <h2 className="ww-section-title font-artistic-display">Where to find us</h2>
       <div className="ww-contact-grid">
         <div>

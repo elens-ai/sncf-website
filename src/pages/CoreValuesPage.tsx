@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageShell } from '../components/PageShell';
+import { SubsectionNav } from '../components/SubsectionNav';
+import { MediaGallery } from '../components/MediaGallery';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
 
@@ -107,6 +109,15 @@ export const CoreValuesPage: React.FC = () => {
       standfirst="Everything the foundation does stands on three of them. What follows is
         not a summary — it is the record: every activity, every figure it
         reports, and the scale of one against another."
+      rail={
+        <SubsectionNav
+          label="The cornerstones"
+          links={CORNERSTONES.map((id) => {
+            const p = PILLARS.find((x) => x.id === id)!;
+            return { id, label: p.label, ink: p.accentB };
+          })}
+        />
+      }
     >
       {/* THE CONTENTS — three doors, one per cornerstone */}
       <nav className="cv-contents" aria-label="Jump to a cornerstone">
@@ -259,6 +270,9 @@ export const CoreValuesPage: React.FC = () => {
                 );
               })}
             </ul>
+
+            {/* THE PLATES — this cornerstone's photographs and films */}
+            <MediaGallery section={id} title={`${pillar.label} — photographs & films`} />
           </section>
         );
       })}

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PageShell } from '../components/PageShell';
+import { SubsectionNav } from '../components/SubsectionNav';
+import { MediaGallery } from '../components/MediaGallery';
 import { ACTIVITIES } from '../data/activities';
 
 /**
@@ -10,6 +12,11 @@ import { ACTIVITIES } from '../data/activities';
  * measurable footprint. So each gets a full spread rather than a row — its
  * figures laid out as a plate, its scope stated, and a way through to the
  * page the foundation itself publishes about it.
+ *
+ * The four were tabbed once, which hid three projects behind a control and
+ * gave each one nowhere to hang its own photographs. They are stacked now,
+ * one spread each with its own plates, and the rail at the top of the page
+ * does the job the tabs did — except it also says where you are.
  *
  * The fifth entry is Sant Nirankari Health City, which the foundation
  * headlines but which reports no figures yet — it is under construction. It
@@ -48,9 +55,13 @@ const PROJECT_FACE: Record<
   },
 };
 
+/** 'Project Oneness Vann' -> 'project-oneness-vann' — the MEDIA key and the
+    anchor id are the same string, so a gallery never silently misses. */
+const slug = (title: string) =>
+  title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 export const ProjectsPage: React.FC = () => {
   const projects = ACTIVITIES.filter((a) => a.pillarId === 'projects');
-  const [active, setActive] = useState<string>(projects[0]?.id ?? '');
 
   return (
     <PageShell
@@ -60,37 +71,27 @@ export const ProjectsPage: React.FC = () => {
       standfirst="Four campaigns the foundation runs under their own names — each with a
         start, a footprint, and figures it reports against. A fifth is being
         built."
+      rail={
+        <SubsectionNav
+          label="The projects"
+          links={[
+            ...projects.map((p) => ({
+              id: slug(p.title),
+              label: p.title.replace(/^Project /, ''),
+              ink: PROJECT_FACE[p.title]?.ink2,
+            })),
+            { id: 'health-city', label: 'Health City', ink: '#9ad6ef' },
+          ]}
+        />
+      }
     >
-      {/* THE RAIL — one tab per project, the ink changing with the choice */}
-      <nav className="pj-rail" aria-label="Choose a project">
-        {projects.map((p) => {
-          const face = PROJECT_FACE[p.title];
-          const on = active === p.id;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              className="pj-tab"
-              data-on={on}
-              aria-pressed={on}
-              style={
-                { '--ink-a': face?.ink, '--ink-b': face?.ink2 } as React.CSSProperties
-              }
-              onClick={() => setActive(p.id)}
-            >
-              {p.title.replace(/^Project /, '')}
-            </button>
-          );
-        })}
-      </nav>
-
       {/* THE SPREADS */}
       {projects.map((p) => {
         const face = PROJECT_FACE[p.title];
-        if (active !== p.id) return null;
         return (
           <article
             key={p.id}
+            id={slug(p.title)}
             className="pj-spread"
             style={{ '--ink-a': face?.ink, '--ink-b': face?.ink2 } as React.CSSProperties}
           >
@@ -121,12 +122,18 @@ export const ProjectsPage: React.FC = () => {
             <footer className="pj-foot">
               <span className="pj-period font-artistic-serif">{p.period}</span>
             </footer>
+
+            {/* THE PLATES */}
+            <MediaGallery
+              section={slug(p.title)}
+              title={`${p.title.replace(/^Project /, '')} — photographs & films`}
+            />
           </article>
         );
       })}
 
       {/* THE ONE STILL BEING BUILT */}
-      <section className="pj-forthcoming">
+      <section className="pj-forthcoming" id="health-city">
         <p className="pj-forthcoming-eyebrow font-artistic-display">Under construction</p>
         <h2 className="pj-forthcoming-title font-artistic-heading">
           Sant Nirankari Health City
