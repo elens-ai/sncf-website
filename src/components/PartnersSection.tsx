@@ -517,8 +517,8 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
             our published activity report
           </p>
           <p className="pb-contact">
-            nirankarifoundation.org · Begin the conversation — the wall has
-            room.
+            Sant Nirankari Charitable Foundation · Begin the conversation —
+            the wall has room.
           </p>
         </div>,
         document.body,

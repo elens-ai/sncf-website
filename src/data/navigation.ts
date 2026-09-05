@@ -6,17 +6,17 @@
  * (Projects), you find out who it is (Who We Are), and you are told where
  * the direction comes from (Our Guiding Force).
  *
- * These are OUR routes now, not the official site's. Where a destination is
- * genuinely somewhere else — the Health City's own site, the careers board —
- * the link still leaves, and those are the only ones that do. `external` is
- * what the nav uses to decide between a router link and an anchor; anything
- * starting with '/' stays in the app.
+ * These are OUR routes. Nothing here points at nirankarifoundation.org: this
+ * site replaces it, that domain is being decommissioned, and a link to it
+ * would send visitors — and search engines — to an address that is going
+ * away. The only outbound links left are to the Mission's OTHER properties,
+ * which are separate live sites: the Health City, the Mission itself.
+ * `external` is what the nav uses to decide between a router link and an
+ * anchor; anything starting with '/' stays in the app.
  *
  * Gallery is deliberately absent — the header already carries a Gallery
  * ribbon, and duplicating it would give two controls for one thing.
  */
-
-const SITE = 'https://nirankarifoundation.org';
 
 export interface NavLink {
   label: string;
@@ -107,14 +107,8 @@ export const NAV_ITEMS: NavItem[] = [
       { label: 'Mission & Vision', href: '/who-we-are' },
       { label: 'Our Partners', href: '/who-we-are' },
       { label: 'Contact', href: '/who-we-are' },
-      { label: 'Honors & Recognitions', href: `${SITE}/honors-and-recognitions/`, external: true },
+      { label: 'Honors & Recognitions', href: '/#awards' },
     ],
   },
   { label: 'Our Guiding Force', href: '/our-guiding-force' },
-  {
-    label: 'Careers',
-    href: 'https://www.nirankarihealthcity.org/careers/',
-    badge: 'New',
-    external: true,
-  },
 ];

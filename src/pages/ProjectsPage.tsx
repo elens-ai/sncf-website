@@ -13,37 +13,38 @@ import { ACTIVITIES } from '../data/activities';
  *
  * The fifth entry is Sant Nirankari Health City, which the foundation
  * headlines but which reports no figures yet — it is under construction. It
- * is listed honestly as such rather than padded with invented numbers.
+ * is listed honestly as such rather than padded with invented numbers, and
+ * it keeps its outbound link because the Health City runs its own live site.
+ *
+ * Nothing here links to nirankarifoundation.org: this site replaces it and
+ * that domain is being decommissioned. The figures below ARE the record now,
+ * so there is no longer another page to send anyone to.
  */
 
 /** Per-project presentation: the ink it wears and where it lives officially. */
 const PROJECT_FACE: Record<
   string,
-  { ink: string; ink2: string; scope: string; href?: string }
+  { ink: string; ink2: string; scope: string }
 > = {
   'Project Amrit': {
     ink: '#00796b',
     ink2: '#4db6ac',
     scope: 'Launched 2023 · with the Government of India',
-    href: 'https://nirankarifoundation.org/project-amrit/',
   },
   'Project Oneness Vann': {
     ink: '#6a1b9a',
     ink2: '#ba68c8',
     scope: 'Launched 2021 · indigenous micro-forests',
-    href: 'https://nirankarifoundation.org/oneness-vann/',
   },
   'Watershed Programme': {
     ink: '#0d6a8c',
     ink2: '#6ac8ed',
     scope: 'Arid-zone rejuvenation',
-    href: 'https://nirankarifoundation.org/watershed-program/',
   },
   'Adopted Villages': {
     ink: '#b06a1f',
     ink2: '#f0b357',
     scope: 'Since 2017 · Haryana',
-    href: 'https://nirankarifoundation.org/adopted-villages/',
   },
 };
 
@@ -119,16 +120,6 @@ export const ProjectsPage: React.FC = () => {
 
             <footer className="pj-foot">
               <span className="pj-period font-artistic-serif">{p.period}</span>
-              {face?.href && (
-                <a
-                  className="pj-link"
-                  href={face.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Read the foundation's own page →
-                </a>
-              )}
             </footer>
           </article>
         );
