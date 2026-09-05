@@ -6741,3 +6741,55 @@ button.mgal-plate-awaiting {
 button.mgal-plate-awaiting:hover {
   border-color: color-mix(in srgb, var(--ink-a, #626981) 45%, transparent);
 }
+
+/* The unit belongs with the figure on the ranked scale: 1,500,230 and 47 sat
+   in one column with nothing saying that one counts units of blood and the
+   other counts buildings. Same value-over-unit stack the record uses below. */
+.cv-bar-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+.cv-bar-unit {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+
+/* AMOUNTS ARE STATED, NOT RANKED. Money leaves the bars entirely and is set
+   below them as a line of record — a sum and a headcount are not the same
+   length, and putting them on one axis made the chart meaningless. */
+.cv-amounts {
+  list-style: none;
+  margin: 10px 0 8px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+}
+.cv-amounts li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+.cv-amount-name {
+  font-size: 12px;
+  color: var(--ink-700);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.cv-amount-value {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink-type, var(--ink-900));
+  font-variant-numeric: tabular-nums;
+}
+.cv-amount-unit {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  flex: none;
+}

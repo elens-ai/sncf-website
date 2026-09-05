@@ -41,6 +41,14 @@ const toNumber = (v: string): number => {
 };
 
 /**
+ * A SUM OF MONEY, not a count of things — '₹4,82,19,252' beside '209,038'.
+ * The ranked scale must never put these on one axis: rupees parse to a far
+ * larger number than any headcount next to them, so one amount becomes the
+ * peak and every real quantity in the room collapses against it.
+ */
+const isAmount = (v: string) => /^[₹$]/.test(v.trim());
+
+/**
  * Only whole, plainly-written counts may be tallied: '9,174+' yes, '1.5M+'
  * no. An abbreviated figure carries its magnitude in a letter, so counting
  * its mantissa rounds 1.5M to "2M" — a quarter of a million units of blood
@@ -168,8 +176,15 @@ export const CoreValuesPage: React.FC = () => {
       {CORNERSTONES.map((id, chapterIndex) => {
         const pillar = PILLARS.find((x) => x.id === id)!;
         const acts = ACTIVITIES.filter((a) => a.pillarId === id);
-        /* the tallest headline figure in THIS vertical sets its own scale */
-        const peak = Math.max(...acts.map((a) => toNumber(a.headline.value)), 1);
+        /* AMOUNTS ARE STATED, NOT RANKED. The page already refuses to scale
+           one cornerstone against another because the quantities differ in
+           kind; this is the same principle one level down. Enrich's peak was
+           ₹4,82,19,252 — parsed as 48,219,252 — which rendered 209,038
+           students at 0.4% of a bar, a chart comparing rupees to people. */
+        const ranked = acts.filter((a) => !isAmount(a.headline.value));
+        const amounts = acts.filter((a) => isAmount(a.headline.value));
+        /* the tallest COUNT in this vertical sets its own scale */
+        const peak = Math.max(...ranked.map((a) => toNumber(a.headline.value)), 1);
 
         return (
           <section
@@ -240,7 +255,7 @@ export const CoreValuesPage: React.FC = () => {
               <div className="cv-scale">
                 <h3 className="cv-sub font-artistic-display">Scale, within this cornerstone</h3>
                 <ul>
-                  {[...acts]
+                  {[...ranked]
                     .sort((a, b) => toNumber(b.headline.value) - toNumber(a.headline.value))
                     .map((a) => {
                       /* The true proportion, floored in PIXELS by the CSS
@@ -256,17 +271,35 @@ export const CoreValuesPage: React.FC = () => {
                           <span className="cv-bar-track">
                             <span className="cv-bar-fill" style={{ width: `${pct}%` }} />
                           </span>
-                          <span className="cv-bar-value font-artistic-heading">
-                            {a.headline.value}
+                          <span className="cv-bar-figure">
+                            <span className="cv-bar-value font-artistic-heading">
+                              {a.headline.value}
+                            </span>
+                            <span className="cv-bar-unit">{a.headline.label}</span>
                           </span>
                         </li>
                       );
                     })}
                 </ul>
+                {amounts.length > 0 && (
+                  <ul className="cv-amounts">
+                    {amounts.map((a) => (
+                      <li key={a.id}>
+                        <span className="cv-amount-name">{a.title}</span>
+                        <span className="cv-amount-value font-artistic-heading">
+                          {a.headline.value}
+                        </span>
+                        <span className="cv-amount-unit">{a.headline.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <p className="cv-scale-note">
-                  Bars compare activities inside this cornerstone only — the
+                  Bars compare counts inside this cornerstone only — the
                   quantities differ in kind, so they are never scaled against
                   another cornerstone's.
+                  {amounts.length > 0 &&
+                    ' Sums of money are stated rather than ranked: rupees and people are not the same length.'}
                 </p>
               </div>
             </div>
