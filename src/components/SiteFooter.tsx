@@ -63,20 +63,22 @@ interface SiteFooterProps {
 export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => (
   <footer
     id="site-footer"
-    className="relative z-10 w-full bg-black/45 backdrop-blur-md border-t border-white/10"
+    className="site-footer relative z-10 w-full"
   >
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-14">
       <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
         {/* Identity + contact */}
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <img
-              src="https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp"
-              alt=""
-              aria-hidden="true"
-              className="w-11 h-11 object-contain"
-              referrerPolicy="no-referrer"
-            />
+            {/* the same white disc the header gives it — on the footer's deep
+                ground the emblem's own petals had nothing to read against */}
+            <span className="footer-badge" aria-hidden="true">
+              <img
+                src="https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp"
+                alt=""
+                referrerPolicy="no-referrer"
+              />
+            </span>
             <div>
               <p className="font-artistic-display text-white text-[15px] font-extrabold tracking-[0.13em] uppercase leading-tight">
                 Sant Nirankari

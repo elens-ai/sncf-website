@@ -6016,13 +6016,35 @@ html:has(.reading-room[data-surface='light']) {
   color: rgb(255 255 255 / 0.88);
 }
 
-/* THE FOOTER is `bg-black/45` — written to deepen the hall's near-black
-   ground. Over paper that composites to a mid-grey band with white type on
-   it. It becomes the volume's back cover instead: the same stone as the
-   cover at the top, so the page opens and closes on the same material. */
-.reading-room[data-surface='light'] > footer {
+/* THE FOOTER IS ONE COLOUR ON EVERY PAGE.
+   It was `bg-black/45` — translucent — so it took whatever was behind it:
+   the hero's shifting accent on the home page, paper on the reading rooms,
+   a different shade on every screen of the exhibition. One footer with a
+   dozen appearances. It is opaque now, the same deep stone as the reading
+   rooms' cover band, so the site closes on the same note wherever you are. */
+.site-footer {
   background: linear-gradient(180deg, #120f2a 0%, #171334 100%);
-  border-top: 0;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+
+/* The emblem needs a ground of its own here. On the footer's deep stone the
+   logo's own petals — pink, purple, cyan, green — had nothing to read
+   against; the header solves this with a white disc and so does this. */
+.footer-badge {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: 999px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 10px -4px rgb(0 0 0 / 0.5);
+}
+.footer-badge img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 /* SMALL TYPE. --ink-400 measured 3.40:1 on card white and was carrying seven
