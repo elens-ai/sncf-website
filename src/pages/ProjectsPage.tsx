@@ -96,7 +96,7 @@ export const ProjectsPage: React.FC = () => {
             style={{ '--ink-a': face?.ink, '--ink-b': face?.ink2 } as React.CSSProperties}
             aria-labelledby={`${slug(p.title)}-title`}
           >
-            <div className="cv-margin-print" data-room="projects" aria-hidden="true" />
+            <div className="cv-margin-print" data-room={slug(p.title)} aria-hidden="true" />
 
             {/* the same threshold the cornerstones use — these are stacked
                 now, and a project deserves the same announcement */}
