@@ -6141,19 +6141,41 @@ html:has(.reading-room[data-surface='light']) {
    about which programme you are looking at. */
 .cv-threshold-emblem {
   position: absolute;
-  right: clamp(16px, 5vw, 72px);
+  /* bled off the right edge — artwork the band is printed over, not an
+     object sitting on it */
+  right: -4vw;
   top: 50%;
   translate: 0 -50%;
-  width: clamp(58px, 11vh, 104px);
+  width: clamp(190px, 38vh, 380px);
   aspect-ratio: 1;
-  border-radius: 999px;
   object-fit: contain;
-  opacity: 0.92;
-  box-shadow: 0 10px 26px -14px rgb(22 24 43 / 0.35);
+  /* THE CIRCLE IS IN THE FILE. These emblems ship as a mark on a near-white
+     disc, which as a badge is fine and as backdrop artwork is a hard white
+     coin stamped on a tinted band. Multiplied, that disc lands on the band at
+     essentially the band's own colour and disappears; only the mark itself
+     darkens through. No mask, no second asset, and it works over every one of
+     the three tints because multiply takes whatever ground it is given. */
+  mix-blend-mode: multiply;
+  /* Multiply kills MOST of the disc, but the file's ground is a very pale
+     tint rather than pure white, so a faint rim survives as a visible circle.
+     The mask fades everything past the mark's own extent to nothing, which
+     removes the edge without touching the leaf — the emblem stops being a
+     coin and becomes artwork bleeding off the band. */
+  -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
+  mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
+  opacity: 0.5;
   pointer-events: none;
 }
 @media (max-width: 700px) {
-  .cv-threshold-emblem { width: 52px; right: 14px; opacity: 0.8; }
+  .cv-threshold-emblem {
+    /* On a narrow screen the headline wraps across the full measure, so the
+       artwork is behind the type rather than beside it. It stays — that is
+       what a backdrop does — but quieter, so the words are unmistakably the
+       thing in front. */
+    width: 172px;
+    right: -30px;
+    opacity: 0.2;
+  }
 }
 .cv-threshold-label {
   position: relative;
@@ -6218,8 +6240,8 @@ html:has(.reading-room[data-surface='light']) {
   .cv-threshold-num { animation-name: cv-arrive-num; }
 }
 @keyframes cv-arrive-emblem {
-  from { opacity: 0; transform: translateY(18px) scale(0.86); }
-  to { opacity: 0.92; transform: none; }
+  from { opacity: 0; transform: translateY(18px) scale(0.9); }
+  to { opacity: 0.5; transform: none; }
 }
 @keyframes cv-arrive-num {
   from { opacity: 0; transform: translateY(26px); }
@@ -6242,7 +6264,7 @@ html:has(.reading-room[data-surface='light']) {
     opacity: 1;
     transform: none;
   }
-  .cv-threshold-emblem { opacity: 0.92; }
+  .cv-threshold-emblem { opacity: 0.5; }
 }
 
 /* The project spreads are threshold-led now, so the panel itself drops the
