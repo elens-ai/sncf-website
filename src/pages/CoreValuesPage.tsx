@@ -149,6 +149,9 @@ export const CoreValuesPage: React.FC = () => {
             }
             aria-labelledby={`${id}-title`}
           >
+            {/* the room's activities, printed small down both margins */}
+            <div className="cv-margin-print" data-room={id} aria-hidden="true" />
+
             {/* THE THRESHOLD. The card stack stops here: a full-bleed band of
                 paper with the cornerstone's number, name and petal on it. It
                 is a leaf you turn rather than a heading you scroll past — the
