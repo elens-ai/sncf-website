@@ -107,7 +107,7 @@ export const GuidingForcePage: React.FC = () => (
     </section>
 
     <section id="gf-media">
-      <MediaGallery section="guiding-force" />
+      <MediaGallery section="guiding-force" headingLevel={2} />
     </section>
 
     <p className="gf-footnote font-artistic-serif">

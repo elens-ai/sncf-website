@@ -856,6 +856,35 @@
   font-family: 'Dancing Script', cursive, sans-serif;
 }
 
+/* THE THREE WORKHORSE CLASSES — `.font-artistic-display`, `-heading` and
+   `-serif` — are on nearly every element of this site: the header wordmark,
+   the hall's labels, the reading rooms' figures and prose. They were defined
+   NOWHERE, so for the whole life of the project they have been silently
+   falling through to the body stack.
+
+   That was invisible while it was uniform. It stopped being invisible the
+   moment one part of the site defined them and the rest did not: the header
+   lockup rendered in one face on the reading rooms and another on the hall.
+
+   So they are defined ONCE, here, at file scope — one face everywhere.
+
+   FAMILY ONLY, deliberately. Every element wearing these classes already
+   carries its own Tailwind weight and tracking, and those were tuned against
+   the face the site has actually been rendering all along. Setting a weight
+   here would silently restyle hundreds of elements across the hall, which is
+   a redesign, not a consistency fix. The one addition is lining tabular
+   numerals on `-heading`, which is what that class is for — the figures — and
+   which changes only how digits align. */
+.font-artistic-display,
+.font-artistic-heading,
+.font-artistic-serif {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+/* the figures line up in columns: 1,500,230 over 454,233 over 15,443 */
+.font-artistic-heading {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
 /* Signature script for the welcome tagline.
    'Brittany Signature' is a commercial font and is not served by Google Fonts.
    local() picks up a system-installed copy with no network request; otherwise the
@@ -5832,9 +5861,10 @@ button.mgal-plate:focus-visible {
     rgb(22 24 43 / 0.34)
   );
 }
-.reading-room[data-surface='light'] .social-rail span {
-  color: var(--ink-400);
-}
+/* NOTE: no rule for `.social-rail span` here. SocialSidebar has no label
+   spans — its only <span> is the hover tooltip, which carries its own dark
+   pill and white text, and a light override repainted that white text to
+   near-white-on-near-black's opposite. Left alone deliberately. */
 
 /* The project spreads are stacked now rather than tabbed, so they need air
    between them — and their entrance animation was written for a tab swap,
@@ -5845,8 +5875,11 @@ button.mgal-plate:focus-visible {
   animation: none;
   scroll-margin-top: 132px;
 }
-/* the tab rail is retired — the page rail replaced it */
-.pj-rail { display: none; }
+/* The tab rail is retired — the page rail replaced it. Scoped, because an
+   unscoped display:none at file scope is a site-wide kill switch for a class
+   name, and the next person to reuse `.pj-rail` anywhere would lose an hour
+   to it. */
+.reading-room[data-surface='light'] .pj-rail { display: none; }
 
 /* ---- PAPER-SAFE INK, AND THE FACES ----------------------------------- */
 
@@ -5893,27 +5926,11 @@ button.mgal-plate:focus-visible {
   border-top-color: var(--ink-type, var(--ink-a));
 }
 
-/* THE FACES. `.font-artistic-display`, `-heading` and `-serif` are used on
-   almost every element of these pages and were defined NOWHERE — they fell
-   through to the body stack, so the intended hierarchy never existed. They
-   are defined here SCOPED TO THE READING ROOMS on purpose: the same classes
-   are used across the home page, and giving the hall a new set of faces is
-   not what was asked for. */
-.reading-room[data-surface='light'] .font-artistic-display {
-  font-family: 'Cinzel', 'Times New Roman', serif;
-  font-weight: 600;
-}
-.reading-room[data-surface='light'] .font-artistic-heading {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  font-variant-numeric: tabular-nums lining-nums;
-}
-.reading-room[data-surface='light'] .font-artistic-serif {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 400;
-  line-height: 1.75;
-}
+/* THE FACES — see the global definitions near the top of this file. They
+   were scoped to the reading rooms here at first, which gave the SAME header
+   two different wordmarks: Cinzel on the reading rooms, the body stack on
+   the hall. One lockup cannot have two faces, so the definitions moved to
+   file scope and this block no longer sets type. */
 
 /* THE BLIND STAMP — the emblem debossed into the sheet. Fixed, so it belongs
    to the stock rather than to the layout, and multiplied so it darkens the
@@ -5953,4 +5970,100 @@ html:has(.reading-room[data-surface='light']) {
    sit on, rather than a broken image. */
 .mgal-plate[data-poster='none'] {
   background: linear-gradient(140deg, #22263f 0%, #16182b 100%);
+}
+
+/* ---- PAPER CORRECTIONS ------------------------------------------------ */
+/* Found by measuring rather than by eye. Each of these survived the bulk
+   inversion because the substitution only rewrote the strings it was handed,
+   and these were either a colour it did not know about or a surface that is
+   still legitimately dark. */
+
+/* THE ACTIVE RAIL CHIP. The pages hand the rail the BRIGHT half of each ink
+   pair (accentB / ink2) — right for a mark on near-black, wrong as a ground
+   for white type: white on Health City's #9ad6ef measured 1.59:1. The chip
+   therefore darkens whatever ink it is given rather than trusting it. */
+.reading-room[data-surface='light'] .subnav-chip[data-on='true'] {
+  background: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  border-color: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  color: #fff;
+}
+
+/* THE PROJECT PLATE is a saturated colour block — one of the few surfaces on
+   these pages that is still DARK. The inversion flipped its type to page ink
+   anyway (1.95:1 on the label). It goes back to white, where it started. */
+.reading-room[data-surface='light'] .pj-plate-value {
+  color: #fff;
+}
+.reading-room[data-surface='light'] .pj-plate-label {
+  color: rgb(255 255 255 / 0.88);
+}
+
+/* THE FOOTER is `bg-black/45` — written to deepen the hall's near-black
+   ground. Over paper that composites to a mid-grey band with white type on
+   it. It becomes the volume's back cover instead: the same stone as the
+   cover at the top, so the page opens and closes on the same material. */
+.reading-room[data-surface='light'] > footer {
+  background: linear-gradient(180deg, #120f2a 0%, #171334 100%);
+  border-top: 0;
+}
+
+/* SMALL TYPE. --ink-400 measured 3.40:1 on card white and was carrying seven
+   roles that are ALL small text — captions, periods, notes, the rail label.
+   Small text has no 3:1 allowance. */
+.reading-room[data-surface='light'] {
+  --ink-400: #5f667e;
+}
+
+/* FOCUS RINGS kept the bright accent, which was the visible one on
+   near-black and is not on paper. */
+.reading-room[data-surface='light'] .cv-record-head:focus-visible {
+  outline-color: var(--ink-type, #16182b);
+}
+.reading-room[data-surface='light'] .pj-tab:focus-visible,
+.reading-room[data-surface='light'] .cv-door:focus-visible {
+  outline: 2px solid #16182b;
+  outline-offset: 2px;
+}
+
+/* THE CONTACT LINKS were underlined with a white hairline for the dark room,
+   which on a white card is no underline at all — and they were the same ink
+   as the paragraph around them, so nothing said they were links. */
+.reading-room[data-surface='light'] .ww-contact-grid a {
+  color: #1f4f8f;
+  border-bottom-color: rgb(31 79 143 / 0.35);
+}
+.reading-room[data-surface='light'] .ww-contact-grid a:hover {
+  color: #16182b;
+  border-bottom-color: #16182b;
+}
+
+/* THE PORTRAIT FRAME was a white hairline on a white card — no frame at all
+   against a light-edged photograph. */
+.reading-room[data-surface='light'] .gf-portrait {
+  border-color: var(--line);
+}
+
+/* THE COVER ON A SHORT SCREEN. Cover + sticky rail measured 393px of 700 —
+   56% of the viewport spent on chrome before a word of content. The band
+   keeps its presence on a tall display and gives the height back on a short
+   one: the padding and the title now scale with viewport height, not just
+   with width. */
+@media (max-height: 800px) {
+  .page-cover {
+    padding-top: 92px;
+    padding-bottom: clamp(18px, 2.6vh, 30px);
+  }
+  .page-cover .page-title {
+    font-size: clamp(30px, 5.2vh, 46px);
+  }
+  .page-cover .page-standfirst {
+    font-size: 13px;
+    max-width: 58ch;
+  }
+  .page-cover-inks {
+    margin-bottom: 8px;
+  }
+  .page-rule {
+    margin: 10px auto 9px;
+  }
 }

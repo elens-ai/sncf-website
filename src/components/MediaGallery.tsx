@@ -29,6 +29,14 @@ interface MediaGalleryProps {
   section: string;
   /** Small caps line above the gallery. */
   title?: string;
+  /**
+   * Heading level for that line. A gallery that is one of the page's own
+   * rail destinations is a SIBLING of the other sections, so it needs an h2;
+   * one tucked inside a chapter is subordinate and stays an h3. Getting this
+   * wrong files a top-level section under the section before it when anyone
+   * navigates the page by headings.
+   */
+  headingLevel?: 2 | 3;
 }
 
 type Filter = 'all' | 'photo' | 'film';
@@ -44,7 +52,9 @@ const FILTERS: [Filter, string][] = [
 export const MediaGallery: React.FC<MediaGalleryProps> = ({
   section,
   title = 'Photographs & films',
+  headingLevel = 3,
 }) => {
+  const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
   const items = MEDIA[section] ?? [];
   const [filter, setFilterState] = useState<Filter>('all');
   /* Changing the filter re-derives `openable`, so a viewer left open would
@@ -99,7 +109,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         step(-1);
       } else if (e.key === 'Tab') {
         /* aria-modal is a promise to assistive tech, not a mechanism: without
-           this, Tab walks straight out of the dialog into the page behind */
+           this, Tab walks straight out of the dialog into the page behind. */
         const d = dialogRef.current;
         if (!d) return;
         const focusable = d.querySelectorAll<HTMLElement>(
@@ -108,7 +118,15 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         if (!focusable.length) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
+        /* On open, focus sits on the dialog CONTAINER, which is in neither
+           the first nor the last branch — so a wrap test alone lets the very
+           first Shift+Tab fall out of the dialog and into the page. Anything
+           focused that is not inside the dialog is pulled back in. */
+        const inside = d.contains(document.activeElement) && document.activeElement !== d;
+        if (!inside) {
+          e.preventDefault();
+          (e.shiftKey ? last : first).focus();
+        } else if (e.shiftKey && document.activeElement === first) {
           e.preventDefault();
           last.focus();
         } else if (!e.shiftKey && document.activeElement === last) {
@@ -149,9 +167,11 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   };
 
   return (
-    <section className="mgal" aria-label={title}>
+    /* no aria-label on the section: it would duplicate the heading right
+       inside it, and a screen reader would announce the name twice */
+    <section className="mgal">
       <header className="mgal-head">
-        <h3 className="mgal-title font-artistic-display">{title}</h3>
+        <Heading className="mgal-title font-artistic-display">{title}</Heading>
 
         {hasPhoto && hasFilm && (
           <div className="mgal-filter" role="radiogroup" aria-label="Filter media">

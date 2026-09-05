@@ -57,6 +57,9 @@ export const WhoWeArePage: React.FC = () => (
   >
     {/* THE ACCOUNT */}
     <section className="ww-prose" id="account">
+      {/* the rail's first stop was an unheaded block — a destination with no
+          name for anyone navigating by headings */}
+      <h2 className="ww-section-title font-artistic-display">The account</h2>
       <p className="font-artistic-serif">
         The foundation was set up in 2010 to act on a single line of Baba
         Hardev Singh Ji’s: that a life gets its meaning if it is lived for
@@ -144,7 +147,7 @@ export const WhoWeArePage: React.FC = () => (
     </section>
 
     <section id="wwa-media">
-      <MediaGallery section="who-we-are" />
+      <MediaGallery section="who-we-are" headingLevel={2} />
     </section>
 
     {/* WHERE TO FIND US */}
