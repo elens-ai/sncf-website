@@ -14,6 +14,12 @@
  * URLs. There is not one video file in this repository today, so every
  * film is an awaiting plate until somebody hands us the footage.
  *
+ * NOTE ON WHAT IS HERE. The three programme emblems used to open each
+ * gallery as its widest plate. They were the only "photographs" most rooms
+ * had, and they are not photographs — they are the verticals' icons, which
+ * already appear on each room's threshold. A gallery of the archive should
+ * contain the archive.
+ *
  * TO ADD A PHOTOGRAPH
  *   1. put the file in /public/images (WebP, ~1600px on the long edge)
  *   2. set `src` to '/images/your-file.webp'
@@ -47,40 +53,16 @@ export interface MediaItem {
 export const MEDIA: Record<string, MediaItem[]> = {
   /* ---- CORE VALUES ---------------------------------------------------- */
   heal: [
-    {
-      id: 'heal-vertical',
-      kind: 'photo',
-      src: '/images/vertical-heal.webp',
-      alt: 'The emblem for the Heal programme',
-      caption: 'Heal — health, blood and sight',
-      wide: true,
-    },
     { id: 'heal-camp', kind: 'photo', src: null, alt: '', caption: 'A blood donation camp on Manav Ekta Diwas' },
     { id: 'heal-eye', kind: 'photo', src: null, alt: '', caption: 'Cataract surgery at a free eye camp' },
     { id: 'heal-film', kind: 'film', src: null, alt: '', caption: 'Film — a day inside a mobile dispensary' },
   ],
   enrich: [
-    {
-      id: 'enrich-vertical',
-      kind: 'photo',
-      src: '/images/vertical-enrich.webp',
-      alt: 'The emblem for the Enrich programme',
-      caption: 'Enrich — schooling, scholarship and skill',
-      wide: true,
-    },
     { id: 'enrich-class', kind: 'photo', src: null, alt: '', caption: 'A classroom at a foundation free school' },
     { id: 'enrich-nima', kind: 'photo', src: null, alt: '', caption: 'A NIMA skill centre in session' },
     { id: 'enrich-film', kind: 'film', src: null, alt: '', caption: 'Film — a Rajmata scholar’s first term' },
   ],
   empower: [
-    {
-      id: 'empower-vertical',
-      kind: 'photo',
-      src: '/images/vertical-empower.webp',
-      alt: 'The emblem for the Empower programme',
-      caption: 'Empower — youth, environment and relief',
-      wide: true,
-    },
     {
       id: 'empower-planting',
       kind: 'photo',

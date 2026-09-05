@@ -68,10 +68,16 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   const [viewing, setViewing] = useState<number | null>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const stripRef = useRef<HTMLUListElement | null>(null);
 
-  const hasPhoto = items.some((m) => m.kind === 'photo');
-  const hasFilm = items.some((m) => m.kind === 'film');
-  const shown = items.filter((m) => filter === 'all' || m.kind === filter);
+  const hasPhoto = items.some((m) => m.kind === 'photo' && m.src);
+  const hasFilm = items.some((m) => m.kind === 'film' && m.src);
+  /* What exists leads; what is awaited follows. A carousel that opens on
+     three placeholders buries the one photograph the room actually has. */
+  const shown = items
+    .filter((m) => filter === 'all' || m.kind === filter)
+    .slice()
+    .sort((a, b) => (a.src ? 0 : 1) - (b.src ? 0 : 1));
   /** only plates with a file can be opened — the arrows walk these */
   const openable = shown.filter((m) => m.src);
 
@@ -90,6 +96,43 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     },
     [openable.length],
   );
+
+  /* THE WHEEL DRIVES THE STRIP SIDEWAYS.
+     A vertical wheel gesture over the strip scrolls it horizontally — but
+     only while the strip can still take it. At either end the gesture is
+     handed back to the page untouched, which is the difference between a
+     carousel you can scroll past and the familiar trap where a horizontal
+     band swallows the page's scroll and strands the reader inside it.
+
+     Bound with { passive: false } because preventDefault is meaningless on a
+     passive listener, and React's onWheel is passive by default — the whole
+     thing would silently do nothing if this were a JSX prop. */
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      /* a genuinely horizontal gesture (trackpad, shift-wheel) already works
+         — leave it alone */
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 1) return;
+      /* A TOLERANCE, not an exact comparison. The strip carries 2px of
+         padding so focus rings are not clipped, and scroll-snap rests it on
+         the first plate's edge rather than on 0 — so `scrollLeft <= 0` was
+         never true, the "hand it back at the start" branch never ran, and
+         scrolling up over the strip trapped the page. Sub-pixel scroll
+         positions on a fractional-DPI display would break an exact test the
+         same way. */
+      const EDGE = 4;
+      const atStart = el.scrollLeft <= EDGE;
+      const atEnd = el.scrollLeft >= max - EDGE;
+      if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return;
+      e.preventDefault();
+      el.scrollLeft += e.deltaY;
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
 
   /* the viewer's keys, its focus trap, and the page's scroll lock */
   useEffect(() => {
@@ -154,6 +197,28 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
 
   if (!items.length) return null;
 
+  /* THE ROOM WITH NOTHING IN IT YET.
+     Four of the nine galleries have no photograph at all, and a strip of
+     "photograph to come" cards under a filter offering to sort them between
+     photographs and films is not a gallery — it is furniture standing in an
+     empty room, and it makes the page look broken rather than unfinished.
+     Say the true thing in one line instead, and put the gallery up when
+     there is something to hang in it. */
+  const anyReal = items.some((m) => m.src);
+  if (!anyReal) {
+    return (
+      <section className="mgal mgal-empty" aria-label={title}>
+        <Heading className="mgal-title font-artistic-display">{title}</Heading>
+        <p className="mgal-empty-line font-artistic-serif">
+          {items.length} {items.length === 1 ? 'plate is' : 'plates are'} reserved
+          here — {items.map((m) => m.caption.replace(/^Film — /, '')).slice(0, 2).join(', ')}
+          {items.length > 2 ? ' and more' : ''} — and they go up as the
+          foundation’s archive is catalogued.
+        </p>
+      </section>
+    );
+  }
+
   const current = viewing !== null ? openable[viewing] : null;
   /* counted over what is ON SCREEN, not over the whole set — under the Films
      filter, "3 of 12 hung" describes a grid the reader cannot see */
@@ -209,7 +274,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         )}
       </header>
 
-      <ul className="mgal-grid">
+      <ul className="mgal-strip" ref={stripRef}>
         {shown.map((m) => {
           const awaiting = !m.src;
           return (
