@@ -71,12 +71,20 @@ const renderSegments = (count: number) => {
 interface FoundationIntroProps {
   /** True while this copy is the one on screen; typing restarts on each arrival. */
   active: boolean;
+  /** Fires once, the moment the sentence finishes writing (or immediately,
+      under reduced motion). Lets a parent hold other entrance animations —
+      the orbit wheel's auto-rotation — until this line has actually been read. */
+  onComplete?: () => void;
 }
 
-export const FoundationIntro: React.FC<FoundationIntroProps> = ({ active }) => {
+export const FoundationIntro: React.FC<FoundationIntroProps> = ({ active, onComplete }) => {
   const [count, setCount] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const timerRef = useRef<number | null>(null);
+  /** The sentence types out once, the first time it's shown. Every later lap
+      of the wheel — the devotional portrait fronts again and this copy
+      re-arrives — it should just already be there, not retype. */
+  const hasTypedRef = useRef(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -86,29 +94,27 @@ export const FoundationIntro: React.FC<FoundationIntroProps> = ({ active }) => {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  /* Starts the moment this copy is settled in place, and restarts cleanly if
-     the effect is re-run.
+  /* Starts the moment this copy is first settled in place. `hasTypedRef`
+     guards the ANIMATION only, not the count write — every branch below sets
+     `count` to something on every `active` arrival, so there is no path that
+     leaves the sentence blank. That matters under StrictMode's mount →
+     cleanup → remount: the second run may find `hasTypedRef` already true and
+     skip straight to the instant branch, but it still writes the full length,
+     it just never (further) risks a bailed-and-blank render the way an
+     early-return guard would have.
 
-     There is deliberately NO "have I already started?" ref here. That guard
-     looks right but breaks under StrictMode, which mounts, tears down and
-     remounts effects: the first run would set the flag and create the timer,
-     the teardown would clear the timer, and the second run would see the flag
-     and bail — leaving the sentence permanently unwritten. It only showed on
-     the very first page load, where the intro mounts with active already true;
-     on later visits it mounts mid-transition, so both runs bailed harmlessly
-     and the bug stayed hidden.
-
-     Guarding on `active` alone is enough, and the early return when inactive
-     must NOT reset the count: `active` drops as the block shuttles away, and
-     clearing the text there would blank the sentence mid-fade. */
+     The early return when inactive must NOT reset the count: `active` drops
+     as the block shuttles away, and clearing the text there would blank the
+     sentence mid-fade. */
   useEffect(() => {
     if (!active) return;
 
-    if (reducedMotion) {
+    if (reducedMotion || hasTypedRef.current) {
       setCount(FULL_TEXT.length);
       return;
     }
 
+    hasTypedRef.current = true;
     setCount(0);
     const id = window.setInterval(() => {
       setCount((c) => {
@@ -123,6 +129,13 @@ export const FoundationIntro: React.FC<FoundationIntroProps> = ({ active }) => {
 
     return () => window.clearInterval(id);
   }, [active, reducedMotion]);
+
+  /* Separate from the effect above so onComplete isn't retriggered by every
+     render that leaves `active`/`reducedMotion` unchanged — it should fire
+     exactly once per arrival, the frame `count` actually reaches the end. */
+  useEffect(() => {
+    if (active && count >= FULL_TEXT.length) onComplete?.();
+  }, [active, count, onComplete]);
 
   const done = count >= FULL_TEXT.length;
 

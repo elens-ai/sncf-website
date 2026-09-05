@@ -3,11 +3,36 @@ import {
   LOGO_ASPECT,
   LOGO_BASE,
   LOGO_DISC,
-  LOGO_HAND,
   LOGO_PETALS,
   LOGO_VIEWBOX,
 } from './logoShapes';
-import { TINTED_FILLS } from './logoTint';
+import { PETAL_ART, PALM_ART } from './petalArt';
+
+/** Looked up by id at render time — see petalArt.ts for why the flower is
+    raster now, and what that traded away. */
+const PETAL_ART_BY_ID: Record<string, (typeof PETAL_ART)[number]> = Object.fromEntries(
+  PETAL_ART.map((a) => [a.id, a]),
+);
+
+/** THE GLOW IS CUT OFF AT THE PALM, and this is the box its fade is measured
+    in — the glow circle's own extent (r 230 plus room for its 16-unit blur),
+    centred like the circle itself. */
+const GLOW_BOX = { x: LOGO_BASE.x - 260, y: LOGO_DISC.cy - 260, w: 520, h: 520 };
+/** Where that fade starts and finishes, as fractions of GLOW_BOX — derived
+    from the palm's own top edge rather than hardcoded, so it follows the
+    artwork if the palm is ever replaced again. Full strength until a little
+    above the hand, gone by just inside its top edge: the light reads as
+    coming from the moon the hand is holding, not from behind the hand. */
+const GLOW_FADE_FROM = (PALM_ART.y - 34 - GLOW_BOX.y) / GLOW_BOX.h;
+const GLOW_FADE_TO = (PALM_ART.y + 6 - GLOW_BOX.y) / GLOW_BOX.h;
+/** Spread onto both the mask and its rect — SVG wants x/y/width/height, not
+    the w/h the box is defined with. */
+const GLOW_BOX_ATTRS = {
+  x: GLOW_BOX.x,
+  y: GLOW_BOX.y,
+  width: GLOW_BOX.w,
+  height: GLOW_BOX.h,
+};
 
 /**
  * The SNCF seal, assembling as the screen scrolls.
@@ -104,22 +129,32 @@ const easeOutBack = (t: number) => {
   return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
 };
 
-/** When the white disc grows in — on the APPROACH, not the scrub.
-
-    IT HAS TO BE WHOLE BEFORE THE PETALS ARRIVE. The petals now fly in off the
-    hero's own artwork and merge INTO this disc; a disc still opening when
-    they land would be catching them in something half-built, and the moment
-    reads as a full moon receiving them or it reads as nothing.
-
-    So it rides `entry` — the section taking the screen — and finishes at 0.92
-    of it, comfortably before the stage pins and the merge begins. It used to
-    open on the first fraction of the scrub, back when the seal simply landed
-    beside it and nothing had to be caught. */
-const DISC_WINDOW_ENTRY: [number, number] = [0.58, 0.92];
+/** When the moon grows in — ON THE SCRUB now, and late enough to be BORN
+    from the landing: the flower's five dots consolidate and descend into
+    the palm across scrub 0.01..0.048 (HallEntrance), handing the sprite off
+    over 0.046..0.054 — and this window opens after ALL of that, at 0.055:
+    the head lands, is briefly just a small white seed sitting in the palm,
+    and THEN the world grows out of it. Opening at 0.048 (where this sat)
+    started the growth on the exact frame of contact, with no beat between
+    arrival and expansion, so the two read as one blur; opening under the
+    descent — where it sat before that — was worse still, a glowing sphere
+    already waiting in the palm while the head was visibly still in the air.
+    The landing has to be the event — and the ORDER of the handover is the
+    event's grammar: the disc is born the instant the head touches the palm
+    (0.046, the same beat the orbit's `land` used to start), grows out from
+    under it while the head still sits there solid, and only once the world
+    has clearly outgrown its seed does the head fade away behind it (see
+    HallEntrance's `land`, 0.058-0.07). Grow-then-hide; the reverse read as
+    the head vanishing and a globe appearing in its place. It rode `entry`
+    before, when
+    the moon had to pre-exist for a whole seal to sink into; nothing
+    pre-exists now — the emblem is assembled on stage, piece by piece, and
+    every piece arrives from somewhere the reader watched. */
+const DISC_WINDOW_SCRUB: [number, number] = [0.046, 0.086];
 
 /** When the palm rises, on the APPROACH.
 
-    Ordered ahead of DISC_WINDOW_ENTRY and closing before it opens: the disc
+    Ordered ahead of the disc (see DISC_WINDOW_SCRUB) so the palm stands first: the disc
     is the seal's ground and sits IN the hand, so a disc arriving first would
     hang unsupported for a beat. Palm, then moon, then the petals that merge
     into it. */
@@ -226,10 +261,22 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
     }
 
     if (discRef.current) {
-      const [d0, d1] = DISC_WINDOW_ENTRY;
-      const du = easeOut(clamp01((entryRef.current - d0) / (d1 - d0)));
-      discRef.current.style.transform = `scale(${lerp(0.82, 1, du).toFixed(3)})`;
-      discRef.current.style.opacity = du.toFixed(3);
+      const [d0, d1] = DISC_WINDOW_SCRUB;
+      const du = easeOut(clamp01((s - d0) / (d1 - d0)));
+      /* STARTS AT THE HEAD'S OWN SIZE. The landing sprite is 34% of the
+         disc's radius (HallEntrance sets exactly that), so the world begins
+         at 0.34 and grows from there — the seed the reader watched land IS
+         the first frame of the moon, not a smaller ghost of it that pops to
+         a different size. It was 0.82 when the disc merely faded in behind
+         a seal, and 0.5 when this beat was first rewired; both left a step
+         at birth.
+
+         Opacity leads the scale a little (cubed against du), so the seed is
+         solid from the outset and only its SIZE animates — a sphere that
+         fades in while growing reads as an apparition, and this one is
+         meant to read as something already there, expanding. */
+      discRef.current.style.transform = `scale(${lerp(0.34, 1, du).toFixed(3)})`;
+      discRef.current.style.opacity = Math.min(1, du * 3).toFixed(3);
 
       /* THE WORLD TURNS ON THE SCRUB, not on a clock. A meridian seen from
          the side is an ellipse whose width is the cosine of how far round it
@@ -576,23 +623,46 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
             <stop offset="72%" stopColor="var(--accent-a, #1f8a5c)" stopOpacity="0.2" />
             <stop offset="100%" stopColor="var(--accent-a, #1f8a5c)" stopOpacity="0" />
           </radialGradient>
+
+          {/* Cuts the radiance off at the hand. The glow used to be a full
+              circle, so it spilled out below the palm and the hand read as
+              sitting in fog rather than holding a lit moon. A soft ramp
+              rather than a hard edge — this is a 16-unit blur, and a clean
+              rect cut across it shows as a visible straight line. */}
+          <linearGradient id="logoGlowFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fff" stopOpacity="1" />
+            <stop offset={GLOW_FADE_FROM.toFixed(4)} stopColor="#fff" stopOpacity="1" />
+            <stop offset={GLOW_FADE_TO.toFixed(4)} stopColor="#fff" stopOpacity="0" />
+            <stop offset="1" stopColor="#fff" stopOpacity="0" />
+          </linearGradient>
+          <mask id="logoGlowMask" maskUnits="userSpaceOnUse" {...GLOW_BOX_ATTRS}>
+            <rect {...GLOW_BOX_ATTRS} fill="url(#logoGlowFade)" />
+          </mask>
         </defs>
 
-        <circle
-          ref={glowRef}
-          cx={LOGO_BASE.x}
-          cy={LOGO_DISC.cy}
-          r="230"
-          fill="url(#logoAmbient)"
-          filter="url(#logoGlowBlur)"
-          style={{
-            pointerEvents: 'none',
-            opacity: 0.03,
-            transform: 'scale(0.2)',
-            transformOrigin: `${LOGO_DISC.cx}px ${LOGO_DISC.cy}px`,
-            willChange: 'transform, opacity',
-          }}
-        />
+        {/* THE MASK SITS ON THE WRAPPER, not on the circle. The circle scales
+            0.2 -> 1 as the disc opens; a mask on the circle itself would be
+            resolved in that same scaled space and the fade line would ride
+            up and down with it, only meeting the palm at full scale. On a
+            wrapper with no transform of its own, the cut stays pinned in
+            user space where the hand actually is. */}
+        <g mask="url(#logoGlowMask)">
+          <circle
+            ref={glowRef}
+            cx={LOGO_BASE.x}
+            cy={LOGO_DISC.cy}
+            r="230"
+            fill="url(#logoAmbient)"
+            filter="url(#logoGlowBlur)"
+            style={{
+              pointerEvents: 'none',
+              opacity: 0.03,
+              transform: 'scale(0.2)',
+              transformOrigin: `${LOGO_DISC.cx}px ${LOGO_DISC.cy}px`,
+              willChange: 'transform, opacity',
+            }}
+          />
+        </g>
 
         {/* the lamp: one wedge of light per petal, out past the frame */}
         {/* Multiply, not screen: the section turns white under the emblem, and
@@ -700,21 +770,22 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
           }}
         />
 
-        {/* the hand, under everything the flower does */}
+        {/* the hand, under everything the flower does — the artwork's own
+            palm, already 3D-shaded, in place of the vector palm+curl pair.
+            No bevel filter: that existed to fake the shading a flat vector
+            fill doesn't have, and this raster already carries its own. */}
         <g
           ref={handRef}
           style={{ willChange: 'transform, opacity', transformOrigin: PIVOT, opacity: 0 }}
         >
-          <g filter="url(#logoBevelSoft)">
-            {LOGO_HAND.palm.map((sh, i) => (
-              <path key={i} d={sh.d} fill={sh.fill} />
-            ))}
-          </g>
-          <g filter="url(#logoBevelSoft)">
-            {LOGO_HAND.curl.map((sh, i) => (
-              <path key={i} d={sh.d} fill={sh.fill} />
-            ))}
-          </g>
+          <image
+            href={PALM_ART.src}
+            x={PALM_ART.x}
+            y={PALM_ART.y}
+            width={PALM_ART.w}
+            height={PALM_ART.h}
+            preserveAspectRatio="xMidYMid meet"
+          />
         </g>
 
         {/* petals, painted back to front.
@@ -746,11 +817,19 @@ export const SncfLotus3D = forwardRef<SncfLotus3DHandle, SncfLotus3DProps>(({
                 filter: activePillarId === p.id ? 'brightness(1.08)' : undefined,
               }}
             >
-              <g filter="url(#logoBevel)">
-                {p.shapes.map((sh, i) => (
-                  <path key={i} d={sh.d} fill={TINTED_FILLS[p.id][i]} />
-                ))}
-              </g>
+              {(() => {
+                const art = PETAL_ART_BY_ID[p.id];
+                return art ? (
+                  <image
+                    href={art.src}
+                    x={art.x}
+                    y={art.y}
+                    width={art.w}
+                    height={art.h}
+                    preserveAspectRatio="xMidYMid meet"
+                  />
+                ) : null;
+              })()}
             </g>
           ))}
         </g>
