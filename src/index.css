@@ -7198,54 +7198,87 @@ button.mgal-plate-awaiting:hover {
 }
 
 /* ---- THE CAMPAIGN'S OWN LETTERHEAD ------------------------------------ */
-/* Two of the five projects have a real lockup; three are programmes that
-   have never had one. This prints where there is one and nothing where
-   there is not, which is why it is IN THE FLOW rather than absolutely
-   placed. Two reasons, both load-bearing:
+/* THE LOCKUP TAKES THE MARK'S PLACE. Every project threshold carries a big
+   faint glyph bled off the right edge; where the foundation has an actual
+   logo, that logo occupies the same side of the band and the glyph is
+   switched off — two graphics in one place is a collision, and a real mark
+   beats a drawn stand-in for it.
 
-   An empty badge slot is the most conspicuous thing a layout can contain,
-   because the eye has already learned the slot from the room above. In the
-   flow, a project without a mark simply starts at its folio and there is no
-   hole to notice.
-
-   And .cv-threshold's `padding-inline: max(calc(50vw - 50%), 16px)` resolves
+   The band becomes a ROW to do it, rather than the logo being absolutely
+   positioned. Absolute placement cannot find the reading column here:
+   .cv-threshold's `padding-inline: max(calc(50vw - 50%), 16px)` resolves
    that 50% against the reading column for an in-flow child, but against the
    band's own 100vw padding box for an absolutely positioned one — where it
-   collapses to 0 and the mark slides under the full-bleed edge.
+   collapses to 0 and the mark slides out to the viewport edge. A flex row
+   lands on the column edge by construction and needs no arithmetic.
 
-   SIZED BY HEIGHT so the Hindi can be read, and the floor is measured from
-   the file rather than guessed. amrit.webp is 630x396 and scanning it for
-   rows of opaque pixels gives three bands: the wordmark at y 31-265, then
-   the two Devanagari lines at y 272-316 and y 321-365 — 44px each, exactly
-   11.11% of the canvas. So the tagline renders at 0.1111 x whatever height
-   this rule sets: 8.4px at 76px (which is what `clamp(64px, 9vh, 96px)`
-   actually produced in a short viewport, and the matras were noise), 10.4px
-   at the 94px floor below, 12.9px at the 116px cap. The floor is a fixed
-   px and not a vh so a short window cannot shrink it back under 10px. A
-   mark shown too small to read its own tagline is not the mark, it is its
-   silhouette.
-
-   No blend mode and no mask: .cv-threshold-emblem multiplies because those
-   files carry a near-white disc to dissolve, and this one has genuine alpha
-   and no disc — its corners measure RGBA(0,0,0,0). Multiplying it would only
-   darken a blue mark into a blue band. Its ink averages Y = 0.260, which is
-   3.31:1 on the paper it sits over and 1.75:1 on the projects blue — which
-   is why it is here, on the band's pale tint, and never on the plate. */
-.pj-lockup {
-  position: relative;   /* the masked backdrop mark is absolute and unstacked */
-  display: block;
-  height: clamp(94px, 12vh, 116px);
-  width: auto;
-  max-width: min(100%, 320px);
-  margin: 0 0 14px;
+   Only the project thresholds are rows. Core Values' thresholds share this
+   class and stay in normal flow. */
+.pj-threshold {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 5vw, 64px);
 }
-@media (max-width: 700px) {
-  /* Only a little smaller, and 92px is not a round number by accident: it is
-     the smallest height that still clears 10px of tagline (92 x 0.1111 =
-     10.2px). 88px looked fine and measured 9.8px, which is the whole thing
-     this size exists to prevent. Width is not the constraint — 92px makes
-     the lockup 146px wide, comfortable on a 375px screen. */
-  .pj-lockup { height: 92px; margin-bottom: 10px; }
+.pj-threshold-col {
+  flex: 1 1 auto;
+  min-width: 0;          /* long titles shrink the column, not the lockup */
+}
+/* the drawn glyph stands down for a real one */
+.pj-threshold:has(.pj-lockup) .cv-threshold-mark {
+  display: none;
+}
+
+/* SIZED AS A BOX, NOT A HEIGHT, because the two lockups are not the same
+   shape: Amrit's is landscape at 1.59:1 and Oneness Vann's is close to
+   square. `object-fit: contain` inside a fixed box makes a wide mark fill
+   the width and a tall one fill the height, so both read at the same
+   optical size and a file of any aspect can be dropped in later without
+   touching this rule.
+
+   THE BOX IS SIZED BY THE HINDI. Scanning amrit.webp for rows of opaque
+   pixels gives the wordmark at y 31-265 and the two Devanagari lines at
+   y 272-316 and y 321-365 — 44px each, exactly 11.11% of the 396px canvas.
+   So the tagline renders at 0.1111 x the fitted height. In the smallest box
+   (150x96) the mark fits to 150x94 and the tagline is 10.5px; in the largest
+   (240x150) it fits to 239x150 and the tagline is 16.7px. An earlier pass
+   sized this by height alone and produced 8.4px, at which the matras are
+   noise — a mark shown too small to read its own tagline is not the mark,
+   it is its silhouette.
+
+   No blend mode and no mask, unlike .cv-threshold-emblem: that class exists
+   for the cornerstone icons, which carry a near-white disc that has to be
+   dissolved. This file has genuine alpha and no disc — its corners measure
+   RGBA(0,0,0,0) — so multiply would only darken a blue mark into a blue
+   band. Its ink averages Y = 0.260: 3.31:1 on the pale band it sits over,
+   and 1.75:1 on the projects blue, which is why it is never on the plate. */
+.pj-lockup {
+  flex: none;
+  width: clamp(150px, 20vw, 240px);
+  height: clamp(96px, 13vw, 150px);
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (max-width: 760px) {
+  /* Stacked, and the mark leads. There is not room for a 150px logo beside
+     a title at this width, and a letterhead above the name is the more
+     natural of the two readings anyway. `order` moves it without changing
+     the DOM, so the reading order stays name-then-tagline. */
+  .pj-threshold {
+    /* STAYS FLEX. Switching to `display: block` here made the `order` below
+       inert and dropped the lockup underneath the blurb, which is neither
+       a letterhead nor anything else. A column keeps order working. */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .pj-lockup {
+    order: -1;
+    width: clamp(146px, 42vw, 190px);
+    height: clamp(92px, 26vw, 120px);
+    object-position: left center;
+    margin: 0 0 14px;
+  }
 }
 
 /* THE FOCUS RING WAS THE ONE PLACE THE BRIGHT INK REACHED PAPER UNDARKENED.

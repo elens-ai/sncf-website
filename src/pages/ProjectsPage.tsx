@@ -141,15 +141,33 @@ export const ProjectsPage: React.FC = () => {
 
             {/* the same threshold the cornerstones use — these are stacked
                 now, and a project deserves the same announcement */}
-            <header className="cv-threshold">
+            <header className="cv-threshold pj-threshold">
               {/* the project's own mark, in place of the shared petal that
-                  used to say the same thing about all four */}
+                  used to say the same thing about all four. Where a real
+                  lockup exists it takes this spot instead — see the CSS. */}
               <span
                 className="cv-threshold-mark"
                 data-for={slug(p.title)}
                 aria-hidden="true"
               />
-              {/* the campaign's own letterhead, where it has one */}
+
+              <div className="pj-threshold-col">
+                <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <p className="cv-threshold-label font-artistic-display">{face?.scope}</p>
+                <h2
+                  id={`${slug(p.title)}-title`}
+                  className="cv-threshold-title font-artistic-heading"
+                >
+                  {p.title}
+                </h2>
+                <p className="cv-threshold-body font-artistic-serif">{p.blurb}</p>
+              </div>
+
+              {/* The campaign's own letterhead, where it has one. It comes
+                  LAST in the DOM so a screen reader reaches the project's
+                  name before its tagline; the row puts it on the right. */}
               {PROJECT_LOCKUP[p.title] && (
                 <img
                   className="pj-lockup"
@@ -159,17 +177,6 @@ export const ProjectsPage: React.FC = () => {
                   decoding="async"
                 />
               )}
-              <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <p className="cv-threshold-label font-artistic-display">{face?.scope}</p>
-              <h2
-                id={`${slug(p.title)}-title`}
-                className="cv-threshold-title font-artistic-heading"
-              >
-                {p.title}
-              </h2>
-              <p className="cv-threshold-body font-artistic-serif">{p.blurb}</p>
             </header>
 
             <article className="pj-spread">
