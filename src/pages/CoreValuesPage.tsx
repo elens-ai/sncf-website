@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
@@ -6,7 +6,13 @@ import { ChapterAmbience } from '../components/ChapterAmbience';
 import { MediaGallery } from '../components/MediaGallery';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
-import { onArrival } from '../utils/arrival';
+import { Tally } from '../components/Tally';
+import {
+  toNumber,
+  isAmount,
+  markStep,
+  groupNum,
+} from '../utils/figures';
 
 /**
  * CORE VALUES — the three cornerstones, written down.
@@ -34,120 +40,6 @@ import { onArrival } from '../utils/arrival';
 
 /** The three official cornerstones, in the foundation's own order. */
 const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
-
-/** '1,500,230' -> 1500230; '19,582,822 sq ft' -> 19582822; '449' -> 449. */
-const toNumber = (v: string): number => {
-  const m = v.replace(/,/g, '').match(/\d+(\.\d+)?/);
-  return m ? parseFloat(m[0]) : 0;
-};
-
-/**
- * A SUM OF MONEY, not a count of things — '₹4,82,19,252' beside '209,038'.
- * The ranked scale must never put these on one axis: rupees parse to a far
- * larger number than any headcount next to them, so one amount becomes the
- * peak and every real quantity in the room collapses against it.
- */
-const isAmount = (v: string) => /^[₹$]/.test(v.trim());
-
-/**
- * ONE MARK STANDS FOR HOW MANY?
- *
- * The tally draws a row of marks per activity, and each row declares its own
- * worth — "each ● = 100,000 units collected". That declaration is what makes
- * the presentation honest: a bar chart forces one axis onto quantities that
- * do not share one, so 47 hospitals sat three pixels long beside 1.5 million
- * bags of blood and read as negligible. Counting symbols carry magnitude
- * without ever implying that a hospital and a blood bag are the same thing.
- *
- * The step is chosen so every row lands between 8 and 20 marks — enough to
- * feel a quantity, few enough to take in without counting.
- */
-const markStep = (v: number): number => {
-  if (v <= 20) return 1;
-  /* WHOLE STEPS ONLY. A 2.5 in this list gave the Health Centre a step of
-     2.5 centres, which the key then printed as "≈ 3" — a caption that
-     misstates its own scale, in the one section whose whole purpose is not
-     to mislead. Integers only, so what is printed is what is drawn. */
-  const mag = Math.pow(10, Math.floor(Math.log10(v / 14)));
-  for (const m of [1, 2, 5]) {
-    const step = Math.max(1, Math.round(m * mag));
-    if (v / step <= 20) return step;
-  }
-  return Math.max(1, Math.round(mag * 10));
-};
-
-/** '100000' -> '100,000'; 2500 -> '2,500' */
-const groupNum = (n: number) =>
-  n >= 1 ? Math.round(n).toLocaleString('en-US') : String(n);
-
-/**
- * Only whole, plainly-written counts may be tallied: '9,174+' yes, '1.5M+'
- * no. An abbreviated figure carries its magnitude in a letter, so counting
- * its mantissa rounds 1.5M to "2M" — a quarter of a million units of blood
- * invented by a rounding step. Those are printed exactly as reported.
- */
-const isTallyable = (v: string) => /^[\d,]+\+?$/.test(v.trim());
-
-/** Counts a figure up once, when it first comes into view. */
-const Tally: React.FC<{ value: string; className?: string }> = ({ value, className }) => {
-  const ref = useRef<HTMLSpanElement | null>(null);
-  const [shown, setShown] = useState(value);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const target = toNumber(value);
-    if (
-      !target ||
-      !isTallyable(value) ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
-      return;
-    }
-
-    let raf = 0;
-    const suffix = value.replace(/^[\d,.]+/, '');
-    /* One shared, rAF-throttled driver decides when this has arrived. Each
-       figure used to mount its own unthrottled scroll listener and measure on
-       every event — nine layout reads per scroll with twelve figures up. */
-    let settle = 0;
-    const stop = onArrival(el, () => {
-      const t0 = performance.now();
-      const tick = (t: number) => {
-        const k = Math.min(1, (t - t0) / 1100);
-        /* easeOut for the last stretch: the number decelerates into place */
-        const e = 1 - Math.pow(1 - k, 3);
-        setShown(Math.round(target * e).toLocaleString('en-US') + suffix);
-        if (k < 1) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
-
-      /* THE FIGURE MUST END UP TRUE, whatever happens to the animation.
-         A count-up walks through numbers that are all WRONG until the last
-         frame, and requestAnimationFrame is suspended whenever the tab is
-         backgrounded or throttled — so an interrupted tally leaves a false
-         figure standing indefinitely. Seen in testing: "268 couples married"
-         where the record says 5,317. A timer, which keeps running when frames
-         do not, guarantees the true value is what remains. */
-      settle = window.setTimeout(() => {
-        cancelAnimationFrame(raf);
-        setShown(value);
-      }, 1500);
-    });
-
-    return () => {
-      stop();
-      cancelAnimationFrame(raf);
-      window.clearTimeout(settle);
-    };
-  }, [value]);
-
-  return (
-    <span ref={ref} className={className}>
-      {shown}
-    </span>
-  );
-};
 
 export const CoreValuesPage: React.FC = () => {
   /* which activity has its full record open, by id */
