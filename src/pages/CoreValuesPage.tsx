@@ -50,6 +50,37 @@ const toNumber = (v: string): number => {
 const isAmount = (v: string) => /^[₹$]/.test(v.trim());
 
 /**
+ * ONE MARK STANDS FOR HOW MANY?
+ *
+ * The tally draws a row of marks per activity, and each row declares its own
+ * worth — "each ● = 100,000 units collected". That declaration is what makes
+ * the presentation honest: a bar chart forces one axis onto quantities that
+ * do not share one, so 47 hospitals sat three pixels long beside 1.5 million
+ * bags of blood and read as negligible. Counting symbols carry magnitude
+ * without ever implying that a hospital and a blood bag are the same thing.
+ *
+ * The step is chosen so every row lands between 8 and 20 marks — enough to
+ * feel a quantity, few enough to take in without counting.
+ */
+const markStep = (v: number): number => {
+  if (v <= 20) return 1;
+  /* WHOLE STEPS ONLY. A 2.5 in this list gave the Health Centre a step of
+     2.5 centres, which the key then printed as "≈ 3" — a caption that
+     misstates its own scale, in the one section whose whole purpose is not
+     to mislead. Integers only, so what is printed is what is drawn. */
+  const mag = Math.pow(10, Math.floor(Math.log10(v / 14)));
+  for (const m of [1, 2, 5]) {
+    const step = Math.max(1, Math.round(m * mag));
+    if (v / step <= 20) return step;
+  }
+  return Math.max(1, Math.round(mag * 10));
+};
+
+/** '100000' -> '100,000'; 2500 -> '2,500' */
+const groupNum = (n: number) =>
+  n >= 1 ? Math.round(n).toLocaleString('en-US') : String(n);
+
+/**
  * Only whole, plainly-written counts may be tallied: '9,174+' yes, '1.5M+'
  * no. An abbreviated figure carries its magnitude in a letter, so counting
  * its mantissa rounds 1.5M to "2M" — a quarter of a million units of blood
@@ -262,36 +293,40 @@ export const CoreValuesPage: React.FC = () => {
                 </ul>
               </div>
 
-              {/* THE SCALE — activities ranked within this vertical */}
-              <div className="cv-scale">
-                <h3 className="cv-sub font-artistic-display">Scale, within this cornerstone</h3>
-                <ul>
+              {/* THE TALLY — each activity counted in its own unit */}
+              <div className="cv-tally">
+                <h3 className="cv-sub font-artistic-display">What it adds up to</h3>
+                <ul className="cv-tally-list">
                   {[...ranked]
                     .sort((a, b) => toNumber(b.headline.value) - toNumber(a.headline.value))
                     .map((a) => {
-                      /* The true proportion, floored in PIXELS by the CSS
-                         rather than in percent here. A 3% floor made a bar of
-                         43,904 and a bar of 47 identical — a 934-fold
-                         difference drawn as the same object, on a page whose
-                         argument is the record. A small value should look
-                         small; it should merely still be visible. */
-                      const pct = (toNumber(a.headline.value) / peak) * 100;
+                      const v = toNumber(a.headline.value);
+                      const step = markStep(v);
+                      const marks = Math.max(1, Math.min(20, Math.round(v / step)));
                       return (
-                        <li key={a.id}>
-                          <span className="cv-bar-name">{a.title}</span>
-                          <span className="cv-bar-track">
-                            <span className="cv-bar-fill" style={{ width: `${pct}%` }} />
-                          </span>
-                          <span className="cv-bar-figure">
-                            <span className="cv-bar-value font-artistic-heading">
-                              {a.headline.value}
+                        <li key={a.id} className="cv-tally-row">
+                          <p className="cv-tally-head">
+                            <span className="cv-tally-name font-artistic-heading">
+                              {a.title}
                             </span>
-                            <span className="cv-bar-unit">{a.headline.label}</span>
-                          </span>
+                            <span className="cv-tally-figure font-artistic-heading">
+                              {a.headline.value}
+                              <span className="cv-tally-unit">{a.headline.label}</span>
+                            </span>
+                          </p>
+                          <p className="cv-tally-marks" data-for={a.id} aria-hidden="true">
+                            {Array.from({ length: marks }, (_, i) => (
+                              <span key={i} style={{ '--n': i } as React.CSSProperties} />
+                            ))}
+                          </p>
+                          <p className="cv-tally-key">
+                            each mark ≈ {groupNum(step)} {a.headline.label.toLowerCase()}
+                          </p>
                         </li>
                       );
                     })}
                 </ul>
+
                 {amounts.length > 0 && (
                   <ul className="cv-amounts">
                     {amounts.map((a) => (
@@ -305,12 +340,12 @@ export const CoreValuesPage: React.FC = () => {
                     ))}
                   </ul>
                 )}
+
                 <p className="cv-scale-note">
-                  Bars compare counts inside this cornerstone only — the
-                  quantities differ in kind, so they are never scaled against
-                  another cornerstone's.
-                  {amounts.length > 0 &&
-                    ' Sums of money are stated rather than ranked: rupees and people are not the same length.'}
+                  Each row is counted in its own unit and says what one mark is
+                  worth. Nothing here is ranked against anything else — a
+                  hospital and a bag of blood are not the same quantity, and a
+                  shared axis would pretend they were.
                 </p>
               </div>
             </div>

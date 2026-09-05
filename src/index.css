@@ -4678,15 +4678,40 @@
   line-height: 1.6;
   color: var(--ink-700);
 }
+/* Each line gets a ruled marker rather than a dot: a short stroke in the
+   room's ink at the cap height of the first line, the way a printed list
+   marks its items. A dot is punctuation; a rule is a hand pointing. */
 .cv-highlights li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 8px;
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: var(--ink-b);
+  top: 11px;
+  width: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--ink-a), var(--ink-b));
+}
+.cv-highlights li {
+  padding-left: 24px;
+}
+/* the room's ink faintly rules the list's own left edge, so four sentences
+   read as one considered set rather than as four stray bullets */
+.cv-highlights ul {
+  position: relative;
+  padding-left: 2px;
+}
+.cv-highlights ul::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ink-a) 34%, transparent),
+    transparent
+  );
 }
 
 /* the scale */
@@ -6880,4 +6905,165 @@ button.mgal-plate-awaiting:hover {
 #empower .cv-ledger li:nth-child(4)::after {
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+
+/* ---- THE TALLY -------------------------------------------------------- */
+/* Counting marks instead of a ranked bar chart.
+   The bars put units of blood, people seen, hospital visits and BUILDINGS on
+   one axis: 47 health centres drew three pixels beside 1,500,230 bags and
+   read as negligible, which is false — they are not the same quantity and no
+   axis can hold both. Each row is now counted in its own unit and states
+   what one mark is worth, so magnitude is felt without anything being
+   compared that should not be. Symbols you count are also the one statistical
+   form that needs no chart literacy at all, which is what this page needed
+   for a general visitor. */
+.cv-tally-list {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+}
+.cv-tally-row + .cv-tally-row {
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft, rgb(22 24 43 / 0.06));
+}
+.cv-tally-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 7px;
+}
+.cv-tally-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-900);
+  min-width: 0;
+}
+.cv-tally-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex: none;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink-type, var(--ink-900));
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.cv-tally-unit {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+
+/* the marks themselves */
+.cv-tally-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0 0 5px;
+}
+.cv-tally-marks span {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  background-color: var(--ink-a, #626981);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  opacity: 0.9;
+}
+/* they arrive left to right as the cornerstone opens — the page's only
+   staggered entrance, and it earns its place by reading as counting */
+@supports (animation-timeline: view()) {
+  .cv-tally-marks span {
+    animation: cv-mark-in 340ms cubic-bezier(0.33, 1, 0.68, 1) both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 62%;
+    animation-delay: calc(var(--n, 0) * 26ms);
+  }
+}
+@keyframes cv-mark-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 0.9; transform: none; }
+}
+.cv-tally-key {
+  margin: 0;
+  font-size: 10.5px;
+  font-style: italic;
+  color: var(--ink-400);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-tally-marks span {
+    animation: none;
+    opacity: 0.9;
+    transform: none;
+  }
+}
+
+/* the drawing each activity is counted in */
+.cv-tally-marks[data-for='blood-donation'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='health-checkup'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='eye-checkup'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='health-centre'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='blood-bank'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='schools-colleges'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='scholarships'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='free-schools'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='skill-nima'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='skill-trades'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='tree-plantation'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='cleanliness'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='covid-relief'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='mass-marriages'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='financial-support'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
 }
