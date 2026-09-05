@@ -18,6 +18,8 @@
  * ribbon, and duplicating it would give two controls for one thing.
  */
 
+import { activitiesFor } from './activities';
+
 export interface NavLink {
   label: string;
   href: string;
@@ -44,49 +46,53 @@ export interface NavItem {
   groups?: PillarGroup[];
 }
 
-/* EVERY ENTRY GOES SOMEWHERE OF ITS OWN.
-   These were all pointed at the room anchor — four Heal entries, one
-   destination between them — which is a menu promising more than the page
-   delivers. Each activity now links to its own record, which opens on
-   arrival (CoreValuesPage watches the hash). The ids are the activity ids in
-   data/activities.ts, so a renamed activity breaks the link visibly at build
-   time rather than silently landing in the wrong place. */
+/* THE MENU IS GENERATED FROM THE PAGE'S OWN DATA.
+   These entries were written by hand, and a hand-written index of another
+   file's contents drifts: this one had already lost three real activities
+   (the Health Centre, mass marriages, the sewing and beautician trades) and
+   any renamed id would have become a dead anchor nobody noticed. Deriving
+   the rows from `activitiesFor` means the menu cannot promise an activity
+   the page does not have, or miss one it does.
+
+   Only the LABELS are curated — an activity's own title is written for a
+   record on the page ("Sant Nirankari Health Centre", "Sewing & Beautician")
+   and a menu wants it shorter. Anything without an entry here falls back to
+   its real title, so adding an activity surfaces it immediately rather than
+   silently omitting it. */
+const MENU_LABEL: Record<string, string> = {
+  'blood-donation': 'Blood Donation',
+  'health-checkup': 'Health Checkup Camps',
+  'eye-checkup': 'Eye Care',
+  'health-centre': 'Health Centre',
+  'blood-bank': 'Blood Bank',
+  'schools-colleges': 'Schools & Colleges',
+  scholarships: 'Scholarships',
+  'free-schools': 'Free Schools',
+  'skill-nima': 'NIMA Skill Centres',
+  'skill-trades': 'Sewing & Beautician',
+  'tree-plantation': 'Tree Plantation',
+  cleanliness: 'Cleanliness Drives',
+  'covid-relief': 'COVID-19 Relief',
+  'mass-marriages': 'Mass Marriages',
+  'financial-support': 'Financial Support',
+};
+
+const roomLinks = (pillarId: 'heal' | 'enrich' | 'empower'): NavLink[] => [
+  { label: `All of ${pillarId[0].toUpperCase()}${pillarId.slice(1)}`, href: `/core-values#${pillarId}` },
+  ...activitiesFor(pillarId).map((a) => ({
+    label: MENU_LABEL[a.id] ?? a.title,
+    href: `/core-values#${a.id}`,
+  })),
+];
+
 export const CORE_VALUE_GROUPS: PillarGroup[] = [
-  {
-    pillarId: 'heal',
-    title: 'Heal',
-    blurb: 'Health & medical care',
-    links: [
-      { label: 'All of Heal', href: '/core-values#heal' },
-      { label: 'Blood Donation', href: '/core-values#blood-donation' },
-      { label: 'Eye Care', href: '/core-values#eye-checkup' },
-      { label: 'Health Checkup Camps', href: '/core-values#health-checkup' },
-      { label: 'Blood Bank', href: '/core-values#blood-bank' },
-    ],
-  },
-  {
-    pillarId: 'enrich',
-    title: 'Enrich',
-    blurb: 'Education & skills',
-    links: [
-      { label: 'All of Enrich', href: '/core-values#enrich' },
-      { label: 'Schools & Colleges', href: '/core-values#schools-colleges' },
-      { label: 'Scholarships', href: '/core-values#scholarships' },
-      { label: 'Free Schools', href: '/core-values#free-schools' },
-      { label: 'Skill Development', href: '/core-values#skill-nima' },
-    ],
-  },
+  { pillarId: 'heal', title: 'Heal', blurb: 'Health & medical care', links: roomLinks('heal') },
+  { pillarId: 'enrich', title: 'Enrich', blurb: 'Education & skills', links: roomLinks('enrich') },
   {
     pillarId: 'empower',
     title: 'Empower',
     blurb: 'Upliftment & environment',
-    links: [
-      { label: 'All of Empower', href: '/core-values#empower' },
-      { label: 'Tree Plantation', href: '/core-values#tree-plantation' },
-      { label: 'Cleanliness Drives', href: '/core-values#cleanliness' },
-      { label: 'COVID-19 Relief', href: '/core-values#covid-relief' },
-      { label: 'Financial Support', href: '/core-values#financial-support' },
-    ],
+    links: roomLinks('empower'),
   },
 ];
 
