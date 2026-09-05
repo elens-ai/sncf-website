@@ -320,7 +320,11 @@ export const CoreValuesPage: React.FC = () => {
                             ))}
                           </p>
                           <p className="cv-tally-key">
-                            each mark ≈ {groupNum(step)} {a.headline.label.toLowerCase()}
+                            <span>
+                              each mark ≈ {groupNum(step)}{' '}
+                              {a.headline.label.toLowerCase()}
+                            </span>
+                            <span className="cv-tally-period">{a.period}</span>
                           </p>
                         </li>
                       );
@@ -336,6 +340,7 @@ export const CoreValuesPage: React.FC = () => {
                           {a.headline.value}
                         </span>
                         <span className="cv-amount-unit">{a.headline.label}</span>
+                        <span className="cv-tally-period">{a.period}</span>
                       </li>
                     ))}
                   </ul>
@@ -345,7 +350,8 @@ export const CoreValuesPage: React.FC = () => {
                   Each row is counted in its own unit and says what one mark is
                   worth. Nothing here is ranked against anything else — a
                   hospital and a bag of blood are not the same quantity, and a
-                  shared axis would pretend they were.
+                  shared axis would pretend they were. Each row also carries the
+                  date it is counted to, because those dates are not the same.
                 </p>
               </div>
             </div>
