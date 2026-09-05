@@ -6273,3 +6273,17 @@ html:has(.reading-room[data-surface='light']) {
   border-top: 0;
   margin-bottom: 0;
 }
+
+/* AIR BETWEEN THE ROOMS. The chapter card's bottom edge was landing flush on
+   the next room's threshold band — one surface ending exactly where the next
+   begins, which makes the seam read as a collision rather than as a passage
+   between two rooms. A band of plain paper before each new threshold gives
+   the door something to open out of, and lets the ambient light for the
+   incoming room be seen on its own before the band states it. */
+.reading-room[data-surface='light'] .cv-room + .cv-room {
+  margin-top: clamp(34px, 7vh, 84px);
+}
+/* and the last room does not butt into the footer either */
+.reading-room[data-surface='light'] .cv-room:last-of-type {
+  margin-bottom: clamp(20px, 4vh, 44px);
+}
