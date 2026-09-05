@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { NAV_ITEMS, NavItem } from '../data/navigation';
 import { PILLARS } from '../data/pillars';
 
@@ -18,8 +19,52 @@ import { PILLARS } from '../data/pillars';
  * Gallery is not here on purpose: the header already has a Gallery ribbon.
  */
 
+/**
+ * One link that knows where it goes. Internal destinations ('/core-values',
+ * '/projects#amrit') are router links so the page swaps without a reload;
+ * anything else is a real anchor that leaves the site in a new tab.
+ */
+const NavAnchor: React.FC<{
+  href?: string;
+  external?: boolean;
+  className?: string;
+  onClick?: () => void;
+  onFocus?: () => void;
+  ariaExpanded?: boolean;
+  ariaHasPopup?: boolean;
+  children: React.ReactNode;
+}> = ({ href, external, className, onClick, onFocus, ariaExpanded, ariaHasPopup, children }) => {
+  const aria = {
+    ...(ariaExpanded === undefined ? {} : { 'aria-expanded': ariaExpanded }),
+    ...(ariaHasPopup ? { 'aria-haspopup': true as const } : {}),
+  };
+  const internal = !!href && href.startsWith('/') && !external;
+  if (internal) {
+    return (
+      <Link to={href!} className={className} onClick={onClick} onFocus={onFocus} {...aria}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a
+      href={href}
+      className={className}
+      onClick={onClick}
+      onFocus={onFocus}
+      {...aria}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {children}
+    </a>
+  );
+};
+
 const accentOf = (pillarId: string) =>
   PILLARS.find((p) => p.id === pillarId)?.accentB ?? '#ffffff';
+/* the deep half of the pair — the readable one on a light ground */
+const deepOf = (pillarId: string) =>
+  PILLARS.find((p) => p.id === pillarId)?.accentA ?? '#3a3f57';
 
 export const MainNav: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -49,6 +94,24 @@ export const MainNav: React.FC = () => {
     setOpenIndex(index);
     moveSpotlight(index);
   };
+
+  /* Navigating with the panel still on screen leaves it hanging over the page
+     you just asked for. Every destination in it closes it. */
+  const closeMenu = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    setOpenIndex(null);
+    setSpotlight(null);
+  };
+
+  /* Escape dismisses it, as it should for anything that opens over the page. */
+  useEffect(() => {
+    if (openIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeMenu();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [openIndex]);
 
   const scheduleClose = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
@@ -113,7 +176,35 @@ export const MainNav: React.FC = () => {
                 onMouseEnter={() => (hasPanel(item) ? openMenu(i) : (moveSpotlight(i), setOpenIndex(null)))}
                 className="relative"
               >
-                {hasPanel(item) ? (
+                {/* An item that BOTH has a page and a panel is a link first:
+                    hovering opens the panel, clicking the label goes to the
+                    page. Only a panel with nowhere of its own to go stays a
+                    button. Otherwise Core Values, Projects and Who We Are
+                    would be reachable only through their own submenus. */}
+                {hasPanel(item) && item.href ? (
+                  <NavAnchor
+                    href={item.href}
+                    external={item.external}
+                    className={shared}
+                    /* These were a <button> before they became links, and the
+                       conversion silently dropped both attributes — assistive
+                       tech was no longer told the panel existed. */
+                    ariaExpanded={expanded}
+                    ariaHasPopup
+                    /* Hover opens it for a mouse; focus is the keyboard's
+                       equivalent, and without this the panel could not be
+                       opened from the keyboard at all. */
+                    onFocus={() => openMenu(i)}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                        expanded ? 'rotate-180' : ''
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </NavAnchor>
+                ) : hasPanel(item) ? (
                   <button
                     type="button"
                     aria-expanded={expanded}
@@ -129,14 +220,14 @@ export const MainNav: React.FC = () => {
                     />
                   </button>
                 ) : (
-                  <a href={item.href} className={shared}>
+                  <NavAnchor href={item.href} external={item.external} className={shared}>
                     {item.label}
                     {item.badge && (
                       <span className="ml-1 text-[9px] font-bold uppercase tracking-wider text-amber-300 italic">
                         {item.badge}
                       </span>
                     )}
-                  </a>
+                  </NavAnchor>
                 )}
               </div>
             );
@@ -153,36 +244,53 @@ export const MainNav: React.FC = () => {
               onMouseEnter={() => openMenu(i)}
               className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50 animate-fadeIn"
             >
-              <div className="rounded-2xl bg-neutral-950/90 border border-white/15 backdrop-blur-xl shadow-2xl p-4 min-w-[240px]">
+              <div className="nvpanel">
                 {item.groups ? (
-                  /* Core Values — one column per pillar, in that pillar's colour */
-                  <div className="flex gap-6 px-1">
-                    {item.groups.map((g) => {
-                      const accent = accentOf(g.pillarId);
+                  /* Core Values — one leaf per room, each a miniature of that
+                     room's page: the tinted door it opens with on top, its
+                     index of activities on white beneath. */
+                  <div className="nvrooms">
+                    {item.groups.map((g, gi) => {
+                      const deep = deepOf(g.pillarId);
+                      const bright = accentOf(g.pillarId);
+                      const all = g.links.find((l) => l.label.startsWith('All of'));
+                      const rows = g.links.filter((l) => !l.label.startsWith('All of'));
                       return (
-                        <div key={g.pillarId} className="min-w-[176px]">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span
-                              className="w-2 h-2 rounded-full flex-none"
-                              style={{ backgroundColor: accent }}
+                        <div
+                          key={g.pillarId}
+                          className="nvroom"
+                          style={
+                            { '--ink-a': deep, '--ink-b': bright } as React.CSSProperties
+                          }
+                        >
+                          <NavAnchor
+                            href={all?.href ?? `/core-values#${g.pillarId}`}
+                            className="nvroom-door"
+                            onClick={closeMenu}
+                          >
+                            <img
+                              className="nvroom-emblem"
+                              src={`/images/vertical-${g.pillarId}.webp`}
+                              alt=""
+                              aria-hidden="true"
                             />
-                            <span
-                              className="font-artistic-display text-xs font-extrabold uppercase tracking-widest"
-                              style={{ color: accent }}
-                            >
-                              {g.title}
+                            <span className="nvroom-folio" aria-hidden="true">
+                              {String(gi + 1).padStart(2, '0')}
                             </span>
-                          </div>
-                          <p className="text-[11px] text-white/45 mb-2.5 pl-4">{g.blurb}</p>
-                          <ul className="space-y-0.5">
-                            {g.links.map((l) => (
-                              <li key={l.href}>
-                                <a
+                            <span className="nvroom-name font-artistic-display">{g.title}</span>
+                            <span className="nvroom-blurb">{g.blurb}</span>
+                          </NavAnchor>
+                          <ul className="nvroom-index">
+                            {rows.map((l) => (
+                              <li key={l.label}>
+                                <NavAnchor
                                   href={l.href}
-                                  className="block px-3 py-1.5 rounded-lg text-[13px] text-white/75 hover:text-white hover:bg-white/10 transition-colors"
+                                  external={l.external}
+                                  className="nvroom-row"
+                                  onClick={closeMenu}
                                 >
                                   {l.label}
-                                </a>
+                                </NavAnchor>
                               </li>
                             ))}
                           </ul>
@@ -190,16 +298,18 @@ export const MainNav: React.FC = () => {
                       );
                     })}
                   </div>
-                ) : (
-                  <ul className="space-y-0.5">
+                                ) : (
+                  <ul className="nvlist">
                     {item.links?.map((l) => (
-                      <li key={l.href}>
-                        <a
+                      <li key={l.label}>
+                        <NavAnchor
                           href={l.href}
-                          className="block px-3 py-2 rounded-lg text-[13px] text-white/80 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
+                          external={l.external}
+                          className="nvroom-row"
+                          onClick={closeMenu}
                         >
                           {l.label}
-                        </a>
+                        </NavAnchor>
                       </li>
                     ))}
                   </ul>
@@ -229,9 +339,11 @@ export const MainNav: React.FC = () => {
               const open = mobileSection === i;
               if (!hasPanel(item)) {
                 return (
-                  <a
+                  <NavAnchor
                     key={item.label}
                     href={item.href}
+                    external={item.external}
+                    onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10 transition-colors"
                   >
                     {item.label}
@@ -240,7 +352,7 @@ export const MainNav: React.FC = () => {
                         {item.badge}
                       </span>
                     )}
-                  </a>
+                  </NavAnchor>
                 );
               }
               return (
@@ -260,6 +372,15 @@ export const MainNav: React.FC = () => {
                   </button>
                   {open && (
                     <div className="pb-2">
+                      {item.href && !item.external && (
+                        <NavAnchor
+                          href={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-6 py-2 rounded-lg text-[13px] font-semibold text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+                        >
+                          Open {item.label}
+                        </NavAnchor>
+                      )}
                       {item.groups
                         ? item.groups.map((g) => (
                             <div key={g.pillarId} className="mb-2">
@@ -270,24 +391,28 @@ export const MainNav: React.FC = () => {
                                 {g.title}
                               </div>
                               {g.links.map((l) => (
-                                <a
-                                  key={l.href}
+                                <NavAnchor
+                                  key={l.label}
                                   href={l.href}
+                                  external={l.external}
+                                  onClick={() => setMobileOpen(false)}
                                   className="block px-6 py-2 rounded-lg text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors"
                                 >
                                   {l.label}
-                                </a>
+                                </NavAnchor>
                               ))}
                             </div>
                           ))
                         : item.links?.map((l) => (
-                            <a
-                              key={l.href}
+                            <NavAnchor
+                              key={l.label}
                               href={l.href}
+                              external={l.external}
+                              onClick={() => setMobileOpen(false)}
                               className="block px-6 py-2 rounded-lg text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors"
                             >
                               {l.label}
-                            </a>
+                            </NavAnchor>
                           ))}
                     </div>
                   )}

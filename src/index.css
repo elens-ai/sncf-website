@@ -856,6 +856,35 @@
   font-family: 'Dancing Script', cursive, sans-serif;
 }
 
+/* THE THREE WORKHORSE CLASSES — `.font-artistic-display`, `-heading` and
+   `-serif` — are on nearly every element of this site: the header wordmark,
+   the hall's labels, the reading rooms' figures and prose. They were defined
+   NOWHERE, so for the whole life of the project they have been silently
+   falling through to the body stack.
+
+   That was invisible while it was uniform. It stopped being invisible the
+   moment one part of the site defined them and the rest did not: the header
+   lockup rendered in one face on the reading rooms and another on the hall.
+
+   So they are defined ONCE, here, at file scope — one face everywhere.
+
+   FAMILY ONLY, deliberately. Every element wearing these classes already
+   carries its own Tailwind weight and tracking, and those were tuned against
+   the face the site has actually been rendering all along. Setting a weight
+   here would silently restyle hundreds of elements across the hall, which is
+   a redesign, not a consistency fix. The one addition is lining tabular
+   numerals on `-heading`, which is what that class is for — the figures — and
+   which changes only how digits align. */
+.font-artistic-display,
+.font-artistic-heading,
+.font-artistic-serif {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+/* the figures line up in columns: 1,500,230 over 454,233 over 15,443 */
+.font-artistic-heading {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
 /* Signature script for the welcome tagline.
    'Brittany Signature' is a commercial font and is not served by Google Fonts.
    local() picks up a system-installed copy with no network request; otherwise the
@@ -1677,8 +1706,8 @@
    the belief that it smooths wheel and touchpad scrolling — it does not.
    `scroll-behavior` only affects PROGRAMMATIC scrolls (scrollTo,
    scrollIntoView) and in-page anchor jumps; wheel and touch input are
-   untouched by it. This site has neither — no scrollTo, no scrollIntoView,
-   no `href="#..."` anywhere — so the rule governed nothing at all, while
+   untouched by it. The HALL has none of those — no scrollTo, no
+   scrollIntoView, no `href="#..."` — so the rule governed nothing here, while
    still routing scroll-snap's own settle through the smooth-scroll path,
    which makes snapping feel sluggish rather than smooth. The transition
    between screens is animated in the sections themselves instead. */
@@ -4439,4 +4468,2859 @@
   .award-eyebrow,
   .award-title,
   .award-standfirst { opacity: 1; animation: none; }
+}
+
+/* ====================================================================== */
+/* THE READING ROOMS — Core Values, Projects, Who We Are, Guiding Force.  */
+/* The hall performs; these pages answer questions. Same inks, same faces, */
+/* quieter motion: things fade and rise once, and then hold still so the   */
+/* figures can actually be read.                                          */
+/* ====================================================================== */
+
+/* ---- SHARED MASTHEAD (PageShell) ------------------------------------- */
+.page-masthead {
+  text-align: center;
+  margin-bottom: clamp(28px, 5vh, 52px);
+}
+.page-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin: 0 0 6px;
+}
+.page-title {
+  font-size: clamp(38px, 7vw, 68px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-900);
+  margin: 0;
+  text-shadow: 0 6px 30px rgb(0 0 0 / 0.4);
+}
+.page-rule {
+  width: 76px;
+  height: 2px;
+  margin: 16px auto 14px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent-a, #fff), var(--accent-b, #fff));
+  transform-origin: center;
+  animation: page-rule-draw 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes page-rule-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.page-standfirst {
+  max-width: 62ch;
+  margin: 0 auto;
+  font-size: clamp(14px, 1.7vw, 16.5px);
+  line-height: 1.7;
+  color: var(--ink-700);
+}
+
+/* a shared surface for every panel on these pages */
+.cv-chapter,
+.pj-spread,
+.pj-forthcoming,
+.ww-card,
+.ww-contact,
+.gf-present,
+
+/* ---- CORE VALUES ------------------------------------------------------ */
+
+/* The three "door" cards that used to sit here — one per cornerstone, with
+   its headline and activity count — are gone. They were a jump list directly
+   beneath the sticky rail, which is also a jump list of the same three
+   cornerstones, and each room now announces itself at its own threshold. */
+
+/* a chapter */
+.cv-chapter {
+  padding: clamp(20px, 3.4vw, 34px);
+  margin-bottom: clamp(24px, 4vh, 44px);
+  scroll-margin-top: 100px;
+  border-top: 3px solid var(--ink-b);
+}
+.cv-chapter-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: var(--ink-b);
+  margin: 0 0 6px;
+}
+.cv-chapter-title {
+  font-size: clamp(23px, 3.4vw, 34px);
+  font-weight: 700;
+  color: var(--ink-900);
+  line-height: 1.15;
+  margin: 0 0 10px;
+}
+.cv-chapter-body {
+  max-width: 70ch;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink-700);
+  margin: 0;
+}
+
+/* the ledger */
+.cv-ledger {
+  list-style: none;
+  margin: 22px 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+/* THE LEDGER PLATES.
+   Cut from the same block as the projects' headline plate: the room's ink
+   laid deep-to-bright across the face, the figure struck in white on it.
+   A saturated plate carries a number the way a light card cannot — it stops
+   being a box containing a statistic and becomes the statistic itself. */
+.cv-ledger li {
+  position: relative;
+  padding: 16px 18px 15px;
+  border-radius: 16px;
+  border: 0;
+  overflow: hidden;
+  /* THE GRADIENT STAYS INSIDE THE DEEP ACCENT — from a shade under it to
+     just under it — and never runs to the bright one. Running deep-to-bright
+     looks richer and puts white type on a mid-tone at the far end: measured
+     1.86:1 on Heal, where the 10px label sits. Held in the deep register the
+     plate is just as saturated and white clears 4.5:1 across the whole face. */
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ink-a) 84%, #16182b) 0%,
+    color-mix(in srgb, var(--ink-a) 94%, #16182b) 100%
+  );
+  box-shadow: 0 18px 34px -22px color-mix(in srgb, var(--ink-a) 70%, #16182b);
+  transition: transform 260ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 260ms ease;
+}
+/* a soft light from the top-left corner, so four identical plates in a row
+   are not four flat rectangles */
+.cv-ledger li::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 100% at 0% 0%,
+    rgb(255 255 255 / 0.22),
+    transparent 62%
+  );
+  pointer-events: none;
+}
+.cv-ledger li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 44px -22px var(--ink-a);
+}
+.cv-ledger-value {
+  display: block;
+  font-size: clamp(20px, 2.8vw, 27px);
+  font-weight: 800;
+  color: var(--ink-900);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.cv-ledger-label {
+  position: relative;
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.88);
+}
+.cv-subtext {
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--ink-500);
+  margin: 0 0 22px;
+  max-width: 70ch;
+}
+
+.cv-columns {
+  display: grid;
+  gap: clamp(18px, 3vw, 30px);
+  grid-template-columns: 1fr;
+  margin-bottom: 26px;
+}
+@media (min-width: 900px) {
+  .cv-columns { grid-template-columns: 0.85fr 1.15fr; }
+}
+.cv-sub {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin: 0 0 12px;
+}
+.cv-sub-wide { margin-top: 4px; }
+
+.cv-highlights ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cv-highlights li {
+  position: relative;
+  padding: 0 0 0 20px;
+  margin-bottom: 11px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-700);
+}
+/* Each line gets a ruled marker rather than a dot: a short stroke in the
+   room's ink at the cap height of the first line, the way a printed list
+   marks its items. A dot is punctuation; a rule is a hand pointing. */
+.cv-highlights li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--ink-a), var(--ink-b));
+}
+.cv-highlights li {
+  padding-left: 24px;
+}
+/* the room's ink faintly rules the list's own left edge, so four sentences
+   read as one considered set rather than as four stray bullets */
+.cv-highlights ul {
+  position: relative;
+  padding-left: 2px;
+}
+.cv-highlights ul::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ink-a) 34%, transparent),
+    transparent
+  );
+}
+
+/* the scale */
+.cv-scale ul {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+}
+.cv-scale li {
+  display: grid;
+  grid-template-columns: minmax(90px, 1.1fr) 2fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+.cv-bar-name {
+  font-size: 12px;
+  color: var(--ink-700);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cv-bar-track {
+  height: 9px;
+  border-radius: 999px;
+  background: rgb(22 24 43 / 0.07);
+  overflow: hidden;
+}
+.cv-bar-fill {
+  display: block;
+  height: 100%;
+  /* the floor lives here, in pixels: enough that a tiny quantity is still
+     legible as a mark, small enough that it cannot impersonate a large one */
+  min-width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ink-a), var(--ink-b));
+  transform-origin: left center;
+  animation: cv-bar-grow 1000ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes cv-bar-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.cv-bar-value {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-900);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.cv-scale-note {
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--ink-400);
+  margin: 0;
+  max-width: 52ch;
+}
+
+/* the record */
+.cv-records {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* THE RECORD ROWS. Same beige, same problem — and there are five of them per
+   room, so the mismatch was five times as loud. White, with the room's ink
+   arriving as you touch a row rather than sitting in it permanently: a list
+   should be quiet until you engage with it. */
+.cv-record {
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  margin-bottom: 9px;
+  overflow: hidden;
+  transition: border-color 240ms ease, background 240ms ease,
+    box-shadow 240ms ease;
+}
+.cv-record:hover {
+  border-color: color-mix(in srgb, var(--ink-a, #626981) 26%, transparent);
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.04), 0 10px 22px -18px rgb(22 24 43 / 0.28);
+}
+.cv-record[data-open='true'] {
+  border-color: color-mix(in srgb, var(--ink-a) 34%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ink-b) 11%, #ffffff) 0%,
+    #ffffff 46%
+  );
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.04), 0 12px 26px -18px rgb(22 24 43 / 0.3);
+}
+.cv-record-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+.cv-record-head:focus-visible {
+  outline: 2px solid var(--ink-b);
+  outline-offset: -2px;
+}
+.cv-record-title {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+.cv-record-blurb {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-500);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cv-record-figure {
+  margin-left: auto;
+  text-align: right;
+  flex: none;
+}
+.cv-record-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink-b);
+  font-variant-numeric: tabular-nums;
+}
+.cv-record-unit {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+.cv-record-chev {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-500);
+  font-size: 15px;
+  line-height: 1;
+}
+/* the 0fr -> 1fr grid trick: opens to the content's real height */
+.cv-record-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.cv-record[data-open='true'] .cv-record-body {
+  grid-template-rows: 1fr;
+}
+.cv-record-inner {
+  overflow: hidden;
+}
+.cv-points {
+  display: grid;
+  gap: 9px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin: 0;
+  padding: 4px 16px 14px;
+}
+.cv-points dt {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin-bottom: 2px;
+}
+.cv-points dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-900);
+  font-variant-numeric: tabular-nums;
+}
+.cv-period {
+  margin: 0;
+  padding: 0 16px 13px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+.cv-footnote {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-400);
+  max-width: 60ch;
+  margin: 8px auto 0;
+}
+
+/* ---- PROJECTS --------------------------------------------------------- */
+.pj-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  justify-content: center;
+  margin-bottom: clamp(20px, 3.5vh, 34px);
+}
+.pj-tab {
+  padding: 9px 19px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink-500);
+  background: #f4f2ee;
+  border: 1px solid var(--line);
+  transition: color 240ms ease, background 240ms ease, border-color 240ms ease,
+    transform 240ms ease;
+}
+.pj-tab:hover { color: var(--ink-900); transform: translateY(-1px); }
+.pj-tab[data-on='true'] {
+  color: var(--ink-900);
+  border-color: var(--ink-b);
+  background: linear-gradient(135deg, var(--ink-a), var(--ink-b));
+  box-shadow: 0 12px 26px -14px var(--ink-a);
+}
+.pj-tab:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+.pj-spread {
+  padding: clamp(20px, 3.4vw, 36px);
+  border-top: 3px solid var(--ink-b);
+  animation: pj-in 460ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+@keyframes pj-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.pj-scope {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-b);
+  margin: 0 0 7px;
+}
+.pj-title {
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  color: var(--ink-900);
+  line-height: 1.1;
+  margin: 0 0 9px;
+}
+.pj-blurb {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-700);
+  margin: 0 0 22px;
+  max-width: 62ch;
+}
+.pj-plate {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 16px 26px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  /* held in the deep register for the same reason the ledger plates are:
+     its bright end measured 2.44:1 under white type */
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ink-a) 84%, #16182b) 0%,
+    color-mix(in srgb, var(--ink-a) 94%, #16182b) 100%
+  );
+  box-shadow: 0 20px 40px -22px color-mix(in srgb, var(--ink-a) 70%, #16182b);
+}
+.pj-plate-value {
+  font-size: clamp(30px, 5.5vw, 46px);
+  font-weight: 800;
+  color: var(--ink-900);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.pj-plate-label {
+  margin-top: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+}
+.pj-points {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin: 0 0 20px;
+}
+.pj-points dt {
+  font-size: 10px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin-bottom: 3px;
+}
+.pj-points dd {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-900);
+  font-variant-numeric: tabular-nums;
+}
+.pj-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.pj-period {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--ink-500);
+}
+.pj-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-b, #6ac8ed);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink-b, #6ac8ed) 45%, transparent);
+  transition: color 200ms ease, border-color 200ms ease;
+}
+.pj-link:hover { color: var(--ink-900); border-color: var(--ink-900); }
+
+.pj-forthcoming {
+  margin-top: clamp(22px, 4vh, 40px);
+  padding: clamp(20px, 3.4vw, 32px);
+  border-style: dashed;
+}
+/* Health City's inks are written inline by ProjectsPage, the way the four
+   rooms' are. This block used to hardcode `--ink-b: #9ad6ef` and never set
+   --ink-a — so .pj-link's light-surface override (which reads --ink-a) fell
+   back to the neutral #3a3f57 and rendered "Follow its progress" as slate
+   at 11.51:1. The fifth project was the one NOT in the family colour, which
+   is exactly what it looked like. It resolves to #0f5b7b, 7.49:1, now. */
+.pj-forthcoming-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin: 0 0 6px;
+}
+.pj-forthcoming-title {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  color: var(--ink-900);
+  margin: 0 0 10px;
+}
+.pj-forthcoming p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-700);
+  max-width: 66ch;
+  margin: 0 0 14px;
+}
+
+/* ---- WHO WE ARE ------------------------------------------------------- */
+.ww-prose { max-width: 68ch; margin: 0 auto clamp(24px, 4vh, 40px); }
+.ww-prose p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink-700);
+  margin: 0 0 16px;
+}
+.ww-prose em { color: var(--ink-900); font-style: italic; }
+
+.ww-facts {
+  list-style: none;
+  margin: 0 0 clamp(24px, 4vh, 40px);
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+.ww-facts li {
+  padding: 15px 17px;
+  border-radius: 14px;
+  background: #f7f5f1;
+  border: 1px solid var(--line);
+  /* 2.03:1 as accent-b on this ground; 5.28:1 as the room's ink. */
+  border-left: 3px solid var(--ink-a, #626981);
+}
+.ww-fact-k {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin-bottom: 5px;
+}
+.ww-fact-v { font-size: 15px; font-weight: 700; color: var(--ink-900); line-height: 1.35; }
+
+.ww-pair {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin-bottom: clamp(24px, 4vh, 42px);
+}
+.ww-card { padding: clamp(18px, 3vw, 28px); }
+.ww-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink-900);
+  margin: 0 0 10px;
+}
+.ww-card p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-700);
+  margin: 0;
+}
+
+
+.ww-timeline {
+  list-style: none;
+  margin: 0 0 clamp(24px, 4vh, 42px);
+  padding: 0 0 0 22px;
+  border-left: 2px solid var(--line);
+}
+.ww-timeline li {
+  position: relative;
+  padding-bottom: 18px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-700);
+}
+.ww-timeline li::before {
+  content: '';
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  /* was accent-b (#64b5f6), which measured 2.12:1 on the paper — under the
+     3:1 a non-text indicator needs, and this dot is the timeline's only
+     indicator. The room's deep ink is 5.51:1 and is still, plainly, blue. */
+  background: var(--ink-a, #626981);
+  box-shadow: 0 0 0 3px var(--paper);
+}
+.ww-year {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink-900);
+  margin-bottom: 2px;
+}
+
+
+.ww-contact { padding: clamp(18px, 3vw, 28px); }
+.ww-contact-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.ww-contact-grid p {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-700);
+  margin: 0;
+}
+.ww-contact-grid a {
+  color: var(--ink-700);
+  text-decoration: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0.25);
+}
+.ww-contact-grid a:hover { color: var(--ink-900); border-color: var(--ink-900); }
+
+/* ---- OUR GUIDING FORCE ------------------------------------------------ */
+.gf-present {
+  display: grid;
+  gap: clamp(18px, 3vw, 32px);
+  grid-template-columns: 1fr;
+  padding: clamp(20px, 3.4vw, 34px);
+  margin-bottom: clamp(24px, 4vh, 42px);
+}
+@media (min-width: 820px) {
+  .gf-present { grid-template-columns: 300px 1fr; align-items: start; }
+}
+.gf-portrait {
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  box-shadow: 0 2px 4px rgb(22 24 43 / 0.05), 0 18px 40px -22px rgb(22 24 43 / 0.28);
+}
+.gf-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 3 / 4;
+}
+.gf-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-b, #f48fb1);
+  margin: 0 0 6px;
+}
+.gf-name {
+  font-size: clamp(23px, 3.5vw, 33px);
+  font-weight: 700;
+  color: var(--ink-900);
+  line-height: 1.15;
+  margin: 0 0 14px;
+}
+.gf-present-text p,
+.gf-quote {
+  margin: 18px 0 0;
+  padding-left: 18px;
+  /* 2.23:1 as accent-b on white; 5.87:1 as the room's ink, still pink. */
+  border-left: 3px solid var(--ink-a, #626981);
+  font-size: clamp(17px, 2.6vw, 23px);
+  line-height: 1.5;
+  color: var(--ink-900);
+}
+
+.gf-works {
+  list-style: none;
+  margin: 0 0 clamp(24px, 4vh, 42px);
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.gf-works li {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: #f7f5f1;
+  border: 1px solid var(--line);
+  /* 2.05:1 as accent-b on this ground; 5.39:1 as the room's ink. */
+  border-top: 3px solid var(--ink-a, #626981);
+}
+.gf-works strong {
+  display: block;
+  font-size: 14.5px;
+  color: var(--ink-900);
+  margin-bottom: 5px;
+}
+.gf-works span {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-700);
+}
+
+
+/* the present Satguru's mark is lit; the rest are the line behind Her */
+.gf-footnote {
+  text-align: center;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-500);
+  max-width: 54ch;
+  margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-rule,
+  .cv-bar-fill,
+  .pj-spread {
+    animation: none;
+  }
+  .cv-record,
+  .cv-record-body,
+  .pj-tab {
+    transition: none;
+  }
+}
+
+/* ====================================================================== */
+/* THE LIGHT SURFACE — the reading rooms' paper.                          */
+/*                                                                        */
+/* The hall on "/" keeps its colour-shifting accent canvas. These four     */
+/* pages are lit the other way: warm paper, the emblem's five inks used as */
+/* light rather than as pigment, and the record laid out on top in true    */
+/* white cards. One attribute — data-surface="light" — separates the two   */
+/* states, and the hall is never touched by anything in this block.        */
+/* ====================================================================== */
+
+.reading-room[data-surface='light'] {
+  /* THE PAPER. Not #fff: pure white glares beneath the dark brand bar and
+     leaves a card nowhere to go. Cards sit at true white ABOVE this, and
+     that half-step is the whole sense of elevation. */
+  --paper: #fbfaf8;
+  --card: #ffffff;
+
+  /* THE INK. One near-black with a little indigo in it, stepped down by
+     opacity rather than by mixing toward grey — greyed text on warm paper
+     reads as faded, tinted text reads as considered. */
+  --ink-900: #16182b;
+  --ink-700: #3a3f57;
+  --ink-500: #626981;
+  --ink-400: #838aa8;
+
+  /* THE RULES. */
+  --line: rgb(22 24 43 / 0.1);
+  --line-soft: rgb(22 24 43 / 0.06);
+
+  /* THE FIVE PETALS — the emblem's own inks, unchanged. */
+  --petal-1: #f81170;
+  --petal-2: #b357ad;
+  --petal-3: #6663b5;
+  --petal-4: #09a6cf;
+  --petal-5: #69b947;
+
+  color: var(--ink-700);
+  background: var(--paper);
+}
+
+/* THE BRAND BAR. Header.tsx is white type on transparency — built to float
+   over the dark hall. Rather than fork it, the light pages give that type
+   the dark ground it expects: a deep band painted underneath it.
+   `#site-header` is an id (1-0-0); the component's own `bg-transparent` is a
+   class (0-1-0). The bar wins, and Header.tsx is not edited at all. */
+.reading-room[data-surface='light'] #site-header {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(248 17 112 / 0.16) 0%,
+      rgb(179 87 173 / 0.14) 26%,
+      rgb(102 99 181 / 0.13) 50%,
+      rgb(9 166 207 / 0.14) 74%,
+      rgb(105 185 71 / 0.16) 100%
+    ),
+    linear-gradient(180deg, #171334 0%, #120f2a 100%);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.08), 0 10px 30px -18px rgb(18 15 42 / 0.8);
+}
+
+/* THE GROUND. Petal light, not petal pigment: five very soft radial washes
+   placed off-centre so the page never reads as symmetrical wallpaper, over a
+   paper base. Opacities are single-digit percentages — at anything stronger
+   this stops being a ground and starts competing with the type. */
+.paper-canvas {
+  /* the ground's decorations are deliberately bled off the edges, and a bleed
+     that is not clipped is just horizontal overflow — the page grew 157px
+     wider than the viewport at 1280 until this was added */
+  overflow: hidden;
+  background:
+    radial-gradient(58vw 46vw at 8% -6%, rgb(248 17 112 / 0.07), transparent 62%),
+    radial-gradient(50vw 40vw at 96% 4%, rgb(9 166 207 / 0.08), transparent 60%),
+    radial-gradient(46vw 44vw at 88% 52%, rgb(179 87 173 / 0.06), transparent 62%),
+    radial-gradient(52vw 42vw at 4% 74%, rgb(105 185 71 / 0.06), transparent 60%),
+    radial-gradient(44vw 38vw at 60% 104%, rgb(102 99 181 / 0.07), transparent 62%),
+    var(--paper);
+}
+/* the emblem's own petal, bled off the top-right corner, very faint — the
+   brand as a watermark on the paper rather than as an ornament on it */
+.paper-canvas::after {
+  content: '';
+  position: absolute;
+  top: -6vw;
+  right: -8vw;
+  width: min(46vw, 620px);
+  aspect-ratio: 1;
+  background: url('/images/petals/petal-welcome.webp') center / contain no-repeat;
+  opacity: 0.05;
+  rotate: -12deg;
+  pointer-events: none;
+}
+
+/* Paper needs dark type. The reading-room CSS below was written for the dark
+   hall, so the light surface restates the few global roles here and the rest
+   is inverted in place. */
+.reading-room[data-surface='light'] .page-title,
+.reading-room[data-surface='light'] .page-eyebrow,
+.reading-room[data-surface='light'] .page-standfirst {
+  color: var(--ink-900);
+  text-shadow: none;
+}
+.reading-room[data-surface='light'] .page-eyebrow {
+  color: var(--ink-500);
+}
+.reading-room[data-surface='light'] .page-standfirst {
+  color: var(--ink-700);
+}
+
+/* ---- THE COVER ------------------------------------------------------- */
+/* A band of the hall's own dark stone across the top of every reading room.
+   It gives the white header and the masthead the ground they were drawn for,
+   and it is the seam that says the daylit pages and the dark hall are one
+   building. Paper starts underneath it. */
+.page-cover {
+  position: relative;
+  z-index: 10;
+  padding: 104px clamp(16px, 5vw, 64px) clamp(34px, 5vh, 56px);
+  text-align: center;
+  /* THE COVER IS LIGHT NOW. It was a deep navy band, which on a page that is
+     otherwise daylight read as a lid rather than a cover. It is paper here
+     too — washed with the emblem's five inks so the brand is what tints it,
+     each one placed where its dot sits in the row above the title.
+
+     This is only possible because the HEADER carries its own dark bar (see
+     `#site-header` above): the white lockup never depends on this band for
+     its ground, so the cover is free to be as light as the rest of the page. */
+  background:
+    radial-gradient(46vw 70% at 6% 0%, rgb(248 17 112 / 0.1), transparent 68%),
+    radial-gradient(42vw 64% at 30% 8%, rgb(179 87 173 / 0.09), transparent 66%),
+    radial-gradient(44vw 72% at 54% 0%, rgb(102 99 181 / 0.09), transparent 68%),
+    radial-gradient(42vw 66% at 76% 6%, rgb(9 166 207 / 0.1), transparent 66%),
+    radial-gradient(46vw 70% at 98% 0%, rgb(105 185 71 / 0.1), transparent 68%),
+    linear-gradient(180deg, #f6f4fa 0%, #fbfaf8 100%);
+  border-bottom: 1px solid var(--line);
+}
+/* the five inks, laid as a hairline along the cover's foot — the emblem
+   signing the page */
+.page-cover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #f81170 0%, #f81170 20%,
+    #b357ad 20%, #b357ad 40%,
+    #6663b5 40%, #6663b5 60%,
+    #09a6cf 60%, #09a6cf 80%,
+    #69b947 80%, #69b947 100%
+  );
+}
+.page-cover-inks {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.page-cover-inks span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+/* on the cover the masthead is back on dark, so it keeps its original inks */
+.reading-room[data-surface='light'] .page-cover .page-title {
+  color: var(--ink-900);
+  text-shadow: none;
+}
+.reading-room[data-surface='light'] .page-cover .page-eyebrow {
+  color: var(--ink-500);
+}
+.reading-room[data-surface='light'] .page-cover .page-standfirst {
+  color: var(--ink-700);
+}
+.page-masthead {
+  margin-bottom: 0;
+}
+
+/* ---- THE SUBSECTION RAIL --------------------------------------------- */
+/* Parks flush under the fixed header once the cover has scrolled away. */
+.subnav {
+  position: sticky;
+  top: 72px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px clamp(16px, 5vw, 64px);
+  background: rgb(251 250 248 / 0.88);
+  backdrop-filter: blur(14px) saturate(1.3);
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.subnav::-webkit-scrollbar { display: none; }
+.subnav-label {
+  flex: none;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+.subnav-list {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.subnav-chip {
+  --chip-ink: #6663b5;
+  white-space: nowrap;
+  padding: 7px 15px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-500);
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+}
+.subnav-chip:hover {
+  color: var(--ink-900);
+  background: rgb(22 24 43 / 0.04);
+}
+.subnav-chip[data-on='true'] {
+  color: #fff;
+  background: var(--chip-ink);
+  border-color: var(--chip-ink);
+}
+.subnav-chip:focus-visible {
+  outline: 2px solid var(--chip-ink);
+  outline-offset: 2px;
+}
+/* the rail is sticky, so anchored sections must clear it AND the header */
+.reading-room[data-surface='light'] main section[id],
+.reading-room[data-surface='light'] main div[id] {
+  scroll-margin-top: 132px;
+}
+
+/* ---- THE GALLERY ----------------------------------------------------- */
+.mgal {
+  margin-top: clamp(22px, 4vh, 38px);
+}
+.mgal-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+}
+.mgal-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+  margin: 0;
+}
+.mgal-filter {
+  display: flex;
+  gap: 5px;
+}
+.mgal-chip {
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-500);
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+}
+.mgal-chip:hover { color: var(--ink-900); }
+.mgal-chip[data-on='true'] {
+  color: #fff;
+  background: var(--ink-900);
+  border-color: var(--ink-900);
+}
+.mgal-chip:focus-visible { outline: 2px solid var(--petal-3); outline-offset: 2px; }
+
+/* THE STRIP. A horizontal band of tall plates the reader drives sideways —
+   by wheel, by drag, by keyboard, or by flicking it on a touchscreen. It
+   replaces a wrapping grid, which on a wide screen spread four plates thinly
+   across the card and on a narrow one stacked them into a column. */
+.mgal-strip {
+  list-style: none;
+  margin: 0;
+  padding: 16px 2px 20px;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* NO SCROLL SNAPPING. The band drifts by moving its own scrollLeft a
+     fraction of a pixel per frame, and a snap container re-snaps to the
+     nearest plate after every one of those writes — so the drift was being
+     cancelled as fast as it was applied and the band simply never moved.
+     Measured: 40 drift-sized steps advanced it 0px with snapping on and 20px
+     with it off. Snapping also fights a flick's own momentum, so a band meant
+     to glide is better without it entirely. */
+  scrollbar-width: thin;
+  scrollbar-color: rgb(22 24 43 / 0.18) transparent;
+  /* the strip scrolls; the page never scrolls sideways because of it */
+  overscroll-behavior-x: contain;
+}
+.mgal-strip::-webkit-scrollbar { height: 6px; }
+.mgal-strip::-webkit-scrollbar-thumb {
+  background: rgb(22 24 43 / 0.18);
+  border-radius: 999px;
+}
+.mgal-strip::-webkit-scrollbar-track { background: transparent; }
+
+.mgal-cell {
+  flex: 0 0 auto;
+  width: clamp(168px, 21vw, 232px);
+  /* the reference's hand-laid look: every other plate leans the other way, so
+     the band reads as photographs set down rather than as a filmstrip */
+  rotate: -2.6deg;
+  transition: rotate 300ms ease, translate 300ms ease;
+}
+.mgal-cell:nth-child(even) {
+  rotate: 2.6deg;
+  translate: 0 10px;
+}
+.mgal-cell:hover {
+  rotate: 0deg;
+  translate: 0 -2px;
+}
+/* a plate the manifest marks as wide gets a landscape cell */
+.mgal-cell[data-wide='true'] {
+  width: clamp(240px, 31vw, 340px);
+}
+.mgal-cell[data-wide='true'] .mgal-plate {
+  aspect-ratio: 4 / 3;
+}
+.mgal-plate {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.04), 0 10px 24px -18px rgb(22 24 43 / 0.25);
+  transition: transform 300ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 300ms ease;
+}
+button.mgal-plate:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgb(22 24 43 / 0.05), 0 20px 38px -20px rgb(22 24 43 / 0.35);
+}
+button.mgal-plate:focus-visible {
+  outline: 2px solid var(--petal-3);
+  outline-offset: 3px;
+}
+.mgal-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mgal-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgb(22 24 43 / 0.72);
+  color: #fff;
+  font-size: 15px;
+  padding-left: 3px;
+  backdrop-filter: blur(3px);
+}
+/* THE AWAITING PLATE. It was diagonal grey hatching — a hole with a label,
+   which is fine in a grid and dismal in a band that is meant to be looked at.
+   It is a plate now: the room's own ink laid on paper, its subject named
+   beneath, so a wall being hung still reads as a wall rather than as a fault.
+   Still inert, still unfocusable, still says plainly that the photograph has
+   not arrived. */
+.mgal-plate-awaiting {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 9px;
+  cursor: default;
+  border: 1px solid color-mix(in srgb, var(--ink-a, #626981) 22%, transparent);
+  box-shadow: none;
+  background:
+    radial-gradient(
+      120% 90% at 50% 8%,
+      color-mix(in srgb, var(--ink-b, #9aa0b8) 26%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ink-a, #626981) 9%, #ffffff) 0%,
+      color-mix(in srgb, var(--ink-a, #626981) 4%, #ffffff) 100%
+    );
+}
+.mgal-await-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: color-mix(in srgb, var(--ink-a, #626981) 62%, #16182b);
+  background: rgb(255 255 255 / 0.72);
+  border: 1px solid color-mix(in srgb, var(--ink-a, #626981) 20%, transparent);
+}
+.mgal-await-label {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink-a, #626981) 58%, #16182b);
+}
+.mgal-caption {
+  margin: 8px 2px 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-500);
+}
+.mgal-note {
+  margin: 14px 0 0;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--ink-400);
+}
+
+/* the viewer */
+.mgal-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 5vw, 60px);
+  background: rgb(14 12 28 / 0.92);
+  backdrop-filter: blur(6px);
+  animation: mgal-fade 220ms ease-out both;
+}
+@keyframes mgal-fade { from { opacity: 0; } to { opacity: 1; } }
+.mgal-viewer-figure {
+  margin: 0;
+  max-width: min(1100px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mgal-viewer-figure img,
+.mgal-viewer-figure video,
+.mgal-viewer-figure iframe {
+  max-width: 100%;
+  max-height: 76vh;
+  width: auto;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+  background: #000;
+  border: 0;
+}
+.mgal-viewer-figure iframe {
+  width: min(1100px, 90vw);
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+.mgal-viewer-figure figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.82);
+  text-align: left;
+}
+.mgal-viewer-count {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 0.5);
+}
+.mgal-viewer-close,
+.mgal-viewer-arrow {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 200ms ease;
+}
+.mgal-viewer-close:hover,
+.mgal-viewer-arrow:hover { background: rgb(255 255 255 / 0.2); }
+.mgal-viewer-close {
+  top: 20px;
+  right: 22px;
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+}
+.mgal-viewer-arrow {
+  top: 50%;
+  translate: 0 -50%;
+  width: 46px;
+  height: 46px;
+  font-size: 26px;
+}
+.mgal-viewer-prev { left: 16px; }
+.mgal-viewer-next { right: 16px; }
+.mgal-viewer-close:focus-visible,
+.mgal-viewer-arrow:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mgal-plate,
+  .mgal-viewer,
+  .subnav-chip,
+  .mgal-chip { transition: none; animation: none; }
+}
+
+/* THE SOCIAL RAIL on paper. It is white-on-transparent for the dark hall;
+   on the reading rooms it needs the opposite ink. Same approach as the
+   header: restated here rather than forked into a light variant. */
+.reading-room[data-surface='light'] .social-rail a,
+.reading-room[data-surface='light'] .social-rail button {
+  color: var(--ink-500);
+  border-color: rgb(22 24 43 / 0.18);
+  background: rgb(255 255 255 / 0.7);
+}
+.reading-room[data-surface='light'] .social-rail a:hover,
+.reading-room[data-surface='light'] .social-rail button:hover {
+  color: var(--ink-900);
+  border-color: rgb(22 24 43 / 0.4);
+  background: #fff;
+  box-shadow: 0 0 14px rgb(22 24 43 / 0.12);
+}
+.reading-room[data-surface='light'] .social-rail .rail-line {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(22 24 43 / 0.2),
+    rgb(22 24 43 / 0.34)
+  );
+}
+/* NOTE: no rule for `.social-rail span` here. SocialSidebar has no label
+   spans — its only <span> is the hover tooltip, which carries its own dark
+   pill and white text, and a light override repainted that white text to
+   near-white-on-near-black's opposite. Left alone deliberately. */
+
+/* The project spreads are stacked now rather than tabbed, so they need air
+   between them — and their entrance animation was written for a tab swap,
+   where only one was ever on screen. Stacked, four of them animating at once
+   on load reads as a flinch. */
+.reading-room[data-surface='light'] .pj-spread {
+  margin-bottom: clamp(26px, 5vh, 52px);
+  animation: none;
+  scroll-margin-top: 132px;
+}
+/* The tab rail is retired — the page rail replaced it. Scoped, because an
+   unscoped display:none at file scope is a site-wide kill switch for a class
+   name, and the next person to reuse `.pj-rail` anywhere would lose an hour
+   to it. */
+.reading-room[data-surface='light'] .pj-rail { display: none; }
+
+/* ---- PAPER-SAFE INK, AND THE FACES ----------------------------------- */
+
+/* THE INK PROBLEM. Each pillar carries two colours: accentA (deep) and
+   accentB (bright). The reading rooms were written for the dark hall, where
+   the BRIGHT one is the readable one — Heal's #6fd19a glows on near-black.
+   On paper it measures 1.86:1 against white, which is not text, it is a
+   watermark. Type therefore switches to a paper cut of each ink, and the
+   bright one keeps only the jobs where contrast does not apply: bar fills,
+   rules, borders, active chips.
+
+   Measured against #ffffff:
+     heal    #15694a  6.3:1   (its own #1f8a5c is 4.1 — just under)
+     enrich  #1565c0  5.4:1
+     empower #b3164f  5.9:1
+     projects#0d6a8c  5.8:1 */
+/* ON .cv-room, WHICH IS WHERE THE ID IS. These were written as
+   `#heal.cv-chapter` — id and class on one element — and then the threshold
+   moved the id up to the room, leaving .cv-chapter an inner div. So all three
+   have matched nothing since: --ink-type was never set, and every rule
+   reading it has silently been using its fallback. The fallback measures
+   fine, which is why nothing looked wrong; the rules were simply dead. */
+.reading-room[data-surface='light'] #heal.cv-room { --ink-type: #15694a; }
+.reading-room[data-surface='light'] #enrich.cv-room { --ink-type: #1565c0; }
+.reading-room[data-surface='light'] #empower.cv-room { --ink-type: #b3164f; }
+/* anything else falls back to the deep accent, darkened toward the page ink
+   so a pale accent can never become pale type */
+.reading-room[data-surface='light'] .cv-chapter-eyebrow,
+.reading-room[data-surface='light'] .cv-record-value,
+.reading-room[data-surface='light'] .pj-scope,
+.reading-room[data-surface='light'] .pj-link,
+.reading-room[data-surface='light'] .gf-eyebrow {
+  color: var(--ink-type, color-mix(in srgb, var(--ink-a, #3a3f57) 82%, #16182b));
+}
+.reading-room[data-surface='light'] .pj-link {
+  border-bottom-color: color-mix(in srgb, var(--ink-type, var(--ink-a, #3a3f57)) 40%, transparent);
+}
+.reading-room[data-surface='light'] .pj-link:hover {
+  color: var(--ink-900);
+  border-bottom-color: var(--ink-900);
+}
+/* the chapter's top rule and the highlight bullets keep the bright ink —
+   they are marks, not text */
+.reading-room[data-surface='light'] .cv-chapter {
+  border-top-color: var(--ink-type, var(--ink-a));
+}
+
+/* THE FACES — see the global definitions near the top of this file. They
+   were scoped to the reading rooms here at first, which gave the SAME header
+   two different wordmarks: Cinzel on the reading rooms, the body stack on
+   the hall. One lockup cannot have two faces, so the definitions moved to
+   file scope and this block no longer sets type. */
+
+/* THE BLIND STAMP — the emblem debossed into the sheet. Fixed, so it belongs
+   to the stock rather than to the layout, and multiplied so it darkens the
+   paper instead of sitting on it. */
+.paper-canvas::before {
+  content: '';
+  /* fixed, so it belongs to the stock rather than the layout — which also
+     means no ancestor's overflow can clip it, so it stays inside the
+     viewport under its own steam and leans out by translation instead */
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  translate: 60px 40px;
+  width: min(520px, 42vw);
+  aspect-ratio: 1;
+  background: url('/images/lotus-watermark.png') center / contain no-repeat;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* SNAP BELONGS TO THE HALL, NOT TO THE READING ROOMS.
+   `html { scroll-snap-type: y proximity }` is set globally for the home
+   page, where each screen is a `.snap-screen` and settling on a boundary is
+   the whole point. The reading rooms are long documents with no snap
+   children, and snapping a document you are READING — mid-paragraph, mid
+   figure table — is the opposite of what proximity snapping is for. It also
+   now has something to fight: the subsection rail scrolls with
+   scrollIntoView and the chapter doors are real '#id' anchors, neither of
+   which existed when that rule was written (its comment still says the site
+   has none). */
+html:has(.reading-room[data-surface='light']) {
+  scroll-snap-type: none;
+}
+
+/* A film tile with a file but no still: an ink ground for the play mark to
+   sit on, rather than a broken image. */
+.mgal-plate[data-poster='none'] {
+  background: linear-gradient(140deg, #22263f 0%, #16182b 100%);
+}
+
+/* ---- PAPER CORRECTIONS ------------------------------------------------ */
+/* Found by measuring rather than by eye. Each of these survived the bulk
+   inversion because the substitution only rewrote the strings it was handed,
+   and these were either a colour it did not know about or a surface that is
+   still legitimately dark. */
+
+/* THE ACTIVE RAIL CHIP. The pages hand the rail the BRIGHT half of each ink
+   pair (accentB / ink2) — right for a mark on near-black, wrong as a ground
+   for white type: white on Health City's #9ad6ef measured 1.59:1. The chip
+   therefore darkens whatever ink it is given rather than trusting it. */
+.reading-room[data-surface='light'] .subnav-chip[data-on='true'] {
+  background: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  border-color: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  color: #fff;
+}
+
+/* THE PROJECT PLATE is a saturated colour block — one of the few surfaces on
+   these pages that is still DARK. The inversion flipped its type to page ink
+   anyway (1.95:1 on the label). It goes back to white, where it started. */
+.reading-room[data-surface='light'] .pj-plate-value {
+  color: #fff;
+}
+.reading-room[data-surface='light'] .pj-plate-label {
+  color: rgb(255 255 255 / 0.88);
+}
+
+/* THE FOOTER IS ONE COLOUR ON EVERY PAGE.
+   It was `bg-black/45` — translucent — so it took whatever was behind it:
+   the hero's shifting accent on the home page, paper on the reading rooms,
+   a different shade on every screen of the exhibition. One footer with a
+   dozen appearances. It is opaque now, the same deep stone as the reading
+   rooms' cover band, so the site closes on the same note wherever you are. */
+.site-footer {
+  background: linear-gradient(180deg, #120f2a 0%, #171334 100%);
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+}
+
+/* The emblem needs a ground of its own here. On the footer's deep stone the
+   logo's own petals — pink, purple, cyan, green — had nothing to read
+   against; the header solves this with a white disc and so does this.
+
+   MATCHED TO THE HEADER EXACTLY: 52px, and the mark fills it edge to edge.
+   At 46px with a 40px mark inside, three pixels of the disc showed all the
+   way round and read as a white border drawn on the logo — the header has
+   none because there the image covers its disc completely. Same lockup at
+   the top of the page and the bottom, same size, no ring. */
+.footer-badge {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border-radius: 999px;
+  background: #fff;
+  overflow: hidden;
+}
+.footer-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* the ledger plate is a dark object on a light page: its type is white */
+.reading-room[data-surface='light'] .cv-ledger-value {
+  color: #fff;
+}
+.reading-room[data-surface='light'] .cv-ledger-label {
+  color: rgb(255 255 255 / 0.9);
+}
+
+/* SMALL TYPE. --ink-400 measured 3.40:1 on card white and was carrying seven
+   roles that are ALL small text — captions, periods, notes, the rail label.
+   Small text has no 3:1 allowance. */
+.reading-room[data-surface='light'] {
+  --ink-400: #5f667e;
+}
+
+/* FOCUS RINGS kept the bright accent, which was the visible one on
+   near-black and is not on paper. */
+.reading-room[data-surface='light'] .cv-record-head:focus-visible {
+  outline-color: var(--ink-type, #16182b);
+}
+.reading-room[data-surface='light'] .pj-tab:focus-visible {
+  outline: 2px solid #16182b;
+  outline-offset: 2px;
+}
+
+/* THE CONTACT LINKS were underlined with a white hairline for the dark room,
+   which on a white card is no underline at all — and they were the same ink
+   as the paragraph around them, so nothing said they were links. */
+.reading-room[data-surface='light'] .ww-contact-grid a {
+  color: #1f4f8f;
+  border-bottom-color: rgb(31 79 143 / 0.35);
+}
+.reading-room[data-surface='light'] .ww-contact-grid a:hover {
+  color: #16182b;
+  border-bottom-color: #16182b;
+}
+
+/* THE PORTRAIT FRAME was a white hairline on a white card — no frame at all
+   against a light-edged photograph. */
+.reading-room[data-surface='light'] .gf-portrait {
+  border-color: var(--line);
+}
+
+/* THE COVER ON A SHORT SCREEN. Cover + sticky rail measured 393px of 700 —
+   56% of the viewport spent on chrome before a word of content. The band
+   keeps its presence on a tall display and gives the height back on a short
+   one: the padding and the title now scale with viewport height, not just
+   with width. */
+@media (max-height: 800px) {
+  .page-cover {
+    padding-top: 92px;
+    padding-bottom: clamp(18px, 2.6vh, 30px);
+  }
+  .page-cover .page-title {
+    font-size: clamp(30px, 5.2vh, 46px);
+  }
+  .page-cover .page-standfirst {
+    font-size: 13px;
+    max-width: 58ch;
+  }
+  .page-cover-inks {
+    margin-bottom: 8px;
+  }
+  .page-rule {
+    margin: 10px auto 9px;
+  }
+}
+
+/* ---- THE ROOM'S LIGHT -------------------------------------------------- */
+/* ChapterAmbience publishes --room-ink (the cornerstone that owns the
+   viewport, crossing to the next as you approach it). The paper answers in
+   two places only — an ambient wash and the watermark — so the page changes
+   its light without ever stopping being paper. */
+.reading-room[data-surface='light'] .paper-canvas::after {
+  /* the corner bloom takes the room's ink */
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--room-ink, 102 99 181) / 0.5),
+    transparent 70%
+  );
+  /* the room's colour drains at the door and floods back on the far side */
+  opacity: calc(0.5 * var(--room-strength, 1));
+}
+/* a broad wash low on the page, so the incoming room's colour is already in
+   the air before its first card arrives */
+.reading-room[data-surface='light'] .paper-canvas::before {
+  background:
+    radial-gradient(
+      64vw 52vh at 50% 100%,
+      rgb(var(--room-ink, 102 99 181) / calc(0.1 * var(--room-strength, 1))),
+      transparent 70%
+    ),
+    url('/images/lotus-watermark.png') center / contain no-repeat;
+}
+
+/* ---- THE THRESHOLD ---------------------------------------------------- */
+/* Crossing from Heal into Enrich used to be a 44px gap between two white
+   cards — the page read as a list, and nothing told you that you had entered
+   a different cornerstone. The threshold is the seam: the card stack stops,
+   the paper opens full width, and the next room states its number, its name
+   and its petal before any of its content appears.
+
+   It is deliberately NOT a card. Everything else on this page is a white
+   panel; this is bare paper, which is exactly why it reads as a break in the
+   rhythm rather than as one more block. */
+
+.cv-room {
+  scroll-margin-top: 132px;
+}
+/* the chapter body keeps the panel treatment the threshold gives up */
+.reading-room[data-surface='light'] .cv-chapter {
+  border-top: 0;
+  margin-bottom: 0;
+}
+
+.cv-threshold {
+  position: relative;
+  /* full-bleed out of the reading column, back to the page's edges */
+  margin-inline: calc(50% - 50vw);
+  padding: clamp(30px, 5.5vh, 58px) max(calc(50vw - 50%), 16px) clamp(30px, 5.5vh, 58px);
+  overflow: hidden;
+  /* THE DOOR IS COLOURED PAPER — the room's own light, not stone.
+     A dark band did separate the chapters, but it sat on a daylit page like
+     a shutter coming down: heavy, and it borrowed the hall's night for a
+     page that is deliberately in daylight.
+
+     What separates the rooms instead is a full-bleed leaf tinted with that
+     vertical's OWN colour, the way a printed volume gives each part a
+     coloured chapter page. It still breaks the rhythm — everything else here
+     is a white card, and this is neither white nor a card — but it breaks it
+     with the room's light rather than with its absence. And it means the
+     colour you are crossing INTO is the thing you are looking at while you
+     cross. */
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ink-b) 30%, #fbfaf8) 0%,
+      color-mix(in srgb, var(--ink-b) 17%, #fbfaf8) 58%,
+      color-mix(in srgb, var(--ink-b) 9%, #fbfaf8) 100%
+    );
+  color: var(--ink-900);
+}
+/* the rule the room is announced over — its full width, in its own ink */
+.cv-threshold::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ink-a) 18%,
+    var(--ink-a) 82%,
+    transparent 100%
+  );
+}
+/* The folio, a chapter leaf's number. IN THE FLOW, not absolutely placed:
+   positioned it collided with the label the moment the band was short enough
+   that its 92px numeral reached down into the text — which is every short
+   viewport. In the flow it cannot collide at any size. */
+.cv-threshold-num {
+  display: block;
+  font-size: clamp(34px, 6.4vh, 66px);
+  font-weight: 800;
+  line-height: 0.85;
+  color: color-mix(in srgb, var(--ink-a) 26%, transparent);
+  letter-spacing: -0.04em;
+  margin: 0 0 6px -0.04em;
+  pointer-events: none;
+}
+/* THE VERTICAL'S OWN EMBLEM. This was an abstract petal bled off the edge as
+   a watermark; the site already has a proper icon per cornerstone (the leaf
+   for Heal, and its siblings), and an icon that MEANS the room beats a shape
+   that merely decorates it. Shown at full strength rather than ghosted — it
+   is a mark, not a texture.
+
+   THE PROJECTS PAGE USES NONE OF THIS, and could not: this class is built
+   for the cornerstone icons, which ship as an opaque mark on a near-white
+   disc — `mix-blend-mode: multiply` dissolves that coin into the band and
+   the radial mask removes the rim multiply leaves behind. The projects carry
+   line art cut as masks instead (see THE PROJECTS WEAR THEIR OWN MARKS), and
+   where the foundation has a real lockup it is placed as an <img>. Multiply
+   would only darken a blue mark into a blue band, and a square closest-side
+   mask would crop a landscape one. A mark is still never borrowed between
+   programmes — that would be a lie about which one you are looking at. */
+.cv-threshold-emblem {
+  position: absolute;
+  /* bled off the right edge — artwork the band is printed over, not an
+     object sitting on it */
+  right: -4vw;
+  top: 50%;
+  translate: 0 -50%;
+  width: clamp(190px, 38vh, 380px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  /* THE CIRCLE IS IN THE FILE. These emblems ship as a mark on a near-white
+     disc, which as a badge is fine and as backdrop artwork is a hard white
+     coin stamped on a tinted band. Multiplied, that disc lands on the band at
+     essentially the band's own colour and disappears; only the mark itself
+     darkens through. No mask, no second asset, and it works over every one of
+     the three tints because multiply takes whatever ground it is given. */
+  mix-blend-mode: multiply;
+  /* Multiply kills MOST of the disc, but the file's ground is a very pale
+     tint rather than pure white, so a faint rim survives as a visible circle.
+     The mask fades everything past the mark's own extent to nothing, which
+     removes the edge without touching the leaf — the emblem stops being a
+     coin and becomes artwork bleeding off the band. */
+  -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
+  mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .cv-threshold-emblem {
+    /* On a narrow screen the headline wraps across the full measure, so the
+       artwork is behind the type rather than beside it. It stays — that is
+       what a backdrop does — but quieter, so the words are unmistakably the
+       thing in front. */
+    width: 172px;
+    right: -30px;
+    opacity: 0.2;
+  }
+}
+.cv-threshold-label {
+  position: relative;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  /* The label is 12px/800 uppercase — small text, so it needs 4.5:1, and it
+     is NOT sitting on white: the band is a mid-light tint of its own colour,
+     which lifts the ground and eats the margin. The paper cuts that clear
+     4.5:1 on #ffffff measured 3.45-4.5 here. Carrying the ink most of the way
+     to the page's near-black keeps each room's hue and buys the contrast
+     back on every one of the seven bands. */
+  color: color-mix(in srgb, var(--ink-a) 58%, #16182b);
+  margin: 0 0 8px;
+}
+.cv-threshold-title {
+  position: relative;
+  font-size: clamp(26px, 4.6vw, 44px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink-900);
+  margin: 0 0 12px;
+  max-width: 20ch;
+}
+.cv-threshold-body {
+  position: relative;
+  max-width: 58ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-700);
+  margin: 0;
+}
+
+/* THE ARRIVAL. The threshold's parts rise as it comes into view — the number
+   and petal first, then the name, then the line under it. `animation-timeline`
+   ties this to the element's own passage through the viewport, so there is no
+   observer and no scroll handler: the browser drives it, and it reverses
+   correctly when you scroll back up. */
+@supports (animation-timeline: view()) {
+  .cv-threshold-num,
+  .cv-threshold-emblem,
+  .cv-threshold-label,
+  .cv-threshold-title,
+  .cv-threshold-body {
+    animation: cv-arrive linear both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 68%;
+  }
+  .cv-threshold-label { animation-range: entry 12% entry 74%; }
+  .cv-threshold-title { animation-range: entry 16% entry 80%; }
+  .cv-threshold-body { animation-range: entry 22% entry 88%; }
+}
+@keyframes cv-arrive {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+/* the petal and folio arrive from their own resting opacity, not from 1 */
+@supports (animation-timeline: view()) {
+  .cv-threshold-emblem { animation-name: cv-arrive-emblem; }
+  .cv-threshold-num { animation-name: cv-arrive-num; }
+}
+@keyframes cv-arrive-emblem {
+  from { opacity: 0; transform: translateY(18px) scale(0.9); }
+  to { opacity: 0.5; transform: none; }
+}
+@keyframes cv-arrive-num {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 700px) {
+  .cv-threshold-num { font-size: clamp(30px, 6vh, 46px); }
+}
+
+/* Reduced motion: the threshold is still a threshold — the rule, the folio,
+   the petal and the type are all there. Nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  .cv-threshold-num,
+  .cv-threshold-emblem,
+  .cv-threshold-label,
+  .cv-threshold-title,
+  .cv-threshold-body {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .cv-threshold-emblem { opacity: 0.5; }
+}
+
+/* The project spreads are threshold-led now, so the panel itself drops the
+   top rule and the outer margin the threshold provides. */
+.reading-room[data-surface='light'] .cv-room .pj-spread {
+  border-top: 0;
+  margin-bottom: 0;
+}
+
+/* AIR BETWEEN THE ROOMS. The chapter card's bottom edge was landing flush on
+   the next room's threshold band — one surface ending exactly where the next
+   begins, which makes the seam read as a collision rather than as a passage
+   between two rooms. A band of plain paper before each new threshold gives
+   the door something to open out of, and lets the ambient light for the
+   incoming room be seen on its own before the band states it. */
+/* One margin on the trailing edge of every room, rather than a margin-top on
+   `.cv-room + .cv-room` plus a special case for the last one. The special
+   case was `:last-of-type`, which matches by ELEMENT type and not by class —
+   on Projects the last <section> is the Health City block, so the last room
+   there matched nothing and kept butting into what followed. A single
+   trailing margin has no last-element case to get wrong. */
+.reading-room[data-surface='light'] .cv-room {
+  margin-bottom: clamp(34px, 7vh, 84px);
+}
+
+
+/* ---- THE PATTERNED MARGINS -------------------------------------------- */
+/* The reading column is 1152px, so on a wide screen there is a broad band of
+   empty paper either side of every card. It is now printed: each room's own
+   activities drawn as small marks and repeated down both gutters, in that
+   room's ink — a blood drop, an eye, a pulse and a cross beside Heal; a book,
+   a cap, a pencil and a lamp beside Enrich.
+   
+   Endpaper, not wallpaper. The marks are set at a few percent so the margin
+   reads as MADE rather than decorated, and you have to look to find them —
+   which is the difference between a printed volume's patterned endpaper and a
+   free vector background.
+   
+   It is painted by ONE full-bleed pseudo-element per room carrying two
+   repeat-y background columns, one pinned to each edge. The reading column
+   sits on top and is opaque, so nothing is ever behind the text — and the
+   geometry is the same `50% - 50vw` full-bleed the threshold already uses,
+   which is known not to overflow. */
+.reading-room[data-surface='light'] .cv-room {
+  position: relative;
+}
+.reading-room[data-surface='light'] .cv-chapter,
+.reading-room[data-surface='light'] .cv-room .pj-spread {
+  position: relative;
+  z-index: 1;
+}
+.cv-margin-print {
+  position: absolute;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* THE MARKS TAKE THE ROOM'S INK. The colour is a flat background and the
+     icons are a MASK cut out of it, so one tile serves every room and each
+     one is drawn in its own accent — rather than shipping a coloured SVG per
+     cornerstone, or leaving them the black they are authored in. */
+  background-color: var(--ink-a, #626981);
+  -webkit-mask-repeat: repeat-y, repeat-y;
+  mask-repeat: repeat-y, repeat-y;
+  /* the right margin is the same tile shifted half a period, so the two
+     sides are never a mirrored pair down the page */
+  -webkit-mask-position: left top, right -130px;
+  mask-position: left top, right -130px;
+  -webkit-mask-size: 260px 260px;
+  mask-size: 260px 260px;
+  /* No cut-out for the reading column is needed: the card is opaque and sits
+     above this, so the only place the print can be seen IS the margin. */
+}
+/* Below this width the gutter is too narrow to print anything into without
+   it becoming a stripe beside the text. */
+@media (max-width: 1399px) {
+  .cv-margin-print { display: none; }
+}
+
+/* PER-INK WEIGHT. Seven rooms, but four inks: Heal, Enrich and Empower each
+   keep their own, and the four project rooms now share the Projects blue.
+   The alpha belongs to the INK, not the room — each is solved so every
+   margin lands on the same perceived lightness (WCAG relative luminance
+   Y ≈ 0.745, a shade heavier than the page's own hairline and never louder).
+   At one shared opacity they did not: Empower's pink measured Y = 0.672
+   against Heal's 0.738, so the pink margins read heavier than the green ones
+   all the way down the page.
+
+   THE FOUR PROJECTS THEREFORE TAKE ONE VALUE, not the four they were each
+   solved to. Those four were solved against four different inks; re-used
+   under #0d6a8c they measure Y = 0.7396 / 0.7810 / 0.7444 / 0.7055 — a
+   0.0755 spread where the solved one is 0.005. That is four different
+   WEIGHTS of one hue down a single page with no colour left to explain the
+   difference, which reads as a rendering fault rather than as a design.
+   0.163 is what #0d6a8c solves to (Y = 0.7444), written once so the four
+   cannot drift apart again. */
+.cv-margin-print[data-room='project-amrit'],
+.cv-margin-print[data-room='project-oneness-vann'],
+.cv-margin-print[data-room='watershed-programme'],
+.cv-margin-print[data-room='adopted-villages'] {
+  opacity: 0.163;
+}
+.cv-margin-print[data-room='heal'] {
+  opacity: 0.19;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-margin-print[data-room='enrich'] {
+  opacity: 0.164;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-margin-print[data-room='empower'] {
+  opacity: 0.14;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-margin-print[data-room='project-amrit'] {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-margin-print[data-room='project-oneness-vann'] {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M20%205.4c0%207.4-4.4%2011.4-9.6%2011.4-3%200-5.4-1.6-5.4-4.4%200-5%205.4-7%2015-7z%20M5%2019.6c2.6-4%205.6-6.4%209.4-8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-margin-print[data-room='watershed-programme'] {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-margin-print[data-room='adopted-villages'] {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+
+/* an activity row linked to from the navigation has to clear the header and
+   the sticky rail, like every other anchor target on these pages */
+.reading-room[data-surface='light'] .cv-record[id] {
+  scroll-margin-top: 132px;
+}
+
+/* ---- THE NAVIGATION PANEL --------------------------------------------- */
+/* It was a near-black plate with three columns of grey links — the last piece
+   of the site still wearing its old clothes, and a dark object dropping onto
+   pages that are now paper.
+   
+   It is paper too, and each cornerstone is a MINIATURE OF ITS ROOM: the
+   tinted door the room opens with on the page, with its folio, emblem and
+   name, and its index of activities on white beneath. You do not read the
+   panel so much as recognise it — green room, blue room, pink room — and the
+   band you land on is the one you were just looking at. */
+.nvpanel {
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--paper, #fbfaf8);
+  border: 1px solid rgb(22 24 43 / 0.1);
+  box-shadow:
+    0 1px 2px rgb(22 24 43 / 0.06),
+    0 26px 60px -28px rgb(22 24 43 / 0.45);
+  min-width: 240px;
+}
+.nvrooms {
+  display: flex;
+  gap: 10px;
+}
+.nvroom {
+  width: 218px;
+  border-radius: 13px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgb(22 24 43 / 0.09);
+}
+
+/* THE DOOR — the room's threshold band, at a quarter scale */
+.nvroom-door {
+  position: relative;
+  display: block;
+  padding: 12px 13px 11px;
+  overflow: hidden;
+  text-decoration: none;
+  border-bottom: 1px solid rgb(22 24 43 / 0.08);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ink-b) 30%, #fbfaf8) 0%,
+    color-mix(in srgb, var(--ink-b) 15%, #fbfaf8) 100%
+  );
+  transition: filter 200ms ease;
+}
+.nvroom-door::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--ink-a);
+}
+.nvroom-door:hover {
+  filter: brightness(0.97);
+}
+.nvroom-door:focus-visible {
+  outline: 2px solid var(--ink-a);
+  outline-offset: -2px;
+}
+/* the emblem, bled off the corner and multiplied so its disc disappears */
+.nvroom-emblem {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 74px;
+  aspect-ratio: 1;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  opacity: 0.34;
+  -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
+  mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
+  pointer-events: none;
+}
+.nvroom-folio {
+  display: block;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: color-mix(in srgb, var(--ink-a) 30%, transparent);
+}
+.nvroom-name {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  /* the deep ink carried toward the page's near-black, the same move the
+     thresholds make — the accents alone are too light on their own tint */
+  color: color-mix(in srgb, var(--ink-a) 58%, #16182b);
+}
+.nvroom-blurb {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: rgb(22 24 43 / 0.6);
+}
+
+/* THE INDEX — the room's activities, on the white card */
+.nvroom-index,
+.nvlist {
+  list-style: none;
+  margin: 0;
+  padding: 5px;
+}
+.nvroom-row {
+  display: block;
+  padding: 7px 9px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: #3a3f57;
+  text-decoration: none;
+  /* WRAPS, deliberately. `nowrap` in a fixed-width column clips silently, and
+     the label falls back to the activity's own title when no short form is
+     given — "Sant Nirankari Health Centre" is 28 characters and would have
+     been cut off with no sign that anything was missing. A menu row may take
+     two lines; it may not lie about its destination. */
+  white-space: normal;
+  transition: background 180ms ease, color 180ms ease;
+}
+.nvroom-row:hover {
+  background: color-mix(in srgb, var(--ink-b, #6663b5) 14%, transparent);
+  color: #16182b;
+}
+.nvroom-row:focus-visible {
+  outline: 2px solid var(--ink-a, #6663b5);
+  outline-offset: -2px;
+}
+.nvlist {
+  min-width: 200px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nvroom-door,
+  .nvroom-row {
+    transition: none;
+  }
+}
+
+/* A gallery with nothing in it yet: one line, no strip, no filter. */
+.mgal-empty {
+  padding-top: 4px;
+}
+.mgal-empty .mgal-title {
+  display: block;
+  margin-bottom: 7px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.mgal-empty-line {
+  margin: 0;
+  max-width: 66ch;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ink-500);
+}
+
+/* The viewer showing a plate whose file has not arrived: the same reserved
+   plate at size, saying what it is for rather than pretending to be a photo. */
+.mgal-viewer-await {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  width: min(560px, 86vw);
+  aspect-ratio: 3 / 4;
+  max-height: 76vh;
+  border-radius: 14px;
+  border: 1px dashed rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.05);
+  padding: 30px;
+  text-align: center;
+}
+.mgal-viewer-await-mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  font-size: 19px;
+  color: rgb(255 255 255 / 0.8);
+  border: 1px solid rgb(255 255 255 / 0.3);
+}
+.mgal-viewer-await-kind {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+}
+.mgal-viewer-await-note {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.6);
+}
+/* an awaiting plate in the strip is a control now, so it gets the affordances */
+button.mgal-plate-awaiting {
+  cursor: pointer;
+}
+button.mgal-plate-awaiting:hover {
+  border-color: color-mix(in srgb, var(--ink-a, #626981) 45%, transparent);
+}
+
+/* The unit belongs with the figure on the ranked scale: 1,500,230 and 47 sat
+   in one column with nothing saying that one counts units of blood and the
+   other counts buildings. Same value-over-unit stack the record uses below. */
+.cv-bar-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+.cv-bar-unit {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+
+/* AMOUNTS ARE STATED, NOT RANKED. Money leaves the bars entirely and is set
+   below them as a line of record — a sum and a headcount are not the same
+   length, and putting them on one axis made the chart meaningless. */
+.cv-amounts {
+  list-style: none;
+  margin: 10px 0 8px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--line);
+}
+.cv-amounts li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+.cv-amount-name {
+  font-size: 12px;
+  color: var(--ink-700);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.cv-amount-value {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink-type, var(--ink-900));
+  font-variant-numeric: tabular-nums;
+}
+.cv-amount-unit {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  flex: none;
+}
+
+/* THE PLATE'S OWN MARK.
+   Each ledger plate is stamped with one of its room's activity drawings —
+   the same set printed down the page margins — bled off the bottom-right
+   corner at low opacity. It is a watermark on the plate, not an icon beside
+   the figure: nothing is added next to the number, which is the whole point
+   of the plate, and the mark reads only once the eye has finished with it. */
+.cv-ledger li::after {
+  content: '';
+  position: absolute;
+  right: -14px;
+  bottom: -16px;
+  width: 84px;
+  height: 84px;
+  background-color: #fff;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  opacity: 0.16;
+  pointer-events: none;
+}
+#heal .cv-ledger li:nth-child(1)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#heal .cv-ledger li:nth-child(2)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#heal .cv-ledger li:nth-child(3)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#heal .cv-ledger li:nth-child(4)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#enrich .cv-ledger li:nth-child(1)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#enrich .cv-ledger li:nth-child(2)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#enrich .cv-ledger li:nth-child(3)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#enrich .cv-ledger li:nth-child(4)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#empower .cv-ledger li:nth-child(1)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#empower .cv-ledger li:nth-child(2)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#empower .cv-ledger li:nth-child(3)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+#empower .cv-ledger li:nth-child(4)::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+
+/* ---- THE TALLY -------------------------------------------------------- */
+/* Counting marks instead of a ranked bar chart.
+   The bars put units of blood, people seen, hospital visits and BUILDINGS on
+   one axis: 47 health centres drew three pixels beside 1,500,230 bags and
+   read as negligible, which is false — they are not the same quantity and no
+   axis can hold both. Each row is now counted in its own unit and states
+   what one mark is worth, so magnitude is felt without anything being
+   compared that should not be. Symbols you count are also the one statistical
+   form that needs no chart literacy at all, which is what this page needed
+   for a general visitor. */
+.cv-tally-list {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+}
+.cv-tally-row + .cv-tally-row {
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft, rgb(22 24 43 / 0.06));
+}
+.cv-tally-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 7px;
+}
+.cv-tally-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-900);
+  min-width: 0;
+}
+.cv-tally-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex: none;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink-type, var(--ink-900));
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.cv-tally-unit {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+}
+
+/* the marks themselves */
+.cv-tally-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0 0 5px;
+}
+.cv-tally-marks span {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  background-color: var(--ink-a, #626981);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  opacity: 0.9;
+}
+/* they arrive left to right as the cornerstone opens — the page's only
+   staggered entrance, and it earns its place by reading as counting */
+@supports (animation-timeline: view()) {
+  .cv-tally-marks span {
+    animation: cv-mark-in 340ms cubic-bezier(0.33, 1, 0.68, 1) both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 62%;
+    animation-delay: calc(var(--n, 0) * 26ms);
+  }
+}
+@keyframes cv-mark-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 0.9; transform: none; }
+}
+.cv-tally-key {
+  margin: 0;
+  font-size: 10.5px;
+  font-style: italic;
+  color: var(--ink-400);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-tally-marks span {
+    animation: none;
+    opacity: 0.9;
+    transform: none;
+  }
+}
+
+/* the drawing each activity is counted in */
+.cv-tally-marks[data-for='blood-donation'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='health-checkup'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012h4l2-5%203.4%2010%202.6-7%201.8%202h5.2%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='eye-checkup'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2012s3.6-5.6%209.5-5.6S21.5%2012%2021.5%2012s-3.6%205.6-9.5%205.6S2.5%2012%202.5%2012z%20M12%209.6a2.4%202.4%200%201%200%200%204.8%202.4%202.4%200%200%200%200-4.8z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='health-centre'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='blood-bank'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='schools-colleges'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='scholarships'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='free-schools'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='skill-nima'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.4%2017.4a5.6%205.6%200%201%201%205.2%200v2.2H9.4v-2.2z%20M9.8%2021.4h4.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='skill-trades'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020l1-4L16.2%204.8a2%202%200%200%201%202.8%202.8L7.8%2019%204%2020z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='tree-plantation'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='cleanliness'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='covid-relief'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='mass-marriages'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-tally-marks[data-for='financial-support'] span {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.9%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+
+/* ---- THE PROJECTS WEAR THEIR OWN MARKS -------------------------------- */
+/* Each project's threshold carried the one shared petal, which said the same
+   thing about all four, and then nothing at all once that was removed. Each
+   now shows the drawing of the work it does — waves for Amrit, a conifer for
+   the Vann, hills for the watershed, a roof for the adopted villages — the
+   same set the margins are printed with and the tally is counted in. */
+.cv-threshold-mark {
+  position: absolute;
+  right: -2vw;
+  top: 50%;
+  translate: 0 -50%;
+  width: clamp(140px, 26vh, 250px);
+  aspect-ratio: 1;
+  background-color: var(--ink-a);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  opacity: 0.14;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .cv-threshold-mark { width: 130px; right: -18px; opacity: 0.1; }
+}
+
+/* the headline plate is stamped like the cornerstones' ledger plates */
+.pj-plate {
+  position: relative;
+  overflow: hidden;
+}
+.pj-plate::after {
+  content: '';
+  position: absolute;
+  right: -12px;
+  bottom: -14px;
+  width: 88px;
+  height: 88px;
+  background-color: #fff;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  opacity: 0.16;
+  pointer-events: none;
+}
+.pj-plate-value,
+.pj-plate-label {
+  position: relative;
+}
+
+.cv-threshold-mark[data-for='project-amrit'],
+.pj-plate[data-for='project-amrit']::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-threshold-mark[data-for='project-oneness-vann'],
+.pj-plate[data-for='project-oneness-vann']::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-threshold-mark[data-for='watershed-programme'],
+.pj-plate[data-for='watershed-programme']::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M2.6%2018.4%209%207.2l4%206.6%202.6-4%205.8%208.6z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-threshold-mark[data-for='adopted-villages'],
+.pj-plate[data-for='adopted-villages']::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+
+/* THE DATE EACH ROW IS COUNTED TO.
+   The figures in a room are NOT stopped at one moment — Empower's five
+   activities carry five different dates (March 2026, a September 2025
+   cumulative, a 2022 total, September 2025, and "Till 15 May 2025"), and
+   activities.ts says so in its own header. A stack of figures reads as one
+   snapshot unless it is told otherwise, so every row states its date.
+
+   It rides the key line rather than taking a line of its own: the key is
+   already the row's quiet footnote, and pushing the date to its far end
+   squares the column without adding height to fifteen rows. */
+.cv-tally-key {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 14px;
+}
+.cv-tally-period {
+  font-style: normal;
+  font-size: 9.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-400);
+  white-space: nowrap;
+}
+/* An amounts row is a single flex line, not a grid — `grid-column` here was
+   inert, and the date was riding beside the unit whatever the rule said. It
+   reads well there (one row, one figure, one date), so the date keeps the
+   line and is only given air to stand off the unit. */
+.cv-amounts .cv-tally-period {
+  margin-left: 2px;
+}
+
+/* ---- THE CAMPAIGN'S OWN LETTERHEAD ------------------------------------ */
+/* THE LOCKUP TAKES THE MARK'S PLACE. Every project threshold carries a big
+   faint glyph bled off the right edge; where the foundation has an actual
+   logo, that logo occupies the same side of the band and the glyph is
+   switched off — two graphics in one place is a collision, and a real mark
+   beats a drawn stand-in for it.
+
+   The band becomes a ROW to do it, rather than the logo being absolutely
+   positioned. Absolute placement cannot find the reading column here:
+   .cv-threshold's `padding-inline: max(calc(50vw - 50%), 16px)` resolves
+   that 50% against the reading column for an in-flow child, but against the
+   band's own 100vw padding box for an absolutely positioned one — where it
+   collapses to 0 and the mark slides out to the viewport edge. A flex row
+   lands on the column edge by construction and needs no arithmetic.
+
+   Only the project thresholds are rows. Core Values' thresholds share this
+   class and stay in normal flow. */
+.pj-threshold {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 5vw, 64px);
+}
+.pj-threshold-col {
+  flex: 1 1 auto;
+  min-width: 0;          /* long titles shrink the column, not the lockup */
+}
+/* the drawn glyph stands down for a real one */
+.pj-threshold:has(.pj-lockup) .cv-threshold-mark {
+  display: none;
+}
+
+/* SIZED AS A BOX, NOT A HEIGHT, because the two lockups are not the same
+   shape: Amrit's is landscape at 1.59:1 and Oneness Vann's is close to
+   square. `object-fit: contain` inside a fixed box makes a wide mark fill
+   the width and a tall one fill the height, so both read at the same
+   optical size and a file of any aspect can be dropped in later without
+   touching this rule.
+
+   THE BOX IS SIZED BY THE HINDI. Scanning amrit.webp for rows of opaque
+   pixels gives the wordmark at y 31-265 and the two Devanagari lines at
+   y 272-316 and y 321-365 — 44px each, exactly 11.11% of the 396px canvas.
+   So the tagline renders at 0.1111 x the fitted height. In the smallest box
+   (150x96) the mark fits to 150x94 and the tagline is 10.5px; in the largest
+   (240x150) it fits to 239x150 and the tagline is 16.7px. An earlier pass
+   sized this by height alone and produced 8.4px, at which the matras are
+   noise — a mark shown too small to read its own tagline is not the mark,
+   it is its silhouette.
+
+   No blend mode and no mask, unlike .cv-threshold-emblem: that class exists
+   for the cornerstone icons, which carry a near-white disc that has to be
+   dissolved. This file has genuine alpha and no disc — its corners measure
+   RGBA(0,0,0,0) — so multiply would only darken a blue mark into a blue
+   band. Its ink averages Y = 0.260: 3.31:1 on the pale band it sits over,
+   and 1.75:1 on the projects blue, which is why it is never on the plate. */
+.pj-lockup {
+  flex: none;
+  width: clamp(150px, 20vw, 240px);
+  height: clamp(96px, 13vw, 150px);
+  object-fit: contain;
+  object-position: center;
+}
+
+@media (max-width: 760px) {
+  /* Stacked, and the mark leads. There is not room for a 150px logo beside
+     a title at this width, and a letterhead above the name is the more
+     natural of the two readings anyway. `order` moves it without changing
+     the DOM, so the reading order stays name-then-tagline. */
+  .pj-threshold {
+    /* STAYS FLEX. Switching to `display: block` here made the `order` below
+       inert and dropped the lockup underneath the blurb, which is neither
+       a letterhead nor anything else. A column keeps order working. */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .pj-lockup {
+    order: -1;
+    width: clamp(146px, 42vw, 190px);
+    height: clamp(92px, 26vw, 120px);
+    object-position: left center;
+    margin: 0 0 14px;
+  }
+}
+
+/* THE FOCUS RING WAS THE ONE PLACE THE BRIGHT INK REACHED PAPER UNDARKENED.
+   The active chip mixes --chip-ink 42% into the page ink before painting it,
+   but `outline: 2px solid var(--chip-ink)` uses it raw: #6ac8ed on #fbfaf8
+   measures 1.81:1, well under the 3:1 a non-text indicator needs. It takes
+   the same 42% the fill takes, so a focused chip is ringed in the colour it
+   fills with — 6.27:1. Scoped to the light surface, which is the ground the
+   number was measured against. */
+.reading-room[data-surface='light'] .subnav-chip:focus-visible {
+  outline-color: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+}
+
+/* THE TWO PAGES THAT WERE SKIPPED, PRINTED LIKE THE REST.
+   Who We Are takes Enrich's #1565c0 and therefore Enrich's alpha; Our
+   Guiding Force takes Empower's #c2185b and Empower's. The alpha belongs to
+   the INK, as the PER-INK WEIGHT block above says, so these are not new
+   values — they are the two already solved for those two inks, and they land
+   on the same Y ~= 0.745 every other margin does.
+
+   The TILES are new and have to be. Every path in them is copied from a tile
+   already in this file, on the same six-slot grid at the same scales and
+   stroke — but a mark is never borrowed between rooms, and printing Enrich's
+   books down the foundation's own page would say the page is about schools.
+   Who We Are prints the drop, the book, the two figures and the tree: the
+   three cornerstones its own prose names, plus the care for the natural world
+   it says runs through all three. Our Guiding Force prints the cross, the
+   tree, the water and the mortarboard: the four undertakings that room
+   lists, in the order it lists them. */
+.cv-margin-print[data-room='who-we-are'] {
+  opacity: 0.164;   /* #1565c0 -> Y = 0.7457 */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%203.2c0%200%205.4%205.6%205.4%209.1a5.4%205.4%200%200%201-10.8%200C6.6%208.8%2012%203.2%2012%203.2z%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%206.4C10.4%205%208.4%204.4%204%204.4v13c4.4%200%206.4.6%208%202%201.6-1.4%203.6-2%208-2v-13c-4.4%200-6.4.6-8%202z%20M12%206.4v13%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-margin-print[data-room='our-guiding-force'] {
+  opacity: 0.14;   /* #c2185b -> Y = 0.7488 */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"), url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27260%27%20height%3D%27260%27%20viewBox%3D%270%200%20260%20260%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cg%20transform%3D%27translate%2828%2034%29%20scale%281.35%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.33%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28150%2018%29%20scale%281.05%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.71%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2888%20128%29%20scale%281.22%29%27%3E%3Cpath%20d%3D%27M2.5%2015.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%20M2.5%2019.5c2-1.6%203.4-1.6%205.4%200s3.4%201.6%205.4%200%203.4-1.6%205.4%200%27%20stroke-width%3D%271.48%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28196%20108%29%20scale%281.42%29%27%3E%3Cpath%20d%3D%27M2.6%209.2%2012%204.6l9.4%204.6L12%2013.8%202.6%209.2z%20M6.6%2011.2v4.4c0%201.3%202.4%202.4%205.4%202.4s5.4-1.1%205.4-2.4v-4.4%27%20stroke-width%3D%271.27%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2824%20196%29%20scale%281.11%29%27%3E%3Cpath%20d%3D%27M12%205v14%20M5%2012h14%27%20stroke-width%3D%271.63%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%28156%20206%29%20scale%281.28%29%27%3E%3Cpath%20d%3D%27M12%203.4%207.2%2011h2.6L5.4%2018.4h13.2L14.2%2011h2.6L12%203.4z%20M12%2018.4v3%27%20stroke-width%3D%271.40%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+
+/* THE TWO PAGES' THRESHOLD MARKS. Backdrop artwork cut from the room's ink
+   and bled off the right edge — the same class and the same 0.14 the four
+   projects wear, no disc and nothing to click. Each glyph means its own
+   chapter: two figures for the account (the page's line is that the work is
+   done without asking who the recipient is), a sprout for the road since
+   2010, a house for the registered office, and the radiance for what follows
+   from the guidance. The partners band and the Satguru band carry NO mark —
+   twelve real logos sit under one and a real photograph in the other, and a
+   drawn stand-in beside either is the collision .pj-lockup already refuses. */
+.cv-threshold-mark[data-for='account'] {   /* people */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9%2010.6a2.5%202.5%200%201%200%200-5%202.5%202.5%200%200%200%200%205z%20M3.8%2019.6v-2a5.2%205.2%200%200%201%2010.4%200v2%20M16.4%2010.2a2.1%202.1%200%201%200%200-4.2%202.1%202.1%200%200%200%200%204.2z%20M16.6%2012.4a4.4%204.4%200%200%201%203.6%204.4v2.8%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-threshold-mark[data-for='road'] {   /* sprout */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%2021v-7%20M12%2014c-2.6%200-4.4-1.8-4.4-4.2%200-1.4.6-2.6%201.6-3.4%201%201.4%201.8%202%202.8%202.2%201-.2%201.8-.8%202.8-2.2%201%20.8%201.6%202%201.6%203.4%200%202.4-1.8%204.2-4.4%204.2z%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-threshold-mark[data-for='contact'] {   /* home */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M4%2020V10.4L12%204l8%206.4V20%20M9.6%2020v-5.6h4.8V20%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.cv-threshold-mark[data-for='guidance'] {   /* shine */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+
+/* ---- THE REGISTER OF SUPPORTS ----------------------------------------- */
+/* NINE REAL LOGO FILES HAD BEEN SITTING IN public/images/partners/ UNUSED
+   while this page printed all twelve companions as plain text. A name set
+   beside its own mark is what a register of supporters looks like; a name
+   set alone is a list.
+
+   THE MONOGRAM IS ALWAYS RENDERED and the logo is layered OVER it — the
+   media wall's idiom, and the reason a 404 leaves an entry rather than a
+   hole. Three of the twelve have no file at all (two served a CMS default,
+   one's site is gone), so the fallback is a real state, not a safety net.
+
+   THE MARK SITS ON TRUE WHITE with a small radius and no tint plate: two of
+   the nine files are opaque brand cards rather than artwork (toi.png is
+   1200x630 with no alpha, ndtv.png is 57px square), so anything painted
+   behind them would show as a rectangle around the logo on some rows and not
+   others. White is the ground every one of them was drawn against. */
+.ww-register {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.ww-register li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: #f8f6f2;
+  border: 1px solid var(--line);
+}
+.ww-register-mark {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.ww-register-mark img {
+  position: absolute;
+  inset: 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  object-fit: contain;
+}
+/* NEVER THE BRAND INK RAW. Four of the twelve miss 4.5:1 on white as
+   published — KSCF's #ee7623 measures 2.90:1, the UN's #009edb 3.04:1, Red
+   Cross and NIIT 4.38:1 each. Cut 55% toward the page ink, the whole set
+   lands between 6.57:1 (KSCF) and 13.81:1. The monogram is type: it is read,
+   not glanced at, and it is the only thing three of these rows carry. */
+.ww-register-initials {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--tile-ink, #626981) 55%, #16182b);
+}
+.ww-register-text {
+  min-width: 0;   /* long names wrap instead of stretching the row */
+  display: block;
+}
+.ww-register-text strong {
+  display: block;
+  font-size: 14.5px;
+  color: var(--ink-900);
+  margin-bottom: 4px;
+}
+.ww-register-text > span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-700);
+}
+.ww-register-note {
+  margin-top: 6px;
+  font-size: 12px;
+  font-style: italic;
+  /* 5.00:1 on this ground — quieter than the contribution above it, still
+     type rather than decoration, because it is where the UN consultative
+     status is actually stated. */
+  color: var(--ink-500);
+}
+
+/* THE SATGURU'S PORTRAIT IN THE BAND'S RIGHT-HAND SLOT.
+   .pj-lockup is sized for wordmarks — a 150-240px box at 1.6:1 — and this is
+   a 3:4 portrait, so it takes the slot on its own terms rather than being
+   fitted into a box drawn for something else. No new class: .gf-portrait
+   already carries the frame, and this only says how wide it sits in the row. */
+.pj-threshold > .gf-portrait {
+  flex: none;
+  width: clamp(118px, 16vw, 172px);
+}
+/* the row's own stacking rule applies below 760px, where the portrait leads
+   the band the way a lockup does */
+@media (max-width: 760px) {
+  .pj-threshold > .gf-portrait {
+    order: -1;
+    width: clamp(104px, 30vw, 140px);
+    margin-bottom: 14px;
+  }
 }

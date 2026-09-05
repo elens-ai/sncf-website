@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 import { MapPin, Phone, Mail, Heart } from 'lucide-react';
 
@@ -17,25 +18,30 @@ import { MapPin, Phone, Mail, Heart } from 'lucide-react';
  * would strand the reader on a wall of links.
  */
 
-const SITE = 'https://nirankarifoundation.org';
+/* Nothing here points at nirankarifoundation.org. This site replaces it and
+   that domain is being decommissioned, so every link that used to leave for
+   it now goes to the page here that carries the same material. The Mission's
+   OTHER properties are separate live sites and still link out.
 
+   Not yet rehoused: Privacy Policy, Terms of Service, Social Media Guidelines
+   and Foreign Contributions had no equivalent page here, so rather than link
+   to a dying domain they are held back until those pages exist. */
 const GROUPS: { title: string; links: { label: string; href: string }[] }[] = [
   {
-    title: 'Quick links',
+    title: 'Explore',
     links: [
-      { label: 'Contact', href: `${SITE}/contact/` },
-      { label: 'Social Media — Some Guidelines', href: `${SITE}/social-media-guidelines/` },
-      { label: 'Privacy Policy', href: `${SITE}/privacy-policy/` },
-      { label: 'Terms of Service', href: `${SITE}/terms-of-service/` },
+      { label: 'Core Values', href: '/core-values' },
+      { label: 'Projects', href: '/projects' },
+      { label: 'Who We Are', href: '/who-we-are' },
+      { label: 'Our Guiding Force', href: '/our-guiding-force' },
     ],
   },
   {
     title: 'Useful links',
     links: [
-      { label: 'Awards and Honours', href: `${SITE}/honors-and-recognitions/` },
-      { label: 'Our Partners', href: `${SITE}/our-partners/` },
-      { label: 'Foreign Contributions', href: `${SITE}/foreign-contributions/` },
-      { label: 'Contribute', href: `${SITE}/donate/` },
+      { label: 'Awards and Honours', href: '/#awards' },
+      { label: 'Our Partners', href: '/who-we-are' },
+      { label: 'Contact', href: '/who-we-are' },
     ],
   },
   {
@@ -57,20 +63,22 @@ interface SiteFooterProps {
 export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => (
   <footer
     id="site-footer"
-    className="relative z-10 w-full bg-black/45 backdrop-blur-md border-t border-white/10"
+    className="site-footer relative z-10 w-full"
   >
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-14">
       <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
         {/* Identity + contact */}
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <img
-              src="https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp"
-              alt=""
-              aria-hidden="true"
-              className="w-11 h-11 object-contain"
-              referrerPolicy="no-referrer"
-            />
+            {/* the same white disc the header gives it — on the footer's deep
+                ground the emblem's own petals had nothing to read against */}
+            <span className="footer-badge" aria-hidden="true">
+              <img
+                src="https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp"
+                alt=""
+                referrerPolicy="no-referrer"
+              />
+            </span>
             <div>
               <p className="font-artistic-display text-white text-[15px] font-extrabold tracking-[0.13em] uppercase leading-tight">
                 Sant Nirankari
@@ -123,18 +131,31 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => (
                 {group.title}
               </h2>
               <ul className="space-y-2">
-                {group.links.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[13px] text-white/75 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
+                {group.links.map((link) => {
+                  const cls =
+                    'text-[13px] text-white/75 hover:text-white transition-colors';
+                  /* our own routes stay in the app; only the Mission's other
+                     sites open in a new tab */
+                  const internal = link.href.startsWith('/');
+                  return (
+                    <li key={link.label}>
+                      {internal ? (
+                        <Link to={link.href} className={cls}>
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={cls}
+                        >
+                          {link.label}
+                        </a>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
