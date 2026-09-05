@@ -44,7 +44,13 @@ export interface NavItem {
   groups?: PillarGroup[];
 }
 
-/* The mega menu now opens our own Core Values page at the right chapter. */
+/* EVERY ENTRY GOES SOMEWHERE OF ITS OWN.
+   These were all pointed at the room anchor — four Heal entries, one
+   destination between them — which is a menu promising more than the page
+   delivers. Each activity now links to its own record, which opens on
+   arrival (CoreValuesPage watches the hash). The ids are the activity ids in
+   data/activities.ts, so a renamed activity breaks the link visibly at build
+   time rather than silently landing in the wrong place. */
 export const CORE_VALUE_GROUPS: PillarGroup[] = [
   {
     pillarId: 'heal',
@@ -52,9 +58,10 @@ export const CORE_VALUE_GROUPS: PillarGroup[] = [
     blurb: 'Health & medical care',
     links: [
       { label: 'All of Heal', href: '/core-values#heal' },
-      { label: 'Blood Donation', href: '/core-values#heal' },
-      { label: 'Eye Care', href: '/core-values#heal' },
-      { label: 'Health Checkup Camps', href: '/core-values#heal' },
+      { label: 'Blood Donation', href: '/core-values#blood-donation' },
+      { label: 'Eye Care', href: '/core-values#eye-checkup' },
+      { label: 'Health Checkup Camps', href: '/core-values#health-checkup' },
+      { label: 'Blood Bank', href: '/core-values#blood-bank' },
     ],
   },
   {
@@ -63,8 +70,10 @@ export const CORE_VALUE_GROUPS: PillarGroup[] = [
     blurb: 'Education & skills',
     links: [
       { label: 'All of Enrich', href: '/core-values#enrich' },
-      { label: 'Schools & Scholarships', href: '/core-values#enrich' },
-      { label: 'Skill Development', href: '/core-values#enrich' },
+      { label: 'Schools & Colleges', href: '/core-values#schools-colleges' },
+      { label: 'Scholarships', href: '/core-values#scholarships' },
+      { label: 'Free Schools', href: '/core-values#free-schools' },
+      { label: 'Skill Development', href: '/core-values#skill-nima' },
     ],
   },
   {
@@ -73,9 +82,10 @@ export const CORE_VALUE_GROUPS: PillarGroup[] = [
     blurb: 'Upliftment & environment',
     links: [
       { label: 'All of Empower', href: '/core-values#empower' },
-      { label: 'Tree Plantation', href: '/core-values#empower' },
-      { label: 'Disaster Relief', href: '/core-values#empower' },
-      { label: 'Youth Empowerment', href: '/core-values#empower' },
+      { label: 'Tree Plantation', href: '/core-values#tree-plantation' },
+      { label: 'Cleanliness Drives', href: '/core-values#cleanliness' },
+      { label: 'COVID-19 Relief', href: '/core-values#covid-relief' },
+      { label: 'Financial Support', href: '/core-values#financial-support' },
     ],
   },
 ];
@@ -88,10 +98,10 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/projects',
     links: [
       { label: 'All projects', href: '/projects' },
-      { label: 'Project Amrit', href: '/projects' },
-      { label: 'Oneness Vann', href: '/projects' },
-      { label: 'Watershed Programme', href: '/projects' },
-      { label: 'Adopted Villages', href: '/projects' },
+      { label: 'Project Amrit', href: '/projects#project-amrit' },
+      { label: 'Oneness Vann', href: '/projects#project-oneness-vann' },
+      { label: 'Watershed Programme', href: '/projects#watershed-programme' },
+      { label: 'Adopted Villages', href: '/projects#adopted-villages' },
       {
         label: 'Sant Nirankari Health City',
         href: 'https://www.nirankarihealthcity.org/',
@@ -103,10 +113,11 @@ export const NAV_ITEMS: NavItem[] = [
     label: 'Who We Are',
     href: '/who-we-are',
     links: [
-      { label: 'About the foundation', href: '/who-we-are' },
-      { label: 'Mission & Vision', href: '/who-we-are' },
-      { label: 'Our Partners', href: '/who-we-are' },
-      { label: 'Contact', href: '/who-we-are' },
+      { label: 'About the foundation', href: '/who-we-are#account' },
+      { label: 'Mission & Vision', href: '/who-we-are#mission' },
+      { label: 'The road so far', href: '/who-we-are#road' },
+      { label: 'Our Partners', href: '/who-we-are#partners' },
+      { label: 'Contact', href: '/who-we-are#contact' },
       { label: 'Honors & Recognitions', href: '/#awards' },
     ],
   },

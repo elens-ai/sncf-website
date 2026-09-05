@@ -102,6 +102,37 @@ export const CoreValuesPage: React.FC = () => {
   /* which activity has its full record open, by id */
   const [openId, setOpenId] = useState<string | null>(null);
 
+  /* A link into a single activity — '/core-values#blood-donation' from the
+     navigation — should not merely land near the row, it should OPEN it.
+     Otherwise the menu promises an activity and delivers a list.
+
+     Timers rather than requestAnimationFrame: rAF is suspended in a
+     backgrounded tab, and a deep link that silently does nothing when the
+     tab was not focused is a bug this codebase has already had once. */
+  useEffect(() => {
+    const jump = () => {
+      const id = window.location.hash.slice(1);
+      if (!id) return;
+      if (!ACTIVITIES.some((a) => a.id === id)) return;
+      setOpenId(id);
+      /* `block: 'start'` and not 'center', so this agrees with ScrollToTop,
+         which also honours the hash on a route change. Two handlers landing
+         on the same offset is invisible; two landing on different offsets is
+         a jump. The retry re-settles after the record has opened, since
+         opening it changes the height of everything below. */
+      let tries = 0;
+      const settle = () => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ block: 'start' });
+        if (++tries < 3) window.setTimeout(settle, 200);
+      };
+      window.setTimeout(settle, 60);
+    };
+    jump();
+    window.addEventListener('hashchange', jump);
+    return () => window.removeEventListener('hashchange', jump);
+  }, []);
+
   return (
     <PageShell
       accentPillarId="heal"
@@ -236,7 +267,7 @@ export const CoreValuesPage: React.FC = () => {
               {acts.map((a) => {
                 const open = openId === a.id;
                 return (
-                  <li key={a.id} className="cv-record" data-open={open}>
+                  <li key={a.id} id={a.id} className="cv-record" data-open={open}>
                     <button
                       type="button"
                       className="cv-record-head"
