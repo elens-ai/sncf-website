@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
+import { ChapterAmbience } from '../components/ChapterAmbience';
 import { MediaGallery } from '../components/MediaGallery';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
@@ -119,6 +120,15 @@ export const CoreValuesPage: React.FC = () => {
         />
       }
     >
+      {/* The room answers: the paper's light crosses to the next
+          cornerstone's ink as you approach it. */}
+      <ChapterAmbience
+        chapters={CORNERSTONES.map((id) => ({
+          id,
+          ink: PILLARS.find((x) => x.id === id)!.accentA,
+        }))}
+      />
+
       {/* THE CONTENTS — three doors, one per cornerstone */}
       <nav className="cv-contents" aria-label="Jump to a cornerstone">
         {CORNERSTONES.map((id) => {
@@ -145,7 +155,7 @@ export const CoreValuesPage: React.FC = () => {
       </nav>
 
       {/* THE CHAPTERS */}
-      {CORNERSTONES.map((id) => {
+      {CORNERSTONES.map((id, chapterIndex) => {
         const pillar = PILLARS.find((x) => x.id === id)!;
         const acts = ACTIVITIES.filter((a) => a.pillarId === id);
         /* the tallest headline figure in THIS vertical sets its own scale */
@@ -155,7 +165,7 @@ export const CoreValuesPage: React.FC = () => {
           <section
             key={id}
             id={id}
-            className="cv-chapter"
+            className="cv-room"
             style={
               {
                 '--ink-a': pillar.accentA,
@@ -164,13 +174,29 @@ export const CoreValuesPage: React.FC = () => {
             }
             aria-labelledby={`${id}-title`}
           >
-            <header className="cv-chapter-head">
-              <p className="cv-chapter-eyebrow font-artistic-display">{pillar.label}</p>
-              <h2 id={`${id}-title`} className="cv-chapter-title font-artistic-heading">
+            {/* THE THRESHOLD. The card stack stops here: a full-bleed band of
+                paper with the cornerstone's number, name and petal on it. It
+                is a leaf you turn rather than a heading you scroll past — the
+                daylit answer to the hall's camera turning into a new room. */}
+            <header className="cv-threshold">
+              <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
+                {String(chapterIndex + 1).padStart(2, '0')}
+              </span>
+              <img
+                className="cv-threshold-petal"
+                src={`/images/petals/petal-${id}.webp`}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+              <p className="cv-threshold-label font-artistic-display">{pillar.label}</p>
+              <h2 id={`${id}-title`} className="cv-threshold-title font-artistic-heading">
                 {pillar.headline}
               </h2>
-              <p className="cv-chapter-body font-artistic-serif">{pillar.body}</p>
+              <p className="cv-threshold-body font-artistic-serif">{pillar.body}</p>
             </header>
+
+            <div className="cv-chapter">
 
             {/* THE LEDGER — the vertical's four headline figures */}
             <ul className="cv-ledger" aria-label={`${pillar.label} headline figures`}>
@@ -273,6 +299,7 @@ export const CoreValuesPage: React.FC = () => {
 
             {/* THE PLATES — this cornerstone's photographs and films */}
             <MediaGallery section={id} title={`${pillar.label} — photographs & films`} />
+            </div>
           </section>
         );
       })}

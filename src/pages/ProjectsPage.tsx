@@ -86,20 +86,40 @@ export const ProjectsPage: React.FC = () => {
       }
     >
       {/* THE SPREADS */}
-      {projects.map((p) => {
+      {projects.map((p, i) => {
         const face = PROJECT_FACE[p.title];
         return (
-          <article
+          <section
             key={p.id}
             id={slug(p.title)}
-            className="pj-spread"
+            className="cv-room"
             style={{ '--ink-a': face?.ink, '--ink-b': face?.ink2 } as React.CSSProperties}
+            aria-labelledby={`${slug(p.title)}-title`}
           >
-            <header className="pj-head">
-              <p className="pj-scope font-artistic-display">{face?.scope}</p>
-              <h2 className="pj-title font-artistic-heading">{p.title}</h2>
-              <p className="pj-blurb font-artistic-serif">{p.blurb}</p>
+            {/* the same threshold the cornerstones use — these are stacked
+                now, and a project deserves the same announcement */}
+            <header className="cv-threshold">
+              <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <img
+                className="cv-threshold-petal"
+                src="/images/petals/petal-projects.webp"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+              <p className="cv-threshold-label font-artistic-display">{face?.scope}</p>
+              <h2
+                id={`${slug(p.title)}-title`}
+                className="cv-threshold-title font-artistic-heading"
+              >
+                {p.title}
+              </h2>
+              <p className="cv-threshold-body font-artistic-serif">{p.blurb}</p>
             </header>
+
+            <article className="pj-spread">
 
             {/* THE HEADLINE PLATE */}
             <div className="pj-plate">
@@ -128,7 +148,8 @@ export const ProjectsPage: React.FC = () => {
               section={slug(p.title)}
               title={`${p.title.replace(/^Project /, '')} — photographs & films`}
             />
-          </article>
+            </article>
+          </section>
         );
       })}
 

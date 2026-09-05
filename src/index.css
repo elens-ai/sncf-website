@@ -6067,3 +6067,205 @@ html:has(.reading-room[data-surface='light']) {
     margin: 10px auto 9px;
   }
 }
+
+/* ---- THE ROOM'S LIGHT -------------------------------------------------- */
+/* ChapterAmbience publishes --room-ink (the cornerstone that owns the
+   viewport, crossing to the next as you approach it). The paper answers in
+   two places only — an ambient wash and the watermark — so the page changes
+   its light without ever stopping being paper. */
+.reading-room[data-surface='light'] .paper-canvas::after {
+  /* the corner bloom takes the room's ink */
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--room-ink, 102 99 181) / 0.5),
+    transparent 70%
+  );
+  opacity: 0.5;
+  transition: opacity 600ms ease;
+}
+/* a broad wash low on the page, so the incoming room's colour is already in
+   the air before its first card arrives */
+.reading-room[data-surface='light'] .paper-canvas::before {
+  background:
+    radial-gradient(
+      64vw 52vh at 50% 100%,
+      rgb(var(--room-ink, 102 99 181) / 0.1),
+      transparent 70%
+    ),
+    url('/images/lotus-watermark.png') center / contain no-repeat;
+}
+
+/* ---- THE THRESHOLD ---------------------------------------------------- */
+/* Crossing from Heal into Enrich used to be a 44px gap between two white
+   cards — the page read as a list, and nothing told you that you had entered
+   a different cornerstone. The threshold is the seam: the card stack stops,
+   the paper opens full width, and the next room states its number, its name
+   and its petal before any of its content appears.
+
+   It is deliberately NOT a card. Everything else on this page is a white
+   panel; this is bare paper, which is exactly why it reads as a break in the
+   rhythm rather than as one more block. */
+
+.cv-room {
+  scroll-margin-top: 132px;
+}
+/* the chapter body keeps the panel treatment the threshold gives up */
+.reading-room[data-surface='light'] .cv-chapter {
+  border-top: 0;
+  margin-bottom: 0;
+}
+
+.cv-threshold {
+  position: relative;
+  /* full-bleed out of the reading column, back to the page's edges */
+  margin-inline: calc(50% - 50vw);
+  padding: clamp(46px, 9vh, 92px) max(calc(50vw - 50%), 16px) clamp(34px, 6vh, 62px);
+  overflow: hidden;
+  /* THE DOOR IS STONE, not paper. A tinted band of paper between two white
+     sheets is still paper — the eye reads it as one more block and the
+     crossing stays unfelt. This is the SAME dark the page cover at the top
+     and the footer at the bottom are cut from, so the volume opens on stone,
+     turns on stone and closes on stone, and the three cornerstones stop
+     reading as a list because what separates them is not a sheet.
+
+     It is also the hall's own material: the exhibition on "/" is this
+     colour. Crossing a room boundary here is lit the way it is lit there. */
+  background:
+    radial-gradient(
+      70% 140% at 50% 0%,
+      color-mix(in srgb, var(--ink-b) 16%, transparent),
+      transparent 72%
+    ),
+    linear-gradient(180deg, #171334 0%, #120f2a 100%);
+  color: #fff;
+}
+/* the rule the room is announced over — its full width, in its own ink */
+.cv-threshold::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ink-b) 18%,
+    var(--ink-b) 82%,
+    transparent 100%
+  );
+}
+/* the number, set large and pale behind the name — a chapter leaf's folio */
+.cv-threshold-num {
+  position: absolute;
+  top: clamp(14px, 3vh, 34px);
+  left: max(calc(50vw - 50%), 16px);
+  font-size: clamp(52px, 11vh, 108px);
+  font-weight: 800;
+  line-height: 0.8;
+  color: rgb(255 255 255 / 0.09);
+  letter-spacing: -0.04em;
+  pointer-events: none;
+}
+/* the cornerstone's own petal, bled off the right edge */
+.cv-threshold-petal {
+  position: absolute;
+  right: -3vw;
+  top: 50%;
+  translate: 0 -50%;
+  width: min(30vw, 260px);
+  opacity: 0.3;
+  rotate: -8deg;
+  pointer-events: none;
+}
+.cv-threshold-label {
+  position: relative;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  /* on stone the BRIGHT half of the pair is the readable one — the same
+     inversion the hall relies on */
+  color: var(--ink-b);
+  margin: 0 0 8px;
+}
+.cv-threshold-title {
+  position: relative;
+  font-size: clamp(26px, 4.6vw, 44px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 12px;
+  max-width: 20ch;
+}
+.cv-threshold-body {
+  position: relative;
+  max-width: 58ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgb(255 255 255 / 0.78);
+  margin: 0;
+}
+
+/* THE ARRIVAL. The threshold's parts rise as it comes into view — the number
+   and petal first, then the name, then the line under it. `animation-timeline`
+   ties this to the element's own passage through the viewport, so there is no
+   observer and no scroll handler: the browser drives it, and it reverses
+   correctly when you scroll back up. */
+@supports (animation-timeline: view()) {
+  .cv-threshold-num,
+  .cv-threshold-petal,
+  .cv-threshold-label,
+  .cv-threshold-title,
+  .cv-threshold-body {
+    animation: cv-arrive linear both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 68%;
+  }
+  .cv-threshold-label { animation-range: entry 12% entry 74%; }
+  .cv-threshold-title { animation-range: entry 16% entry 80%; }
+  .cv-threshold-body { animation-range: entry 22% entry 88%; }
+}
+@keyframes cv-arrive {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+/* the petal and folio arrive from their own resting opacity, not from 1 */
+@supports (animation-timeline: view()) {
+  .cv-threshold-petal { animation-name: cv-arrive-petal; }
+  .cv-threshold-num { animation-name: cv-arrive-num; }
+}
+@keyframes cv-arrive-petal {
+  from { opacity: 0; transform: translateY(26px) rotate(-14deg); }
+  to { opacity: 0.3; transform: rotate(-8deg); }
+}
+@keyframes cv-arrive-num {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 700px) {
+  .cv-threshold-petal { width: 42vw; opacity: 0.22; }
+  .cv-threshold-num { font-size: clamp(40px, 9vh, 64px); }
+}
+
+/* Reduced motion: the threshold is still a threshold — the rule, the folio,
+   the petal and the type are all there. Nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  .cv-threshold-num,
+  .cv-threshold-petal,
+  .cv-threshold-label,
+  .cv-threshold-title,
+  .cv-threshold-body {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .cv-threshold-petal { opacity: 0.3; }
+}
+
+/* The project spreads are threshold-led now, so the panel itself drops the
+   top rule and the outer margin the threshold provides. */
+.reading-room[data-surface='light'] .cv-room .pj-spread {
+  border-top: 0;
+  margin-bottom: 0;
+}
