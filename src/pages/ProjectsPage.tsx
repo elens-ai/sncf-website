@@ -103,7 +103,7 @@ export const ProjectsPage: React.FC = () => {
                 {String(i + 1).padStart(2, '0')}
               </span>
               <img
-                className="cv-threshold-petal"
+                className="cv-threshold-petal cv-threshold-petal--neutral"
                 src="/images/petals/petal-projects.webp"
                 alt=""
                 aria-hidden="true"

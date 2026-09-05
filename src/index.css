@@ -6119,25 +6119,28 @@ html:has(.reading-room[data-surface='light']) {
   position: relative;
   /* full-bleed out of the reading column, back to the page's edges */
   margin-inline: calc(50% - 50vw);
-  padding: clamp(46px, 9vh, 92px) max(calc(50vw - 50%), 16px) clamp(34px, 6vh, 62px);
+  padding: clamp(30px, 5.5vh, 58px) max(calc(50vw - 50%), 16px) clamp(30px, 5.5vh, 58px);
   overflow: hidden;
-  /* THE DOOR IS STONE, not paper. A tinted band of paper between two white
-     sheets is still paper — the eye reads it as one more block and the
-     crossing stays unfelt. This is the SAME dark the page cover at the top
-     and the footer at the bottom are cut from, so the volume opens on stone,
-     turns on stone and closes on stone, and the three cornerstones stop
-     reading as a list because what separates them is not a sheet.
+  /* THE DOOR IS COLOURED PAPER — the room's own light, not stone.
+     A dark band did separate the chapters, but it sat on a daylit page like
+     a shutter coming down: heavy, and it borrowed the hall's night for a
+     page that is deliberately in daylight.
 
-     It is also the hall's own material: the exhibition on "/" is this
-     colour. Crossing a room boundary here is lit the way it is lit there. */
+     What separates the rooms instead is a full-bleed leaf tinted with that
+     vertical's OWN colour, the way a printed volume gives each part a
+     coloured chapter page. It still breaks the rhythm — everything else here
+     is a white card, and this is neither white nor a card — but it breaks it
+     with the room's light rather than with its absence. And it means the
+     colour you are crossing INTO is the thing you are looking at while you
+     cross. */
   background:
-    radial-gradient(
-      70% 140% at 50% 0%,
-      color-mix(in srgb, var(--ink-b) 16%, transparent),
-      transparent 72%
-    ),
-    linear-gradient(180deg, #171334 0%, #120f2a 100%);
-  color: #fff;
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ink-b) 30%, #fbfaf8) 0%,
+      color-mix(in srgb, var(--ink-b) 17%, #fbfaf8) 58%,
+      color-mix(in srgb, var(--ink-b) 9%, #fbfaf8) 100%
+    );
+  color: var(--ink-900);
 }
 /* the rule the room is announced over — its full width, in its own ink */
 .cv-threshold::before {
@@ -6148,21 +6151,23 @@ html:has(.reading-room[data-surface='light']) {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--ink-b) 18%,
-    var(--ink-b) 82%,
+    var(--ink-a) 18%,
+    var(--ink-a) 82%,
     transparent 100%
   );
 }
-/* the number, set large and pale behind the name — a chapter leaf's folio */
+/* The folio, a chapter leaf's number. IN THE FLOW, not absolutely placed:
+   positioned it collided with the label the moment the band was short enough
+   that its 92px numeral reached down into the text — which is every short
+   viewport. In the flow it cannot collide at any size. */
 .cv-threshold-num {
-  position: absolute;
-  top: clamp(14px, 3vh, 34px);
-  left: max(calc(50vw - 50%), 16px);
-  font-size: clamp(52px, 11vh, 108px);
+  display: block;
+  font-size: clamp(34px, 6.4vh, 66px);
   font-weight: 800;
-  line-height: 0.8;
-  color: rgb(255 255 255 / 0.09);
+  line-height: 0.85;
+  color: color-mix(in srgb, var(--ink-a) 26%, transparent);
   letter-spacing: -0.04em;
+  margin: 0 0 6px -0.04em;
   pointer-events: none;
 }
 /* the cornerstone's own petal, bled off the right edge */
@@ -6172,9 +6177,17 @@ html:has(.reading-room[data-surface='light']) {
   top: 50%;
   translate: 0 -50%;
   width: min(30vw, 260px);
-  opacity: 0.3;
+  opacity: 0.34;
   rotate: -8deg;
+  mix-blend-mode: multiply;
   pointer-events: none;
+}
+/* One petal serves all four projects, so its own green sits wrong on a lilac
+   or amber ground. Desaturated, it takes the tint it is multiplied over and
+   reads as the room's own watermark. */
+.cv-threshold-petal--neutral {
+  filter: grayscale(1);
+  opacity: 0.16;
 }
 .cv-threshold-label {
   position: relative;
@@ -6182,9 +6195,13 @@ html:has(.reading-room[data-surface='light']) {
   font-weight: 800;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  /* on stone the BRIGHT half of the pair is the readable one — the same
-     inversion the hall relies on */
-  color: var(--ink-b);
+  /* The label is 12px/800 uppercase — small text, so it needs 4.5:1, and it
+     is NOT sitting on white: the band is a mid-light tint of its own colour,
+     which lifts the ground and eats the margin. The paper cuts that clear
+     4.5:1 on #ffffff measured 3.45-4.5 here. Carrying the ink most of the way
+     to the page's near-black keeps each room's hue and buys the contrast
+     back on every one of the seven bands. */
+  color: color-mix(in srgb, var(--ink-a) 58%, #16182b);
   margin: 0 0 8px;
 }
 .cv-threshold-title {
@@ -6193,7 +6210,7 @@ html:has(.reading-room[data-surface='light']) {
   font-weight: 800;
   line-height: 1.08;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: var(--ink-900);
   margin: 0 0 12px;
   max-width: 20ch;
 }
@@ -6202,7 +6219,7 @@ html:has(.reading-room[data-surface='light']) {
   max-width: 58ch;
   font-size: 15px;
   line-height: 1.7;
-  color: rgb(255 255 255 / 0.78);
+  color: var(--ink-700);
   margin: 0;
 }
 
@@ -6236,7 +6253,7 @@ html:has(.reading-room[data-surface='light']) {
 }
 @keyframes cv-arrive-petal {
   from { opacity: 0; transform: translateY(26px) rotate(-14deg); }
-  to { opacity: 0.3; transform: rotate(-8deg); }
+  to { opacity: 0.34; transform: rotate(-8deg); }
 }
 @keyframes cv-arrive-num {
   from { opacity: 0; transform: translateY(26px); }
@@ -6244,8 +6261,8 @@ html:has(.reading-room[data-surface='light']) {
 }
 
 @media (max-width: 700px) {
-  .cv-threshold-petal { width: 42vw; opacity: 0.22; }
-  .cv-threshold-num { font-size: clamp(40px, 9vh, 64px); }
+  .cv-threshold-petal { width: 42vw; opacity: 0.26; }
+  .cv-threshold-num { font-size: clamp(30px, 6vh, 46px); }
 }
 
 /* Reduced motion: the threshold is still a threshold — the rule, the folio,
@@ -6260,7 +6277,7 @@ html:has(.reading-room[data-surface='light']) {
     opacity: 1;
     transform: none;
   }
-  .cv-threshold-petal { opacity: 0.3; }
+  .cv-threshold-petal { opacity: 0.34; }
 }
 
 /* The project spreads are threshold-led now, so the panel itself drops the
