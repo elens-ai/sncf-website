@@ -3,7 +3,7 @@ import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { MediaGallery } from '../components/MediaGallery';
 import { ACTIVITIES } from '../data/activities';
-import { PILLARS, EXTENDED_PILLARS } from '../data/pillars';
+import { PILLARS } from '../data/pillars';
 
 /**
  * PROJECTS — the four named undertakings, each given its own section.
@@ -30,55 +30,63 @@ import { PILLARS, EXTENDED_PILLARS } from '../data/pillars';
  */
 
 /**
- * THE PROJECTS TAKE THEIR COLOUR FROM THE HALL.
+ * ONE INK FOR THE WHOLE FAMILY.
  *
- * Amrit and Oneness Vann are rooms on the home page with inks of their own,
- * and the Watershed Programme sits under the Projects pillar. Those inks
- * were transcribed here by hand, which meant two copies of the same colour
- * and no way to keep them in step — the same drift that puts "over 9,100
- * camps" in prose above a record reading 9,174. They are looked up from
- * PILLARS now, so a project on this page is the colour of its room in the
- * exhibition, always.
+ * The Projects card in the hall is a single deep blue, and that blue IS the
+ * projects' colour — the five undertakings are one programme of work, not
+ * five brands. They were briefly given a colour each (Amrit teal, Vann
+ * purple, Villages amber), which made the page read as five unrelated
+ * things that happened to share a rail.
  *
- * The Adopted Villages have no pillar of their own — they are the one
- * undertaking the hall does not give a room — so they carry an ink stated
- * here, and that is said plainly rather than hidden among lookups.
+ * So the ink is read once, from the `projects` pillar the hall itself
+ * paints that card with, and every room takes it. Nothing is transcribed:
+ * change the pillar and this page follows.
+ *
+ * WHAT NOW TELLS THE ROOMS APART is no longer colour but the mark — each
+ * project's own glyph behind its threshold numeral and stamped on its
+ * plate — and, where the foundation has one, its actual logo.
  */
-const inkOf = (pillarId: string): [string, string] => {
-  /* BOTH arrays. `PILLARS` holds only the four rooms the hall walks through;
-     Amrit and Oneness live in `EXTENDED_PILLARS`. Searching the first alone
-     found neither and silently returned the fallback, so three of the four
-     projects came out the same generic blue — the failure looked like a
-     colour choice rather than a missed lookup, which is why it needed
-     measuring to catch. */
-  const p =
-    PILLARS.find((x) => x.id === pillarId) ??
-    EXTENDED_PILLARS.find((x) => x.id === pillarId);
-  return [p?.accentA ?? '#0d6a8c', p?.accentB ?? '#6ac8ed'];
+const PROJECTS_PILLAR = PILLARS.find((p) => p.id === 'projects');
+/* A missing pillar would silently repaint the page, so the fallback is the
+   same blue rather than an inherited or arbitrary one. */
+const INK_A = PROJECTS_PILLAR?.accentA ?? '#0d6a8c';
+const INK_B = PROJECTS_PILLAR?.accentB ?? '#6ac8ed';
+
+const PROJECT_FACE: Record<string, { scope: string }> = {
+  'Project Amrit': { scope: 'Launched 2023 · with the Government of India' },
+  'Project Oneness Vann': { scope: 'Launched 2021 · indigenous micro-forests' },
+  'Watershed Programme': { scope: 'Arid-zone rejuvenation' },
+  'Adopted Villages': { scope: 'Since 2017 · Haryana' },
 };
 
-const PROJECT_FACE: Record<
-  string,
-  { ink: string; ink2: string; scope: string }
-> = {
+/**
+ * THE OFFICIAL LOCKUPS.
+ *
+ * Two of the five campaigns have a real mark of their own; the Watershed
+ * Programme, the Adopted Villages and the Health City are programmes rather
+ * than branded campaigns and have never had one. So this is a map with holes
+ * in it on purpose, and a project with no entry prints nothing — the lockup
+ * sits IN THE FLOW, so its absence costs no space and leaves no gap to
+ * explain. That is the whole reason it is not an absolutely-placed badge:
+ * a badge slot the eye has learned from the room above is the most
+ * conspicuous thing a layout can leave empty, and filling it with a monogram
+ * would assert a brand nobody has ever made.
+ *
+ * Sized by HEIGHT with width auto, because a lockup's aspect is whatever was
+ * drawn — Amrit's is 1.63:1. Dropping oneness-vann.webp into
+ * public/images/projects/ and adding one line here is then the entire change,
+ * whatever shape that file turns out to be.
+ *
+ * The alt text carries the TAGLINE, not the name. The <h2> below already
+ * says "Project Amrit"; a screen reader should not hear it twice, and the
+ * Hindi line is the part of the mark that is genuinely additional.
+ */
+const PROJECT_LOCKUP: Record<string, { src: string; alt: string }> = {
   'Project Amrit': {
-    ...(([a, b]) => ({ ink: a, ink2: b }))(inkOf('amrit')),
-    scope: 'Launched 2023 · with the Government of India',
+    src: '/images/projects/amrit.webp',
+    alt: 'Swachh Jal, Swachh Man — clean water, clean mind',
   },
-  'Project Oneness Vann': {
-    ...(([a, b]) => ({ ink: a, ink2: b }))(inkOf('oneness')),
-    scope: 'Launched 2021 · indigenous micro-forests',
-  },
-  'Watershed Programme': {
-    ...(([a, b]) => ({ ink: a, ink2: b }))(inkOf('projects')),
-    scope: 'Arid-zone rejuvenation',
-  },
-  'Adopted Villages': {
-    /* no room in the hall, so no pillar to read from */
-    ink: '#b06a1f',
-    ink2: '#f0b357',
-    scope: 'Since 2017 · Haryana',
-  },
+  /* 'Project Oneness Vann': awaiting the logo file. */
 };
 
 /** 'Project Oneness Vann' -> 'project-oneness-vann' — the MEDIA key, the
@@ -102,12 +110,18 @@ export const ProjectsPage: React.FC = () => {
         <SubsectionNav
           label="The projects"
           links={[
+            /* THE BRIGHT half of the pair, which looks wrong and is right:
+               the rail never paints --chip-ink raw. The light surface mixes
+               it 42% into the page ink first (see THE ACTIVE RAIL CHIP), so
+               INK_B lands at #39627c — 6.54:1 under white type. Handing it
+               INK_A instead darkens an already-darkened colour to #123a54,
+               11.94:1, a near-black pill on a paper page. */
             ...projects.map((p) => ({
               id: slug(p.title),
               label: p.title.replace(/^Project /, ''),
-              ink: PROJECT_FACE[p.title]?.ink2,
+              ink: INK_B,
             })),
-            { id: 'health-city', label: 'Health City', ink: '#9ad6ef' },
+            { id: 'health-city', label: 'Health City', ink: INK_B },
           ]}
         />
       }
@@ -120,7 +134,7 @@ export const ProjectsPage: React.FC = () => {
             key={p.id}
             id={slug(p.title)}
             className="cv-room"
-            style={{ '--ink-a': face?.ink, '--ink-b': face?.ink2 } as React.CSSProperties}
+            style={{ '--ink-a': INK_A, '--ink-b': INK_B } as React.CSSProperties}
             aria-labelledby={`${slug(p.title)}-title`}
           >
             <div className="cv-margin-print" data-room={slug(p.title)} aria-hidden="true" />
@@ -135,6 +149,16 @@ export const ProjectsPage: React.FC = () => {
                 data-for={slug(p.title)}
                 aria-hidden="true"
               />
+              {/* the campaign's own letterhead, where it has one */}
+              {PROJECT_LOCKUP[p.title] && (
+                <img
+                  className="pj-lockup"
+                  src={PROJECT_LOCKUP[p.title].src}
+                  alt={PROJECT_LOCKUP[p.title].alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
               <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
                 {String(i + 1).padStart(2, '0')}
               </span>
@@ -183,7 +207,14 @@ export const ProjectsPage: React.FC = () => {
       })}
 
       {/* THE ONE STILL BEING BUILT */}
-      <section className="pj-forthcoming" id="health-city">
+      {/* The fifth project. It takes the inks inline exactly as the four
+          rooms do — it is a sibling of .cv-room, not a child, so it inherits
+          nothing from them. */}
+      <section
+        className="pj-forthcoming"
+        id="health-city"
+        style={{ '--ink-a': INK_A, '--ink-b': INK_B } as React.CSSProperties}
+      >
         <p className="pj-forthcoming-eyebrow font-artistic-display">Under construction</p>
         <h2 className="pj-forthcoming-title font-artistic-heading">
           Sant Nirankari Health City
