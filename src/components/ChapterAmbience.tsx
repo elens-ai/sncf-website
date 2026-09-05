@@ -94,10 +94,25 @@ export const ChapterAmbience: React.FC<ChapterAmbienceProps> = ({ chapters }) =>
       /* smootherstep: no visible start or stop to the crossing */
       const e = t * t * t * (t * (t * 6 - 15) + 10);
 
+      /* THE BREATH. In the hall, a camera turn does not cross one lit wall
+         into the next — it swings both through a dark room, the ground going
+         black at the midpoint (PillarsSection's fold bell) and coming back up
+         on the far side. This is the daylit inversion of that: the room's
+         colour DRAINS out of the paper as you reach the door and floods back
+         once you are through, so the crossing has a held breath in it rather
+         than being a straight dissolve. The threshold's stone sits at exactly
+         that midpoint, which is what you are looking at while the paper is
+         empty. */
+      const strength = Math.abs(2 * e - 1);
+
       const from = list[currentIdx].rgb;
       const to = (list[currentIdx + 1] ?? list[currentIdx]).rgb;
       root.style.setProperty('--room-ink', calm.matches ? mix(from, from, 0) : mix(from, to, e));
       root.style.setProperty('--room-cross', calm.matches ? '0' : e.toFixed(3));
+      root.style.setProperty(
+        '--room-strength',
+        calm.matches ? '1' : (0.25 + 0.75 * strength).toFixed(3),
+      );
     };
 
     const onScroll = () => {
@@ -113,6 +128,7 @@ export const ChapterAmbience: React.FC<ChapterAmbienceProps> = ({ chapters }) =>
       /* the hall does not want these — hand the root back as we found it */
       root.style.removeProperty('--room-ink');
       root.style.removeProperty('--room-cross');
+      root.style.removeProperty('--room-strength');
     };
   }, [key]);
 

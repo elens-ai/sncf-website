@@ -6080,8 +6080,8 @@ html:has(.reading-room[data-surface='light']) {
     rgb(var(--room-ink, 102 99 181) / 0.5),
     transparent 70%
   );
-  opacity: 0.5;
-  transition: opacity 600ms ease;
+  /* the room's colour drains at the door and floods back on the far side */
+  opacity: calc(0.5 * var(--room-strength, 1));
 }
 /* a broad wash low on the page, so the incoming room's colour is already in
    the air before its first card arrives */
@@ -6089,7 +6089,7 @@ html:has(.reading-room[data-surface='light']) {
   background:
     radial-gradient(
       64vw 52vh at 50% 100%,
-      rgb(var(--room-ink, 102 99 181) / 0.1),
+      rgb(var(--room-ink, 102 99 181) / calc(0.1 * var(--room-strength, 1))),
       transparent 70%
     ),
     url('/images/lotus-watermark.png') center / contain no-repeat;
