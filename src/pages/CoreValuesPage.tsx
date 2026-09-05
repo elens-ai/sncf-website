@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { ChapterAmbience } from '../components/ChapterAmbience';
@@ -101,6 +102,7 @@ const Tally: React.FC<{ value: string; className?: string }> = ({ value, classNa
 export const CoreValuesPage: React.FC = () => {
   /* which activity has its full record open, by id */
   const [openId, setOpenId] = useState<string | null>(null);
+  const { hash } = useLocation();
 
   /* A link into a single activity — '/core-values#blood-donation' from the
      navigation — should not merely land near the row, it should OPEN it.
@@ -111,7 +113,7 @@ export const CoreValuesPage: React.FC = () => {
      tab was not focused is a bug this codebase has already had once. */
   useEffect(() => {
     const jump = () => {
-      const id = window.location.hash.slice(1);
+      const id = hash.slice(1);
       if (!id) return;
       if (!ACTIVITIES.some((a) => a.id === id)) return;
       setOpenId(id);
@@ -129,9 +131,11 @@ export const CoreValuesPage: React.FC = () => {
       window.setTimeout(settle, 60);
     };
     jump();
-    window.addEventListener('hashchange', jump);
-    return () => window.removeEventListener('hashchange', jump);
-  }, []);
+    /* Keyed on the ROUTER's hash, not the `hashchange` event. React Router
+       navigates with history.pushState, which does not fire hashchange — so
+       an activity link clicked from the menu while already on this page
+       changed the address and opened nothing. */
+  }, [hash]);
 
   return (
     <PageShell

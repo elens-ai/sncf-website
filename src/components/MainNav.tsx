@@ -29,12 +29,19 @@ const NavAnchor: React.FC<{
   external?: boolean;
   className?: string;
   onClick?: () => void;
+  onFocus?: () => void;
+  ariaExpanded?: boolean;
+  ariaHasPopup?: boolean;
   children: React.ReactNode;
-}> = ({ href, external, className, onClick, children }) => {
+}> = ({ href, external, className, onClick, onFocus, ariaExpanded, ariaHasPopup, children }) => {
+  const aria = {
+    ...(ariaExpanded === undefined ? {} : { 'aria-expanded': ariaExpanded }),
+    ...(ariaHasPopup ? { 'aria-haspopup': true as const } : {}),
+  };
   const internal = !!href && href.startsWith('/') && !external;
   if (internal) {
     return (
-      <Link to={href!} className={className} onClick={onClick}>
+      <Link to={href!} className={className} onClick={onClick} onFocus={onFocus} {...aria}>
         {children}
       </Link>
     );
@@ -44,6 +51,8 @@ const NavAnchor: React.FC<{
       href={href}
       className={className}
       onClick={onClick}
+      onFocus={onFocus}
+      {...aria}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       {children}
@@ -53,6 +62,9 @@ const NavAnchor: React.FC<{
 
 const accentOf = (pillarId: string) =>
   PILLARS.find((p) => p.id === pillarId)?.accentB ?? '#ffffff';
+/* the deep half of the pair — the readable one on a light ground */
+const deepOf = (pillarId: string) =>
+  PILLARS.find((p) => p.id === pillarId)?.accentA ?? '#3a3f57';
 
 export const MainNav: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -82,6 +94,24 @@ export const MainNav: React.FC = () => {
     setOpenIndex(index);
     moveSpotlight(index);
   };
+
+  /* Navigating with the panel still on screen leaves it hanging over the page
+     you just asked for. Every destination in it closes it. */
+  const closeMenu = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    setOpenIndex(null);
+    setSpotlight(null);
+  };
+
+  /* Escape dismisses it, as it should for anything that opens over the page. */
+  useEffect(() => {
+    if (openIndex === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeMenu();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [openIndex]);
 
   const scheduleClose = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
@@ -156,6 +186,15 @@ export const MainNav: React.FC = () => {
                     href={item.href}
                     external={item.external}
                     className={shared}
+                    /* These were a <button> before they became links, and the
+                       conversion silently dropped both attributes — assistive
+                       tech was no longer told the panel existed. */
+                    ariaExpanded={expanded}
+                    ariaHasPopup
+                    /* Hover opens it for a mouse; focus is the keyboard's
+                       equivalent, and without this the panel could not be
+                       opened from the keyboard at all. */
+                    onFocus={() => openMenu(i)}
                   >
                     {item.label}
                     <ChevronDown
@@ -205,34 +244,50 @@ export const MainNav: React.FC = () => {
               onMouseEnter={() => openMenu(i)}
               className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50 animate-fadeIn"
             >
-              <div className="rounded-2xl bg-neutral-950/90 border border-white/15 backdrop-blur-xl shadow-2xl p-4 min-w-[240px]">
+              <div className="nvpanel">
                 {item.groups ? (
-                  /* Core Values — one column per pillar, in that pillar's colour */
-                  <div className="flex gap-6 px-1">
-                    {item.groups.map((g) => {
-                      const accent = accentOf(g.pillarId);
+                  /* Core Values — one leaf per room, each a miniature of that
+                     room's page: the tinted door it opens with on top, its
+                     index of activities on white beneath. */
+                  <div className="nvrooms">
+                    {item.groups.map((g, gi) => {
+                      const deep = deepOf(g.pillarId);
+                      const bright = accentOf(g.pillarId);
+                      const all = g.links.find((l) => l.label.startsWith('All of'));
+                      const rows = g.links.filter((l) => !l.label.startsWith('All of'));
                       return (
-                        <div key={g.pillarId} className="min-w-[176px]">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span
-                              className="w-2 h-2 rounded-full flex-none"
-                              style={{ backgroundColor: accent }}
+                        <div
+                          key={g.pillarId}
+                          className="nvroom"
+                          style={
+                            { '--ink-a': deep, '--ink-b': bright } as React.CSSProperties
+                          }
+                        >
+                          <NavAnchor
+                            href={all?.href ?? `/core-values#${g.pillarId}`}
+                            className="nvroom-door"
+                            onClick={closeMenu}
+                          >
+                            <img
+                              className="nvroom-emblem"
+                              src={`/images/vertical-${g.pillarId}.webp`}
+                              alt=""
+                              aria-hidden="true"
                             />
-                            <span
-                              className="font-artistic-display text-xs font-extrabold uppercase tracking-widest"
-                              style={{ color: accent }}
-                            >
-                              {g.title}
+                            <span className="nvroom-folio" aria-hidden="true">
+                              {String(gi + 1).padStart(2, '0')}
                             </span>
-                          </div>
-                          <p className="text-[11px] text-white/45 mb-2.5 pl-4">{g.blurb}</p>
-                          <ul className="space-y-0.5">
-                            {g.links.map((l) => (
+                            <span className="nvroom-name font-artistic-display">{g.title}</span>
+                            <span className="nvroom-blurb">{g.blurb}</span>
+                          </NavAnchor>
+                          <ul className="nvroom-index">
+                            {rows.map((l) => (
                               <li key={l.label}>
                                 <NavAnchor
                                   href={l.href}
                                   external={l.external}
-                                  className="block px-3 py-1.5 rounded-lg text-[13px] text-white/75 hover:text-white hover:bg-white/10 transition-colors"
+                                  className="nvroom-row"
+                                  onClick={closeMenu}
                                 >
                                   {l.label}
                                 </NavAnchor>
@@ -243,14 +298,15 @@ export const MainNav: React.FC = () => {
                       );
                     })}
                   </div>
-                ) : (
-                  <ul className="space-y-0.5">
+                                ) : (
+                  <ul className="nvlist">
                     {item.links?.map((l) => (
                       <li key={l.label}>
                         <NavAnchor
                           href={l.href}
                           external={l.external}
-                          className="block px-3 py-2 rounded-lg text-[13px] text-white/80 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
+                          className="nvroom-row"
+                          onClick={closeMenu}
                         >
                           {l.label}
                         </NavAnchor>
