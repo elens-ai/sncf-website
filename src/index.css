@@ -5974,9 +5974,15 @@ button.mgal-plate:focus-visible {
      enrich  #1565c0  5.4:1
      empower #b3164f  5.9:1
      projects#0d6a8c  5.8:1 */
-.reading-room[data-surface='light'] #heal.cv-chapter { --ink-type: #15694a; }
-.reading-room[data-surface='light'] #enrich.cv-chapter { --ink-type: #1565c0; }
-.reading-room[data-surface='light'] #empower.cv-chapter { --ink-type: #b3164f; }
+/* ON .cv-room, WHICH IS WHERE THE ID IS. These were written as
+   `#heal.cv-chapter` — id and class on one element — and then the threshold
+   moved the id up to the room, leaving .cv-chapter an inner div. So all three
+   have matched nothing since: --ink-type was never set, and every rule
+   reading it has silently been using its fallback. The fallback measures
+   fine, which is why nothing looked wrong; the rules were simply dead. */
+.reading-room[data-surface='light'] #heal.cv-room { --ink-type: #15694a; }
+.reading-room[data-surface='light'] #enrich.cv-room { --ink-type: #1565c0; }
+.reading-room[data-surface='light'] #empower.cv-room { --ink-type: #b3164f; }
 /* anything else falls back to the deep accent, darkened toward the page ink
    so a pale accent can never become pale type */
 .reading-room[data-surface='light'] .cv-chapter-eyebrow,
