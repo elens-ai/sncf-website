@@ -243,7 +243,13 @@ export const CoreValuesPage: React.FC = () => {
                   {[...acts]
                     .sort((a, b) => toNumber(b.headline.value) - toNumber(a.headline.value))
                     .map((a) => {
-                      const pct = Math.max(3, (toNumber(a.headline.value) / peak) * 100);
+                      /* The true proportion, floored in PIXELS by the CSS
+                         rather than in percent here. A 3% floor made a bar of
+                         43,904 and a bar of 47 identical — a 934-fold
+                         difference drawn as the same object, on a page whose
+                         argument is the record. A small value should look
+                         small; it should merely still be visible. */
+                      const pct = (toNumber(a.headline.value) / peak) * 100;
                       return (
                         <li key={a.id}>
                           <span className="cv-bar-name">{a.title}</span>

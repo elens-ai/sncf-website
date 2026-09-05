@@ -4682,6 +4682,9 @@
 .cv-bar-fill {
   display: block;
   height: 100%;
+  /* the floor lives here, in pixels: enough that a tiny quantity is still
+     legible as a mark, small enough that it cannot impersonate a large one */
+  min-width: 3px;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--ink-a), var(--ink-b));
   transform-origin: left center;
