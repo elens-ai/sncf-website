@@ -3,6 +3,7 @@ import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { MediaGallery } from '../components/MediaGallery';
 import { ACTIVITIES } from '../data/activities';
+import { PILLARS, EXTENDED_PILLARS } from '../data/pillars';
 
 /**
  * PROJECTS — the four named undertakings, each given its own section.
@@ -28,35 +29,61 @@ import { ACTIVITIES } from '../data/activities';
  * so there is no longer another page to send anyone to.
  */
 
-/** Per-project presentation: the ink it wears and where it lives officially. */
+/**
+ * THE PROJECTS TAKE THEIR COLOUR FROM THE HALL.
+ *
+ * Amrit and Oneness Vann are rooms on the home page with inks of their own,
+ * and the Watershed Programme sits under the Projects pillar. Those inks
+ * were transcribed here by hand, which meant two copies of the same colour
+ * and no way to keep them in step — the same drift that puts "over 9,100
+ * camps" in prose above a record reading 9,174. They are looked up from
+ * PILLARS now, so a project on this page is the colour of its room in the
+ * exhibition, always.
+ *
+ * The Adopted Villages have no pillar of their own — they are the one
+ * undertaking the hall does not give a room — so they carry an ink stated
+ * here, and that is said plainly rather than hidden among lookups.
+ */
+const inkOf = (pillarId: string): [string, string] => {
+  /* BOTH arrays. `PILLARS` holds only the four rooms the hall walks through;
+     Amrit and Oneness live in `EXTENDED_PILLARS`. Searching the first alone
+     found neither and silently returned the fallback, so three of the four
+     projects came out the same generic blue — the failure looked like a
+     colour choice rather than a missed lookup, which is why it needed
+     measuring to catch. */
+  const p =
+    PILLARS.find((x) => x.id === pillarId) ??
+    EXTENDED_PILLARS.find((x) => x.id === pillarId);
+  return [p?.accentA ?? '#0d6a8c', p?.accentB ?? '#6ac8ed'];
+};
+
 const PROJECT_FACE: Record<
   string,
   { ink: string; ink2: string; scope: string }
 > = {
   'Project Amrit': {
-    ink: '#00796b',
-    ink2: '#4db6ac',
+    ...(([a, b]) => ({ ink: a, ink2: b }))(inkOf('amrit')),
     scope: 'Launched 2023 · with the Government of India',
   },
   'Project Oneness Vann': {
-    ink: '#6a1b9a',
-    ink2: '#ba68c8',
+    ...(([a, b]) => ({ ink: a, ink2: b }))(inkOf('oneness')),
     scope: 'Launched 2021 · indigenous micro-forests',
   },
   'Watershed Programme': {
-    ink: '#0d6a8c',
-    ink2: '#6ac8ed',
+    ...(([a, b]) => ({ ink: a, ink2: b }))(inkOf('projects')),
     scope: 'Arid-zone rejuvenation',
   },
   'Adopted Villages': {
+    /* no room in the hall, so no pillar to read from */
     ink: '#b06a1f',
     ink2: '#f0b357',
     scope: 'Since 2017 · Haryana',
   },
 };
 
-/** 'Project Oneness Vann' -> 'project-oneness-vann' — the MEDIA key and the
-    anchor id are the same string, so a gallery never silently misses. */
+/** 'Project Oneness Vann' -> 'project-oneness-vann' — the MEDIA key, the
+    anchor id and the margin print all key off this one string, so a gallery
+    can never silently miss its own room. */
 const slug = (title: string) =>
   title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
@@ -101,6 +128,13 @@ export const ProjectsPage: React.FC = () => {
             {/* the same threshold the cornerstones use — these are stacked
                 now, and a project deserves the same announcement */}
             <header className="cv-threshold">
+              {/* the project's own mark, in place of the shared petal that
+                  used to say the same thing about all four */}
+              <span
+                className="cv-threshold-mark"
+                data-for={slug(p.title)}
+                aria-hidden="true"
+              />
               <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
                 {String(i + 1).padStart(2, '0')}
               </span>
@@ -117,7 +151,7 @@ export const ProjectsPage: React.FC = () => {
             <article className="pj-spread">
 
             {/* THE HEADLINE PLATE */}
-            <div className="pj-plate">
+            <div className="pj-plate" data-for={slug(p.title)}>
               <span className="pj-plate-value font-artistic-heading">
                 {p.headline.value}
               </span>
