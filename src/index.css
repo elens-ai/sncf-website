@@ -6610,3 +6610,52 @@ html:has(.reading-room[data-surface='light']) {
   line-height: 1.65;
   color: var(--ink-500);
 }
+
+/* The viewer showing a plate whose file has not arrived: the same reserved
+   plate at size, saying what it is for rather than pretending to be a photo. */
+.mgal-viewer-await {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  width: min(560px, 86vw);
+  aspect-ratio: 3 / 4;
+  max-height: 76vh;
+  border-radius: 14px;
+  border: 1px dashed rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.05);
+  padding: 30px;
+  text-align: center;
+}
+.mgal-viewer-await-mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  font-size: 19px;
+  color: rgb(255 255 255 / 0.8);
+  border: 1px solid rgb(255 255 255 / 0.3);
+}
+.mgal-viewer-await-kind {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.72);
+}
+.mgal-viewer-await-note {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.6);
+}
+/* an awaiting plate in the strip is a control now, so it gets the affordances */
+button.mgal-plate-awaiting {
+  cursor: pointer;
+}
+button.mgal-plate-awaiting:hover {
+  border-color: color-mix(in srgb, var(--ink-a, #626981) 45%, transparent);
+}

@@ -80,8 +80,13 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     .filter((m) => filter === 'all' || m.kind === filter)
     .slice()
     .sort((a, b) => (a.src ? 0 : 1) - (b.src ? 0 : 1));
-  /** only plates with a file can be opened — the arrows walk these */
-  const openable = shown.filter((m) => m.src);
+  /* EVERY PLATE OPENS. Most of the archive has not arrived, so restricting
+     the viewer to plates with a file meant six cards in eight did nothing at
+     all when clicked — the band looked interactive and mostly was not. An
+     awaiting plate opens too and says plainly that its photograph has not
+     been added, which makes the viewer a way to read the catalogue rather
+     than a dead end, and lets the arrows walk the whole set. */
+  const openable = shown;
 
   const close = useCallback(() => {
     setViewing(null);
@@ -358,15 +363,19 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
               inert={echo}
             >
               {awaiting ? (
-                /* inert on purpose — there is nothing behind it to open */
-                <div className="mgal-plate mgal-plate-awaiting">
+                <button
+                  type="button"
+                  className="mgal-plate mgal-plate-awaiting"
+                  aria-label={`${m.caption} — not yet added`}
+                  onClick={(e) => openPlate(m, e.currentTarget)}
+                >
                   <span className="mgal-await-mark" aria-hidden="true">
                     {m.kind === 'film' ? '▶' : '◻'}
                   </span>
                   <span className="mgal-await-label">
                     {m.kind === 'film' ? 'Film to come' : 'Photograph to come'}
                   </span>
-                </div>
+                </button>
               ) : (
                 <button
                   type="button"
@@ -450,7 +459,20 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
             )}
 
             <figure className="mgal-viewer-figure">
-              {current.kind === 'film' && current.src ? (
+              {!current.src ? (
+                <div className="mgal-viewer-await">
+                  <span className="mgal-viewer-await-mark" aria-hidden="true">
+                    {current.kind === 'film' ? '▶' : '◻'}
+                  </span>
+                  <p className="mgal-viewer-await-kind">
+                    {current.kind === 'film' ? 'Film to come' : 'Photograph to come'}
+                  </p>
+                  <p className="mgal-viewer-await-note font-artistic-serif">
+                    This plate is reserved. It goes up when the foundation’s
+                    archive reaches it.
+                  </p>
+                </div>
+              ) : current.kind === 'film' && current.src ? (
                 isEmbed(current.src) ? (
                   <iframe
                     src={current.src}
