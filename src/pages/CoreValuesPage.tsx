@@ -6,6 +6,7 @@ import { ChapterAmbience } from '../components/ChapterAmbience';
 import { MediaGallery } from '../components/MediaGallery';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
+import { onArrival } from '../utils/arrival';
 
 /**
  * CORE VALUES — the three cornerstones, written down.
@@ -74,28 +75,24 @@ const Tally: React.FC<{ value: string; className?: string }> = ({ value, classNa
     }
 
     let raf = 0;
-    let started = false;
     const suffix = value.replace(/^[\d,.]+/, '');
-    const run = () => {
-      if (started) return;
-      const r = el.getBoundingClientRect();
-      if (r.top > window.innerHeight || r.bottom < 0) return;
-      started = true;
-      window.removeEventListener('scroll', run);
+    /* One shared, rAF-throttled driver decides when this has arrived. Each
+       figure used to mount its own unthrottled scroll listener and measure on
+       every event — nine layout reads per scroll with twelve figures up. */
+    const stop = onArrival(el, () => {
       const t0 = performance.now();
       const tick = (t: number) => {
         const k = Math.min(1, (t - t0) / 1100);
-        /* easeOutfor the last stretch: the number decelerates into place */
+        /* easeOut for the last stretch: the number decelerates into place */
         const e = 1 - Math.pow(1 - k, 3);
         setShown(Math.round(target * e).toLocaleString('en-US') + suffix);
         if (k < 1) raf = requestAnimationFrame(tick);
       };
       raf = requestAnimationFrame(tick);
-    };
-    run();
-    window.addEventListener('scroll', run, { passive: true });
+    });
+
     return () => {
-      window.removeEventListener('scroll', run);
+      stop();
       cancelAnimationFrame(raf);
     };
   }, [value]);
