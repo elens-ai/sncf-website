@@ -5489,10 +5489,22 @@
   z-index: 10;
   padding: 104px clamp(16px, 5vw, 64px) clamp(34px, 5vh, 56px);
   text-align: center;
+  /* THE COVER IS LIGHT NOW. It was a deep navy band, which on a page that is
+     otherwise daylight read as a lid rather than a cover. It is paper here
+     too — washed with the emblem's five inks so the brand is what tints it,
+     each one placed where its dot sits in the row above the title.
+
+     This is only possible because the HEADER carries its own dark bar (see
+     `#site-header` above): the white lockup never depends on this band for
+     its ground, so the cover is free to be as light as the rest of the page. */
   background:
-    radial-gradient(70% 120% at 50% 0%, rgb(255 255 255 / 0.07), transparent 70%),
-    linear-gradient(180deg, #171334 0%, #120f2a 100%);
-  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+    radial-gradient(46vw 70% at 6% 0%, rgb(248 17 112 / 0.1), transparent 68%),
+    radial-gradient(42vw 64% at 30% 8%, rgb(179 87 173 / 0.09), transparent 66%),
+    radial-gradient(44vw 72% at 54% 0%, rgb(102 99 181 / 0.09), transparent 68%),
+    radial-gradient(42vw 66% at 76% 6%, rgb(9 166 207 / 0.1), transparent 66%),
+    radial-gradient(46vw 70% at 98% 0%, rgb(105 185 71 / 0.1), transparent 68%),
+    linear-gradient(180deg, #f6f4fa 0%, #fbfaf8 100%);
+  border-bottom: 1px solid var(--line);
 }
 /* the five inks, laid as a hairline along the cover's foot — the emblem
    signing the page */
@@ -5525,14 +5537,14 @@
 }
 /* on the cover the masthead is back on dark, so it keeps its original inks */
 .reading-room[data-surface='light'] .page-cover .page-title {
-  color: #fff;
-  text-shadow: 0 6px 30px rgb(0 0 0 / 0.4);
+  color: var(--ink-900);
+  text-shadow: none;
 }
 .reading-room[data-surface='light'] .page-cover .page-eyebrow {
-  color: rgb(255 255 255 / 0.62);
+  color: var(--ink-500);
 }
 .reading-room[data-surface='light'] .page-cover .page-standfirst {
-  color: rgb(255 255 255 / 0.84);
+  color: var(--ink-700);
 }
 .page-masthead {
   margin-bottom: 0;
@@ -6170,24 +6182,28 @@ html:has(.reading-room[data-surface='light']) {
   margin: 0 0 6px -0.04em;
   pointer-events: none;
 }
-/* the cornerstone's own petal, bled off the right edge */
-.cv-threshold-petal {
+/* THE VERTICAL'S OWN EMBLEM. This was an abstract petal bled off the edge as
+   a watermark; the site already has a proper icon per cornerstone (the leaf
+   for Heal, and its siblings), and an icon that MEANS the room beats a shape
+   that merely decorates it. Shown at full strength rather than ghosted — it
+   is a mark, not a texture. The Projects page carries none: there is no
+   per-project icon in the repository, and a borrowed one would be a lie
+   about which programme you are looking at. */
+.cv-threshold-emblem {
   position: absolute;
-  right: -3vw;
+  right: clamp(16px, 5vw, 72px);
   top: 50%;
   translate: 0 -50%;
-  width: min(30vw, 260px);
-  opacity: 0.34;
-  rotate: -8deg;
-  mix-blend-mode: multiply;
+  width: clamp(58px, 11vh, 104px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  object-fit: contain;
+  opacity: 0.92;
+  box-shadow: 0 10px 26px -14px rgb(22 24 43 / 0.35);
   pointer-events: none;
 }
-/* One petal serves all four projects, so its own green sits wrong on a lilac
-   or amber ground. Desaturated, it takes the tint it is multiplied over and
-   reads as the room's own watermark. */
-.cv-threshold-petal--neutral {
-  filter: grayscale(1);
-  opacity: 0.16;
+@media (max-width: 700px) {
+  .cv-threshold-emblem { width: 52px; right: 14px; opacity: 0.8; }
 }
 .cv-threshold-label {
   position: relative;
@@ -6230,7 +6246,7 @@ html:has(.reading-room[data-surface='light']) {
    correctly when you scroll back up. */
 @supports (animation-timeline: view()) {
   .cv-threshold-num,
-  .cv-threshold-petal,
+  .cv-threshold-emblem,
   .cv-threshold-label,
   .cv-threshold-title,
   .cv-threshold-body {
@@ -6248,12 +6264,12 @@ html:has(.reading-room[data-surface='light']) {
 }
 /* the petal and folio arrive from their own resting opacity, not from 1 */
 @supports (animation-timeline: view()) {
-  .cv-threshold-petal { animation-name: cv-arrive-petal; }
+  .cv-threshold-emblem { animation-name: cv-arrive-emblem; }
   .cv-threshold-num { animation-name: cv-arrive-num; }
 }
-@keyframes cv-arrive-petal {
-  from { opacity: 0; transform: translateY(26px) rotate(-14deg); }
-  to { opacity: 0.34; transform: rotate(-8deg); }
+@keyframes cv-arrive-emblem {
+  from { opacity: 0; transform: translateY(18px) scale(0.86); }
+  to { opacity: 0.92; transform: none; }
 }
 @keyframes cv-arrive-num {
   from { opacity: 0; transform: translateY(26px); }
@@ -6261,7 +6277,6 @@ html:has(.reading-room[data-surface='light']) {
 }
 
 @media (max-width: 700px) {
-  .cv-threshold-petal { width: 42vw; opacity: 0.26; }
   .cv-threshold-num { font-size: clamp(30px, 6vh, 46px); }
 }
 
@@ -6269,7 +6284,7 @@ html:has(.reading-room[data-surface='light']) {
    the petal and the type are all there. Nothing moves. */
 @media (prefers-reduced-motion: reduce) {
   .cv-threshold-num,
-  .cv-threshold-petal,
+  .cv-threshold-emblem,
   .cv-threshold-label,
   .cv-threshold-title,
   .cv-threshold-body {
@@ -6277,7 +6292,7 @@ html:has(.reading-room[data-surface='light']) {
     opacity: 1;
     transform: none;
   }
-  .cv-threshold-petal { opacity: 0.34; }
+  .cv-threshold-emblem { opacity: 0.92; }
 }
 
 /* The project spreads are threshold-led now, so the panel itself drops the

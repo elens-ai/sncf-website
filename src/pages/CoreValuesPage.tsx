@@ -183,8 +183,8 @@ export const CoreValuesPage: React.FC = () => {
                 {String(chapterIndex + 1).padStart(2, '0')}
               </span>
               <img
-                className="cv-threshold-petal"
-                src={`/images/petals/petal-${id}.webp`}
+                className="cv-threshold-emblem"
+                src={`/images/vertical-${id}.webp`}
                 alt=""
                 aria-hidden="true"
                 loading="lazy"

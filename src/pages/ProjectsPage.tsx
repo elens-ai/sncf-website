@@ -102,13 +102,6 @@ export const ProjectsPage: React.FC = () => {
               <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <img
-                className="cv-threshold-petal cv-threshold-petal--neutral"
-                src="/images/petals/petal-projects.webp"
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-              />
               <p className="cv-threshold-label font-artistic-display">{face?.scope}</p>
               <h2
                 id={`${slug(p.title)}-title`}
