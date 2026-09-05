@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { NAV_ITEMS, NavItem } from '../data/navigation';
 import { PILLARS } from '../data/pillars';
 
@@ -17,6 +18,38 @@ import { PILLARS } from '../data/pillars';
  *
  * Gallery is not here on purpose: the header already has a Gallery ribbon.
  */
+
+/**
+ * One link that knows where it goes. Internal destinations ('/core-values',
+ * '/projects#amrit') are router links so the page swaps without a reload;
+ * anything else is a real anchor that leaves the site in a new tab.
+ */
+const NavAnchor: React.FC<{
+  href?: string;
+  external?: boolean;
+  className?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}> = ({ href, external, className, onClick, children }) => {
+  const internal = !!href && href.startsWith('/') && !external;
+  if (internal) {
+    return (
+      <Link to={href!} className={className} onClick={onClick}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a
+      href={href}
+      className={className}
+      onClick={onClick}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {children}
+    </a>
+  );
+};
 
 const accentOf = (pillarId: string) =>
   PILLARS.find((p) => p.id === pillarId)?.accentB ?? '#ffffff';
@@ -113,7 +146,26 @@ export const MainNav: React.FC = () => {
                 onMouseEnter={() => (hasPanel(item) ? openMenu(i) : (moveSpotlight(i), setOpenIndex(null)))}
                 className="relative"
               >
-                {hasPanel(item) ? (
+                {/* An item that BOTH has a page and a panel is a link first:
+                    hovering opens the panel, clicking the label goes to the
+                    page. Only a panel with nowhere of its own to go stays a
+                    button. Otherwise Core Values, Projects and Who We Are
+                    would be reachable only through their own submenus. */}
+                {hasPanel(item) && item.href ? (
+                  <NavAnchor
+                    href={item.href}
+                    external={item.external}
+                    className={shared}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                        expanded ? 'rotate-180' : ''
+                      }`}
+                      aria-hidden="true"
+                    />
+                  </NavAnchor>
+                ) : hasPanel(item) ? (
                   <button
                     type="button"
                     aria-expanded={expanded}
@@ -129,14 +181,14 @@ export const MainNav: React.FC = () => {
                     />
                   </button>
                 ) : (
-                  <a href={item.href} className={shared}>
+                  <NavAnchor href={item.href} external={item.external} className={shared}>
                     {item.label}
                     {item.badge && (
                       <span className="ml-1 text-[9px] font-bold uppercase tracking-wider text-amber-300 italic">
                         {item.badge}
                       </span>
                     )}
-                  </a>
+                  </NavAnchor>
                 )}
               </div>
             );
@@ -176,13 +228,14 @@ export const MainNav: React.FC = () => {
                           <p className="text-[11px] text-white/45 mb-2.5 pl-4">{g.blurb}</p>
                           <ul className="space-y-0.5">
                             {g.links.map((l) => (
-                              <li key={l.href}>
-                                <a
+                              <li key={l.label}>
+                                <NavAnchor
                                   href={l.href}
+                                  external={l.external}
                                   className="block px-3 py-1.5 rounded-lg text-[13px] text-white/75 hover:text-white hover:bg-white/10 transition-colors"
                                 >
                                   {l.label}
-                                </a>
+                                </NavAnchor>
                               </li>
                             ))}
                           </ul>
@@ -193,13 +246,14 @@ export const MainNav: React.FC = () => {
                 ) : (
                   <ul className="space-y-0.5">
                     {item.links?.map((l) => (
-                      <li key={l.href}>
-                        <a
+                      <li key={l.label}>
+                        <NavAnchor
                           href={l.href}
+                          external={l.external}
                           className="block px-3 py-2 rounded-lg text-[13px] text-white/80 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
                         >
                           {l.label}
-                        </a>
+                        </NavAnchor>
                       </li>
                     ))}
                   </ul>
@@ -229,9 +283,11 @@ export const MainNav: React.FC = () => {
               const open = mobileSection === i;
               if (!hasPanel(item)) {
                 return (
-                  <a
+                  <NavAnchor
                     key={item.label}
                     href={item.href}
+                    external={item.external}
+                    onClick={() => setMobileOpen(false)}
                     className="flex items-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10 transition-colors"
                   >
                     {item.label}
@@ -240,7 +296,7 @@ export const MainNav: React.FC = () => {
                         {item.badge}
                       </span>
                     )}
-                  </a>
+                  </NavAnchor>
                 );
               }
               return (
@@ -260,6 +316,15 @@ export const MainNav: React.FC = () => {
                   </button>
                   {open && (
                     <div className="pb-2">
+                      {item.href && !item.external && (
+                        <NavAnchor
+                          href={item.href}
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-6 py-2 rounded-lg text-[13px] font-semibold text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+                        >
+                          Open {item.label}
+                        </NavAnchor>
+                      )}
                       {item.groups
                         ? item.groups.map((g) => (
                             <div key={g.pillarId} className="mb-2">
@@ -270,24 +335,28 @@ export const MainNav: React.FC = () => {
                                 {g.title}
                               </div>
                               {g.links.map((l) => (
-                                <a
-                                  key={l.href}
+                                <NavAnchor
+                                  key={l.label}
                                   href={l.href}
+                                  external={l.external}
+                                  onClick={() => setMobileOpen(false)}
                                   className="block px-6 py-2 rounded-lg text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors"
                                 >
                                   {l.label}
-                                </a>
+                                </NavAnchor>
                               ))}
                             </div>
                           ))
                         : item.links?.map((l) => (
-                            <a
-                              key={l.href}
+                            <NavAnchor
+                              key={l.label}
                               href={l.href}
+                              external={l.external}
+                              onClick={() => setMobileOpen(false)}
                               className="block px-6 py-2 rounded-lg text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors"
                             >
                               {l.label}
-                            </a>
+                            </NavAnchor>
                           ))}
                     </div>
                   )}
