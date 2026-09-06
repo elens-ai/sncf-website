@@ -112,19 +112,28 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
     <section
       id="partnership"
       aria-labelledby="partnership-heading"
-      className="partnership relative w-full bg-[#f9fafb] py-16 md:py-24 px-4"
+      className="partnership relative z-10 w-full py-16 md:py-24 px-4"
     >
       {/* THE CARD */}
-      <div className="relative w-full max-w-[1400px] mx-auto rounded-[48px] bg-white border border-slate-200/50 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.03)] overflow-hidden h-[600px] flex flex-col">
+      <div className="relative w-full max-w-[1400px] mx-auto rounded-[48px] bg-transparent border border-white/20 overflow-hidden h-[600px] flex flex-col">
         {/* the ground */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden select-none">
+          {/* BENEATH the video, never over it: the moment the film paints it
+              is hidden completely. It exists only so the dark lettering still
+              has something to read against on a slow connection, or if the
+              film is unreachable — not as an overlay, which the brief
+              rules out. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[radial-gradient(120%_100%_at_15%_0%,#ffffff_0%,#eef2f7_45%,#dce4ee_100%)]"
+          />
           <video
             autoPlay
             loop
             muted
             playsInline
             aria-hidden="true"
-            className="w-full h-full object-cover scale-105 transition-transform duration-1000"
+            className="relative w-full h-full object-cover scale-105 transition-transform duration-1000"
             src={VIDEO_SRC}
           />
         </div>
@@ -260,7 +269,7 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
         </ul>
       </div>
 
-      <p className="mt-6 text-center font-sans text-[12px] text-slate-400">
+      <p className="mt-6 text-center font-sans text-[12px] text-white/50">
         {partnerCount} organisations named on the foundation&rsquo;s partners
         page. Marks shown for the {MARKS.length} that publish one.
       </p>
