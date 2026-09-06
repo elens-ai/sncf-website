@@ -61,8 +61,11 @@ const GLOW_MS = 520;
 /** How long the button holds a mark when nobody is touching the wall. */
 const WALK_MS = 3200;
 
-const VIDEO_SRC =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_101331_74f9b798-3f00-4e86-8a01-377aa16ffeaa.mp4';
+/** Served from our own public/ rather than the CloudFront URL the brief
+    carried: that object is a per-user export behind an account path, so it
+    is not ours to hotlink and would break the day it expires. Same film,
+    same bytes, no third party in the path. */
+const VIDEO_SRC = '/video/partnership.mp4';
 
 export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
   onOpenDonate,
