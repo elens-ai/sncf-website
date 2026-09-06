@@ -4537,10 +4537,11 @@
      decorative: the headline is dark on its left and pale on its right, so
      the gradient IS what makes that switch legible. */
   padding-top: 96px;
-  background:
-    radial-gradient(70% 60% at 12% 4%, #fbf8ff 0%, rgba(251, 248, 255, 0) 70%),
-    radial-gradient(60% 55% at 88% 86%, rgba(160, 104, 255, 0.45) 0%, rgba(6, 2, 24, 0) 65%),
-    linear-gradient(163deg, #f3ecff 0%, #dbcbfb 20%, #9b7ada 42%, #4b2b8c 64%, #1b0b3f 84%, #060218 100%);
+  /* No ground of its own. What shows is the page-wide .accent-canvas, the
+     same one every other screen stands on. The headline's two voices are
+     carried by the type instead: the ground can no longer do that job, so
+     the opening sentence is white and the rest takes the accent. */
+  background: transparent;
 }
 
 /* ── HEADER ─────────────────────────────────────────────────────────────── */
@@ -4564,7 +4565,7 @@
   position: relative;
   font-size: 15px;
   font-weight: 500;
-  color: #1b0b3f;
+  color: #fff;
   text-decoration: none;
   padding-bottom: 2px;
 }
@@ -4731,7 +4732,7 @@
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #3d2168;
+  color: #d9a1ff;
   margin-bottom: 18px;
 }
 
@@ -4746,11 +4747,11 @@
 }
 
 .mt-ink {
-  color: #000;
+  color: #fff;
 }
 
 .mt-pale {
-  color: #fff;
+  color: #d9a1ff;
 }
 
 .mt-caret {
