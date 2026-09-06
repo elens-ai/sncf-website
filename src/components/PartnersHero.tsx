@@ -1,0 +1,276 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { PARTNERS } from '../data/partners';
+
+/**
+ * THE PARTNERS PAGE — built to the supplied Marketeam brief: a full-viewport
+ * hero with a header, a typed headline that changes colour mid-sentence, four
+ * concentric orbits carrying the network, and an infinite logo ticker at the
+ * foot. Every mechanic in the brief is here — the rotating conic-gradient
+ * border, the mask-technique orbit rings, the count-up, the staggered fly-in,
+ * the ticker's edge fades.
+ *
+ * WHAT IS NOT HERE, AND WHY. The brief's assets all live on hosts this build
+ * cannot reach (figma.site, images.higgs.ai, CloudFront — every one refused),
+ * and its copy belongs to a marketing agency, not to a charitable foundation.
+ * So the LAYOUT is the brief's and the CONTENT is ours:
+ *
+ *   · the ticker carries the foundation's own partner marks, as asked;
+ *   · the orbits carry those marks and the programme photographs;
+ *   · the count is the real number of organisations on the partners page —
+ *     12, from data/partners.ts, not an invented "20k+ specialists";
+ *   · the background is a painted gradient in the brief's palette rather
+ *     than an image that would 404.
+ */
+
+const ACCENT = '#A068FF';
+
+interface PartnersHeroProps {
+  /** "Partner with us" / "Become a partner" — opens the donate/contact modal. */
+  onOpenDonate?: () => void;
+}
+
+/* ── THE HEADLINE ──────────────────────────────────────────────────────────
+   Typed one character at a time. The brief colours the opening clause dark
+   and the remainder white, against a ground that runs light-to-dark the same
+   way — so SPLIT is a character index, not a word count, and must land on
+   the em dash for the switch to read as intentional. */
+const HEADLINE =
+  'Great work is never done alone. Twelve organisations already stand with this Mission.';
+/* The switch lands on the full stop, so the pale half begins a sentence
+   rather than a fragment — the colour change reads as a second voice, not a
+   glitch mid-clause. */
+const SPLIT = HEADLINE.indexOf('.') + 1;
+const TYPE_MS = 35;
+const TYPE_DELAY = 400;
+
+const TypewriterHeading: React.FC<{ calm: boolean }> = ({ calm }) => {
+  const [n, setN] = useState(calm ? HEADLINE.length : 0);
+
+  useEffect(() => {
+    if (calm) return;
+    let i = 0;
+    let tick: number | undefined;
+    const start = window.setTimeout(() => {
+      tick = window.setInterval(() => {
+        i += 1;
+        setN(i);
+        if (i >= HEADLINE.length) window.clearInterval(tick);
+      }, TYPE_MS);
+    }, TYPE_DELAY);
+    return () => {
+      window.clearTimeout(start);
+      if (tick) window.clearInterval(tick);
+    };
+  }, [calm]);
+
+  const done = n >= HEADLINE.length;
+  return (
+    <h2 className="mt-hero-title">
+      <span className="mt-ink">{HEADLINE.slice(0, Math.min(n, SPLIT))}</span>
+      <span className="mt-pale">{n > SPLIT ? HEADLINE.slice(SPLIT, n) : ''}</span>
+      {!done && <span className="mt-caret" aria-hidden="true" />}
+      {/* The heading is typed, so assistive tech would otherwise hear it
+          letter by letter. It is announced once, whole. */}
+      <span className="sr-only">{HEADLINE}</span>
+    </h2>
+  );
+};
+
+/* ── THE COUNT ─────────────────────────────────────────────────────────────
+   0 → the real number of partners, eased out over two seconds. */
+const useCountUp = (to: number, ms: number, delay: number, calm: boolean) => {
+  const [v, setV] = useState(calm ? to : 0);
+  useEffect(() => {
+    if (calm) return;
+    let raf = 0;
+    const start = window.setTimeout(() => {
+      const t0 = performance.now();
+      const step = (t: number) => {
+        const p = Math.min(1, (t - t0) / ms);
+        setV(Math.round(to * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    }, delay);
+    return () => {
+      window.clearTimeout(start);
+      cancelAnimationFrame(raf);
+    };
+  }, [to, ms, delay, calm]);
+  return v;
+};
+
+/* ── THE ORBITS ────────────────────────────────────────────────────────────
+   A node is placed by the brief's formula: rotate to its angle, push out by
+   the orbit radius, then rotate back so the picture itself stays upright.
+   Orbits 2 and 4 turn one way, 1 and 3 the other, so the network never reads
+   as a single rigid wheel. */
+interface Node {
+  src: string;
+  alt: string;
+  orbit: 1 | 2 | 3 | 4;
+  angle: number;
+  size: number;
+  round: boolean;
+  glow: string;
+  delay: number;
+}
+
+const P = '/images/partners';
+const NODES: Node[] = [
+  { src: `${P}/un.png`, alt: 'United Nations', orbit: 1, angle: 270, size: 74, round: false, glow: '#009edb', delay: 0.6 },
+  { src: '/images/vertical-heal.webp', alt: 'A health camp', orbit: 2, angle: 60, size: 58, round: true, glow: '#f2c14e', delay: 0.8 },
+  { src: `${P}/red-cross.png`, alt: 'Indian Red Cross Society', orbit: 2, angle: 180, size: 78, round: true, glow: '#ed1b2e', delay: 1.0 },
+  { src: `${P}/railways.png`, alt: 'Ministry of Indian Railways', orbit: 2, angle: 300, size: 58, round: false, glow: '#0077c8', delay: 1.2 },
+  { src: '/images/vertical-enrich.webp', alt: 'A classroom', orbit: 3, angle: 130, size: 88, round: true, glow: '#e86ba0', delay: 1.4 },
+  { src: `${P}/toi.png`, alt: 'Times of India', orbit: 4, angle: 30, size: 58, round: false, glow: ACCENT, delay: 1.6 },
+  { src: '/images/volunteers-planning.webp', alt: 'Volunteers planning a drive', orbit: 4, angle: 95, size: 88, round: false, glow: '#f08a3c', delay: 1.8 },
+  { src: '/images/vertical-empower.webp', alt: 'A plantation drive', orbit: 4, angle: 220, size: 88, round: false, glow: '#e86ba0', delay: 2.0 },
+  { src: `${P}/niit.png`, alt: 'NIIT', orbit: 4, angle: 320, size: 58, round: false, glow: ACCENT, delay: 2.3 },
+];
+
+const RADIUS: Record<number, number> = { 1: 177, 2: 251, 3: 325, 4: 399 };
+
+/* ── THE TICKER ────────────────────────────────────────────────────────────
+   Every mark we hold a file for, laid out four times so the strip is always
+   wider than any viewport and the loop has nothing to catch on. */
+const MARKS = [
+  { src: `${P}/un.png`, alt: 'United Nations' },
+  { src: `${P}/railways.png`, alt: 'Ministry of Indian Railways' },
+  { src: `${P}/red-cross.png`, alt: 'Indian Red Cross Society' },
+  { src: `${P}/life-west.svg`, alt: 'The Life Chiropractic College West' },
+  { src: `${P}/urban-development.png`, alt: 'Ministry of Urban Development' },
+  { src: `${P}/ndtv.png`, alt: 'NDTV' },
+  { src: `${P}/toi.png`, alt: 'Times of India' },
+  { src: `${P}/niit.png`, alt: 'NIIT' },
+  { src: `${P}/singer.png`, alt: 'Singer India Ltd.' },
+];
+
+export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
+  const [calm, setCalm] = useState(false);
+  useEffect(() => {
+    const q = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setCalm(q.matches);
+    const on = () => setCalm(q.matches);
+    q.addEventListener('change', on);
+    return () => q.removeEventListener('change', on);
+  }, []);
+
+  const count = useCountUp(PARTNERS.length, 2000, 1200, calm);
+  const strip = useRef<HTMLDivElement>(null);
+
+  return (
+    <section className="mt-app" aria-labelledby="partners-heading">
+      {/* THE ACTIONS. The brief's header row, minus the logo and nav: this
+          screen is a section of a one-page site that already carries both in
+          its own fixed header, and a second lockup and menu directly beneath
+          the first is two headers, not a design. What the row keeps is the
+          part the brief actually invents — the pill with the turning border. */}
+      <div className="mt-actions">
+        <a
+          className="mt-login"
+          href="https://nirankarifoundation.org/our-partners/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          All partners
+        </a>
+        <div className="btn-border-wrap">
+          <button type="button" className="mt-join" onClick={onOpenDonate}>
+            Partner With Us
+          </button>
+        </div>
+      </div>
+
+      {/* LEFT */}
+      <div className="mt-body">
+        <div className="mt-left">
+          <p className="mt-eyebrow" id="partners-heading">
+            Our partners
+          </p>
+
+          <TypewriterHeading calm={calm} />
+
+          <div className="btn-border-wrap mt-start-wrap">
+            <button type="button" className="mt-start" onClick={onOpenDonate}>
+              Become a partner
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+
+          {/* The reserved seat, pointed at. The brief's stray cursor, saying
+              the obvious thing: one of these places is not taken yet. */}
+          <div className="mt-cursor" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill={ACCENT}>
+              <path d="M5 2l14 9-6.2 1.4L10 20 5 2z" />
+            </svg>
+            <span className="mt-cursor-tag">Your organisation</span>
+          </div>
+        </div>
+
+        {/* RIGHT — THE ORBITS */}
+        <div className="mt-right">
+          <div className="mt-circles" role="img" aria-label={`${PARTNERS.length} partner organisations`}>
+            {[1, 2, 3, 4].map((o) => (
+              <div key={o} className={`mt-orbit mt-orbit-${o}`} />
+            ))}
+
+            <div className="mt-orbit mt-orbit-1 mt-orbit-core">
+              <div className="mt-core">
+                <span className="mt-core-num">{count}</span>
+                <span className="mt-core-label">Partners</span>
+              </div>
+            </div>
+
+            {NODES.map((n) => (
+              <div
+                key={`${n.src}-${n.angle}`}
+                className={`mt-node mt-node-o${n.orbit}`}
+                style={{
+                  ['--a' as string]: `${n.angle}deg`,
+                  ['--r' as string]: `${RADIUS[n.orbit]}px`,
+                  ['--s' as string]: `${n.size}px`,
+                  ['--glow' as string]: n.glow,
+                  animationDelay: calm ? '0s' : `${n.delay}s`,
+                }}
+              >
+                <span className={`mt-node-spin mt-node-spin-o${n.orbit}`}>
+                  <img
+                    className={n.round ? 'mt-node-img mt-node-round' : 'mt-node-img'}
+                    src={n.src}
+                    alt={n.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* TICKER */}
+      <div className="mt-ticker" ref={strip}>
+        <div className="mt-ticker-track">
+          {[0, 1, 2, 3].map((copy) =>
+            MARKS.map((m) => (
+              <img
+                key={`${copy}-${m.src}`}
+                className="mt-ticker-logo"
+                src={m.src}
+                alt={copy === 0 ? m.alt : ''}
+                aria-hidden={copy !== 0}
+                loading="lazy"
+                decoding="async"
+              />
+            )),
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default PartnersHero;

@@ -6,7 +6,7 @@ import { HeroSection } from './components/HeroSection';
 import { PillarsSection } from './components/PillarsSection';
 import { EventsSection } from './components/EventsSection';
 import { AwardsSection } from './components/AwardsSection';
-import { PartnershipSection } from './components/PartnershipSection';
+import { PartnersHero } from './components/PartnersHero';
 import { SiteFooter } from './components/SiteFooter';
 import { SocialSidebar } from './components/SocialSidebar';
 import { InvitationCard } from './components/InvitationCard';
@@ -212,9 +212,10 @@ export default function App() {
       {/* 5. AWARDS & RECOGNITIONS */}
       <AwardsSection />
 
-      {/* 6. PARTNERSHIP — the Media Wall (components/PartnersSection.tsx) is
-             kept on disk and can be swapped back in here unchanged. */}
-      <PartnershipSection onOpenDonate={() => setIsDonateOpen(true)} />
+      {/* 6. PARTNERS. Two earlier builds of this screen are kept on disk and
+             swap back in here unchanged: PartnersSection (the Media Wall) and
+             PartnershipSection (the video hero). */}
+      <PartnersHero onOpenDonate={() => setIsDonateOpen(true)} />
 
       {/* 7. FOOTER — closes the page. Not a snap target: it is a band, not a
              screen, and snapping to it would strand the reader on links. */}
