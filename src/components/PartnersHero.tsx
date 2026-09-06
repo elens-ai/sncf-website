@@ -115,17 +115,20 @@ interface Node {
 }
 
 const ACCENT = '#A068FF';
-const P = '/images/partners';
+/* Written out in full, never assembled from a prefix. The preview bundler
+   inlines an asset by finding its path as a literal string in the built
+   JS, and '/images/partners/un.png' leaves no such string behind — every mark on this
+   screen silently 404'd inside the artifact. */
 const NODES: Node[] = [
-  { src: `${P}/un.png`, alt: 'United Nations', orbit: 1, angle: 270, size: 74, round: false, glow: '#009edb', delay: 0.6 },
+  { src: '/images/partners/un.png', alt: 'United Nations', orbit: 1, angle: 270, size: 74, round: false, glow: '#009edb', delay: 0.6 },
   { src: '/images/vertical-heal.webp', alt: 'A health camp', orbit: 2, angle: 60, size: 58, round: true, glow: '#f2c14e', delay: 0.8 },
-  { src: `${P}/red-cross.png`, alt: 'Indian Red Cross Society', orbit: 2, angle: 180, size: 78, round: true, glow: '#ed1b2e', delay: 1.0 },
-  { src: `${P}/railways.png`, alt: 'Ministry of Indian Railways', orbit: 2, angle: 300, size: 58, round: false, glow: '#0077c8', delay: 1.2 },
+  { src: '/images/partners/red-cross.png', alt: 'Indian Red Cross Society', orbit: 2, angle: 180, size: 78, round: true, glow: '#ed1b2e', delay: 1.0 },
+  { src: '/images/partners/railways.png', alt: 'Ministry of Indian Railways', orbit: 2, angle: 300, size: 58, round: false, glow: '#0077c8', delay: 1.2 },
   { src: '/images/vertical-enrich.webp', alt: 'A classroom', orbit: 3, angle: 130, size: 88, round: true, glow: '#e86ba0', delay: 1.4 },
-  { src: `${P}/toi.png`, alt: 'Times of India', orbit: 4, angle: 30, size: 58, round: false, glow: ACCENT, delay: 1.6 },
+  { src: '/images/partners/toi.png', alt: 'Times of India', orbit: 4, angle: 30, size: 58, round: false, glow: ACCENT, delay: 1.6 },
   { src: '/images/volunteers-planning.webp', alt: 'Volunteers planning a drive', orbit: 4, angle: 95, size: 88, round: false, glow: '#f08a3c', delay: 1.8 },
   { src: '/images/vertical-empower.webp', alt: 'A plantation drive', orbit: 4, angle: 220, size: 88, round: false, glow: '#e86ba0', delay: 2.0 },
-  { src: `${P}/niit.png`, alt: 'NIIT', orbit: 4, angle: 320, size: 58, round: false, glow: ACCENT, delay: 2.3 },
+  { src: '/images/partners/niit.png', alt: 'NIIT', orbit: 4, angle: 320, size: 58, round: false, glow: ACCENT, delay: 2.3 },
 ];
 
 const RADIUS: Record<number, number> = { 1: 177, 2: 251, 3: 325, 4: 399 };
@@ -134,15 +137,15 @@ const RADIUS: Record<number, number> = { 1: 177, 2: 251, 3: 325, 4: 399 };
    Every mark we hold a file for, laid out four times so the strip is always
    wider than any viewport and the loop has nothing to catch on. */
 const MARKS = [
-  { src: `${P}/un.png`, alt: 'United Nations' },
-  { src: `${P}/railways.png`, alt: 'Ministry of Indian Railways' },
-  { src: `${P}/red-cross.png`, alt: 'Indian Red Cross Society' },
-  { src: `${P}/life-west.svg`, alt: 'The Life Chiropractic College West' },
-  { src: `${P}/urban-development.png`, alt: 'Ministry of Urban Development' },
-  { src: `${P}/ndtv.png`, alt: 'NDTV' },
-  { src: `${P}/toi.png`, alt: 'Times of India' },
-  { src: `${P}/niit.png`, alt: 'NIIT' },
-  { src: `${P}/singer.png`, alt: 'Singer India Ltd.' },
+  { src: '/images/partners/un.png', alt: 'United Nations' },
+  { src: '/images/partners/railways.png', alt: 'Ministry of Indian Railways' },
+  { src: '/images/partners/red-cross.png', alt: 'Indian Red Cross Society' },
+  { src: '/images/partners/life-west.svg', alt: 'The Life Chiropractic College West' },
+  { src: '/images/partners/urban-development.png', alt: 'Ministry of Urban Development' },
+  { src: '/images/partners/ndtv.png', alt: 'NDTV' },
+  { src: '/images/partners/toi.png', alt: 'Times of India' },
+  { src: '/images/partners/niit.png', alt: 'NIIT' },
+  { src: '/images/partners/singer.png', alt: 'Singer India Ltd.' },
 ];
 
 export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
