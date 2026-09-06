@@ -4440,3 +4440,66 @@
   .award-title,
   .award-standfirst { opacity: 1; animation: none; }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   THE PARTNERSHIP SECTION — see PartnershipSection.tsx.
+
+   Additive only. `--font-display` is a NEW utility (`font-display`); nothing
+   here redefines `--font-sans`, because <body> wears `font-sans` and the rest
+   of the page is not Inter. Inter is scoped to `.partnership` instead.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+}
+
+.partnership {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* The reel travels exactly half its own width. Because the list is rendered
+   twice back to back, the second copy arrives precisely where the first
+   started — the loop has no seam and needs no JS. */
+@keyframes partner-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.partner-marquee-track {
+  animation: partner-marquee 46s linear infinite;
+  will-change: transform;
+}
+
+/* Hover holds the reel so a mark can be read, not chased. */
+.partner-marquee:hover .partner-marquee-track {
+  animation-play-state: paused;
+}
+
+/* The edges dissolve rather than cut, so marks enter and leave the strip
+   instead of appearing at a hard border. */
+.partner-marquee {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-marquee-track {
+    animation: none;
+  }
+}
