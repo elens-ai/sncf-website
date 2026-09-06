@@ -4775,24 +4775,6 @@
   animation: mt-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 3.2s both;
 }
 
-.mt-cursor {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 290px;
-  margin-top: 40px;
-  animation: mt-fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) 3.6s both;
-}
-
-.mt-cursor-tag {
-  background: #a068ff;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 20px;
-}
-
 /* ── THE ORBITS ─────────────────────────────────────────────────────────── */
 /* The circles are a fixed 720px box that we shrink with a transform — and a
    transform changes what you see, never what the layout reserves. So the
@@ -4867,10 +4849,6 @@
 
 /* The core rides the innermost ring so it shares its turn, and the number
    inside counter-turns at the same rate so it never leaves upright. */
-.mt-orbit-core::before {
-  display: none;
-}
-
 .mt-core {
   position: absolute;
   inset: 0;
@@ -5049,7 +5027,6 @@
   .mt-hero-title { font-size: 48px; line-height: 50px; min-height: 0; }
 
   .mt-right { --mt-scale: 0.7; }
-  .mt-cursor { margin-left: 180px; margin-top: 24px; }
 }
 
 @media (max-width: 768px) {
@@ -5066,7 +5043,6 @@
   .mt-start { padding: 12px 20px; font-size: 14px; }
   .mt-ticker-logo { width: 104px; height: 32px; }
   .mt-ticker-track { gap: 36px; }
-  .mt-cursor { margin-left: 60px; }
 }
 
 /* Nothing here is load-bearing for meaning, so all of it stands down. */

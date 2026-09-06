@@ -22,8 +22,6 @@ import { PARTNERS } from '../data/partners';
  *     than an image that would 404.
  */
 
-const ACCENT = '#A068FF';
-
 interface PartnersHeroProps {
   /** "Partner with us" / "Become a partner" — opens the donate/contact modal. */
   onOpenDonate?: () => void;
@@ -116,6 +114,7 @@ interface Node {
   delay: number;
 }
 
+const ACCENT = '#A068FF';
 const P = '/images/partners';
 const NODES: Node[] = [
   { src: `${P}/un.png`, alt: 'United Nations', orbit: 1, angle: 270, size: 74, round: false, glow: '#009edb', delay: 0.6 },
@@ -199,52 +198,50 @@ export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
               </svg>
             </button>
           </div>
-
-          {/* The reserved seat, pointed at. The brief's stray cursor, saying
-              the obvious thing: one of these places is not taken yet. */}
-          <div className="mt-cursor" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill={ACCENT}>
-              <path d="M5 2l14 9-6.2 1.4L10 20 5 2z" />
-            </svg>
-            <span className="mt-cursor-tag">Your organisation</span>
-          </div>
         </div>
 
         {/* RIGHT — THE ORBITS */}
         <div className="mt-right">
           <div className="mt-circles" role="img" aria-label={`${PARTNERS.length} partner organisations`}>
-            {[1, 2, 3, 4].map((o) => (
-              <div key={o} className={`mt-orbit mt-orbit-${o}`} />
-            ))}
+            {/* THE NODES RIDE THEIR RING. They have to be CHILDREN of the
+                orbit, not siblings of it: laid alongside, they inherit none
+                of its turn and simply hang in place while an almost
+                invisible circle rotates behind them — which reads, exactly,
+                as nothing moving at all. Inside each one a span counter-turns
+                at that ring's own rate, so the picture stays upright while
+                the ring carries it round. */}
+            {([1, 2, 3, 4] as const).map((o) => (
+              <div key={o} className={`mt-orbit mt-orbit-${o}`}>
+                {o === 1 && (
+                  <div className="mt-core">
+                    <span className="mt-core-num">{count}</span>
+                    <span className="mt-core-label">Partners</span>
+                  </div>
+                )}
 
-            <div className="mt-orbit mt-orbit-1 mt-orbit-core">
-              <div className="mt-core">
-                <span className="mt-core-num">{count}</span>
-                <span className="mt-core-label">Partners</span>
-              </div>
-            </div>
-
-            {NODES.map((n) => (
-              <div
-                key={`${n.src}-${n.angle}`}
-                className={`mt-node mt-node-o${n.orbit}`}
-                style={{
-                  ['--a' as string]: `${n.angle}deg`,
-                  ['--r' as string]: `${RADIUS[n.orbit]}px`,
-                  ['--s' as string]: `${n.size}px`,
-                  ['--glow' as string]: n.glow,
-                  animationDelay: calm ? '0s' : `${n.delay}s`,
-                }}
-              >
-                <span className={`mt-node-spin mt-node-spin-o${n.orbit}`}>
-                  <img
-                    className={n.round ? 'mt-node-img mt-node-round' : 'mt-node-img'}
-                    src={n.src}
-                    alt={n.alt}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </span>
+                {NODES.filter((n) => n.orbit === o).map((n) => (
+                  <div
+                    key={`${n.src}-${n.angle}`}
+                    className="mt-node"
+                    style={{
+                      ['--a' as string]: `${n.angle}deg`,
+                      ['--r' as string]: `${RADIUS[o]}px`,
+                      ['--s' as string]: `${n.size}px`,
+                      ['--glow' as string]: n.glow,
+                      animationDelay: calm ? '0s' : `${n.delay}s`,
+                    }}
+                  >
+                    <span className={`mt-node-spin mt-node-spin-o${o}`}>
+                      <img
+                        className={n.round ? 'mt-node-img mt-node-round' : 'mt-node-img'}
+                        src={n.src}
+                        alt={n.alt}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
