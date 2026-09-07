@@ -32,5 +32,151 @@ services:
       - "${PROD_PORT:-8080}:80"
     restart: unless-stopped
 
+  # ── THE CMS ────────────────────────────────────────────────────────────────
+  # Payload (Next.js host) + Postgres. The frontend above stays a static
+  # bundle: content is pulled from here at BUILD time and written into the
+  # site, so nothing in this compose file sits in a visitor's request path.
+  # Only the donation endpoints are called live, and those are opt-in.
+  db:
+    image: postgres:17-alpine
+    container_name: sncf-cms-db
+    profiles: ["cms", "dev"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sncf}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sncf}
+      POSTGRES_DB: ${POSTGRES_DB:-sncf_cms}
+    ports:
+      # 5433 on the host: 5432 is usually already taken by a local Postgres,
+      # and a port clash here fails in a way that looks like a CMS bug.
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      # `cms-migrate` waits on this. A container that is merely *up* has not
+      # necessarily finished initdb, and a migration fired at that moment dies
+      # against a socket that is not listening yet.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sncf} -d ${POSTGRES_DB:-sncf_cms}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  # Applies pending migrations, then exits. A ONE-SHOT service, not a daemon.
+  #
+  # It exists as its own container because the schema cannot be migrated from
+  # the `cms` image: Next's standalone output prunes payload's CLI, tsx and
+  # drizzle-kit out of node_modules (backend/Dockerfile explains the detail).
+  # This runs the `cli` stage, which still has the full install.
+  #
+  # Separating it also buys the property you want on a deploy: the schema
+  # change either succeeds or the new admin never starts. `cms` below waits on
+  # this exiting 0, so a failed migration leaves the OLD container serving
+  # rather than a new one against a half-built schema.
+  cms-migrate:
+    build:
+      context: ./backend
+      target: cli
+    image: sncf-cms:cli
+    container_name: sncf-cms-migrate
+    profiles: ["cms"]
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URI: postgres://${POSTGRES_USER:-sncf}:${POSTGRES_PASSWORD:-sncf}@db:5432/${POSTGRES_DB:-sncf_cms}
+      NODE_ENV: production
+    # Never restart. A migration that failed must be read and fixed, not
+    # retried in a loop that fills the log with the same error.
+    restart: "no"
+
+  # THE BUILD-TIME EXPORT — content out of Postgres and into src/data/*.ts.
+  #
+  #   docker compose --profile export run --rm cms-export
+  #
+  # Not started by `up`: the `export` profile means it only runs when named.
+  # It shares the `cli` image with cms-migrate, so no extra build.
+  #
+  # This is how the static site gets its content, and note where it runs —
+  # beside the database, NOT in GitHub Actions. The script uses Payload's Local
+  # API, so it needs DATABASE_URI and no HTTP server; the generated .ts files
+  # are then committed, and the frontend workflow builds from those. CI
+  # therefore needs no database credential and no route to this host, and a CMS
+  # that is down cannot block a frontend deploy.
+  #
+  # The bind mount is the point: the container writes real files into the
+  # working tree, so a content change arrives as a reviewable git diff. For a
+  # site whose figures are the foundation's public record, a changed number
+  # showing up in a diff is the whole safety mechanism.
+  cms-export:
+    build:
+      context: ./backend
+      target: cli
+    image: sncf-cms:cli
+    profiles: ["export"]
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URI: postgres://${POSTGRES_USER:-sncf}:${POSTGRES_PASSWORD:-sncf}@db:5432/${POSTGRES_DB:-sncf_cms}
+      NODE_ENV: production
+      # Where the script writes. Inside the container; the mount below maps it
+      # back to the repo's src/data on the host.
+      EXPORT_OUT_DIR: /out
+    volumes:
+      - ./src/data:/out
+    # Writes as the invoking user, not root. On Linux a root-owned container
+    # writing through a bind mount leaves root-owned .ts files in the working
+    # tree, and the next `git checkout` of those paths fails with EACCES.
+    # Run it as:  EXPORT_UID=$(id -u) EXPORT_GID=$(id -g) docker compose ...
+    # (macOS does not need this — Docker Desktop remaps ownership already.)
+    user: "${EXPORT_UID:-1000}:${EXPORT_GID:-1000}"
+    command: ["./node_modules/.bin/payload", "run", "scripts/export-content.ts"]
+    restart: "no"
+
+  cms:
+    build:
+      context: ./backend
+      # `runner`, not `prod` — the Dockerfile names its stages for what they
+      # do, and it builds a second runnable stage (`migrator`) above.
+      target: runner
+    image: sncf-cms:prod
+    container_name: sncf-cms
+    profiles: ["cms"]
+    depends_on:
+      db:
+        condition: service_healthy
+      cms-migrate:
+        # Not service_started: the admin must not boot until the schema it was
+        # built against is actually in the database.
+        condition: service_completed_successfully
+    # The app's own settings come from backend/.env — one file, the same one
+    # `npm run dev` reads, so the container and a local run cannot drift.
+    env_file:
+      - ./backend/.env
+    environment:
+      # OVERRIDES the DATABASE_URI in that file on purpose. backend/.env points
+      # at localhost:5433 because that is where the database is reachable from
+      # the host; inside the compose network it is db:5432. Getting this wrong
+      # produces a connection refused that reads like a broken CMS.
+      DATABASE_URI: postgres://${POSTGRES_USER:-sncf}:${POSTGRES_PASSWORD:-sncf}@db:5432/${POSTGRES_DB:-sncf_cms}
+      NODE_ENV: production
+    ports:
+      - "${CMS_PORT:-3001}:3001"
+    volumes:
+      # Uploads live on a named volume, not in the image: rebuilding the CMS
+      # must never destroy the media library. The image creates /app/media
+      # owned by the unprivileged `nextjs` user, and a named volume inherits
+      # that ownership on first mount — a bind mount would not, and uploads
+      # would fail with EACCES.
+      - cms_media:/app/media
+    # The healthcheck is declared in the image (curl on Payload's /api/access).
+    restart: unless-stopped
+
 volumes:
   node_modules:
+  db_data:
+  cms_media:

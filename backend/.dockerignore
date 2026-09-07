@@ -1,0 +1,24 @@
+# Build context for the CMS image.
+#
+# .env MUST stay excluded. `next build` with output:'standalone' copies any
+# .env it finds in the project root into .next/standalone/.env — verified by
+# inspecting the build output — so a .env in the context ends up baked into an
+# image layer in cleartext, PAYLOAD_SECRET and DATABASE_URI included. Runtime
+# configuration arrives through compose's env_file/environment instead.
+.env
+.env.*
+!.env.example
+
+node_modules
+.next
+media
+
+# tsc --noEmit's incremental cache. Half a megabyte of absolute host paths
+# that would invalidate the COPY layer on every local typecheck.
+tsconfig.tsbuildinfo
+
+.git
+*.log
+.DS_Store
+Dockerfile
+.dockerignore
