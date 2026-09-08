@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 import {
   CalendarPlus,
   CalendarDays,
@@ -73,11 +74,15 @@ const clockParts = (ms: number) => {
 
 /** Ticks in isolation so one second of time repaints the clock, not the deck. */
 const CountdownClock: React.FC<{ target: Date }> = ({ target }) => {
+  const clockRef = useRef<HTMLDivElement>(null);
+  const active = useSectionActivity(clockRef);
   const [left, setLeft] = useState(() => target.getTime() - Date.now());
   useEffect(() => {
+    if (!active) return;
+    setLeft(target.getTime() - Date.now());
     const id = window.setInterval(() => setLeft(target.getTime() - Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [target]);
+  }, [target, active]);
 
   const { d, h, m, s } = clockParts(left);
   const cells: [string, string][] = [
@@ -87,7 +92,7 @@ const CountdownClock: React.FC<{ target: Date }> = ({ target }) => {
     [pad(s), 'sec'],
   ];
   return (
-    <div className="flex items-stretch gap-1.5" role="timer" aria-live="off">
+    <div ref={clockRef} className="flex items-stretch gap-1.5" role="timer" aria-live="off">
       {cells.map(([value, label]) => (
         <div
           key={label}
