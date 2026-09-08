@@ -103,13 +103,19 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
       const deltaTime = Math.min((currentTime - lastTimeRef.current) / 1000, 0.1);
       lastTimeRef.current = currentTime;
 
+      if (isPaused || document.hidden) {
+        // Freeze an in-flight turn as well as the hold timer.
+        if (snapStartTimeRef.current !== null) snapStartTimeRef.current += deltaTime * 1000;
+        animationFrameRef.current = requestAnimationFrame(animate);
+        return;
+      }
       // Handle animated snap transition
       if (isSnappingRef.current && snapTargetRef.current !== null) {
         if (snapStartTimeRef.current === null) {
           snapStartTimeRef.current = currentTime;
         }
         const snapElapsed = (currentTime - snapStartTimeRef.current) / 1000;
-        const snapDuration = 0.9;
+        const snapDuration = 1.25;
 
         if (snapElapsed < snapDuration) {
           const progress = snapElapsed / snapDuration;
@@ -137,7 +143,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
         // Reference rhythm: let the subject own the centre, then sweep the
         // next one forward. The sequence loops automatically without arrows.
         holdTimeRef.current += deltaTime;
-        if (holdTimeRef.current >= 2.7) {
+        if (holdTimeRef.current >= 4.5) {
           snapStartAngleRef.current = angleRef.current;
           snapTargetRef.current = (Math.round(angleRef.current / stepAngle) - 1) * stepAngle;
           snapStartTimeRef.current = null;
@@ -345,14 +351,22 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
                   zIndex: cardState.zIndex,
                   transformStyle: 'preserve-3d',
                 }}
-                role="group"
+                role="button"
+                tabIndex={isCurrentActive ? 0 : -1}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onCardClick(i);
+                  }
+                }}
                 aria-label={`${pillar.label}: ${pillar.headline}`}
                 aria-current={isCurrentActive ? 'true' : 'false'}
               >
                 {/* Independent Asynchronous Float/Drift Wrapper with extra curved border-radius */}
                 <div
                   className={`w-full h-full rounded-[32px] ${hasModel ? 'overflow-visible' : 'overflow-hidden'} ${
-                    !reducedMotion && !isDragging ? driftClass : ''
+                    !reducedMotion && !isPaused && !isDragging ? driftClass : ''
                   } transition-[border,box-shadow] duration-300`}
                   style={{
                     boxShadow: hasModel ? 'none' : cardState.isFrontFacing

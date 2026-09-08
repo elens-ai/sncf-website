@@ -6,7 +6,7 @@ import { HeroSection } from './components/HeroSection';
 import { PillarsSection } from './components/PillarsSection';
 import { EventsSection } from './components/EventsSection';
 import { AwardsSection } from './components/AwardsSection';
-import { PartnershipSection } from './components/PartnershipSection';
+import { PartnersSection } from './components/PartnersSection';
 import { SiteFooter } from './components/SiteFooter';
 import { SocialSidebar } from './components/SocialSidebar';
 import { InvitationCard } from './components/InvitationCard';
@@ -140,7 +140,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none">
+    <div className="home-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none">
       {/* ONE gradient for the whole page. Absolute, not fixed, so it spans the
           full document height and the ramp runs continuously from the top of
           the hero to the bottom of the last screen — the sections themselves
@@ -212,10 +212,11 @@ export default function App() {
       {/* 5. AWARDS & RECOGNITIONS */}
       <AwardsSection />
 
-      {/* 6. PARTNERSHIP — the video hero. Two other builds of this screen are
-             kept on disk and swap back in here unchanged: PartnersHero (the
-             orbits) and PartnersSection (the Media Wall). */}
-      <PartnershipSection onOpenDonate={() => setIsDonateOpen(true)} />
+      {/* 6. PARTNERS — the partner wall from vansh. */}
+      <PartnersSection
+        onOpenDonate={() => setIsDonateOpen(true)}
+        escapeSuspended={isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || galleryLeader !== null}
+      />
 
       {/* 7. FOOTER — closes the page. Not a snap target: it is a band, not a
              screen, and snapping to it would strand the reader on links. */}

@@ -11,6 +11,8 @@ import {
   RotateCw,
   Layout,
   Flame,
+  Pause,
+  Play,
 } from 'lucide-react';
 
 interface HeroSectionProps {
@@ -86,7 +88,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     const measure = () => {
       // The model canvas and front-stage scale enlarge this slot by ~1.67x.
       // Size its silhouette against the copy while keeping narrow screens usable.
-      const widthLimit = window.innerWidth >= 1024 ? window.innerWidth * 0.25 : window.innerWidth * 0.48;
+      const widthLimit = window.innerWidth >= 900 ? window.innerWidth * 0.25 : window.innerWidth * 0.48;
       setModelBaseSize(Math.round(Math.min(copy.offsetHeight * 0.8, widthLimit)));
     };
     const observer = new ResizeObserver(measure);
@@ -112,6 +114,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }, [cardScale]);
 
   const currentPillar = pillars[activeIndex] || pillars[0];
+  const [heroVisible, setHeroVisible] = useState(true);
+  useEffect(() => {
+    const stage = document.getElementById('hero-clone-stage');
+    if (!stage) return;
+    const observer = new IntersectionObserver(([entry]) => setHeroVisible(entry.isIntersecting), { threshold: 0 });
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
   /* THE FOREGROUND HIDES EARLY ON SCROLL. `#hero-clone-stage` (this whole
      <main>) already recedes as the exhibition entrance rises over it, but
@@ -141,14 +151,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       const stage = document.getElementById('hero-clone-stage');
       if (!stage) return;
       const h = stage.offsetHeight || window.innerHeight;
-      /* Fully gone by 10% of the hero's own height scrolled — the first
-         nudge of the wheel should be enough to clear it, not a third of the
-         screen's worth of scrolling. */
+      // On stacked layouts, keep content visible until the reader reaches
+      // the bottom of the hero; otherwise the icons fade before they arrive.
+      const fadeStart = Math.max(0, h - window.innerHeight);
+      const progress = Math.max(0, window.scrollY - fadeStart);
       const t = reducedMotionRef.current
-        ? window.scrollY > 4
-          ? 1
-          : 0
-        : Math.max(0, Math.min(1, window.scrollY / (h * 0.1)));
+        ? progress > h * 0.38 ? 1 : 0
+        : Math.max(0, Math.min(1, progress / (h * 0.38)));
       if (el) {
         el.style.opacity = (1 - t).toFixed(3);
         el.style.transform = t > 0 ? `translateY(${(-t * 24).toFixed(1)}px)` : '';
@@ -229,33 +238,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       if (enterTimerRef.current) clearTimeout(enterTimerRef.current);
     };
   }, []);
-
-  // Keyboard navigation for the 4 pillars
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      /* keys aimed at an interactive element (the partner desk's text
-         field, any focused button) are not carousel commands */
-      const t = e.target as HTMLElement | null;
-      if (
-        t &&
-        (t.isContentEditable ||
-          /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(t.tagName))
-      ) {
-        return;
-      }
-      if (e.key === 'ArrowRight') {
-        onActiveIndexChange((activeIndex + 1) % pillars.length);
-      } else if (e.key === 'ArrowLeft') {
-        onActiveIndexChange((activeIndex - 1 + pillars.length) % pillars.length);
-      } else if (e.key === ' ') {
-        e.preventDefault();
-        onTogglePause();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex, onActiveIndexChange, onTogglePause, pillars.length]);
 
   const getPillarScriptTitle = (p: PillarState): string => {
     switch (p.id) {
@@ -585,10 +567,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             reach back across the text column, and they are blurred/faded there
             anyway, so the text should read over them rather than under. */}
         <div
-          className={`relative z-20 w-full lg:w-1/2 flex flex-col justify-center items-start max-w-xl ${
+          className={`hero-editorial relative z-20 w-full lg:w-1/2 flex flex-col justify-center items-start max-w-xl ${
             introActive ? 'hero-intro-rise' : 'hero-intro-waiting'
           }`}
         >
+          <p className="home-eyebrow hero-eyebrow"><span /> Service with Humility</p>
           <div ref={copySizeRef} className="w-full flex flex-col">
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
@@ -621,7 +604,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {showMetrics && (
               <div
                 style={{ transitionDelay: phase === 'exiting' ? '20ms' : '180ms' }}
-                className={`grid grid-cols-2 gap-2.5 mb-5 px-3 py-2.5 rounded-xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[360px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                className={`hero-impact grid grid-cols-2 gap-2.5 mb-5 px-3 py-2.5 rounded-xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[360px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
               >
                 {displayPillar.stats.slice(0, 2).map((stat, i) => (
                   <div key={i} className="flex flex-col">
@@ -629,7 +612,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       <OdometerStatCounter
                         key={`${displayPillar.id}-${i}-${stat.value}`}
                         value={stat.value}
-                        duration={1800}
+                        duration={1100}
                       />
                     </span>
                     <span className="font-artistic-serif text-[12px] text-white/80 font-medium leading-tight">
@@ -656,7 +639,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 }}
               >
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 pointer-events-none" />
-                <span>Explore {displayPillar.label} Details</span>
+                <span>Explore {getPillarScriptTitle(displayPillar)}</span>
                 <svg
                   className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200 fill-none stroke-current stroke-2"
                   viewBox="0 0 24 24"
@@ -671,7 +654,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Floating 3D pillar icons — blooms in just after the copy */}
         <div
-          className={`w-full lg:w-1/2 flex justify-center lg:justify-start ${
+          className={`hero-sculptures w-full lg:w-1/2 flex justify-center lg:justify-start ${
             introActive ? 'hero-intro-bloom' : 'hero-intro-waiting'
           }`}
         >
@@ -679,7 +662,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             pillars={pillars}
             activeIndex={activeIndex}
             onActiveIndexChange={onActiveIndexChange}
-            isPaused={isPaused || !introActive}
+            isPaused={isPaused || !introActive || !heroVisible}
             onCardClick={(clickedIndex) => {
               // Clicking a pillar card opens that pillar's details
               if (clickedIndex < pillars.length) {
@@ -690,7 +673,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           />
         </div>
       </div>
-
+      <div className="hero-bottom-line">
+        <span>Compassion in action. Possibilities for everyone.</span>
+        <div className="hero-playback">
+          <span className="hero-chapter" aria-label={`Pillar ${activeIndex + 1} of ${pillars.length}`}>0{activeIndex + 1}<i />0{pillars.length}</span>
+          <button onClick={onTogglePause} aria-label={isPaused ? 'Play hero animation' : 'Pause hero animation'}>
+            {isPaused ? <Play size={13} /> : <Pause size={13} />}
+          </button>
+        </div>
+      </div>
     </main>
 
   );
