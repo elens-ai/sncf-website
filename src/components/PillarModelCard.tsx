@@ -3,13 +3,13 @@ import { HeartHandshake } from 'lucide-react';
 import type { ModelView } from './pillarRenderer';
 export const MODEL_PILLARS = new Set(['heal', 'enrich', 'empower', 'projects']);
 
-export function PillarModelCard({ id, label, animate, active = false }: {
-  id: string; label: string; animate: boolean; active?: boolean;
+export function PillarModelCard({ id, label, animate, active = false, rotationRef }: {
+  id: string; label: string; animate: boolean; active?: boolean; rotationRef?: { current: number };
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<ModelView | null>(null);
-  const stateRef = useRef({ active, animate });
-  stateRef.current = { active, animate };
+  const stateRef = useRef({ active, animate, rotationRef });
+  stateRef.current = { active, animate, rotationRef };
   const [poster, setPoster] = useState<string>();
   const [live, setLive] = useState(false);
   useEffect(() => {
@@ -24,7 +24,7 @@ export function PillarModelCard({ id, label, animate, active = false }: {
       try {
         const { attachModel } = await import('./pillarRenderer');
         if (disposed) return;
-        viewRef.current = attachModel(host, id, setPoster, setLive);
+        viewRef.current = attachModel(host, id, setPoster, setLive, () => stateRef.current.rotationRef?.current ?? 0);
         viewRef.current.update({ ...stateRef.current, visible });
       } catch (error) { console.warn(`Unable to load ${id} model`, error); }
     });

@@ -4,7 +4,7 @@ import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
-import { PillarsSection } from '../components/PillarsSection';
+import { PavilionJourney } from '../components/PavilionJourney';
 import { EventsSection } from '../components/EventsSection';
 import { AwardsSection } from '../components/AwardsSection';
 import { PartnersSection } from '../components/PartnersSection';
@@ -201,12 +201,7 @@ export default function HomePage() {
 
       {/* 3. THE SCREEN BELOW THE HERO. It carries the current pillar's accent
              colors to maintain color continuity from the hero section. */}
-      <PillarsSection
-        pillars={activePillarsList}
-        activeIndex={activeIndex}
-        onOpenDetails={handleOpenDetails}
-        currentPillar={currentPillar}
-      />
+      <PavilionJourney />
 
       {/* 4. UPCOMING EVENTS */}
       <EventsSection />
