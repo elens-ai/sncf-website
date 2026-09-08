@@ -54,6 +54,7 @@ const SECTIONS: { id: string; label: string }[] = [
 const ROOM_IDS = ['heal', 'enrich', 'empower', 'projects'] as const;
 
 type Mode =
+  | { kind: 'pavilion' }
   | { kind: 'page'; atEnd: boolean; nextLabel: string }
   | { kind: 'explore' }
   | { kind: 'start' }
@@ -81,11 +82,15 @@ export const SectionJumpButton: React.FC = () => {
       if (track) {
         const r = track.getBoundingClientRect();
         const span = r.height - vh;
+        if (track.dataset.pavilion && r.top <= vh * .25 && r.bottom >= vh) {
+          setMode(m => m.kind === 'pavilion' ? m : { kind: 'pavilion' });
+          return;
+        }
         const covered = Math.max(0, Math.min(1, (vh - r.top) / vh));
         const scrub = span > 0 ? -r.top / span : 1;
         /* The rooms end at Projects; from the rose outro on (0.785) the
            corner hands back to the page walker, which offers Events. */
-        if (covered >= 0.995 && scrub <= 0.785) {
+        if (!track.dataset.pavilion && covered >= 0.995 && scrub <= 0.785) {
           let next: Mode;
           if (scrub < 0.145) next = { kind: 'explore' };
           else if (scrub < 0.205) next = { kind: 'start' };
@@ -182,6 +187,8 @@ export const SectionJumpButton: React.FC = () => {
         : undefined
   ) as React.CSSProperties | undefined;
   const lastStage = roomStage !== null && roomStage >= STAGE_MID.length - 1;
+
+  if (mode.kind === 'pavilion') return null;
 
   return (
     <div

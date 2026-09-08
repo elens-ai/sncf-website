@@ -2,12 +2,15 @@ import * as T from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createFrameClock } from '../utils/frameClock';
+import { pillarModelUrl } from '../utils/modelAssets';
+import { createBookOpening } from '../utils/bookOpening';
 
 type ViewState = { active: boolean; animate: boolean; visible: boolean };
 export interface ModelView { update(state: Partial<ViewState>): void; dispose(): void }
-type Asset = { pivot: T.Group; extent: number; elapsed: number; phase: number; poster?: string };
+type Asset = { pivot: T.Group; extent: number; elapsed: number; phase: number; poster?: string; book?: ReturnType<typeof createBookOpening> };
 type Client = ViewState & {
   host: HTMLElement; id: string; poster: (url: string) => void; live: (value: boolean) => void;
+  rotation: () => number;
 };
 
 // One GPU context, lighting environment and clock for the entire carousel.
@@ -23,7 +26,9 @@ class PillarRenderer {
   current: Client | undefined;
   clock = createFrameClock(delta => {
     if (!this.current || this.lost || document.hidden) { this.stop(); return; }
-    this.assets.get(this.current.id)!.elapsed += delta;
+    const asset = this.assets.get(this.current.id)!;
+    asset.elapsed += delta;
+    asset.book?.advance(delta);
     this.drawCurrent();
   });
   disposed = false;
@@ -67,10 +72,10 @@ class PillarRenderer {
     this.clock.stop();
     this.renderer.domElement.dataset.renderState = 'paused';
   }
-  paint(asset: Asset, pixels: number) {
+  paint(asset: Asset, pixels: number, rotation = 0) {
     for (const value of this.assets.values()) value.pivot.visible = value === asset;
     const t = asset.elapsed;
-    asset.pivot.rotation.y = -.18 + Math.sin(t * .42 + asset.phase) * .42;
+    asset.pivot.rotation.y = -.18 + Math.sin(t * .42 + asset.phase) * .42 + rotation;
     asset.pivot.rotation.x = .08 + Math.sin(t * .45 + asset.phase) * .035;
     asset.pivot.position.y = Math.sin(t * .8 + asset.phase) * .065;
     this.camera.left = this.camera.bottom = -asset.extent;
@@ -79,14 +84,15 @@ class PillarRenderer {
     if (this.renderer.domElement.width !== pixels) this.renderer.setSize(pixels, pixels, false);
     this.renderer.render(this.scene, this.camera);
   }
-  snapshot(asset: Asset) {
-    this.paint(asset, 384);
+  snapshot(asset: Asset, rotation = 0) {
+    asset.book?.finish();
+    this.paint(asset, 384, rotation);
     asset.poster = this.renderer.domElement.toDataURL('image/png');
     for (const client of this.clients) if (this.assets.get(client.id) === asset) client.poster(asset.poster);
   }
   async load(id: string) {
     if (this.loads.has(id)) return this.loads.get(id);
-    const promise = new GLTFLoader().loadAsync(`/models/${id}.glb`).then(({ scene: model }) => {
+    const promise = new GLTFLoader().loadAsync(pillarModelUrl(id)).then(({ scene: model }) => {
       if (this.disposed) { release(model); return; }
       const bounds = new T.Box3().setFromObject(model);
       model.position.sub(bounds.getCenter(new T.Vector3()));
@@ -94,6 +100,7 @@ class PillarRenderer {
       const radius = Math.hypot(size.x, size.z) / 2;
       const pivot = new T.Group(); pivot.add(model);
       const asset: Asset = { pivot, extent: Math.max(size.y / 2 + radius * .14 + .1, radius) * 1.015, elapsed: 0, phase: id === 'heal' ? 0 : id === 'enrich' ? 1.8 : 3.6 };
+      if (id === 'enrich') asset.book = createBookOpening(model);
       this.assets.set(id, asset); this.scene.add(pivot);
       if (!this.lost) this.snapshot(asset);
       this.sync();
@@ -108,10 +115,11 @@ class PillarRenderer {
     if (this.current !== next) {
       if (this.current) {
         const asset = this.assets.get(this.current.id);
-        if (asset) this.snapshot(asset);
+        if (asset) this.snapshot(asset, this.current.rotation());
         this.current.live(false);
       }
       this.current = next;
+      if (next) this.assets.get(next.id)?.book?.restart(next.animate);
     }
     if (!next) { this.renderer.domElement.remove(); return; }
     next.host.appendChild(this.renderer.domElement);
@@ -126,7 +134,7 @@ class PillarRenderer {
     if (!this.current) return;
     const asset = this.assets.get(this.current.id)!;
     // A larger CSS icon must never allocate a multi-megapixel render target.
-    this.paint(asset, this.pixels);
+    this.paint(asset, this.pixels, this.current.rotation());
   }
   dispose() {
     this.disposed = true; this.stop();
@@ -148,10 +156,10 @@ function release(root: T.Group) {
 }
 let shared: PillarRenderer | undefined;
 let cleanup: ReturnType<typeof setTimeout> | undefined;
-export function attachModel(host: HTMLElement, id: string, poster: Client['poster'], live: Client['live']): ModelView {
+export function attachModel(host: HTMLElement, id: string, poster: Client['poster'], live: Client['live'], rotation: Client['rotation'] = () => 0): ModelView {
   clearTimeout(cleanup);
   const renderer = shared ??= new PillarRenderer();
-  const client: Client = { host, id, poster, live, active: false, animate: false, visible: false };
+  const client: Client = { host, id, poster, live, rotation, active: false, animate: false, visible: false };
   renderer.clients.add(client);
   const cached = renderer.assets.get(id)?.poster;
   if (cached) poster(cached);
