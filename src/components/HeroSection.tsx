@@ -2,9 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { HeroOrbitWheel } from '../components/HeroOrbitWheel';
-import { DevotionalLightboxModal } from '../components/DevotionalLightboxModal';
-import { DevotionalLeader, DEVOTIONAL_ACCENT } from '../components/DevotionalPhotoCard';
-import { FoundationIntro } from '../components/FoundationIntro';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import {
   Sparkles,
@@ -50,8 +47,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   // Exactly 4 real pillar content items
   const pillars = PILLARS;
 
-  // Selected spiritual leader for the photo card lightbox modal
-  const [selectedPhotoLeader, setSelectedPhotoLeader] = useState<DevotionalLeader | null>(null);
 
   // Live design studio controls
   const [isStudioOpen, setIsStudioOpen] = useState<boolean>(false);
@@ -61,8 +56,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   /* Multiplies the fluid clamp on the pillar script name, so the size stays
      responsive at every setting rather than being pinned to one pixel value. */
   const [pillarNameScale, setPillarNameScale] = useState<number>(1);
-  /* Multiplies the responsive card bases, so the carousel resizes as a whole —
-     cards and orbit radius both follow from this one value. */
+  // User-adjustable icon size, based on the full editorial text block.
   const [cardScale, setCardScale] = useState<number>(1);
   const [glowIntensity, setGlowIntensity] = useState<number>(0.85);
   const [showMetrics, setShowMetrics] = useState<boolean>(true);
@@ -84,10 +78,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     Math.min(72, Math.max(28, viewportWidth * 0.05325)) * pillarNameScale,
   );
 
-  // Mirrors the responsive --card-*-base values so the studio can report real px
-  const cardBase =
-    viewportWidth <= 900 ? { w: 127, h: 163 } : viewportWidth <= 1200 ? { w: 174, h: 222 } : { w: 210, h: 270 };
-  const cardPx = `${Math.round(cardBase.w * cardScale)}×${Math.round(cardBase.h * cardScale)}`;
+  const copySizeRef = useRef<HTMLDivElement>(null);
+  const [modelBaseSize, setModelBaseSize] = useState(320);
+  useEffect(() => {
+    const copy = copySizeRef.current;
+    if (!copy) return;
+    const measure = () => {
+      // The model canvas and front-stage scale enlarge this slot by ~1.67x.
+      // Size its silhouette against the copy while keeping narrow screens usable.
+      const widthLimit = window.innerWidth >= 1024 ? window.innerWidth * 0.25 : window.innerWidth * 0.48;
+      setModelBaseSize(Math.round(Math.min(copy.offsetHeight * 0.8, widthLimit)));
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(copy);
+    measure();
+    return () => observer.disconnect();
+  }, [viewportWidth]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--hero-model-size', `${modelBaseSize}px`);
+  }, [modelBaseSize]);
 
   /* Published on :root so the stylesheet's clamp can compose with it. */
   useEffect(() => {
@@ -103,12 +113,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   const currentPillar = pillars[activeIndex] || pillars[0];
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
-  /* Holds the wheel's auto-rotation off until the welcome sentence
-     (FoundationIntro) has actually finished writing itself out, so the cards
-     don't start spinning while the visitor is still mid-read. Sticky once
-     true — later pillar-to-pillar shuttles must not re-pause the wheel. */
-  const [introTextDone, setIntroTextDone] = useState(false);
-
   /* THE FOREGROUND HIDES EARLY ON SCROLL. `#hero-clone-stage` (this whole
      <main>) already recedes as the exhibition entrance rises over it, but
      that fade is driven by PillarsSection's `covered` and only starts once
@@ -175,17 +179,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         ? 'opacity-0 translate-y-4 !transition-none'
         : 'opacity-100 translate-y-0';
   const [displayPillar, setDisplayPillar] = useState<PillarState>(currentPillar);
-  /* The wheel opens on the Satguru Mata Sudiksha Ji portrait, so the copy
-     column opens on the devotional quote. null = a pillar card is front. */
-  const [devotionalIdx, setDevotionalIdx] = useState<number | null>(0);
-  const [displayLeaderIdx, setDisplayLeaderIdx] = useState<number | null>(0);
-
-  /* Serene rose stage while the devotional portrait fronts — the pillar
-     gradients read as brand verticals; this slide deserves its own mood.
-     Imported, not redeclared, so the stage and the portrait card cannot
-     drift to different colours. */
-  const stageAccentA = devotionalIdx !== null ? DEVOTIONAL_ACCENT.a : currentPillar.accentA;
-  const stageAccentB = devotionalIdx !== null ? DEVOTIONAL_ACCENT.b : currentPillar.accentB;
+  const stageAccentA = currentPillar.accentA;
+  const stageAccentB = currentPillar.accentB;
 
   /* The single source for the page's colour. The .accent-canvas backdrop, the
      header ribbon and the donate panel all read these, so publishing them here
@@ -204,13 +199,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const exitTimerRef = useRef<NodeJS.Timeout | null>(null);
   const enterTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Trigger smooth staggered fade-out and fade-in when the front content
-  // changes — pillar to pillar, pillar to quote, or quote back to pillar.
-  /* Both portraits show the same quote, so they collapse into one 'quote'
-     state — the copy holds steady from Mata Ji through Rajpita Ji and only
-     shuttles again when Heal arrives. */
-  const targetKey = devotionalIdx !== null ? 'quote' : `P${currentPillar.id}`;
-  const displayKey = displayLeaderIdx !== null ? 'quote' : `P${displayPillar.id}`;
+  const targetKey = `P${currentPillar.id}`;
+  const displayKey = `P${displayPillar.id}`;
 
   useEffect(() => {
     if (targetKey !== displayKey) {
@@ -221,7 +211,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       exitTimerRef.current = setTimeout(() => {
         setDisplayPillar(currentPillar);
-        setDisplayLeaderIdx(devotionalIdx);
         /* 'entering' stages the new copy BELOW its slot, invisible and with
            transitions suppressed; two frames later 'idle' releases it to rise
            up into place. Old copy left upward, new copy arrives from below —
@@ -232,7 +221,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         }, 40);
       }, 380);
     }
-  }, [targetKey, displayKey, currentPillar, devotionalIdx]);
+  }, [targetKey, displayKey, currentPillar]);
 
   useEffect(() => {
     return () => {
@@ -241,18 +230,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     };
   }, []);
 
-  /* NOTE: --accent-a/--accent-b are written in exactly ONE place, the effect
-     above. A second effect here used to write currentPillar's accents to the
-     same two variables. Both ran on every mount, the pillar one was declared
-     later so it ran last and won, and the header chrome was therefore painted
-     in the front PILLAR's colour even while a devotional portrait fronted and
-     the stage was rose. That is the colour mismatch at the intro. Anything
-     needing the current mood should read the vars or stageAccentA/B. */
-
   // Keyboard navigation for the 4 pillars
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (selectedPhotoLeader) return;
       /* keys aimed at an interactive element (the partner desk's text
          field, any focused button) are not carousel commands */
       const t = e.target as HTMLElement | null;
@@ -275,7 +255,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex, onActiveIndexChange, onTogglePause, pillars.length, selectedPhotoLeader]);
+  }, [activeIndex, onActiveIndexChange, onTogglePause, pillars.length]);
 
   const getPillarScriptTitle = (p: PillarState): string => {
     switch (p.id) {
@@ -332,58 +312,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none"
       style={{ willChange: 'transform, opacity', transformOrigin: '50% 42%' }}
     >
-      {/* Glow behind the wheel. The left-to-right darkening that used to be
-          layered in here now lives on the page-wide .accent-canvas instead:
-          being uniform down the hero's height, it stopped dead at the hero's
-          bottom edge and drew a band across the fold.
-
-          This glow has to clear that edge too, and the SIZE KEYWORD is what
-          decides whether it does. An unsized `circle` is farthest-corner, so
-          its radius grows with the WIDTH: on a wide, short screen the 60%
-          transparent stop landed below the hero's bottom edge, the glow was
-          still bright where the section ended, and it was sliced off — the
-          same band across the fold, just one that only appeared at certain
-          window shapes. Sizing the ellipse in PERCENTAGES OF THE BOX ties it
-          to the height as well, so the fade always completes inside its own
-          bounds: the last stop sits at 60% of a 60%-of-height radius, i.e.
-          36% from the centre line, clear of the edge at every aspect ratio. */}
+      {/* A quiet studio backdrop: a broad light pool frames the white cards,
+          with every overlay fading before the hero hands off to Our Work. */}
       <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-700 z-0"
-        style={{
-          background: `radial-gradient(ellipse 60% 60% at 75% 50%, rgba(255,255,255,${glowIntensity * 0.15}) 0%, transparent 60%)`,
-        }}
+        className="hero-studio-light"
+        aria-hidden="true"
+        style={{ opacity: glowIntensity }}
       />
-
-      {/* 2. TOP-LEFT CELESTIAL RING */}
-      <div
-        id="hero-top-left-celestial-ring"
-        className="celestial-ring absolute -left-[20%] -top-[16%] sm:-left-[12%] sm:-top-[12%] md:-left-[6%] md:-top-[8%] w-[58vh] h-[58vh] max-w-[560px] max-h-[560px] rounded-full border border-white/20 pointer-events-none z-0"
-        style={{
-          boxShadow: 'inset 0 0 60px rgba(255, 255, 255, 0.05), 0 0 80px rgba(255, 255, 255, 0.08)',
-        }}
-      >
-        <div className="absolute inset-6 rounded-full border border-dashed border-white/15" />
-        <div className="absolute inset-16 rounded-full border border-white/10" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white/60 shadow-[0_0_10px_white]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 rounded-full bg-white/40" />
-        <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white/50" />
-        <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white/70 shadow-[0_0_12px_white]" />
-      </div>
-
-      {/* 3. RIGHT CELESTIAL RING (Behind 6-Card Carousel) */}
-      <div
-        id="decorative-celestial-circle"
-        className="celestial-ring absolute -right-[20%] top-1/2 -translate-y-1/2 w-[70vh] h-[70vh] max-w-[700px] max-h-[700px] rounded-full border border-white/20 pointer-events-none z-0"
-        style={{
-          boxShadow: 'inset 0 0 60px rgba(255, 255, 255, 0.05), 0 0 80px rgba(255, 255, 255, 0.08)',
-        }}
-      >
-        <div className="absolute inset-6 rounded-full border border-dashed border-white/15" />
-        <div className="absolute inset-16 rounded-full border border-white/10" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white/60 shadow-[0_0_10px_white]" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-2 h-2 rounded-full bg-white/40" />
-        <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white/50" />
-        <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-white/70 shadow-[0_0_12px_white]" />
+      <div className="hero-studio-ground" aria-hidden="true" />
+      <div id="hero-top-left-celestial-ring" className="hero-studio-arc hero-studio-arc--corner" aria-hidden="true" />
+      <div id="decorative-celestial-circle" className="hero-studio-arc hero-studio-arc--cards" aria-hidden="true">
+        <div className="hero-studio-arc-inner" />
       </div>
 
       {/* 4. FADED WHITE LOTUS HERO BACKGROUND GRAPHICS */}
@@ -504,37 +443,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </p>
             </div>
 
-            {/* Card size — scales the whole carousel, orbit radius included */}
             <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-4">
-              <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5">
-                  <Layout className="w-3.5 h-3.5 text-amber-400" /> Card Size
-                </span>
-                <span className="text-amber-300 tabular-nums normal-case tracking-normal">
-                  {Math.round(cardScale * 100)}% · {cardPx}px here
-                </span>
+              <label htmlFor="hero-icon-size" className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center justify-between gap-2">
+                <span className="flex items-center gap-1.5"><Layout className="w-3.5 h-3.5 text-amber-400" /> 3D Icon Size</span>
+                <span className="text-amber-300 tabular-nums">{Math.round(cardScale * 100)}%</span>
               </label>
               <div className="flex items-center gap-3">
-                <input
-                  id="hero-card-size"
-                  type="range"
-                  min="0.6"
-                  max="1.6"
-                  step="0.05"
-                  value={cardScale}
-                  onChange={(e) => setCardScale(Number(e.target.value))}
-                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400"
-                />
-                <button
-                  onClick={() => setCardScale(1)}
-                  className="flex-shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2 cursor-pointer"
-                >
-                  Reset
-                </button>
+                <button type="button" aria-label="Decrease 3D icon size" disabled={cardScale <= 0.5}
+                  onClick={() => setCardScale(value => Math.max(0.5, Math.round((value - 0.1) * 100) / 100))}
+                  className="w-8 h-8 shrink-0 rounded-lg bg-white/10 text-white disabled:opacity-30">−</button>
+                <input id="hero-icon-size" type="range" min="0.5" max="1.8" step="0.05"
+                  value={cardScale} onChange={(e) => setCardScale(Number(e.target.value))}
+                  aria-valuetext={`${Math.round(cardScale * 100)} percent`}
+                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400" />
+                <button type="button" aria-label="Increase 3D icon size" disabled={cardScale >= 1.8}
+                  onClick={() => setCardScale(value => Math.min(1.8, Math.round((value + 0.1) * 100) / 100))}
+                  className="w-8 h-8 shrink-0 rounded-lg bg-white/10 text-white disabled:opacity-30">+</button>
+                <button type="button" onClick={() => setCardScale(1)}
+                  className="shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2">Reset</button>
               </div>
               <p className="text-[11px] text-neutral-500 leading-snug">
-                Resizes the cards and widens the orbit to match, so the carousel keeps
-                its spacing. Responsive breakpoints still apply underneath.
+                100% balances the featured icon with the full text block. Adjust from 50% to 180%.
               </p>
             </div>
 
@@ -660,38 +589,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             introActive ? 'hero-intro-rise' : 'hero-intro-waiting'
           }`}
         >
-          <div className="w-full flex flex-col">
-            {displayLeaderIdx !== null ? (
-              /* FOUNDATION INTRO — shown while the Satguru Mata Sudiksha Ji
-                 portrait fronts the wheel. Same shuttle phases as the pillar
-                 copy, so pillar -> intro -> pillar all move as one vertical
-                 stream. The wrapper reserves the pillar block's height via
-                 --pillar-copy-height so, in the centered column, Welcome lands
-                 on the same line Heal occupies — without it the shorter block
-                 re-centers ~100px lower and the swap visibly jumps. */
-              <div className="flex flex-col md:min-h-[var(--pillar-copy-height)]">
-                {/* Same class, size and margins as the pillar script names, so
-                    Heal -> Welcome (and back) swap in place instead of jumping. */}
-                <p
-                  className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
-                >
-                  Welcome
-                </p>
-                <div
-                  style={{ transitionDelay: phase === 'exiting' ? '0ms' : '60ms' }}
-                  className={`transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
-                >
-                  {/* Typing starts only once the copy has settled into place —
-                      running it during the shuttle would waste the first third
-                      of the sentence behind a moving, half-faded block. */}
-                  <FoundationIntro
-                    active={phase === 'idle' && introActive}
-                    onComplete={() => setIntroTextDone(true)}
-                  />
-                </div>
-              </div>
-            ) : (
-              <>
+          <div ref={copySizeRef} className="w-full flex flex-col">
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
               id="hero-script-pillar-name"
@@ -768,23 +666,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 </svg>
               </button>
             </div>
-              </>
-            )}
           </div>
         </div>
 
-        {/* Right 3D 6-Card Orbit Carousel — blooms in just after the copy */}
+        {/* Floating 3D pillar icons — blooms in just after the copy */}
         <div
           className={`w-full lg:w-1/2 flex justify-center lg:justify-start ${
             introActive ? 'hero-intro-bloom' : 'hero-intro-waiting'
           }`}
         >
           <HeroOrbitWheel
-            onDevotionalFront={setDevotionalIdx}
             pillars={pillars}
             activeIndex={activeIndex}
             onActiveIndexChange={onActiveIndexChange}
-            isPaused={isPaused || !introTextDone}
+            isPaused={isPaused || !introActive}
             onCardClick={(clickedIndex) => {
               // Clicking a pillar card opens that pillar's details
               if (clickedIndex < pillars.length) {
@@ -792,19 +687,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onOpenDetails(pillars[clickedIndex]);
               }
             }}
-            onPhotoCardClick={(leader) => {
-              // Clicking a photo card opens the devotional portrait lightbox
-              setSelectedPhotoLeader(leader);
-            }}
           />
         </div>
       </div>
-
-      {/* Devotional Lightbox Modal for Photo Cards */}
-      <DevotionalLightboxModal
-        leader={selectedPhotoLeader}
-        onClose={() => setSelectedPhotoLeader(null)}
-      />
 
     </main>
 

@@ -240,7 +240,7 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
         const dissolve = Math.max(ramp(scrub, 0.05, 0.1), ramp(gateForm, 0.08, 0.6));
         const gs = lerp(1, 1.08, rise);
         const gx = markX - (markW * (gs - 1)) / 2;
-        const gy = markY - rise * stageBox.height * 0.09 - (markH * (gs - 1)) / 2;
+        const gy = markY - rise * stageBox.height * 0.14 - (markH * (gs - 1)) / 2;
 
         /* THE ORBIT. The four heads do not simply pool into a blob and
            drop — they leave the flower and begin to CIRCLE a common centre,
@@ -374,10 +374,10 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
 
              They trade places over one short window, and the two sides are
              THE SAME RAMP on purpose — the vectors come up to exactly the
-             0.09 the artwork renders at as the artwork goes to nothing, so
+             0.14 the artwork renders at as the artwork goes to nothing, so
              the sum across the swap is constant and there is no frame where
              the hero's lotus is brighter or dimmer than it was. Painting the
-             vectors at 0.09 from the start, over an artwork also at 0.09,
+             vectors at 0.14 from the start, over an artwork also at 0.14,
              is what doubled it. */
           const swap = reducedRef.current ? 1 : ramp(covered, 0.015, 0.09);
 
@@ -411,7 +411,7 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
               `translate(${lerp(dx, 0, t).toFixed(2)}px, ${lerp(dy, 0, t).toFixed(2)}px) ` +
               `rotate(${roll.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
             /* STARTS AT THE ARTWORK'S OWN GHOST STRENGTH. The watermark
-               renders at opacity 0.09, so a vector copy at full strength
+               renders at opacity 0.14, so a vector copy at full strength
                would flash bright on the frame it takes over — the whole
                point of laying them on top is that the substitution cannot be
                seen. They brighten as they leave, which is also the only
@@ -451,11 +451,8 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
             z-50): they should read as crossing in front of the page but
             behind the site's own chrome.
 
-            Unfiltered on purpose. The emblem's bevel lives in ITS OWN <defs>
-            inside SncfLotus3D, and filter ids are document-scoped — pointing
-            at it across components is exactly the kind of invisible coupling
-            that breaks when either side is edited. A drop-shadow gives these
-            their depth instead. */}
+            Each white petal carries its own crisp relief filter, so lighting
+            stays aligned to the silhouette while the group travels. */}
         <svg
           ref={sealRef}
           className="hall-petals"
@@ -527,13 +524,8 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
                   them. The colour is what the globe GIVES BACK, one petal
                   per room, once the exhibition starts opening them.
 
-                  Forced white via filter, not by swapping in a plain fill:
-                  this is the SAME raster silhouette that lands in the
-                  assembled emblem (see SncfLotus3D, petalArt.ts), so the
-                  shape a visitor sees mid-flight is the shape it settles
-                  into — only the colour is suppressed here and given back
-                  there. brightness(0) flattens every pixel to black while
-                  leaving alpha alone; invert(1) turns that black white. */}
+                  The same silhouette is cleaned and lit as white relief;
+                  the colour layer above it still controls the awakening. */}
               {(() => {
                 const art = PETAL_ART_BY_ID[petal.id];
                 if (!art) return null;
