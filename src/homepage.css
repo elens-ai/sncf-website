@@ -1,5 +1,13 @@
 /* Shared finishing layer for the homepage. Carousel transforms remain owned
    by their components; these rules style their surfaces and reading areas. */
+.home-page [data-motion='paused'] :is(.lotus-sway, .celestial-ring, .celestial-ring-reverse, [class*='card-drift-'], [class*='caption-float-'], .heal-ring-outer, .heal-ring-inner, .countdown-pulse, .rail-ping) {
+  animation-play-state: paused !important;
+}
+/* Static card surfaces don't need a live blur of everything behind them. */
+.home-page .home-event-ticket { backdrop-filter: none; }
+/* Keep the changing gradient's paint surface to one viewport, rather than
+   allocating a background as tall as the entire exhibition scroll track. */
+.home-page > .accent-canvas { position: fixed; inset: 0; }
 .home-page {
   --home-paper: #f4f1e9;
   --home-line: rgb(255 255 255 / .16);

@@ -356,6 +356,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
 
   useEffect(() => {
     let raf = 0;
+    let settledOutside = '';
 
     const read = () => {
       raf = 0;
@@ -367,6 +368,12 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
          hardcoding either. */
       const vh = window.innerHeight || 1;
       const r = track.getBoundingClientRect();
+      // Once a boundary is painted, scrolling other sections must not rerun
+      // the entire exhibition's DOM update. Resizing invalidates this key.
+      const outside = r.top >= vh ? 'before' : r.bottom <= 0 ? 'after' : '';
+      const boundary = outside ? `${outside}:${vh}:${r.height}` : '';
+      if (boundary && boundary === settledOutside) return;
+      settledOutside = boundary;
       const span = r.height - vh;
       const covered = Math.max(0, Math.min(1, (vh - r.top) / vh));
       const scrub = span > 0 ? -r.top / span : 1;

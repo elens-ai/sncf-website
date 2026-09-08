@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { usePageMotion } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { Header } from '../components/Header';
@@ -32,6 +33,7 @@ const parseInviteParam = (): string | null => {
 };
 
 export default function HomePage() {
+  usePageMotion();
   /* 'showing' -> 'exiting' (logo flies to the header) -> 'done'.
      The hero is mounted underneath the whole time so the handoff is seamless.
      A visitor arriving from a scanned pass (?invite=...) skips the splash
@@ -278,4 +280,3 @@ export default function HomePage() {
     </div>
   );
 }
-

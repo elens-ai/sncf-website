@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PillarState } from '../types';
 import { CardIllustration } from './CardIllustration';
 import { PillarModelCard, MODEL_PILLARS } from './PillarModelCard';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 interface HeroOrbitWheelProps {
   pillars: PillarState[]; // 4 pillars: HEAL, ENRICH, EMPOWER, PROJECTS
   activeIndex: number; // 0..3 for active pillar
@@ -19,6 +20,8 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
   onCardClick,
 }) => {
   const totalCards = pillars.length;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const inView = useSectionActivity(stageRef);
   const stepAngle = 360 / totalCards;
 
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -38,6 +41,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
   const snapTargetRef = useRef<number | null>(null);
   const snapStartTimeRef = useRef<number | null>(null);
   const snapStartAngleRef = useRef<number>(0);
+  const pausedSnapElapsedRef = useRef(0);
   const isSnappingRef = useRef<boolean>(false);
 
   // Check prefers-reduced-motion
@@ -94,7 +98,9 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
 
   // Main animation loop (requestAnimationFrame)
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion || isPaused || !inView) return;
+    lastTimeRef.current = null;
+    if (isSnappingRef.current) snapStartTimeRef.current = performance.now() - pausedSnapElapsedRef.current;
 
     const animate = (currentTime: number) => {
       if (lastTimeRef.current === null) {
@@ -103,12 +109,6 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
       const deltaTime = Math.min((currentTime - lastTimeRef.current) / 1000, 0.1);
       lastTimeRef.current = currentTime;
 
-      if (isPaused || document.hidden) {
-        // Freeze an in-flight turn as well as the hold timer.
-        if (snapStartTimeRef.current !== null) snapStartTimeRef.current += deltaTime * 1000;
-        animationFrameRef.current = requestAnimationFrame(animate);
-        return;
-      }
       // Handle animated snap transition
       if (isSnappingRef.current && snapTargetRef.current !== null) {
         if (snapStartTimeRef.current === null) {
@@ -137,6 +137,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
           isSnappingRef.current = false;
           snapTargetRef.current = null;
           snapStartTimeRef.current = null;
+          pausedSnapElapsedRef.current = 0;
           holdTimeRef.current = 0;
         }
       } else if (!isDraggingRef.current && !isPaused) {
@@ -147,6 +148,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
           snapStartAngleRef.current = angleRef.current;
           snapTargetRef.current = (Math.round(angleRef.current / stepAngle) - 1) * stepAngle;
           snapStartTimeRef.current = null;
+          pausedSnapElapsedRef.current = 0;
           isSnappingRef.current = true;
         }
       }
@@ -157,11 +159,13 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
     animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
+      if (isSnappingRef.current && snapStartTimeRef.current !== null) pausedSnapElapsedRef.current = performance.now() - snapStartTimeRef.current;
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
   }, [
+    inView,
     isPaused,
     reducedMotion,
     updateActiveCardFromAngle,
@@ -281,6 +285,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
   return (
     <div
       id="hero-orbit-wheel-container"
+      ref={stageRef}
       className="relative flex flex-col items-center justify-center w-full max-w-[880px] py-0"
       tabIndex={0}
       role="region"
@@ -366,7 +371,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
                 {/* Independent Asynchronous Float/Drift Wrapper with extra curved border-radius */}
                 <div
                   className={`w-full h-full rounded-[32px] ${hasModel ? 'overflow-visible' : 'overflow-hidden'} ${
-                    !reducedMotion && !isPaused && !isDragging ? driftClass : ''
+                    !reducedMotion && !isPaused && inView && !isDragging ? driftClass : ''
                   } transition-[border,box-shadow] duration-300`}
                   style={{
                     boxShadow: hasModel ? 'none' : cardState.isFrontFacing
@@ -377,7 +382,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
                       : '1.2px solid rgba(255, 255, 255, 0.35)',
                   }}
                 >
-                  {hasModel ? <PillarModelCard id={pillar.id} label={pillar.label} animate={!reducedMotion && !isPaused && !isDragging} /> : <CardIllustration
+                  {hasModel ? <PillarModelCard id={pillar.id} label={pillar.label} active={isCurrentActive} animate={!reducedMotion && !isPaused && inView && !isDragging} /> : <CardIllustration
                     pillar={pillar}
                     index={i}
                     roundedClass="rounded-[32px]"
