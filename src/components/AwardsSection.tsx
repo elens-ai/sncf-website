@@ -81,9 +81,9 @@ const STANDIN = [
     'Youth empowerment, plantation drives and disaster relief.'),
 ];
 
-const STEP_MS = 650;
+const STEP_MS = 900;
 /** How long each honour holds the centre before the stage turns itself. */
-const HOLD_MS = 3000;
+const HOLD_MS = 4500;
 const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 export const AwardsSection: React.FC = () => {

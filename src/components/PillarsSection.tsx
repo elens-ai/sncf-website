@@ -1420,7 +1420,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                     {/* the wall label */}
                     <div className="min-w-0">
                       <p className="font-artistic-display text-[10px] sm:text-[11px] tracking-[0.2em] text-white/60 mb-1.5">
-                        ROOM {i + 1} OF {VERTICAL_SEQUENCE.length}
+                        ROOM {i + 1} OF {ROOM_IDS.length}
                       </p>
                       <p className="font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 drop-shadow-md select-none">
                         {pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}

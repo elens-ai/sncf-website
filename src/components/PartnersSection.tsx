@@ -26,9 +26,7 @@ import { BRAND } from '../data/partnerBrand';
  * Idle, the chyron carries the proof figures — the wall never stops
  * saying what all this delivered.
  *
- * The section stands on its own fixed slate wash (the footer's sanctioned
- * translucent-tint pattern), so the white wall always reads against the
- * same considered ground whatever the hero is publishing.
+ * The section shares the page gradient, with no separate background wash.
  *
  * Partner data is verbatim from nirankarifoundation.org/our-partners/
  * (data/partners.ts). Marks are each organisation's own published icon,
@@ -216,7 +214,6 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
       className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[84px] pb-6 overflow-hidden"
     >
       {/* the fixed slate ground the white wall stands against */}
-      <div className="partner-backdrop" aria-hidden="true" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col justify-center min-h-0">
         {/* the section's own eyebrow, above the wall */}

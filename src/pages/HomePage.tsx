@@ -140,7 +140,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none">
+    <div className="home-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none">
       {/* ONE gradient for the whole page. Absolute, not fixed, so it spans the
           full document height and the ramp runs continuously from the top of
           the hero to the bottom of the last screen — the sections themselves

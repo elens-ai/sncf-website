@@ -56,6 +56,7 @@ interface RollingDigitColumnProps {
   digitIndex: number;
   totalDigits: number;
   isTriggered: boolean;
+  duration: number;
 }
 
 const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
@@ -63,20 +64,19 @@ const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
   digitIndex,
   totalDigits,
   isTriggered,
+  duration,
 }) => {
-  // Higher place value (left) spins more revolutions and settles slightly later,
-  // creating the signature livecounts.io staggered cascading roll
-  const cycles = Math.max(2, (totalDigits - digitIndex) * 2 + 1);
+  // One revolution gives a quiet count-in, with a slight stagger.
+  const cycles = 1;
   const reel = React.useMemo(() => generateReelDigits(targetDigit, cycles), [targetDigit, cycles]);
   const finalIndex = reel.length - 1;
 
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   const [isSpinning, setIsSpinning] = useState<boolean>(false);
 
-  // Staggered durations & delays
-  // Left digits spin longer (e.g. 2.2s), right digits spin slightly shorter (e.g. 1.6s)
-  const durationMs = 1500 + (totalDigits - digitIndex) * 160;
-  const delayMs = 60 + digitIndex * 70;
+  // Honour the caller’s duration while keeping adjacent digits close together.
+  const durationMs = duration + (totalDigits - digitIndex) * 30;
+  const delayMs = digitIndex * 30;
 
   useEffect(() => {
     if (!isTriggered) return;
@@ -136,17 +136,23 @@ const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
         ))}
       </div>
 
-      {/* Subtle top & bottom edge vignette for cylindrical reel depth */}
-      <div className="absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-black/40 via-black/10 to-transparent pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 h-[22%] bg-gradient-to-t from-black/40 via-black/10 to-transparent pointer-events-none" />
+
     </div>
   );
 };
 
 export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
   value,
+  duration = 1100,
   className = '',
 }) => {
+  const [calm, setCalm] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setCalm(mq.matches);
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
   const tokens = tokenizeStat(value);
   const totalDigits = tokens.filter((t) => t.type === 'digit').length;
   const [isTriggered, setIsTriggered] = useState<boolean>(false);
@@ -187,7 +193,7 @@ export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
         fontVariantNumeric: 'tabular-nums',
       }}
     >
-      {tokens.map((token, idx) => {
+      {calm ? value : tokens.map((token, idx) => {
         if (token.type === 'digit') {
           return (
             <RollingDigitColumn
@@ -196,6 +202,7 @@ export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
               digitIndex={token.digitIndex}
               totalDigits={totalDigits}
               isTriggered={isTriggered}
+              duration={duration}
             />
           );
         }

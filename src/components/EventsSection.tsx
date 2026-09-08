@@ -159,7 +159,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
   return (
     <article
       id={`event-card-${event.id}`}
-      className={`relative w-[min(90vw,320px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
+      className={`home-event-ticket relative w-[min(90vw,320px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
         lit ? 'border-white/40' : 'border-white/[0.14]'
       }`}
       style={{
@@ -169,7 +169,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
            people at the drive do. The standing pass also carries a faint
            halo of its own pillar colour in the shadow. */
         backgroundImage:
-          'linear-gradient(172deg, rgba(42, 84, 179, 0.92) 0%, rgba(28, 62, 138, 0.93) 45%, rgba(16, 38, 92, 0.95) 100%)',
+          'linear-gradient(160deg, rgba(39, 74, 96, 0.98), rgba(13, 34, 52, 0.98))',
         boxShadow: lit
           ? `0 26px 55px -18px rgba(0, 0, 0, 0.65), 0 0 42px ${accentB}26`
           : '0 12px 30px -12px rgba(0, 0, 0, 0.5)',
@@ -685,7 +685,7 @@ export const EventsSection: React.FC = () => {
               What&rsquo;s next
             </p>
             <h2 className="font-artistic-heading text-white text-[28px] sm:text-[34px] md:text-[40px] leading-tight drop-shadow">
-              Show up, pitch in
+              A little time. A lasting difference.
             </h2>
           </div>
 

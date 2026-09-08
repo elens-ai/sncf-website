@@ -95,7 +95,7 @@ export function PillarModelCard({ id, label, animate }: { id: string; label: str
       const tick = (time: number) => {
         if (disposed) return;
         frame = requestAnimationFrame(tick);
-        if (time - lastTime < 1000 / 30) return;
+        if (time - lastTime < 1000 / 60) return;
         const delta = Math.min((time - lastTime) / 1000, 0.05);
         lastTime = time;
         if (!visible || document.hidden || !motionRef.current) return;
@@ -126,7 +126,7 @@ export function PillarModelCard({ id, label, animate }: { id: string; label: str
   return (
     <div className="relative w-full h-full overflow-visible pointer-events-none" role="img" aria-label={`${label} floating 3D icon`}>
       {!ready && id !== 'projects' && <img src={`/images/vertical-${id}.webp`} alt="" className="absolute w-[60%] left-[20%] top-1/2 -translate-y-1/2 rounded-full" />}
-      <div key="model-canvas" ref={hostRef} className="absolute -inset-[22%] z-[1]" style={{ opacity: ready ? 1 : 0, filter: 'drop-shadow(0 18px 12px rgba(8, 18, 24, 0.26))' }} />
+      <div key="model-canvas" ref={hostRef} className="absolute -inset-[22%] z-[1]" style={{ opacity: ready ? 1 : 0, transition: 'opacity 600ms ease', filter: 'drop-shadow(0 18px 12px rgba(8, 18, 24, 0.26))' }} />
     </div>
   );
 }
