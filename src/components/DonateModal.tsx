@@ -8,14 +8,19 @@ import { X, Heart, Building2, Users, Landmark, ShieldCheck, Phone, Mail, MapPin,
  * organised as three ways to give plus the practical details, instead of one
  * long column with the FAQ buried at the bottom.
  *
- * It deliberately does NOT take payment. Every path to giving hands off to the
- * foundation's own donation page, which is where the Razorpay / PayUmoney
- * integration and the receipting live. A second payment surface would be a
- * second thing to secure, and donors should see the official domain in the
- * address bar when they enter card details.
+ * It deliberately does NOT take payment, and it no longer hands off to
+ * nirankarifoundation.org/donate/ either: this site replaces that domain and
+ * it is being decommissioned, so the old link would send donors somewhere
+ * that is going away — the worst possible destination for someone about to
+ * enter card details.
+ *
+ * PENDING: the Razorpay / PayUmoney checkout and the receipting still live
+ * behind that old page. Until a replacement payment address exists, the
+ * primary action is a real conversation with the accounts team, and the
+ * offline routes below (cheque, bank, counter) are complete and usable as
+ * they stand. Point DONATE_URL at the new checkout when there is one and
+ * restore the button.
  */
-
-const DONATE_URL = 'https://nirankarifoundation.org/donate/';
 
 interface DonateModalProps {
   isOpen: boolean;
@@ -125,17 +130,15 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <a
-              href={DONATE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:accounts@nirankarifoundation.org?subject=Contributing%20to%20SNCF"
               className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white text-neutral-900 font-bold text-sm shadow-xl hover:scale-[1.03] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
             >
-              Contribute Now
+              Talk to the accounts team
               <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
             <span className="inline-flex items-center gap-1.5 text-[11px] text-white/75">
               <ShieldCheck className="w-3.5 h-3.5" />
-              Completed on the foundation’s official site
+              Donations are deductible u/s 80G(5)(vi)
             </span>
           </div>
         </div>

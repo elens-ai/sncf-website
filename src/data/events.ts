@@ -138,7 +138,7 @@ export const EVENTS: SNCFEvent[] = [
     blurb:
       'Native saplings planted and tended until they grow into community forests. Volunteers welcome year-round.',
     pillarId: 'empower',
-    href: 'https://nirankarifoundation.org/oneness-vann/',
+    href: '/projects',
   },
   {
     id: 'project-amrit',
@@ -148,6 +148,6 @@ export const EVENTS: SNCFEvent[] = [
     blurb:
       'Cleaning and reviving ponds, lakes and riverbanks — one water body, one weekend at a time.',
     pillarId: 'projects',
-    href: 'https://nirankarifoundation.org/project-amrit/',
+    href: '/projects',
   },
 ];
