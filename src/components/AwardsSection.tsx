@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { AWARDS, Award, AwardPhoto } from '../data/awards';
 import { AwardLightbox, LightboxTarget } from './AwardLightbox';
@@ -81,13 +82,14 @@ const STANDIN = [
     'Youth empowerment, plantation drives and disaster relief.'),
 ];
 
-const STEP_MS = 650;
+const STEP_MS = 900;
 /** How long each honour holds the centre before the stage turns itself. */
-const HOLD_MS = 3000;
+const HOLD_MS = 4500;
 const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 export const AwardsSection: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
+  const inView = useSectionActivity(rootRef);
   const stageRef = useRef<HTMLDivElement>(null);
   const lock = useRef(false);
   const timer = useRef<number | null>(null);
@@ -144,8 +146,9 @@ export const AwardsSection: React.FC = () => {
 
   /* Warm the next pictures so a step never lands on an empty frame. */
   useEffect(() => {
-    items.forEach((it) => { const img = new Image(); img.src = it.src; });
-  }, [items]);
+    if (!inView) return;
+    [items[active], items[(active + 1) % items.length]].forEach(it => { if (it) { const img = new Image(); img.src = it.src; } });
+  }, [items, active, inView]);
 
   useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
 
@@ -165,10 +168,10 @@ export const AwardsSection: React.FC = () => {
      under reduced motion, where an unbidden change every few seconds is the
      whole thing that setting asks us not to do. */
   useEffect(() => {
-    if (calm || target || held || n < 2) return;
+    if (!inView || calm || target || held || n < 2) return;
     const id = window.setInterval(() => navigate('next'), HOLD_MS);
     return () => window.clearInterval(id);
-  }, [calm, target, held, n, navigate]);
+  }, [inView, calm, target, held, n, navigate]);
 
   /* Arrow keys drive the stage while it is the screen in view. Bound in the
      CAPTURE phase and stopped there, because App binds ArrowLeft/Right on
@@ -206,7 +209,7 @@ export const AwardsSection: React.FC = () => {
       position: 'absolute',
       aspectRatio: '0.72 / 1',
       transition: t,
-      willChange: 'transform, filter, opacity',
+      willChange: inView && role !== 'off' ? 'transform, opacity' : 'auto',
     };
     switch (role) {
       case 'center':
@@ -284,7 +287,7 @@ export const AwardsSection: React.FC = () => {
                     : `Bring ${it.award.title} to the centre`
                 }
               >
-                <img src={it.src} alt={it.alt} draggable={false} decoding="async" />
+                <img src={it.src} alt={it.alt} draggable={false} decoding="async" loading="lazy" />
               </button>
             );
           })}

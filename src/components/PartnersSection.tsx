@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PARTNERS } from '../data/partners';
+import { BRAND } from '../data/partnerBrand';
 
 /**
  * THE MEDIA WALL — the screen after awards, rebuilt as the backdrop of a
@@ -25,9 +26,7 @@ import { PARTNERS } from '../data/partners';
  * Idle, the chyron carries the proof figures — the wall never stops
  * saying what all this delivered.
  *
- * The section stands on its own fixed slate wash (the footer's sanctioned
- * translucent-tint pattern), so the white wall always reads against the
- * same considered ground whatever the hero is publishing.
+ * The section shares the page gradient, with no separate background wash.
  *
  * Partner data is verbatim from nirankarifoundation.org/our-partners/
  * (data/partners.ts). Marks are each organisation's own published icon,
@@ -43,27 +42,6 @@ interface PartnersSectionProps {
       overlay; the chyron must not collapse on the same keypress. */
   escapeSuspended?: boolean;
 }
-
-/** Display presentation per companion: wall wordmark (short), brand ink,
-    mark, monogram fallback. KSCF, Blind Relief and EBAI publish no usable
-    icon (two served CMS defaults, one's site is gone) — monograms. */
-const BRAND: Record<
-  string,
-  { short: string; color: string; logo?: string; initials: string }
-> = {
-  un: { short: 'United Nations', color: '#009edb', logo: '/images/partners/un.png', initials: 'UN' },
-  railways: { short: 'Indian Railways', color: '#c8102e', logo: '/images/partners/railways.png', initials: 'IR' },
-  'red-cross': { short: 'Indian Red Cross', color: '#ed1b2e', logo: '/images/partners/red-cross.png', initials: 'RC' },
-  'life-west': { short: 'Life West', color: '#0077c8', logo: '/images/partners/life-west.svg', initials: 'LW' },
-  'urban-development': { short: 'Urban Development', color: '#2e3092', logo: '/images/partners/urban-development.png', initials: 'UD' },
-  ksct: { short: 'KSCF', color: '#ee7623', initials: 'KS' },
-  ndtv: { short: 'NDTV', color: '#e4002b', logo: '/images/partners/ndtv.png', initials: 'ND' },
-  toi: { short: 'Times of India', color: '#bb0000', logo: '/images/partners/toi.png', initials: 'TOI' },
-  niit: { short: 'NIIT', color: '#ed1c24', logo: '/images/partners/niit.png', initials: 'NT' },
-  singer: { short: 'Singer India', color: '#d21f2f', logo: '/images/partners/singer.png', initials: 'SI' },
-  'blind-relief': { short: 'Blind Relief Assn.', color: '#1b7a5a', initials: 'BR' },
-  ebai: { short: 'Eye Bank Assn.', color: '#1273b8', initials: 'EB' },
-};
 
 /** THE PATTERN. A fixed interleaving of the twelve marks plus the reserved
     seat, stepped diagonally across offset rows the way a printed
@@ -236,7 +214,6 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
       className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[84px] pb-6 overflow-hidden"
     >
       {/* the fixed slate ground the white wall stands against */}
-      <div className="partner-backdrop" aria-hidden="true" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col justify-center min-h-0">
         {/* the section's own eyebrow, above the wall */}
@@ -517,8 +494,8 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
             our published activity report
           </p>
           <p className="pb-contact">
-            nirankarifoundation.org · Begin the conversation — the wall has
-            room.
+            Sant Nirankari Charitable Foundation · Begin the conversation —
+            the wall has room.
           </p>
         </div>,
         document.body,

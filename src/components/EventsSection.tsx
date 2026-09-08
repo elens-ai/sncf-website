@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 import {
   CalendarPlus,
   CalendarDays,
@@ -73,11 +74,15 @@ const clockParts = (ms: number) => {
 
 /** Ticks in isolation so one second of time repaints the clock, not the deck. */
 const CountdownClock: React.FC<{ target: Date }> = ({ target }) => {
+  const clockRef = useRef<HTMLDivElement>(null);
+  const active = useSectionActivity(clockRef);
   const [left, setLeft] = useState(() => target.getTime() - Date.now());
   useEffect(() => {
+    if (!active) return;
+    setLeft(target.getTime() - Date.now());
     const id = window.setInterval(() => setLeft(target.getTime() - Date.now()), 1000);
     return () => window.clearInterval(id);
-  }, [target]);
+  }, [target, active]);
 
   const { d, h, m, s } = clockParts(left);
   const cells: [string, string][] = [
@@ -87,7 +92,7 @@ const CountdownClock: React.FC<{ target: Date }> = ({ target }) => {
     [pad(s), 'sec'],
   ];
   return (
-    <div className="flex items-stretch gap-1.5" role="timer" aria-live="off">
+    <div ref={clockRef} className="flex items-stretch gap-1.5" role="timer" aria-live="off">
       {cells.map(([value, label]) => (
         <div
           key={label}
@@ -159,7 +164,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
   return (
     <article
       id={`event-card-${event.id}`}
-      className={`relative w-[min(90vw,320px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
+      className={`home-event-ticket relative w-[min(90vw,320px)] mx-auto flex flex-col rounded-[22px] overflow-hidden backdrop-blur-md border transition-colors duration-300 ${
         lit ? 'border-white/40' : 'border-white/[0.14]'
       }`}
       style={{
@@ -169,7 +174,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
            people at the drive do. The standing pass also carries a faint
            halo of its own pillar colour in the shadow. */
         backgroundImage:
-          'linear-gradient(172deg, rgba(42, 84, 179, 0.92) 0%, rgba(28, 62, 138, 0.93) 45%, rgba(16, 38, 92, 0.95) 100%)',
+          'linear-gradient(160deg, rgba(39, 74, 96, 0.98), rgba(13, 34, 52, 0.98))',
         boxShadow: lit
           ? `0 26px 55px -18px rgba(0, 0, 0, 0.65), 0 0 42px ${accentB}26`
           : '0 12px 30px -12px rgba(0, 0, 0, 0.5)',
@@ -685,7 +690,7 @@ export const EventsSection: React.FC = () => {
               What&rsquo;s next
             </p>
             <h2 className="font-artistic-heading text-white text-[28px] sm:text-[34px] md:text-[40px] leading-tight drop-shadow">
-              Show up, pitch in
+              A little time. A lasting difference.
             </h2>
           </div>
 

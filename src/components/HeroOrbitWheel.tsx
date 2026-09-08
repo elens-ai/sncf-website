@@ -1,22 +1,15 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PillarState } from '../types';
 import { CardIllustration } from './CardIllustration';
-import { DevotionalPhotoCard, DEVOTIONAL_LEADERS, DevotionalLeader } from './DevotionalPhotoCard';
-
-/** Only Satguru Mata Sudiksha Ji rides the wheel. Hoisted to module scope so the
-    array identity is stable across renders. */
-const WHEEL_LEADERS = DEVOTIONAL_LEADERS.filter((l) => l.id === 'mata-sudiksha-ji');
-
+import { PillarModelCard, MODEL_PILLARS } from './PillarModelCard';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 interface HeroOrbitWheelProps {
   pillars: PillarState[]; // 4 pillars: HEAL, ENRICH, EMPOWER, PROJECTS
   activeIndex: number; // 0..3 for active pillar
   onActiveIndexChange: (index: number) => void;
   isPaused: boolean;
   onCardClick: (index: number) => void;
-  onPhotoCardClick?: (leader: DevotionalLeader) => void;
-  /** Fired once whenever a devotional portrait takes (or leaves) the front:
-      the leader's index, or null when a pillar card fronts again. */
-  onDevotionalFront?: (leaderIdx: number | null) => void;
+
 }
 
 export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
@@ -25,28 +18,21 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
   onActiveIndexChange,
   isPaused,
   onCardClick,
-  onPhotoCardClick,
-  onDevotionalFront,
 }) => {
-  /* 5 cards -> 72-degree steps. Rajpita Ji's card was removed from the wheel on
-     request; the portrait stays in DEVOTIONAL_LEADERS so the Gallery still
-     shows both guides. */
-  const totalCards = 4 + WHEEL_LEADERS.length;
-  const stepAngle = 360 / totalCards; // 72 degrees
+  const totalCards = pillars.length;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const inView = useSectionActivity(stageRef);
+  const stepAngle = 360 / totalCards;
 
-  const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [reducedMotion, setReducedMotion] = useState<boolean>(false);
 
-  /* Start with the Satguru Mata Sudiksha Ji portrait front. She is card index 4,
-     so the wheel must sit at -(4 * stepAngle) = -288deg with 72-degree steps.
-     Forward rotation then walks: Mata Ji -> Heal -> Enrich -> Empower ->
-     Projects -> back to Mata Ji, looping. */
-  const angleRef = useRef<number>(-288);
+  const angleRef = useRef<number>(-activeIndex * stepAngle);
   const drumRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationFrameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
+  const holdTimeRef = useRef(0);
   const isDraggingRef = useRef<boolean>(false);
   const dragStartXRef = useRef<number>(0);
   const dragStartAngleRef = useRef<number>(0);
@@ -55,6 +41,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
   const snapTargetRef = useRef<number | null>(null);
   const snapStartTimeRef = useRef<number | null>(null);
   const snapStartAngleRef = useRef<number>(0);
+  const pausedSnapElapsedRef = useRef(0);
   const isSnappingRef = useRef<boolean>(false);
 
   // Check prefers-reduced-motion
@@ -66,31 +53,11 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
 
-  // Update active card index based on current wheel angle
-  const lastDevotionalRef = useRef<number | null>(0);
-
-  const updateActiveCardFromAngle = useCallback(
-    (angle: number) => {
-      const positiveAngle = ((-angle % 360) + 360) % 360;
-      const index = Math.round(positiveAngle / stepAngle) % totalCards;
-      if (index < pillars.length) {
-        // Pillar card front
-        if (index !== activeIndex) onActiveIndexChange(index);
-        if (lastDevotionalRef.current !== null) {
-          lastDevotionalRef.current = null;
-          onDevotionalFront?.(null);
-        }
-      } else {
-        // Devotional portrait front — tell the parent which one, once
-        const leaderIdx = index - pillars.length;
-        if (lastDevotionalRef.current !== leaderIdx) {
-          lastDevotionalRef.current = leaderIdx;
-          onDevotionalFront?.(leaderIdx);
-        }
-      }
-    },
-    [activeIndex, pillars.length, stepAngle, onActiveIndexChange, onDevotionalFront]
-  );
+  const updateActiveCardFromAngle = useCallback((angle: number) => {
+    const positiveAngle = ((-angle % 360) + 360) % 360;
+    const index = Math.round(positiveAngle / stepAngle) % totalCards;
+    if (index !== activeIndex) onActiveIndexChange(index);
+  }, [activeIndex, stepAngle, totalCards, onActiveIndexChange]);
 
   /* Writes the frame straight to the DOM. Previously every frame called
      setWheelAngle(), which re-rendered all six cards — each a full SVG
@@ -101,7 +68,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
       if (reducedMotion) return;
 
       if (drumRef.current) {
-        drumRef.current.style.transform = `rotateY(${angle}deg)`;
+        drumRef.current.style.transform = 'none';
       }
 
       for (let i = 0; i < totalCards; i++) {
@@ -110,11 +77,12 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
         const st = getCardTransformState(i, angle);
         /* Write only what changed. Re-assigning identical style strings still
            costs style recalculation across six cards every frame. */
-        const nextTransform = `rotateY(${i * stepAngle}deg) translateZ(var(--hero-radius, 408px)) scale(${st.scale.toFixed(4)})`;
+        const nextTransform = st.transform;
         if (el.style.transform !== nextTransform) el.style.transform = nextTransform;
 
         const nextOpacity = st.opacity.toFixed(3);
         if (el.style.opacity !== nextOpacity) el.style.opacity = nextOpacity;
+        el.style.pointerEvents = st.opacity < 0.01 ? 'none' : 'auto';
 
         const nextFilter = st.blur === 0 ? 'none' : `blur(${st.blur}px)`;
         if (el.style.filter !== nextFilter) el.style.filter = nextFilter;
@@ -125,19 +93,14 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
     },
     // getCardTransformState is a pure function of its args plus stepAngle
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [reducedMotion, totalCards, stepAngle],
+    [reducedMotion, totalCards, stepAngle, pillars],
   );
 
   // Main animation loop (requestAnimationFrame)
   useEffect(() => {
-    if (reducedMotion) {
-      const interval = setInterval(() => {
-        if (!isPaused && !isHovered) {
-          onActiveIndexChange((activeIndex + 1) % pillars.length);
-        }
-      }, 4000);
-      return () => clearInterval(interval);
-    }
+    if (reducedMotion || isPaused || !inView) return;
+    lastTimeRef.current = null;
+    if (isSnappingRef.current) snapStartTimeRef.current = performance.now() - pausedSnapElapsedRef.current;
 
     const animate = (currentTime: number) => {
       if (lastTimeRef.current === null) {
@@ -152,14 +115,12 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
           snapStartTimeRef.current = currentTime;
         }
         const snapElapsed = (currentTime - snapStartTimeRef.current) / 1000;
-        const snapDuration = 0.7; // 700ms ease-in-out
+        const snapDuration = 1.25;
 
         if (snapElapsed < snapDuration) {
           const progress = snapElapsed / snapDuration;
-          const easeProgress =
-            progress < 0.5
-              ? 4 * progress * progress * progress
-              : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+          // Smooth acceleration and a soft landing, with no scale overshoot.
+          const easeProgress = progress * progress * progress * (progress * (progress * 6 - 15) + 10);
 
           const currentAngle =
             snapStartAngleRef.current +
@@ -176,17 +137,20 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
           isSnappingRef.current = false;
           snapTargetRef.current = null;
           snapStartTimeRef.current = null;
+          pausedSnapElapsedRef.current = 0;
+          holdTimeRef.current = 0;
         }
-      } else if (!isDraggingRef.current && !isPaused && !isHovered) {
-        // Continuous auto-rotation: 26s for a full 360-degree rotation across 6 cards
-        const isMobile = window.innerWidth < 640;
-        const fullTurnSeconds = isMobile ? 20 : 26;
-        const degreesPerSecond = 360 / fullTurnSeconds;
-
-        const newAngle = angleRef.current - degreesPerSecond * deltaTime;
-        angleRef.current = newAngle;
-        applyFrame(newAngle);
-        updateActiveCardFromAngle(newAngle);
+      } else if (!isDraggingRef.current && !isPaused) {
+        // Reference rhythm: let the subject own the centre, then sweep the
+        // next one forward. The sequence loops automatically without arrows.
+        holdTimeRef.current += deltaTime;
+        if (holdTimeRef.current >= 4.5) {
+          snapStartAngleRef.current = angleRef.current;
+          snapTargetRef.current = (Math.round(angleRef.current / stepAngle) - 1) * stepAngle;
+          snapStartTimeRef.current = null;
+          pausedSnapElapsedRef.current = 0;
+          isSnappingRef.current = true;
+        }
       }
 
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -195,13 +159,14 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
     animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
+      if (isSnappingRef.current && snapStartTimeRef.current !== null) pausedSnapElapsedRef.current = performance.now() - snapStartTimeRef.current;
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
   }, [
+    inView,
     isPaused,
-    isHovered,
     reducedMotion,
     updateActiveCardFromAngle,
     applyFrame,
@@ -226,18 +191,17 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
         setIsDragging(false);
       }
     };
-    const clearHover = () => setIsHovered(false);
 
     window.addEventListener('pointerup', release);
     window.addEventListener('pointercancel', release);
-    window.addEventListener('blur', clearHover);
-    document.addEventListener('visibilitychange', clearHover);
+    window.addEventListener('blur', release);
+    document.addEventListener('visibilitychange', release);
 
     return () => {
       window.removeEventListener('pointerup', release);
       window.removeEventListener('pointercancel', release);
-      window.removeEventListener('blur', clearHover);
-      document.removeEventListener('visibilitychange', clearHover);
+      window.removeEventListener('blur', release);
+      document.removeEventListener('visibilitychange', release);
     };
   }, []);
 
@@ -285,98 +249,49 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
     isSnappingRef.current = true;
   };
 
-  // Helper to compute dynamic 3D card scale, opacity, and blur for each card in the 6-orbit
+  // Awards-style staging: a large centre subject, smaller side neighbours,
+  // and a recessed fourth subject. Interpolate continuously around the oval.
   const getCardTransformState = (cardIndex: number, atAngle: number = angleRef.current) => {
-    const cardAngleInWheel = cardIndex * stepAngle;
-    const worldAngle = (((atAngle + cardAngleInWheel) % 360) + 540) % 360 - 180;
-    const absAngle = Math.abs(worldAngle);
-
-    // Front-facing threshold: within ~20 deg
-    const isFrontFacing = absAngle <= 20;
-    // Normalized distance from front (0 at front, 1 at 180deg back)
-    const normalizedDistance = Math.min(absAngle / 180, 1);
-
-    /* Presence: 1 dead-centre, 0 at the back, on a raised cosine.
-       This one basis drives both scale and opacity, and its slope is ZERO at
-       both ends, so a card eases into the front and eases out again.
-
-       It replaces two separate defects. The old curve was
-       `pow(distance, 0.8)` plus a cosine bump that only applied inside 32deg:
-         - pow(d, 0.8) has an INFINITE slope at d = 0, putting a cusp exactly
-           at the front — the card was still accelerating as it crossed dead
-           centre instead of settling.
-         - the bump switched on at the 32deg boundary, where the rate of zoom
-           jumped ~4x in a single degree — a visible hitch as a card began to
-           grow.
-       A raised cosine is smooth everywhere (C-infinity), so neither exists. */
-    const presence = (1 + Math.cos((worldAngle * Math.PI) / 180)) / 2;
-
-    /* The front card is NOT magnified: SCALE_FRONT is exactly 1, so a card at
-       dead centre renders at precisely its declared --card-width/--card-height
-       and nothing larger. That alone makes the active card ~21% smaller on
-       screen than the old 1.26 magnification did.
-
-       The exponent moved 2.6 -> 1.15 for the same reason. At 2.6 the curve was
-       deliberately top-heavy: almost all of the growth was crammed into the
-       last few degrees before centre, which IS the zoom being removed. At 1.15
-       the size change is spread evenly around the wheel, so across the +-20deg
-       a card spends as the active one its drawn size varies by ~1% (~2.5% once
-       the 3D perspective is counted) — it holds its size instead of breathing.
-
-       Depth is still carried by scale at the back (0.68), plus opacity and
-       blur, so flattening the front does not flatten the wheel. */
-    const SCALE_BACK = 0.68;
-    const SCALE_FRONT = 1.0;
-    const scale = SCALE_BACK + (SCALE_FRONT - SCALE_BACK) * Math.pow(presence, 1.15);
-    // Opacity: 1.0 at front, down to 0.55 at back
-    /* A linear falloff left the two cards flanking the front at ~0.85 opacity and
-       the rear card at 0.55 showing through it — mid-rotation that reads as three
-       competing cards. The power curve drops the neighbours away quickly so only
-       the front card holds attention, and all but retires the rear one. */
-    const OPACITY_BACK = 0.1;
-    const opacity = OPACITY_BACK + (1 - OPACITY_BACK) * Math.pow(presence, 1.9);
-    // Blur: a dead zone keeps the front card perfectly crisp. Previously this
-    // ramped straight from 0, so the active card always carried a residual
-    // ~0.3px blur because the wheel never rests at exactly 0deg.
-    /* Depth blur, QUANTISED to whole pixels. A continuously-varying blur was
-       the wheel's biggest cost: filter: blur() forces a full re-rasterisation
-       of the layer, and a fresh value every frame meant six large cards
-       repainting 60x a second. Rounding to 1px steps keeps the depth cue but
-       changes the value only a handful of times per revolution. */
-    const BLUR_DEAD_ZONE = 0.2;
-    const rawBlur =
-      normalizedDistance <= BLUR_DEAD_ZONE
-        ? 0
-        : (normalizedDistance - BLUR_DEAD_ZONE) * 3.0;
-    const blur = Math.round(rawBlur);
-    // Z-Index: highest for front
-    const zIndex = Math.round((1 - normalizedDistance) * 100);
-
+    const worldAngle = (((atAngle + cardIndex * stepAngle) % 360) + 540) % 360 - 180;
+    const radians = worldAngle * Math.PI / 180;
+    const presence = (1 + Math.cos(radians)) / 2;
+    const prominence = presence * presence * presence;
+    const scale = 0.22 + 0.94 * prominence;
+    const x = Math.sin(radians) * 0.7;
+    const y = 0.2 - 0.16 * prominence;
+    const blur = presence < 0.25 ? 1 : 0;
+    const reveal = Math.max(0, Math.min(1, (presence - 0.12) / 0.38));
+    const visibility = reveal * reveal * (3 - 2 * reveal);
     return {
-      isFrontFacing,
+      isFrontFacing: Math.abs(worldAngle) < 35,
       scale,
-      opacity,
+      opacity: (0.55 + 0.45 * presence) * visibility,
       blur,
-      zIndex,
-      worldAngle,
+      zIndex: Math.round(5 + presence * 95),
+      transform: `translate3d(calc(var(--hero-radius-base, 256px) * ${x.toFixed(4)}), calc(var(--card-height, 344px) * ${y.toFixed(4)}), 0) scale(${scale.toFixed(4)})`,
     };
   };
+
+  // External pillar selection (for example the hero's keyboard controls)
+  // positions the same stage; automatic reporting does not restart its turn.
+  useEffect(() => {
+    const current = Math.round((((-angleRef.current % 360) + 360) % 360) / stepAngle) % totalCards;
+    if (current !== activeIndex) {
+      angleRef.current = -activeIndex * stepAngle;
+      applyFrame(angleRef.current);
+    }
+  }, [activeIndex, stepAngle, totalCards, applyFrame]);
 
   return (
     <div
       id="hero-orbit-wheel-container"
+      ref={stageRef}
       className="relative flex flex-col items-center justify-center w-full max-w-[880px] py-0"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onFocus={() => setIsHovered(true)}
-      onBlur={() => setIsHovered(false)}
       tabIndex={0}
       role="region"
       /* Derived, not written out: the counts drifted out of date the moment
          a card was removed from the wheel. */
-      aria-label={`Interactive ${totalCards}-card orbital carousel with ${pillars.length} pillars and ${WHEEL_LEADERS.length} spiritual ${
-        WHEEL_LEADERS.length === 1 ? 'portrait' : 'portraits'
-      }`}
+      aria-label={`Continuously revolving showcase with ${pillars.length} floating 3D icons`}
     >
       {/* 3D Scene Wrapper */}
       <div
@@ -408,7 +323,7 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
           className="relative w-full h-full flex items-center justify-center will-change-transform"
           style={{
             transformStyle: 'preserve-3d',
-            transform: reducedMotion ? 'none' : `rotateY(${angleRef.current}deg)`,
+            transform: 'none',
             /* No transform transition here. The rAF loop rewrites this every
                ~16ms, so a 50ms transition was restarted before it could ever
                finish — the drum permanently chased a target it never reached,
@@ -417,7 +332,8 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
         >
           {/* 1. The 4 Dynamic Pillar Content Cards (Indices 0, 1, 2, 3) */}
           {pillars.map((pillar, i) => {
-            const cardState = getCardTransformState(i);
+            const hasModel = MODEL_PILLARS.has(pillar.id);
+            const cardState = getCardTransformState(i, reducedMotion ? -activeIndex * stepAngle : angleRef.current);
             const isCurrentActive = activeIndex === i;
             const driftClass = `card-drift-${i % 6}`;
 
@@ -431,98 +347,54 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
                 onClick={() => onCardClick(i)}
                 className="absolute flex items-center justify-center transition-[box-shadow] duration-300 cursor-pointer"
                 style={{
-                  width: 'var(--card-width, 268px)',
-                  height: 'var(--card-height, 344px)',
-                  transform: reducedMotion
-                    ? 'none'
-                    : `rotateY(${i * stepAngle}deg) translateZ(var(--hero-radius, 408px)) scale(${cardState.scale})`,
-                  opacity: reducedMotion ? (isCurrentActive ? 1 : 0.4) : cardState.opacity,
-                  filter: reducedMotion ? 'none' : `blur(${cardState.blur}px)`,
+                  width: 'calc(var(--hero-model-size, 320px) * var(--card-scale, 1))',
+                  height: 'calc(var(--hero-model-size, 320px) * var(--card-scale, 1))',
+                  transform: cardState.transform,
+                  opacity: cardState.opacity,
+                  pointerEvents: cardState.opacity < 0.01 ? 'none' : 'auto',
+                  filter: cardState.blur === 0 ? 'none' : `blur(${cardState.blur}px)`,
                   zIndex: cardState.zIndex,
                   transformStyle: 'preserve-3d',
                 }}
-                role="group"
+                role="button"
+                tabIndex={isCurrentActive ? 0 : -1}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onCardClick(i);
+                  }
+                }}
                 aria-label={`${pillar.label}: ${pillar.headline}`}
                 aria-current={isCurrentActive ? 'true' : 'false'}
               >
                 {/* Independent Asynchronous Float/Drift Wrapper with extra curved border-radius */}
                 <div
-                  className={`w-full h-full rounded-[32px] overflow-hidden ${
-                    !reducedMotion && !isDragging ? driftClass : ''
+                  className={`w-full h-full rounded-[32px] ${hasModel ? 'overflow-visible' : 'overflow-hidden'} ${
+                    !reducedMotion && !isPaused && inView && !isDragging ? driftClass : ''
                   } transition-[border,box-shadow] duration-300`}
                   style={{
-                    boxShadow: cardState.isFrontFacing
+                    boxShadow: hasModel ? 'none' : cardState.isFrontFacing
                       ? '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 255, 255, 0.25)'
                       : '0 15px 35px rgba(0, 0, 0, 0.3)',
-                    border: cardState.isFrontFacing
+                    border: hasModel ? 'none' : cardState.isFrontFacing
                       ? '2.5px solid rgba(255, 255, 255, 0.95)'
                       : '1.2px solid rgba(255, 255, 255, 0.35)',
                   }}
                 >
-                  <CardIllustration
+                  {hasModel ? <PillarModelCard id={pillar.id} label={pillar.label} active={isCurrentActive} animate={!reducedMotion && !isPaused && inView && !isDragging} /> : <CardIllustration
                     pillar={pillar}
                     index={i}
                     roundedClass="rounded-[32px]"
                     isActive={cardState.isFrontFacing || isCurrentActive}
-                  />
+                  />}
 
                 </div>
               </div>
             );
           })}
 
-          {/* 2. The 2 Static Devotional Photo Cards (Indices 4 and 5) */}
-          {WHEEL_LEADERS.map((leader, idx) => {
-            const cardIndex = 4 + idx;
-            const cardState = getCardTransformState(cardIndex);
-            const driftClass = `card-drift-${cardIndex % 6}`;
 
-            return (
-              <div
-                key={leader.id}
-                ref={(el) => {
-                  cardRefs.current[cardIndex] = el;
-                }}
-                id={`hero-orbit-photo-card-${leader.id}`}
-                onClick={() => onPhotoCardClick?.(leader)}
-                className="absolute flex items-center justify-center transition-[box-shadow] duration-300 cursor-pointer"
-                style={{
-                  width: 'var(--card-width, 268px)',
-                  height: 'var(--card-height, 344px)',
-                  transform: reducedMotion
-                    ? 'none'
-                    : `rotateY(${cardIndex * stepAngle}deg) translateZ(var(--hero-radius, 408px)) scale(${cardState.scale})`,
-                  opacity: reducedMotion ? 0.9 : cardState.opacity,
-                  filter: reducedMotion ? 'none' : `blur(${cardState.blur}px)`,
-                  zIndex: cardState.zIndex,
-                  transformStyle: 'preserve-3d',
-                }}
-                role="group"
-                aria-label={`Devotional Portrait: ${leader.name}`}
-              >
-                {/* Independent Float/Drift Wrapper */}
-                <div
-                  className={`w-full h-full rounded-[32px] overflow-hidden ${
-                    !reducedMotion && !isDragging ? driftClass : ''
-                  } transition-[border,box-shadow] duration-300`}
-                  style={{
-                    boxShadow: cardState.isFrontFacing
-                      ? `0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px ${leader.glowColor}40`
-                      : '0 15px 35px rgba(0, 0, 0, 0.4)',
-                    border: cardState.isFrontFacing
-                      ? `2.5px solid ${leader.glowColor}`
-                      : '1.2px solid rgba(255, 255, 255, 0.35)',
-                  }}
-                >
-                  <DevotionalPhotoCard
-                    leader={leader}
-                    roundedClass="rounded-[32px]"
-                    isFrontFacing={cardState.isFrontFacing}
-                  />
-                </div>
-              </div>
-            );
-          })}
         </div>
       </div>
 

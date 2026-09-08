@@ -1,9 +1,16 @@
 name: Backend CI
 
-# The backend does not exist yet. This workflow activates automatically the
-# moment a backend/ directory lands on any branch — until then it never runs
-# (path filters keep it dormant). When the backend's stack is settled, extend
-# the build job and add a deploy job mirroring frontend.yml's OIDC pattern.
+# The CMS: Payload 3.88 on a Next.js 16 host, Postgres, self-hosted via Docker.
+#
+# The dormancy guard this file used to carry is gone — backend/ exists now, so
+# a guard that skips every step would only hide a broken build.
+#
+# NO DEPLOY JOB HERE, deliberately. The frontend deploys itself to S3 and
+# CloudFront; the CMS is a long-lived container on a VM with a database and a
+# media volume behind it, and pushing to it is not the same class of action as
+# replacing static files. Deploys stay a deliberate, approved step on the host
+# (`docker compose --profile cms up -d --build`) until someone decides
+# otherwise.
 
 on:
   push:
@@ -15,6 +22,7 @@ on:
     branches: [main, dev]
     paths:
       - "backend/**"
+      - ".github/workflows/backend.yml"
   workflow_dispatch:
 
 permissions:
@@ -25,47 +33,114 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
+
+    services:
+      # Real Postgres, because the checks worth running here are the ones that
+      # touch a database: that the migrations apply to an EMPTY schema, and
+      # that the committed migrations still describe the collections.
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: sncf
+          POSTGRES_PASSWORD: sncf
+          POSTGRES_DB: sncf_cms_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sncf -d sncf_cms_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URI: postgres://sncf:sncf@localhost:5432/sncf_cms_ci
+      # NOT a secret. It signs sessions for a database that is destroyed with
+      # the runner; the real one lives in backend/.env on the CMS host. Payload
+      # refuses to start without a non-empty value, which is the only reason
+      # this line exists.
+      PAYLOAD_SECRET: ci-throwaway-not-a-real-secret
+      # payload.config.ts keys `push` off this. Anything but production would
+      # let the adapter auto-sync the schema, and the migration checks below
+      # would then pass against a schema no migration ever created.
+      NODE_ENV: production
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Guard — backend present?
-        id: guard
-        working-directory: .
-        run: |
-          if [ -f backend/package.json ]; then
-            echo "present=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::No backend/package.json yet — nothing to build."
-          fi
-
       - name: Setup Node
-        if: steps.guard.outputs.present == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
 
+      # `npm ci` — backend/package-lock.json is committed. It also reads
+      # backend/.npmrc (legacy-peer-deps=true), which this tree needs.
       - name: Install dependencies
-        if: steps.guard.outputs.present == 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run lint
+
+      # Proves the committed migrations build the schema from nothing. The
+      # database this runs against is empty, so a migration that only works as
+      # an increment on a developer's existing database fails here.
+      - name: Apply migrations to an empty database
+        run: npx payload migrate
+
+      - name: Show migration status
+        run: npx payload migrate:status
+
+      # THE DRIFT CHECK, and the reason this job has a database at all.
+      #
+      # `migrate:create --skip-empty` exits 0 and writes NOTHING when the
+      # collections and the committed migrations agree; when they have
+      # diverged it writes a migration. So a new file here means someone
+      # changed a collection and did not run `npm run migrate:create` — which
+      # would deploy an admin whose schema was never applied.
+      #
+      # --skip-empty must be spelled in kebab-case and must be ALONE:
+      #   • `--skipEmpty` is silently ignored (payload lowercases the first
+      #     word of each flag, so the camelCase form never matches),
+      #   • `--force-accept-warning` short-circuits the emptiness test and
+      #     always writes a blank migration.
+      # Either mistake turns this step into one that can never fail.
+      - name: Check for un-migrated schema changes
         run: |
-          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+          npx payload migrate:create --skip-empty < /dev/null
+          if [ -n "$(git status --porcelain src/migrations)" ]; then
+            echo "::error::Collections changed without a migration."
+            echo "Run 'npm run migrate:create <name>' in backend/ and commit the result."
+            git status --porcelain src/migrations
+            git --no-pager diff -- src/migrations
+            exit 1
+          fi
+          echo "Schema and migrations agree."
 
-      - name: Lint & typecheck (if configured)
-        if: steps.guard.outputs.present == 'true'
+      # Builds every stage the deployment uses. `next build` reaches no
+      # database — all Payload routes are dynamic — so this needs no service
+      # container of its own and catches Dockerfile breakage before the host
+      # does.
+      - name: Build CMS image (runner)
+        run: docker build --target runner -t sncf-cms:ci .
+
+      - name: Build CLI image (migrations and content export)
+        run: docker build --target cli -t sncf-cms-cli:ci .
+
+      # The runner image must not carry a .env. backend/.dockerignore keeps one
+      # out of the build context and the Dockerfile deletes any that survives,
+      # because `next build` copies .env into .next/standalone — this asserts
+      # both guards actually held.
+      - name: Assert no .env baked into the image
         run: |
-          npm run lint --if-present
-          npm run typecheck --if-present
-
-      - name: Test (if configured)
-        if: steps.guard.outputs.present == 'true'
-        run: npm test --if-present
-
-      - name: Build (if configured)
-        if: steps.guard.outputs.present == 'true'
-        run: npm run build --if-present
+          if docker run --rm --entrypoint sh sncf-cms:ci -c 'ls /app/.env* 2>/dev/null | grep -q .'; then
+            echo "::error::A .env file is present in the CMS image."
+            exit 1
+          fi
+          echo "No .env in the image."
