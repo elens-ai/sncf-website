@@ -3734,15 +3734,6 @@
 
 /* ---- PILLAR-PETAL CARDS & FULL-SCREEN COMPOSITION -------------------- */
 
-/* the fixed ground: deep slate, translucent — stable whatever the hero is
-   publishing, and the page gradient still breathes faintly through */
-.partner-backdrop {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgb(13 26 46 / 0.6) 0%, rgb(9 18 34 / 0.68) 100%);
-  pointer-events: none;
-}
-
 /* the cards grow into the screen: pillar-washed bodies, equal rows */
 .partner-register {
   grid-auto-rows: 1fr;
@@ -3834,8 +3825,7 @@
 /* ---- THE MEDIA WALL (PartnersSection) -------------------------------- */
 /* A press-conference step-and-repeat: the foundation's lockup headlining a
    white fabric wall, the companions' marks cycling across offset rows, and
-   a broadcast chyron at its foot doing the talking. The wall stands on the
-   fixed .partner-backdrop slate so the white always has the same ground. */
+   a broadcast chyron at its foot doing the talking, over the shared page ground. */
 
 .media-wall {
   position: relative;
