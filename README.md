@@ -32,7 +32,7 @@ Open `http://localhost:3000`. The website includes bundled content and can run w
 
 Local development uses SQLite by default. Production uses PostgreSQL migrations and persistent media storage. No default administrator credentials are committed. Use the same hostname for the website and CMS when previewing drafts.
 
-The Vite server proxies `/api` to the local CMS. Production builds use the public HTTPS CMS origin configured through `VITE_CMS_URL`. Never put private credentials in `VITE_` variables.
+The Vite server proxies `/api` to the local CMS. Production deployments can run with bundled content while `VITE_CMS_URL` is unset; CI displays a notice instead of blocking deployment. To enable live CMS updates, configure the deployed CMS's public HTTPS origin in that repository variable, or serve the CMS on the website's own `/api/site-content` endpoint. Supplied malformed or non-HTTPS origins fail CI validation. Never put private credentials in `VITE_` variables.
 
 See [CMS setup and authoring](CMS.md) for editing, media replacement, previews, publishing and the exposed design controls. See [backend/README.md](backend/README.md) for roles, API access, migrations and backups.
 

@@ -9,7 +9,9 @@
 Repository variables:
 
 - `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID` identify the existing hosting resources.
-- `VITE_CMS_URL` must be the public HTTPS **origin** of the deployed CMS, with no API path or credentials. Production deployment refuses to proceed without it. Set this as a repository variable so the build job can read it; environment-only variables are not available to that job.
+- `VITE_CMS_URL` is optional. Leave it unset to deploy the existing bundled-content website. CI emits a notice explaining that live CMS updates require a deployed CMS. To connect one, set its public HTTPS **origin**, with no API path, credentials, query or fragment. A supplied invalid value still fails validation. Set this as a repository variable so the build job can read it; environment-only variables are not available to that job.
+
+Without `VITE_CMS_URL`, the runtime makes a bounded request to `/api/site-content` on the website's own origin. A same-origin CMS can serve that endpoint; the current static S3/CloudFront deployment continues with cached or bundled content when it is unavailable. Deploy the CMS service separately and rebuild the frontend with its public origin to enable live content and authenticated previews across origins. Use the actual CMS host (for example `https://cms.example.org`), not a bare hostname such as `sncf.elens.in` or the static website address. Adding `https://` to the frontend address does not deploy or connect a CMS. This variable contains a public address, never credentials.
 
 Only generated `/assets/` files receive immutable caching. Stable photo, video and model filenames revalidate. Old hashed chunks remain available for visitors with the previous page open. CloudFront invalidates all paths after the new HTML has uploaded.
 

@@ -50,10 +50,12 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Tests
-        run: npm test
+        run: |
+          npm test
+          node --test scripts/check-cms-url.test.cjs
 
-      - name: Validate production CMS address
-        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && inputs.deploy)
+      # A CMS is optional for the bundled site, but a configured origin must be valid.
+      - name: Validate CMS configuration
         env:
           VITE_CMS_URL: ${{ vars.VITE_CMS_URL }}
         run: node scripts/check-cms-url.cjs
