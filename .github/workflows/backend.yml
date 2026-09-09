@@ -100,6 +100,7 @@ jobs:
         run: npx payload migrate
 
       - name: Seed current content and prove a second run preserves it
+        timeout-minutes: 5
         run: |
           npm run seed -- seed/site-content.json
           npm run seed -- seed/site-content.json | tee /tmp/cms-seed-repeat.log

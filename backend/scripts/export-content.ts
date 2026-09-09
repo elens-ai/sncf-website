@@ -5,11 +5,12 @@ import path from 'node:path'
 import {getPayload} from 'payload'
 import config from '../src/payload.config'
 import {getSnapshot} from '../src/cms/snapshot'
+import {runCMSCommand} from './run-cms-command'
 const payload=await getPayload({config})
-try{
+await runCMSCommand(async()=>{
   const snapshot=await getSnapshot(payload)
   const target=path.resolve(process.env.EXPORT_OUT_FILE||'../public/cms-content.json')
   await fs.mkdir(path.dirname(target),{recursive:true})
   await fs.writeFile(target,JSON.stringify(snapshot))
   console.log(`Exported published content ${snapshot.version} to ${target}`)
-}finally{await payload.destroy()}
+},async()=>{await payload.destroy()})
