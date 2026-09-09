@@ -99,6 +99,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header
       id="site-header"
+      data-compact={scrolled}
       className="fixed top-0 left-0 right-0 z-50 h-[72px] px-4 md:px-8 flex items-center justify-between bg-transparent pointer-events-none"
     >
       {/* Ground that appears on scroll. The blur is constant and only OPACITY

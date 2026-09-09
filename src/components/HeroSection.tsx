@@ -158,6 +158,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       const t = reducedMotionRef.current
         ? progress > h * 0.38 ? 1 : 0
         : Math.max(0, Math.min(1, progress / (h * 0.38)));
+      setHeroVisible(t < 1);
       if (el) {
         el.style.opacity = (1 - t).toFixed(3);
         el.style.transform = t > 0 ? `translateY(${(-t * 24).toFixed(1)}px)` : '';

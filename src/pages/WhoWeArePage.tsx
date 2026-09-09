@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { ArrowDown, ArrowUpRight, Search, HeartHandshake, Sparkles, Pause, Play, Plus, Heart, BookOpen, Sprout } from 'lucide-react';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { MediaGallery } from '../components/MediaGallery';
 import { Tally } from '../components/Tally';
+import { MissionVision } from '../components/MissionVision';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PARTNERS } from '../data/partners';
-import { BRAND } from '../data/partnerBrand';
+import { EditorialTimeline, PartnerItem } from '../components/EditorialContent';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
-import { toNumber, isTallyable, markStep, groupNum } from '../utils/figures';
+import { toNumber, isTallyable } from '../utils/figures';
+import './who-we-are.css';
+import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion';
+import './who-editorial.css';
 
 /**
  * WHO WE ARE — the foundation's own account of itself.
@@ -18,11 +25,6 @@ import { toNumber, isTallyable, markStep, groupNum } from '../utils/figures';
  * education and upliftment, with environmental care running through all
  * three. The mission and vision statements are the foundation's own
  * positions, restated here rather than reproduced.
- *
- * The contact block carries the registered address, the phones, the email
- * addresses and the 80G position, because a page that asks an organisation
- * to partner or give has to say plainly where the money goes and who
- * receives it.
  *
  * IT IS BUILT AS ROOMS, like Core Values and Projects. It was not, and that
  * was the whole of what was wrong with it: the same shell and the same rail,
@@ -76,7 +78,7 @@ const BIGGEST = CORNERSTONES.map((id) => {
 const roomProps = (id: string) => ({
   id,
   className: 'cv-room',
-  style: { '--ink-a': INK_A, '--ink-b': INK_B } as React.CSSProperties,
+  style: { '--ink-a': ({ account: '#a75e48', road: '#517659', partners: '#766295', contact: '#347d87' } as Record<string,string>)[id], '--ink-b': ({ account: '#f0c5ac', road: '#c6dfbd', partners: '#dcd0eb', contact: '#b9dee1' } as Record<string,string>)[id] } as React.CSSProperties,
   'aria-labelledby': `${id}-title`,
 });
 
@@ -90,22 +92,39 @@ interface LeafProps {
   mark?: boolean;
 }
 
-const Leaf: React.FC<LeafProps> = ({ n, id, label, title, body, mark }) => (
-  <header className="cv-threshold">
-    {mark && <span className="cv-threshold-mark" data-for={id} aria-hidden="true" />}
-    <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
-      {String(n).padStart(2, '0')}
-    </span>
-    <p className="cv-threshold-label font-artistic-display">{label}</p>
-    <h2 id={`${id}-title`} className="cv-threshold-title font-artistic-heading">
-      {title}
-    </h2>
-    <p className="cv-threshold-body font-artistic-serif">{body}</p>
-  </header>
-);
+const Leaf: React.FC<LeafProps> = (props) => <EditorialHeading {...props} className="who-chapter-heading" />;
 
-export const WhoWeArePage: React.FC = () => (
+const WhoCover: React.FC = () => {
+  const ref = useRef<HTMLElement>(null);
+  const active = useSectionActivity(ref);
+  return <section ref={ref} className="who-cover" data-active={active} aria-labelledby="who-title">
+    <div className="who-cover-copy" data-reveal><p className="who-eyebrow">Sant Nirankari Charitable Foundation</p><div className="ed-dots" aria-hidden="true">{[0,1,2,3,4].map(i => <i key={i} />)}</div><h1 id="who-title">Who we are</h1><p>The Sant Nirankari Charitable Foundation is the Mission’s working hands — the part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.</p><div className="who-cover-actions"><a href="#account">Discover our story <ArrowDown size={17} /></a></div><span className="who-cover-signature"><HeartHandshake size={19} /> Service with humility · Since 2010</span></div>
+    <figure className="who-cover-photo" data-reveal><img src="/images/volunteers-planning.webp" alt="Source illustration of volunteers planning a service drive" width="640" height="480" decoding="async" fetchPriority="high" /><figcaption>Volunteer planning · Source illustration</figcaption><div className="who-cover-note"><HeartHandshake size={22} /><span>Service<br /><strong>with Humility.</strong></span></div></figure>
+  </section>;
+};
+
+export const WhoWeArePage: React.FC = () => {
+  const [partnerQuery, setPartnerQuery] = useState('');
+  const storyRef = useRef<HTMLDivElement>(null), timelineRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const elements = storyRef.current?.querySelectorAll('.who-chapter-heading, .ww-facts, .cv-tally-row, .ww-card, .who-closing');
+    if (!elements) return;
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { (entry.target as HTMLElement).dataset.entered = 'true'; observer.unobserve(entry.target); }
+    }), { threshold: .12 });
+    elements.forEach((el,i) => { (el as HTMLElement).style.setProperty('--reveal-delay', `${i % 3 * 70}ms`); observer.observe(el); });
+    return () => observer.disconnect();
+  }, []);
+  const { hash } = useLocation();
+  const matchingPartners = PARTNERS.filter(p => `${p.name} ${p.contribution} ${p.note ?? ''}`.toLowerCase().includes(partnerQuery.trim().toLowerCase()));
+  useEffect(() => {
+    if (!hash) return;
+    const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' }), 100);
+    return () => clearTimeout(timer);
+  }, [hash]);
+  return (
   <PageShell
+    cover={<EditorialMotion><WhoCover /></EditorialMotion>}
     accentPillarId="enrich"
     eyebrow="Who We Are · About the foundation"
     title="Who we are"
@@ -119,7 +138,7 @@ export const WhoWeArePage: React.FC = () => (
           /* One ink, the page's own. These carried the five petal inks — the
              hall's lotus colours — which made a third colour system on a page
              that already has a pillar and a set of brand marks. */
-          { id: 'account', label: 'The account', ink: INK_B },
+          { id: 'account', label: 'Our story', ink: INK_B },
           { id: 'mission', label: 'Mission & vision', ink: INK_B },
           { id: 'road', label: 'The road so far', ink: INK_B },
           { id: 'partners', label: 'Who walks with us', ink: INK_B },
@@ -129,6 +148,7 @@ export const WhoWeArePage: React.FC = () => (
       />
     }
   >
+    <EditorialMotion className="who-editorial"><div className="who-story" ref={storyRef}>
     {/* ── 01 · THE ACCOUNT ─────────────────────────────────────────────── */}
     <section {...roomProps('account')}>
       <div className="cv-margin-print" data-room="who-we-are" aria-hidden="true" />
@@ -137,8 +157,8 @@ export const WhoWeArePage: React.FC = () => (
         id="account"
         mark
         label="About the foundation"
-        title="The account"
-        body="Why it exists, in the words it uses itself."
+        title="A purpose bigger than ourselves."
+        body="The belief that brings us together, and the work that carries it forward."
       />
 
       <div className="cv-chapter">
@@ -178,14 +198,11 @@ export const WhoWeArePage: React.FC = () => (
             them; this counts them, in the same marks Core Values uses and at
             each row's own step, so nothing is ranked against anything else. */}
         <div className="cv-tally">
-          <h3 className="cv-sub font-artistic-display">What the three come to</h3>
+          <h3 className="cv-sub font-artistic-display">Three values. Everyday action.</h3>
           <ul className="cv-tally-list">
             {BIGGEST.map(({ pillar, act }) => {
-              const v = toNumber(act.headline.value);
-              const step = markStep(v);
-              const marks = Math.max(1, Math.min(20, Math.round(v / step)));
               return (
-                <li key={act.id} className="cv-tally-row">
+                <li key={act.id} className="cv-tally-row" style={{ '--value-ink': pillar.accentA, '--value-tint': pillar.accentB } as React.CSSProperties}>
                   <p className="cv-tally-head">
                     <span className="cv-tally-name font-artistic-heading">
                       {pillar.label} · {act.title}
@@ -195,18 +212,10 @@ export const WhoWeArePage: React.FC = () => (
                       <span className="cv-tally-unit">{act.headline.label}</span>
                     </span>
                   </p>
-                  <p className="cv-tally-marks" data-for={act.id} aria-hidden="true">
-                    {Array.from({ length: marks }, (_, i) => (
-                      <span key={i} style={{ '--n': i } as React.CSSProperties} />
-                    ))}
-                  </p>
                   <p className="cv-tally-key">
-                    <span>
-                      each mark ≈ {groupNum(step)}{' '}
-                      {act.headline.label.toLowerCase()}
-                    </span>
                     <span className="cv-tally-period">{act.period}</span>
                   </p>
+                  <a className="who-value-link" href={`/core-values#${pillar.id}`}>Explore {pillar.label.toLowerCase()} <ArrowUpRight size={15} /></a>
                 </li>
               );
             })}
@@ -220,27 +229,7 @@ export const WhoWeArePage: React.FC = () => (
         </div>
 
         {/* MISSION & VISION */}
-        <div className="ww-pair" id="mission">
-          <section className="ww-card">
-            <h3 className="ww-card-title font-artistic-heading">Our mission</h3>
-            <p className="font-artistic-serif">
-              To serve with humility and to share what the foundation has — to
-              heal, to enrich and to empower, wherever in the world the need is.
-              The conviction underneath it is simple: what is given cheerfully and
-              received gratefully leaves both sides better off.
-            </p>
-          </section>
-          <section className="ww-card">
-            <h3 className="ww-card-title font-artistic-heading">Our vision</h3>
-            <p className="font-artistic-serif">
-              Living the spirit of service. The foundation works towards a world
-              in which people are healthy, educated and able to stand on their own
-              — and it expects to get there through ordinary volunteers doing
-              extraordinary amounts of quiet work, alongside others who want the
-              same thing.
-            </p>
-          </section>
-        </div>
+        <MissionVision />
       </div>
     </section>
 
@@ -255,15 +244,8 @@ export const WhoWeArePage: React.FC = () => (
         title="The road so far"
         body="Four dates the foundation marks its own history by."
       />
-      <div className="cv-chapter">
-        <ol className="ww-timeline">
-          {MILESTONES.map((m) => (
-            <li key={m.year}>
-              <span className="ww-year font-artistic-heading">{m.year}</span>
-              <span className="font-artistic-serif">{m.text}</span>
-            </li>
-          ))}
-        </ol>
+      <div className="cv-chapter" ref={timelineRef}>
+        <EditorialTimeline items={MILESTONES.map((m,i) => ({...m,label:['Our beginning','Learning opens doors','Growing together','Reviving our water'][i],href:['#account','/core-values#enrich','/projects#project-oneness-vann','/projects#project-amrit'][i]}))} />
       </div>
     </section>
 
@@ -283,105 +265,25 @@ export const WhoWeArePage: React.FC = () => (
             as text. A name set beside its own mark is what a register of
             supporters looks like, and the three without one take a monogram
             rather than a gap. */}
+        <div className="who-partner-toolbar"><label><Search size={17} /><input value={partnerQuery} onChange={e => setPartnerQuery(e.target.value)} aria-label="Search foundation partners" placeholder="Find an organisation or a cause…" /></label><span>{matchingPartners.length} collaborations</span></div>
+        {matchingPartners.length === 0 && <p className="who-empty">No collaborations match that search. Try another name or cause.</p>}
         <ul className="ww-register">
-          {PARTNERS.map((p) => {
-            const b = BRAND[p.id];
-            return (
-              <li key={p.id}>
-                <span
-                  className="ww-register-mark"
-                  style={{ '--tile-ink': b?.color ?? INK_A } as React.CSSProperties}
-                >
-                  <span className="ww-register-initials font-artistic-display">
-                    {b?.initials ?? p.name.slice(0, 2)}
-                  </span>
-                  {b?.logo && (
-                    <img
-                      src={b.logo}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      /* the monogram underneath is the fallback, so a file
-                         that 404s leaves a register entry rather than a hole */
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  )}
-                </span>
-                <span className="ww-register-text">
-                  <strong className="font-artistic-heading">{p.name}</strong>
-                  <span className="font-artistic-serif">{p.contribution}</span>
-                  {p.note && <span className="ww-register-note">{p.note}</span>}
-                </span>
-              </li>
-            );
-          })}
+          {matchingPartners.map(partner => <PartnerItem key={partner.id} partner={partner} />)}
         </ul>
 
         <div id="wwa-media">
-          <MediaGallery section="who-we-are" headingLevel={3} />
+          <MediaGallery section="who-we-are" headingLevel={3} layout="editorial" />
         </div>
       </div>
     </section>
 
-    {/* ── 04 · WHERE TO FIND US ────────────────────────────────────────── */}
-    <section {...roomProps('contact')}>
-      <div className="cv-margin-print" data-room="who-we-are" aria-hidden="true" />
-      <Leaf
-        n={4}
-        id="contact"
-        label="The registered office"
-        title="Where to find us"
-        body="Where the foundation is, and under what terms a gift to it is made."
-      />
-      <div className="cv-chapter">
-        <div className="ww-contact">
-          <div className="ww-contact-grid">
-            <div>
-              <span className="ww-fact-k">Registered office</span>
-              <p className="font-artistic-serif">
-                Sant Nirankari Charitable Foundation
-                <br />
-                80-A, Avtar Marg, Nirankari Colony
-                <br />
-                Delhi 110009, India
-              </p>
-            </div>
-            <div>
-              <span className="ww-fact-k">Telephone</span>
-              <p className="font-artistic-serif">
-                <a href="tel:+911147660380">+91 11 4766 0380</a>
-                <br />
-                <a href="tel:+911147660200">+91 11 4766 0200</a>
-              </p>
-            </div>
-            <div>
-              <span className="ww-fact-k">Email</span>
-              <p className="font-artistic-serif">
-                <a href="mailto:sncf@nirankarifoundation.org">
-                  sncf@nirankarifoundation.org
-                </a>
-                <br />
-                <a href="mailto:accounts@nirankarifoundation.org">
-                  accounts@nirankarifoundation.org
-                </a>
-              </p>
-            </div>
-            {/* THE 80G POSITION BELONGS HERE. This file's own header has
-                always said the contact block carries it; it did not — the
-                clause sat in the facts strip at the top of the page, four
-                sections away from the addresses. The comment is true now. */}
-            <div>
-              <span className="ww-fact-k">Tax status</span>
-              <p className="font-artistic-serif">
-                Donations are deductible under section 80G(5)(vi) of the Income
-                Tax Act, 1961.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section {...roomProps('contact')} data-reveal><Leaf n={4} id="contact" label="The registered office" title="Where to find us" body="Where the foundation is, and under what terms a gift to it is made."/><div className="who-contact-editorial">
+      <div><p className="ed-eyebrow">Registered office</p><h3>Service begins<br /><em>with a conversation.</em></h3><address>Sant Nirankari Charitable Foundation<br/>80-A, Avtar Marg, Nirankari Colony<br/>Delhi 110009, India</address></div>
+      <div><p className="ed-eyebrow">Telephone</p><a href="tel:+911147660380">+91 11 4766 0380</a><a href="tel:+911147660200">+91 11 4766 0200</a><p className="ed-eyebrow">Email</p><a href="mailto:sncf@nirankarifoundation.org">sncf@nirankarifoundation.org</a><a href="mailto:accounts@nirankarifoundation.org">accounts@nirankarifoundation.org</a></div>
+      <p className="who-contact-tax"><strong>Tax status</strong> Donations are deductible under section 80G(5)(vi) of the Income Tax Act, 1961.</p>
+    </div></section>
+    <div className="who-closing"><HeartHandshake size={30} strokeWidth={1.4} /><p>Service begins with a willingness<br /><em>to make a difference.</em></p><a href="/projects">Discover our projects <ArrowUpRight size={17} /></a></div>
+    </div></EditorialMotion>
   </PageShell>
-);
+  );
+};

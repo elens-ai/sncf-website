@@ -33,7 +33,6 @@ const parseInviteParam = (): string | null => {
 };
 
 export default function HomePage() {
-  usePageMotion();
   /* 'showing' -> 'exiting' (logo flies to the header) -> 'done'.
      The hero is mounted underneath the whole time so the handoff is seamless.
      A visitor arriving from a scanned pass (?invite=...) skips the splash
@@ -61,6 +60,7 @@ export default function HomePage() {
      is read once on load and cleared on dismiss, so reloading or sharing the
      address afterwards gives the plain site, not a stuck invitation. */
   const [inviteId, setInviteId] = useState<string | null>(parseInviteParam);
+  usePageMotion(isSplashUp || isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || !!galleryLeader || !!inviteId);
   const inviteItem = useMemo(
     () => (inviteId ? resolveEvents(EVENTS).find((i) => i.event.id === inviteId) ?? null : null),
     [inviteId],

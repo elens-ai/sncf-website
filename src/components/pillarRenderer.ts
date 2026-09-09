@@ -4,6 +4,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createFrameClock } from '../utils/frameClock';
 import { pillarModelUrl } from '../utils/modelAssets';
 import { createBookOpening } from '../utils/bookOpening';
+import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 
 type ViewState = { active: boolean; animate: boolean; visible: boolean };
 export interface ModelView { update(state: Partial<ViewState>): void; dispose(): void }
@@ -25,7 +26,7 @@ class PillarRenderer {
   loads = new Map<string, Promise<void>>();
   current: Client | undefined;
   clock = createFrameClock(delta => {
-    if (!this.current || this.lost || document.hidden) { this.stop(); return; }
+    if (!this.current || this.lost || !pageIsActive(this.current.host)) { this.stop(); return; }
     const asset = this.assets.get(this.current.id)!;
     asset.elapsed += delta;
     asset.book?.advance(delta);
@@ -55,6 +56,7 @@ class PillarRenderer {
     rim.position.set(4, 2, -4);
     this.scene.add(key, rim);
     document.addEventListener('visibilitychange', this.sync);
+    document.addEventListener(PAGE_ACTIVITY_EVENT, this.sync);
     this.renderer.domElement.addEventListener('webglcontextlost', this.onLost);
     this.renderer.domElement.addEventListener('webglcontextrestored', this.onRestored);
   }
@@ -111,7 +113,7 @@ class PillarRenderer {
   sync = () => {
     if (this.disposed || this.lost) return;
     this.stop();
-    const next = document.hidden ? undefined : [...this.clients].find(c => c.active && c.visible && this.assets.has(c.id));
+    const next = [...this.clients].find(c => c.active && c.visible && pageIsActive(c.host) && this.assets.has(c.id));
     if (this.current !== next) {
       if (this.current) {
         const asset = this.assets.get(this.current.id);
@@ -139,6 +141,7 @@ class PillarRenderer {
   dispose() {
     this.disposed = true; this.stop();
     document.removeEventListener('visibilitychange', this.sync);
+    document.removeEventListener(PAGE_ACTIVITY_EVENT, this.sync);
     this.renderer.domElement.removeEventListener('webglcontextlost', this.onLost);
     this.renderer.domElement.removeEventListener('webglcontextrestored', this.onRestored);
     for (const asset of this.assets.values()) release(asset.pivot);

@@ -12,6 +12,11 @@ export function createBookOpening(root: Object3D) {
         if (material instanceof MeshBasicMaterial) {
           material.color.set(0xffffff);
           material.toneMapped = false;
+          // The supplied page is only .001 units above the cover. Keep the
+          // decal stable at gallery distances while retaining depth occlusion.
+          material.polygonOffset = true;
+          material.polygonOffsetFactor = -1;
+          material.polygonOffsetUnits = -4;
           material.needsUpdate = true;
         }
       }

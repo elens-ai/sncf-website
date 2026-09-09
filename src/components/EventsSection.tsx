@@ -636,6 +636,8 @@ const EventDeck: React.FC<{
 /* ---------------------------------------------------------------- section */
 
 export const EventsSection: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const sectionActive = useSectionActivity(sectionRef);
   /* null = "no choice made yet": the deck opens on the next upcoming event,
      which with January-first ordering is rarely index 0. */
   const [activeOverride, setActiveOverride] = useState<number | null>(null);
@@ -646,9 +648,11 @@ export const EventsSection: React.FC = () => {
      clock, which owns its own interval. */
   const [tick, setTick] = useState(0);
   useEffect(() => {
+    if (!sectionActive) return;
+    setTick((t) => t + 1);
     const id = window.setInterval(() => setTick((t) => t + 1), 3_600_000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [sectionActive]);
 
   const items = useMemo<ResolvedEvent[]>(() => {
     void tick;
@@ -680,6 +684,7 @@ export const EventsSection: React.FC = () => {
   return (
     <section
       id="events-section"
+      ref={sectionRef}
       aria-label="Upcoming events"
       className="snap-screen relative z-10 w-full min-h-screen flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 pt-[78px] pb-2 overflow-hidden"
     >

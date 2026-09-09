@@ -39,3 +39,12 @@ test('stopping inside a draw cannot leave another frame queued', () => {
   const clock = createFrameClock(() => clock.stop(), 30, h.scheduler);
   clock.start(); h.advance(0); assert.equal(h.callbacks.size, 0);
 });
+
+test('uneven browser frames do not count scheduling remainder as animation time', () => {
+  const h = harness(); let elapsed = 0;
+  const clock = createFrameClock(delta => { elapsed += delta; }, 30, h.scheduler);
+  clock.start();
+  for (const time of [0, 18, 36, 55, 73, 91, 109, 128, 146, 164, 182, 200]) h.advance(time);
+  assert.ok(Math.abs(elapsed - (200 + 1000 / 30) / 1000) < 1e-8);
+  clock.stop();
+});
