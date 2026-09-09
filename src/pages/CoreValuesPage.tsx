@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, Pause, Play, CalendarDays } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Pause, Play, CalendarDays, Search, Heart, BookOpen, Sprout } from 'lucide-react';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { PillarModelCard } from '../components/PillarModelCard';
@@ -12,10 +12,36 @@ import './core-values.css';
 const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
 type Cornerstone = typeof CORNERSTONES[number];
 
+const ValueCover: React.FC = () => {
+  const [choice, setChoice] = useState<Cornerstone>('heal');
+  const root = useRef<HTMLElement>(null);
+  const active = useSectionActivity(root);
+  const pillar = PILLARS.find(p => p.id === choice)!;
+  const icons = [Heart, BookOpen, Sprout];
+  return <section ref={root} className="values-cover" data-active={active} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties} aria-labelledby="values-cover-title">
+    <div className="values-cover-copy">
+      <p className="value-kicker">One purpose. Three ways to make a difference.</p>
+      <h1 id="values-cover-title">The three<br /><em>cornerstones.</em></h1>
+      <p>Care that reaches further. Learning that opens doors. Communities that grow stronger.</p>
+      <div className="values-choice" role="group" aria-label="Preview a core value">{CORNERSTONES.map((id, i) => {
+        const Icon = icons[i];
+        return <button key={id} aria-pressed={choice === id} onClick={() => setChoice(id)}><Icon size={17} />{id}</button>;
+      })}</div>
+      <a href={`#${choice}`} className="values-cover-link">Explore {choice} <ArrowDown size={18} /></a>
+    </div>
+    <div className="values-compass">
+      <div className="values-compass-art" aria-hidden="true"><div className="values-compass-ring" /><span className="values-petal values-petal-one" /><span className="values-petal values-petal-two" /><span className="values-petal values-petal-three" /><span className="values-compass-heart">Service<br />with humility</span></div>
+    </div>
+    <div className="values-cover-footer"><span>Compassion, made visible.</span><span>Explore the values · Meet the programmes · Discover the impact</span></div>
+  </section>;
+};
+
 const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: string }> = ({ id, index, linkedActivity }) => {
   const pillar = PILLARS.find(p => p.id === id)!;
   const activities = ACTIVITIES.filter(a => a.pillarId === id);
   const [selectedId, setSelectedId] = useState(activities[0].id);
+  const [query, setQuery] = useState('');
+  const matching = activities.filter(a => `${a.title} ${a.blurb}`.toLowerCase().includes(query.trim().toLowerCase()));
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   const modelRef = useRef<HTMLDivElement>(null);
@@ -158,9 +184,11 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
         <div className="value-explorer-heading"><div><p className="value-kicker">Behind the numbers</p><h3>Small actions. Lasting change.</h3></div><p>Choose a programme to explore its reach.</p></div>
         <div className="value-explorer-grid">
           <div className="value-programmes" role="group" aria-label={`${pillar.label} programmes`}>
-            {activities.map((activity, i) => (
+            <label className="value-programme-search"><Search size={16} /><input aria-label={`Find a ${id} programme`} placeholder="Find a programme…" value={query} onChange={e => setQuery(e.target.value)} /></label>
+            {matching.length === 0 && <p className="value-no-results">No programmes match. Try another word.</p>}
+            {matching.map((activity) => (
               <button key={activity.id} id={activity.id} aria-pressed={activity.id === selected.id} aria-controls={`${id}-detail`} onClick={() => setSelectedId(activity.id)}>
-                <span className="value-programme-num">0{i + 1}</span><span>{activity.title}</span><ArrowUpRight size={18} />
+                <span className="value-programme-num">0{activities.indexOf(activity) + 1}</span><span>{activity.title}</span><ArrowUpRight size={18} />
               </button>
             ))}
           </div>
@@ -168,16 +196,18 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
             <div className="value-detail-top"><span>Programme in focus</span><span><CalendarDays size={14} />{selected.period}</span></div>
             <div className="value-detail-summary value-detail-summary-with-model">
             <div ref={detailAnchorRef} className="value-detail-model-anchor" aria-hidden="true" />
-            <h4>{selected.title}</h4>
+            <h4 className="value-content-enter" key={selected.id}>{selected.title}</h4>
             <p>{selected.blurb}</p>
             <div className="value-featured-number"><strong>{selected.headline.value}</strong><span>{selected.headline.label}</span></div>
             </div>
-            <dl className="value-data-grid">{selected.dataPoints.map(point => <div key={point.label}><dt>{point.label}</dt><dd>{point.value}</dd></div>)}</dl>
+            <dl className="value-data-grid value-content-enter" key={selected.id}>{selected.dataPoints.map(point => <div key={point.label}><dt>{point.label}</dt><dd>{point.value}</dd></div>)}</dl>
             <p className="value-source">Source: foundation activity report · Figures shown as reported.</p>
+            <button className="value-next-programme" onClick={() => { setQuery(''); setSelectedId(activities[(activities.indexOf(selected) + 1) % activities.length].id); }}>Discover the next programme <ArrowUpRight size={16} /></button>
           </article>
         </div>
       </div>
       <aside className="value-purpose"><div><p className="value-kicker">The purpose behind the progress</p><h3>{pillar.subText}</h3></div><ul>{pillar.keyHighlights.map((highlight, i) => <li key={highlight}><span>0{i + 1}</span>{highlight}</li>)}</ul></aside>
+      {index < 2 && <a className="value-next-chapter" href={`#${CORNERSTONES[index + 1]}`}><span>Continue the journey</span><strong>Discover {CORNERSTONES[index + 1]}</strong><ArrowDown size={22} /></a>}
     </section>
   );
 }
@@ -188,7 +218,7 @@ export const CoreValuesPage: React.FC = () => {
     const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' }), 100);
     return () => window.clearTimeout(timer);
   }, [hash]);
-  return <PageShell accentPillarId="heal" eyebrow="Core Values · Heal · Enrich · Empower" title="The three cornerstones" standfirst="Compassion in action. Discover the programmes, people and reported progress behind Heal, Enrich and Empower." rail={<SubsectionNav label="Explore our impact" links={CORNERSTONES.map(id => ({ id, label: PILLARS.find(p => p.id === id)!.label, ink: PILLARS.find(p => p.id === id)!.accentB }))} />}>
+  return <PageShell cover={<ValueCover />} accentPillarId="heal" eyebrow="Core Values · Heal · Enrich · Empower" title="The three cornerstones" standfirst="Compassion in action. Discover the programmes, people and reported progress behind Heal, Enrich and Empower." rail={<SubsectionNav label="Explore our impact" links={CORNERSTONES.map(id => ({ id, label: PILLARS.find(p => p.id === id)!.label, ink: PILLARS.find(p => p.id === id)!.accentB }))} />}>
     <div className="values-dashboard">{CORNERSTONES.map((id, index) => <ValueChapter key={id} id={id} index={index} linkedActivity={hash.slice(1)} />)}<p className="value-footnote">Figures reflect each programme’s stated reporting period. Different measures and periods are presented separately; they are not combined into a total.</p></div>
   </PageShell>;
 };

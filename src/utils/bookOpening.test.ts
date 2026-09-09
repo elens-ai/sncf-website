@@ -18,6 +18,9 @@ test('supplied Enrich model opens at its hinges and can replay without changing 
     whitePages++;
     assert.equal(node.material.toneMapped, false, 'unlit pages must bypass filmic greying');
     assert.equal(node.material.color.getHex(), 0xffffff);
+    assert.equal(node.material.polygonOffset, true, 'white decals must not fight with the cover at a distance');
+    assert.ok(node.material.polygonOffsetUnits < 0);
+    assert.equal(node.material.depthTest, true, 'the back cover must still occlude the pages');
   });
   assert.equal(whitePages, 2);
   book.restart();

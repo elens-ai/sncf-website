@@ -35,6 +35,26 @@ export const PAVILION_GALLERY = PAVILION_IDS.map((id, room) => PHOTOS[room].map(
   caption, alt: `Illustrative photograph: ${alt}`, source: `https://images.unsplash.com/photo-${photo}`,
 })));
 
+/** The farewell passage uses 40% of a full chapter's scroll distance. */
+export function pavilionProgress(scrollFraction: number) {
+  const distance = Math.max(0, Math.min(1, scrollFraction)) * 4.4;
+  return distance <= 4 ? distance : 4 + (distance - 4) / .4;
+}
+
+export function pavilionScrollFraction(progress: number) {
+  return (progress <= 4 ? progress : 4 + (progress - 4) * .4) / 4.4;
+}
+
+/** Keep the exhibit's pose continuous even after the next gallery becomes active. */
+export function pavilionExhibitReveal(progress: number, room: number) {
+  const ease = (value: number) => {
+    const t = Math.max(0, Math.min(1, value));
+    return t * t * t * (t * (t * 6 - 15) + 10);
+  };
+  const local = progress - room;
+  return ease((local - .76) / .16) * (1 - ease((local - 1.08) / .32));
+}
+
 /** Each passage gets most of the scroll distance; its exhibit then holds still. */
 export function pavilionPhase(progress: number) {
   if (progress <= .03) return { room: 0, gallery: false, photo: 0, arrival: 0 };

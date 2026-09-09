@@ -1,6 +1,11 @@
 /* Shared finishing layer for the homepage. Carousel transforms remain owned
    by their components; these rules style their surfaces and reading areas. */
-.home-page [data-motion='paused'] :is(.lotus-sway, .celestial-ring, .celestial-ring-reverse, [class*='card-drift-'], [class*='caption-float-'], .heal-ring-outer, .heal-ring-inner, .countdown-pulse, .rail-ping) {
+.home-page [data-motion='paused'],
+.home-page [data-motion='paused'] *,
+.home-page [data-motion='paused']::before,
+.home-page [data-motion='paused']::after,
+.home-page [data-motion='paused'] *::before,
+.home-page [data-motion='paused'] *::after {
   animation-play-state: paused !important;
 }
 /* Static card surfaces don't need a live blur of everything behind them. */

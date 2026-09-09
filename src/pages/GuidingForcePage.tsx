@@ -1,4 +1,6 @@
 import React from 'react';
+import { ArrowDown, ArrowUpRight, HeartHandshake, Trees, Droplets, Music } from 'lucide-react';
+import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { MediaGallery } from '../components/MediaGallery';
@@ -85,8 +87,14 @@ const roomProps = (id: string) => ({
   'aria-labelledby': `${id}-title`,
 });
 
+const GUIDANCE_LINKS = ['/projects#health-city', '/projects#project-oneness-vann', '/projects#project-amrit', '/core-values#enrich'];
+const GUIDANCE_ICONS = [HeartHandshake, Trees, Droplets, Music];
+
+const GuidingCover = () => <EditorialMotion><section className="ed-cover"><div className="ed-cover-copy" data-reveal><div className="ed-dots" aria-hidden="true">{[0,1,2,3,4].map(i => <i key={i} />)}</div><p className="ed-eyebrow">Our Guiding Force</p><h1>Our guiding force</h1><p>Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document. This page says plainly where that guidance comes from.</p><a className="ed-link" href="#satguru">The present Satguru <ArrowDown size={17} /></a></div><figure className="ed-portrait" data-reveal><img src="/images/satguru-mata-sudiksha-ji.jpg" alt="Satguru Mata Sudiksha Ji Maharaj" width="500" height="600" fetchPriority="high" /><figcaption>Satguru Mata Sudiksha Ji Maharaj</figcaption></figure></section></EditorialMotion>;
+
 export const GuidingForcePage: React.FC = () => (
   <PageShell
+    cover={<GuidingCover />}
     accentPillarId="empower"
     eyebrow="Our Guiding Force"
     title="Our guiding force"
@@ -100,13 +108,15 @@ export const GuidingForcePage: React.FC = () => (
           /* the page's own ink, not the hall's five petal colours */
           { id: 'satguru', label: 'The present Satguru', ink: INK_B },
           { id: 'guidance', label: 'Under Her guidance', ink: INK_B },
+          { id: 'gf-relief', label: 'COVID-19 response', ink: INK_B },
           { id: 'gf-media', label: 'Photographs & films', ink: INK_B },
         ]}
       />
     }
   >
+    <EditorialMotion className="guiding-story">
     {/* ── 01 · THE PRESENT SATGURU ─────────────────────────────────────── */}
-    <section {...roomProps('satguru')}>
+    <section data-reveal {...roomProps('satguru')}>
       <div className="cv-margin-print" data-room="our-guiding-force" aria-hidden="true" />
 
       {/* THE PORTRAIT TAKES THE BAND'S RIGHT-HAND SLOT — the place the
@@ -114,28 +124,7 @@ export const GuidingForcePage: React.FC = () => (
           one real image of its subject, and a drawn glyph beside it would be
           the collision that rule already refuses. It is DOM-last so a screen
           reader reaches Her name before the picture of Her. */}
-      <header className="cv-threshold pj-threshold">
-        <div className="pj-threshold-col">
-          <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
-            01
-          </span>
-          <p className="cv-threshold-label font-artistic-display">The present Satguru</p>
-          <h2 id="satguru-title" className="cv-threshold-title font-artistic-heading">
-            Satguru Mata Sudiksha Ji Maharaj
-          </h2>
-          <p className="cv-threshold-body font-artistic-serif">
-            Head of the Sant Nirankari Mission, whose subject is universal love,
-            inner change and service asked of no one.
-          </p>
-        </div>
-        <figure className="gf-portrait">
-          <img
-            src="/images/satguru-mata-sudiksha-ji.jpg"
-            alt="Satguru Mata Sudiksha Ji Maharaj"
-            loading="lazy"
-          />
-        </figure>
-      </header>
+      <EditorialHeading n={1} id="satguru" label="The present Satguru" title="Satguru Mata Sudiksha Ji Maharaj" body="Head of the Sant Nirankari Mission, whose subject is universal love, inner change and service asked of no one." />
 
       <div className="cv-chapter">
         <div className="ww-prose">
@@ -163,29 +152,19 @@ export const GuidingForcePage: React.FC = () => (
     </section>
 
     {/* ── 02 · UNDER HER GUIDANCE ──────────────────────────────────────── */}
-    <section {...roomProps('guidance')}>
+    <section data-reveal {...roomProps('guidance')}>
       <div className="cv-margin-print" data-room="our-guiding-force" aria-hidden="true" />
-      <header className="cv-threshold">
-        <span className="cv-threshold-mark" data-for="guidance" aria-hidden="true" />
-        <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
-          02
-        </span>
-        <p className="cv-threshold-label font-artistic-display">What follows from it</p>
-        <h2 id="guidance-title" className="cv-threshold-title font-artistic-heading">
-          Under Her guidance
-        </h2>
-        <p className="cv-threshold-body font-artistic-serif">
-          Four undertakings the Mission runs, and one emergency it was counted
-          through.
-        </p>
-      </header>
+      <EditorialHeading n={2} id="guidance" label="What follows from it" title="Under Her guidance" body="Four undertakings the Mission runs, and one emergency it was counted through." />
 
       <div className="cv-chapter">
         <ul className="gf-works">
-          {UNDER_HER_GUIDANCE.map((w) => (
-            <li key={w.title}>
+          {UNDER_HER_GUIDANCE.map((w, i) => (
+            <li key={w.title} data-reveal>
+              {React.createElement(GUIDANCE_ICONS[i], { size: 30, strokeWidth: 1.3, className: "gf-work-symbol" })}
+              {i === 1 && <img className="gf-work-image" src="/images/mataji-rajpita-planting.webp" alt="A sapling planted at a Oneness Vann drive" loading="lazy" width="640" height="360" />}
               <strong className="font-artistic-heading">{w.title}</strong>
               <span className="font-artistic-serif">{w.text}</span>
+              <a className="ed-link" href={GUIDANCE_LINKS[i]}>{i === 3 ? "Explore Enrich" : "Explore this project"} <ArrowUpRight size={16} /></a>
             </li>
           ))}
         </ul>
@@ -193,8 +172,9 @@ export const GuidingForcePage: React.FC = () => (
         {/* THE ONE THE PARAGRAPH ABOVE NAMES. Four figures, one activity, one
             date — so the ledger states its period once rather than per plate. */}
         {RELIEF.length > 0 && (
-          <>
-            <h3 className="cv-sub cv-sub-wide font-artistic-display">
+          <section id="gf-relief" className="gf-relief" aria-labelledby="gf-relief-title" data-reveal>
+            <p className="ed-eyebrow">Historical response · 2022 total</p>
+            <h3 id="gf-relief-title" className="cv-sub cv-sub-wide font-artistic-display">
               The COVID-19 emergency, as it was counted
             </h3>
             <ul className="cv-ledger" aria-label="COVID-19 relief figures">
@@ -222,19 +202,20 @@ export const GuidingForcePage: React.FC = () => (
               quarantine, care and vaccination. The full record for every
               activity is on the Core Values page.
             </p>
-          </>
+          </section>
         )}
       </div>
     </section>
 
     {/* ── PHOTOGRAPHS & FILMS ──────────────────────────────────────────── */}
     <section id="gf-media">
-      <MediaGallery section="guiding-force" headingLevel={2} />
+      <MediaGallery section="guiding-force" headingLevel={2} layout="editorial" />
     </section>
 
-    <p className="gf-footnote font-artistic-serif">
+    <div className="ed-closing" data-reveal><span className="ed-eyebrow">An invitation to listen</span><p>
       To hear any of this properly, attend a Satsang. This page can only point
       the way.
-    </p>
+    </p></div>
+    </EditorialMotion>
   </PageShell>
 );

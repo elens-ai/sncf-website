@@ -255,7 +255,7 @@ export const MEDIA: Record<string, MediaItem[]> = {
       id: 'wwa-volunteers',
       kind: 'photo',
       src: '/images/volunteers-planning.webp',
-      alt: 'Foundation volunteers planning a service drive',
+      alt: 'Illustration of foundation volunteers planning a service drive',
       caption: 'The work starts with a plan and a room of volunteers',
       wide: true,
     },
