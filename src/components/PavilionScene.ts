@@ -120,6 +120,67 @@ export function createPavilion(host: HTMLElement) {
     contactTransform.position.set(x, .045, z); contactTransform.rotation.set(-Math.PI / 2, 0, 0); contactTransform.scale.set(width, depth, 1); contactTransform.updateMatrix(); contacts.setMatrixAt(i, contactTransform.matrix);
   });
   contacts.instanceMatrix.needsUpdate = true; scene.add(contacts);
+  // Quiet human-scale details: planted alcoves and a few reading benches.
+  // All repeated furnishings are instanced; none add animation or shadow passes.
+  const furnishingBatches: T.InstancedMesh[] = [];
+  const batch = (geometry: T.BufferGeometry, material: T.Material, transforms: T.Matrix4[], colors?: T.Color[]) => {
+    const mesh = new T.InstancedMesh(geometry, material, transforms.length);
+    transforms.forEach((matrix, i) => { mesh.setMatrixAt(i, matrix); if (colors) mesh.setColorAt(i, colors[i]); });
+    mesh.instanceMatrix.needsUpdate = true; mesh.computeBoundingSphere();
+    scene.add(mesh); furnishingBatches.push(mesh); return mesh;
+  };
+  const matrixAt = (x: number, y: number, z: number, sx: number, sy: number, sz: number, rotation = new T.Quaternion()) => new T.Matrix4().compose(new T.Vector3(x,y,z), rotation, new T.Vector3(sx,sy,sz));
+  const potMatrices: T.Matrix4[] = [], soilMatrices: T.Matrix4[] = [], stemMatrices: T.Matrix4[] = [], leafMatrices: T.Matrix4[] = [], leafColors: T.Color[] = [], plantShadows: T.Matrix4[] = [];
+  const up = new T.Vector3(0,1,0);
+  for (let z = 54; z >= -198; z -= 36) for (const side of [-1,1]) {
+    // Place greenery between columns, just outside the brass walkway edge.
+    const x = side * 4.95, plantZ = z - 4.5;
+    potMatrices.push(matrixAt(x,.39,plantZ,1,1,1));
+    soilMatrices.push(matrixAt(x,.755,plantZ,.385,.025,.385));
+    plantShadows.push(matrixAt(x,.047,plantZ,1.7,1.7,1,new T.Quaternion().setFromAxisAngle(new T.Vector3(1,0,0),-Math.PI/2)));
+    for (let i = 0; i < 9; i++) {
+      const angle = i * 2.4 + side, height = 1.12 + random() * .65;
+      const start = new T.Vector3(x,.75,plantZ), end = new T.Vector3(x+Math.cos(angle)*.25,height,plantZ+Math.sin(angle)*.25);
+      const stemDirection = end.clone().sub(start);
+      stemMatrices.push(matrixAt((x+end.x)/2,(.75+height)/2,(plantZ+end.z)/2,.014,stemDirection.length(),.014,new T.Quaternion().setFromUnitVectors(up,stemDirection.normalize())));
+      const direction = new T.Vector3(Math.cos(angle)*.8,.25+random()*.6,Math.sin(angle)*.8).normalize();
+      leafMatrices.push(matrixAt(end.x,end.y,end.z,.35+random()*.22,.65+random()*.4,1,new T.Quaternion().setFromUnitVectors(up,direction)));
+      leafColors.push(new T.Color().setHSL(.27+random()*.06,.25+random()*.15,.19+random()*.13));
+    }
+  }
+  // A curved, tapered leaf surface catches light naturally from either side.
+  const leafPositions: number[] = [], leafUV: number[] = [], leafIndices: number[] = [];
+  for (let row=0;row<=10;row++) for(let col=0;col<=4;col++) {
+    const t=row/10, across=col/4*2-1, width=Math.pow(Math.sin(Math.PI*t),.8)*.5;
+    leafPositions.push(across*width,t,.14*Math.sin(Math.PI*t)-Math.abs(across)*width*.2);
+    leafUV.push(col/4,t);
+    if(row<10&&col<4){const a=row*5+col;leafIndices.push(a,a+5,a+1,a+1,a+5,a+6);}
+  }
+  const leafGeometry=new T.BufferGeometry();leafGeometry.setAttribute('position',new T.Float32BufferAttribute(leafPositions,3));leafGeometry.setAttribute('uv',new T.Float32BufferAttribute(leafUV,2));leafGeometry.setIndex(leafIndices);leafGeometry.computeVertexNormals();
+  batch(new T.CylinderGeometry(.42,.31,.75,24),new T.MeshStandardMaterial({color:'#bcaa90',roughness:.93,map:limestone}),potMatrices);
+  batch(cylinder,new T.MeshStandardMaterial({color:'#423d2b',roughness:1}),soilMatrices);
+  batch(cylinder,new T.MeshStandardMaterial({color:'#536044',roughness:.85}),stemMatrices);
+  batch(leafGeometry,new T.MeshStandardMaterial({color:'#ffffff',roughness:.62,side:T.DoubleSide}),leafMatrices,leafColors);
+  batch(plane,shadowMaterial,plantShadows);
+
+  const cushions: T.Matrix4[] = [], books: T.Matrix4[] = [], pages: T.Matrix4[] = [];
+  for(const z of [27,-45,-117,-189]) {
+    const x=-6.8*.88, seatZ=z-3;
+    cushions.push(matrixAt(x,.68,seatZ-.65,.72,.12,.92));
+    books.push(matrixAt(x,.675,seatZ+.65,.46,.055,.65,new T.Quaternion().setFromAxisAngle(up,.12)));
+    pages.push(matrixAt(x,.713,seatZ+.65,.42,.028,.61,new T.Quaternion().setFromAxisAngle(up,.12)));
+  }
+  batch(box,new T.MeshStandardMaterial({color:'#a7aea0',roughness:1,map:limestone}),cushions);
+  batch(box,galleryInk,books);batch(box,pale,pages);
+  // Soft daylight pools from the overhead bays, baked rather than moving lights.
+  const daylightCanvas=document.createElement('canvas');daylightCanvas.width=128;daylightCanvas.height=128;
+  const daylightPen=daylightCanvas.getContext('2d')!;
+  const daylightGradient=daylightPen.createRadialGradient(64,64,10,64,64,64);
+  daylightGradient.addColorStop(0,'rgba(255,243,210,.24)');daylightGradient.addColorStop(1,'rgba(255,243,210,0)');daylightPen.fillStyle=daylightGradient;daylightPen.fillRect(0,0,128,128);
+  const daylightTexture=new T.CanvasTexture(daylightCanvas);daylightTexture.colorSpace=T.SRGBColorSpace;surfaceTextures.push(daylightTexture);
+  const daylightPatches: T.Matrix4[]=[];
+  for(let z=48;z>-208;z-=27)daylightPatches.push(matrixAt(1,.051,z,6,9,1,new T.Quaternion().setFromEuler(new T.Euler(-Math.PI/2,0,.25))));
+  batch(plane,new T.MeshBasicMaterial({map:daylightTexture,transparent:true,depthWrite:false,toneMapped:false}),daylightPatches);
   const models: T.Group[] = [];
   const spots: T.SpotLight[] = [];
   const pools: T.Mesh[] = [];
@@ -316,7 +377,7 @@ export function createPavilion(host: HTMLElement) {
       renderer.domElement.removeEventListener('webglcontextlost', lost); renderer.domElement.removeEventListener('webglcontextrestored', restored);
       const geometries = new Set<T.BufferGeometry>(), materials = new Set<T.Material>();
       scene.traverse(child => { if (child instanceof T.Mesh) { geometries.add(child.geometry); for (const m of Array.isArray(child.material) ? child.material : [child.material]) materials.add(m); } });
-      geometries.forEach(g => g.dispose()); materials.forEach(m => m.dispose()); photoTextures.forEach(map => map.dispose()); surfaceTextures.forEach(map => map.dispose()); environment.dispose(); contacts.dispose(); texture.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
+      geometries.forEach(g => g.dispose()); materials.forEach(m => m.dispose()); photoTextures.forEach(map => map.dispose()); surfaceTextures.forEach(map => map.dispose()); environment.dispose(); contacts.dispose(); furnishingBatches.forEach(mesh=>mesh.dispose()); texture.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
     },
   };
 }
