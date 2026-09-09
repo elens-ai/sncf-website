@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useEffect, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES, activitiesFor, Activity } from '../data/activities';
@@ -72,10 +74,10 @@ export const GalleryCatalogue: React.FC<GalleryCatalogueProps> = ({ open, onClos
       aria-modal="true"
       aria-label={`Exhibition catalogue — ${ACTIVITIES.length} works in four rooms`}
     >
-      <button className="gallery-catalogue-scrim" onClick={onClose} aria-label="Close" tabIndex={-1} />
+      <button className="gallery-catalogue-scrim" onClick={onClose} aria-label={getCMSCopy("copy.GalleryCatalogue.7d9eb7acb13e", "Close")} tabIndex={-1} />
 
       <div className="gallery-catalogue-body">
-        <button ref={closeRef} className="gallery-catalogue-close" onClick={onClose} aria-label="Close the catalogue">
+        <button ref={closeRef} className="gallery-catalogue-close" onClick={onClose} aria-label={getCMSCopy("copy.GalleryCatalogue.987904b82edf", "Close the catalogue")}>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18M6 6l12 12" />
           </svg>
@@ -83,15 +85,9 @@ export const GalleryCatalogue: React.FC<GalleryCatalogueProps> = ({ open, onClos
 
         {/* the catalogue's cover line */}
         <header className="gallery-catalogue-head">
-          <p className="font-dancing-script pillar-script-name font-bold text-white leading-none drop-shadow-md select-none">
-            The Catalogue
-          </p>
-          <p className="font-artistic-display text-white/80 text-[11px] sm:text-[12.5px] tracking-[0.22em] uppercase mt-3">
-            Four rooms · {ACTIVITIES.length} works
-          </p>
-          <p className="font-artistic-serif text-white/60 text-[12px] mt-1.5">
-            Select any piece to step up to its figures
-          </p>
+          <p className="font-dancing-script pillar-script-name font-bold text-white leading-none drop-shadow-md select-none">{getCMSCopy("copy.GalleryCatalogue.a4bdb4cd85f2", "The Catalogue")}</p>
+          <p className="font-artistic-display text-white/80 text-[11px] sm:text-[12.5px] tracking-[0.22em] uppercase mt-3">{getCMSCopy("copy.GalleryCatalogue.f4ea9612fe30", "Four rooms · ")}{ACTIVITIES.length}{getCMSCopy("copy.GalleryCatalogue.93952640c625", " works")}</p>
+          <p className="font-artistic-serif text-white/60 text-[12px] mt-1.5">{getCMSCopy("copy.GalleryCatalogue.e68ce14dabba", "Select any piece to step up to its figures")}</p>
         </header>
 
         {ROOM_IDS.map((id, i) => {
@@ -105,8 +101,7 @@ export const GalleryCatalogue: React.FC<GalleryCatalogueProps> = ({ open, onClos
               aria-label={`Room ${i + 1} — ${pillar.label}`}
             >
               <div className="gallery-catalogue-room-head">
-                <p className="font-artistic-display text-[10px] tracking-[0.2em] text-white/55 uppercase">
-                  Room {i + 1} of {ROOM_IDS.length}
+                <p className="font-artistic-display text-[10px] tracking-[0.2em] text-white/55 uppercase">{getCMSCopy("copy.GalleryCatalogue.5fdb0c060d10", "Room ")}{i + 1}{getCMSCopy("copy.GalleryCatalogue.a4282e4b2298", " of ")}{ROOM_IDS.length}
                 </p>
                 <p className="font-dancing-script text-[30px] sm:text-[36px] font-bold text-white leading-none mt-0.5">
                   {pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}
@@ -136,7 +131,7 @@ export const GalleryCatalogue: React.FC<GalleryCatalogueProps> = ({ open, onClos
                         aria-label={`${act.title} — ${act.dataPoints.length} figures`}
                       >
                         <span className="lotus-plate-art">
-                          {art ? <img src={art.src} alt={art.alt} loading="lazy" decoding="async" /> : null}
+                          {art ? <img src={resolveCMSMedia(art.src)} alt={art.alt} loading="lazy" decoding="async" /> : null}
                         </span>
                         <span className="lotus-plate-headline">
                           <span className="lotus-plate-value">{act.headline.value}</span>
@@ -152,9 +147,7 @@ export const GalleryCatalogue: React.FC<GalleryCatalogueProps> = ({ open, onClos
           );
         })}
 
-        <p className="font-artistic-serif text-white/45 text-[11.5px] text-center pb-2">
-          Figures as reported · March 2026
-        </p>
+        <p className="font-artistic-serif text-white/45 text-[11.5px] text-center pb-2">{getCMSCopy("copy.GalleryCatalogue.b77d9413553b", "Figures as reported · March 2026")}</p>
       </div>
     </div>
   );

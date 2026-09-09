@@ -1,0 +1,33 @@
+name: Infrastructure validation
+on:
+  push:
+    branches: [main, dev, vansh]
+    paths: ['infra/**', 'docker/**', 'docker-compose.yml', 'Dockerfile', '.github/workflows/**', 'scripts/check-cms-url.*']
+  pull_request:
+    branches: [main, dev, vansh]
+    paths: ['infra/**', 'docker/**', 'docker-compose.yml', 'Dockerfile', '.github/workflows/**', 'scripts/check-cms-url.*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: infra-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell syntax and lint
+        run: |
+          bash -n infra/bootstrap.sh
+          shellcheck infra/bootstrap.sh
+      - name: Bootstrap configuration tests (mock AWS)
+        run: node --test infra/*.test.cjs scripts/check-cms-url.test.cjs scripts/check-cms-url.test.cjs
+      - name: Validate every Compose profile
+        run: |
+          cp backend/.env.example backend/.env
+          docker compose --profile dev --profile prod --profile cms --profile export config --quiet
+      - name: Build frontend production image
+        run: docker build --target prod -t sncf-web:ci .
+      - name: Validate Nginx configuration
+        run: docker run --rm sncf-web:ci nginx -t

@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import {
@@ -190,7 +192,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           }}
         />
         <img
-          src="/images/lotus-watermark.png"
+          src={resolveCMSAsset("asset.EventsSection.51c5d5f403d2", "/images/lotus-watermark.png")}
           alt=""
           className="absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2 w-[82%] opacity-[0.05] select-none"
         />
@@ -262,13 +264,9 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
                 <p
                   className="text-[8px] font-extrabold uppercase tracking-[0.14em]"
                   style={{ color: accentB }}
-                >
-                  Every day
-                </p>
+                >{getCMSCopy("copy.EventsSection.c4e42b974c33", "Every day")}</p>
                 <p className="font-artistic-heading font-bold text-[26px] leading-none mt-0.5">∞</p>
-                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">
-                  Year-round
-                </p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500 mt-0.5">{getCMSCopy("copy.EventsSection.f0ba2cd588e0", "Year-round")}</p>
               </div>
             )}
           </div>
@@ -291,9 +289,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
 
             {event.kind === 'ongoing' ? (
               <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-white/70">
-                <InfinityIcon className="w-3 h-3" />
-                Ongoing · join anytime
-              </span>
+                <InfinityIcon className="w-3 h-3" />{getCMSCopy("copy.EventsSection.4ca25532480e", "Ongoing · join anytime")}</span>
             ) : (
               <span
                 className={`mt-1.5 inline-block text-[10px] font-bold tabular-nums ${
@@ -315,8 +311,8 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
               <a
                 href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
                 download={`${event.id}.ics`}
-                aria-label="Add to calendar"
-                title="Add to calendar"
+                aria-label={getCMSCopy("copy.EventsSection.d0efffa65ea7", "Add to calendar")}
+                title={getCMSCopy("copy.EventsSection.d0efffa65ea7", "Add to calendar")}
                 className="grid place-items-center w-8 h-8 rounded-full text-neutral-900 bg-white shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <CalendarPlus className="w-4 h-4" />
@@ -327,7 +323,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Take part in ${event.title}`}
-                title="Take part"
+                title={getCMSCopy("copy.EventsSection.74fa7d10facc", "Take part")}
                 className="grid place-items-center w-8 h-8 rounded-full text-neutral-900 bg-white shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <ArrowUpRight className="w-4 h-4" />
@@ -376,7 +372,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           <div className="rounded-xl bg-white p-1.5 ring-1 ring-white/30 shadow-lg">
             {qr ? (
               <img
-                src={qr}
+                src={resolveCMSMedia(qr)}
                 alt={`QR code — scan to open the ${event.title} invitation`}
                 className="w-[54px] h-[54px] rounded-md"
               />
@@ -387,9 +383,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           <p
             className="text-[7px] font-extrabold uppercase tracking-[0.2em] mt-1"
             style={{ color: accentB }}
-          >
-            Scan me
-          </p>
+          >{getCMSCopy("copy.EventsSection.287a49a0546d", "Scan me")}</p>
         </div>
       </div>
 
@@ -397,7 +391,7 @@ const EventPass: React.FC<{ item: ResolvedEvent; lit: boolean }> = ({ item, lit 
           invitation ends on, uncropped, so the two are one object at two
           sizes. Everything above was compressed to buy it this room. */}
       <img
-        src="/images/volunteers-planning.webp"
+        src={resolveCMSAsset("asset.EventsSection.76f684891a21", "/images/volunteers-planning.webp")}
         alt=""
         aria-hidden="true"
         className="w-full h-auto block select-none flex-none mt-auto"
@@ -512,7 +506,7 @@ const EventDeck: React.FC<{
         style={{ perspective: '1500px' }}
         role="group"
         aria-roledescription="carousel"
-        aria-label="Upcoming events deck"
+        aria-label={getCMSCopy("copy.EventsSection.992eecae9ee5", "Upcoming events deck")}
         onPointerDown={(e) => {
           dragX.current = e.clientX;
         }}
@@ -657,7 +651,7 @@ export const EventsSection: React.FC = () => {
   const items = useMemo<ResolvedEvent[]>(() => {
     void tick;
     return resolveEvents(EVENTS);
-  }, [tick]);
+  }, [tick, EVENTS]);
 
   const dated = items.filter((i) => i.days !== null);
   /* Soonest by countdown — NOT dated[0], which is now January's event. */
@@ -665,7 +659,7 @@ export const EventsSection: React.FC = () => {
     ? dated.reduce((m, i) => ((i.days as number) < (m.days as number) ? i : m), dated[0])
     : undefined;
   const active =
-    activeOverride ?? Math.max(0, items.findIndex((i) => i === next));
+    Math.min(Math.max(0,items.length-1),activeOverride ?? Math.max(0, items.findIndex((i) => i === next)));
   const setActive = setActiveOverride;
 
   const today = startOfToday();
@@ -685,25 +679,20 @@ export const EventsSection: React.FC = () => {
     <section
       id="events-section"
       ref={sectionRef}
-      aria-label="Upcoming events"
+      aria-label={getCMSCopy("copy.EventsSection.df9110b56fb1", "Upcoming events")}
       className="snap-screen relative z-10 w-full min-h-screen flex flex-col px-4 sm:px-8 md:px-12 lg:px-16 pt-[78px] pb-2 overflow-hidden"
     >
       <div className="relative z-10 w-full max-w-7xl mx-auto flex-1 flex flex-col min-h-0">
         <header className="mb-1 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div>
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">
-              What&rsquo;s next
-            </p>
-            <h2 className="font-artistic-heading text-white text-[28px] sm:text-[34px] md:text-[40px] leading-tight drop-shadow">
-              A little time. A lasting difference.
-            </h2>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-white/70 mb-2">{getCMSCopy("copy.EventsSection.e795b70c71c8", "What’s next")}</p>
+            <h2 className="font-artistic-heading text-white text-[28px] sm:text-[34px] md:text-[40px] leading-tight drop-shadow">{getCMSCopy("copy.EventsSection.6f24c80240f1", "A little time. A lasting difference.")}</h2>
           </div>
 
           <div className="flex flex-wrap items-end gap-3">
             {next?.date && (
               <div>
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/60 mb-1 text-right">
-                  Next · {next.event.title}
+                <p className="text-[10px] uppercase tracking-[0.18em] text-white/60 mb-1 text-right">{getCMSCopy("copy.EventsSection.ec19ea2a34bb", "Next · ")}{next.event.title}
                 </p>
                 <div className="w-[220px]">
                   <CountdownClock target={next.date} />
@@ -714,9 +703,7 @@ export const EventsSection: React.FC = () => {
               onClick={() => openCalendarAt(null)}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[12px] font-bold text-neutral-900 bg-white shadow-lg hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
-              <CalendarDays className="w-4 h-4" />
-              View calendar
-            </button>
+              <CalendarDays className="w-4 h-4" />{getCMSCopy("copy.EventsSection.206eea992f2d", "View calendar")}</button>
           </div>
         </header>
 
@@ -771,9 +758,7 @@ export const EventsSection: React.FC = () => {
             className="absolute top-0 flex flex-col items-center -translate-x-1/2"
             style={{ left: `${todayPct}%` }}
           >
-            <span className="text-[8px] font-extrabold tracking-[0.16em] text-white/80 mb-1">
-              TODAY
-            </span>
+            <span className="text-[8px] font-extrabold tracking-[0.16em] text-white/80 mb-1">{getCMSCopy("copy.EventsSection.ea4171ae8d53", "TODAY")}</span>
             <span className="relative grid place-items-center">
               <span className="rail-ping absolute w-[9px] h-[9px] rounded-full bg-white/80" aria-hidden="true" />
               <span className="relative w-[9px] h-[9px] rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />

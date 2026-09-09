@@ -7373,3 +7373,11 @@ button.mgal-plate-awaiting:hover {
     margin-bottom: 14px;
   }
 }
+
+/* Offscreen sections retain their layout and animation position, but stop work. */
+[data-motion="paused"],
+[data-motion="paused"] *,
+[data-motion="paused"]::before,
+[data-motion="paused"]::after,
+[data-motion="paused"] *::before,
+[data-motion="paused"] *::after{animation-play-state:paused!important}

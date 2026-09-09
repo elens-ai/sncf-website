@@ -1,3 +1,5 @@
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
+import { HeroCurtain } from './HeroCurtain';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
@@ -115,25 +117,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   const currentPillar = pillars[activeIndex] || pillars[0];
   const [heroVisible, setHeroVisible] = useState(true);
-  useEffect(() => {
-    const stage = document.getElementById('hero-clone-stage');
-    if (!stage) return;
-    const observer = new IntersectionObserver(([entry]) => setHeroVisible(entry.isIntersecting), { threshold: 0 });
-    observer.observe(stage);
-    return () => observer.disconnect();
-  }, []);
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
-  /* THE FOREGROUND HIDES EARLY ON SCROLL. `#hero-clone-stage` (this whole
-     <main>) already recedes as the exhibition entrance rises over it, but
-     that fade is driven by PillarsSection's `covered` and only starts once
-     its section is nearly in view — for the first stretch of ordinary
-     scrolling the copy and the orbit wheel just travel up the page fully
-     opaque, which reads as clutter once the next screen starts arriving
-     underneath. So the copy+wheel grid gets its OWN, much quicker fade,
-     tied to nothing but how far the reader has scrolled past the hero's own
-     top — while the rings, the watermark and the glow (all siblings of this
-     grid, still on #hero-clone-stage) are untouched and keep the background
-     showing right up until the slower recede takes over. */
+  // Keep the original carousel mounted while the curtain carries it away.
   const contentGridRef = useRef<HTMLDivElement | null>(null);
   const reducedMotionRef = useRef(false);
   useEffect(() => {
@@ -144,38 +129,50 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     };
     mq.addEventListener('change', onMotionChange);
 
-    let raf = 0;
+    const stage = document.getElementById('hero-clone-stage');
+    let raf = 0, measurementFrame = 0, extra = 0, viewport = window.innerHeight;
+    let previousHeight = -1, previousExtra = -1, wasFinished: boolean | undefined;
     const read = () => {
       raf = 0;
-      const el = contentGridRef.current;
-      const stage = document.getElementById('hero-clone-stage');
+      const finished = window.scrollY > extra + viewport * .53;
+      if (finished === wasFinished) return;
+      wasFinished = finished;
+      setHeroVisible(!finished);
+      if (contentGridRef.current) contentGridRef.current.style.pointerEvents = finished ? 'none' : '';
+    };
+    const measure = () => {
+      measurementFrame = 0;
       if (!stage) return;
-      const h = stage.offsetHeight || window.innerHeight;
-      // On stacked layouts, keep content visible until the reader reaches
-      // the bottom of the hero; otherwise the icons fade before they arrive.
-      const fadeStart = Math.max(0, h - window.innerHeight);
-      const progress = Math.max(0, window.scrollY - fadeStart);
-      const t = reducedMotionRef.current
-        ? progress > h * 0.38 ? 1 : 0
-        : Math.max(0, Math.min(1, progress / (h * 0.38)));
-      setHeroVisible(t < 1);
-      if (el) {
-        el.style.opacity = (1 - t).toFixed(3);
-        el.style.transform = t > 0 ? `translateY(${(-t * 24).toFixed(1)}px)` : '';
-        el.style.pointerEvents = t > 0.85 ? 'none' : '';
+      viewport = window.innerHeight;
+      const h = stage.offsetHeight || viewport;
+      extra = Math.max(0, h - viewport);
+      // Sticky geometry only changes with layout, never with scroll. Rewriting
+      // these values while scrolling forced the next animation to reflow.
+      if (h !== previousHeight) {
+        previousHeight = h;
+        stage.parentElement?.style.setProperty('--hero-height', `${h}px`);
       }
+      if (extra !== previousExtra) {
+        previousExtra = extra;
+        stage.style.setProperty('--hero-sticky-top', `${-extra}px`);
+      }
+      if (raf) cancelAnimationFrame(raf);
+      read();
     };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(read);
-    };
-    read();
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
+    const onResize = () => { if (!measurementFrame) measurementFrame = requestAnimationFrame(measure); };
+    const geometry = new ResizeObserver(onResize);
+    if (stage) geometry.observe(stage);
+    measure();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener('resize', onResize);
     return () => {
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      window.removeEventListener('resize', onResize);
       mq.removeEventListener('change', onMotionChange);
+      geometry.disconnect();
       if (raf) cancelAnimationFrame(raf);
+      if (measurementFrame) cancelAnimationFrame(measurementFrame);
     };
   }, []);
 
@@ -295,6 +292,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none"
       style={{ willChange: 'transform, opacity', transformOrigin: '50% 42%' }}
     >
+      <div className="hero-restored-ground accent-canvas" aria-hidden="true" />
+      <HeroCurtain />
       {/* A quiet studio backdrop: a broad light pool frames the white cards,
           with every overlay fading before the hero hands off to Our Work. */}
       <div
@@ -313,8 +312,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         id="hero-lotus-watermark"
         className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
       >
+        <canvas className="hero-petal-transition-canvas" aria-hidden="true" />
         <img
-          src="/images/lotus-watermark.png"
+          src={resolveCMSAsset("asset.HeroSection.51c5d5f403d2", "/images/lotus-watermark.png")}
           alt=""
           role="presentation"
           aria-hidden="true"
@@ -329,7 +329,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         onClick={() => setIsStudioOpen(!isStudioOpen)}
         aria-label={isStudioOpen ? 'Close hero settings' : 'Open hero settings'}
         aria-expanded={isStudioOpen}
-        title="Hero settings"
+        title={getCMSCopy("copy.HeroSection.b4bf826ad7e8", "Hero settings")}
         className={`group absolute top-[88px] right-4 sm:right-6 md:right-8 lg:right-10 z-40 grid place-items-center w-9 h-9 rounded-full border cursor-pointer transition-all duration-300 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/70 ${
           isStudioOpen
             ? 'opacity-100 rotate-90 bg-amber-400 text-neutral-950 border-amber-300 shadow-lg'
@@ -353,28 +353,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-3 mb-4 pr-12">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <h3 className="font-artistic-heading text-base sm:text-lg font-bold tracking-wide">
-                Live Style &amp; Motion Customizer
-              </h3>
+              <h3 className="font-artistic-heading text-base sm:text-lg font-bold tracking-wide">{getCMSCopy("copy.HeroSection.d72fe2c6264a", "Live Style & Motion Customizer")}</h3>
             </div>
-            <span className="text-xs text-neutral-400">
-              Interactive design adjustments for the orbit carousel
-            </span>
+            <span className="text-xs text-neutral-400">{getCMSCopy("copy.HeroSection.9dc429d2bbc2", "Interactive design adjustments for the orbit carousel")}</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {/* 1. Typography Pairings */}
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Type className="w-3.5 h-3.5 text-amber-400" /> Editorial Typography
-              </label>
+                <Type className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.5caadabe7659", " Editorial Typography")}</label>
               <div className="grid grid-cols-2 gap-1.5">
                 {(
                   [
-                    { id: 'marcellus-editorial', name: 'Marcellus' },
-                    { id: 'cinzel-monumental', name: 'Cinzel' },
-                    { id: 'garamond-poetic', name: 'Garamond' },
-                    { id: 'syne-modern', name: 'Syne Neo' },
+                    { id: 'marcellus-editorial', name: getCMSCopy("copy.HeroSection.c70470565292", "Marcellus") },
+                    { id: 'cinzel-monumental', name: getCMSCopy("copy.HeroSection.1cc364db0d2c", "Cinzel") },
+                    { id: 'garamond-poetic', name: getCMSCopy("copy.HeroSection.b28a8d4af9c3", "Garamond") },
+                    { id: 'syne-modern', name: getCMSCopy("copy.HeroSection.fd293ff4e23b", "Syne Neo") },
                   ] as const
                 ).map((t) => (
                   <button
@@ -396,11 +391,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-4">
               <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center justify-between gap-2">
                 <span className="flex items-center gap-1.5">
-                  <Type className="w-3.5 h-3.5 text-amber-400" /> Pillar Name Size
-                </span>
+                  <Type className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.d63db49427e8", " Pillar Name Size")}</span>
                 <span className="text-amber-300 tabular-nums normal-case tracking-normal">
-                  {Math.round(pillarNameScale * 100)}% · {pillarNamePx}px here
-                </span>
+                  {Math.round(pillarNameScale * 100)}% · {pillarNamePx}{getCMSCopy("copy.HeroSection.2d61b94393b8", "px here")}</span>
               </label>
               <div className="flex items-center gap-3">
                 <input
@@ -416,52 +409,44 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <button
                   onClick={() => setPillarNameScale(1)}
                   className="flex-shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2 cursor-pointer"
-                >
-                  Reset
-                </button>
+                >{getCMSCopy("copy.HeroSection.daee7606b339", "Reset")}</button>
               </div>
-              <p className="text-[11px] text-neutral-500 leading-snug">
-                Scales the fluid size — the name still grows and shrinks with the
-                screen at every setting.
-              </p>
+              <p className="text-[11px] text-neutral-500 leading-snug">{getCMSCopy("copy.HeroSection.618a67ebf739", "Scales the fluid size — the name still grows and shrinks with the screen at every setting.")}</p>
             </div>
 
             <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-4">
               <label htmlFor="hero-icon-size" className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5"><Layout className="w-3.5 h-3.5 text-amber-400" /> 3D Icon Size</span>
+                <span className="flex items-center gap-1.5"><Layout className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.eb84c28d0955", " 3D Icon Size")}</span>
                 <span className="text-amber-300 tabular-nums">{Math.round(cardScale * 100)}%</span>
               </label>
               <div className="flex items-center gap-3">
-                <button type="button" aria-label="Decrease 3D icon size" disabled={cardScale <= 0.5}
+                <button type="button" aria-label={getCMSCopy("copy.HeroSection.385ad56b7b5d", "Decrease 3D icon size")} disabled={cardScale <= 0.5}
                   onClick={() => setCardScale(value => Math.max(0.5, Math.round((value - 0.1) * 100) / 100))}
                   className="w-8 h-8 shrink-0 rounded-lg bg-white/10 text-white disabled:opacity-30">−</button>
                 <input id="hero-icon-size" type="range" min="0.5" max="1.8" step="0.05"
                   value={cardScale} onChange={(e) => setCardScale(Number(e.target.value))}
                   aria-valuetext={`${Math.round(cardScale * 100)} percent`}
                   className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400" />
-                <button type="button" aria-label="Increase 3D icon size" disabled={cardScale >= 1.8}
+                <button type="button" aria-label={getCMSCopy("copy.HeroSection.1f76c27ba811", "Increase 3D icon size")} disabled={cardScale >= 1.8}
                   onClick={() => setCardScale(value => Math.min(1.8, Math.round((value + 0.1) * 100) / 100))}
                   className="w-8 h-8 shrink-0 rounded-lg bg-white/10 text-white disabled:opacity-30">+</button>
                 <button type="button" onClick={() => setCardScale(1)}
-                  className="shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2">Reset</button>
+                  className="shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2">{getCMSCopy("copy.HeroSection.daee7606b339", "Reset")}</button>
               </div>
-              <p className="text-[11px] text-neutral-500 leading-snug">
-                100% balances the featured icon with the full text block. Adjust from 50% to 180%.
-              </p>
+              <p className="text-[11px] text-neutral-500 leading-snug">{getCMSCopy("copy.HeroSection.428325204f8f", "100% balances the featured icon with the full text block. Adjust from 50% to 180%.")}</p>
             </div>
 
             {/* 2. Sacred Aura Visual Style */}
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-amber-400" /> Background Aura
-              </label>
+                <Flame className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.9ddebdbc2e7e", " Background Aura")}</label>
               <div className="grid grid-cols-2 gap-1.5">
                 {(
                   [
-                    { id: 'sacred-mandala', name: 'Mandala' },
-                    { id: 'celestial-rings', name: 'Rings' },
-                    { id: 'cosmic-nebula', name: 'Nebula' },
-                    { id: 'minimal-clean', name: 'Minimal' },
+                    { id: 'sacred-mandala', name: getCMSCopy("copy.HeroSection.893b99492c3e", "Mandala") },
+                    { id: 'celestial-rings', name: getCMSCopy("copy.HeroSection.bab4c75d0722", "Rings") },
+                    { id: 'cosmic-nebula', name: getCMSCopy("copy.HeroSection.04b8dcba096f", "Nebula") },
+                    { id: 'minimal-clean', name: getCMSCopy("copy.HeroSection.057b5de48d7b", "Minimal") },
                   ] as const
                 ).map((a) => (
                   <button
@@ -482,17 +467,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {/* 3. Gradient Angle & Glow Sliders */}
             <div className="flex flex-col gap-2.5">
               <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Palette className="w-3.5 h-3.5 text-amber-400" /> Gradient & Glow
-              </label>
+                <Palette className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.a2d1351cc8ee", " Gradient & Glow")}</label>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between text-xs text-neutral-300">
-                  <span>Wipe Angle: {gradientAngle}°</span>
+                  <span>{getCMSCopy("copy.HeroSection.cbe72fa83d95", "Wipe Angle: ")}{gradientAngle}°</span>
                   <button
                     onClick={() => setGradientAngle((prev) => (prev + 45) % 360)}
                     className="text-amber-400 hover:underline flex items-center gap-1 text-[11px]"
                   >
-                    <RotateCw className="w-3 h-3" /> +45°
-                  </button>
+                    <RotateCw className="w-3 h-3" />{getCMSCopy("copy.HeroSection.0213b9349f96", " +45°")}</button>
                 </div>
                 <input
                   type="range"
@@ -505,7 +488,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 />
 
                 <div className="flex items-center justify-between text-xs text-neutral-300 mt-1">
-                  <span>Glow Intensity: {Math.round(glowIntensity * 100)}%</span>
+                  <span>{getCMSCopy("copy.HeroSection.eb6170d865df", "Glow Intensity: ")}{Math.round(glowIntensity * 100)}%</span>
                 </div>
                 <input
                   type="range"
@@ -522,8 +505,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {/* 4. Content Elements & Preset Tags */}
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Layout className="w-3.5 h-3.5 text-amber-400" /> Layout Features
-              </label>
+                <Layout className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.7ad1aff3ea68", " Layout Features")}</label>
               <div className="flex flex-col gap-2">
                 <button
                   onClick={() => setShowMetrics(!showMetrics)}
@@ -533,7 +515,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       : 'bg-white/5 text-white/60 border border-white/10'
                   }`}
                 >
-                  <span>Impact Metrics Bar</span>
+                  <span>{getCMSCopy("copy.HeroSection.faac55222144", "Impact Metrics Bar")}</span>
                   <span>{showMetrics ? 'ON' : 'OFF'}</span>
                 </button>
 
@@ -545,7 +527,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       : 'bg-white/5 text-white/60 border border-white/10'
                   }`}
                 >
-                  <span>Auto 3D Rotation</span>
+                  <span>{getCMSCopy("copy.HeroSection.4f210fb57610", "Auto 3D Rotation")}</span>
                   <span>{isPaused ? 'PAUSED' : 'ACTIVE'}</span>
                 </button>
               </div>
@@ -572,7 +554,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             introActive ? 'hero-intro-rise' : 'hero-intro-waiting'
           }`}
         >
-          <p className="home-eyebrow hero-eyebrow"><span /> Service with Humility</p>
+          <p className="home-eyebrow hero-eyebrow"><span />{getCMSCopy("copy.HeroSection.d5dc0eff1e60", " Service with Humility")}</p>
           <div ref={copySizeRef} className="w-full flex flex-col">
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
@@ -640,7 +622,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 }}
               >
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 pointer-events-none" />
-                <span>Explore {getPillarScriptTitle(displayPillar)}</span>
+                <span>{getCMSCopy("copy.HeroSection.2e1ac6e9292a", "Explore ")}{getPillarScriptTitle(displayPillar)}</span>
                 <svg
                   className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200 fill-none stroke-current stroke-2"
                   viewBox="0 0 24 24"
@@ -675,9 +657,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
       </div>
       <div className="hero-bottom-line">
-        <span>Compassion in action. Possibilities for everyone.</span>
+        <span>{getCMSCopy("copy.HeroSection.f41de8da275f", "Compassion in action. Possibilities for everyone.")}</span>
         <div className="hero-playback">
-          <span className="hero-chapter" aria-label={`Pillar ${activeIndex + 1} of ${pillars.length}`}>0{activeIndex + 1}<i />0{pillars.length}</span>
+          <span className="hero-chapter" aria-label={`Pillar ${activeIndex + 1} of ${pillars.length}`}>{getCMSCopy("copy.HeroSection.5feceb66ffc8", "0")}{activeIndex + 1}<i />{getCMSCopy("copy.HeroSection.5feceb66ffc8", "0")}{pillars.length}</span>
           <button onClick={onTogglePause} aria-label={isPaused ? 'Play hero animation' : 'Pause hero animation'}>
             {isPaused ? <Play size={13} /> : <Pause size={13} />}
           </button>

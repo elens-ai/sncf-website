@@ -11,7 +11,7 @@ import { isAdmin, isAdminField } from '../access/roles'
  */
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: { useAPIKey: true },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'role'],
@@ -26,6 +26,7 @@ export const Users: CollectionConfig = {
       return { id: { equals: req.user.id } }
     },
     create: isAdmin,
+    unlock: isAdmin,
     delete: isAdmin,
     update: ({ req }) => {
       if (!req.user) return false

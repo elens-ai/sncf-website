@@ -1,0 +1,332 @@
+{
+  "defaults": {
+    "materials": {
+      "stone": {
+        "color": "#d8cdb8",
+        "roughness": 0.85,
+        "texture": ""
+      },
+      "trim": {
+        "color": "#80745e",
+        "roughness": 0.7,
+        "texture": ""
+      },
+      "plaster": {
+        "color": "#f2eadb",
+        "roughness": 0.85,
+        "texture": ""
+      },
+      "brass": {
+        "color": "#88724b",
+        "roughness": 0.32,
+        "metalness": 0.78,
+        "texture": ""
+      },
+      "wall": {
+        "color": "#bcbcaf",
+        "roughness": 0.9,
+        "texture": ""
+      },
+      "wood": {
+        "color": "#544738",
+        "roughness": 0.65,
+        "texture": ""
+      },
+      "displayBase": {
+        "color": "#243e38",
+        "roughness": 0.8,
+        "texture": ""
+      },
+      "floor": {
+        "color": "#f4ead9",
+        "roughness": 0.68,
+        "texture": ""
+      },
+      "carpet": {
+        "color": "#cf203b",
+        "roughness": 0.95,
+        "texture": ""
+      },
+      "queueMetal": {
+        "color": "#b5a17b",
+        "roughness": 0.3,
+        "metalness": 0.72,
+        "texture": ""
+      },
+      "queueBelt": {
+        "color": "#244b42",
+        "roughness": 0.94,
+        "texture": ""
+      },
+      "planterColors": [
+        "#e3d2b8",
+        "#454d49",
+        "#ad6f4c"
+      ]
+    },
+    "chapters": [
+      {
+        "id": "heal",
+        "wall": "#709d83",
+        "panel": "#a8cbb5",
+        "led": "#53d695",
+        "ink": "#91d6ae"
+      },
+      {
+        "id": "enrich",
+        "wall": "#779bbd",
+        "panel": "#adc8e2",
+        "led": "#60b6ff",
+        "ink": "#92c8ed"
+      },
+      {
+        "id": "empower",
+        "wall": "#bc839f",
+        "panel": "#dfb3c9",
+        "led": "#ed79b3",
+        "ink": "#e6a4be"
+      },
+      {
+        "id": "projects",
+        "wall": "#6da7a9",
+        "panel": "#a4d1d0",
+        "led": "#55d5dc",
+        "ink": "#9cd5da"
+      }
+    ],
+    "lighting": {
+      "exposure": 1.02,
+      "background": "#111714",
+      "fogNear": 25,
+      "fogFar": 90,
+      "pendantColor": "#fff1db",
+      "pendantIntensity": 60,
+      "edgeIntensity": 14,
+      "pictureColor": "#fff2de",
+      "pictureIntensity": 14,
+      "exhibitColor": "#fff5e3",
+      "exhibitIntensity": 32,
+      "frameGlow": 1,
+      "beamOpacity": 0.055
+    },
+    "camera": {
+      "fieldOfView": 48,
+      "positionSmoothing": 16,
+      "turnSmoothing": 12,
+      "scrollSmoothing": 8,
+      "photoPause": 0.25,
+      "modelFloat": 0.09,
+      "modelSway": 0.35
+    },
+    "performance": {
+      "maxWidth": 1280,
+      "maxHeight": 1000,
+      "fps": 60,
+      "adaptiveQuality": true,
+      "minScale": 0.65,
+      "maxScale": 1,
+      "photoLoadDistance": 70
+    },
+    "components": {
+      "planters": true,
+      "barriers": true,
+      "benches": true,
+      "pendants": true,
+      "photoLights": true,
+      "frameBacklights": true,
+      "edgeStrips": true,
+      "models": true,
+      "windows": true,
+      "carpet": true
+    },
+    "finale": {
+      "logo": "/images/sncf-logo.webp",
+      "model": "/models/sncf-emblem.glb",
+      "modelSize": 2.4,
+      "modelHeight": 4.35,
+      "modelLightIntensity": 8,
+      "title": "Thank you for visiting",
+      "subtitle": "SERVICE WITH HUMILITY. ALWAYS.",
+      "background": "#183d36",
+      "textColor": "#d6eee4",
+      "mosaic": true,
+      "mosaicHue": 157,
+      "mosaicSaturation": 28,
+      "tileSize": 24
+    },
+    "windows": {
+      "amrit": {
+        "video": "/video/amrit-lake.mp4",
+        "poster": "/images/pavilion/projects-1.jpg",
+        "woodColor": "#ffffff",
+        "grainColor": "#f5f4ef",
+        "woodRoughness": 0.48,
+        "glassColor": "#e8f5f3",
+        "glassOpacity": 0.07,
+        "frost": true,
+        "frostOpacity": 0.94,
+        "frostBlur": 0.024,
+        "autoplay": true
+      },
+      "oneness": {
+        "video": "/video/oneness-forest.mp4",
+        "poster": "/images/pavilion/projects-2.jpg",
+        "woodColor": "#ffffff",
+        "grainColor": "#f5f4ef",
+        "woodRoughness": 0.48,
+        "glassColor": "#e8f5f3",
+        "glassOpacity": 0.07,
+        "frost": false,
+        "frostOpacity": 0.94,
+        "frostBlur": 0.024,
+        "autoplay": true
+      }
+    },
+    "models": {
+      "heal": "/models/heal.glb",
+      "enrich": "/models/enrich.glb?v=d4b28fa0be42",
+      "empower": "/models/empower.glb",
+      "projects": "/models/projects.glb",
+      "amrit": "/models/amrit.glb",
+      "oneness": "/models/oneness.glb"
+    }
+  },
+  "bounds": {
+    "exposure": [
+      0.25,
+      2.5
+    ],
+    "roughness": [
+      0,
+      1
+    ],
+    "metalness": [
+      0,
+      1
+    ],
+    "fogNear": [
+      5,
+      80
+    ],
+    "fogFar": [
+      30,
+      130
+    ],
+    "pendantIntensity": [
+      0,
+      120
+    ],
+    "edgeIntensity": [
+      0,
+      50
+    ],
+    "pictureIntensity": [
+      0,
+      50
+    ],
+    "exhibitIntensity": [
+      0,
+      80
+    ],
+    "frameGlow": [
+      0,
+      2
+    ],
+    "beamOpacity": [
+      0,
+      0.2
+    ],
+    "fieldOfView": [
+      35,
+      70
+    ],
+    "positionSmoothing": [
+      3,
+      30
+    ],
+    "turnSmoothing": [
+      3,
+      30
+    ],
+    "scrollSmoothing": [
+      3,
+      20
+    ],
+    "photoPause": [
+      0,
+      0.65
+    ],
+    "modelFloat": [
+      0,
+      0.2
+    ],
+    "modelSway": [
+      0,
+      0.6
+    ],
+    "maxWidth": [
+      640,
+      1920
+    ],
+    "maxHeight": [
+      480,
+      1440
+    ],
+    "fps": [
+      24,
+      60
+    ],
+    "minScale": [
+      0.5,
+      1
+    ],
+    "maxScale": [
+      0.5,
+      1
+    ],
+    "photoLoadDistance": [
+      40,
+      100
+    ],
+    "modelSize": [
+      1,
+      3
+    ],
+    "modelHeight": [
+      3.8,
+      4.8
+    ],
+    "modelLightIntensity": [
+      0,
+      80
+    ],
+    "mosaicHue": [
+      0,
+      360
+    ],
+    "mosaicSaturation": [
+      0,
+      100
+    ],
+    "tileSize": [
+      12,
+      64
+    ],
+    "woodRoughness": [
+      0,
+      1
+    ],
+    "glassOpacity": [
+      0,
+      0.5
+    ],
+    "frostOpacity": [
+      0,
+      1
+    ],
+    "frostBlur": [
+      0,
+      0.05
+    ]
+  }
+}

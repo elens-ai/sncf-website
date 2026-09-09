@@ -1,0 +1,116 @@
+{
+  "home.intro": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "Home · Hero and pavilion (linked scroll sequence)"
+  },
+  "home.events": {
+    "enabled": true,
+    "order": 1,
+    "options": {},
+    "label": "Home · Upcoming events"
+  },
+  "home.awards": {
+    "enabled": true,
+    "order": 2,
+    "options": {},
+    "label": "Home · Awards and recognition"
+  },
+  "home.partners": {
+    "enabled": true,
+    "order": 3,
+    "options": {},
+    "label": "Home · Partnerships"
+  },
+  "home.footer": {
+    "enabled": true,
+    "order": 4,
+    "options": {},
+    "label": "Home · Footer"
+  },
+  "shared.Header": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "HomePage · Header"
+  },
+  "shared.SocialSidebar": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "HomePage · SocialSidebar"
+  },
+  "shared.SectionJumpButton": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "HomePage · SectionJumpButton"
+  },
+  "shared.SiteFooter": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "PageShell · SiteFooter"
+  },
+  "WhoWeArePage.account": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "WhoWeArePage · account"
+  },
+  "WhoWeArePage.road": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "WhoWeArePage · road"
+  },
+  "WhoWeArePage.partners": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "WhoWeArePage · partners"
+  },
+  "WhoWeArePage.contact": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "WhoWeArePage · contact"
+  },
+  "GuidingForcePage.satguru": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "GuidingForcePage · satguru"
+  },
+  "GuidingForcePage.guidance": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "GuidingForcePage · guidance"
+  },
+  "GuidingForcePage.gf-relief": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "GuidingForcePage · gf-relief"
+  },
+  "GuidingForcePage.gf-media": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "GuidingForcePage · gf-media"
+  },
+  "ProjectsPage.projects-directory": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "ProjectsPage · projects-directory"
+  },
+  "ProjectsPage.health-city": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "ProjectsPage · health-city"
+  }
+}

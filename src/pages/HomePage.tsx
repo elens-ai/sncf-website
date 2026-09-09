@@ -1,3 +1,5 @@
+import { CMSSection } from '../cms/CMSContentProvider';
+import { CMSLayout } from '../components/CMSLayout';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePageMotion } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
@@ -63,7 +65,7 @@ export default function HomePage() {
   usePageMotion(isSplashUp || isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || !!galleryLeader || !!inviteId);
   const inviteItem = useMemo(
     () => (inviteId ? resolveEvents(EVENTS).find((i) => i.event.id === inviteId) ?? null : null),
-    [inviteId],
+    [inviteId, EVENTS],
   );
   const closeInvite = useCallback(() => {
     setInviteId(null);
@@ -159,7 +161,7 @@ export default function HomePage() {
       )}
 
       {/* 1. TOP HEADER NAVIGATION */}
-      <Header
+      <CMSSection id="shared.Header"><Header
         currentPillar={currentPillar}
         onSearchClick={() => setIsSearchOpen(true)}
         searchQuery={searchQuery}
@@ -171,7 +173,7 @@ export default function HomePage() {
         onOpenGallery={() => setIsGalleryOpen(true)}
         onOpenDonate={() => setIsDonateOpen(true)}
         hideLogo={isSplashUp}
-      />
+      /></CMSSection>
 
       {/* Social sidebar — a viewport fixture, so it lives at ROOT level, not
           inside the hero. Inside it sat in the hero's stacking context
@@ -181,15 +183,17 @@ export default function HomePage() {
           ended up sliced off behind the footer. Out here its z-40 is real —
           above the sections and footer (z-10), below the header and modals
           (z-50). */}
-      <SocialSidebar />
+      <CMSSection id="shared.SocialSidebar"><SocialSidebar /></CMSSection>
 
       {/* Floating section-to-section jump. Root level for the same reason the
           social rail is: it is a viewport fixture, and inside a section its
           `position: fixed` would be captured by that section's transform /
           will-change containing block. Hidden while the splash is up. */}
-      {!isSplashUp && <SectionJumpButton />}
+      {!isSplashUp && <CMSSection id="shared.SectionJumpButton"><SectionJumpButton /></CMSSection>}
 
       {/* 2. HERO — the site's single hero. */}
+      <CMSLayout sections={[
+        {id:'home.intro',node:(<div className="hero-pavilion-sequence">
       <HeroSection
         activeIndex={activeIndex}
         onActiveIndexChange={handleActiveIndexChange}
@@ -202,26 +206,19 @@ export default function HomePage() {
       {/* 3. THE SCREEN BELOW THE HERO. It carries the current pillar's accent
              colors to maintain color continuity from the hero section. */}
       <PavilionJourney />
-
-      {/* 4. UPCOMING EVENTS */}
-      <EventsSection />
-
-      {/* 5. AWARDS & RECOGNITIONS */}
-      <AwardsSection />
-
-      {/* 6. PARTNERS */}
-      <PartnersSection
+      </div>)},
+        {id:'home.events',node:<EventsSection />},
+        {id:'home.awards',node:<AwardsSection />},
+        {id:'home.partners',node:(<PartnersSection
         onOpenDonate={() => setIsDonateOpen(true)}
         escapeSuspended={
           /* while any overlay is up, Escape belongs to the overlay — the
              desk beneath it must not collapse on the same keypress */
           isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || galleryLeader !== null
         }
-      />
-
-      {/* 7. FOOTER — closes the page. Not a snap target: it is a band, not a
-             screen, and snapping to it would strand the reader on links. */}
-      <SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />
+      />)},
+        {id:'home.footer',node:<SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />},
+      ]} />
 
       {/* Detail Modal for in-depth pillar exploration */}
       <PillarModal

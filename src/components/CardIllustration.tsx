@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { bindCMSValue, resolveCMSAsset, getCMSCopy } from '../cms/runtime';
 import React from 'react';
 import { PillarState } from '../types';
 
@@ -28,10 +30,10 @@ interface Mark {
   art: React.ReactNode;
 }
 
-const MARKS: Record<string, Mark> = {
+let MARKS: Record<string, Mark> = bindCMSValue(() => ({
   // HEAL — sprout: two upper leaves, two lower leaves, vein on the large leaf
   heal: {
-    img: '/images/vertical-heal.webp',
+    img: resolveCMSAsset("asset.CardIllustration.7144da391fb1", "/images/vertical-heal.webp"),
     color: '#2FA96B',
     art: (
       <>
@@ -52,7 +54,7 @@ const MARKS: Record<string, Mark> = {
 
   // ENRICH — open book with white pages
   enrich: {
-    img: '/images/vertical-enrich.webp',
+    img: resolveCMSAsset("asset.CardIllustration.486823e29a83", "/images/vertical-enrich.webp"),
     color: '#3BAFBF',
     art: (
       <>
@@ -65,7 +67,7 @@ const MARKS: Record<string, Mark> = {
 
   // EMPOWER — figure with arms raised
   empower: {
-    img: '/images/vertical-empower.webp',
+    img: resolveCMSAsset("asset.CardIllustration.7e886446b163", "/images/vertical-empower.webp"),
     color: '#E0459A',
     art: (
       <>
@@ -124,7 +126,7 @@ const MARKS: Record<string, Mark> = {
       </>
     ),
   },
-};
+}), value => { MARKS = value; });
 
 export const CardIllustration: React.FC<CardIllustrationProps> = ({
   pillar,
@@ -165,7 +167,7 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
             /* The artwork carries its own pale disc; the circular container
                clips the square's white corners so it sits on the gradient. */
             <img
-              src={mark.img}
+              src={resolveCMSMedia(mark.img)}
               alt={`${pillar.label} icon`}
               className="w-full h-full object-cover"
               width={512}

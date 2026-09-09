@@ -1,3 +1,6 @@
+import { resolveCMSMedia } from '../cms/media';
+import { bindCMSValue, resolveCMSAsset, getCMSCopy } from '../cms/runtime';
+import { getCMSLink } from '../cms/links';
 import React, { useEffect, useRef, useState } from 'react';
 import { PARTNERS } from '../data/partners';
 
@@ -119,34 +122,34 @@ const ACCENT = '#A068FF';
    inlines an asset by finding its path as a literal string in the built
    JS, and '/images/partners/un.png' leaves no such string behind — every mark on this
    screen silently 404'd inside the artifact. */
-const NODES: Node[] = [
-  { src: '/images/partners/un.png', alt: 'United Nations', orbit: 1, angle: 270, size: 74, round: false, glow: '#009edb', delay: 0.6 },
-  { src: '/images/vertical-heal.webp', alt: 'A health camp', orbit: 2, angle: 60, size: 58, round: true, glow: '#f2c14e', delay: 0.8 },
-  { src: '/images/partners/red-cross.png', alt: 'Indian Red Cross Society', orbit: 2, angle: 180, size: 78, round: true, glow: '#ed1b2e', delay: 1.0 },
-  { src: '/images/partners/railways.png', alt: 'Ministry of Indian Railways', orbit: 2, angle: 300, size: 58, round: false, glow: '#0077c8', delay: 1.2 },
-  { src: '/images/vertical-enrich.webp', alt: 'A classroom', orbit: 3, angle: 130, size: 88, round: true, glow: '#e86ba0', delay: 1.4 },
-  { src: '/images/partners/toi.png', alt: 'Times of India', orbit: 4, angle: 30, size: 58, round: false, glow: ACCENT, delay: 1.6 },
-  { src: '/images/volunteers-planning.webp', alt: 'Volunteers planning a drive', orbit: 4, angle: 95, size: 88, round: false, glow: '#f08a3c', delay: 1.8 },
-  { src: '/images/vertical-empower.webp', alt: 'A plantation drive', orbit: 4, angle: 220, size: 88, round: false, glow: '#e86ba0', delay: 2.0 },
-  { src: '/images/partners/niit.png', alt: 'NIIT', orbit: 4, angle: 320, size: 58, round: false, glow: ACCENT, delay: 2.3 },
-];
+let NODES: Node[] = bindCMSValue(() => ([
+  { src: resolveCMSAsset("asset.PartnersHero.836c7e928538", "/images/partners/un.png"), alt: getCMSCopy("copy.PartnersHero.c3c27cfe4426", "United Nations"), orbit: 1, angle: 270, size: 74, round: false, glow: '#009edb', delay: 0.6 },
+  { src: resolveCMSAsset("asset.PartnersHero.7144da391fb1", "/images/vertical-heal.webp"), alt: getCMSCopy("copy.PartnersHero.3007e1e3446d", "A health camp"), orbit: 2, angle: 60, size: 58, round: true, glow: '#f2c14e', delay: 0.8 },
+  { src: resolveCMSAsset("asset.PartnersHero.46bbc9f2d591", "/images/partners/red-cross.png"), alt: getCMSCopy("copy.PartnersHero.4cc0b4376458", "Indian Red Cross Society"), orbit: 2, angle: 180, size: 78, round: true, glow: '#ed1b2e', delay: 1.0 },
+  { src: resolveCMSAsset("asset.PartnersHero.848a29a67689", "/images/partners/railways.png"), alt: getCMSCopy("copy.PartnersHero.9e351718fa06", "Ministry of Indian Railways"), orbit: 2, angle: 300, size: 58, round: false, glow: '#0077c8', delay: 1.2 },
+  { src: resolveCMSAsset("asset.PartnersHero.486823e29a83", "/images/vertical-enrich.webp"), alt: getCMSCopy("copy.PartnersHero.5f84470d9613", "A classroom"), orbit: 3, angle: 130, size: 88, round: true, glow: '#e86ba0', delay: 1.4 },
+  { src: resolveCMSAsset("asset.PartnersHero.81c0e1df48f3", "/images/partners/toi.png"), alt: getCMSCopy("copy.PartnersHero.98d12a4fc755", "Times of India"), orbit: 4, angle: 30, size: 58, round: false, glow: ACCENT, delay: 1.6 },
+  { src: resolveCMSAsset("asset.PartnersHero.76f684891a21", "/images/volunteers-planning.webp"), alt: getCMSCopy("copy.PartnersHero.2a5a44b61ff2", "Volunteers planning a drive"), orbit: 4, angle: 95, size: 88, round: false, glow: '#f08a3c', delay: 1.8 },
+  { src: resolveCMSAsset("asset.PartnersHero.7e886446b163", "/images/vertical-empower.webp"), alt: getCMSCopy("copy.PartnersHero.ae869749ce31", "A plantation drive"), orbit: 4, angle: 220, size: 88, round: false, glow: '#e86ba0', delay: 2.0 },
+  { src: resolveCMSAsset("asset.PartnersHero.e4d851213c84", "/images/partners/niit.png"), alt: getCMSCopy("copy.PartnersHero.08b3dd67f846", "NIIT"), orbit: 4, angle: 320, size: 58, round: false, glow: ACCENT, delay: 2.3 },
+]), value => { NODES = value; });
 
 const RADIUS: Record<number, number> = { 1: 177, 2: 251, 3: 325, 4: 399 };
 
 /* ── THE TICKER ────────────────────────────────────────────────────────────
    Every mark we hold a file for, laid out four times so the strip is always
    wider than any viewport and the loop has nothing to catch on. */
-const MARKS = [
-  { src: '/images/partners/un.png', alt: 'United Nations' },
-  { src: '/images/partners/railways.png', alt: 'Ministry of Indian Railways' },
-  { src: '/images/partners/red-cross.png', alt: 'Indian Red Cross Society' },
-  { src: '/images/partners/life-west.svg', alt: 'The Life Chiropractic College West' },
-  { src: '/images/partners/urban-development.png', alt: 'Ministry of Urban Development' },
-  { src: '/images/partners/ndtv.png', alt: 'NDTV' },
-  { src: '/images/partners/toi.png', alt: 'Times of India' },
-  { src: '/images/partners/niit.png', alt: 'NIIT' },
-  { src: '/images/partners/singer.png', alt: 'Singer India Ltd.' },
-];
+let MARKS = bindCMSValue(() => ([
+  { src: resolveCMSAsset("asset.PartnersHero.836c7e928538", "/images/partners/un.png"), alt: getCMSCopy("copy.PartnersHero.c3c27cfe4426", "United Nations") },
+  { src: resolveCMSAsset("asset.PartnersHero.848a29a67689", "/images/partners/railways.png"), alt: getCMSCopy("copy.PartnersHero.9e351718fa06", "Ministry of Indian Railways") },
+  { src: resolveCMSAsset("asset.PartnersHero.46bbc9f2d591", "/images/partners/red-cross.png"), alt: getCMSCopy("copy.PartnersHero.4cc0b4376458", "Indian Red Cross Society") },
+  { src: resolveCMSAsset("asset.PartnersHero.39811b65f44a", "/images/partners/life-west.svg"), alt: getCMSCopy("copy.PartnersHero.9a314cf92be3", "The Life Chiropractic College West") },
+  { src: resolveCMSAsset("asset.PartnersHero.9f2bded92dc1", "/images/partners/urban-development.png"), alt: getCMSCopy("copy.PartnersHero.7b8eb828684b", "Ministry of Urban Development") },
+  { src: resolveCMSAsset("asset.PartnersHero.752cd88f3494", "/images/partners/ndtv.png"), alt: getCMSCopy("copy.PartnersHero.180b26bb6065", "NDTV") },
+  { src: resolveCMSAsset("asset.PartnersHero.81c0e1df48f3", "/images/partners/toi.png"), alt: getCMSCopy("copy.PartnersHero.98d12a4fc755", "Times of India") },
+  { src: resolveCMSAsset("asset.PartnersHero.e4d851213c84", "/images/partners/niit.png"), alt: getCMSCopy("copy.PartnersHero.08b3dd67f846", "NIIT") },
+  { src: resolveCMSAsset("asset.PartnersHero.7985ebc52923", "/images/partners/singer.png"), alt: getCMSCopy("copy.PartnersHero.a6c36a338c46", "Singer India Ltd.") },
+]), value => { MARKS = value; });
 
 export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
   const [calm, setCalm] = useState(false);
@@ -171,32 +174,24 @@ export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
       <div className="mt-actions">
         <a
           className="mt-login"
-          href="https://nirankarifoundation.org/our-partners/"
+          href={getCMSLink("copy.Link.PartnersHero.4d589e9db012", "https://nirankarifoundation.org/our-partners/")}
           target="_blank"
           rel="noopener noreferrer"
-        >
-          All partners
-        </a>
+        >{getCMSCopy("copy.PartnersHero.f1beb9d2a979", "All partners")}</a>
         <div className="btn-border-wrap">
-          <button type="button" className="mt-join" onClick={onOpenDonate}>
-            Partner With Us
-          </button>
+          <button type="button" className="mt-join" onClick={onOpenDonate}>{getCMSCopy("copy.PartnersHero.be3dde060bae", "Partner With Us")}</button>
         </div>
       </div>
 
       {/* LEFT */}
       <div className="mt-body">
         <div className="mt-left">
-          <p className="mt-eyebrow" id="partners-heading">
-            Our partners
-          </p>
+          <p className="mt-eyebrow" id="partners-heading">{getCMSCopy("copy.PartnersHero.7e9dc538a648", "Our partners")}</p>
 
           <TypewriterHeading calm={calm} />
 
           <div className="btn-border-wrap mt-start-wrap">
-            <button type="button" className="mt-start" onClick={onOpenDonate}>
-              Become a partner
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <button type="button" className="mt-start" onClick={onOpenDonate}>{getCMSCopy("copy.PartnersHero.66a18f4d2672", "Become a partner")}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
@@ -218,7 +213,7 @@ export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
                 {o === 1 && (
                   <div className="mt-core">
                     <span className="mt-core-num">{count}</span>
-                    <span className="mt-core-label">Partners</span>
+                    <span className="mt-core-label">{getCMSCopy("copy.PartnersHero.5dab502bfba3", "Partners")}</span>
                   </div>
                 )}
 
@@ -237,7 +232,7 @@ export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
                     <span className={`mt-node-spin mt-node-spin-o${o}`}>
                       <img
                         className={n.round ? 'mt-node-img mt-node-round' : 'mt-node-img'}
-                        src={n.src}
+                        src={resolveCMSMedia(n.src)}
                         alt={n.alt}
                         loading="lazy"
                         decoding="async"
@@ -259,7 +254,7 @@ export const PartnersHero: React.FC<PartnersHeroProps> = ({ onOpenDonate }) => {
               <img
                 key={`${copy}-${m.src}`}
                 className="mt-ticker-logo"
-                src={m.src}
+                src={resolveCMSMedia(m.src)}
                 alt={copy === 0 ? m.alt : ''}
                 aria-hidden={copy !== 0}
                 loading="lazy"

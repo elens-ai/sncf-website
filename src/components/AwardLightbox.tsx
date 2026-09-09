@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -146,7 +148,7 @@ export const AwardLightbox: React.FC<AwardLightboxProps> = ({
         <button
           onClick={onClose}
           className="award-icon-btn absolute -top-2 right-0 sm:top-0 sm:-right-2 z-10"
-          aria-label="Close photograph"
+          aria-label={getCMSCopy("copy.AwardLightbox.ed90d2b23113", "Close photograph")}
         >
           <X className="w-5 h-5" />
         </button>
@@ -155,7 +157,7 @@ export const AwardLightbox: React.FC<AwardLightboxProps> = ({
           <div className="award-lightbox-stage">
             <img
               key={photo.src}
-              src={photo.src}
+              src={resolveCMSMedia(photo.src)}
               alt={photo.alt}
               width={photo.width}
               height={photo.height}
@@ -179,13 +181,13 @@ export const AwardLightbox: React.FC<AwardLightboxProps> = ({
 
         {count > 1 && (
           <div className="flex items-center justify-center gap-4 mt-6">
-            <button onClick={goPrev} className="award-icon-btn" aria-label="Previous photograph">
+            <button onClick={goPrev} className="award-icon-btn" aria-label={getCMSCopy("copy.AwardLightbox.c7cd30884cd6", "Previous photograph")}>
               <ChevronLeft className="w-5 h-5" />
             </button>
             <p className="text-[13px] text-white/70 tabular-nums" aria-live="polite">
               {index + 1} / {count}
             </p>
-            <button onClick={goNext} className="award-icon-btn" aria-label="Next photograph">
+            <button onClick={goNext} className="award-icon-btn" aria-label={getCMSCopy("copy.AwardLightbox.a471f92bee76", "Next photograph")}>
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>

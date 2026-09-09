@@ -10,7 +10,7 @@ type ViewState = { active: boolean; animate: boolean; visible: boolean };
 export interface ModelView { update(state: Partial<ViewState>): void; dispose(): void }
 type Asset = { pivot: T.Group; extent: number; elapsed: number; phase: number; poster?: string; book?: ReturnType<typeof createBookOpening> };
 type Client = ViewState & {
-  host: HTMLElement; id: string; poster: (url: string) => void; live: (value: boolean) => void;
+  host: HTMLElement; id: string; assetKey: string; poster: (url: string) => void; live: (value: boolean) => void;
   rotation: () => number;
 };
 
@@ -27,7 +27,7 @@ class PillarRenderer {
   current: Client | undefined;
   clock = createFrameClock(delta => {
     if (!this.current || this.lost || !pageIsActive(this.current.host)) { this.stop(); return; }
-    const asset = this.assets.get(this.current.id)!;
+    const asset = this.assets.get(this.current.assetKey)!;
     asset.elapsed += delta;
     asset.book?.advance(delta);
     this.drawCurrent();
@@ -90,12 +90,12 @@ class PillarRenderer {
     asset.book?.finish();
     this.paint(asset, 384, rotation);
     asset.poster = this.renderer.domElement.toDataURL('image/png');
-    for (const client of this.clients) if (this.assets.get(client.id) === asset) client.poster(asset.poster);
+    for (const client of this.clients) if (this.assets.get(client.assetKey) === asset) client.poster(asset.poster);
   }
-  async load(id: string) {
-    if (this.loads.has(id)) return this.loads.get(id);
-    const promise = new GLTFLoader().loadAsync(pillarModelUrl(id)).then(({ scene: model }) => {
-      if (this.disposed) { release(model); return; }
+  async load(id: string, url: string, assetKey: string) {
+    if (this.loads.has(assetKey)) return this.loads.get(assetKey);
+    const promise = new GLTFLoader().loadAsync(url).then(({ scene: model }) => {
+      if (this.disposed || ![...this.clients].some(client => client.assetKey === assetKey)) { release(model); this.loads.delete(assetKey); return; }
       const bounds = new T.Box3().setFromObject(model);
       model.position.sub(bounds.getCenter(new T.Vector3()));
       const size = bounds.getSize(new T.Vector3());
@@ -103,25 +103,25 @@ class PillarRenderer {
       const pivot = new T.Group(); pivot.add(model);
       const asset: Asset = { pivot, extent: Math.max(size.y / 2 + radius * .14 + .1, radius) * 1.015, elapsed: 0, phase: id === 'heal' ? 0 : id === 'enrich' ? 1.8 : 3.6 };
       if (id === 'enrich') asset.book = createBookOpening(model);
-      this.assets.set(id, asset); this.scene.add(pivot);
+      this.assets.set(assetKey, asset); this.scene.add(pivot);
       if (!this.lost) this.snapshot(asset);
       this.sync();
     }).catch(error => console.warn(`Unable to load ${id} model`, error));
-    this.loads.set(id, promise);
+    this.loads.set(assetKey, promise);
     return promise;
   }
   sync = () => {
     if (this.disposed || this.lost) return;
     this.stop();
-    const next = [...this.clients].find(c => c.active && c.visible && pageIsActive(c.host) && this.assets.has(c.id));
+    const next = [...this.clients].find(c => c.active && c.visible && pageIsActive(c.host) && this.assets.has(c.assetKey));
     if (this.current !== next) {
       if (this.current) {
-        const asset = this.assets.get(this.current.id);
+        const asset = this.assets.get(this.current.assetKey);
         if (asset) this.snapshot(asset, this.current.rotation());
         this.current.live(false);
       }
       this.current = next;
-      if (next) this.assets.get(next.id)?.book?.restart(next.animate);
+      if (next) this.assets.get(next.assetKey)?.book?.restart(next.animate);
     }
     if (!next) { this.renderer.domElement.remove(); return; }
     next.host.appendChild(this.renderer.domElement);
@@ -134,7 +134,7 @@ class PillarRenderer {
   };
   drawCurrent() {
     if (!this.current) return;
-    const asset = this.assets.get(this.current.id)!;
+    const asset = this.assets.get(this.current.assetKey)!;
     // A larger CSS icon must never allocate a multi-megapixel render target.
     this.paint(asset, this.pixels, this.current.rotation());
   }
@@ -150,23 +150,29 @@ class PillarRenderer {
   }
 }
 function release(root: T.Group) {
+  const textures = new Set<T.Texture>();
   root.traverse(object => {
     const mesh = object as T.Mesh;
     if (!mesh.isMesh) return;
     mesh.geometry.dispose();
-    for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) material.dispose();
+    for (const material of Array.isArray(mesh.material) ? mesh.material : [mesh.material]) {
+      for (const value of Object.values(material)) if (value instanceof T.Texture) textures.add(value);
+      material.dispose();
+    }
   });
+  for (const texture of textures) texture.dispose();
 }
 let shared: PillarRenderer | undefined;
 let cleanup: ReturnType<typeof setTimeout> | undefined;
-export function attachModel(host: HTMLElement, id: string, poster: Client['poster'], live: Client['live'], rotation: Client['rotation'] = () => 0): ModelView {
+export function attachModel(host: HTMLElement, id: string, poster: Client['poster'], live: Client['live'], rotation: Client['rotation'] = () => 0, url = pillarModelUrl(id)): ModelView {
   clearTimeout(cleanup);
   const renderer = shared ??= new PillarRenderer();
-  const client: Client = { host, id, poster, live, rotation, active: false, animate: false, visible: false };
+  const assetKey = `${id}:${url}`;
+  const client: Client = { host, id, assetKey, poster, live, rotation, active: false, animate: false, visible: false };
   renderer.clients.add(client);
-  const cached = renderer.assets.get(id)?.poster;
+  const cached = renderer.assets.get(assetKey)?.poster;
   if (cached) poster(cached);
-  void renderer.load(id);
+  void renderer.load(id, url, assetKey);
   const observer = new ResizeObserver(() => { if (renderer.current === client) renderer.sync(); });
   observer.observe(host);
   return {
@@ -175,6 +181,10 @@ export function attachModel(host: HTMLElement, id: string, poster: Client['poste
       observer.disconnect(); renderer.clients.delete(client);
       if (renderer.current === client) renderer.current = undefined;
       renderer.sync();
+      if (![...renderer.clients].some(other => other.assetKey === assetKey)) {
+        const asset = renderer.assets.get(assetKey);
+        if (asset) { renderer.scene.remove(asset.pivot); release(asset.pivot); renderer.assets.delete(assetKey); renderer.loads.delete(assetKey); }
+      }
       if (!renderer.clients.size) cleanup = setTimeout(() => {
         renderer.dispose(); if (shared === renderer) shared = undefined;
       }, 0);

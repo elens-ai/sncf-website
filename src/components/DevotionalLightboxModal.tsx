@@ -1,3 +1,4 @@
+import { getCMSCopy } from '../cms/runtime';
 import React from 'react';
 import { X, Sparkles } from 'lucide-react';
 import { DevotionalLeader } from './DevotionalPhotoCard';
@@ -31,7 +32,7 @@ export const DevotionalLightboxModal: React.FC<DevotionalLightboxModalProps> = (
         <button
           onClick={onClose}
           className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-          aria-label="Close Lightbox"
+          aria-label={getCMSCopy("copy.DevotionalLightboxModal.8d5e2ed870c4", "Close Lightbox")}
         >
           <X className="w-5 h-5" />
         </button>
@@ -39,7 +40,7 @@ export const DevotionalLightboxModal: React.FC<DevotionalLightboxModalProps> = (
         {/* Spiritual Halo Tag */}
         <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-xs font-semibold tracking-widest uppercase mb-5">
           <Sparkles className="w-3.5 h-3.5" style={{ color: leader.glowColor }} />
-          <span>Spiritual Guidance</span>
+          <span>{getCMSCopy("copy.DevotionalLightboxModal.6a4aa2122de2", "Spiritual Guidance")}</span>
         </div>
 
         {/* Centered Large Dignified Portrait Icon Frame */}
@@ -49,13 +50,9 @@ export const DevotionalLightboxModal: React.FC<DevotionalLightboxModalProps> = (
           {/* Portrait Icon Graphics */}
           <div className="relative z-10 text-center">
             <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-full bg-neutral-100 border-2 border-neutral-300 flex items-center justify-center shadow-md mb-3">
-              <span className="font-artistic-display text-2xl sm:text-3xl text-neutral-900 font-bold tracking-wider">
-                ੴ
-              </span>
+              <span className="font-artistic-display text-2xl sm:text-3xl text-neutral-900 font-bold tracking-wider">{getCMSCopy("copy.DevotionalLightboxModal.1cd0846b2924", "ੴ")}</span>
             </div>
-            <div className="px-3 py-1 rounded-full bg-neutral-900 text-[11px] font-bold text-white uppercase tracking-widest shadow-sm">
-              Sant Nirankari Mission
-            </div>
+            <div className="px-3 py-1 rounded-full bg-neutral-900 text-[11px] font-bold text-white uppercase tracking-widest shadow-sm">{getCMSCopy("copy.DevotionalLightboxModal.4e51d6a701d7", "Sant Nirankari Mission")}</div>
           </div>
         </div>
 
@@ -67,9 +64,7 @@ export const DevotionalLightboxModal: React.FC<DevotionalLightboxModalProps> = (
           {leader.honorificTitle}
         </p>
 
-        <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-md">
-          “Know One, Believe in One, Become One. Spreading universal brotherhood, love, peace, and selfless service across humanity.”
-        </p>
+        <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-md">{getCMSCopy("copy.DevotionalLightboxModal.7506d87af357", "“Know One, Believe in One, Become One. Spreading universal brotherhood, love, peace, and selfless service across humanity.”")}</p>
       </div>
     </div>
   );

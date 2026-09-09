@@ -1,3 +1,4 @@
+import { bindCMSValue, getCMSCopy } from '../cms/runtime';
 import React, { useEffect, useRef, useState } from 'react';
 
 /**
@@ -21,19 +22,19 @@ interface Segment {
   strong?: boolean;
 }
 
-const SEGMENTS: Segment[] = [
-  { text: 'We are the ' },
-  { text: 'Sant Nirankari Charitable Foundation', strong: true },
-  { text: ' — we ' },
-  { text: 'heal', script: true },
+let SEGMENTS: Segment[] = bindCMSValue(() => ([
+  { text: getCMSCopy("copy.FoundationIntro.0b819a2b703a", "We are the ") },
+  { text: getCMSCopy("copy.FoundationIntro.a01941bf3134", "Sant Nirankari Charitable Foundation"), strong: true },
+  { text: getCMSCopy("copy.FoundationIntro.71173b91e15d", " — we ") },
+  { text: getCMSCopy("copy.FoundationIntro.599f8341fe3e", "heal"), script: true },
   { text: ', ' },
-  { text: 'enrich', script: true },
-  { text: ' and ' },
-  { text: 'empower', script: true },
-  { text: ' communities through selfless service.' },
-];
+  { text: getCMSCopy("copy.FoundationIntro.9e7ef9e260ae", "enrich"), script: true },
+  { text: getCMSCopy("copy.FoundationIntro.e3ee915a8e8c", " and ") },
+  { text: getCMSCopy("copy.FoundationIntro.b823c439f9e1", "empower"), script: true },
+  { text: getCMSCopy("copy.FoundationIntro.35f3de0998e3", " communities through selfless service.") },
+]), value => { SEGMENTS = value; });
 
-const FULL_TEXT = SEGMENTS.map((s) => s.text).join('');
+let FULL_TEXT = bindCMSValue(() => (SEGMENTS.map((s) => s.text).join('')), value => { FULL_TEXT = value; });
 
 /* The portrait holds the front for ~5.2s (26s per turn / 5 cards) and typing
    only starts once the copy has settled, so there are roughly 4.6s to write in.
@@ -176,9 +177,7 @@ export const FoundationIntro: React.FC<FoundationIntroProps> = ({ active, onComp
           fontSize: 'calc(var(--pillar-name-size) * 0.55)',
           opacity: done ? 1 : 0,
         }}
-      >
-        Service with Humility
-      </p>
+      >{getCMSCopy("copy.FoundationIntro.56219e473693", "Service with Humility")}</p>
     </>
   );
 };

@@ -19,12 +19,15 @@ services:
       - node_modules:/app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - VITE_CMS_URL=${VITE_CMS_URL:-http://127.0.0.1:3001}
     restart: unless-stopped
 
   web:
     build:
       context: .
       target: prod
+      args:
+        VITE_CMS_URL: ${VITE_CMS_URL:-}
     image: sncf-website:prod
     container_name: sncf-website
     profiles: ["prod"]
@@ -33,10 +36,9 @@ services:
     restart: unless-stopped
 
   # ── THE CMS ────────────────────────────────────────────────────────────────
-  # Payload (Next.js host) + Postgres. The frontend above stays a static
-  # bundle: content is pulled from here at BUILD time and written into the
-  # site, so nothing in this compose file sits in a visitor's request path.
-  # Only the donation endpoints are called live, and those are opt-in.
+  # Published CMS content is fetched at runtime; cached/bundled data keeps the
+  # frontend available if the CMS is down. Production requires a public HTTPS
+  # VITE_CMS_URL at frontend build time and matching CMS_ALLOWED_ORIGINS.
   db:
     image: postgres:17-alpine
     container_name: sncf-cms-db
@@ -48,7 +50,7 @@ services:
     ports:
       # 5433 on the host: 5432 is usually already taken by a local Postgres,
       # and a port clash here fails in a way that looks like a CMS bug.
-      - "${DB_PORT:-5433}:5432"
+      - "127.0.0.1:${DB_PORT:-5433}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
@@ -91,24 +93,8 @@ services:
     # retried in a loop that fills the log with the same error.
     restart: "no"
 
-  # THE BUILD-TIME EXPORT — content out of Postgres and into src/data/*.ts.
-  #
-  #   docker compose --profile export run --rm cms-export
-  #
-  # Not started by `up`: the `export` profile means it only runs when named.
-  # It shares the `cli` image with cms-migrate, so no extra build.
-  #
-  # This is how the static site gets its content, and note where it runs —
-  # beside the database, NOT in GitHub Actions. The script uses Payload's Local
-  # API, so it needs DATABASE_URI and no HTTP server; the generated .ts files
-  # are then committed, and the frontend workflow builds from those. CI
-  # therefore needs no database credential and no route to this host, and a CMS
-  # that is down cannot block a frontend deploy.
-  #
-  # The bind mount is the point: the container writes real files into the
-  # working tree, so a content change arrives as a reviewable git diff. For a
-  # site whose figures are the foundation's public record, a changed number
-  # showing up in a diff is the whole safety mechanism.
+  # Optional published JSON backup (the live site does not need a rebuild).
+  # docker compose --profile export run --rm cms-export
   cms-export:
     build:
       context: ./backend
@@ -125,9 +111,9 @@ services:
       NODE_ENV: production
       # Where the script writes. Inside the container; the mount below maps it
       # back to the repo's src/data on the host.
-      EXPORT_OUT_DIR: /out
+      EXPORT_OUT_FILE: /out/cms-content.json
     volumes:
-      - ./src/data:/out
+      - ./public:/out
     # Writes as the invoking user, not root. On Linux a root-owned container
     # writing through a bind mount leaves root-owned .ts files in the working
     # tree, and the next `git checkout` of those paths fails with EACCES.
@@ -165,7 +151,7 @@ services:
       DATABASE_URI: postgres://${POSTGRES_USER:-sncf}:${POSTGRES_PASSWORD:-sncf}@db:5432/${POSTGRES_DB:-sncf_cms}
       NODE_ENV: production
     ports:
-      - "${CMS_PORT:-3001}:3001"
+      - "127.0.0.1:${CMS_PORT:-3001}:3001"
     volumes:
       # Uploads live on a named volume, not in the image: rebuilding the CMS
       # must never destroy the media library. The image creates /app/media

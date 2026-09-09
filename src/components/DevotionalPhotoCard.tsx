@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { bindCMSValue, resolveCMSAsset, getCMSCopy } from '../cms/runtime';
 import React, { useState } from 'react';
 
 export interface DevotionalLeader {
@@ -28,15 +30,15 @@ export interface DevotionalLeader {
  */
 export const DEVOTIONAL_ACCENT = { a: '#7d3f66', b: '#c98ab2' };
 
-export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
+export let DEVOTIONAL_LEADERS: DevotionalLeader[] = bindCMSValue(() => ([
   {
     id: 'mata-sudiksha-ji',
-    name: 'Satguru Mata Sudiksha Ji Maharaj',
+    name: getCMSCopy("copy.DevotionalPhotoCard.e19d3f2c98e2", "Satguru Mata Sudiksha Ji Maharaj"),
     honorificTitle: 'Sixth Spiritual Guide · Sant Nirankari Mission',
     avatarTone: 'from-amber-500 via-rose-500 to-indigo-900',
     glowColor: '#f59e0b',
     portraitType: 'mata-ji',
-    photoUrl: '/images/mataji-rajpita-planting.webp',
+    photoUrl: resolveCMSAsset("asset.DevotionalPhotoCard.4daa8ff53979", "/images/mataji-rajpita-planting.webp"),
     photoAlt:
       'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling',
     /* The card carries the same rose the stage does while this portrait
@@ -48,14 +50,14 @@ export const DEVOTIONAL_LEADERS: DevotionalLeader[] = [
   },
   {
     id: 'rajpita-ramit-ji',
-    name: 'Nirankari Rajpita Ramit Ji',
+    name: getCMSCopy("copy.DevotionalPhotoCard.9b46c96cea64", "Nirankari Rajpita Ramit Ji"),
     honorificTitle: 'Spiritual Guide · Sant Nirankari Mission',
     avatarTone: 'from-sky-500 via-blue-600 to-slate-900',
     glowColor: '#38bdf8',
     portraitType: 'rajpita-ji',
-    photoUrl: '/images/nirankari-rajpita-ramit-ji.jpg',
+    photoUrl: resolveCMSAsset("asset.DevotionalPhotoCard.b4324b25c1ce", "/images/nirankari-rajpita-ramit-ji.jpg"),
   },
-];
+]), value => { DEVOTIONAL_LEADERS = value; });
 
 interface DevotionalPhotoCardProps {
   leader: DevotionalLeader;
@@ -95,7 +97,7 @@ export const DevotionalPhotoCard: React.FC<DevotionalPhotoCardProps> = ({
           />
         )}
         <img
-          src={leader.photoUrl}
+          src={resolveCMSMedia(leader.photoUrl)}
           alt={leader.photoAlt ?? leader.name}
           /* A cut-out is CONTAINed, never covered: the subject is 0.46 wide to
              tall against a 0.78 card, so object-cover would slice the sapling

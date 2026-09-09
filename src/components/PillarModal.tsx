@@ -1,3 +1,4 @@
+import { getCMSCopy } from '../cms/runtime';
 import React, { useEffect } from 'react';
 import { PillarState } from '../types';
 import { OdometerStatCounter } from './OdometerStatCounter';
@@ -64,13 +65,12 @@ export const PillarModal: React.FC<PillarModalProps> = ({
             id="close-pillar-modal-btn"
             onClick={onClose}
             className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
-            aria-label="Close dialog"
+            aria-label={getCMSCopy("copy.PillarModal.c8df66c5fe3f", "Close dialog")}
           >
             ✕
           </button>
 
-          <div className="inline-block px-3 py-1 rounded-full bg-white/25 backdrop-blur-md text-xs font-black tracking-widest uppercase mb-2 border border-white/30">
-            Pillar: {pillar.label}
+          <div className="inline-block px-3 py-1 rounded-full bg-white/25 backdrop-blur-md text-xs font-black tracking-widest uppercase mb-2 border border-white/30">{getCMSCopy("copy.PillarModal.1da514561ad6", "Pillar: ")}{pillar.label}
           </div>
 
           <h2 id="modal-pillar-title" className="text-2xl sm:text-3xl font-extrabold text-white">
@@ -86,9 +86,7 @@ export const PillarModal: React.FC<PillarModalProps> = ({
         <div className="p-6 sm:p-8 space-y-6">
           {/* Main summary */}
           <div>
-            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-2">
-              Mission Overview
-            </h3>
+            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-2">{getCMSCopy("copy.PillarModal.cb971f19cfd5", "Mission Overview")}</h3>
             <p className="text-neutral-200 text-base leading-relaxed">
               {pillar.body}
             </p>
@@ -99,9 +97,7 @@ export const PillarModal: React.FC<PillarModalProps> = ({
 
           {/* Impact Statistics Grid */}
           <div>
-            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-3">
-              Key Milestones & Reach
-            </h3>
+            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-3">{getCMSCopy("copy.PillarModal.f2d466ee4bb2", "Key Milestones & Reach")}</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {pillar.stats.map((stat, idx) => (
                 <div
@@ -128,9 +124,7 @@ export const PillarModal: React.FC<PillarModalProps> = ({
 
           {/* Key Highlights Bullet points */}
           <div>
-            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-3">
-              Core Initiatives
-            </h3>
+            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-3">{getCMSCopy("copy.PillarModal.2dabdf0f9c1b", "Core Initiatives")}</h3>
             <ul className="space-y-2.5 text-sm text-neutral-300">
               {pillar.keyHighlights.map((item, idx) => (
                 <li key={idx} className="flex items-start gap-2.5">
@@ -146,9 +140,7 @@ export const PillarModal: React.FC<PillarModalProps> = ({
 
           {/* Switch Pillars Quick Bar */}
           <div className="pt-4 border-t border-neutral-800">
-            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-3">
-              Explore Other Pillars
-            </h3>
+            <h3 className="text-xs uppercase font-bold text-white/50 tracking-wider mb-3">{getCMSCopy("copy.PillarModal.ef358cdee538", "Explore Other Pillars")}</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
               {allPillars.map((p) => (
                 <button
@@ -171,16 +163,12 @@ export const PillarModal: React.FC<PillarModalProps> = ({
 
           {/* Action footer */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-            <span className="text-xs text-neutral-400 text-center sm:text-left">
-              Sant Nirankari Charitable Foundation · Serving Humanity with Selfless Devotion
-            </span>
+            <span className="text-xs text-neutral-400 text-center sm:text-left">{getCMSCopy("copy.PillarModal.49df5771f033", "Sant Nirankari Charitable Foundation · Serving Humanity with Selfless Devotion")}</span>
             <button
               onClick={onClose}
               className="w-full sm:w-auto px-6 py-2.5 rounded-full text-white text-sm font-semibold cursor-pointer shadow-lg hover:brightness-110 active:scale-95 transition-all"
               style={{ backgroundColor: pillar.accentA }}
-            >
-              Back to Hero Wheel
-            </button>
+            >{getCMSCopy("copy.PillarModal.0356ce03b498", "Back to Hero Wheel")}</button>
           </div>
         </div>
       </div>
