@@ -18,13 +18,6 @@ import { ACTIVITIES } from '../data/activities';
  * present Satguru, at length, with the initiatives that carry Her guidance
  * into the world.
  *
- * It carried two more sections once — a second portrait and the five-Satguru
- * succession — and both were removed at the foundation's request. A living
- * spiritual lineage is not this site's to narrate; the page points towards
- * Satsang and the Mission's own literature instead. The CSS those sections
- * left behind (.gf-line*, .gf-second, .gf-portrait-sm, .gf-name-sm, .gf-lede)
- * has now been deleted too — it had been sitting unused since.
- *
  * IT IS BUILT AS ROOMS, like every other reading page. And it now carries
  * FIGURES: the page asserted that the guidance produces something "visible
  * rather than theoretical" and then showed nothing, while the activity
@@ -124,6 +117,21 @@ return (
           <p className="font-artistic-serif">{getCMSCopy("copy.GuidingForcePage.789311938ee2", "What that produces is visible rather than theoretical. Volunteers reach earthquakes, floods and wildfires with relief and stay to rebuild. Through the COVID-19 emergency the Mission opened its own centres as quarantine and vaccination sites. Affordable healthcare, the education of the young, and the repair of the natural world are the three directions Her guidance has pushed hardest.")}</p>
           <blockquote className="gf-quote font-dancing-script">{getCMSCopy("copy.GuidingForcePage.6c4e91b61bcb", "“Become One with the Formless One, so that we can become One with Everyone.”")}</blockquote>
         </div>
+      </div>
+    </section></CMSSection>
+
+    <CMSSection id="GuidingForcePage.rajpita"><section id="rajpita" className="gf-rajpita" aria-labelledby="rajpita-title" data-reveal>
+      <figure className="gf-rajpita-portrait">
+        <img src={resolveCMSAsset('asset.GuidingForcePage.rajpita', '/images/nirankari-rajpita-ramit-ji.jpg')} alt={getCMSCopy('copy.GuidingForcePage.rajpitaName', 'Nirankari Rajpita Ramit Ji')} width="831" height="1134" loading="lazy" />
+        <figcaption>{getCMSCopy('copy.GuidingForcePage.rajpitaName', 'Nirankari Rajpita Ramit Ji')}</figcaption>
+      </figure>
+      <div className="gf-rajpita-copy">
+        <p className="ed-eyebrow">{getCMSCopy('copy.GuidingForcePage.rajpitaEyebrow', 'A shared spirit of service')}</p>
+        <h2 id="rajpita-title">{getCMSCopy('copy.GuidingForcePage.rajpitaName', 'Nirankari Rajpita Ramit Ji')}</h2>
+        <span className="gf-rajpita-rule" aria-hidden="true" />
+        <p>{getCMSCopy('copy.GuidingForcePage.rajpitaBody', 'At the heart of the Nirankari spirit is a simple invitation: to see humanity as one family and to meet one another with love, respect and understanding.')}</p>
+        <p>{getCMSCopy('copy.GuidingForcePage.rajpitaService', 'This spirit finds expression in everyday acts of care — giving time, sharing what we can, and serving with humility. It is the shared purpose that connects the foundation’s work in healthcare, education and community welfare.')}</p>
+        <div className="gf-rajpita-signature">{getCMSCopy('copy.GuidingForcePage.rajpitaSignature', 'Together, in the spirit of oneness.')}</div>
       </div>
     </section></CMSSection>
 

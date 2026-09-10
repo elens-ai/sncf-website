@@ -123,7 +123,7 @@
 #awards-section .award-arrow { border-width: 1px; border-color: rgb(255 255 255 / .3); width: 42px; height: 42px; background: rgb(255 255 255 / .04); }
 #awards-section .award-standfirst { color: rgb(255 255 255 / .75); }
 
-#site-footer { background: rgb(5 19 25 / .72); backdrop-filter: none; }
+#site-footer { backdrop-filter: none; }
 #site-footer > div { padding-block: 64px 28px; }
 #site-footer nav a { display: inline-block; padding-block: 4px; text-decoration-color: transparent; text-underline-offset: 4px; transition: color 250ms ease, text-decoration-color 250ms ease; }
 #site-footer nav a:hover { text-decoration: underline; text-decoration-color: currentColor; }

@@ -656,15 +656,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           />
         </div>
       </div>
-      <div className="hero-bottom-line">
-        <span>{getCMSCopy("copy.HeroSection.f41de8da275f", "Compassion in action. Possibilities for everyone.")}</span>
-        <div className="hero-playback">
-          <span className="hero-chapter" aria-label={`Pillar ${activeIndex + 1} of ${pillars.length}`}>{getCMSCopy("copy.HeroSection.5feceb66ffc8", "0")}{activeIndex + 1}<i />{getCMSCopy("copy.HeroSection.5feceb66ffc8", "0")}{pillars.length}</span>
-          <button onClick={onTogglePause} aria-label={isPaused ? 'Play hero animation' : 'Pause hero animation'}>
-            {isPaused ? <Play size={13} /> : <Pause size={13} />}
-          </button>
-        </div>
-      </div>
     </main>
 
   );

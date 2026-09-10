@@ -2,7 +2,48 @@ import { resolveCMSAsset } from '../cms/runtime';
 import { PETAL_ART, PALM_ART } from './petalArt';
 import { forwardRef, useImperativeHandle, useEffect, useRef } from 'react';
 import './curtain-entrance.css';
-export const PAVILION_ENTRANCE_VH = 2.8;
+/** Smooth source alpha explicitly: Canvas filters are not supported in every browser.
+ * Three separable box passes approximate a Gaussian, once per loaded asset. */
+function smoothContour(image: HTMLImageElement, palm: boolean) {
+  const mask = document.createElement('canvas');
+  mask.width = 512; mask.height = Math.round(512 * image.naturalHeight / image.naturalWidth);
+  const context = mask.getContext('2d')!;
+  context.drawImage(image, 0, 0, mask.width, mask.height);
+  const pixels = context.getImageData(0, 0, mask.width, mask.height);
+  const { width: w, height: h } = mask;
+  let alpha = Float32Array.from({ length: w * h }, (_, i) => pixels.data[i * 4 + 3]);
+  let next = new Float32Array(alpha.length);
+  const radius = palm ? 2 : 6;
+  const span = radius * 2 + 1;
+  for (let pass = 0; pass < 3; pass++) {
+    for (let y = 0; y < h; y++) {
+      let sum = 0;
+      for (let k = -radius; k <= radius; k++) sum += alpha[y * w + Math.max(0, Math.min(w - 1, k))];
+      for (let x = 0; x < w; x++) {
+        next[y * w + x] = sum / span;
+        sum += alpha[y * w + Math.min(w - 1, x + radius + 1)] - alpha[y * w + Math.max(0, x - radius)];
+      }
+    }
+    [alpha, next] = [next, alpha];
+    for (let x = 0; x < w; x++) {
+      let sum = 0;
+      for (let k = -radius; k <= radius; k++) sum += alpha[Math.max(0, Math.min(h - 1, k)) * w + x];
+      for (let y = 0; y < h; y++) {
+        next[y * w + x] = sum / span;
+        sum += alpha[Math.min(h - 1, y + radius + 1) * w + x] - alpha[Math.max(0, y - radius) * w + x];
+      }
+    }
+    [alpha, next] = [next, alpha];
+  }
+  for (let i = 0; i < alpha.length; i++) {
+    pixels.data[i * 4] = pixels.data[i * 4 + 1] = pixels.data[i * 4 + 2] = 255;
+    pixels.data[i * 4 + 3] = Math.round(alpha[i]);
+  }
+  context.putImageData(pixels, 0, 0);
+  return mask;
+}
+
+export const PAVILION_ENTRANCE_VH = 1.4;
 export const entranceDistance = () => Math.max(0, (document.getElementById('hero-clone-stage')?.offsetHeight || innerHeight) - innerHeight) + innerHeight * PAVILION_ENTRANCE_VH;
 export interface CurtainEntranceHandle { update(top: number, viewport: number, reduced: boolean): void }
 /** Scroll drives existing DOM layers; the 3D icon keeps its original renderer. */
@@ -31,14 +72,18 @@ export const CurtainEntrance = forwardRef<CurtainEntranceHandle, Record<string, 
     Promise.all([...PETAL_ART,{...PALM_ART,src:resolveCMSAsset("asset.CurtainEntrance.2aec77b1523f", "/images/curtain-ghost-palm.svg")}].map(art => new Promise<HTMLCanvasElement>(resolve => {
       const image = new Image(); image.onload = () => {
         const tile = document.createElement('canvas'); tile.width = 2048; tile.height = Math.round(2048*image.naturalHeight/image.naturalWidth);
-        const ctx = tile.getContext('2d')!; ctx.drawImage(image,0,0,tile.width,tile.height); ctx.globalCompositeOperation='source-in';ctx.fillStyle='white';ctx.fillRect(0,0,tile.width,tile.height);
+        const ctx = tile.getContext('2d')!;
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        // Upscale the smoothed coverage first, then restore the clean white edge.
+        ctx.drawImage(smoothContour(image, art.src.includes('curtain-ghost-palm')), 0, 0, tile.width, tile.height);
         const ink=ctx.getImageData(0,0,tile.width,tile.height);
         // Remove the source mask's broad blur without creating a hard stair-step edge.
         // A narrow smooth coverage ramp keeps the silhouette antialiased.
         const isPalm=art.src.includes('curtain-ghost-palm');
         const coverageRamp = new Uint8Array(256);
         for (let alpha = 0; alpha < 256; alpha++) {
-          const edge = Math.max(0, Math.min(1, (alpha / 255 - (isPalm ? .42 : .12)) / (isPalm ? .16 : .6)));
+          const edge = Math.max(0, Math.min(1, (alpha / 255 - (isPalm ? .42 : .38)) / (isPalm ? .16 : .24)));
           coverageRamp[alpha] = Math.round(255 * edge * edge * (3 - 2 * edge));
         }
         for (let a = 3; a < ink.data.length; a += 4) ink.data[a] = coverageRamp[ink.data[a]];

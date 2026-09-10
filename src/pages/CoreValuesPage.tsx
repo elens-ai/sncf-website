@@ -1,7 +1,9 @@
 import { getCMSCopy } from '../cms/runtime';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, Pause, Play, CalendarDays, Search, Heart, BookOpen, Sprout } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Pause, Play, CalendarDays, Search } from 'lucide-react';
+import { ValueCompass } from '../components/ValueCompass';
+import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { PillarModelCard } from '../components/PillarModelCard';
@@ -14,25 +16,19 @@ const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
 type Cornerstone = typeof CORNERSTONES[number];
 
 const ValueCover: React.FC = () => {
+  useCMSRevision();
   const [choice, setChoice] = useState<Cornerstone>('heal');
   const root = useRef<HTMLElement>(null);
   const active = useSectionActivity(root);
   const pillar = PILLARS.find(p => p.id === choice)!;
-  const icons = [Heart, BookOpen, Sprout];
   return <section ref={root} className="values-cover" data-active={active} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties} aria-labelledby="values-cover-title">
     <div className="values-cover-copy">
       <p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.bb5f4b8db550", "One purpose. Three ways to make a difference.")}</p>
       <h1 id="values-cover-title">{getCMSCopy("copy.CoreValuesPage.1872c282a338", "The three")}<br /><em>{getCMSCopy("copy.CoreValuesPage.19b476bc912f", "cornerstones.")}</em></h1>
       <p>{getCMSCopy("copy.CoreValuesPage.eddff23d6323", "Care that reaches further. Learning that opens doors. Communities that grow stronger.")}</p>
-      <div className="values-choice" role="group" aria-label={getCMSCopy("copy.CoreValuesPage.c7a3284847f9", "Preview a core value")}>{CORNERSTONES.map((id, i) => {
-        const Icon = icons[i];
-        return <button key={id} aria-pressed={choice === id} onClick={() => setChoice(id)}><Icon size={17} />{id}</button>;
-      })}</div>
-      <a href={`#${choice}`} className="values-cover-link">{getCMSCopy("copy.CoreValuesPage.2e1ac6e9292a", "Explore ")}{choice} <ArrowDown size={18} /></a>
+
     </div>
-    <div className="values-compass">
-      <div className="values-compass-art" aria-hidden="true"><div className="values-compass-ring" /><span className="values-petal values-petal-one" /><span className="values-petal values-petal-two" /><span className="values-petal values-petal-three" /><span className="values-compass-heart">{getCMSCopy("copy.CoreValuesPage.d677190e0a99", "Service")}<br />{getCMSCopy("copy.CoreValuesPage.bb8643e88aae", "with humility")}</span></div>
-    </div>
+    <ValueCompass choice={choice} onChange={setChoice} active={active} />
     <div className="values-cover-footer"><span>{getCMSCopy("copy.CoreValuesPage.4109634bf723", "Compassion, made visible.")}</span><span>{getCMSCopy("copy.CoreValuesPage.1cd27a19c41a", "Explore the values · Meet the programmes · Discover the impact")}</span></div>
   </section>;
 };
@@ -43,7 +39,6 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   const [selectedId, setSelectedId] = useState(activities[0].id);
   const [query, setQuery] = useState('');
   const matching = activities.filter(a => `${a.title} ${a.blurb}`.toLowerCase().includes(query.trim().toLowerCase()));
-  const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   const modelRef = useRef<HTMLDivElement>(null);
   const showcaseRef = useRef<HTMLDivElement>(null);
@@ -108,9 +103,14 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
         transitionRotation.current += Math.PI * 2 * u;
       }
       model.style.transform = `translate3d(${positionX}px, ${positionY}px, 0)`;
-      model.style.opacity = '1';
+      // Reach zero before maximum enlargement and hold it while screen-filling.
+      // Reveal the content through the icon, then restore its
+      // solid appearance on the return journey (also reversible on scroll-up).
+      const fade = Math.max(0, Math.min(1, (zoom - .2) / .5));
+      const opacity = 1 - fade * fade * (3 - 2 * fade);
+      model.style.opacity = `${opacity}`;
+      model.inert = opacity < .05;
       model.style.setProperty('--value-object-scale', `${scale}`);
-      showcase.style.setProperty('--value-zoom', `${zoom}`);
       model.dataset.zooming = zoom > .15 ? 'true' : 'false';
       model.dataset.docking = dock > .02 ? 'true' : 'false';
       model.style.setProperty('--value-control-shift', `${Math.max(0, finalScale - 1) * 160 * ease}px`);
@@ -147,13 +147,10 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   return (
     <section id={id} className="value-chapter" aria-labelledby={`${id}-title`} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties}>
       <div className="value-showcase" ref={showcaseRef}>
-        <div className="value-zoom-wash" aria-hidden="true" />
         <div className="value-model value-model-traveller" ref={modelRef}>
-          <div className="value-model-orbit" aria-hidden="true" />
-          <div className="value-model-object"><PillarModelCard id={id} label={pillar.label} active={visible} animate={visible && !paused && !reduced} rotationRef={transitionRotation} /></div>
-          <button className="value-motion" onClick={() => setPaused(!paused)} aria-label={`${paused ? 'Play' : 'Pause'} ${pillar.label} model animation`} aria-pressed={paused} disabled={reduced}>
-            {paused || reduced ? <Play size={14} /> : <Pause size={14} />} <span>{reduced ? 'Reduced motion' : '3D emblem'}</span>
-          </button>
+
+          <div className="value-model-object"><PillarModelCard id={id} label={pillar.label} active={visible} animate={visible && !reduced} rotationRef={transitionRotation} /></div>
+
         </div>
       <header className="value-intro">
         <div className="value-model-origin" ref={originRef} aria-hidden="true" />

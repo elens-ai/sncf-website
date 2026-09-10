@@ -27,7 +27,6 @@ const inkStyle = (i: number) => ({ '--project-ink': FACES[i % FACES.length].ink,
 const ProjectsCover: React.FC = () => {
   const root = useRef<HTMLElement>(null);
   const active = useSectionActivity(root);
-  const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
     const query = matchMedia('(prefers-reduced-motion: reduce)');
@@ -41,9 +40,9 @@ const ProjectsCover: React.FC = () => {
       <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#projects-directory")} className="project-primary-link">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={17} /></a>
       <div className="projects-cover-index"><span><strong>{getCMSCopy("copy.ProjectsPage.6cd5b6e51936", "04")}</strong>{getCMSCopy("copy.ProjectsPage.ba61ddf6e8f7", " Named campaigns")}</span><span><strong>{getCMSCopy("copy.ProjectsPage.938db8c9f82c", "01")}</strong>{getCMSCopy("copy.ProjectsPage.c0c0d22814e2", " Healthcare campus in development")}</span></div>
     </div>
-    <div className="projects-cover-art"><div className="projects-cover-orbit" aria-hidden="true" /><span className="project-orbit-label label-water">{getCMSCopy("copy.ProjectsPage.7ca7dea90680", "Water")}</span><span className="project-orbit-label label-nature">{getCMSCopy("copy.ProjectsPage.c71ce8ccf3b4", "Nature")}</span><span className="project-orbit-label label-community">{getCMSCopy("copy.ProjectsPage.bb501d7877eb", "Community")}</span>
-      <div className="projects-cover-model"><PillarModelCard id="projects" label={getCMSCopy("copy.ProjectsPage.04e2a9728af7", "Projects")} active={active} animate={active && !paused && !reduced} /></div>
-      <button className="project-motion" onClick={() => setPaused(!paused)} aria-pressed={paused} disabled={reduced} aria-label={paused ? 'Resume projects emblem' : 'Pause projects emblem'}>{paused ? <Play size={13} /> : <Pause size={13} />} {reduced ? 'Reduced motion' : '3D emblem'}</button>
+    <div className="projects-cover-art">
+      <div className="projects-cover-model"><PillarModelCard id="projects" label={getCMSCopy("copy.ProjectsPage.04e2a9728af7", "Projects")} active={active} animate={active && !reduced} /></div>
+
     </div>
   </section>;
 };
@@ -51,7 +50,6 @@ const ProjectsCover: React.FC = () => {
 const ProjectEmblem = ({ id, label }: { id: string; label: string }) => {
   const root = useRef<HTMLDivElement>(null);
   const active = useSectionActivity(root);
-  const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
     const query = matchMedia('(prefers-reduced-motion: reduce)');
@@ -60,8 +58,8 @@ const ProjectEmblem = ({ id, label }: { id: string; label: string }) => {
     return () => query.removeEventListener('change', sync);
   }, []);
   return <div ref={root} className="project-amrit-emblem">
-    <div className="project-amrit-model"><PillarModelCard id={id} label={label} active={active} animate={active && !paused && !reduced} /></div>
-    <button className="project-motion" onClick={() => setPaused(!paused)} disabled={reduced} aria-pressed={paused} aria-label={`${paused ? 'Resume' : 'Pause'} ${label} emblem`}>{paused || reduced ? <Play size={12} /> : <Pause size={12} />}{getCMSCopy("copy.ProjectsPage.20e446db95de", " 3D emblem")}</button>
+    <div className="project-amrit-model"><PillarModelCard id={id} label={label} active={active} animate={active && !reduced} /></div>
+
   </div>;
 };
 

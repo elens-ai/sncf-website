@@ -112,5 +112,11 @@
     "order": 0,
     "options": {},
     "label": "ProjectsPage · health-city"
+  },
+  "GuidingForcePage.rajpita": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "GuidingForcePage · Nirankari Rajpita Ji"
   }
 }

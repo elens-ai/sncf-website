@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { CMSSection } from '../cms/CMSContentProvider';
 import { CMSLayout } from '../components/CMSLayout';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -34,7 +35,15 @@ const parseInviteParam = (): string | null => {
   return m ? m[1] : null;
 };
 
+const WELCOME_SESSION_KEY = 'sncf.welcome.shown';
+let welcomeShownInMemory = false;
+const welcomeWasShown = () => {
+  try { return welcomeShownInMemory || sessionStorage.getItem(WELCOME_SESSION_KEY) === '1'; }
+  catch { return welcomeShownInMemory; }
+};
+
 export default function HomePage() {
+  const navigate = useNavigate();
   /* 'showing' -> 'exiting' (logo flies to the header) -> 'done'.
      The hero is mounted underneath the whole time so the handoff is seamless.
      A visitor arriving from a scanned pass (?invite=...) skips the splash
@@ -43,10 +52,15 @@ export default function HomePage() {
   const [splashPhase, setSplashPhase] = useState<'showing' | 'exiting' | 'done'>(() =>
     /* partner-invite: the CSR desk's personalised links (PartnersSection)
        skip the splash for the same reason event passes do */
-    parseInviteParam() || new URLSearchParams(window.location.search).has('partner-invite')
+    welcomeWasShown() || parseInviteParam() || new URLSearchParams(window.location.search).has('partner-invite')
       ? 'done'
       : 'showing',
   );
+  useEffect(() => {
+    if (splashPhase === 'done') return;
+    welcomeShownInMemory = true;
+    try { sessionStorage.setItem(WELCOME_SESSION_KEY, '1'); } catch { /* In-memory fallback when storage is unavailable. */ }
+  }, [splashPhase]);
   const isSplashUp = splashPhase !== 'done';
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -199,7 +213,7 @@ export default function HomePage() {
         onActiveIndexChange={handleActiveIndexChange}
         isPaused={isPaused || isSplashUp}
         onTogglePause={() => setIsPaused((prev) => !prev)}
-        onOpenDetails={handleOpenDetails}
+        onOpenDetails={pillar => navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`)}
         introActive={!isSplashUp}
       />
 

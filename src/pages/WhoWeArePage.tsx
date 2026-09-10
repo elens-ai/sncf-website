@@ -17,6 +17,7 @@ import { toNumber, isTallyable } from '../utils/figures';
 import './who-we-are.css';
 import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion';
 import './who-editorial.css';
+import { ServiceStory } from '../components/ServiceStory';
 
 /**
  * WHO WE ARE — the foundation's own account of itself.
@@ -39,8 +40,8 @@ import './who-editorial.css';
 /** The page prints in Enrich's blue: it is the foundation's own account, and
     Enrich is the cornerstone this page's shell already accents. */
 const PILLAR = PILLARS.find((p) => p.id === 'enrich');
-const INK_A = PILLAR?.accentA ?? '#1565c0';
-const INK_B = PILLAR?.accentB ?? '#64b5f6';
+const INK_A = PILLAR?.accentA ?? '#2dacc3';
+const INK_B = PILLAR?.accentB ?? '#8dd4df';
 
 let MILESTONES = bindCMSValue(() => ([
   { year: getCMSCopy("copy.WhoWeArePage.7d12ba56e9f8", "2010"), text: getCMSCopy("copy.WhoWeArePage.86c8252ee47f", "The foundation is established as the Mission’s charitable arm.") },
@@ -101,7 +102,7 @@ const WhoCover: React.FC = () => {
   const active = useSectionActivity(ref);
   return <section ref={ref} className="who-cover" data-active={active} aria-labelledby="who-title">
     <div className="who-cover-copy" data-reveal><p className="who-eyebrow">{getCMSCopy("copy.WhoWeArePage.a01941bf3134", "Sant Nirankari Charitable Foundation")}</p><div className="ed-dots" aria-hidden="true">{[0,1,2,3,4].map(i => <i key={i} />)}</div><h1 id="who-title">{getCMSCopy("copy.WhoWeArePage.696ab4d5bfb5", "Who we are")}</h1><p>{getCMSCopy("copy.WhoWeArePage.5f1d766bc647", "The Sant Nirankari Charitable Foundation is the Mission’s working hands — the part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.")}</p><div className="who-cover-actions"><a href={getCMSLink("copy.Link.WhoWeArePage.f24daa84860f", "#account")}>{getCMSCopy("copy.WhoWeArePage.3c34f30db957", "Discover our story ")}<ArrowDown size={17} /></a></div><span className="who-cover-signature"><HeartHandshake size={19} />{getCMSCopy("copy.WhoWeArePage.368abdd6a9dc", " Service with humility · Since 2010")}</span></div>
-    <figure className="who-cover-photo" data-reveal><img src={resolveCMSAsset("asset.WhoWeArePage.76f684891a21", "/images/volunteers-planning.webp")} alt={getCMSCopy("copy.WhoWeArePage.5879b4fa1245", "Source illustration of volunteers planning a service drive")} width="640" height="480" decoding="async" fetchPriority="high" /><figcaption>{getCMSCopy("copy.WhoWeArePage.54f53f33a2a7", "Volunteer planning · Source illustration")}</figcaption><div className="who-cover-note"><HeartHandshake size={22} /><span>{getCMSCopy("copy.WhoWeArePage.d677190e0a99", "Service")}<br /><strong>{getCMSCopy("copy.WhoWeArePage.feb554a592af", "with Humility.")}</strong></span></div></figure>
+    <ServiceStory />
   </section>;
 };
 

@@ -442,5 +442,9 @@
   "/models/heal.glb": {
     "source": "/models/heal.glb",
     "label": "heal.glb"
+  },
+  "asset.GuidingForcePage.rajpita": {
+    "source": "/images/nirankari-rajpita-ramit-ji.jpg",
+    "label": "GuidingForcePage · Rajpita portrait"
   }
 }

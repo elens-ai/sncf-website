@@ -16,7 +16,7 @@ export const pavilionDefaults = {
   },
   chapters: [
     { id: 'heal', wall: '#709d83', panel: '#a8cbb5', led: '#53d695', ink: '#91d6ae' },
-    { id: 'enrich', wall: '#779bbd', panel: '#adc8e2', led: '#60b6ff', ink: '#92c8ed' },
+    { id: 'enrich', wall: '#498995', panel: '#b1dfe6', led: '#2dacc3', ink: '#2dacc3' },
     { id: 'empower', wall: '#bc839f', panel: '#dfb3c9', led: '#ed79b3', ink: '#e6a4be' },
     { id: 'projects', wall: '#6da7a9', panel: '#a4d1d0', led: '#55d5dc', ink: '#9cd5da' },
   ],
@@ -29,12 +29,12 @@ export const pavilionDefaults = {
   camera: { fieldOfView: 48, positionSmoothing: 16, turnSmoothing: 12, scrollSmoothing: 8, photoPause: .25, modelFloat: .09, modelSway: .35 },
   performance: { maxWidth: 1280, maxHeight: 1000, fps: 60, adaptiveQuality: true, minScale: .65, maxScale: 1, photoLoadDistance: 70 },
   components: { planters: true, barriers: true, benches: true, pendants: true, photoLights: true, frameBacklights: true, edgeStrips: true, models: true, windows: true, carpet: true },
-  finale: { logo: '/images/sncf-logo.webp', model: '/models/sncf-emblem.glb', modelSize: 2.4, modelHeight: 4.35, modelLightIntensity: 8, title: 'Thank you for visiting', subtitle: 'SERVICE WITH HUMILITY. ALWAYS.', background: '#183d36', textColor: '#d6eee4', mosaic: true, mosaicHue: 157, mosaicSaturation: 28, tileSize: 24 },
+  finale: { logo: '/images/sncf-logo.webp', model: '/models/sncf-emblem.glb', modelSize: 2.4, modelHeight: 4.35, modelLightIntensity: 8, title: 'Thank you for visiting', subtitle: 'SERVICE WITH HUMILITY', background: '#183d36', textColor: '#d6eee4', mosaic: true, mosaicHue: 157, mosaicSaturation: 28, tileSize: 24 },
   windows: {
     amrit: { video: '/video/amrit-lake.mp4', poster: '/images/pavilion/projects-1.jpg', woodColor: '#ffffff', grainColor: '#f5f4ef', woodRoughness: .48, glassColor: '#e8f5f3', glassOpacity: .07, frost: true, frostOpacity: .94, frostBlur: .024, autoplay: true },
     oneness: { video: '/video/oneness-forest.mp4', poster: '/images/pavilion/projects-2.jpg', woodColor: '#ffffff', grainColor: '#f5f4ef', woodRoughness: .48, glassColor: '#e8f5f3', glassOpacity: .07, frost: false, frostOpacity: .94, frostBlur: .024, autoplay: true },
   },
-  models: { heal: '/models/heal.glb', enrich: '/models/enrich.glb?v=d4b28fa0be42', empower: '/models/empower.glb', projects: '/models/projects.glb', amrit: '/models/amrit.glb', oneness: '/models/oneness.glb' },
+  models: { heal: '/models/heal.glb', enrich: '/models/enrich.glb?v=2dacc3', empower: '/models/empower.glb', projects: '/models/projects.glb?v=sncf-bloom-balanced', amrit: '/models/amrit.glb', oneness: '/models/oneness.glb' },
 };
 export type PavilionSettings = typeof pavilionDefaults;
 

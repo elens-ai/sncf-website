@@ -60,3 +60,11 @@ node --import tsx scripts/smoke-api.ts
 ```
 
 The database integration test creates and deletes its own temporary SQLite database and test accounts. It never uses the local authoring database. Backend CI also applies the Postgres migrations from an empty database, checks migration drift, verifies idempotent seeding, builds both Docker targets and checks the HTTP API. CMS deployment remains a deliberate operation; the backend workflow does not deploy a server.
+
+### Contribution checkout integration status
+
+The `/contribute` frontend collects the official form's contact, identity, amount and address fields on this site. It currently keeps the form in memory and does not submit identities or charge payments. The Razorpay server adapter in `src/payments/razorpay.ts` creates INR orders, verifies callback signatures against a stored order, and checks capture status and amount with Razorpay. It is not exposed as a public payment endpoint yet.
+
+Before activation: configure server-only `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` with test keys; connect mobile/email OTP providers with expiry, attempt limits and verified sessions; add restricted, encrypted donor storage and a contribution ledger; expose authenticated/rate-limited order and verification endpoints; add signed webhook reconciliation and duplicate-event handling; then connect Razorpay Checkout and test success, cancellation, retries and delayed capture. Never send identity numbers in payment notes, URLs, browser storage or logs. A client callback alone must never mark a contribution paid.
+
+Run adapter validation with `node --import tsx --test scripts/payments.test.ts`.

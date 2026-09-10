@@ -84,21 +84,11 @@ let MARKS: Record<string, Mark> = bindCMSValue(() => ({
     ),
   },
 
-  // PROJECTS — skyline with a health cross
+  // Matching still of the shared 3D Projects bloom.
   projects: {
     color: '#0d6a8c',
-    art: (
-      <>
-        <path d="M2.8 20.4v-8l4-1.4v9.4h-4Z" />
-        <path d="M8.2 20.4V6.6l6.2-2v15.8H8.2Z" />
-        <path d="M15.8 20.4v-9h5v9h-5Z" />
-        <path
-          d="M10.65 7.7h1.3v1.35h1.35v1.3h-1.35v1.35h-1.3v-1.35H9.3v-1.3h1.35V7.7Z"
-          fill="#fff"
-        />
-        <path d="M1.6 20.6h20.8v1.2H1.6Z" />
-      </>
-    ),
+    img: resolveCMSAsset('asset.projects.bloom', '/images/projects-bloom.png?v=balanced'),
+    art: null,
   },
 
   amrit: {
@@ -220,6 +210,7 @@ export const PillarGlyph: React.FC<{
   color?: string;
 }> = ({ pillarId, className = 'w-4 h-4', color }) => {
   const mark = MARKS[pillarId] ?? MARKS.oneness;
+  if (pillarId === 'projects' && mark.img) return <img src={resolveCMSMedia(mark.img)} alt="" aria-hidden="true" className={className} style={{ objectFit: 'contain' }} />;
   return (
     <svg
       className={className}

@@ -1,4 +1,4 @@
-.pavilion-track { position: relative; z-index: 10; height: 1596svh; width: 100%; --journey-progress: 0; scroll-snap-align: none; }
+.pavilion-track { position: relative; z-index: 10; height: 1418.5svh; width: 100%; --journey-progress: 0; scroll-snap-align: none; }
 .pavilion-stage { height: 100svh; position: sticky; top: 0; overflow: hidden; background: #344a44; color: #fffaf0; font-family: Inter, sans-serif; }
 .pavilion-scene { position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 35%, #b8b8a1, #4e6b62 50%, #213d35); }
 .pavilion-scene canvas { width: 100%; height: 100%; display: block; }
@@ -62,7 +62,7 @@
 .pavilion-stage :is(a,button):focus-visible { outline: 2px solid #fff1c0; outline-offset: 5px; }
 @keyframes pavilion-arrive { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-height: 760px) and (min-width: 701px) { .pavilion-exhibit { top: 21%; } .pavilion-exhibit h2 { font-size: 58px; } .pavilion-body { margin: 10px 0; font-size: 12px; } .pavilion-feature { padding: 12px 0; } .pavilion-hotspots { gap: 5px; margin-bottom: 12px; } .pavilion-topline { top: 92px; } .pavilion-nav { bottom: 18px; } }
-@media (max-width: 700px) { .pavilion-track { height: 670svh; } .pavilion-topline { top: 88px; left: 22px; right: 22px; font-size: 8px; } .pavilion-topline > div { gap: 12px; } .pavilion-topline > div > span { display: none; } .pavilion-welcome { inset: 23% 8% 20%; } .pavilion-welcome h2 { font-size: 76px; } .pavilion-welcome > p:not(.pavilion-eyebrow) { font-size: 14px; } .pavilion-exhibit { top: 19%; left: 26px; width: calc(100% - 52px); max-height: calc(81svh - 114px); overflow-y: auto; padding-bottom: 10px; } .pavilion-exhibit h2 { font-size: 64px; } .pavilion-exhibit h3 { font-size: 23px; max-width: 280px; } .pavilion-body { max-width: 310px; font-size: 12px; } .pavilion-shade { background: linear-gradient(90deg,#09261dea,#09261daa 65%,#09261d40),linear-gradient(0deg,#09261d,transparent 35%); } .pavilion-object-point { display: none; } .pavilion-feature { max-width: 310px; } .pavilion-hotspots { max-width: 350px; } .pavilion-nav { bottom: 22px; left: 20px; right: 20px; gap: 12px; } .pavilion-nav > div { gap: 18px; overflow-x: auto; scrollbar-width: none; } .pavilion-nav > div > button { white-space: nowrap; font-size: 10px; } .pavilion-nav > button { width: 30px; height: 30px; } .pavilion-farewell h2 { font-size: 66px; } .pavilion-record-inner { padding: 30px 24px; } }
+@media (max-width: 700px) { .pavilion-track { height: 492.5svh; } .pavilion-topline { top: 88px; left: 22px; right: 22px; font-size: 8px; } .pavilion-topline > div { gap: 12px; } .pavilion-topline > div > span { display: none; } .pavilion-welcome { inset: 23% 8% 20%; } .pavilion-welcome h2 { font-size: 76px; } .pavilion-welcome > p:not(.pavilion-eyebrow) { font-size: 14px; } .pavilion-exhibit { top: 19%; left: 26px; width: calc(100% - 52px); max-height: calc(81svh - 114px); overflow-y: auto; padding-bottom: 10px; } .pavilion-exhibit h2 { font-size: 64px; } .pavilion-exhibit h3 { font-size: 23px; max-width: 280px; } .pavilion-body { max-width: 310px; font-size: 12px; } .pavilion-shade { background: linear-gradient(90deg,#09261dea,#09261daa 65%,#09261d40),linear-gradient(0deg,#09261d,transparent 35%); } .pavilion-object-point { display: none; } .pavilion-feature { max-width: 310px; } .pavilion-hotspots { max-width: 350px; } .pavilion-nav { bottom: 22px; left: 20px; right: 20px; gap: 12px; } .pavilion-nav > div { gap: 18px; overflow-x: auto; scrollbar-width: none; } .pavilion-nav > div > button { white-space: nowrap; font-size: 10px; } .pavilion-nav > button { width: 30px; height: 30px; } .pavilion-farewell h2 { font-size: 66px; } .pavilion-record-inner { padding: 30px 24px; } }
 @media (prefers-reduced-motion: reduce) { .pavilion-stage * { animation: none !important; transition: none !important; } }
 .pavilion-stage[data-exhibit-side='left'] .pavilion-exhibit { left: auto; right: 6%; }
 .pavilion-stage[data-exhibit-side='left'] .pavilion-object-point { left: 24%; }
@@ -72,7 +72,7 @@
 .pavilion-gallery-caption h2 { font: 400 clamp(24px, 3vw, 40px)/1.2 Outfit, sans-serif; margin: 12px 0; text-shadow: 0 2px 12px #12352f; }
 .pavilion-gallery-caption > p:not(.pavilion-eyebrow) { font-size: 11px; color: #e2e7df; margin: 12px 0 20px; }
 @media (max-width: 700px) {
-  .pavilion-track { height: 1332svh; }
+  .pavilion-track { height: 1154.5svh; }
   .pavilion-stage[data-exhibit-side='left'] .pavilion-exhibit { left: 26px; right: auto; }
   .pavilion-stage[data-exhibit-side='left'] .pavilion-shade:not([data-centred='true']) { transform: none; }
   .pavilion-gallery-caption { bottom: 135px; left: 26px; right: 26px; }
@@ -104,7 +104,7 @@
 
 /* Exhibit typography borrows the colour and depth of its physical display. */
 .pavilion-stage{--exhibit-ink:#91d6ae}
-.pavilion-stage[data-chapter="enrich"]{--exhibit-ink:#92c8ed}
+.pavilion-stage[data-chapter="enrich"]{--exhibit-ink:#2dacc3}
 .pavilion-stage[data-chapter="empower"]{--exhibit-ink:#e6a4be}
 .pavilion-stage[data-chapter="projects"]{--exhibit-ink:#9cd5da}
 .pavilion-exhibit{isolation:isolate;text-shadow:0 2px 5px #06110cb3}
@@ -183,3 +183,5 @@
 
 /* The finished wall carries its own lettering; keep a clear view of the artwork. */
 .pavilion-stage[data-farewell='true'] .pavilion-shade { background: linear-gradient(0deg,#102e29a8,transparent 16%); }
+
+.pavilion-exit-next { bottom: max(28px, env(safe-area-inset-bottom)); }

@@ -410,17 +410,40 @@ export function createPavilion(host: HTMLElement) {
       }
     }
   });
+  // Shared halo geometry and a soft floor wash keep the luminous plinths inexpensive.
+  const plinthRing = new T.TorusGeometry(1, .018, 8, 80);
+  const plinthSurface = new T.CylinderGeometry(1, 1, 1, 64);
+  const spillCanvas = document.createElement('canvas'); spillCanvas.width = spillCanvas.height = 128;
+  const spillPen = spillCanvas.getContext('2d')!;
+  const spillGradient = spillPen.createRadialGradient(64,64,12,64,64,64);
+  spillGradient.addColorStop(0,'rgba(255,255,255,.48)'); spillGradient.addColorStop(.45,'rgba(255,255,255,.2)'); spillGradient.addColorStop(1,'rgba(255,255,255,0)');
+  spillPen.fillStyle=spillGradient;spillPen.fillRect(0,0,128,128);
+  const spillTexture=new T.CanvasTexture(spillCanvas);surfaceTextures.push(spillTexture);
   ids.forEach((id, i) => {
     const z = 52-i * 60, side = i % 2 === 0 ? 1 : -1, x = 3.5 * side;
     const chapterInks = settings.chapters.map(chapter=>chapter.ink);
-    put(cylinder, pale, [x, .55, z], [1.6, 1.1, 1.6]);
-    put(cylinder, galleryInk, [x, .08, z], [1.67, .16, 1.67]);
-    put(cylinder, bronze, [x, 1.105, z], [1.58, .035, 1.58]);
+    const plinthMetal = new T.MeshStandardMaterial({color:'#193b35',metalness:.72,roughness:.3});
+    const luminous = new T.MeshStandardMaterial({color:chapterInks[i],emissive:chapterInks[i],emissiveIntensity:2.4,roughness:.28,metalness:.15});
+    put(plinthSurface, plinthMetal, [x,.12,z], [1.55,.24,1.55]);
+    put(plinthSurface, bronze, [x,.26,z], [1.4,.045,1.4]);
+    put(plinthSurface, plinthMetal, [x,.58,z], [.94,.62,.94]);
+    // Open shadow gap and slim crown make the display surface appear suspended.
+    put(plinthSurface, luminous, [x,.91,z], [1.37,.06,1.37]);
+    put(plinthSurface, plinthMetal, [x,1.015,z], [1.6,.13,1.6]);
+    put(plinthSurface, new T.MeshStandardMaterial({color:'#fffdf2',emissive:'#e8fff1',emissiveIntensity:.65,roughness:.55}), [x,1.09,z], [1.52,.035,1.52]);
+    for(const [y,radius] of [[.3,1.35],[.89,1.48],[1.075,1.6]]) {
+      const halo=put(plinthRing,luminous,[x,y,z],[radius,radius,1]);halo.rotation.x=-Math.PI/2;
+    }
+    for(let rib=0;rib<16;rib++) {
+      const theta=rib*Math.PI/8;
+      const fin=put(box,bronze,[x+Math.cos(theta)*.98,.58,z+Math.sin(theta)*.98],[.045,.5,.08]);fin.rotation.y=-theta;
+    }
+    const spill=put(plane,new T.MeshBasicMaterial({map:spillTexture,color:chapterInks[i],transparent:true,opacity:.7,depthWrite:false,blending:T.AdditiveBlending}),[x,.06,z],[6,6,1]);spill.rotation.x=-Math.PI/2;
+    const plinthLight=new T.PointLight(chapterInks[i],2.2,4,2);plinthLight.position.set(x,.65,z);scene.add(plinthLight);
     const floorContact=put(plane,shadowMaterial,[x,.048,z],[4.8,4.8,1]);floorContact.rotation.x=-Math.PI/2;
     const shadow = put(plane, shadowMaterial, [x, 1.13, z], [3.8, 3.8, 1]); shadow.rotation.x = -Math.PI / 2;
     const spot = new T.SpotLight(lighting.exhibitColor, 0, 15, Math.PI / 5, 1, 1);
-    spot.position.set(x, 6.5, z + 2.4); spot.target.position.set(x, 3.4, z); scene.add(spot, spot.target); spots.push(spot);
-    put(cylinder, bronze, [x, 6.65, z + 2.4], [.2, .3, .2]);
+    spot.position.set(x, 1.18, z + .3); spot.target.position.set(x, 3.4, z); scene.add(spot, spot.target); spots.push(spot);
     const pool = put(cylinder, new T.MeshBasicMaterial({ color: '#ffebbc', transparent: true, opacity: 0, depthWrite: false }), [x, 1.14, z], [1.45, .01, 1.45]); pools.push(pool);
     const pivot = new T.Group(); pivot.position.set(x, 3, z); scene.add(pivot); models.push(pivot);
     photoFrames[i] = [];
@@ -474,7 +497,7 @@ export function createPavilion(host: HTMLElement) {
       if (!Number.isFinite(extent) || extent <= 0) { disposeModel(model); return; }
       model.position.sub(bounds.getCenter(new T.Vector3()));
       const wrapper = new T.Group(); wrapper.add(model); wrapper.scale.setScalar(2.9 / extent);
-      if (id === 'enrich') book = createBookOpening(model);
+      if (id === 'enrich') { book = createBookOpening(model); book?.restart(true); }
       pivot.add(wrapper);wrapper.visible=false;
       compile(wrapper).then(()=>{if(!disposed){wrapper.visible=true;if(active&&prepared)clock.start();}}).catch(()=>{if(!disposed){wrapper.visible=true;if(active&&prepared)clock.start();}});
     }, undefined, () => { /* The HTML exhibit retains all content if its model fails. */ });
@@ -508,10 +531,10 @@ export function createPavilion(host: HTMLElement) {
     }
     pen.textAlign='center';pen.fillStyle=settings.finale.textColor;pen.font='64px "Dancing Script", cursive';
     const titleScale = Math.min(1, framing.finaleTextWidth / Math.max(1, pen.measureText(settings.finale.title).width));
-    pen.font=`${64 * titleScale}px "Dancing Script", cursive`;pen.fillText(settings.finale.title,1024,680);
+    pen.font=`${64 * titleScale}px "Dancing Script", cursive`;pen.fillText(settings.finale.title,1024,655);
     pen.font='15px sans-serif';
     const subtitleScale = Math.min(1, framing.finaleTextWidth / Math.max(1, pen.measureText(settings.finale.subtitle).width));
-    pen.font=`${15 * subtitleScale}px sans-serif`;pen.fillText(settings.finale.subtitle,1024,745);
+    pen.font=`${15 * subtitleScale}px sans-serif`;pen.fillText(settings.finale.subtitle,1024,710);
     farewellMap.needsUpdate=true;draw();
   };
   farewellLogo.onload=paintFarewell;
@@ -645,8 +668,9 @@ export function createPavilion(host: HTMLElement) {
     if(photo){renderer.initTexture(photo.map);photo.material.map=photo.map;photo.material.color.set('#ffffff');}
     if (book) {
       const viewingBook = current > 1.06 && current < 1.4;
-      if (viewingBook && !bookVisible) book.restart(!paused && !reduced);
-      if (reduced) book.finish();
+      if (current <= 1.06) book.restart(true);
+      else if (viewingBook && !bookVisible) book.restart(!reduced);
+      if (viewingBook && reduced) book.finish();
       bookVisible = viewingBook;
     }
     projectFilms.forEach(film=>film.update(current,active&&pageIsActive(host),paused||reduced));
@@ -717,7 +741,8 @@ export function createPavilion(host: HTMLElement) {
       model.rotation.y = (model.userData.pathYaw || 0) -.15 + Math.sin(elapsed * .25 + i) * settings.camera.modelSway;
       model.position.y = 2.65 + reveal * .75 + Math.sin(elapsed * .7 + i) * settings.camera.modelFloat;
       model.scale.setScalar(.72 + reveal * .38);
-      spots[i].intensity = reveal * lighting.exhibitIntensity;
+      spots[i].target.position.y = model.position.y;
+      spots[i].intensity = reveal * lighting.exhibitIntensity * .55;
       (pools[i].material as T.MeshBasicMaterial).opacity = reveal * .22;
     });
     const litExhibit=spots.reduce((best,spot,i)=>spot.intensity>spots[best].intensity?i:best,0);

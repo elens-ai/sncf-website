@@ -29,8 +29,8 @@ export const DEFAULT_PILLARS: PillarState[] = [
   {
     id: 'enrich',
     label: 'ENRICH',
-    accentA: '#1565c0',
-    accentB: '#64b5f6',
+    accentA: '#2dacc3',
+    accentB: '#8dd4df',
     headline: 'Education that opens doors',
     body: 'Skill-development programs and educational support that build self-reliance in underserved communities.',
     cardImageAlt: 'Skill training classroom',

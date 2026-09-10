@@ -86,7 +86,7 @@ export const PavilionJourney: React.FC = () => {
       entrance.current?.update(rect.top,viewport,calm.current);
       const arrival=calm.current?1:Math.max(0,Math.min(1,(-rect.top-entryDistance*.55)/(entryDistance*.45)));
       style(el, '--entrance-copy', String(arrival*arrival*(3-2*arrival)));
-      const walkStart=entryDistance+viewport*.75;
+      const walkStart=entryDistance+viewport*.375;
       progress.current = Math.min(5, pavilionProgress((-rect.top-walkStart) / Math.max(1, rect.height - viewport-walkStart)));
       const phase = pavilionPhase(progress.current);
       const index = progress.current <= .03 ? 0 : progress.current >= 4.8 ? 5 : phase.room + 1;
@@ -130,7 +130,7 @@ export const PavilionJourney: React.FC = () => {
     const el = track.current;
     if (!el) return;
     const destination = index === 0 || index === 5 ? index : index - .8;
-    const entryDistance=entranceDistance()+innerHeight*.75;
+    const entryDistance=entranceDistance()+innerHeight*.375;
     window.scrollTo({ top: scrollY + el.getBoundingClientRect().top + entryDistance + (el.offsetHeight - innerHeight-entryDistance) * pavilionScrollFraction(destination), behavior: calm.current ? 'instant' : 'smooth' });
   };
   return <section id="pillars-section" className="pavilion-track" data-pavilion="true" ref={track} aria-label={getCMSCopy("copy.PavilionJourney.388eff14452d", "Our work — an immersive journey")}>
@@ -138,13 +138,13 @@ export const PavilionJourney: React.FC = () => {
     <div className="pavilion-stage" data-chapter={current?.id} data-exhibit-side={step === 2 || step === 4 ? 'left' : 'right'} data-gallery={galleryIndex >= 0} data-farewell={step === 5 || approachingFinale}>
       <div ref={host} className="pavilion-scene" data-failed={failed || undefined} />
       <div className="pavilion-shade" data-centred={step === 0 || step === 5} aria-hidden="true" />
-      <div className="pavilion-topline"><span>{getCMSCopy("copy.PavilionJourney.720c2c4bc21b", "SNCF / The pavilion of service")}</span><div><span>{getCMSCopy("copy.PavilionJourney.5feceb66ffc8", "0")}{step + 1}{getCMSCopy("copy.PavilionJourney.f7bce165377c", " — 06")}</span><button onClick={() => setPaused(!paused)} aria-label={paused ? 'Resume pavilion animation' : 'Pause pavilion animation'}>{paused ? <Play size={15} /> : <Pause size={15} />}</button><button onClick={() => document.getElementById('events-section')?.scrollIntoView({ behavior: 'instant' })}>{getCMSCopy("copy.PavilionJourney.1bb6c2bb5cce", "Skip tour ")}<ArrowUpRight size={13} /></button></div></div>
+      <div className="pavilion-topline"><span>{getCMSCopy("copy.PavilionJourney.720c2c4bc21b", "SNCF / The pavilion of service")}</span></div>
 
       {step === 0 ? <div className="pavilion-welcome" key="welcome">
         <p className="pavilion-eyebrow">{getCMSCopy("copy.PavilionJourney.269b4d29d9e2", "Compassion, given a place to grow")}</p><h2>{getCMSCopy("copy.PavilionJourney.fc967e87a6e8", "Our work")}</h2><p>{getCMSCopy("copy.PavilionJourney.3a7b474ee02a", "A walk through the lives we touch.")}<br />{getCMSCopy("copy.PavilionJourney.eee670c33892", "Four paths. One shared purpose.")}</p>
         <button className="pavilion-enter" onClick={() => {
           const el = track.current!;
-          const entryDistance=entranceDistance()+innerHeight*.75;
+          const entryDistance=entranceDistance()+innerHeight*.375;
           window.scrollTo({ top: scrollY + el.getBoundingClientRect().top + entryDistance + (el.offsetHeight - innerHeight-entryDistance) * pavilionScrollFraction(.125), behavior: calm.current ? 'instant' : 'smooth' });
         }}><span><ArrowDown size={21} /></span>{getCMSCopy("copy.PavilionJourney.115f75f7ffd1", "Step inside")}</button>
       </div> : step === 5 ? <div className="pavilion-exit-next"><button className="pavilion-text-link" onClick={() => document.getElementById('events-section')?.scrollIntoView({ behavior: calm.current ? 'instant' : 'smooth' })}>{getCMSCopy("copy.PavilionJourney.2b20284541a9", "Discover what’s next ")}<ArrowUpRight size={17}/></button></div> : approachingFinale ? null : galleryIndex >= 0 ? <div className="pavilion-gallery-caption" key={`${step}-${galleryIndex}`}>
