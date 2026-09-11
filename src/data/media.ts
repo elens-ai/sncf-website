@@ -1,3 +1,5 @@
+import { bindCMSData, resolveGalleryGroups, validMedia } from '../cms/data';
+
 /**
  * THE MEDIA LIBRARY — photographs and films for the four content pages.
  *
@@ -50,7 +52,7 @@ export interface MediaItem {
 }
 
 /** Galleries are keyed by page, then by the subsection they belong to. */
-export const MEDIA: Record<string, MediaItem[]> = {
+export const DEFAULT_MEDIA: Record<string, MediaItem[]> = {
   /* ---- CORE VALUES ---------------------------------------------------- */
   heal: [
     {
@@ -285,6 +287,8 @@ export const MEDIA: Record<string, MediaItem[]> = {
     { id: 'gf-film', kind: 'film', src: null, alt: '', caption: 'Film — Her Holiness on service and oneness' },
   ],
 };
+
+export let MEDIA: Record<string, MediaItem[]> = bindCMSData(DEFAULT_MEDIA, (publication, fallback) => resolveGalleryGroups(publication, fallback, 'media', validMedia), value => { MEDIA = value; });
 
 /** How many plates in a gallery are actually hung today. */
 export const mediaReady = (key: string) =>

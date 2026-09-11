@@ -1,7 +1,10 @@
+import { resolveCMSMedia } from '../cms/media';
+import { useCMSRevision } from '../cms/CMSContentProvider';
+import { resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
-const ANTHEM_URL = 'https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3';
+const anthemURL = () => resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3");
 /** The anthem is cued past its intro. */
 const START_AT_SECONDS = 5;
 const VOLUME = 0.7;
@@ -21,6 +24,8 @@ const MUTED_KEY = 'sncf:anthem-muted';
  * is remembered.
  */
 export const AnthemPlayer: React.FC = () => {
+  useCMSRevision();
+  const ANTHEM_URL = anthemURL();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [muted, setMuted] = useState<boolean>(() => {
     try {
@@ -121,7 +126,7 @@ export const AnthemPlayer: React.FC = () => {
     };
     // Intentionally runs once: the toggle drives playback afterwards.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cue]);
+  }, [cue, ANTHEM_URL]);
 
   useEffect(() => {
     try {
@@ -149,7 +154,7 @@ export const AnthemPlayer: React.FC = () => {
 
   return (
     <>
-      <audio ref={audioRef} src={ANTHEM_URL} preload="auto" playsInline />
+      <audio ref={audioRef} src={resolveCMSMedia(ANTHEM_URL)} preload="auto" playsInline />
       <button
         id="anthem-toggle"
         onClick={toggle}

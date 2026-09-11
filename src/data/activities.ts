@@ -1,3 +1,5 @@
+import { bindCMSData, resolveActivities } from '../cms/data';
+
 /**
  * EVERY ACTIVITY THE FOUNDATION REPORTS, and every figure it reports for it.
  *
@@ -40,7 +42,7 @@ export interface Activity {
   images: { src: string; alt: string }[];
 }
 
-export const ACTIVITIES: Activity[] = [
+export const DEFAULT_ACTIVITIES: Activity[] = [
   /* ---------------------------------------------------------------- HEAL */
   {
     id: 'blood-donation',
@@ -355,5 +357,7 @@ export const ACTIVITIES: Activity[] = [
 ];
 
 /** Activities for one pillar, in report order. */
+export let ACTIVITIES: Activity[] = bindCMSData(DEFAULT_ACTIVITIES, resolveActivities, value => { ACTIVITIES = value; });
+
 export const activitiesFor = (pillarId: string) =>
   ACTIVITIES.filter((a) => a.pillarId === pillarId);

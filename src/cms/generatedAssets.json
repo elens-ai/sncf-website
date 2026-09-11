@@ -1,0 +1,450 @@
+{
+  "asset.AnthemPlayer.bf1bfa524baa": {
+    "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3",
+    "label": "AnthemPlayer · sncf-anthem.mp3"
+  },
+  "asset.AwardsSection.56b9a5e0ea79": {
+    "source": "/images/satguru-mata-sudiksha-ji.jpg",
+    "label": "AwardsSection · satguru-mata-sudiksha-ji.jpg"
+  },
+  "asset.AwardsSection.4daa8ff53979": {
+    "source": "/images/mataji-rajpita-planting.webp",
+    "label": "AwardsSection · mataji-rajpita-planting.webp"
+  },
+  "asset.AwardsSection.b4324b25c1ce": {
+    "source": "/images/nirankari-rajpita-ramit-ji.jpg",
+    "label": "AwardsSection · nirankari-rajpita-ramit-ji.jpg"
+  },
+  "asset.AwardsSection.76f684891a21": {
+    "source": "/images/volunteers-planning.webp",
+    "label": "AwardsSection · volunteers-planning.webp"
+  },
+  "asset.AwardsSection.7144da391fb1": {
+    "source": "/images/vertical-heal.webp",
+    "label": "AwardsSection · vertical-heal.webp"
+  },
+  "asset.AwardsSection.486823e29a83": {
+    "source": "/images/vertical-enrich.webp",
+    "label": "AwardsSection · vertical-enrich.webp"
+  },
+  "asset.AwardsSection.7e886446b163": {
+    "source": "/images/vertical-empower.webp",
+    "label": "AwardsSection · vertical-empower.webp"
+  },
+  "asset.CardIllustration.7144da391fb1": {
+    "source": "/images/vertical-heal.webp",
+    "label": "CardIllustration · vertical-heal.webp"
+  },
+  "asset.CardIllustration.486823e29a83": {
+    "source": "/images/vertical-enrich.webp",
+    "label": "CardIllustration · vertical-enrich.webp"
+  },
+  "asset.CardIllustration.7e886446b163": {
+    "source": "/images/vertical-empower.webp",
+    "label": "CardIllustration · vertical-empower.webp"
+  },
+  "asset.CurtainEntrance.2aec77b1523f": {
+    "source": "/images/curtain-ghost-palm.svg",
+    "label": "CurtainEntrance · curtain-ghost-palm.svg"
+  },
+  "asset.DevotionalPhotoCard.4daa8ff53979": {
+    "source": "/images/mataji-rajpita-planting.webp",
+    "label": "DevotionalPhotoCard · mataji-rajpita-planting.webp"
+  },
+  "asset.DevotionalPhotoCard.b4324b25c1ce": {
+    "source": "/images/nirankari-rajpita-ramit-ji.jpg",
+    "label": "DevotionalPhotoCard · nirankari-rajpita-ramit-ji.jpg"
+  },
+  "asset.EventsSection.51c5d5f403d2": {
+    "source": "/images/lotus-watermark.png",
+    "label": "EventsSection · lotus-watermark.png"
+  },
+  "asset.EventsSection.76f684891a21": {
+    "source": "/images/volunteers-planning.webp",
+    "label": "EventsSection · volunteers-planning.webp"
+  },
+  "asset.Header.25aa35189463": {
+    "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
+    "label": "Header · sncf-logo-only.webp"
+  },
+  "asset.HeroSection.51c5d5f403d2": {
+    "source": "/images/lotus-watermark.png",
+    "label": "HeroSection · lotus-watermark.png"
+  },
+  "asset.InvitationCard.51c5d5f403d2": {
+    "source": "/images/lotus-watermark.png",
+    "label": "InvitationCard · lotus-watermark.png"
+  },
+  "asset.InvitationCard.76f684891a21": {
+    "source": "/images/volunteers-planning.webp",
+    "label": "InvitationCard · volunteers-planning.webp"
+  },
+  "asset.MediaGallery.76f684891a21": {
+    "source": "/images/volunteers-planning.webp",
+    "label": "MediaGallery · volunteers-planning.webp"
+  },
+  "asset.PartnersHero.836c7e928538": {
+    "source": "/images/partners/un.png",
+    "label": "PartnersHero · un.png"
+  },
+  "asset.PartnersHero.7144da391fb1": {
+    "source": "/images/vertical-heal.webp",
+    "label": "PartnersHero · vertical-heal.webp"
+  },
+  "asset.PartnersHero.46bbc9f2d591": {
+    "source": "/images/partners/red-cross.png",
+    "label": "PartnersHero · red-cross.png"
+  },
+  "asset.PartnersHero.848a29a67689": {
+    "source": "/images/partners/railways.png",
+    "label": "PartnersHero · railways.png"
+  },
+  "asset.PartnersHero.486823e29a83": {
+    "source": "/images/vertical-enrich.webp",
+    "label": "PartnersHero · vertical-enrich.webp"
+  },
+  "asset.PartnersHero.81c0e1df48f3": {
+    "source": "/images/partners/toi.png",
+    "label": "PartnersHero · toi.png"
+  },
+  "asset.PartnersHero.76f684891a21": {
+    "source": "/images/volunteers-planning.webp",
+    "label": "PartnersHero · volunteers-planning.webp"
+  },
+  "asset.PartnersHero.7e886446b163": {
+    "source": "/images/vertical-empower.webp",
+    "label": "PartnersHero · vertical-empower.webp"
+  },
+  "asset.PartnersHero.e4d851213c84": {
+    "source": "/images/partners/niit.png",
+    "label": "PartnersHero · niit.png"
+  },
+  "asset.PartnersHero.39811b65f44a": {
+    "source": "/images/partners/life-west.svg",
+    "label": "PartnersHero · life-west.svg"
+  },
+  "asset.PartnersHero.9f2bded92dc1": {
+    "source": "/images/partners/urban-development.png",
+    "label": "PartnersHero · urban-development.png"
+  },
+  "asset.PartnersHero.752cd88f3494": {
+    "source": "/images/partners/ndtv.png",
+    "label": "PartnersHero · ndtv.png"
+  },
+  "asset.PartnersHero.7985ebc52923": {
+    "source": "/images/partners/singer.png",
+    "label": "PartnersHero · singer.png"
+  },
+  "asset.PartnershipSection.836c7e928538": {
+    "source": "/images/partners/un.png",
+    "label": "PartnershipSection · un.png"
+  },
+  "asset.PartnershipSection.848a29a67689": {
+    "source": "/images/partners/railways.png",
+    "label": "PartnershipSection · railways.png"
+  },
+  "asset.PartnershipSection.46bbc9f2d591": {
+    "source": "/images/partners/red-cross.png",
+    "label": "PartnershipSection · red-cross.png"
+  },
+  "asset.PartnershipSection.39811b65f44a": {
+    "source": "/images/partners/life-west.svg",
+    "label": "PartnershipSection · life-west.svg"
+  },
+  "asset.PartnershipSection.9f2bded92dc1": {
+    "source": "/images/partners/urban-development.png",
+    "label": "PartnershipSection · urban-development.png"
+  },
+  "asset.PartnershipSection.752cd88f3494": {
+    "source": "/images/partners/ndtv.png",
+    "label": "PartnershipSection · ndtv.png"
+  },
+  "asset.PartnershipSection.81c0e1df48f3": {
+    "source": "/images/partners/toi.png",
+    "label": "PartnershipSection · toi.png"
+  },
+  "asset.PartnershipSection.e4d851213c84": {
+    "source": "/images/partners/niit.png",
+    "label": "PartnershipSection · niit.png"
+  },
+  "asset.PartnershipSection.7985ebc52923": {
+    "source": "/images/partners/singer.png",
+    "label": "PartnershipSection · singer.png"
+  },
+  "asset.PartnershipSection.d0662fd992e8": {
+    "source": "/video/partnership.mp4",
+    "label": "PartnershipSection · partnership.mp4"
+  },
+  "asset.PavilionExitCurtain.25aa35189463": {
+    "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
+    "label": "PavilionExitCurtain · sncf-logo-only.webp"
+  },
+  "asset.PillarModelCard.c73c056cfd4f": {
+    "source": "/images/projects/amrit.webp",
+    "label": "PillarModelCard · amrit.webp"
+  },
+  "asset.SiteFooter.25aa35189463": {
+    "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
+    "label": "SiteFooter · sncf-logo-only.webp"
+  },
+  "asset.WelcomeSplashScreen.25aa35189463": {
+    "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
+    "label": "WelcomeSplashScreen · sncf-logo-only.webp"
+  },
+  "asset.GuidingForcePage.56b9a5e0ea79": {
+    "source": "/images/satguru-mata-sudiksha-ji.jpg",
+    "label": "GuidingForcePage · satguru-mata-sudiksha-ji.jpg"
+  },
+  "asset.GuidingForcePage.4daa8ff53979": {
+    "source": "/images/mataji-rajpita-planting.webp",
+    "label": "GuidingForcePage · mataji-rajpita-planting.webp"
+  },
+  "asset.WhoWeArePage.76f684891a21": {
+    "source": "/images/volunteers-planning.webp",
+    "label": "WhoWeArePage · volunteers-planning.webp"
+  },
+  "/video/oneness-forest.mp4": {
+    "source": "/video/oneness-forest.mp4",
+    "label": "oneness-forest.mp4"
+  },
+  "/video/amrit-lake.mp4": {
+    "source": "/video/amrit-lake.mp4",
+    "label": "amrit-lake.mp4"
+  },
+  "/video/partnership.mp4": {
+    "source": "/video/partnership.mp4",
+    "label": "partnership.mp4"
+  },
+  "/images/vertical-empower.webp": {
+    "source": "/images/vertical-empower.webp",
+    "label": "vertical-empower.webp"
+  },
+  "/images/satguru-mata-sudiksha-ji.jpg": {
+    "source": "/images/satguru-mata-sudiksha-ji.jpg",
+    "label": "satguru-mata-sudiksha-ji.jpg"
+  },
+  "/images/curtain-ghost-petals.svg": {
+    "source": "/images/curtain-ghost-petals.svg",
+    "label": "curtain-ghost-petals.svg"
+  },
+  "/images/sncf-mark.svg": {
+    "source": "/images/sncf-mark.svg",
+    "label": "sncf-mark.svg"
+  },
+  "/images/lotus-watermark.png": {
+    "source": "/images/lotus-watermark.png",
+    "label": "lotus-watermark.png"
+  },
+  "/images/curtain-ghost-palm.svg": {
+    "source": "/images/curtain-ghost-palm.svg",
+    "label": "curtain-ghost-palm.svg"
+  },
+  "/images/sncf-logo.webp": {
+    "source": "/images/sncf-logo.webp",
+    "label": "sncf-logo.webp"
+  },
+  "/images/vertical-heal.webp": {
+    "source": "/images/vertical-heal.webp",
+    "label": "vertical-heal.webp"
+  },
+  "/images/volunteers-planning.webp": {
+    "source": "/images/volunteers-planning.webp",
+    "label": "volunteers-planning.webp"
+  },
+  "/images/curtain-ghost.svg": {
+    "source": "/images/curtain-ghost.svg",
+    "label": "curtain-ghost.svg"
+  },
+  "/images/vertical-enrich.webp": {
+    "source": "/images/vertical-enrich.webp",
+    "label": "vertical-enrich.webp"
+  },
+  "/images/mataji-rajpita-planting.webp": {
+    "source": "/images/mataji-rajpita-planting.webp",
+    "label": "mataji-rajpita-planting.webp"
+  },
+  "/images/nirankari-rajpita-ramit-ji.jpg": {
+    "source": "/images/nirankari-rajpita-ramit-ji.jpg",
+    "label": "nirankari-rajpita-ramit-ji.jpg"
+  },
+  "/images/pavilion/projects-1.jpg": {
+    "source": "/images/pavilion/projects-1.jpg",
+    "label": "projects-1.jpg"
+  },
+  "/images/pavilion/heal-2.jpg": {
+    "source": "/images/pavilion/heal-2.jpg",
+    "label": "heal-2.jpg"
+  },
+  "/images/pavilion/heal-3.jpg": {
+    "source": "/images/pavilion/heal-3.jpg",
+    "label": "heal-3.jpg"
+  },
+  "/images/pavilion/projects-2.jpg": {
+    "source": "/images/pavilion/projects-2.jpg",
+    "label": "projects-2.jpg"
+  },
+  "/images/pavilion/heal-1.jpg": {
+    "source": "/images/pavilion/heal-1.jpg",
+    "label": "heal-1.jpg"
+  },
+  "/images/pavilion/projects-3.jpg": {
+    "source": "/images/pavilion/projects-3.jpg",
+    "label": "projects-3.jpg"
+  },
+  "/images/pavilion/heal-4.jpg": {
+    "source": "/images/pavilion/heal-4.jpg",
+    "label": "heal-4.jpg"
+  },
+  "/images/pavilion/heal-5.jpg": {
+    "source": "/images/pavilion/heal-5.jpg",
+    "label": "heal-5.jpg"
+  },
+  "/images/pavilion/projects-4.jpg": {
+    "source": "/images/pavilion/projects-4.jpg",
+    "label": "projects-4.jpg"
+  },
+  "/images/pavilion/mosaic-wall.svg": {
+    "source": "/images/pavilion/mosaic-wall.svg",
+    "label": "mosaic-wall.svg"
+  },
+  "/images/pavilion/projects-5.jpg": {
+    "source": "/images/pavilion/projects-5.jpg",
+    "label": "projects-5.jpg"
+  },
+  "/images/pavilion/enrich-1.jpg": {
+    "source": "/images/pavilion/enrich-1.jpg",
+    "label": "enrich-1.jpg"
+  },
+  "/images/pavilion/enrich-2.jpg": {
+    "source": "/images/pavilion/enrich-2.jpg",
+    "label": "enrich-2.jpg"
+  },
+  "/images/pavilion/empower-5.jpg": {
+    "source": "/images/pavilion/empower-5.jpg",
+    "label": "empower-5.jpg"
+  },
+  "/images/pavilion/empower-4.jpg": {
+    "source": "/images/pavilion/empower-4.jpg",
+    "label": "empower-4.jpg"
+  },
+  "/images/pavilion/enrich-3.jpg": {
+    "source": "/images/pavilion/enrich-3.jpg",
+    "label": "enrich-3.jpg"
+  },
+  "/images/pavilion/empower-1.jpg": {
+    "source": "/images/pavilion/empower-1.jpg",
+    "label": "empower-1.jpg"
+  },
+  "/images/pavilion/enrich-4.jpg": {
+    "source": "/images/pavilion/enrich-4.jpg",
+    "label": "enrich-4.jpg"
+  },
+  "/images/pavilion/empower-3.jpg": {
+    "source": "/images/pavilion/empower-3.jpg",
+    "label": "empower-3.jpg"
+  },
+  "/images/pavilion/empower-2.jpg": {
+    "source": "/images/pavilion/empower-2.jpg",
+    "label": "empower-2.jpg"
+  },
+  "/images/pavilion/enrich-5.jpg": {
+    "source": "/images/pavilion/enrich-5.jpg",
+    "label": "enrich-5.jpg"
+  },
+  "/images/projects/amrit.webp": {
+    "source": "/images/projects/amrit.webp",
+    "label": "amrit.webp"
+  },
+  "/images/partners/toi.png": {
+    "source": "/images/partners/toi.png",
+    "label": "toi.png"
+  },
+  "/images/partners/singer.png": {
+    "source": "/images/partners/singer.png",
+    "label": "singer.png"
+  },
+  "/images/partners/ndtv.png": {
+    "source": "/images/partners/ndtv.png",
+    "label": "ndtv.png"
+  },
+  "/images/partners/niit.png": {
+    "source": "/images/partners/niit.png",
+    "label": "niit.png"
+  },
+  "/images/partners/urban-development.png": {
+    "source": "/images/partners/urban-development.png",
+    "label": "urban-development.png"
+  },
+  "/images/partners/railways.png": {
+    "source": "/images/partners/railways.png",
+    "label": "railways.png"
+  },
+  "/images/partners/red-cross.png": {
+    "source": "/images/partners/red-cross.png",
+    "label": "red-cross.png"
+  },
+  "/images/partners/life-west.svg": {
+    "source": "/images/partners/life-west.svg",
+    "label": "life-west.svg"
+  },
+  "/images/partners/un.png": {
+    "source": "/images/partners/un.png",
+    "label": "un.png"
+  },
+  "/images/petals/palm.webp": {
+    "source": "/images/petals/palm.webp",
+    "label": "palm.webp"
+  },
+  "/images/petals/petal-empower.webp": {
+    "source": "/images/petals/petal-empower.webp",
+    "label": "petal-empower.webp"
+  },
+  "/images/petals/petal-heal.webp": {
+    "source": "/images/petals/petal-heal.webp",
+    "label": "petal-heal.webp"
+  },
+  "/images/petals/petal-enrich.webp": {
+    "source": "/images/petals/petal-enrich.webp",
+    "label": "petal-enrich.webp"
+  },
+  "/images/petals/petal-welcome.webp": {
+    "source": "/images/petals/petal-welcome.webp",
+    "label": "petal-welcome.webp"
+  },
+  "/images/petals/petal-projects.webp": {
+    "source": "/images/petals/petal-projects.webp",
+    "label": "petal-projects.webp"
+  },
+  "/models/sncf-emblem.glb": {
+    "source": "/models/sncf-emblem.glb",
+    "label": "sncf-emblem.glb"
+  },
+  "/models/oneness.glb": {
+    "source": "/models/oneness.glb",
+    "label": "oneness.glb"
+  },
+  "/models/amrit.glb": {
+    "source": "/models/amrit.glb",
+    "label": "amrit.glb"
+  },
+  "/models/empower.glb": {
+    "source": "/models/empower.glb",
+    "label": "empower.glb"
+  },
+  "/models/projects.glb": {
+    "source": "/models/projects.glb",
+    "label": "projects.glb"
+  },
+  "/models/enrich.glb": {
+    "source": "/models/enrich.glb",
+    "label": "enrich.glb"
+  },
+  "/models/heal.glb": {
+    "source": "/models/heal.glb",
+    "label": "heal.glb"
+  },
+  "asset.GuidingForcePage.rajpita": {
+    "source": "/images/nirankari-rajpita-ramit-ji.jpg",
+    "label": "GuidingForcePage · Rajpita portrait"
+  }
+}

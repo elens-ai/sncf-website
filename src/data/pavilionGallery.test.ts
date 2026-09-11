@@ -14,26 +14,26 @@ test('shortened farewell keeps all chapter navigation destinations accurate', ()
 
 test('exhibits retain their pose across chapter boundaries and ease away continuously', () => {
   for (let room = 0; room < 4; room++) {
-    for (const boundary of [1, 1.001, 1.08, 1.4]) {
+    for (const boundary of [.1, .3, .48, 1]) {
       const before = pavilionExhibitReveal(room + boundary - .00001, room);
       const after = pavilionExhibitReveal(room + boundary + .00001, room);
       assert.ok(Math.abs(after - before) < .001, 'no visible pose jump in either scroll direction');
     }
-    assert.equal(pavilionExhibitReveal(room + 1.01, room), 1);
-    assert.ok(pavilionExhibitReveal(room + 1.24, room) > .4);
-    assert.equal(pavilionExhibitReveal(room + 1.5, room), 0);
+    assert.equal(pavilionExhibitReveal(room + .2, room), 1);
+    assert.ok(pavilionExhibitReveal(room + .38, room) > .4);
+    assert.equal(pavilionExhibitReveal(room + .6, room), 0);
   }
 });
 
-test('each gallery visits five photographs before revealing its exhibit', () => {
+test('each icon appears before all five gallery photographs', () => {
   for (let room = 0; room < 4; room++) {
     const seen = new Set<number>();
-    for (let part = .04; part < .76; part += .01) {
+    for (let part = .31; part < 1; part += .01) {
       const phase = pavilionPhase(room + part);
       assert.equal(phase.room, room); assert.equal(phase.gallery, true); seen.add(phase.photo);
     }
     assert.equal(seen.size, 5);
-    const stop = pavilionPhase(room + .93);
+    const stop = pavilionPhase(room + .2);
     assert.equal(stop.gallery, false); assert.equal(stop.arrival, 1);
   }
 });

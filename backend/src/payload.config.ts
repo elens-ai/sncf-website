@@ -1,65 +1,30 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { buildConfig } from 'payload'
+import 'dotenv/config'
+import path from 'node:path'
+import {fileURLToPath} from 'node:url'
+import {postgresAdapter} from '@payloadcms/db-postgres'
+import {sqliteAdapter} from '@payloadcms/db-sqlite'
+import {lexicalEditor} from '@payloadcms/richtext-lexical'
+import {buildConfig} from 'payload'
 import sharp from 'sharp'
-
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
-
-/**
- * THE SNCF CMS.
- *
- * Postgres rather than Mongo (the template's default): the content here is
- * relational — an activity belongs to a pillar, a plate belongs to a section,
- * a donation belongs to a campaign — and the figures are a public record that
- * benefits from constraints the database itself enforces.
- *
- * This server is NOT in a visitor's request path. The site is a static Vite
- * bundle on CloudFront; content is pulled from here at BUILD time by
- * scripts/export-content.ts and written into the frontend. That is why the
- * admin can live on a modest self-hosted VM without being a availability risk
- * for the public site.
- */
+import {Users} from './collections/Users'
+import {Media} from './collections/Media'
+import {contentCollections} from './collections/Content'
+import {LiveStats,StatAudit} from './collections/LiveStats'
+import {SiteSettings,PavilionSettings} from './globals/Settings'
+import {endpoints} from './cms/endpoints'
+const dirname=path.dirname(fileURLToPath(import.meta.url))
+const databaseURI=process.env.DATABASE_URI||'file:./cms-dev.db'
+const sqlite=databaseURI.startsWith('file:')||databaseURI.startsWith('libsql:')
+const origins=[process.env.PAYLOAD_PUBLIC_SITE_URL||'http://localhost:3000',process.env.PAYLOAD_PUBLIC_SERVER_URL||'http://localhost:3001',...(process.env.CMS_ALLOWED_ORIGINS||'http://127.0.0.1:3000,http://127.0.0.1:3001').split(',')].filter(Boolean)
 export default buildConfig({
-  admin: {
-    user: Users.slug,
-    importMap: { baseDir: path.resolve(dirname) },
-    meta: {
-      titleSuffix: '— SNCF',
-    },
-  },
-
-  collections: [Users, Media],
-
-  editor: lexicalEditor(),
-
-  /* Empty is a hard failure rather than a default: an unset secret silently
-     produces sessions that anyone who knows the default can forge. */
-  secret: process.env.PAYLOAD_SECRET || '',
-
-  typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
-
-  db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URI || '' },
-    /* Schema changes are applied by an explicit, reviewable migration rather
-       than inferred at boot. `push` is convenient in development and is how
-       production schemas drift. */
-    push: process.env.NODE_ENV !== 'production',
-  }),
-
-  sharp,
-
-  /* Who may call this API from a browser. The site is the only intended
-     caller; anything else is either the admin itself or a build script using
-     the Local API, which does not go through CORS. */
-  cors: [process.env.PAYLOAD_PUBLIC_SITE_URL || 'http://localhost:3000'].filter(Boolean),
-  csrf: [process.env.PAYLOAD_PUBLIC_SITE_URL || 'http://localhost:3000'].filter(Boolean),
+  serverURL:process.env.PAYLOAD_PUBLIC_SERVER_URL||'http://localhost:3001',
+  admin:{user:Users.slug,components:{beforeDashboard:['./components/CMSWelcome#CMSWelcome']},importMap:{baseDir:dirname},meta:{titleSuffix:'— SNCF Content Studio'},
+    livePreview:{url:`${process.env.PAYLOAD_PUBLIC_SITE_URL||'http://localhost:3000'}?cms-preview=true`,collections:contentCollections.map(c=>c.slug)}},
+  collections:[Users,Media,...contentCollections,LiveStats,StatAudit],globals:[SiteSettings,PavilionSettings],endpoints,
+  editor:lexicalEditor(),secret:process.env.PAYLOAD_SECRET||'',
+  onInit:async()=>{if(process.env.NODE_ENV==='production'&&(!process.env.PAYLOAD_SECRET||process.env.PAYLOAD_SECRET.length<32||!process.env.DATABASE_URI))throw new Error('Production requires DATABASE_URI and a random PAYLOAD_SECRET of at least 32 characters.')},
+  typescript:{outputFile:path.resolve(dirname,'payload-types.ts')},
+  db:sqlite?sqliteAdapter({client:{url:databaseURI},push:process.env.NODE_ENV!=='production',migrationDir:path.resolve(dirname,'migrations-sqlite')}):postgresAdapter({pool:{connectionString:databaseURI},push:process.env.NODE_ENV!=='production',migrationDir:path.resolve(dirname,'migrations')}),
+  sharp,cors:{origins,headers:['If-None-Match']},csrf:origins,
+  upload:{limits:{fileSize:150*1024*1024}},
 })

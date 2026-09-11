@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { bindCMSValue, resolveCMSAsset, getCMSCopy } from '../cms/runtime';
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PARTNERS } from '../data/partners';
@@ -82,12 +84,12 @@ WALL_ROWS.forEach((row, r) =>
 );
 
 /** Idle chyron: the proof line — what all of this delivered. */
-const PROOF = [
-  { value: '1.5M+', label: 'blood units' },
-  { value: '2.6M+', label: 'trees planted' },
-  { value: '263', label: 'stations cleaned' },
-  { value: '209K+', label: 'students' },
-];
+let PROOF = bindCMSValue(() => ([
+  { value: '1.5M+', label: getCMSCopy("copy.PartnersSection.1eac70612fcd", "blood units") },
+  { value: '2.6M+', label: getCMSCopy("copy.PartnersSection.5d8fee134d25", "trees planted") },
+  { value: '263', label: getCMSCopy("copy.PartnersSection.34412c88d963", "stations cleaned") },
+  { value: '209K+', label: getCMSCopy("copy.PartnersSection.dac4970ce624", "students") },
+]), value => { PROOF = value; });
 
 export const PartnersSection: React.FC<PartnersSectionProps> = ({
   onOpenDonate,
@@ -210,23 +212,21 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
     <section
       ref={sectionRef}
       id="partners-section"
-      aria-label="Partners and CSR collaboration"
+      aria-label={getCMSCopy("copy.PartnersSection.cdd9e6909c7f", "Partners and CSR collaboration")}
       className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[84px] pb-6 overflow-hidden"
     >
       {/* the fixed slate ground the white wall stands against */}
 
       <div className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col justify-center min-h-0">
         {/* the section's own eyebrow, above the wall */}
-        <p className="font-artistic-display text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/60 mb-2 text-center">
-          Partnerships · CSR · Walking together
-        </p>
+        <p className="font-artistic-display text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/60 mb-2 text-center">{getCMSCopy("copy.PartnersSection.2e9686b783ba", "Partnerships · CSR · Walking together")}</p>
 
         {/* ==================== THE WALL ==================== */}
         <div
           className="media-wall"
           data-active={activeId ? 'true' : 'false'}
           role="group"
-          aria-label="Partner media wall — select any mark to read that collaboration"
+          aria-label={getCMSCopy("copy.PartnersSection.0363d0e439f3", "Partner media wall — select any mark to read that collaboration")}
         >
           {/* the headline lockup — the wall belongs to the foundation */}
           <header className="media-wall-head">
@@ -235,8 +235,8 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                 <span key={ink} style={{ background: ink }} />
               ))}
             </div>
-            <h2 className="media-wall-title">Sant Nirankari Charitable Foundation</h2>
-            <p className="media-wall-motto font-dancing-script">Service with Humility</p>
+            <h2 className="media-wall-title">{getCMSCopy("copy.PartnersSection.a01941bf3134", "Sant Nirankari Charitable Foundation")}</h2>
+            <p className="media-wall-motto font-dancing-script">{getCMSCopy("copy.PartnersSection.56219e473693", "Service with Humility")}</p>
           </header>
 
           {/* the step-and-repeat field */}
@@ -256,7 +256,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                         data-brand={isPrimary ? 'seat' : undefined}
                         tabIndex={isPrimary ? 0 : -1}
                         aria-hidden={isPrimary ? undefined : true}
-                        aria-label="Your organisation — reserve this space"
+                        aria-label={getCMSCopy("copy.PartnersSection.32cd5e384c6c", "Your organisation — reserve this space")}
                         aria-pressed={seatOpen}
                         onMouseEnter={() => setLitId('seat')}
                         onMouseLeave={() => setLitId(null)}
@@ -273,7 +273,8 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                       </button>
                     );
                   }
-                  const partner = PARTNERS.find((p) => p.id === id)!;
+                  const partner = PARTNERS.find((p) => p.id === id);
+                  if(!partner)return null;
                   const b = BRAND[id];
                   return (
                     <button
@@ -300,7 +301,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                         </span>
                         {b?.logo && (
                           <img
-                            src={b.logo}
+                            src={resolveCMSMedia(b.logo)}
                             alt=""
                             decoding="async"
                             onError={(e) => {
@@ -318,10 +319,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
           </div>
 
           {/* the sponsor line at the wall's hem — the credentials */}
-          <p className="media-wall-hem font-artistic-display">
-            UN special consultative status · Serving since 2010 · 250+ branches
-            nationwide · 12 collaborations, one space reserved
-          </p>
+          <p className="media-wall-hem font-artistic-display">{getCMSCopy("copy.PartnersSection.e968b8fbdcaf", "UN special consultative status · Serving since 2010 · 250+ branches nationwide · 12 collaborations, one space reserved")}</p>
         </div>
 
         {/* What the chyron shows, spoken once for assistive tech. A separate
@@ -353,7 +351,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                 </span>
                 {BRAND[selected.id]?.logo && (
                   <img
-                    src={BRAND[selected.id].logo}
+                    src={resolveCMSMedia(BRAND[selected.id].logo)}
                     alt=""
                     decoding="async"
                     onError={(e) => {
@@ -372,7 +370,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
               <button
                 type="button"
                 className="media-chyron-close"
-                aria-label="Close"
+                aria-label={getCMSCopy("copy.PartnersSection.7d9eb7acb13e", "Close")}
                 onClick={closeChyron}
               >
                 ×
@@ -390,15 +388,13 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                     value={orgName}
                     maxLength={60}
                     onChange={(e) => setOrgName(e.target.value)}
-                    placeholder="Prospect organisation's name…"
-                    aria-label="Prospect organisation's name"
+                    placeholder={getCMSCopy("copy.PartnersSection.a818e27e9d52", "Prospect organisation's name…")}
+                    aria-label={getCMSCopy("copy.PartnersSection.1cd7b9621ccb", "Prospect organisation's name")}
                     className="media-chyron-input"
                   />
                   {/* honest label: this opens the print dialog, and
                       Save-as-PDF there is the download */}
-                  <button type="button" onClick={printBrochure} className="partner-cta">
-                    Save brochure (PDF)
-                  </button>
+                  <button type="button" onClick={printBrochure} className="partner-cta">{getCMSCopy("copy.PartnersSection.33bb9c6ad169", "Save brochure (PDF)")}</button>
                   <button type="button" onClick={copyInvite} className="partner-cta partner-cta-ghost">
                     {copied ? 'Link copied ✓' : 'Copy invite link'}
                   </button>
@@ -406,15 +402,13 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                     type="button"
                     onClick={onOpenDonate}
                     className="font-artistic-display text-[9.5px] tracking-[0.16em] uppercase text-white/65 hover:text-white underline decoration-white/30 underline-offset-4 cursor-pointer"
-                  >
-                    Start a conversation
-                  </button>
+                  >{getCMSCopy("copy.PartnersSection.258150cb3ee4", "Start a conversation")}</button>
                 </div>
               </div>
               <button
                 type="button"
                 className="media-chyron-close"
-                aria-label="Close"
+                aria-label={getCMSCopy("copy.PartnersSection.7d9eb7acb13e", "Close")}
                 onClick={closeChyron}
               >
                 ×
@@ -423,10 +417,8 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
           ) : (
             <div key="idle" className="media-chyron-inner">
               <p className="media-chyron-live font-artistic-display" aria-hidden="true">
-                <span />
-                Delivered
-              </p>
-              <ul className="media-chyron-proof" aria-label="Delivered outcomes">
+                <span />{getCMSCopy("copy.PartnersSection.906115657390", "Delivered")}</p>
+              <ul className="media-chyron-proof" aria-label={getCMSCopy("copy.PartnersSection.14ac8db7b70d", "Delivered outcomes")}>
                 {PROOF.map((p) => (
                   <li key={p.label}>
                     <strong className="font-artistic-heading">{p.value}</strong>
@@ -434,10 +426,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
                   </li>
                 ))}
               </ul>
-              <p className="media-chyron-hint font-artistic-serif">
-                Point at a mark — its every appearance lights. Select the
-                dashed space to reserve yours.
-              </p>
+              <p className="media-chyron-hint font-artistic-serif">{getCMSCopy("copy.PartnersSection.9e9379dff36e", "Point at a mark — its every appearance lights. Select the dashed space to reserve yours.")}</p>
             </div>
           )}
         </div>
@@ -452,22 +441,16 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
               <span key={ink} style={{ background: ink }} />
             ))}
           </div>
-          <p className="pb-eyebrow">Sant Nirankari Charitable Foundation · CSR Partnership</p>
-          <h1 className="pb-title">Walking together</h1>
-          <p className="pb-invite">
-            An invitation to <strong>{orgName.trim() || 'your organisation'}</strong>
+          <p className="pb-eyebrow">{getCMSCopy("copy.PartnersSection.33760ea355b0", "Sant Nirankari Charitable Foundation · CSR Partnership")}</p>
+          <h1 className="pb-title">{getCMSCopy("copy.PartnersSection.c243ca6c4682", "Walking together")}</h1>
+          <p className="pb-invite">{getCMSCopy("copy.PartnersSection.9f0d1afadeed", "An invitation to ")}<strong>{orgName.trim() || 'your organisation'}</strong>
           </p>
-          <p className="pb-lede">
-            Twelve organisations have put their name beside ours — governments,
-            newsrooms, hospitals, institutes. Their CSR did not become a
-            report. It became blood in a bank, a tree in a village, a girl in
-            a classroom.
-          </p>
+          <p className="pb-lede">{getCMSCopy("copy.PartnersSection.b8f22d4fc6de", "Twelve organisations have put their name beside ours — governments, newsrooms, hospitals, institutes. Their CSR did not become a report. It became blood in a bank, a tree in a village, a girl in a classroom.")}</p>
           <div className="pb-proof">
             {[
-              { value: '1.5M+', label: 'blood units collected' },
-              { value: '2.6M+', label: 'trees planted' },
-              { value: '263', label: 'railway stations cleaned' },
+              { value: '1.5M+', label: getCMSCopy("copy.PartnersSection.088d7a1f0e2d", "blood units collected") },
+              { value: '2.6M+', label: getCMSCopy("copy.PartnersSection.5d8fee134d25", "trees planted") },
+              { value: '263', label: getCMSCopy("copy.PartnersSection.673690e9221e", "railway stations cleaned") },
             ].map((pf) => (
               <div key={pf.label}>
                 <span className="pb-proof-value">{pf.value}</span>
@@ -475,7 +458,7 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
               </div>
             ))}
           </div>
-          <p className="pb-section">Companions already walking with us</p>
+          <p className="pb-section">{getCMSCopy("copy.PartnersSection.18595f7a1a29", "Companions already walking with us")}</p>
           <ul className="pb-register">
             {PARTNERS.map((partner) => (
               <li key={partner.id} style={{ borderColor: BRAND[partner.id]?.color }}>
@@ -485,18 +468,11 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
             ))}
             <li className="pb-seat">
               <strong>{orgName.trim() || 'Your organisation'}</strong>
-              <span>This space is reserved.</span>
+              <span>{getCMSCopy("copy.PartnersSection.fbebd4737aa7", "This space is reserved.")}</span>
             </li>
           </ul>
-          <p className="pb-creds">
-            UN special consultative status · Registered charitable foundation,
-            serving since 2010 · 250+ branches nationwide · Every figure from
-            our published activity report
-          </p>
-          <p className="pb-contact">
-            Sant Nirankari Charitable Foundation · Begin the conversation —
-            the wall has room.
-          </p>
+          <p className="pb-creds">{getCMSCopy("copy.PartnersSection.ec90341de6fc", "UN special consultative status · Registered charitable foundation, serving since 2010 · 250+ branches nationwide · Every figure from our published activity report")}</p>
+          <p className="pb-contact">{getCMSCopy("copy.PartnersSection.553ce52fba22", "Sant Nirankari Charitable Foundation · Begin the conversation — the wall has room.")}</p>
         </div>,
         document.body,
       )}

@@ -1,3 +1,4 @@
+import { getCMSCopy } from '../cms/runtime';
 import React, { useEffect } from 'react';
 import { X, Images } from 'lucide-react';
 import { PillarState } from '../types';
@@ -46,7 +47,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
       id="gallery-modal-backdrop"
       role="dialog"
       aria-modal="true"
-      aria-label="Gallery"
+      aria-label={getCMSCopy("copy.GalleryModal.352cfc749e55", "Gallery")}
       className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-xl animate-fadeIn"
       onClick={onClose}
     >
@@ -59,18 +60,15 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
         <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4 mb-6">
           <div className="flex flex-col gap-1">
             <h2 className="font-artistic-heading text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-              <Images className="w-5 h-5 text-amber-400" />
-              Gallery
-            </h2>
+              <Images className="w-5 h-5 text-amber-400" />{getCMSCopy("copy.GalleryModal.352cfc749e55", "Gallery")}</h2>
             <p className="text-xs sm:text-sm text-neutral-400">
-              {pillars.length} pillars · {DEVOTIONAL_LEADERS.length} spiritual portraits
-            </p>
+              {pillars.length}{getCMSCopy("copy.GalleryModal.01ea6241c111", " pillars · ")}{DEVOTIONAL_LEADERS.length}{getCMSCopy("copy.GalleryModal.7f2c43d85472", " spiritual portraits")}</p>
           </div>
 
           <button
             id="gallery-close-btn"
             onClick={onClose}
-            aria-label="Close gallery"
+            aria-label={getCMSCopy("copy.GalleryModal.69e9e2930ad0", "Close gallery")}
             className="flex-shrink-0 grid place-items-center w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer active:scale-95"
           >
             <X className="w-4 h-4" />
@@ -79,9 +77,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
 
         {/* Pillar tiles */}
         <section className="mb-8">
-          <h3 className="text-xs uppercase font-bold text-neutral-300 tracking-wider mb-3">
-            The Four Pillars
-          </h3>
+          <h3 className="text-xs uppercase font-bold text-neutral-300 tracking-wider mb-3">{getCMSCopy("copy.GalleryModal.f42f9bcba9d1", "The Four Pillars")}</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             {pillars.map((pillar, index) => (
               <button
@@ -97,8 +93,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
 
                 {/* Hover veil with the pillar name */}
                 <span className="absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-[11px] uppercase font-bold tracking-widest text-white">
-                    View {pillar.label}
+                  <span className="text-[11px] uppercase font-bold tracking-widest text-white">{getCMSCopy("copy.GalleryModal.9a92a27a2688", "View ")}{pillar.label}
                   </span>
                 </span>
               </button>
@@ -108,9 +103,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
 
         {/* Devotional portraits */}
         <section>
-          <h3 className="text-xs uppercase font-bold text-neutral-300 tracking-wider mb-3">
-            Spiritual Guides
-          </h3>
+          <h3 className="text-xs uppercase font-bold text-neutral-300 tracking-wider mb-3">{getCMSCopy("copy.GalleryModal.5090fffeca9e", "Spiritual Guides")}</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
             {DEVOTIONAL_LEADERS.map((leader) => (
               <button
@@ -125,9 +118,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
                 <DevotionalPhotoCard leader={leader} roundedClass="rounded-[20px]" isFrontFacing />
 
                 <span className="absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-[11px] uppercase font-bold tracking-widest text-white">
-                    View Portrait
-                  </span>
+                  <span className="text-[11px] uppercase font-bold tracking-widest text-white">{getCMSCopy("copy.GalleryModal.0e00e36c4422", "View Portrait")}</span>
                 </span>
               </button>
             ))}

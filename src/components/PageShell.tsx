@@ -1,3 +1,5 @@
+import { CMSSection } from '../cms/CMSContentProvider';
+import { usePageMotion } from '../hooks/useSectionActivity';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PILLARS } from '../data/pillars';
@@ -63,6 +65,7 @@ export const PageShell: React.FC<PageShellProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isDonateOpen, setIsDonateOpen] = useState(false);
+  usePageMotion(isSearchOpen || isGalleryOpen || isDonateOpen);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -91,7 +94,7 @@ export const PageShell: React.FC<PageShellProps> = ({
       {/* the paper, and the petal light laid on it */}
       <div className="paper-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
 
-      <Header
+      <CMSSection id="shared.Header"><Header
         currentPillar={pillar}
         onSearchClick={() => setIsSearchOpen(true)}
         searchQuery={searchQuery}
@@ -102,9 +105,9 @@ export const PageShell: React.FC<PageShellProps> = ({
         onOpenDetails={() => setIsGalleryOpen(true)}
         onOpenGallery={() => setIsGalleryOpen(true)}
         onOpenDonate={() => setIsDonateOpen(true)}
-      />
+      /></CMSSection>
 
-      <SocialSidebar />
+      <CMSSection id="shared.SocialSidebar"><SocialSidebar /></CMSSection>
 
       {/* THE COVER. A band of the hall's own dark stone across the top of
           every reading room. It is what the white header was built to float
@@ -132,7 +135,7 @@ export const PageShell: React.FC<PageShellProps> = ({
         <div className="max-w-6xl mx-auto">{children}</div>
       </main>
 
-      <SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />
+      <CMSSection id="shared.SiteFooter"><SiteFooter onOpenDonate={() => setIsDonateOpen(true)} /></CMSSection>
 
       <SearchModal
         isOpen={isSearchOpen}

@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MEDIA, MediaItem } from '../data/media';
@@ -306,7 +308,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         <Heading className="mgal-title font-artistic-display">{title}</Heading>
 
         {hasPhoto && hasFilm && (
-          <div className="mgal-filter" role="radiogroup" aria-label="Filter media">
+          <div className="mgal-filter" role="radiogroup" aria-label={getCMSCopy("copy.MediaGallery.f5540d923002", "Filter media")}>
             {FILTERS.map(([k, label], i) => (
               <button
                 key={k}
@@ -394,7 +396,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                       back to an ink ground carrying the play mark. */}
                   {(m.kind === 'photo' ? m.src : m.poster) && (
                     <img
-                      src={(m.kind === 'photo' ? m.src : m.poster) as string}
+                      src={resolveCMSMedia((m.kind === 'photo' ? m.src : m.poster) as string)}
                       alt={m.alt}
                       loading="lazy"
                       decoding="async"
@@ -407,16 +409,14 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                   )}
                 </button>
               )}
-              <p className="mgal-caption font-artistic-serif">{m.caption}{layout === 'editorial' && m.src === '/images/volunteers-planning.webp' && <small className="block">Source illustration</small>}</p>
+              <p className="mgal-caption font-artistic-serif">{m.caption}{layout === 'editorial' && m.src === resolveCMSAsset("asset.MediaGallery.76f684891a21", "/images/volunteers-planning.webp") && <small className="block">{getCMSCopy("copy.MediaGallery.d50d1277878f", "Source illustration")}</small>}</p>
             </li>
           );
         })}
       </ul>
 
       <p className="mgal-note">
-        {ready} of {shown.length} available · the rest arrive as the foundation’s
-        archive is catalogued
-      </p>
+        {ready}{getCMSCopy("copy.MediaGallery.a4282e4b2298", " of ")}{shown.length}{getCMSCopy("copy.MediaGallery.db810ff10618", " available · the rest arrive as the foundation’s archive is catalogued")}</p>
 
       {/* THE VIEWER */}
       {current &&
@@ -435,7 +435,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
             <button
               type="button"
               className="mgal-viewer-close"
-              aria-label="Close"
+              aria-label={getCMSCopy("copy.MediaGallery.7d9eb7acb13e", "Close")}
               onClick={close}
             >
               ×
@@ -446,7 +446,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                 <button
                   type="button"
                   className="mgal-viewer-arrow mgal-viewer-prev"
-                  aria-label="Previous"
+                  aria-label={getCMSCopy("copy.MediaGallery.a57b08a480b8", "Previous")}
                   onClick={() => step(-1)}
                 >
                   ‹
@@ -454,7 +454,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                 <button
                   type="button"
                   className="mgal-viewer-arrow mgal-viewer-next"
-                  aria-label="Next"
+                  aria-label={getCMSCopy("copy.MediaGallery.1ff57a29d7c9", "Next")}
                   onClick={() => step(1)}
                 >
                   ›
@@ -471,24 +471,21 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                   <p className="mgal-viewer-await-kind">
                     {current.kind === 'film' ? 'Film to come' : 'Photograph to come'}
                   </p>
-                  <p className="mgal-viewer-await-note font-artistic-serif">
-                    This plate is reserved. It goes up when the foundation’s
-                    archive reaches it.
-                  </p>
+                  <p className="mgal-viewer-await-note font-artistic-serif">{getCMSCopy("copy.MediaGallery.28173abab5d6", "This plate is reserved. It goes up when the foundation’s archive reaches it.")}</p>
                 </div>
               ) : current.kind === 'film' && current.src ? (
                 isEmbed(current.src) ? (
                   <iframe
-                    src={current.src}
+                    src={resolveCMSMedia(current.src)}
                     title={current.caption}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
                 ) : (
-                  <video src={current.src} poster={current.poster} controls autoPlay />
+                  <video src={resolveCMSMedia(current.src)} poster={resolveCMSMedia(current.poster)} controls autoPlay />
                 )
               ) : (
-                <img src={current.src ?? ''} alt={current.alt} />
+                <img src={resolveCMSMedia(current.src ?? '')} alt={current.alt} />
               )}
               <figcaption className="font-artistic-serif">
                 {current.caption}

@@ -1,3 +1,4 @@
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface WelcomeSplashScreenProps {
@@ -157,7 +158,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     <div
       id="welcome-splash-screen"
       role="dialog"
-      aria-label="Sant Nirankari Charitable Foundation — Service with Humility"
+      aria-label={getCMSCopy("copy.WelcomeSplashScreen.da87301fca5f", "Sant Nirankari Charitable Foundation — Service with Humility")}
       aria-modal="true"
       className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center select-none overflow-hidden ${
         exitGeom ? 'pointer-events-none' : 'pointer-events-auto'
@@ -222,8 +223,8 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         {/* SNCF logo, rendered exactly as in the header — no disc, no ring, no glow */}
         <img
           id="splash-sncf-logo"
-          src="https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp"
-          alt="Sant Nirankari Charitable Foundation Logo"
+          src={resolveCMSAsset("asset.WelcomeSplashScreen.25aa35189463", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp")}
+          alt={getCMSCopy("copy.WelcomeSplashScreen.44e3df1518ac", "Sant Nirankari Charitable Foundation Logo")}
           className="object-contain"
           style={{
             width: 'clamp(140px, 22vw, 280px)',
@@ -272,9 +273,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                 fontSize: 'clamp(1.75rem, 7.1vw, 91px)',
                 wordSpacing: '0.26em',
               }}
-            >
-              Service with Humility
-            </p>
+            >{getCMSCopy("copy.WelcomeSplashScreen.56219e473693", "Service with Humility")}</p>
 
             {/* Glint layer: the same text, same metrics, sitting exactly over
                 the original with the sweep clipped to the glyphs. aria-hidden
@@ -286,9 +285,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                 fontSize: 'clamp(1.75rem, 7.1vw, 91px)',
                 wordSpacing: '0.26em',
               }}
-            >
-              Service with Humility
-            </p>
+            >{getCMSCopy("copy.WelcomeSplashScreen.56219e473693", "Service with Humility")}</p>
           </div>
         </div>
       </div>

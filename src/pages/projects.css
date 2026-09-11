@@ -22,3 +22,11 @@
 @media(max-width:900px){.projects-cover{padding-left:35px;padding-right:35px;gap:20px}.projects-cover-model{width:205px;height:205px}.projects-cover-orbit{width:270px;height:270px}.projects-cover-art{min-height:340px}.project-story-grid{grid-template-columns:1fr}.project-landscape{min-height:330px}.projects-directory-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.projects-cover{grid-template-columns:1fr;padding:115px 28px 35px}.projects-cover h1{font-size:43px}.projects-cover-art{margin-top:20px}.projects-cover-index{gap:25px}.projects-directory{padding-top:32px}.projects-directory-grid{gap:10px}.projects-directory-grid>a{padding:18px 14px}.projects-directory-grid h3{font-size:20px;padding-right:10px}.project-chapter{padding-top:40px}.project-chapter-heading{gap:12px}.project-chapter-number{font-size:36px}.project-report{padding:22px}.project-next{gap:12px}.project-next strong{font-size:14px;text-align:right}.project-next>span{font-size:8px}.project-health-city{grid-template-columns:1fr;padding:26px;gap:25px}.health-city-art{padding:20px}.health-city-art svg{width:95px;height:95px}}
 @media(prefers-reduced-motion:reduce){.projects-editorial *,.projects-cover *{animation:none!important;transition:none!important}}
+
+.project-impact-row{display:grid;grid-template-columns:minmax(0,1fr) 180px;align-items:center;gap:24px;min-height:190px;margin:8px 0 20px}
+.project-impact-copy{min-width:0}
+.project-amrit-emblem{position:relative;width:180px;height:190px;display:flex;align-items:center;justify-content:center}
+.project-amrit-model{width:140px;height:140px}
+.project-amrit-emblem .project-motion{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);margin:0;font-size:9px;padding:6px 10px;white-space:nowrap;opacity:0;transition:opacity .2s}
+.project-amrit-emblem:hover .project-motion,.project-amrit-emblem:focus-within .project-motion{opacity:1}
+@media(max-width:600px){.project-impact-row{grid-template-columns:minmax(0,1fr) 100px;gap:12px;min-height:155px}.project-amrit-emblem{width:100px;height:150px}.project-amrit-model{width:84px;height:84px}.project-impact-row .project-selected-metric strong{font-size:clamp(25px,6.7vw,42px);overflow-wrap:anywhere}.project-impact-row .project-report-date{font-size:10px}}

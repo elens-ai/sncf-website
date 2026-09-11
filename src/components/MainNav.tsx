@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -168,7 +170,7 @@ export const MainNav: React.FC = () => {
     <>
       {/* ---------- Desktop ---------- */}
       <nav
-        aria-label="Main"
+        aria-label={getCMSCopy("copy.MainNav.eb814be3ca3b", "Main")}
         className="hidden xl:flex pointer-events-auto relative"
         onMouseLeave={scheduleClose}
       >
@@ -297,7 +299,7 @@ export const MainNav: React.FC = () => {
                           >
                             <img
                               className="nvroom-emblem"
-                              src={`/images/vertical-${g.pillarId}.webp`}
+                              src={resolveCMSMedia(`/images/vertical-${g.pillarId}.webp`)}
                               alt=""
                               aria-hidden="true"
                             />
@@ -360,9 +362,9 @@ export const MainNav: React.FC = () => {
 
       {/* ---------- Mobile panel ---------- */}
       {mobileOpen && (
-        <div ref={mobilePanel} role="dialog" aria-modal="true" aria-label="Site navigation" tabIndex={-1} className="xl:hidden pointer-events-auto fixed left-0 right-0 top-[72px] z-50 px-4 animate-fadeIn">
+        <div ref={mobilePanel} role="dialog" aria-modal="true" aria-label={getCMSCopy("copy.MainNav.7b06d0dd6977", "Site navigation")} tabIndex={-1} className="site-mobile-menu xl:hidden pointer-events-auto fixed left-0 right-0 top-[72px] z-50 px-4 animate-fadeIn">
           <div className="rounded-2xl bg-neutral-950/95 border border-white/15 backdrop-blur-xl shadow-2xl p-3 max-h-[70vh] overflow-y-auto">
-            <button type="button" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 ml-auto px-3 py-3 text-white" aria-label="Close navigation">Close <X size={18} /></button>
+            <button type="button" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 ml-auto px-3 py-3 text-white" aria-label={getCMSCopy("copy.MainNav.99904db30de4", "Close navigation")}>{getCMSCopy("copy.MainNav.79c84b48c2f0", "Close ")}<X size={18} /></button>
             {NAV_ITEMS.map((item, i) => {
               const open = mobileSection === i;
               if (!hasPanel(item)) {
@@ -405,8 +407,7 @@ export const MainNav: React.FC = () => {
                           href={item.href}
                           onClick={() => setMobileOpen(false)}
                           className="block px-6 py-2 rounded-lg text-[13px] font-semibold text-white/90 hover:text-white hover:bg-white/10 transition-colors"
-                        >
-                          Open {item.label}
+                        >{getCMSCopy("copy.MainNav.b8039d1d54bf", "Open ")}{item.label}
                         </NavAnchor>
                       )}
                       {item.groups

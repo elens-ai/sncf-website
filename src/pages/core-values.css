@@ -1,34 +1,24 @@
 .values-dashboard { color: #223c38; font-family: Inter, sans-serif; }
-.values-cover { position: relative; z-index: 1; display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; padding: 145px max(7%, 28px) 0; overflow: hidden; background: radial-gradient(ellipse at 85% 30%, color-mix(in srgb, var(--value-light) 24%, #f8f6ef), transparent 65%), #f8f6ef; color: #203c38; }
+.values-cover { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); gap: 32px; padding: 145px max(7%, 28px) 0; overflow: hidden; background: radial-gradient(ellipse at 85% 30%, color-mix(in srgb, var(--value-light) 24%, #f8f6ef), transparent 65%), #f8f6ef; color: #203c38; }
 .values-cover-copy { padding: 28px 0 50px; align-self: center; }
 .values-cover h1 { font: 500 clamp(46px, 5.8vw, 88px)/1.04 Outfit, sans-serif; letter-spacing: -.055em; margin: 24px 0; }
 .values-cover h1 em { font-family: 'Dancing Script', cursive; font-weight: 500; color: var(--value-color); letter-spacing: -.025em; }
 .values-cover-copy > p:not(.value-kicker) { max-width: 460px; font: 400 16px/1.8 Inter, sans-serif; color: #566963; }
-.values-choice { display: flex; gap: 8px; flex-wrap: wrap; margin: 28px 0 24px; }
-.values-choice button { display: flex; gap: 8px; align-items: center; padding: 12px 17px; border-radius: 30px; border: 1px solid #c8d7ce; background: #fff9; text-transform: capitalize; font-size: 13px; cursor: pointer; transition: background .25s, transform .25s; }
-.values-choice button:hover { transform: translateY(-3px); }
-.values-choice button[aria-pressed='true'] { color: white; background: var(--value-color); border-color: var(--value-color); }
 .values-cover-link { display: inline-flex; align-items: center; gap: 26px; color: var(--value-color); border-bottom: 1px solid currentColor; padding-bottom: 8px; font-size: 13px; text-transform: capitalize; }
-.values-compass { position: relative; min-height: 440px; align-self: center; }
-.values-compass-art { position: absolute; width: 340px; height: 340px; top: 50%; left: 50%; translate: -50% -50%; }
-.values-compass-ring { position: absolute; inset: -14px; border: 1px dashed color-mix(in srgb, var(--value-color) 28%, transparent); border-radius: 50%; animation: values-orbit 65s linear infinite; }
-.values-compass-ring::after { content: ''; position: absolute; top: 30px; left: 60px; width: 10px; height: 10px; border-radius: 50%; background: var(--value-color); }
-.values-petal { position: absolute; width: 170px; height: 170px; border-radius: 85% 12% 85% 12%; box-shadow: inset 2px 2px 2px #ffffff80; opacity: .9; animation: values-breathe 7s ease-in-out infinite alternate; }
-.values-petal-one { top: 0; left: 85px; background: linear-gradient(140deg,#c1edb2,#319873); transform: rotate(-45deg); }
-.values-petal-two { bottom: 12px; right: -2px; background: linear-gradient(140deg,#bce5f4,#5e98d7); transform: rotate(75deg); animation-delay: -2s; }
-.values-petal-three { bottom: 12px; left: -2px; background: linear-gradient(140deg,#fbd1d6,#cf6699); transform: rotate(15deg); animation-delay: -4s; }
-.values-compass-heart { position: absolute; inset: 110px 95px; display: grid; place-content: center; text-align: center; border-radius: 50%; background: #fcfaf3; color: #294b40; font: 500 15px/1.4 Outfit,sans-serif; box-shadow: 0 5px 30px #315d4010; }
-.values-preview { position: absolute; left: 0; right: 30px; bottom: 5px; padding: 25px 28px; border-radius: 20px; background: #fff; border: 1px solid color-mix(in srgb,var(--value-color) 25%,#fff); box-shadow: 0 22px 65px #264c4012; animation: values-reveal .45s both; }
-.values-preview > div { display: flex; align-items: center; justify-content: space-between; color: var(--value-color); }
-.values-preview h2 { font: 500 23px/1.3 Outfit,sans-serif; margin: 14px 0; }
-.values-preview > strong { font: 500 42px/1.1 Outfit,sans-serif; letter-spacing: -.04em; color: var(--value-color); }
-.values-preview > p { font-size: 11px; color: #526a61; margin: 6px 0; }
-.values-preview small { font-size: 10px; color: #657b70; }
+.values-cover-focus { margin: 30px 0 24px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--value-color) 22%, transparent); min-height: 169px; max-width: 430px; }
+.values-focus-story { animation: values-reveal .4s ease both; }
+.values-focus-kicker { display: flex; align-items: center; gap: 12px; color: var(--value-color); font: 600 10px/1.4 Inter,sans-serif; letter-spacing: .14em; }
+.values-focus-kicker > span:first-child { opacity: .6; }
+.values-focus-kicker i { height: 1px; width: 34px; background: currentColor; opacity: .4; }
+.values-cover-focus h2 { margin: 10px 0 16px; font: 500 clamp(21px,2.1vw,28px)/1.2 Outfit,sans-serif; letter-spacing: -.025em; }
+.values-focus-impact { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
+.values-focus-impact > div { display: flex; flex-direction: column; gap: 4px; }
+.values-focus-impact strong { color: var(--value-color); font: 500 clamp(28px,3.2vw,42px)/1.05 Outfit,sans-serif; letter-spacing: -.04em; overflow-wrap: anywhere; }
+.values-focus-impact span { font: 400 11px/1.5 Inter,sans-serif; color: #536b60; }
+.values-focus-impact small { flex: 0 1 120px; text-align: right; color: #64766c; font: 400 9px/1.6 Inter,sans-serif; }
 .values-cover-footer { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid #ccd9ce; padding: 22px 0; font-size: 10px; letter-spacing: .06em; color: #63766f; }
 .values-cover[data-active='false'] * { animation-play-state: paused !important; }
 .values-cover :is(a,button):focus-visible { outline: 3px solid var(--value-color); outline-offset: 4px; }
-@keyframes values-orbit { to { transform: rotate(360deg); } }
-@keyframes values-breathe { from { translate: 0 -4px; } to { translate: 0 6px; } }
 @keyframes values-reveal { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
 .value-chapter { padding: 64px 0 24px; scroll-margin-top: 155px; border-bottom: 1px solid #dce4df; }
 .value-intro { display: grid; grid-template-columns: .8fr 1.2fr; gap: 52px; align-items: center; padding: 20px 0 58px; }
@@ -46,7 +36,6 @@
 .value-stat-heading { display: flex; justify-content: space-between; gap: 12px; text-transform: uppercase; letter-spacing: .1em; font-size: 10px; color: #63766f; margin-bottom: 16px; }
 .value-showcase { position: relative; }
 .reading-room:has(.values-dashboard) { overflow-x: clip; }
-.value-zoom-wash { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: #fbfaf8; opacity: calc(var(--value-zoom, 0) * .92); }
 .value-model-origin { min-height: 340px; }
 .value-model-traveller { position: absolute; top: 0; left: 0; z-index: 2; will-change: transform; pointer-events: none; }
 .value-model-traveller[data-zooming='true'] :is(.value-model-orbit, .value-motion) { visibility: hidden; }
@@ -139,18 +128,25 @@
 .value-next-chapter strong { margin-left: auto; text-transform: capitalize; font: 500 24px Outfit,sans-serif; }
 @media (max-width: 800px) {
   .values-cover { grid-template-columns: 1fr; padding: 110px 28px 0; gap: 10px; }
-  .values-cover-copy { padding-bottom: 15px; }
+  .values-cover-copy { display: contents; }
+  .values-cover-copy > .value-kicker { grid-row: 1; }
+  .values-cover-copy > h1 { grid-row: 2; }
+  .values-cover-copy > p:not(.value-kicker) { grid-row: 3; }
+  .values-cover > .service-compass { grid-row: 4; }
+  .values-cover-focus { grid-row: 5; width: 100%; max-width: none; margin: 8px 0 12px; }
+  .values-cover-link { grid-row: 6; justify-self: start; }
   .values-cover h1 { font-size: clamp(48px, 9vw, 70px); }
-  .values-compass { min-height: 440px; width: min(100%,500px); justify-self: center; }
-  .values-compass-art { width: 300px; height: 300px; }
-  .values-petal { width: 150px; height: 150px; }
-  .values-petal-one { left: 75px; }
-  .values-compass-heart { inset: 95px 80px; }
-  .values-preview { right: 0; bottom: 0; padding: 22px; }
   .values-cover-footer { flex-direction: column; gap: 7px; margin-top: 24px; }
   .value-next-chapter { gap: 10px; }
   .value-next-chapter strong { font-size: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .values-cover *, .values-dashboard * { animation: none !important; transition: none !important; }
+}
+
+/* Compact introduction balances the compass after removing the impact panel. */
+@media (min-width: 801px) {
+  .values-cover { grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 24px; padding-top: 115px; }
+  .values-cover > .service-compass { max-width: 380px; margin-block: 0 12px; }
+  .values-cover-copy { padding-bottom: 28px; }
 }

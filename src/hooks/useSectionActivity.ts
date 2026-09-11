@@ -27,7 +27,7 @@ export function usePageMotion(suspended = false) {
     const sections = new Set<HTMLElement>();
     const visibility = new Map<Element, boolean>();
     const sync = () => {
-      for (const section of document.querySelectorAll<HTMLElement>('.home-page > section, .home-page > main')) {
+      for (const section of document.querySelectorAll<HTMLElement>('.home-page > section, .home-page > main, .hero-pavilion-sequence > main, .hero-pavilion-sequence > section, .reading-room section, .reading-room > .page-cover')) {
         if (!sections.has(section)) { sections.add(section); observer.observe(section); }
       }
       for (const section of sections) if (!section.isConnected) {
