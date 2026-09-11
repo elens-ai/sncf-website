@@ -1,0 +1,79 @@
+/* Shared responsive behaviour must load with every route, not with a lazy editorial page. */
+:root { --site-header-height: 72px; }
+html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
+.reading-room :where(article, section, figure, address) { min-width: 0; }
+.reading-room :where(p, h1, h2, h3, a, strong) { overflow-wrap: break-word; }
+.site-mobile-menu > div { max-height: calc(100dvh - var(--site-header-height) - 20px); overscroll-behavior: contain; }
+.site-mobile-menu :where(a, button) { min-height: 44px; }
+.site-mobile-menu a { display: flex; align-items: center; overflow-wrap: anywhere; }
+.search-dialog-panel { display: flex; flex-direction: column; max-height: calc(100dvh - 120px); min-height: 0; }
+.search-dialog-results { min-height: 0; overscroll-behavior: contain; }
+
+@media (max-width: 1279px) {
+  #hero-search-morph.is-expanded { width: 44px; }
+  #hero-search-morph input, #hero-search-morph .search-kbd { display: none; }
+}
+
+@media (max-width: 767px) {
+  #site-header[data-compact], .reading-room #site-header[data-compact] { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); gap: 8px; }
+  #site-header .site-brand { flex: 0 0 44px; }
+  #site-header #logo-badge-btn { width: 44px; height: 44px; flex-shrink: 0; }
+  #site-header .site-navigation { min-width: 44px; padding-inline: 0; }
+  #site-header .site-actions { flex: none; gap: 8px; }
+  #site-header #donate-ribbon-btn { width: 96px; min-height: 44px; padding-left: 8px; padding-right: 12px; flex-shrink: 0; }
+  .subnav { gap: 8px; padding-inline: 16px; scroll-padding-inline: 16px; }
+  .subnav-label { display: none; }
+  .subnav-chip, .reading-room .subnav-chip { min-height: 44px; }
+  .reading-room :where(.project-metric-options button, .value-explorer-tabs button, .who-partner-toolbar button, .mgal-filter) { min-height: 44px; }
+  .reading-room :where(input, select, textarea) { font-size: 16px; }
+  .reading-room :where(.project-report, .value-detail, .purpose-panel, .who-contact-editorial) { min-width: 0; }
+  .site-footer address a { overflow-wrap: anywhere; min-height: 44px; align-items: center; }
+  #search-results-modal { padding: max(80px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)); }
+  .search-dialog-panel { max-height: calc(100dvh - 96px); padding: 16px; }
+  .search-dialog-results { max-height: none; }
+  .search-dialog-panel > label { flex: none; }
+  #donate-modal-backdrop, #events-calendar-backdrop { padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)); }
+  #donate-modal-panel, #events-calendar-panel { border-radius: 22px; }
+  #donate-modal-panel > div > button, #events-calendar-panel > button { width: 44px; height: 44px; }
+  .mgal-viewer { padding: 72px 16px 76px; }
+  .mgal-viewer-figure { width: 100%; }
+  .mgal-viewer-figure :is(img, video, iframe) { max-height: calc(100dvh - 210px); object-fit: contain; }
+  .mgal-viewer-figure figcaption { flex-wrap: wrap; gap: 6px; }
+  .mgal-viewer-close { width: 44px; height: 44px; top: max(14px, env(safe-area-inset-top)); right: 14px; }
+  .mgal-viewer-arrow { top: auto; bottom: max(16px, env(safe-area-inset-bottom)); translate: none; }
+  .mgal-viewer-prev { left: calc(50% - 56px); }
+  .mgal-viewer-next { right: calc(50% - 56px); }
+}
+
+@media (max-width: 374px) {
+  #site-header[data-compact], .reading-room #site-header[data-compact] { padding-inline: 8px; }
+  #site-header #donate-ribbon-btn { width: 84px; }
+  #site-header #donate-ribbon-btn .donate-ribbon-heart { display: none; }
+  .reading-room :where(.projects-cover, .values-cover) { padding-inline: 20px; }
+  .reading-room .project-report { padding: 18px; }
+  .reading-room .project-impact-row { grid-template-columns: minmax(0, 1fr) 76px; gap: 8px; }
+  .reading-room .project-amrit-emblem { width: 76px; }
+  .reading-room .project-amrit-model { width: 72px; height: 72px; }
+}
+
+@media (max-width: 340px) {
+  #site-header[data-compact], .reading-room #site-header[data-compact] { gap: 4px; }
+  #site-header .site-actions { gap: 4px; }
+  #site-header #donate-ribbon-btn { width: 44px; justify-content: center; padding: 0; clip-path: none !important; border-radius: 50%; }
+  #site-header #donate-ribbon-btn .donate-ribbon-heart { display: block; margin: 0; }
+  #site-header #donate-ribbon-btn > span:last-child { display: none; }
+  .reading-room .projects-directory-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  #search-results-modal { padding: 12px; }
+  .search-dialog-panel { max-height: calc(100dvh - 24px); padding: 14px; }
+  .search-dialog-results { max-height: none; }
+  .site-mobile-menu > div { max-height: calc(100dvh - 84px); }
+  .mgal-viewer { padding-block: 16px; }
+  .mgal-viewer-figure { max-width: calc(100% - 110px); }
+  .mgal-viewer-figure :is(img, video, iframe) { max-height: calc(100dvh - 90px); }
+  .mgal-viewer-arrow { top: 50%; bottom: auto; translate: 0 -50%; }
+  .mgal-viewer-prev { left: 12px; }
+  .mgal-viewer-next { right: 12px; }
+}

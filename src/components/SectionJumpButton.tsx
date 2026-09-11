@@ -1,3 +1,4 @@
+import { bindCMSValue, getCMSCopy } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PILLARS } from '../data/pillars';
@@ -42,18 +43,19 @@ import {
  * control only supplies the intent.
  */
 
-const SECTIONS: { id: string; label: string }[] = [
-  { id: 'hero-clone-stage', label: 'Welcome' },
-  { id: 'pillars-section', label: 'Our Work' },
-  { id: 'events-section', label: 'Events' },
-  { id: 'awards-section', label: 'Awards' },
-  { id: 'partners-section', label: 'Partners' },
-  { id: 'site-footer', label: 'Connect' },
-];
+let SECTIONS: { id: string; label: string }[] = bindCMSValue(() => ([
+  { id: 'hero-clone-stage', label: getCMSCopy("copy.SectionJumpButton.0e2226b5235f", "Welcome") },
+  { id: 'pillars-section', label: getCMSCopy("copy.SectionJumpButton.c8adcae1a996", "Our Work") },
+  { id: 'events-section', label: getCMSCopy("copy.SectionJumpButton.8d14f6e72de8", "Events") },
+  { id: 'awards-section', label: getCMSCopy("copy.SectionJumpButton.669a46138d69", "Awards") },
+  { id: 'partners-section', label: getCMSCopy("copy.SectionJumpButton.5dab502bfba3", "Partners") },
+  { id: 'site-footer', label: getCMSCopy("copy.SectionJumpButton.1a2303ede074", "Connect") },
+]), value => { SECTIONS = value; });
 
 const ROOM_IDS = ['heal', 'enrich', 'empower', 'projects'] as const;
 
 type Mode =
+  | { kind: 'pavilion' }
   | { kind: 'page'; atEnd: boolean; nextLabel: string }
   | { kind: 'explore' }
   | { kind: 'start' }
@@ -81,11 +83,15 @@ export const SectionJumpButton: React.FC = () => {
       if (track) {
         const r = track.getBoundingClientRect();
         const span = r.height - vh;
+        if (track.dataset.pavilion && r.top <= vh * .25 && r.bottom >= vh) {
+          setMode(m => m.kind === 'pavilion' ? m : { kind: 'pavilion' });
+          return;
+        }
         const covered = Math.max(0, Math.min(1, (vh - r.top) / vh));
         const scrub = span > 0 ? -r.top / span : 1;
         /* The rooms end at Projects; from the rose outro on (0.785) the
            corner hands back to the page walker, which offers Events. */
-        if (covered >= 0.995 && scrub <= 0.785) {
+        if (!track.dataset.pavilion && covered >= 0.995 && scrub <= 0.785) {
           let next: Mode;
           if (scrub < 0.145) next = { kind: 'explore' };
           else if (scrub < 0.205) next = { kind: 'start' };
@@ -183,6 +189,8 @@ export const SectionJumpButton: React.FC = () => {
   ) as React.CSSProperties | undefined;
   const lastStage = roomStage !== null && roomStage >= STAGE_MID.length - 1;
 
+  if (mode.kind === 'pavilion') return null;
+
   return (
     <div
       id="section-jump-btn"
@@ -191,9 +199,7 @@ export const SectionJumpButton: React.FC = () => {
     >
       {/* where the forward arrow leads once the rooms run out */}
       {lastStage && (
-        <span className="font-artistic-modern uppercase tracking-[0.2em] text-[9px] text-white/60 pr-2">
-          Next · Exit
-        </span>
+        <span className="font-artistic-modern uppercase tracking-[0.2em] text-[9px] text-white/60 pr-2">{getCMSCopy("copy.SectionJumpButton.df7426fddfed", "Next · Exit")}</span>
       )}
 
       {mode.kind === 'rooms' ? (
@@ -213,7 +219,7 @@ export const SectionJumpButton: React.FC = () => {
           <button
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent('sncf:open-catalogue'))}
-            title="Open the catalogue"
+            title={getCMSCopy("copy.SectionJumpButton.a3da88ec1cfd", "Open the catalogue")}
             className="exhibition-nav-name font-artistic-display uppercase tracking-[0.18em] text-[11px]"
           >
             {STAGE_LABELS[mode.stage]}

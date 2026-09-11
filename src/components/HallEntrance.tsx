@@ -1,3 +1,4 @@
+import { getCMSCopy } from '../cms/runtime';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { ACTIVITIES } from '../data/activities';
 import { LOGO_PETALS } from './logoShapes';
@@ -589,16 +590,10 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
         </svg>
 
         <div ref={panelRef} className="hall-panel" style={{ opacity: 0 }}>
-          <p className="font-dancing-script pillar-script-name font-bold text-white leading-none drop-shadow-md select-none">
-            Our work
-          </p>
+          <p className="font-dancing-script pillar-script-name font-bold text-white leading-none drop-shadow-md select-none">{getCMSCopy("copy.HallEntrance.fc967e87a6e8", "Our work")}</p>
           <span className="hall-panel-rule" aria-hidden="true" />
-          <p className="font-artistic-display text-white text-[11px] sm:text-[12.5px] tracking-[0.22em] uppercase">
-            Four rooms · {ACTIVITIES.length} works
-          </p>
-          <p className="font-artistic-serif text-white/65 text-[11.5px] mt-1.5">
-            Figures as reported · March 2026
-          </p>
+          <p className="font-artistic-display text-white text-[11px] sm:text-[12.5px] tracking-[0.22em] uppercase">{getCMSCopy("copy.HallEntrance.f4ea9612fe30", "Four rooms · ")}{ACTIVITIES.length}{getCMSCopy("copy.HallEntrance.93952640c625", " works")}</p>
+          <p className="font-artistic-serif text-white/65 text-[11.5px] mt-1.5">{getCMSCopy("copy.HallEntrance.b77d9413553b", "Figures as reported · March 2026")}</p>
           {/* The second door in. Scrolling on walks the rooms in sequence —
               this opens the catalogue and lets a visitor browse all of them
               at once, stepping up to any piece directly. */}
@@ -607,11 +602,8 @@ export const HallEntrance = forwardRef<HallEntranceHandle, HallEntranceProps>(
               type="button"
               onClick={onBrowse}
               className="hall-panel-browse font-artistic-display uppercase tracking-[0.2em] text-[10.5px] sm:text-[11.5px]"
-            >
-              Browse the catalogue
-              <span aria-hidden="true" className="hall-panel-browse-count">
-                {ACTIVITIES.length} works
-              </span>
+            >{getCMSCopy("copy.HallEntrance.45bfe4f17af7", "Browse the catalogue")}<span aria-hidden="true" className="hall-panel-browse-count">
+                {ACTIVITIES.length}{getCMSCopy("copy.HallEntrance.93952640c625", " works")}</span>
             </button>
           )}
         </div>

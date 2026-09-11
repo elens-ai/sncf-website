@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { bindCMSValue, resolveCMSAsset, getCMSCopy } from '../cms/runtime';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -54,33 +56,33 @@ const standIn = (
   award: { id: key, title, awardedBy, year: '', note },
 });
 
-const STANDIN = [
-  standIn('satguru', '/images/satguru-mata-sudiksha-ji.jpg',
+let STANDIN = bindCMSValue(() => ([
+  standIn('satguru', resolveCMSAsset("asset.AwardsSection.56b9a5e0ea79", "/images/satguru-mata-sudiksha-ji.jpg"),
     'Portrait of Satguru Mata Sudiksha Ji Maharaj', 'Guiding',
     'Satguru Mata Sudiksha Ji Maharaj', 'Sixth spiritual guide, Sant Nirankari Mission',
     'The Mission’s guiding force.', '50% 24%'),
-  standIn('planting', '/images/mataji-rajpita-planting.webp',
+  standIn('planting', resolveCMSAsset("asset.AwardsSection.4daa8ff53979", "/images/mataji-rajpita-planting.webp"),
     'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling', 'Vann',
     'Planting a sapling', 'Oneness Vann',
     'Native saplings planted and tended until they grow into community forests.', '50% 32%'),
-  standIn('rajpita', '/images/nirankari-rajpita-ramit-ji.jpg',
+  standIn('rajpita', resolveCMSAsset("asset.AwardsSection.b4324b25c1ce", "/images/nirankari-rajpita-ramit-ji.jpg"),
     'Portrait of Nirankari Rajpita Ramit Ji', 'Guiding',
     'Nirankari Rajpita Ramit Ji', 'Spiritual guide, Sant Nirankari Mission',
     'The Mission’s guiding force.', '50% 14%'),
-  standIn('volunteers', '/images/volunteers-planning.webp',
+  standIn('volunteers', resolveCMSAsset("asset.AwardsSection.76f684891a21", "/images/volunteers-planning.webp"),
     'Foundation volunteers planning a service drive', 'Sewa',
     'Volunteers planning a service drive', 'Documented service',
     'From the foundation’s own library, standing in until the honours are catalogued.',
     '50% 45%'),
-  standIn('heal', '/images/vertical-heal.webp', 'Emblem for the Heal programme', 'Heal',
+  standIn('heal', resolveCMSAsset("asset.AwardsSection.7144da391fb1", "/images/vertical-heal.webp"), 'Emblem for the Heal programme', 'Heal',
     'Heal', 'Health and blood donation',
     'Blood donation drives, eye-care camps and free health checkups.'),
-  standIn('enrich', '/images/vertical-enrich.webp', 'Emblem for the Enrich programme', 'Enrich',
+  standIn('enrich', resolveCMSAsset("asset.AwardsSection.486823e29a83", "/images/vertical-enrich.webp"), 'Emblem for the Enrich programme', 'Enrich',
     'Enrich', 'Education and skills', 'Schools, scholarships and skill development.'),
-  standIn('empower', '/images/vertical-empower.webp', 'Emblem for the Empower programme', 'Empower',
+  standIn('empower', resolveCMSAsset("asset.AwardsSection.7e886446b163", "/images/vertical-empower.webp"), 'Emblem for the Empower programme', 'Empower',
     'Empower', 'Youth and environment',
     'Youth empowerment, plantation drives and disaster relief.'),
-];
+]), value => { STANDIN = value; });
 
 const STEP_MS = 900;
 /** How long each honour holds the centre before the stage turns itself. */
@@ -114,7 +116,7 @@ export const AwardsSection: React.FC = () => {
           };
         })
       : STANDIN;
-  }, [hasAwards]);
+  }, [hasAwards, AWARDS]);
 
   const n = items.length;
 
@@ -252,7 +254,7 @@ export const AwardsSection: React.FC = () => {
   return (
     <section
       id="awards-section"
-      aria-label="Awards and recognitions"
+      aria-label={getCMSCopy("copy.AwardsSection.589b32fb4660", "Awards and recognitions")}
       className="snap-screen relative z-10 w-full min-h-screen overflow-hidden"
     >
       <div ref={rootRef} className={`award-screen${shown ? ' is-in' : ''}`}>
@@ -287,7 +289,7 @@ export const AwardsSection: React.FC = () => {
                     : `Bring ${it.award.title} to the centre`
                 }
               >
-                <img src={it.src} alt={it.alt} draggable={false} decoding="async" loading="lazy" />
+                <img src={resolveCMSMedia(it.src)} alt={it.alt} draggable={false} decoding="async" loading="lazy" />
               </button>
             );
           })}
@@ -297,13 +299,10 @@ export const AwardsSection: React.FC = () => {
         {/* The masthead, centred at the top as the ring had it. The bottom-left
             block keeps only what changes with the carousel. */}
         <header className="award-head">
-          <p className="award-eyebrow">Recognition</p>
-          <h2 className="award-title">
-            Awards &amp; <em>Recognitions</em>
+          <p className="award-eyebrow">{getCMSCopy("copy.AwardsSection.22466b5a68ad", "Recognition")}</p>
+          <h2 className="award-title">{getCMSCopy("copy.AwardsSection.39a8c7496bcc", "Awards & ")}<em>{getCMSCopy("copy.AwardsSection.6d628e092af8", "Recognitions")}</em>
           </h2>
-          <p className="award-standfirst">
-            Your appreciation makes us stronger to serve humanity.
-          </p>
+          <p className="award-standfirst">{getCMSCopy("copy.AwardsSection.146746cd2494", "Your appreciation makes us stronger to serve humanity.")}</p>
         </header>
 
         <div className="award-say">
@@ -317,10 +316,10 @@ export const AwardsSection: React.FC = () => {
           </p>
 
           <div className="award-nav">
-            <button type="button" className="award-arrow" onClick={() => navigate('prev')} aria-label="Previous honour">
+            <button type="button" className="award-arrow" onClick={() => navigate('prev')} aria-label={getCMSCopy("copy.AwardsSection.1b32d86cf43a", "Previous honour")}>
               <ArrowLeft size={26} strokeWidth={2.25} />
             </button>
-            <button type="button" className="award-arrow" onClick={() => navigate('next')} aria-label="Next honour">
+            <button type="button" className="award-arrow" onClick={() => navigate('next')} aria-label={getCMSCopy("copy.AwardsSection.a6de5d452df2", "Next honour")}>
               <ArrowRight size={26} strokeWidth={2.25} />
             </button>
             <p className="award-count">
@@ -330,10 +329,7 @@ export const AwardsSection: React.FC = () => {
         </div>
 
         {!hasAwards && (
-          <p className="award-note">
-            The honours are still being catalogued — each will take the stage here
-            with the body that conferred it and the year it was given.
-          </p>
+          <p className="award-note">{getCMSCopy("copy.AwardsSection.865ecb3b60c6", "The honours are still being catalogued — each will take the stage here with the body that conferred it and the year it was given.")}</p>
         )}
       </div>
 

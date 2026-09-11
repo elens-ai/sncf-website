@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MEDIA, MediaItem } from '../data/media';
@@ -25,6 +27,7 @@ import { MEDIA, MediaItem } from '../data/media';
  */
 
 interface MediaGalleryProps {
+  layout?: 'carousel' | 'editorial';
   /** Key into MEDIA. */
   section: string;
   /** Small caps line above the gallery. */
@@ -53,6 +56,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   section,
   title = 'Photographs & films',
   headingLevel = 3,
+  layout = 'carousel',
 }) => {
   const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
   const items = MEDIA[section] ?? [];
@@ -86,7 +90,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
      awaiting plate opens too and says plainly that its photograph has not
      been added, which makes the viewer a way to read the catalogue rather
      than a dead end, and lets the arrows walk the whole set. */
-  const openable = shown;
+  const openable = layout === 'editorial' ? shown.filter(m => m.src) : shown;
 
   const close = useCallback(() => {
     setViewing(null);
@@ -119,6 +123,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
      It stops when a pointer is over it, when focus is inside it, when the
      gallery is off screen, and entirely under prefers-reduced-motion. */
   useEffect(() => {
+    if (layout === 'editorial') return;
     const el = stripRef.current;
     if (!el) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -189,6 +194,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
      passive listener, and React's onWheel is passive by default — the whole
      thing would silently do nothing if this were a JSX prop. */
   useEffect(() => {
+    if (layout === 'editorial') return;
     const el = stripRef.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
@@ -285,7 +291,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   const current = viewing !== null ? openable[viewing] : null;
   /* counted over what is ON SCREEN, not over the whole set — under the Films
      filter, "3 of 12 hung" describes a grid the reader cannot see */
-  const ready = openable.length;
+  const ready = shown.filter(m => m.src).length;
 
   const openPlate = (m: MediaItem, el: HTMLElement) => {
     const i = openable.findIndex((o) => o.id === m.id);
@@ -297,12 +303,12 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   return (
     /* no aria-label on the section: it would duplicate the heading right
        inside it, and a screen reader would announce the name twice */
-    <section className="mgal">
+    <section className="mgal" data-layout={layout}>
       <header className="mgal-head">
         <Heading className="mgal-title font-artistic-display">{title}</Heading>
 
         {hasPhoto && hasFilm && (
-          <div className="mgal-filter" role="radiogroup" aria-label="Filter media">
+          <div className="mgal-filter" role="radiogroup" aria-label={getCMSCopy("copy.MediaGallery.f5540d923002", "Filter media")}>
             {FILTERS.map(([k, label], i) => (
               <button
                 key={k}
@@ -345,7 +351,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         onFocusCapture={() => { heldRef.current = true; }}
         onBlurCapture={() => { heldRef.current = false; }}
       >
-        {[...shown, ...shown].map((m, dupIndex) => {
+        {(layout === 'editorial' ? shown : [...shown, ...shown]).map((m, dupIndex) => {
           const echo = dupIndex >= shown.length;
           const awaiting = !m.src;
           return (
@@ -362,7 +368,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                  string was being dropped, leaving the echo tabbable */
               inert={echo}
             >
-              {awaiting ? (
+              {awaiting && layout === 'editorial' ? <div className="mgal-plate mgal-plate-awaiting"><span className="mgal-await-mark" aria-hidden="true">{m.kind === 'film' ? '▶' : '◻'}</span><span className="mgal-await-label">{m.kind === 'film' ? 'Film unavailable' : 'Photograph unavailable'}</span></div> : awaiting ? (
                 <button
                   type="button"
                   className="mgal-plate mgal-plate-awaiting"
@@ -390,7 +396,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                       back to an ink ground carrying the play mark. */}
                   {(m.kind === 'photo' ? m.src : m.poster) && (
                     <img
-                      src={(m.kind === 'photo' ? m.src : m.poster) as string}
+                      src={resolveCMSMedia((m.kind === 'photo' ? m.src : m.poster) as string)}
                       alt={m.alt}
                       loading="lazy"
                       decoding="async"
@@ -403,16 +409,14 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                   )}
                 </button>
               )}
-              <p className="mgal-caption font-artistic-serif">{m.caption}</p>
+              <p className="mgal-caption font-artistic-serif">{m.caption}{layout === 'editorial' && m.src === resolveCMSAsset("asset.MediaGallery.76f684891a21", "/images/volunteers-planning.webp") && <small className="block">{getCMSCopy("copy.MediaGallery.d50d1277878f", "Source illustration")}</small>}</p>
             </li>
           );
         })}
       </ul>
 
       <p className="mgal-note">
-        {ready} of {shown.length} hung · the rest arrive as the foundation’s
-        archive is catalogued
-      </p>
+        {ready}{getCMSCopy("copy.MediaGallery.a4282e4b2298", " of ")}{shown.length}{getCMSCopy("copy.MediaGallery.db810ff10618", " available · the rest arrive as the foundation’s archive is catalogued")}</p>
 
       {/* THE VIEWER */}
       {current &&
@@ -431,7 +435,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
             <button
               type="button"
               className="mgal-viewer-close"
-              aria-label="Close"
+              aria-label={getCMSCopy("copy.MediaGallery.7d9eb7acb13e", "Close")}
               onClick={close}
             >
               ×
@@ -442,7 +446,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                 <button
                   type="button"
                   className="mgal-viewer-arrow mgal-viewer-prev"
-                  aria-label="Previous"
+                  aria-label={getCMSCopy("copy.MediaGallery.a57b08a480b8", "Previous")}
                   onClick={() => step(-1)}
                 >
                   ‹
@@ -450,7 +454,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                 <button
                   type="button"
                   className="mgal-viewer-arrow mgal-viewer-next"
-                  aria-label="Next"
+                  aria-label={getCMSCopy("copy.MediaGallery.1ff57a29d7c9", "Next")}
                   onClick={() => step(1)}
                 >
                   ›
@@ -458,7 +462,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
               </>
             )}
 
-            <figure className="mgal-viewer-figure">
+            <figure className="mgal-viewer-figure" key={current.id}>
               {!current.src ? (
                 <div className="mgal-viewer-await">
                   <span className="mgal-viewer-await-mark" aria-hidden="true">
@@ -467,24 +471,21 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
                   <p className="mgal-viewer-await-kind">
                     {current.kind === 'film' ? 'Film to come' : 'Photograph to come'}
                   </p>
-                  <p className="mgal-viewer-await-note font-artistic-serif">
-                    This plate is reserved. It goes up when the foundation’s
-                    archive reaches it.
-                  </p>
+                  <p className="mgal-viewer-await-note font-artistic-serif">{getCMSCopy("copy.MediaGallery.28173abab5d6", "This plate is reserved. It goes up when the foundation’s archive reaches it.")}</p>
                 </div>
               ) : current.kind === 'film' && current.src ? (
                 isEmbed(current.src) ? (
                   <iframe
-                    src={current.src}
+                    src={resolveCMSMedia(current.src)}
                     title={current.caption}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
                 ) : (
-                  <video src={current.src} poster={current.poster} controls autoPlay />
+                  <video src={resolveCMSMedia(current.src)} poster={resolveCMSMedia(current.poster)} controls autoPlay />
                 )
               ) : (
-                <img src={current.src ?? ''} alt={current.alt} />
+                <img src={resolveCMSMedia(current.src ?? '')} alt={current.alt} />
               )}
               <figcaption className="font-artistic-serif">
                 {current.caption}

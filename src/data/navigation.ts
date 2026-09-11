@@ -1,3 +1,5 @@
+import { bindCMSData, resolveSiteList, validNavigation, validNavGroup } from '../cms/data';
+
 /**
  * Main navigation.
  *
@@ -85,7 +87,7 @@ const roomLinks = (pillarId: 'heal' | 'enrich' | 'empower'): NavLink[] => [
   })),
 ];
 
-export const CORE_VALUE_GROUPS: PillarGroup[] = [
+export const DEFAULT_CORE_VALUE_GROUPS: PillarGroup[] = [
   { pillarId: 'heal', title: 'Heal', blurb: 'Health & medical care', links: roomLinks('heal') },
   { pillarId: 'enrich', title: 'Enrich', blurb: 'Education & skills', links: roomLinks('enrich') },
   {
@@ -96,9 +98,9 @@ export const CORE_VALUE_GROUPS: PillarGroup[] = [
   },
 ];
 
-export const NAV_ITEMS: NavItem[] = [
+export const DEFAULT_NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'Core Values', href: '/core-values', groups: CORE_VALUE_GROUPS },
+  { label: 'Core Values', href: '/core-values', groups: DEFAULT_CORE_VALUE_GROUPS },
   {
     label: 'Projects',
     href: '/projects',
@@ -129,3 +131,6 @@ export const NAV_ITEMS: NavItem[] = [
   },
   { label: 'Our Guiding Force', href: '/our-guiding-force' },
 ];
+
+export let CORE_VALUE_GROUPS: PillarGroup[] = bindCMSData(DEFAULT_CORE_VALUE_GROUPS, (publication, fallback) => resolveSiteList(publication, fallback, 'coreValueGroups', validNavGroup), value => { CORE_VALUE_GROUPS = value; });
+export let NAV_ITEMS: NavItem[] = bindCMSData(DEFAULT_NAV_ITEMS, (publication, fallback) => resolveSiteList(publication, fallback, 'navigation', validNavigation), value => { NAV_ITEMS = value; });

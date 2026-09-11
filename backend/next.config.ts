@@ -7,6 +7,7 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  agentRules: false,
   /* Ships .next/standalone: server.js plus only the node_modules the server
      bundle actually reaches (74 MB, against 693 MB installed). The Docker
      runner stage copies that and nothing else.

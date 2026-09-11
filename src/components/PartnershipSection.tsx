@@ -1,3 +1,8 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSLink } from '../cms/links';
+import { useCMSRevision } from '../cms/CMSContentProvider';
+import { BRAND } from '../data/partnerBrand';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { ChevronRight } from 'lucide-react';
@@ -44,17 +49,10 @@ interface Mark {
 /** Only partners whose mark we actually hold a file for. The three without
     one (KSCF, Blind Relief, EBAI) are named in data/partners.ts and stay on
     the Media Wall — a blank tile here would read as an absence. */
-const MARKS: Mark[] = [
-  { id: 'un', name: 'United Nations', src: '/images/partners/un.png', from: '#009edb', to: '#5ec8f2' },
-  { id: 'railways', name: 'Indian Railways', src: '/images/partners/railways.png', from: '#c8102e', to: '#f2727f' },
-  { id: 'red-cross', name: 'Indian Red Cross Society', src: '/images/partners/red-cross.png', from: '#ed1b2e', to: '#ff8a7a' },
-  { id: 'life-west', name: 'Life Chiropractic College West', src: '/images/partners/life-west.svg', from: '#0077c8', to: '#63b8ee' },
-  { id: 'urban-development', name: 'Ministry of Urban Development', src: '/images/partners/urban-development.png', from: '#2e3092', to: '#7f81d6' },
-  { id: 'ndtv', name: 'NDTV', src: '/images/partners/ndtv.png', from: '#e4002b', to: '#ff7a90' },
-  { id: 'toi', name: 'Times of India', src: '/images/partners/toi.png', from: '#bb0000', to: '#ef6a6a' },
-  { id: 'niit', name: 'NIIT', src: '/images/partners/niit.png', from: '#ed1c24', to: '#ff8d72' },
-  { id: 'singer', name: 'Singer India', src: '/images/partners/singer.png', from: '#d21f2f', to: '#f4838c' },
-];
+const getMarks = (): Mark[] => PARTNERS.flatMap(partner => {
+  const brand = BRAND[partner.id];
+  return brand?.logo ? [{ id: partner.id, name: brand.short || partner.name, src: resolveCMSMedia(brand.logo), from: brand.color, to: brand.color }] : [];
+});
 
 /** How long a bloom takes to settle before it hands the button along. */
 const GLOW_MS = 520;
@@ -65,11 +63,14 @@ const WALK_MS = 3200;
     carried: that object is a per-user export behind an account path, so it
     is not ours to hotlink and would break the day it expires. Same film,
     same bytes, no third party in the path. */
-const VIDEO_SRC = '/video/partnership.mp4';
+const videoSource = () => resolveCMSAsset("asset.PartnershipSection.d0662fd992e8", "/video/partnership.mp4");
 
 export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
   onOpenDonate,
 }) => {
+  const revision = useCMSRevision();
+  const MARKS = useMemo(getMarks, [revision]);
+  const VIDEO_SRC = videoSource();
   const calm = useReducedMotion();
 
   /** Which mark the "Get in touch" button is currently wearing. */
@@ -96,19 +97,19 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
 
   /** Untouched, the button walks the list itself. */
   useEffect(() => {
-    if (touched) return;
+    if (touched || !MARKS.length) return;
     const id = window.setInterval(
       () => setBadge((i) => (i + 1) % MARKS.length),
       WALK_MS,
     );
     return () => window.clearInterval(id);
-  }, [touched]);
+  }, [touched, MARKS.length]);
 
   /** Rendered twice, back to back: the track travels exactly -50% and the
       second copy lands where the first began, so the seam never shows. */
-  const reel = useMemo(() => [...MARKS, ...MARKS], []);
+  const reel = useMemo(() => [...MARKS, ...MARKS], [MARKS]);
 
-  const wearing = MARKS[badge];
+  const wearing = MARKS[badge % MARKS.length];
   const partnerCount = PARTNERS.length;
 
   return (
@@ -137,7 +138,7 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
             playsInline
             aria-hidden="true"
             className="relative w-full h-full object-cover scale-105 transition-transform duration-1000"
-            src={VIDEO_SRC}
+            src={resolveCMSMedia(VIDEO_SRC)}
           />
         </div>
 
@@ -153,17 +154,9 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
             <h2
               id="partnership-heading"
               className="font-display text-[42px] md:text-[56px] font-medium tracking-tight leading-[1.05] text-[#0a1b33]"
-            >
-              Foundation of the
-              <br />
-              new digital epoch
-            </h2>
+            >{getCMSCopy("copy.PartnershipSection.4f5bd81a46bc", "Foundation of the")}<br />{getCMSCopy("copy.PartnershipSection.e8543633032e", "new digital epoch")}</h2>
 
-            <p className="mt-5 font-sans text-[14px] md:text-[15px] leading-relaxed text-[#64748b]">
-              Designing products, powering ecosystems and laying the foundation
-              of a decentralized web for enterprises, builders and communities
-              alike.
-            </p>
+            <p className="mt-5 font-sans text-[14px] md:text-[15px] leading-relaxed text-[#64748b]">{getCMSCopy("copy.PartnershipSection.af504e81b4d5", "Designing products, powering ecosystems and laying the foundation of a decentralized web for enterprises, builders and communities alike.")}</p>
 
             <motion.button
               type="button"
@@ -172,16 +165,14 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
               whileTap={calm ? undefined : { scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 400, damping: 24 }}
               className="mt-8 inline-flex items-center gap-2 bg-[#0a152d] text-white rounded-full px-6 py-3 text-[13px] font-semibold shadow-[0_10px_30px_rgba(10,21,45,0.25)]"
-            >
-              Contact Us
-            </motion.button>
+            >{getCMSCopy("copy.PartnershipSection.98b67063cf8e", "Contact Us")}</motion.button>
           </motion.div>
         </div>
 
         {/* THE FLOATING NAVBAR */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30">
           <motion.nav
-            aria-label="Partnership"
+            aria-label={getCMSCopy("copy.PartnershipSection.b61dd8f40159", "Partnership")}
             initial={calm ? false : { opacity: 0, y: 16 }}
             whileInView={calm ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -196,21 +187,17 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
             </span>
 
             <a
-              href="https://nirankarifoundation.org/our-partners/"
+              href={getCMSLink("copy.Link.PartnershipSection.4d589e9db012", "https://nirankarifoundation.org/our-partners/")}
               target="_blank"
               rel="noopener noreferrer"
               className="px-3 py-2 text-[12px] font-semibold text-slate-500 hover:text-[#0a1b33] transition-colors"
-            >
-              Products
-            </a>
+            >{getCMSCopy("copy.PartnershipSection.4edc8bfafc6b", "Products")}</a>
             <a
-              href="https://nirankarifoundation.org/about-us/"
+              href={getCMSLink("copy.Link.PartnershipSection.eae35520563d", "https://nirankarifoundation.org/about-us/")}
               target="_blank"
               rel="noopener noreferrer"
               className="px-3 py-2 text-[12px] font-semibold text-slate-500 hover:text-[#0a1b33] transition-colors"
-            >
-              Docs
-            </a>
+            >{getCMSCopy("copy.PartnershipSection.7af023c43013", "Docs")}</a>
 
             <button
               type="button"
@@ -219,9 +206,9 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
             >
               {/* the seat the wall keeps handing along */}
               <span className="relative w-5 h-5 shrink-0 grid place-items-center overflow-hidden">
-                <motion.img
+                {wearing && <motion.img
                   key={wearing.id}
-                  src={wearing.src}
+                  src={resolveCMSMedia(wearing?.src)}
                   alt=""
                   aria-hidden="true"
                   loading="lazy"
@@ -230,9 +217,9 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
                   className="max-w-full max-h-full object-contain"
-                />
+                />}
               </span>
-              <span>Get in touch</span>
+              <span>{getCMSCopy("copy.PartnershipSection.115e410f01dc", "Get in touch")}</span>
               <ChevronRight className="w-3.5 h-3.5" aria-hidden="true" />
             </button>
           </motion.nav>
@@ -260,7 +247,7 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
                 }}
               />
               <img
-                src={m.src}
+                src={resolveCMSMedia(m.src)}
                 alt={i < MARKS.length ? m.name : ''}
                 aria-hidden={i >= MARKS.length}
                 loading="lazy"
@@ -273,9 +260,7 @@ export const PartnershipSection: React.FC<PartnershipSectionProps> = ({
       </div>
 
       <p className="mt-6 text-center font-sans text-[12px] text-white/50">
-        {partnerCount} organisations named on the foundation&rsquo;s partners
-        page. Marks shown for the {MARKS.length} that publish one.
-      </p>
+        {partnerCount}{getCMSCopy("copy.PartnershipSection.a33c4bd321ea", " organisations named on the foundation’s partners page. Marks shown for the ")}{MARKS.length}{getCMSCopy("copy.PartnershipSection.f3d8aad9367d", " that publish one.")}</p>
     </section>
   );
 };

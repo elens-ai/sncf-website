@@ -1,10 +1,13 @@
+import { useNavigate } from 'react-router-dom';
+import { CMSSection } from '../cms/CMSContentProvider';
+import { CMSLayout } from '../components/CMSLayout';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePageMotion } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
-import { PillarsSection } from '../components/PillarsSection';
+import { PavilionJourney } from '../components/PavilionJourney';
 import { EventsSection } from '../components/EventsSection';
 import { AwardsSection } from '../components/AwardsSection';
 import { PartnersSection } from '../components/PartnersSection';
@@ -32,8 +35,15 @@ const parseInviteParam = (): string | null => {
   return m ? m[1] : null;
 };
 
+const WELCOME_SESSION_KEY = 'sncf.welcome.shown';
+let welcomeShownInMemory = false;
+const welcomeWasShown = () => {
+  try { return welcomeShownInMemory || sessionStorage.getItem(WELCOME_SESSION_KEY) === '1'; }
+  catch { return welcomeShownInMemory; }
+};
+
 export default function HomePage() {
-  usePageMotion();
+  const navigate = useNavigate();
   /* 'showing' -> 'exiting' (logo flies to the header) -> 'done'.
      The hero is mounted underneath the whole time so the handoff is seamless.
      A visitor arriving from a scanned pass (?invite=...) skips the splash
@@ -42,10 +52,15 @@ export default function HomePage() {
   const [splashPhase, setSplashPhase] = useState<'showing' | 'exiting' | 'done'>(() =>
     /* partner-invite: the CSR desk's personalised links (PartnersSection)
        skip the splash for the same reason event passes do */
-    parseInviteParam() || new URLSearchParams(window.location.search).has('partner-invite')
+    welcomeWasShown() || parseInviteParam() || new URLSearchParams(window.location.search).has('partner-invite')
       ? 'done'
       : 'showing',
   );
+  useEffect(() => {
+    if (splashPhase === 'done') return;
+    welcomeShownInMemory = true;
+    try { sessionStorage.setItem(WELCOME_SESSION_KEY, '1'); } catch { /* In-memory fallback when storage is unavailable. */ }
+  }, [splashPhase]);
   const isSplashUp = splashPhase !== 'done';
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
@@ -61,9 +76,10 @@ export default function HomePage() {
      is read once on load and cleared on dismiss, so reloading or sharing the
      address afterwards gives the plain site, not a stuck invitation. */
   const [inviteId, setInviteId] = useState<string | null>(parseInviteParam);
+  usePageMotion(isSplashUp || isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || !!galleryLeader || !!inviteId);
   const inviteItem = useMemo(
     () => (inviteId ? resolveEvents(EVENTS).find((i) => i.event.id === inviteId) ?? null : null),
-    [inviteId],
+    [inviteId, EVENTS],
   );
   const closeInvite = useCallback(() => {
     setInviteId(null);
@@ -159,7 +175,7 @@ export default function HomePage() {
       )}
 
       {/* 1. TOP HEADER NAVIGATION */}
-      <Header
+      <CMSSection id="shared.Header"><Header
         currentPillar={currentPillar}
         onSearchClick={() => setIsSearchOpen(true)}
         searchQuery={searchQuery}
@@ -171,7 +187,7 @@ export default function HomePage() {
         onOpenGallery={() => setIsGalleryOpen(true)}
         onOpenDonate={() => setIsDonateOpen(true)}
         hideLogo={isSplashUp}
-      />
+      /></CMSSection>
 
       {/* Social sidebar — a viewport fixture, so it lives at ROOT level, not
           inside the hero. Inside it sat in the hero's stacking context
@@ -181,52 +197,42 @@ export default function HomePage() {
           ended up sliced off behind the footer. Out here its z-40 is real —
           above the sections and footer (z-10), below the header and modals
           (z-50). */}
-      <SocialSidebar />
+      <CMSSection id="shared.SocialSidebar"><SocialSidebar /></CMSSection>
 
       {/* Floating section-to-section jump. Root level for the same reason the
           social rail is: it is a viewport fixture, and inside a section its
           `position: fixed` would be captured by that section's transform /
           will-change containing block. Hidden while the splash is up. */}
-      {!isSplashUp && <SectionJumpButton />}
+      {!isSplashUp && <CMSSection id="shared.SectionJumpButton"><SectionJumpButton /></CMSSection>}
 
       {/* 2. HERO — the site's single hero. */}
+      <CMSLayout sections={[
+        {id:'home.intro',node:(<div className="hero-pavilion-sequence">
       <HeroSection
         activeIndex={activeIndex}
         onActiveIndexChange={handleActiveIndexChange}
         isPaused={isPaused || isSplashUp}
         onTogglePause={() => setIsPaused((prev) => !prev)}
-        onOpenDetails={handleOpenDetails}
+        onOpenDetails={pillar => navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`)}
         introActive={!isSplashUp}
       />
 
       {/* 3. THE SCREEN BELOW THE HERO. It carries the current pillar's accent
              colors to maintain color continuity from the hero section. */}
-      <PillarsSection
-        pillars={activePillarsList}
-        activeIndex={activeIndex}
-        onOpenDetails={handleOpenDetails}
-        currentPillar={currentPillar}
-      />
-
-      {/* 4. UPCOMING EVENTS */}
-      <EventsSection />
-
-      {/* 5. AWARDS & RECOGNITIONS */}
-      <AwardsSection />
-
-      {/* 6. PARTNERS */}
-      <PartnersSection
+      <PavilionJourney />
+      </div>)},
+        {id:'home.events',node:<EventsSection />},
+        {id:'home.awards',node:<AwardsSection />},
+        {id:'home.partners',node:(<PartnersSection
         onOpenDonate={() => setIsDonateOpen(true)}
         escapeSuspended={
           /* while any overlay is up, Escape belongs to the overlay — the
              desk beneath it must not collapse on the same keypress */
           isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || galleryLeader !== null
         }
-      />
-
-      {/* 7. FOOTER — closes the page. Not a snap target: it is a band, not a
-             screen, and snapping to it would strand the reader on links. */}
-      <SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />
+      />)},
+        {id:'home.footer',node:<SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />},
+      ]} />
 
       {/* Detail Modal for in-depth pillar exploration */}
       <PillarModal

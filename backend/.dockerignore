@@ -22,3 +22,10 @@ tsconfig.tsbuildinfo
 .DS_Store
 Dockerfile
 .dockerignore
+
+# Local SQLite databases and first-run authoring state must never enter images.
+*.db
+*.db-*
+*.tsbuildinfo
+AGENTS.md
+CLAUDE.md

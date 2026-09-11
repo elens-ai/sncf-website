@@ -1,309 +1,222 @@
-import React, { useEffect, useState } from 'react';
+import { getCMSCopy } from '../cms/runtime';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ArrowDown, ArrowUpRight, Pause, Play, CalendarDays, Search } from 'lucide-react';
+import { ValueCompass } from '../components/ValueCompass';
+import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
-import { ChapterAmbience } from '../components/ChapterAmbience';
-import { MediaGallery } from '../components/MediaGallery';
+import { PillarModelCard } from '../components/PillarModelCard';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
-import { Tally } from '../components/Tally';
-import {
-  toNumber,
-  isAmount,
-  markStep,
-  groupNum,
-} from '../utils/figures';
+import './core-values.css';
 
-/**
- * CORE VALUES — the three cornerstones, written down.
- *
- * The hall on the home page shows Heal, Enrich and Empower in motion; a
- * visitor walks through it and comes away with an impression. This page is
- * the other half of that: every figure the March 2026 activity report gives,
- * arranged so the scale of each vertical can actually be compared.
- *
- * Three devices carry it:
- *
- *  · the LEDGER — each vertical's four headline figures, counted up on
- *    arrival so the numbers land rather than simply appear;
- *  · the SCALE — a ranked bar for every activity in the vertical, drawn from
- *    that activity's own headline figure. The bars are proportional within a
- *    vertical, never across two: blood units and cataract surgeries are not
- *    the same kind of quantity, and a shared axis would lie about that;
- *  · the RECORD — every data point the report publishes per activity, opened
- *    in place rather than behind a modal.
- *
- * Officially the foundation places environmental work under Heal. Our
- * exhibition puts trees and cleanliness under Empower, and this page follows
- * the exhibition so the two halves of the site agree with each other.
- */
-
-/** The three official cornerstones, in the foundation's own order. */
 const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
+type Cornerstone = typeof CORNERSTONES[number];
+
+const ValueCover: React.FC = () => {
+  useCMSRevision();
+  const [choice, setChoice] = useState<Cornerstone>('heal');
+  const root = useRef<HTMLElement>(null);
+  const active = useSectionActivity(root);
+  const pillar = PILLARS.find(p => p.id === choice)!;
+  return <section ref={root} className="values-cover" data-active={active} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties} aria-labelledby="values-cover-title">
+    <div className="values-cover-copy">
+      <p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.bb5f4b8db550", "One purpose. Three ways to make a difference.")}</p>
+      <h1 id="values-cover-title">{getCMSCopy("copy.CoreValuesPage.1872c282a338", "The three")}<br /><em>{getCMSCopy("copy.CoreValuesPage.19b476bc912f", "cornerstones.")}</em></h1>
+      <p>{getCMSCopy("copy.CoreValuesPage.eddff23d6323", "Care that reaches further. Learning that opens doors. Communities that grow stronger.")}</p>
+
+    </div>
+    <ValueCompass choice={choice} onChange={setChoice} active={active} />
+    <div className="values-cover-footer"><span>{getCMSCopy("copy.CoreValuesPage.4109634bf723", "Compassion, made visible.")}</span><span>{getCMSCopy("copy.CoreValuesPage.1cd27a19c41a", "Explore the values · Meet the programmes · Discover the impact")}</span></div>
+  </section>;
+};
+
+const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: string }> = ({ id, index, linkedActivity }) => {
+  const pillar = PILLARS.find(p => p.id === id)!;
+  const activities = ACTIVITIES.filter(a => a.pillarId === id);
+  const [selectedId, setSelectedId] = useState(activities[0].id);
+  const [query, setQuery] = useState('');
+  const matching = activities.filter(a => `${a.title} ${a.blurb}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const [reduced, setReduced] = useState(false);
+  const modelRef = useRef<HTMLDivElement>(null);
+  const showcaseRef = useRef<HTMLDivElement>(null);
+  const originRef = useRef<HTMLDivElement>(null);
+  const destinationRef = useRef<HTMLDivElement>(null);
+  const detailAnchorRef = useRef<HTMLDivElement>(null);
+  const explorerRef = useRef<HTMLDivElement>(null);
+  const transitionRotation = useRef(0);
+  const visible = useSectionActivity(modelRef);
+  const selected = activities.find(a => a.id === selectedId) ?? activities[0];
+  useEffect(() => {
+    if (ACTIVITIES.some(a => a.id === linkedActivity && a.pillarId === id)) setSelectedId(linkedActivity);
+  }, [linkedActivity, id]);
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setReduced(query.matches);
+    sync(); query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
+  useEffect(() => {
+    const showcase = showcaseRef.current, origin = originRef.current, destination = destinationRef.current, model = modelRef.current;
+    if (!showcase || !origin || !destination || !model) return;
+    let frame = 0;
+    let x = 0, y = 0, dx = 0, dy = 0, travel = 1, finalScale = 1;
+    let modelWidth = 1, modelHeight = 1, objectWidth = 255, baseLeft = 0;
+    let dockX = 0, dockY = 0, dockScale = 1, dockStart = 0, dockEnd = 1;
+    const paint = () => {
+      frame = 0;
+      const top = showcase.getBoundingClientRect().top;
+      let t = Math.max(0, Math.min(1, (170 - top) / travel));
+      if (reduced) t = t < .5 ? 0 : 1;
+      const ease = t * t * (3 - 2 * t);
+      // Rotate the actual mesh so the extruded edges and back stay three-dimensional.
+      transitionRotation.current = !reduced ? ease * Math.PI * 2 : 0;
+      // A single scroll-scrubbed push-in: rest at both ends, full scale midway.
+      const zoom = !reduced ? Math.sin(Math.PI * t) ** 4 : 0;
+      const normalX = x + dx * ease, normalY = y + dy * ease;
+      const centreX = innerWidth / 2 - baseLeft - modelWidth / 2;
+      const centreY = (innerHeight + 125) / 2 - top - modelHeight / 2;
+      let dock = Math.max(0, Math.min(1, (-top - dockStart) / Math.max(1, dockEnd - dockStart)));
+      if (reduced) dock = dock < .5 ? 0 : 1;
+      const dockEase = dock * dock * dock * (dock * (dock * 6 - 15) + 10);
+      const movingX = normalX + (centreX - normalX) * zoom;
+      const movingY = normalY + (centreY - normalY) * zoom;
+      const restingScale = 1 + (finalScale - 1) * ease;
+      const fullScreenScale = Math.max(innerWidth, innerHeight) * 1.2 / (objectWidth * 1.44);
+      const zoomScale = restingScale + Math.max(0, fullScreenScale - restingScale) * zoom;
+      let positionX = movingX + (dockX - movingX) * dockEase;
+      let positionY = movingY + (dockY - movingY) * dockEase;
+      let scale = zoomScale + (dockScale - zoomScale) * dockEase;
+      if (!reduced && dock > 0) {
+        // A lifted Bezier arc, with a depth-like change of scale and a gentle
+        // mesh turn. Both ends settle at zero velocity; reverse scrolling retraces it.
+        const u = dockEase, v = 1 - u;
+        const lift = Math.min(150, innerHeight * .17);
+        const bend = Math.min(140, Math.abs(dockX - movingX) * .4);
+        positionX = v ** 3 * movingX + 3 * v * v * u * (movingX + bend)
+          + 3 * v * u * u * (dockX - bend * .35) + u ** 3 * dockX;
+        positionY = v ** 3 * movingY + 3 * v * v * u * (movingY - lift)
+          + 3 * v * u * u * (dockY - lift * .75) + u ** 3 * dockY;
+        scale = zoomScale * Math.pow(dockScale / zoomScale, u) * (1 + .08 * Math.sin(Math.PI * u));
+        transitionRotation.current += Math.PI * 2 * u;
+      }
+      model.style.transform = `translate3d(${positionX}px, ${positionY}px, 0)`;
+      // Reach zero before maximum enlargement and hold it while screen-filling.
+      // Reveal the content through the icon, then restore its
+      // solid appearance on the return journey (also reversible on scroll-up).
+      const fade = Math.max(0, Math.min(1, (zoom - .2) / .5));
+      const opacity = 1 - fade * fade * (3 - 2 * fade);
+      model.style.opacity = `${opacity}`;
+      model.inert = opacity < .05;
+      model.style.setProperty('--value-object-scale', `${scale}`);
+      model.dataset.zooming = zoom > .15 ? 'true' : 'false';
+      model.dataset.docking = dock > .02 ? 'true' : 'false';
+      model.style.setProperty('--value-control-shift', `${Math.max(0, finalScale - 1) * 160 * ease}px`);
+    };
+    const measure = () => {
+      const base = showcase.getBoundingClientRect(), start = origin.getBoundingClientRect(), end = destination.getBoundingClientRect();
+      x = start.left - base.left; y = start.top - base.top;
+      dx = end.left + end.width / 2 - (start.left + start.width / 2);
+      dy = end.top + end.height / 2 - (start.top + start.height / 2);
+      travel = Math.max(1, end.top - base.top - 30);
+      const object = model.querySelector<HTMLElement>('.value-model-object');
+      objectWidth = object?.offsetWidth || 255;
+      modelWidth = start.width; modelHeight = start.height; baseLeft = base.left;
+      finalScale = Math.min(1.3, end.width * .92 / (objectWidth * 1.44));
+      const anchor = detailAnchorRef.current?.getBoundingClientRect();
+      const explorer = explorerRef.current?.getBoundingClientRect();
+      if (anchor && explorer) {
+        dockX = anchor.left - base.left + anchor.width / 2 - modelWidth / 2;
+        dockY = anchor.top - base.top + anchor.height / 2 - modelHeight / 2;
+        dockScale = anchor.width / (objectWidth * 1.44);
+        dockStart = end.top - base.top - 60;
+        dockEnd = explorer.top - base.top - 150;
+      }
+      model.style.width = `${start.width}px`; model.style.height = `${start.height}px`;
+      paint();
+    };
+    const scroll = () => { if (!frame) frame = requestAnimationFrame(paint); };
+    const observer = new ResizeObserver(measure); observer.observe(showcase); observer.observe(origin); observer.observe(destination);
+    if (detailAnchorRef.current) observer.observe(detailAnchorRef.current);
+    if (explorerRef.current) observer.observe(explorerRef.current);
+    window.addEventListener('scroll', scroll, { passive: true }); measure();
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener('scroll', scroll); };
+  }, [reduced, id]);
+  return (
+    <section id={id} className="value-chapter" aria-labelledby={`${id}-title`} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties}>
+      <div className="value-showcase" ref={showcaseRef}>
+        <div className="value-model value-model-traveller" ref={modelRef}>
+
+          <div className="value-model-object"><PillarModelCard id={id} label={pillar.label} active={visible} animate={visible && !reduced} rotationRef={transitionRotation} /></div>
+
+        </div>
+      <header className="value-intro">
+        <div className="value-model-origin" ref={originRef} aria-hidden="true" />
+        <div className="value-intro-copy">
+          <p className="value-kicker"><span>{getCMSCopy("copy.CoreValuesPage.5feceb66ffc8", "0")}{index + 1}{getCMSCopy("copy.CoreValuesPage.ebcd38e5576a", " / Our core values")}</span><span className="value-dot" />{getCMSCopy("copy.CoreValuesPage.09d7832f2393", " Service with humility")}</p>
+          <p className="value-name font-dancing-script">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</p>
+          <h2 id={`${id}-title`}>{pillar.headline}</h2>
+          <p className="value-description">{pillar.body}</p>
+          <a className="value-explore-link" href={`#${id}-explorer`}>{getCMSCopy("copy.CoreValuesPage.80cc8fe42e1e", "Explore the impact ")}<ArrowDown size={16} /></a>
+        </div>
+      </header>
+
+      <div className="value-stat-heading"><span>{getCMSCopy("copy.CoreValuesPage.0915ad644d68", "The impact at a glance")}</span><span>{activities.length}{getCMSCopy("copy.CoreValuesPage.43bef1db87f1", " programmes · Reporting dates below")}</span></div>
+      <div className="value-stats">
+        <div className="value-stat-center" ref={destinationRef} aria-hidden="true" />
+        {activities.slice(0, 4).map((activity, i) => (
+          <a key={activity.id} href={`#${id}-explorer`} className="value-stat" onClick={() => setSelectedId(activity.id)}>
+            <span className="value-stat-top">{getCMSCopy("copy.CoreValuesPage.5feceb66ffc8", "0")}{i + 1} <ArrowUpRight size={17} /></span>
+            <strong>{activity.headline.value}</strong>
+            <span className="value-stat-unit">{activity.headline.label}</span>
+            <span className="value-stat-caption">{activity.title}</span>
+            <small>{activity.period}</small>
+          </a>
+        ))}
+      </div>
+      </div>
+
+      <div className="value-explorer" id={`${id}-explorer`} ref={explorerRef}>
+        <div className="value-explorer-heading"><div><p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.e7b186e662f2", "Behind the numbers")}</p><h3>{getCMSCopy("copy.CoreValuesPage.6ae8bf36f85f", "Small actions. Lasting change.")}</h3></div><p>{getCMSCopy("copy.CoreValuesPage.92fcbaad24fc", "Choose a programme to explore its reach.")}</p></div>
+        <div className="value-explorer-grid">
+          <div className="value-programmes" role="group" aria-label={`${pillar.label} programmes`}>
+            <label className="value-programme-search"><Search size={16} /><input aria-label={`Find a ${id} programme`} placeholder={getCMSCopy("copy.CoreValuesPage.a3885e77e515", "Find a programme…")} value={query} onChange={e => setQuery(e.target.value)} /></label>
+            {matching.length === 0 && <p className="value-no-results">{getCMSCopy("copy.CoreValuesPage.b458f304b1f0", "No programmes match. Try another word.")}</p>}
+            {matching.map((activity) => (
+              <button key={activity.id} id={activity.id} aria-pressed={activity.id === selected.id} aria-controls={`${id}-detail`} onClick={() => setSelectedId(activity.id)}>
+                <span className="value-programme-num">{getCMSCopy("copy.CoreValuesPage.5feceb66ffc8", "0")}{activities.indexOf(activity) + 1}</span><span>{activity.title}</span><ArrowUpRight size={18} />
+              </button>
+            ))}
+          </div>
+          <article className="value-detail" id={`${id}-detail`} aria-live="polite" aria-atomic="true">
+            <div className="value-detail-top"><span>{getCMSCopy("copy.CoreValuesPage.ad3a80a2651a", "Programme in focus")}</span><span><CalendarDays size={14} />{selected.period}</span></div>
+            <div className="value-detail-summary value-detail-summary-with-model">
+            <div ref={detailAnchorRef} className="value-detail-model-anchor" aria-hidden="true" />
+            <h4 className="value-content-enter" key={selected.id}>{selected.title}</h4>
+            <p>{selected.blurb}</p>
+            <div className="value-featured-number"><strong>{selected.headline.value}</strong><span>{selected.headline.label}</span></div>
+            </div>
+            <dl className="value-data-grid value-content-enter" key={selected.id}>{selected.dataPoints.map(point => <div key={point.label}><dt>{point.label}</dt><dd>{point.value}</dd></div>)}</dl>
+            <p className="value-source">{getCMSCopy("copy.CoreValuesPage.91c1f9479c9a", "Source: foundation activity report · Figures shown as reported.")}</p>
+            <button className="value-next-programme" onClick={() => { setQuery(''); setSelectedId(activities[(activities.indexOf(selected) + 1) % activities.length].id); }}>{getCMSCopy("copy.CoreValuesPage.cd9fb71ad9c3", "Discover the next programme ")}<ArrowUpRight size={16} /></button>
+          </article>
+        </div>
+      </div>
+      <aside className="value-purpose"><div><p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.3824d3f1b90d", "The purpose behind the progress")}</p><h3>{pillar.subText}</h3></div><ul>{pillar.keyHighlights.map((highlight, i) => <li key={highlight}><span>{getCMSCopy("copy.CoreValuesPage.5feceb66ffc8", "0")}{i + 1}</span>{highlight}</li>)}</ul></aside>
+      {index < 2 && <a className="value-next-chapter" href={`#${CORNERSTONES[index + 1]}`}><span>{getCMSCopy("copy.CoreValuesPage.616fea83dd06", "Continue the journey")}</span><strong>{getCMSCopy("copy.CoreValuesPage.7ca10410b52c", "Discover ")}{CORNERSTONES[index + 1]}</strong><ArrowDown size={22} /></a>}
+    </section>
+  );
+}
 
 export const CoreValuesPage: React.FC = () => {
-  /* which activity has its full record open, by id */
-  const [openId, setOpenId] = useState<string | null>(null);
   const { hash } = useLocation();
-
-  /* A link into a single activity — '/core-values#blood-donation' from the
-     navigation — should not merely land near the row, it should OPEN it.
-     Otherwise the menu promises an activity and delivers a list.
-
-     Timers rather than requestAnimationFrame: rAF is suspended in a
-     backgrounded tab, and a deep link that silently does nothing when the
-     tab was not focused is a bug this codebase has already had once. */
   useEffect(() => {
-    const jump = () => {
-      const id = hash.slice(1);
-      if (!id) return;
-      if (!ACTIVITIES.some((a) => a.id === id)) return;
-      setOpenId(id);
-      /* `block: 'start'` and not 'center', so this agrees with ScrollToTop,
-         which also honours the hash on a route change. Two handlers landing
-         on the same offset is invisible; two landing on different offsets is
-         a jump. The retry re-settles after the record has opened, since
-         opening it changes the height of everything below. */
-      let tries = 0;
-      const settle = () => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ block: 'start' });
-        if (++tries < 3) window.setTimeout(settle, 200);
-      };
-      window.setTimeout(settle, 60);
-    };
-    jump();
-    /* Keyed on the ROUTER's hash, not the `hashchange` event. React Router
-       navigates with history.pushState, which does not fire hashchange — so
-       an activity link clicked from the menu while already on this page
-       changed the address and opened nothing. */
+    const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' }), 100);
+    return () => window.clearTimeout(timer);
   }, [hash]);
-
-  return (
-    <PageShell
-      accentPillarId="heal"
-      eyebrow="Core Values · Heal · Enrich · Empower"
-      title="The three cornerstones"
-      standfirst="Everything the foundation does stands on three of them. What follows is
-        not a summary — it is the record: every activity, every figure it
-        reports, and the scale of one against another."
-      rail={
-        <SubsectionNav
-          label="The cornerstones"
-          links={CORNERSTONES.map((id) => {
-            const p = PILLARS.find((x) => x.id === id)!;
-            return { id, label: p.label, ink: p.accentB };
-          })}
-        />
-      }
-    >
-      {/* The room answers: the paper's light crosses to the next
-          cornerstone's ink as you approach it. */}
-      <ChapterAmbience
-        chapters={CORNERSTONES.map((id) => ({
-          id,
-          ink: PILLARS.find((x) => x.id === id)!.accentA,
-        }))}
-      />
-
-      {/* THE CHAPTERS */}
-      {CORNERSTONES.map((id, chapterIndex) => {
-        const pillar = PILLARS.find((x) => x.id === id)!;
-        const acts = ACTIVITIES.filter((a) => a.pillarId === id);
-        /* AMOUNTS ARE STATED, NOT RANKED. The page already refuses to scale
-           one cornerstone against another because the quantities differ in
-           kind; this is the same principle one level down. Enrich's peak was
-           ₹4,82,19,252 — parsed as 48,219,252 — which rendered 209,038
-           students at 0.4% of a bar, a chart comparing rupees to people. */
-        const ranked = acts.filter((a) => !isAmount(a.headline.value));
-        const amounts = acts.filter((a) => isAmount(a.headline.value));
-        /* the tallest COUNT in this vertical sets its own scale */
-        const peak = Math.max(...ranked.map((a) => toNumber(a.headline.value)), 1);
-
-        return (
-          <section
-            key={id}
-            id={id}
-            className="cv-room"
-            style={
-              {
-                '--ink-a': pillar.accentA,
-                '--ink-b': pillar.accentB,
-              } as React.CSSProperties
-            }
-            aria-labelledby={`${id}-title`}
-          >
-            {/* the room's activities, printed small down both margins */}
-            <div className="cv-margin-print" data-room={id} aria-hidden="true" />
-
-            {/* THE THRESHOLD. The card stack stops here: a full-bleed band of
-                paper with the cornerstone's number, name and petal on it. It
-                is a leaf you turn rather than a heading you scroll past — the
-                daylit answer to the hall's camera turning into a new room. */}
-            <header className="cv-threshold">
-              <span className="cv-threshold-num font-artistic-heading" aria-hidden="true">
-                {String(chapterIndex + 1).padStart(2, '0')}
-              </span>
-              <img
-                className="cv-threshold-emblem"
-                src={`/images/vertical-${id}.webp`}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-              />
-              <p className="cv-threshold-label font-artistic-display">{pillar.label}</p>
-              <h2 id={`${id}-title`} className="cv-threshold-title font-artistic-heading">
-                {pillar.headline}
-              </h2>
-              <p className="cv-threshold-body font-artistic-serif">{pillar.body}</p>
-            </header>
-
-            <div className="cv-chapter">
-
-            {/* THE LEDGER — the vertical's four headline figures */}
-            <ul className="cv-ledger" aria-label={`${pillar.label} headline figures`}>
-              {pillar.stats.map((s) => (
-                <li key={s.label}>
-                  <Tally value={s.value} className="cv-ledger-value font-artistic-heading" />
-                  <span className="cv-ledger-label">{s.label}</span>
-                </li>
-              ))}
-            </ul>
-
-            <p className="cv-subtext font-artistic-serif">{pillar.subText}</p>
-
-            <div className="cv-columns">
-              {/* WHAT IT MEANS — the vertical's own highlights */}
-              <div className="cv-highlights">
-                <h3 className="cv-sub font-artistic-display">What this looks like</h3>
-                <ul>
-                  {pillar.keyHighlights.map((h) => (
-                    <li key={h} className="font-artistic-serif">
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* THE TALLY — each activity counted in its own unit */}
-              <div className="cv-tally">
-                <h3 className="cv-sub font-artistic-display">What it adds up to</h3>
-                <ul className="cv-tally-list">
-                  {[...ranked]
-                    .sort((a, b) => toNumber(b.headline.value) - toNumber(a.headline.value))
-                    .map((a) => {
-                      const v = toNumber(a.headline.value);
-                      const step = markStep(v);
-                      const marks = Math.max(1, Math.min(20, Math.round(v / step)));
-                      return (
-                        <li key={a.id} className="cv-tally-row">
-                          <p className="cv-tally-head">
-                            <span className="cv-tally-name font-artistic-heading">
-                              {a.title}
-                            </span>
-                            <span className="cv-tally-figure font-artistic-heading">
-                              {a.headline.value}
-                              <span className="cv-tally-unit">{a.headline.label}</span>
-                            </span>
-                          </p>
-                          <p className="cv-tally-marks" data-for={a.id} aria-hidden="true">
-                            {Array.from({ length: marks }, (_, i) => (
-                              <span key={i} style={{ '--n': i } as React.CSSProperties} />
-                            ))}
-                          </p>
-                          <p className="cv-tally-key">
-                            <span>
-                              each mark ≈ {groupNum(step)}{' '}
-                              {a.headline.label.toLowerCase()}
-                            </span>
-                            <span className="cv-tally-period">{a.period}</span>
-                          </p>
-                        </li>
-                      );
-                    })}
-                </ul>
-
-                {amounts.length > 0 && (
-                  <ul className="cv-amounts">
-                    {amounts.map((a) => (
-                      <li key={a.id}>
-                        <span className="cv-amount-name">{a.title}</span>
-                        <span className="cv-amount-value font-artistic-heading">
-                          {a.headline.value}
-                        </span>
-                        <span className="cv-amount-unit">{a.headline.label}</span>
-                        <span className="cv-tally-period">{a.period}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <p className="cv-scale-note">
-                  Each row is counted in its own unit and says what one mark is
-                  worth. Nothing here is ranked against anything else — a
-                  hospital and a bag of blood are not the same quantity, and a
-                  shared axis would pretend they were. Each row also carries the
-                  date it is counted to, because those dates are not the same.
-                </p>
-              </div>
-            </div>
-
-            {/* THE RECORD — every figure, opened in place */}
-            <h3 className="cv-sub cv-sub-wide font-artistic-display">The record</h3>
-            <ul className="cv-records">
-              {acts.map((a) => {
-                const open = openId === a.id;
-                return (
-                  <li key={a.id} id={a.id} className="cv-record" data-open={open}>
-                    <button
-                      type="button"
-                      className="cv-record-head"
-                      aria-expanded={open}
-                      onClick={() => setOpenId(open ? null : a.id)}
-                    >
-                      <span className="min-w-0">
-                        <span className="cv-record-title font-artistic-heading">{a.title}</span>
-                        <span className="cv-record-blurb font-artistic-serif">{a.blurb}</span>
-                      </span>
-                      <span className="cv-record-figure">
-                        <span className="cv-record-value font-artistic-heading">
-                          {a.headline.value}
-                        </span>
-                        <span className="cv-record-unit">{a.headline.label}</span>
-                      </span>
-                      <span className="cv-record-chev" aria-hidden="true">
-                        {open ? '−' : '+'}
-                      </span>
-                    </button>
-                    <div className="cv-record-body">
-                      <div className="cv-record-inner">
-                        <dl className="cv-points">
-                          {a.dataPoints.map((d) => (
-                            <div key={d.label}>
-                              <dt>{d.label}</dt>
-                              <dd className="font-artistic-heading">{d.value}</dd>
-                            </div>
-                          ))}
-                        </dl>
-                        <p className="cv-period">{a.period}</p>
-                      </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-
-            {/* THE PLATES — this cornerstone's photographs and films */}
-            <MediaGallery section={id} title={`${pillar.label} — photographs & films`} />
-            </div>
-          </section>
-        );
-      })}
-
-      <p className="cv-footnote font-artistic-serif">
-        Figures as published in the foundation's activity report. Where an
-        activity reports a different period, it is noted against that record.
-      </p>
-    </PageShell>
-  );
+  return <PageShell cover={<ValueCover />} accentPillarId="heal" eyebrow={getCMSCopy("copy.CoreValuesPage.c83be5fde065", "Core Values · Heal · Enrich · Empower")} title={getCMSCopy("copy.CoreValuesPage.97ff86ab30e2", "The three cornerstones")} standfirst={getCMSCopy("copy.CoreValuesPage.1d90a9e6fdbc", "Compassion in action. Discover the programmes, people and reported progress behind Heal, Enrich and Empower.")} rail={<SubsectionNav label={getCMSCopy("copy.CoreValuesPage.64263b3319f0", "Explore our impact")} links={CORNERSTONES.map(id => ({ id, label: PILLARS.find(p => p.id === id)!.label, ink: PILLARS.find(p => p.id === id)!.accentB }))} />}>
+    <div className="values-dashboard">{CORNERSTONES.map((id, index) => <ValueChapter key={id} id={id} index={index} linkedActivity={hash.slice(1)} />)}<p className="value-footnote">{getCMSCopy("copy.CoreValuesPage.9fd0ca7a7af7", "Figures reflect each programme’s stated reporting period. Different measures and periods are presented separately; they are not combined into a total.")}</p></div>
+  </PageShell>;
 };

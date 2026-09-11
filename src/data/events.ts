@@ -1,3 +1,5 @@
+import { bindCMSData, resolveEvents } from '../cms/data';
+
 /**
  * Upcoming events.
  *
@@ -41,7 +43,7 @@ export interface SNCFEvent {
   href?: string;
 }
 
-export const EVENTS: SNCFEvent[] = [
+export const DEFAULT_EVENTS: SNCFEvent[] = [
   {
     id: 'manav-ekta-diwas',
     title: 'Manav Ekta Diwas',
@@ -151,3 +153,5 @@ export const EVENTS: SNCFEvent[] = [
     href: '/projects',
   },
 ];
+
+export let EVENTS: SNCFEvent[] = bindCMSData(DEFAULT_EVENTS, resolveEvents, value => { EVENTS = value; });

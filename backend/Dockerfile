@@ -53,7 +53,7 @@ COPY package.json package-lock.json .npmrc ./
 # `npm ci` — the lockfile is committed, so the image gets the exact tree that
 # was tested rather than whatever resolves today.
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund
+    npm ci --include=dev --no-audit --no-fund
 
 
 ##########  builder — next build  ############################################
@@ -96,6 +96,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY package.json .npmrc tsconfig.json next.config.ts ./
 COPY src ./src
 COPY scripts ./scripts
+COPY seed ./seed
 
 # payload's config lookup walks tsconfig's @payload-config path first; naming
 # the file outright removes that inference and any dependence on cwd.

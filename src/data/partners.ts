@@ -1,3 +1,5 @@
+import { bindCMSData, resolvePartners } from '../cms/data';
+
 /**
  * Supports and collaborations.
  *
@@ -16,7 +18,7 @@ export interface Partner {
   note?: string;
 }
 
-export const PARTNERS: Partner[] = [
+export const DEFAULT_PARTNERS: Partner[] = [
   {
     id: 'un',
     name: 'United Nations Organization',
@@ -84,3 +86,5 @@ export const PARTNERS: Partner[] = [
     contribution: 'Eye donation pledge campaign.',
   },
 ];
+
+export let PARTNERS: Partner[] = bindCMSData(DEFAULT_PARTNERS, resolvePartners, value => { PARTNERS = value; });
