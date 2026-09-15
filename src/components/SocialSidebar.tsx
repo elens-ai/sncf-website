@@ -1,3 +1,4 @@
+import { getCMSCopy } from '../cms/runtime';
 import React from 'react';
 import { Instagram, Youtube, Facebook } from 'lucide-react';
 
@@ -17,35 +18,35 @@ const XIcon: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) 
 export const SocialSidebar: React.FC = () => {
   const socialLinks = [
     {
-      name: 'Instagram',
+      name: getCMSCopy("copy.SocialSidebar.bad57ef7837c", "Instagram"),
       icon: <Instagram className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
       url: 'https://instagram.com',
       ariaLabel: 'Follow Sant Nirankari Mission on Instagram',
       colorHover: 'hover:text-pink-400 hover:border-pink-400/60 hover:shadow-[0_0_15px_rgba(244,114,182,0.35)]',
     },
     {
-      name: 'YouTube',
+      name: getCMSCopy("copy.SocialSidebar.fb7accfff8c6", "YouTube"),
       icon: <Youtube className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
       url: 'https://youtube.com',
       ariaLabel: 'Watch Sant Nirankari Mission on YouTube',
       colorHover: 'hover:text-red-400 hover:border-red-400/60 hover:shadow-[0_0_15px_rgba(248,113,113,0.35)]',
     },
     {
-      name: 'Spotify',
+      name: getCMSCopy("copy.SocialSidebar.7005c0064bda", "Spotify"),
       icon: <SpotifyIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
       url: 'https://spotify.com',
       ariaLabel: 'Listen to Nirankari Spiritual Discourses & Bhajans on Spotify',
       colorHover: 'hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-[0_0_15px_rgba(52,211,153,0.35)]',
     },
     {
-      name: 'Facebook',
+      name: getCMSCopy("copy.SocialSidebar.d41f5b4977ee", "Facebook"),
       icon: <Facebook className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
       url: 'https://facebook.com',
       ariaLabel: 'Connect with Sant Nirankari Mission on Facebook',
       colorHover: 'hover:text-blue-400 hover:border-blue-400/60 hover:shadow-[0_0_15px_rgba(96,165,250,0.35)]',
     },
     {
-      name: 'X (Twitter)',
+      name: getCMSCopy("copy.SocialSidebar.89c9b65356e3", "X (Twitter)"),
       icon: <XIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />,
       url: 'https://x.com',
       ariaLabel: 'Follow Sant Nirankari Mission on X',
@@ -56,7 +57,7 @@ export const SocialSidebar: React.FC = () => {
   return (
     <aside
       id="hero-social-sidebar"
-      aria-label="Social Media Connections"
+      aria-label={getCMSCopy("copy.SocialSidebar.e6a6fd6c2f93", "Social Media Connections")}
       /* left-[38px] centres the 40px icon column on x=58 — the same vertical axis as
          the 52px header logo (32px inset + 26px radius), so logo and icons read as
          one aligned rail down the left edge. */

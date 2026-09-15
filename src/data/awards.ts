@@ -1,3 +1,5 @@
+import { bindCMSData, resolveAwards } from '../cms/data';
+
 /**
  * Awards and recognitions.
  *
@@ -56,7 +58,7 @@ export interface Award {
   featured?: boolean;
 }
 
-export const AWARDS: Award[] = [
+export const DEFAULT_AWARDS: Award[] = [
   // {
   //   id: 'example-honour',
   //   title: 'Award name as written on the certificate',
@@ -76,3 +78,5 @@ export const AWARDS: Award[] = [
   //   ],
   // },
 ];
+
+export let AWARDS: Award[] = bindCMSData(DEFAULT_AWARDS, resolveAwards, value => { AWARDS = value; });

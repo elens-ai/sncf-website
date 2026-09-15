@@ -1,0 +1,96 @@
+.hero-pavilion-sequence{position:relative;isolation:isolate;--hero-height:100svh}
+.hero-pavilion-sequence #hero-clone-stage{position:sticky;top:var(--hero-sticky-top,0px);z-index:20;margin-bottom:calc(-1 * var(--hero-height));background:transparent;--curtain-travel:0vw;--curtain-billow:0deg;--curtain-lift:0vh;--curtain-detail:1;pointer-events:none}
+.hero-pavilion-sequence #hero-foreground-content,.hero-pavilion-sequence .hero-bottom-line,.hero-pavilion-sequence #hero-clone-stage button{pointer-events:auto}
+.hero-pavilion-sequence #hero-clone-stage[inert]{pointer-events:none}
+
+.hero-curtain-set{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.stage-curtain{position:absolute;top:0;bottom:-12px;width:50.25%;will-change:transform;transform-origin:50% 0;contain:paint;background:#1b302d}
+.stage-curtain--left{left:0;transform:translate3d(calc(-1 * var(--curtain-travel)),var(--curtain-lift),0) skewX(calc(-1 * var(--curtain-billow)));border-radius:0 0 45% 2% / 0 0 2% 1%;box-shadow:8px 0 22px #102b2426}
+.stage-curtain--right{right:0;transform:translate3d(var(--curtain-travel),var(--curtain-lift),0) skewX(var(--curtain-billow));border-radius:0 0 2% 45% / 0 0 1% 2%;box-shadow:-8px 0 22px #102b2426}
+.curtain-cloth{position:absolute;inset:-2%;background-color:var(--accent-a,#235541);background-image:linear-gradient(180deg,#10292322,transparent 28%,#eff3d808 70%,#16392d26),repeating-linear-gradient(92deg,#102e323b 0%,#25484222 4%,#edf5da22 9%,#ffffff25 12%,#d1e4d412 16%,#173b382d 21%,#112f343d 25%,#dae7d41a 31%,#f4f4d929 35%,#bacfbd12 39%,#193c3833 45%),repeating-linear-gradient(0deg,#ffffff05 0px,#00000004 1px,transparent 2px,transparent 4px);background-size:100% 100%,100% 100%,4px 4px;box-shadow:inset 0 8px 20px #102a2820;transform-origin:50% 0;animation:curtain-fabric-drift 9s ease-in-out infinite alternate}
+.stage-curtain--right .curtain-cloth{background-position:0 0,35px 0,0 0;animation-delay:-4.5s;animation-direction:alternate-reverse}
+.curtain-cloth:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(89.5deg,transparent 0 58px,#e5eed70d 59px,transparent 62px 109px,#16362d14 110px,transparent 115px);opacity:.45;mix-blend-mode:soft-light}
+@keyframes curtain-fabric-drift{from{transform:translateX(-.4%) skewX(-.25deg) scaleY(1.005)}to{transform:translateX(.4%) skewX(.25deg) scaleY(1.015)}}
+#hero-clone-stage[data-curtain-open="true"] .curtain-cloth,#hero-clone-stage[data-motion="paused"] .curtain-cloth,html[data-background-paused="true"] .curtain-cloth{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.curtain-cloth{animation:none}}
+.curtain-uplight{position:absolute;inset:0;background:radial-gradient(ellipse 85% 115% at 12% 110%,var(--accent-b,#64bd9b),transparent 78%);mix-blend-mode:screen;opacity:.32}
+.stage-curtain--right .curtain-uplight{transform:scaleX(-1)}
+.curtain-hem{position:absolute;bottom:10px;left:0;right:0;height:12px;border-top:1px solid #e2dfc212;box-shadow:0 -3px 10px #17372c12}
+.hero-pavilion-sequence .hero-editorial{translate:calc(-1 * var(--curtain-travel)) var(--curtain-lift);will-change:translate}
+.hero-pavilion-sequence .hero-sculptures{translate:var(--curtain-travel) var(--curtain-lift);will-change:translate}
+.hero-pavilion-sequence .hero-bottom-line{opacity:var(--curtain-detail)}
+.curtain-opening-cue{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;color:#f5efdbbb;text-transform:uppercase;font-size:9px;letter-spacing:.2em;white-space:nowrap;opacity:var(--curtain-detail)}
+.curtain-opening-cue span{height:1px;width:28px;background:#efdec56b}
+.pavilion-stage>.pavilion-topline,.pavilion-stage>.pavilion-nav,.pavilion-stage>.pavilion-progress{opacity:var(--entrance-copy,1)}
+.pavilion-stage>.pavilion-welcome:not(.pavilion-farewell){opacity:var(--entrance-copy,1)!important}
+@media(max-width:767px){.curtain-opening-cue{font-size:8px;bottom:10px}.hero-pavilion-sequence .hero-editorial,.hero-pavilion-sequence .hero-sculptures{--curtain-lift:0vh}}
+@media(prefers-reduced-motion:reduce){.stage-curtain,.hero-pavilion-sequence .hero-editorial,.hero-pavilion-sequence .hero-sculptures{will-change:auto}}
+
+@media(max-width:1023px){.hero-pavilion-sequence .hero-editorial{translate:calc(-2 * var(--curtain-travel)) var(--curtain-lift)}.hero-pavilion-sequence .hero-sculptures{translate:calc(2 * var(--curtain-travel)) var(--curtain-lift)}}
+
+/* One ghost flower across the seam, woven into each moving fabric half. */
+.curtain-woven-petals{position:absolute;top:0;bottom:0;left:0;width:100vw;background:url('/images/lotus-watermark.png') center 53% / min(78vw,1100px) auto no-repeat;opacity:.22;mix-blend-mode:soft-light;pointer-events:none}
+.stage-curtain--right .curtain-woven-petals{left:-50vw}
+@media(max-width:767px){.curtain-woven-petals{background-size:135vw auto;background-position:center 55%;opacity:.25}}
+
+/* Hero → magnified ghost petals → woven curtain → pavilion. */
+.hero-restored-ground{position:absolute;inset:0;z-index:0;opacity:var(--hero-scene-opacity,1)}
+.hero-pavilion-sequence #hero-clone-stage>.hero-studio-light,.hero-pavilion-sequence #hero-clone-stage>.hero-studio-ground,.hero-pavilion-sequence #hero-clone-stage>.hero-studio-arc{opacity:var(--hero-scene-opacity,1)!important}
+.hero-curtain-set{z-index:2;opacity:var(--curtain-arrival,0)}
+.hero-pavilion-sequence #hero-lotus-watermark{display:flex;z-index:3;overflow:visible}
+.hero-pavilion-sequence #hero-lotus-watermark img{opacity:var(--petal-opacity,.09);transform:scale(var(--petal-zoom,1));will-change:transform,opacity}
+.hero-pavilion-sequence #hero-foreground-content,.hero-pavilion-sequence .hero-bottom-line{opacity:var(--hero-copy-opacity,1)}
+.hero-pavilion-sequence .hero-editorial,.hero-pavilion-sequence .hero-sculptures{translate:none}
+.curtain-woven-petals{opacity:calc(.22 * var(--woven-opacity,0))}
+.curtain-uplight{animation:curtain-colour-light 16s ease-in-out infinite alternate}
+@keyframes curtain-colour-light{0%{filter:hue-rotate(0deg);opacity:.32}50%{filter:hue-rotate(65deg);opacity:.5}100%{filter:hue-rotate(155deg);opacity:.4}}
+#hero-clone-stage:not([data-curtain-active="true"]) .curtain-cloth,#hero-clone-stage:not([data-curtain-active="true"]) .curtain-uplight,#hero-clone-stage[data-motion="paused"] .curtain-uplight,html[data-background-paused="true"] .curtain-uplight{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.curtain-uplight{animation:none} .hero-pavilion-sequence #hero-lotus-watermark img{will-change:auto}}
+
+.hero-pavilion-sequence #hero-lotus-watermark{overflow:hidden;contain:paint}
+.hero-petal-transition-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero-pavilion-sequence #hero-lotus-watermark img{transform:none;will-change:auto;opacity:.09}
+.hero-pavilion-sequence #hero-clone-stage[data-petal-drawing="true"] #hero-lotus-watermark img{visibility:hidden}
+
+.curtain-woven-petals{background-image:var(--woven-art,url("/images/lotus-watermark.png"));background-size:var(--woven-size,64vw) auto;background-position:center 50%}
+
+/* The source SVG stays aligned across the hero and both curtain halves. */
+.hero-pavilion-sequence #hero-lotus-watermark img{position:absolute;width:100vw;height:90vh;max-width:none;object-fit:contain;transform:translateY(var(--ghost-shift,0vh)) scale(var(--ghost-scale,1));opacity:var(--ghost-alpha,.12);visibility:visible!important}
+.hero-pavilion-sequence #hero-lotus-watermark .hero-ghost-palm{opacity:var(--ghost-palm-alpha,0)}
+.curtain-woven-petals{background-image:url('/images/curtain-ghost.svg');background-size:auto 90vh;background-position:center center;opacity:calc(.34 * var(--woven-opacity,0));mix-blend-mode:normal}
+
+/* Restore the original hero watermark size and white ink. */
+.hero-pavilion-sequence #hero-lotus-watermark img{width:60vw;height:60vh;transform:none;opacity:var(--ghost-alpha,.09);filter:brightness(0) invert(1)}
+.curtain-woven-petals{background-size:min(70vw,900px) auto;filter:brightness(0) invert(1)}
+
+.home-page #site-header{opacity:var(--entrance-header-opacity,1)}
+.home-page #site-header[data-entrance-hidden="true"]{visibility:hidden;pointer-events:none}
+
+/* The white print and fabric breathe together as the flower settles. */
+.hero-pavilion-sequence .hero-curtain-set,
+.hero-pavilion-sequence #hero-lotus-watermark{
+  transform-origin:50% 0;
+  animation:curtain-air-swell 7s ease-in-out infinite;
+}
+@keyframes curtain-air-swell{
+  0%,100%{transform:translate3d(calc(-4px * var(--curtain-breeze,0)),0,0) skewX(calc(-.45deg * var(--curtain-breeze,0))) scaleX(calc(1 + .018 * var(--curtain-breeze,0)))}
+  35%{transform:translate3d(calc(5px * var(--curtain-breeze,0)),calc(-5px * var(--curtain-breeze,0)),0) skewX(calc(.55deg * var(--curtain-breeze,0))) scaleX(calc(1 + .026 * var(--curtain-breeze,0)))}
+  70%{transform:translate3d(calc(-2px * var(--curtain-breeze,0)),calc(-2px * var(--curtain-breeze,0)),0) skewX(calc(-.2deg * var(--curtain-breeze,0))) scaleX(calc(1 + .02 * var(--curtain-breeze,0)))}
+}
+#hero-clone-stage:not([data-curtain-active="true"]) .hero-curtain-set,
+#hero-clone-stage:not([data-curtain-active="true"]) #hero-lotus-watermark,
+#hero-clone-stage[data-motion="paused"] .hero-curtain-set,
+#hero-clone-stage[data-motion="paused"] #hero-lotus-watermark,
+html[data-background-paused="true"] .hero-curtain-set,
+html[data-background-paused="true"] #hero-lotus-watermark{animation-play-state:paused}
+.hero-pavilion-sequence .curtain-cloth{animation-name:curtain-soft-folds;animation-duration:7s}
+@keyframes curtain-soft-folds{
+  0%,100%{transform:translateX(-.5%) skewX(-.35deg) scaleY(1.005)}
+  40%{transform:translateX(.9%) skewX(.7deg) scaleY(1.02)}
+  75%{transform:translateX(-.2%) skewX(-.15deg) scaleY(1.012)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-pavilion-sequence .hero-curtain-set,
+  .hero-pavilion-sequence #hero-lotus-watermark,
+  .hero-pavilion-sequence .curtain-cloth{animation:none}
+}

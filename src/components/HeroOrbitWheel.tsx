@@ -1,3 +1,4 @@
+import { getCMSCopy } from '../cms/runtime';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PillarState } from '../types';
 import { CardIllustration } from './CardIllustration';

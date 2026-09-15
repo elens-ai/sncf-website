@@ -14,12 +14,12 @@ name: Backend CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev, vansh]
     paths:
       - "backend/**"
       - ".github/workflows/backend.yml"
   pull_request:
-    branches: [main, dev]
+    branches: [main, dev, vansh]
     paths:
       - "backend/**"
       - ".github/workflows/backend.yml"
@@ -63,7 +63,7 @@ jobs:
       # the runner; the real one lives in backend/.env on the CMS host. Payload
       # refuses to start without a non-empty value, which is the only reason
       # this line exists.
-      PAYLOAD_SECRET: ci-throwaway-not-a-real-secret
+      PAYLOAD_SECRET: ci-throwaway-not-a-real-secret-32-characters
       # payload.config.ts keys `push` off this. Anything but production would
       # let the adapter auto-sync the schema, and the migration checks below
       # would then pass against a schema no migration ever created.
@@ -83,16 +83,28 @@ jobs:
       # `npm ci` — backend/package-lock.json is committed. It also reads
       # backend/.npmrc (legacy-peer-deps=true), which this tree needs.
       - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+        run: npm ci --include=dev --no-audit --no-fund
 
       - name: Typecheck
         run: npm run lint
+
+      - name: CMS validation and publishing tests
+        run: |
+          npm test
+          node --import tsx scripts/access-integration.ts
 
       # Proves the committed migrations build the schema from nothing. The
       # database this runs against is empty, so a migration that only works as
       # an increment on a developer's existing database fails here.
       - name: Apply migrations to an empty database
         run: npx payload migrate
+
+      - name: Seed current content and prove a second run preserves it
+        timeout-minutes: 5
+        run: |
+          npm run seed -- seed/site-content.json
+          npm run seed -- seed/site-content.json | tee /tmp/cms-seed-repeat.log
+          grep -q "0 created" /tmp/cms-seed-repeat.log
 
       - name: Show migration status
         run: npx payload migrate:status
@@ -132,6 +144,20 @@ jobs:
 
       - name: Build CLI image (migrations and content export)
         run: docker build --target cli -t sncf-cms-cli:ci .
+
+      - name: Build CMS for HTTP smoke checks
+        run: npm run build
+
+      - name: Start the CMS and verify API access and caching
+        run: |
+          npm run start > /tmp/cms-server.log 2>&1 &
+          CMS_PROCESS=$!
+          trap 'kill "$CMS_PROCESS" 2>/dev/null || true' EXIT
+          for _attempt in $(seq 1 60); do
+            if curl --silent --fail http://localhost:3001/api/site-content > /dev/null; then break; fi
+            sleep 2
+          done
+          node --import tsx scripts/smoke-api.ts || { cat /tmp/cms-server.log; exit 1; }
 
       # The runner image must not carry a .env. backend/.dockerignore keeps one
       # out of the build context and the Dockerfile deletes any that survives,

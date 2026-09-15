@@ -1,3 +1,6 @@
+import { bindCMSData } from '../cms/data';
+import { isRecord, safeCMSURL } from '../cms/runtime';
+
 /**
  * HOW EACH COMPANION IS SHOWN — wall wordmark, brand ink, logo file,
  * monogram fallback.
@@ -21,7 +24,7 @@ export interface PartnerBrand {
   initials: string;
 }
 
-export const BRAND: Record<string, PartnerBrand> = {
+export const DEFAULT_BRAND: Record<string, PartnerBrand> = {
   un: { short: 'United Nations', color: '#009edb', logo: '/images/partners/un.png', initials: 'UN' },
   railways: { short: 'Indian Railways', color: '#c8102e', logo: '/images/partners/railways.png', initials: 'IR' },
   'red-cross': { short: 'Indian Red Cross', color: '#ed1b2e', logo: '/images/partners/red-cross.png', initials: 'RC' },
@@ -35,3 +38,19 @@ export const BRAND: Record<string, PartnerBrand> = {
   'blind-relief': { short: 'Blind Relief Assn.', color: '#1b7a5a', initials: 'BR' },
   ebai: { short: 'Eye Bank Assn.', color: '#1273b8', initials: 'EB' },
 };
+
+export let BRAND: Record<string, PartnerBrand> = bindCMSData(DEFAULT_BRAND, (publication, fallback) => {
+  const result = { ...fallback };
+  const incoming = publication.site?.partnerBrands;
+  if (isRecord(incoming)) for (const [id, brand] of Object.entries(incoming)) {
+    if (!isRecord(brand) || !['short', 'initials', 'color'].every(key => typeof brand[key] === 'string') ||
+        !/^#[0-9a-f]{6}$/i.test(String(brand.color)) || (brand.logo !== undefined && !safeCMSURL(brand.logo))) continue;
+    result[id] = brand as unknown as PartnerBrand;
+  }
+  for (const partner of publication.partners ?? []) {
+    if (!isRecord(partner) || typeof partner.id !== 'string' || typeof partner.name !== 'string') continue;
+    result[partner.id] ??= { short: partner.name, color: '#287c6a', initials: partner.name.split(/\s+/).map(word => word[0]).slice(0, 3).join('') };
+    if (safeCMSURL(partner.logo)) result[partner.id] = { ...result[partner.id], logo: partner.logo };
+  }
+  return result;
+}, value => { BRAND = value; });

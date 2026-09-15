@@ -5936,7 +5936,7 @@ button.mgal-plate:focus-visible {
    reading it has silently been using its fallback. The fallback measures
    fine, which is why nothing looked wrong; the rules were simply dead. */
 .reading-room[data-surface='light'] #heal.cv-room { --ink-type: #15694a; }
-.reading-room[data-surface='light'] #enrich.cv-room { --ink-type: #1565c0; }
+.reading-room[data-surface='light'] #enrich.cv-room { --ink-type: #2dacc3; }
 .reading-room[data-surface='light'] #empower.cv-room { --ink-type: #b3164f; }
 /* anything else falls back to the deep accent, darkened toward the page ink
    so a pale accent can never become pale type */
@@ -6038,8 +6038,8 @@ html:has(.reading-room[data-surface='light']) {
    a different shade on every screen of the exhibition. One footer with a
    dozen appearances. It is opaque now, the same deep stone as the reading
    rooms' cover band, so the site closes on the same note wherever you are. */
-.site-footer {
-  background: linear-gradient(180deg, #120f2a 0%, #171334 100%);
+#site-footer.site-footer {
+  background: #0b1f3a;
   border-top: 1px solid rgb(255 255 255 / 0.1);
 }
 
@@ -7373,3 +7373,11 @@ button.mgal-plate-awaiting:hover {
     margin-bottom: 14px;
   }
 }
+
+/* Offscreen sections retain their layout and animation position, but stop work. */
+[data-motion="paused"],
+[data-motion="paused"] *,
+[data-motion="paused"]::before,
+[data-motion="paused"]::after,
+[data-motion="paused"] *::before,
+[data-motion="paused"] *::after{animation-play-state:paused!important}

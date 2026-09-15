@@ -69,6 +69,18 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    pillars: Pillar;
+    activities: Activity;
+    events: Event;
+    partners: Partner;
+    awards: Award;
+    'gallery-items': GalleryItem;
+    pages: Page;
+    'content-slots': ContentSlot;
+    'asset-slots': AssetSlot;
+    'component-settings': ComponentSetting;
+    'live-stats': LiveStat;
+    'stat-audit': StatAudit;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +90,18 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    pillars: PillarsSelect<false> | PillarsSelect<true>;
+    activities: ActivitiesSelect<false> | ActivitiesSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    partners: PartnersSelect<false> | PartnersSelect<true>;
+    awards: AwardsSelect<false> | AwardsSelect<true>;
+    'gallery-items': GalleryItemsSelect<false> | GalleryItemsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
+    'content-slots': ContentSlotsSelect<false> | ContentSlotsSelect<true>;
+    'asset-slots': AssetSlotsSelect<false> | AssetSlotsSelect<true>;
+    'component-settings': ComponentSettingsSelect<false> | ComponentSettingsSelect<true>;
+    'live-stats': LiveStatsSelect<false> | LiveStatsSelect<true>;
+    'stat-audit': StatAuditSelect<false> | StatAuditSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -87,8 +111,14 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+    'pavilion-settings': PavilionSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'pavilion-settings': PavilionSettingsSelect<false> | PavilionSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -130,6 +160,9 @@ export interface User {
   role: 'contributor' | 'editor' | 'admin';
   updatedAt: string;
   createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -153,6 +186,20 @@ export interface User {
  */
 export interface Media {
   id: number;
+  /**
+   * For example Pavilion / Heal or Projects / Amrit.
+   */
+  folder?: string | null;
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  illustrative?: boolean | null;
+  license?: string | null;
+  sourceURL?: string | null;
+  duration?: number | null;
   /**
    * What the picture shows, for readers who cannot see it. Describe the scene, not the file.
    */
@@ -205,6 +252,566 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pillars".
+ */
+export interface Pillar {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  label: string;
+  accentA?: string | null;
+  accentB?: string | null;
+  headline: string;
+  body?: string | null;
+  cardImageAlt?: string | null;
+  shortTagline?: string | null;
+  stats?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  keyHighlights?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  subText?: string | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities".
+ */
+export interface Activity {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  pillarId: 'heal' | 'enrich' | 'empower' | 'projects';
+  title: string;
+  period: string;
+  blurb?: string | null;
+  headline: {
+    label: string;
+    value: string;
+    id?: string | null;
+  };
+  dataPoints?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  images?:
+    | {
+        /**
+         * Upload in Media and choose it below, or use a /local/path or https:// URL.
+         */
+        src?: string | null;
+        media?: (number | null) | Media;
+        alt?: string | null;
+        caption?: string | null;
+        width?: number | null;
+        height?: number | null;
+        focal?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  sourceNote?: string | null;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  sourceURL?: string | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  title: string;
+  kind: 'annual' | 'ongoing';
+  month?: number | null;
+  day?: number | null;
+  tag?: string | null;
+  blurb?: string | null;
+  pillarId: 'heal' | 'enrich' | 'empower' | 'projects';
+  location?: string | null;
+  time?: string | null;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  href?: string | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners".
+ */
+export interface Partner {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  name: string;
+  contribution: string;
+  note?: string | null;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  logo?: string | null;
+  logoMedia?: (number | null) | Media;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  href?: string | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards".
+ */
+export interface Award {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  title: string;
+  awardedBy: string;
+  year: string;
+  note?: string | null;
+  featured?: boolean | null;
+  photos?:
+    | {
+        /**
+         * Upload in Media and choose it below, or use a /local/path or https:// URL.
+         */
+        src?: string | null;
+        media?: (number | null) | Media;
+        alt?: string | null;
+        caption?: string | null;
+        width?: number | null;
+        height?: number | null;
+        focal?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery-items".
+ */
+export interface GalleryItem {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  /**
+   * For example pavilion:heal or media:who-we-are. Keep the group to retain its website placement.
+   */
+  group: string;
+  kind?: ('photo' | 'film' | 'model') | null;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  src?: string | null;
+  media?: (number | null) | Media;
+  alt?: string | null;
+  caption?: string | null;
+  width?: number | null;
+  height?: number | null;
+  focal?: string | null;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  poster?: string | null;
+  posterMedia?: (number | null) | Media;
+  wide?: boolean | null;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  source?: string | null;
+  illustrative?: boolean | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  slug?: string | null;
+  title: string;
+  description?: string | null;
+  sections?:
+    | (
+        | {
+            key: string;
+            heading?: string | null;
+            body?: string | null;
+            enabled?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            key: string;
+            /**
+             * Upload in Media and choose it below, or use a /local/path or https:// URL.
+             */
+            src?: string | null;
+            media?: (number | null) | Media;
+            alt?: string | null;
+            caption?: string | null;
+            width?: number | null;
+            height?: number | null;
+            focal?: string | null;
+            /**
+             * Upload in Media and choose it below, or use a /local/path or https:// URL.
+             */
+            video?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'media';
+          }
+        | {
+            key: string;
+            heading?: string | null;
+            cards?:
+              | {
+                  title?: string | null;
+                  body?: string | null;
+                  /**
+                   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+                   */
+                  href?: string | null;
+                  /**
+                   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+                   */
+                  src?: string | null;
+                  media?: (number | null) | Media;
+                  alt?: string | null;
+                  caption?: string | null;
+                  width?: number | null;
+                  height?: number | null;
+                  focal?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cards';
+          }
+        | {
+            key: string;
+            component?: string | null;
+            enabled?: boolean | null;
+            options?:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'custom';
+          }
+      )[]
+    | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-slots".
+ */
+export interface ContentSlot {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  label: string;
+  value: string;
+  context?: string | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asset-slots".
+ */
+export interface AssetSlot {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  label: string;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  source?: string | null;
+  media?: (number | null) | Media;
+  kind?: ('image' | 'video' | 'audio' | 'model' | 'other') | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "component-settings".
+ */
+export interface ComponentSetting {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  label?: string | null;
+  enabled?: boolean | null;
+  /**
+   * Component-specific settings. Values are validated by the website before rendering.
+   */
+  options?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "live-stats".
+ */
+export interface LiveStat {
+  id: number;
+  /**
+   * Stable website identifier. Keep this unchanged for existing content.
+   */
+  key: string;
+  order?: number | null;
+  label: string;
+  value: string;
+  period?: string | null;
+  asOf?: string | null;
+  source?: string | null;
+  /**
+   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   */
+  sourceURL?: string | null;
+  verifiedAt?: string | null;
+  notes?: string | null;
+  /**
+   * Advanced extension data; standard fields above take precedence.
+   */
+  record?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stat-audit".
+ */
+export interface StatAudit {
+  id: number;
+  key: string;
+  label?: string | null;
+  value?: string | null;
+  previousValue?: string | null;
+  period?: string | null;
+  source?: string | null;
+  operation?: string | null;
+  actor?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -234,6 +841,54 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'pillars';
+        value: number | Pillar;
+      } | null)
+    | ({
+        relationTo: 'activities';
+        value: number | Activity;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
+      } | null)
+    | ({
+        relationTo: 'partners';
+        value: number | Partner;
+      } | null)
+    | ({
+        relationTo: 'awards';
+        value: number | Award;
+      } | null)
+    | ({
+        relationTo: 'gallery-items';
+        value: number | GalleryItem;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'content-slots';
+        value: number | ContentSlot;
+      } | null)
+    | ({
+        relationTo: 'asset-slots';
+        value: number | AssetSlot;
+      } | null)
+    | ({
+        relationTo: 'component-settings';
+        value: number | ComponentSetting;
+      } | null)
+    | ({
+        relationTo: 'live-stats';
+        value: number | LiveStat;
+      } | null)
+    | ({
+        relationTo: 'stat-audit';
+        value: number | StatAudit;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -286,6 +941,9 @@ export interface UsersSelect<T extends boolean = true> {
   role?: T;
   updatedAt?: T;
   createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
   email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
@@ -306,6 +964,17 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  folder?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  illustrative?: T;
+  license?: T;
+  sourceURL?: T;
+  duration?: T;
   alt?: T;
   caption?: T;
   credit?: T;
@@ -357,6 +1026,339 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pillars_select".
+ */
+export interface PillarsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  label?: T;
+  accentA?: T;
+  accentB?: T;
+  headline?: T;
+  body?: T;
+  cardImageAlt?: T;
+  shortTagline?: T;
+  stats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  keyHighlights?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  subText?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities_select".
+ */
+export interface ActivitiesSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  pillarId?: T;
+  title?: T;
+  period?: T;
+  blurb?: T;
+  headline?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  dataPoints?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  images?:
+    | T
+    | {
+        src?: T;
+        media?: T;
+        alt?: T;
+        caption?: T;
+        width?: T;
+        height?: T;
+        focal?: T;
+        id?: T;
+      };
+  sourceNote?: T;
+  sourceURL?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  title?: T;
+  kind?: T;
+  month?: T;
+  day?: T;
+  tag?: T;
+  blurb?: T;
+  pillarId?: T;
+  location?: T;
+  time?: T;
+  href?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners_select".
+ */
+export interface PartnersSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  name?: T;
+  contribution?: T;
+  note?: T;
+  logo?: T;
+  logoMedia?: T;
+  href?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards_select".
+ */
+export interface AwardsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  title?: T;
+  awardedBy?: T;
+  year?: T;
+  note?: T;
+  featured?: T;
+  photos?:
+    | T
+    | {
+        src?: T;
+        media?: T;
+        alt?: T;
+        caption?: T;
+        width?: T;
+        height?: T;
+        focal?: T;
+        id?: T;
+      };
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery-items_select".
+ */
+export interface GalleryItemsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  group?: T;
+  kind?: T;
+  src?: T;
+  media?: T;
+  alt?: T;
+  caption?: T;
+  width?: T;
+  height?: T;
+  focal?: T;
+  poster?: T;
+  posterMedia?: T;
+  wide?: T;
+  source?: T;
+  illustrative?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  slug?: T;
+  title?: T;
+  description?: T;
+  sections?:
+    | T
+    | {
+        text?:
+          | T
+          | {
+              key?: T;
+              heading?: T;
+              body?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              key?: T;
+              src?: T;
+              media?: T;
+              alt?: T;
+              caption?: T;
+              width?: T;
+              height?: T;
+              focal?: T;
+              video?: T;
+              heading?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cards?:
+          | T
+          | {
+              key?: T;
+              heading?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    href?: T;
+                    src?: T;
+                    media?: T;
+                    alt?: T;
+                    caption?: T;
+                    width?: T;
+                    height?: T;
+                    focal?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        custom?:
+          | T
+          | {
+              key?: T;
+              component?: T;
+              enabled?: T;
+              options?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-slots_select".
+ */
+export interface ContentSlotsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  label?: T;
+  value?: T;
+  context?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asset-slots_select".
+ */
+export interface AssetSlotsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  label?: T;
+  source?: T;
+  media?: T;
+  kind?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "component-settings_select".
+ */
+export interface ComponentSettingsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  label?: T;
+  enabled?: T;
+  options?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "live-stats_select".
+ */
+export interface LiveStatsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  label?: T;
+  value?: T;
+  period?: T;
+  asOf?: T;
+  source?: T;
+  sourceURL?: T;
+  verifiedAt?: T;
+  notes?: T;
+  record?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "stat-audit_select".
+ */
+export interface StatAuditSelect<T extends boolean = true> {
+  key?: T;
+  label?: T;
+  value?: T;
+  previousValue?: T;
+  period?: T;
+  source?: T;
+  operation?: T;
+  actor?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -394,6 +1396,518 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  branding?: {
+    name?: string | null;
+    /**
+     * Upload in Media and choose it below, or use a /local/path or https:// URL.
+     */
+    logo?: string | null;
+    tagline?: string | null;
+  };
+  contact?: {
+    email?: string | null;
+    telephone?: string | null;
+    address?: string | null;
+  };
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Upload in Media and choose it below, or use a /local/path or https:// URL.
+     */
+    image?: string | null;
+  };
+  /**
+   * Header navigation and nested menus, preserving the existing route structure.
+   */
+  navigation?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  coreValueGroups?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  partnerBrands?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Additional existing-site settings.
+   */
+  options?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pavilion-settings".
+ */
+export interface PavilionSetting {
+  id: number;
+  settings?: {
+    materials?: {
+      stone?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      trim?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      plaster?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      brass?: {
+        color?: string | null;
+        roughness?: number | null;
+        metalness?: number | null;
+        texture?: string | null;
+      };
+      wall?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      wood?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      displayBase?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      floor?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      carpet?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      queueMetal?: {
+        color?: string | null;
+        roughness?: number | null;
+        metalness?: number | null;
+        texture?: string | null;
+      };
+      queueBelt?: {
+        color?: string | null;
+        roughness?: number | null;
+        texture?: string | null;
+      };
+      /**
+       * Colours in the original planter order.
+       */
+      planterColors?:
+        | {
+            [k: string]: unknown;
+          }
+        | unknown[]
+        | string
+        | number
+        | boolean
+        | null;
+    };
+    /**
+     * Four chapter palettes in Heal, Enrich, Empower, Projects order.
+     */
+    chapters?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    lighting?: {
+      exposure?: number | null;
+      background?: string | null;
+      fogNear?: number | null;
+      fogFar?: number | null;
+      pendantColor?: string | null;
+      pendantIntensity?: number | null;
+      edgeIntensity?: number | null;
+      pictureColor?: string | null;
+      pictureIntensity?: number | null;
+      exhibitColor?: string | null;
+      exhibitIntensity?: number | null;
+      frameGlow?: number | null;
+      beamOpacity?: number | null;
+    };
+    camera?: {
+      fieldOfView?: number | null;
+      positionSmoothing?: number | null;
+      turnSmoothing?: number | null;
+      scrollSmoothing?: number | null;
+      photoPause?: number | null;
+      modelFloat?: number | null;
+      modelSway?: number | null;
+    };
+    performance?: {
+      maxWidth?: number | null;
+      maxHeight?: number | null;
+      fps?: number | null;
+      adaptiveQuality?: boolean | null;
+      minScale?: number | null;
+      maxScale?: number | null;
+      photoLoadDistance?: number | null;
+    };
+    components?: {
+      planters?: boolean | null;
+      barriers?: boolean | null;
+      benches?: boolean | null;
+      pendants?: boolean | null;
+      photoLights?: boolean | null;
+      frameBacklights?: boolean | null;
+      edgeStrips?: boolean | null;
+      models?: boolean | null;
+      windows?: boolean | null;
+      carpet?: boolean | null;
+    };
+    finale?: {
+      logo?: string | null;
+      model?: string | null;
+      modelSize?: number | null;
+      modelHeight?: number | null;
+      modelLightIntensity?: number | null;
+      title?: string | null;
+      subtitle?: string | null;
+      background?: string | null;
+      textColor?: string | null;
+      mosaic?: boolean | null;
+      mosaicHue?: number | null;
+      mosaicSaturation?: number | null;
+      tileSize?: number | null;
+    };
+    windows?: {
+      amrit?: {
+        video?: string | null;
+        poster?: string | null;
+        woodColor?: string | null;
+        grainColor?: string | null;
+        woodRoughness?: number | null;
+        glassColor?: string | null;
+        glassOpacity?: number | null;
+        frost?: boolean | null;
+        frostOpacity?: number | null;
+        frostBlur?: number | null;
+        autoplay?: boolean | null;
+      };
+      oneness?: {
+        video?: string | null;
+        poster?: string | null;
+        woodColor?: string | null;
+        grainColor?: string | null;
+        woodRoughness?: number | null;
+        glassColor?: string | null;
+        glassOpacity?: number | null;
+        frost?: boolean | null;
+        frostOpacity?: number | null;
+        frostBlur?: number | null;
+        autoplay?: boolean | null;
+      };
+    };
+    models?: {
+      heal?: string | null;
+      enrich?: string | null;
+      empower?: string | null;
+      projects?: string | null;
+      amrit?: string | null;
+      oneness?: string | null;
+    };
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  branding?:
+    | T
+    | {
+        name?: T;
+        logo?: T;
+        tagline?: T;
+      };
+  contact?:
+    | T
+    | {
+        email?: T;
+        telephone?: T;
+        address?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  navigation?: T;
+  coreValueGroups?: T;
+  partnerBrands?: T;
+  options?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pavilion-settings_select".
+ */
+export interface PavilionSettingsSelect<T extends boolean = true> {
+  settings?:
+    | T
+    | {
+        materials?:
+          | T
+          | {
+              stone?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              trim?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              plaster?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              brass?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    metalness?: T;
+                    texture?: T;
+                  };
+              wall?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              wood?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              displayBase?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              floor?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              carpet?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              queueMetal?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    metalness?: T;
+                    texture?: T;
+                  };
+              queueBelt?:
+                | T
+                | {
+                    color?: T;
+                    roughness?: T;
+                    texture?: T;
+                  };
+              planterColors?: T;
+            };
+        chapters?: T;
+        lighting?:
+          | T
+          | {
+              exposure?: T;
+              background?: T;
+              fogNear?: T;
+              fogFar?: T;
+              pendantColor?: T;
+              pendantIntensity?: T;
+              edgeIntensity?: T;
+              pictureColor?: T;
+              pictureIntensity?: T;
+              exhibitColor?: T;
+              exhibitIntensity?: T;
+              frameGlow?: T;
+              beamOpacity?: T;
+            };
+        camera?:
+          | T
+          | {
+              fieldOfView?: T;
+              positionSmoothing?: T;
+              turnSmoothing?: T;
+              scrollSmoothing?: T;
+              photoPause?: T;
+              modelFloat?: T;
+              modelSway?: T;
+            };
+        performance?:
+          | T
+          | {
+              maxWidth?: T;
+              maxHeight?: T;
+              fps?: T;
+              adaptiveQuality?: T;
+              minScale?: T;
+              maxScale?: T;
+              photoLoadDistance?: T;
+            };
+        components?:
+          | T
+          | {
+              planters?: T;
+              barriers?: T;
+              benches?: T;
+              pendants?: T;
+              photoLights?: T;
+              frameBacklights?: T;
+              edgeStrips?: T;
+              models?: T;
+              windows?: T;
+              carpet?: T;
+            };
+        finale?:
+          | T
+          | {
+              logo?: T;
+              model?: T;
+              modelSize?: T;
+              modelHeight?: T;
+              modelLightIntensity?: T;
+              title?: T;
+              subtitle?: T;
+              background?: T;
+              textColor?: T;
+              mosaic?: T;
+              mosaicHue?: T;
+              mosaicSaturation?: T;
+              tileSize?: T;
+            };
+        windows?:
+          | T
+          | {
+              amrit?:
+                | T
+                | {
+                    video?: T;
+                    poster?: T;
+                    woodColor?: T;
+                    grainColor?: T;
+                    woodRoughness?: T;
+                    glassColor?: T;
+                    glassOpacity?: T;
+                    frost?: T;
+                    frostOpacity?: T;
+                    frostBlur?: T;
+                    autoplay?: T;
+                  };
+              oneness?:
+                | T
+                | {
+                    video?: T;
+                    poster?: T;
+                    woodColor?: T;
+                    grainColor?: T;
+                    woodRoughness?: T;
+                    glassColor?: T;
+                    glassOpacity?: T;
+                    frost?: T;
+                    frostOpacity?: T;
+                    frostBlur?: T;
+                    autoplay?: T;
+                  };
+            };
+        models?:
+          | T
+          | {
+              heal?: T;
+              enrich?: T;
+              empower?: T;
+              projects?: T;
+              amrit?: T;
+              oneness?: T;
+            };
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

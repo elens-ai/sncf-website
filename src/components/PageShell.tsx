@@ -1,3 +1,5 @@
+import { CMSSection } from '../cms/CMSContentProvider';
+import { usePageMotion } from '../hooks/useSectionActivity';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PILLARS } from '../data/pillars';
@@ -20,6 +22,7 @@ interface PageShellProps {
   standfirst: string;
   /** Rendered under the cover, pinned — the page's own table of contents. */
   rail?: React.ReactNode;
+  cover?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -53,6 +56,7 @@ export const PageShell: React.FC<PageShellProps> = ({
   title,
   standfirst,
   rail,
+  cover,
   children,
 }) => {
   const pillar: PillarState =
@@ -61,6 +65,7 @@ export const PageShell: React.FC<PageShellProps> = ({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isDonateOpen, setIsDonateOpen] = useState(false);
+  usePageMotion(isSearchOpen || isGalleryOpen || isDonateOpen);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -89,7 +94,7 @@ export const PageShell: React.FC<PageShellProps> = ({
       {/* the paper, and the petal light laid on it */}
       <div className="paper-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
 
-      <Header
+      <CMSSection id="shared.Header"><Header
         currentPillar={pillar}
         onSearchClick={() => setIsSearchOpen(true)}
         searchQuery={searchQuery}
@@ -100,16 +105,16 @@ export const PageShell: React.FC<PageShellProps> = ({
         onOpenDetails={() => setIsGalleryOpen(true)}
         onOpenGallery={() => setIsGalleryOpen(true)}
         onOpenDonate={() => setIsDonateOpen(true)}
-      />
+      /></CMSSection>
 
-      <SocialSidebar />
+      <CMSSection id="shared.SocialSidebar"><SocialSidebar /></CMSSection>
 
       {/* THE COVER. A band of the hall's own dark stone across the top of
           every reading room. It is what the white header was built to float
           over, it gives the masthead a ground to be set on, and it is the
           visual seam that says the daylit pages and the dark hall are one
           building. The paper starts underneath it. */}
-      <div className="page-cover">
+      {cover ?? <div className="page-cover">
         <div className="page-cover-inks" aria-hidden="true">
           {['#f81170', '#b357ad', '#6663b5', '#09a6cf', '#69b947'].map((ink) => (
             <span key={ink} style={{ background: ink }} />
@@ -121,7 +126,7 @@ export const PageShell: React.FC<PageShellProps> = ({
           <div className="page-rule" aria-hidden="true" />
           <p className="page-standfirst font-artistic-serif">{standfirst}</p>
         </header>
-      </div>
+      </div>}
 
       {/* THE RAIL — parks under the header once the cover scrolls away */}
       {rail}
@@ -130,7 +135,7 @@ export const PageShell: React.FC<PageShellProps> = ({
         <div className="max-w-6xl mx-auto">{children}</div>
       </main>
 
-      <SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />
+      <CMSSection id="shared.SiteFooter"><SiteFooter onOpenDonate={() => setIsDonateOpen(true)} /></CMSSection>
 
       <SearchModal
         isOpen={isSearchOpen}

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isEditor, isLoggedIn } from '../access/roles'
+import { invalidateContent } from '../cms/cache'
 
 /**
  * THE MEDIA LIBRARY — every photograph and film the site shows.
@@ -29,7 +30,7 @@ export const Media: CollectionConfig = {
   },
   upload: {
     staticDir: 'media',
-    mimeTypes: ['image/*', 'video/*'],
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'video/mp4', 'video/webm', 'audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/wav', 'model/gltf-binary', 'model/gltf+json', 'application/octet-stream'],
     imageSizes: [
       { name: 'thumb', width: 400, height: 300, position: 'centre' },
       { name: 'card', width: 900 },
@@ -37,7 +38,21 @@ export const Media: CollectionConfig = {
     ],
     focalPoint: true,
   },
+  hooks: {beforeOperation: [({args, operation, req}) => {
+    if (operation === 'create' || operation === 'update') {
+      const file = req.file
+      if (file && file.size > 150 * 1024 * 1024) throw new Error('Media must be smaller than 150 MB.')
+      if (file && !/\.(jpe?g|png|webp|avif|gif|mp4|webm|mp3|m4a|ogg|wav|glb|gltf)$/i.test(file.name)) throw new Error('Upload a supported image, video, audio or glTF model file.')
+    }
+    return args
+  }],afterChange:[({doc})=>{invalidateContent();return doc}],afterDelete:[({doc})=>{invalidateContent();return doc}]},
   fields: [
+    {name:'folder',type:'text',index:true,admin:{description:'For example Pavilion / Heal or Projects / Amrit.'}},
+    {name:'tags',type:'array',fields:[{name:'tag',type:'text',required:true}]},
+    {name:'illustrative',type:'checkbox',defaultValue:false},
+    {name:'license',type:'text'},
+    {name:'sourceURL',type:'text'},
+    {name:'duration',type:'number',min:0},
     {
       name: 'alt',
       type: 'text',

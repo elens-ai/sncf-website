@@ -1,3 +1,7 @@
+import { resolveCMSMedia } from '../cms/media';
+import { useCMSRevision } from '../cms/CMSContentProvider';
+import { siteOverride } from '../cms/siteSettings';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AnthemPlayer } from './AnthemPlayer';
 import { MainNav } from './MainNav';
@@ -25,6 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDonate,
   hideLogo = false,
 }) => {
+  const cmsRevision = useCMSRevision();
   /* The search control stays a single glass orb; scrolling no longer opens it.
      It expands only when there is a query to show, which comes back from the
      search modal the orb opens — so the field appears because the visitor
@@ -76,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
     const ro = new ResizeObserver(fit);
     ro.observe(l1);
     return () => ro.disconnect();
-  }, []);
+  }, [cmsRevision]);
 
   /* Reveal: each line slides out from behind the logo inside its own clipping
      row. Pure transform, so it stays cheap, and it only runs once the splash
@@ -99,6 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header
       id="site-header"
+      data-compact={scrolled}
       className="fixed top-0 left-0 right-0 z-50 h-[72px] px-4 md:px-8 flex items-center justify-between bg-transparent pointer-events-none"
     >
       {/* Ground that appears on scroll. The blur is constant and only OPACITY
@@ -113,18 +119,18 @@ export const Header: React.FC<HeaderProps> = ({
         }`}
       />
       {/* LEFT: Logo + wordmark */}
-      <div className="flex items-center gap-3 pointer-events-auto flex-none">
+      <div className="site-brand flex items-center gap-3 pointer-events-auto flex-none">
         <button
           id="logo-badge-btn"
           onClick={onOpenDetails}
           className="group relative w-[52px] h-[52px] rounded-full bg-white overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer p-0 border-none"
-          title="Sant Nirankari Charitable Foundation"
-          aria-label="Sant Nirankari Charitable Foundation logo"
+          title={getCMSCopy("copy.Header.a01941bf3134", "Sant Nirankari Charitable Foundation")}
+          aria-label={getCMSCopy("copy.Header.b79520f8055a", "Sant Nirankari Charitable Foundation logo")}
         >
           <img
             id="header-sncf-logo"
-            src="https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp"
-            alt="Sant Nirankari Charitable Foundation Logo"
+            src={resolveCMSMedia(siteOverride("branding", "logo", resolveCMSAsset("asset.Header.25aa35189463", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp")))}
+            alt={getCMSCopy("copy.Header.44e3df1518ac", "Sant Nirankari Charitable Foundation Logo")}
             className={`w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 ${
               hideLogo ? 'opacity-0' : 'opacity-100'
             }`}
@@ -139,7 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           id="site-wordmark"
           onClick={onOpenDetails}
-          title="Sant Nirankari Charitable Foundation"
+          title={getCMSCopy("copy.Header.a01941bf3134", "Sant Nirankari Charitable Foundation")}
           className="hidden md:block text-left leading-[1.08] cursor-pointer bg-transparent border-none p-0"
         >
           <span className={revealRow}>
@@ -147,29 +153,25 @@ export const Header: React.FC<HeaderProps> = ({
               ref={line1Ref}
               style={revealInner(120)}
               className="font-artistic-display text-white text-[19px] lg:text-[22px] font-extrabold tracking-[0.13em] uppercase drop-shadow-sm whitespace-nowrap"
-            >
-              Sant Nirankari
-            </span>
+            >{siteOverride("branding", "name", getCMSCopy("copy.Header.3eeeb717e545", "Sant Nirankari"))}</span>
           </span>
           <span className={revealRow}>
             <span
               ref={line2Ref}
               style={revealInner(240)}
               className="font-artistic-display text-white/85 text-[11px] lg:text-[12.5px] font-semibold uppercase drop-shadow-sm whitespace-nowrap"
-            >
-              Charitable Foundation
-            </span>
+            >{getCMSCopy("copy.Header.4b0937769465", "Charitable Foundation")}</span>
           </span>
         </button>
       </div>
 
       {/* CENTRE: main navigation (Gallery is the icon button on the right) */}
-      <div className="flex-1 flex justify-center min-w-0 px-2">
+      <div className="site-navigation flex-1 flex justify-center min-w-0 px-2">
         <MainNav />
       </div>
 
       {/* RIGHT: Anthem toggle + search + Gallery + Donate ribbon */}
-      <div className="flex items-center gap-2 md:gap-3 pointer-events-auto">
+      <div className="site-actions flex items-center gap-2 md:gap-3 pointer-events-auto">
         <AnthemPlayer />
         {/* Futuristic morphing search — glass orb on the hero, full field on scroll */}
           <div
@@ -202,7 +204,7 @@ export const Header: React.FC<HeaderProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               onClick={onSearchClick}
-              placeholder="Search pillars, camps, initiatives..."
+              placeholder={getCMSCopy("copy.Header.4c1e7031859e", "Search pillars, camps, initiatives...")}
               tabIndex={isExpanded ? 0 : -1}
               aria-hidden={!isExpanded}
               className={`absolute inset-0 w-full h-full bg-transparent border-none outline-none pl-[44px] pr-[76px] text-sm font-medium text-white placeholder:text-white/55 transition-opacity duration-300 ${
@@ -220,24 +222,24 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   onClick={() => onSearchChange('')}
                   className="text-white/60 hover:text-white p-1 text-xs cursor-pointer"
-                  aria-label="Clear search"
+                  aria-label={getCMSCopy("copy.Header.3b7ea51793e9", "Clear search")}
                 >
                   ✕
                 </button>
               ) : (
-                <kbd className="search-kbd hidden sm:block" aria-hidden="true">
-                  ⌘K
-                </kbd>
+                <kbd className="search-kbd hidden sm:block" aria-hidden="true">{getCMSCopy("copy.Header.dfe870d90b82", "⌘K")}</kbd>
               )}
             </div>
+
+            {isExpanded && <button type="button" onClick={onSearchClick} aria-label={getCMSCopy("copy.Header.50ce48b9c623", "Open search")} className="xl:hidden absolute inset-0 w-full h-full rounded-full z-20 cursor-pointer" />}
 
             {/* Collapsed state: the whole orb is one big search button */}
             {!isExpanded && (
               <button
                 id="hero-search-orb-btn"
                 onClick={onSearchClick}
-                aria-label="Open search"
-                title="Search (⌘K)"
+                aria-label={getCMSCopy("copy.Header.50ce48b9c623", "Open search")}
+                title={getCMSCopy("copy.Header.adc4c5775cdb", "Search (⌘K)")}
                 className="absolute inset-0 w-full h-full cursor-pointer bg-transparent border-none z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-full"
               />
             )}
@@ -249,8 +251,8 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           id="gallery-icon-btn"
           onClick={onOpenGallery}
-          title="Open the gallery"
-          aria-label="Open the gallery"
+          title={getCMSCopy("copy.Header.c6580e851793", "Open the gallery")}
+          aria-label={getCMSCopy("copy.Header.c6580e851793", "Open the gallery")}
           className="grid place-items-center w-11 h-11 rounded-full bg-white/10 border border-white/25 backdrop-blur-xl text-white/90 hover:bg-white/20 hover:text-white transition-all cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 flex-none"
         >
           <svg
@@ -286,8 +288,8 @@ export const Header: React.FC<HeaderProps> = ({
             backgroundColor: 'var(--accent-a)',
             clipPath: 'polygon(0 0, 100% 0, 84% 50%, 100% 100%, 0 100%)',
           }}
-          title="Support the foundation"
-          aria-label="Support the foundation — ways to contribute"
+          title={getCMSCopy("copy.Header.e26586bdf140", "Support the foundation")}
+          aria-label={getCMSCopy("copy.Header.3f598427e78e", "Support the foundation — ways to contribute")}
         >
           <span className="donate-ribbon-sheen" aria-hidden="true" />
 
@@ -303,9 +305,7 @@ export const Header: React.FC<HeaderProps> = ({
             </svg>
           </span>
 
-          <span className="text-[11px] uppercase font-bold text-white tracking-wider">
-            Donate
-          </span>
+          <span className="text-[11px] uppercase font-bold text-white tracking-wider">{getCMSCopy("copy.Header.c91ee0f2799d", "Donate")}</span>
         </button>
       </div>
     </header>

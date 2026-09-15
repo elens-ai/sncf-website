@@ -1,3 +1,4 @@
+import { getCMSCopy } from '../cms/runtime';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   X,
@@ -191,7 +192,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
       id="events-calendar-backdrop"
       role="dialog"
       aria-modal="true"
-      aria-label="Events calendar"
+      aria-label={getCMSCopy("copy.EventsCalendarModal.3ac6ecc4b6ea", "Events calendar")}
       className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-xl animate-fadeIn"
       onClick={onClose}
     >
@@ -202,7 +203,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
       >
         <button
           onClick={onClose}
-          aria-label="Close calendar"
+          aria-label={getCMSCopy("copy.EventsCalendarModal.294123d1da42", "Close calendar")}
           className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 border border-white/15 text-white/80 hover:text-white grid place-items-center transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         >
           <X className="w-4 h-4" />
@@ -219,7 +220,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => step(-1)}
-                  aria-label="Previous month"
+                  aria-label={getCMSCopy("copy.EventsCalendarModal.6a2769502a5d", "Previous month")}
                   className="w-8 h-8 grid place-items-center rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -229,12 +230,10 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                     setView({ year: today.getFullYear(), month: today.getMonth() })
                   }
                   className="px-3 h-8 rounded-full bg-white/10 hover:bg-white/20 text-[11px] font-bold text-white/80 hover:text-white transition-colors cursor-pointer"
-                >
-                  Today
-                </button>
+                >{getCMSCopy("copy.EventsCalendarModal.2b065c7c9ce4", "Today")}</button>
                 <button
                   onClick={() => step(1)}
-                  aria-label="Next month"
+                  aria-label={getCMSCopy("copy.EventsCalendarModal.74e53211fef4", "Next month")}
                   className="w-8 h-8 grid place-items-center rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-colors cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -299,9 +298,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                       />
                     )}
                     {isToday(day) && (
-                      <span className="absolute top-0.5 right-1 text-[7px] font-extrabold tracking-wider text-white/70">
-                        NOW
-                      </span>
+                      <span className="absolute top-0.5 right-1 text-[7px] font-extrabold tracking-wider text-white/70">{getCMSCopy("copy.EventsCalendarModal.97bfc0d9913d", "NOW")}</span>
                     )}
                   </button>
                 );
@@ -397,7 +394,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                       weekday: 'long',
                       day: 'numeric',
                       month: 'long',
-                      year: 'numeric',
+                      year: getCMSCopy("copy.EventsCalendarModal.15f450a59134", "numeric"),
                     })}{' '}
                     ·{' '}
                     {countdownLabel(
@@ -408,7 +405,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                         ),
                       ),
                     )}
-                    <span className="text-white/45"> · every year</span>
+                    <span className="text-white/45">{getCMSCopy("copy.EventsCalendarModal.2a453afa6665", " · every year")}</span>
                   </p>
 
                   <p className="font-artistic-serif text-white/85 text-[14px] leading-relaxed mb-4">
@@ -423,33 +420,27 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                       download={`${selected.event.id}.ics`}
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold text-neutral-900 bg-white hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     >
-                      <CalendarPlus className="w-3.5 h-3.5" />
-                      Add to my calendar
-                    </a>
+                      <CalendarPlus className="w-3.5 h-3.5" />{getCMSCopy("copy.EventsCalendarModal.9d60f9126db7", "Add to my calendar")}</a>
                     {selected.event.href && (
                       <a
                         href={selected.event.href}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-[12px] font-bold text-white bg-white/10 border border-white/20 hover:bg-white/20 transition-colors cursor-pointer"
-                      >
-                        Take part
-                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      >{getCMSCopy("copy.EventsCalendarModal.74fa7d10facc", "Take part")}<ArrowUpRight className="w-3.5 h-3.5" />
                       </a>
                     )}
                   </div>
                 </div>
               </div>
             ) : (
-              <p className="text-[14px] text-white/60">Pick a highlighted day.</p>
+              <p className="text-[14px] text-white/60">{getCMSCopy("copy.EventsCalendarModal.c7d65e75702a", "Pick a highlighted day.")}</p>
             )}
 
             {/* Programmes with no date — running whatever month is showing. */}
             <div className="pt-5">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/45 mb-2 flex items-center gap-1.5">
-                <InfinityIcon className="w-3 h-3" />
-                Running all year
-              </p>
+                <InfinityIcon className="w-3 h-3" />{getCMSCopy("copy.EventsCalendarModal.08b74adf3453", "Running all year")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {ongoing.map((i) => (
                   <a
@@ -474,9 +465,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                 download="sncf-events.ics"
                 className="mt-4 inline-flex items-center gap-1.5 text-[11px] font-bold text-white/60 hover:text-white transition-colors cursor-pointer"
               >
-                <Download className="w-3 h-3" />
-                Export all as .ics
-              </a>
+                <Download className="w-3 h-3" />{getCMSCopy("copy.EventsCalendarModal.0d1519148f4f", "Export all as .ics")}</a>
             </div>
           </div>
         </div>

@@ -13,6 +13,12 @@
 # ---------------------------------------------------------------------------
 set -euo pipefail
 
+for required in aws jq; do
+  command -v "$required" >/dev/null || { echo "Missing required tool: $required" >&2; exit 1; }
+done
+WORK_DIR=$(mktemp -d "${TMPDIR:-/tmp}/sncf-bootstrap.XXXXXX")
+trap 'rm -rf "$WORK_DIR"' EXIT
+
 PROFILE="${AWS_PROFILE:-elens}"
 REGION="ap-south-1"
 DOMAIN="sncf.elens.in"
@@ -32,6 +38,12 @@ aws() { command aws --profile "$PROFILE" "$@"; }
 info() { printf '\033[0;32m==>\033[0m %s\n' "$*"; }
 
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+if [[ "$ACM_ARN" != "arn:aws:acm:us-east-1:$ACCOUNT_ID:"* ]]; then
+  echo "Certificate account/region does not match the authenticated deployment account." >&2
+  exit 1
+fi
+CERT_STATUS=$(aws acm describe-certificate --region us-east-1 --certificate-arn "$ACM_ARN" --query Certificate.Status --output text)
+[ "$CERT_STATUS" = "ISSUED" ] || { echo "The CloudFront certificate is not issued." >&2; exit 1; }
 info "Account: $ACCOUNT_ID  Profile: $PROFILE"
 
 # ---------- 1. S3 bucket (private; CloudFront-only access) ----------
@@ -61,11 +73,12 @@ DIST_ID=$(aws cloudfront list-distributions \
   --query "DistributionList.Items[?Aliases.Items && contains(Aliases.Items, '$DOMAIN')].Id | [0]" --output text)
 if [ "$DIST_ID" = "None" ] || [ -z "$DIST_ID" ]; then
   info "Creating CloudFront distribution for $DOMAIN"
-  cat > /tmp/sncf-dist.json <<JSON
+  cat > "$WORK_DIR/sncf-dist.json" <<JSON
 {
   "CallerReference": "sncf-website-$(date +%s)",
   "Comment": "SNCF Website - $DOMAIN",
   "Enabled": true,
+  "IsIPV6Enabled": true,
   "HttpVersion": "http2and3",
   "PriceClass": "PriceClass_200",
   "Aliases": { "Quantity": 1, "Items": ["$DOMAIN"] },
@@ -95,15 +108,29 @@ if [ "$DIST_ID" = "None" ] || [ -z "$DIST_ID" ]; then
   }
 }
 JSON
-  DIST_ID=$(aws cloudfront create-distribution --distribution-config file:///tmp/sncf-dist.json \
+  DIST_ID=$(aws cloudfront create-distribution --distribution-config "file://$WORK_DIR/sncf-dist.json" \
     --query Distribution.Id --output text)
+fi
+# Never replace a live bucket policy based only on a matching domain alias.
+# An older distribution may use a different origin or legacy origin access.
+DIST_CONFIG=$(aws cloudfront get-distribution-config --id "$DIST_ID" --output json)
+if ! printf '%s' "$DIST_CONFIG" | jq --exit-status \
+  --arg origin "$BUCKET.s3.$REGION.amazonaws.com" --arg oac "$OAC_ID" '
+    .DistributionConfig as $config |
+    any($config.Origins.Items[];
+      .Id == $config.DefaultCacheBehavior.TargetOriginId and
+      .DomainName == $origin and .OriginAccessControlId == $oac
+    )' >/dev/null; then
+  echo "Distribution $DIST_ID does not route its default behavior to $BUCKET using OAC $OAC_ID." >&2
+  echo "Review the existing distribution origin/access configuration before rerunning; its bucket policy and DNS have not been replaced." >&2
+  exit 1
 fi
 DIST_DOMAIN=$(aws cloudfront get-distribution --id "$DIST_ID" --query Distribution.DomainName --output text)
 DIST_ARN="arn:aws:cloudfront::$ACCOUNT_ID:distribution/$DIST_ID"
 info "Distribution: $DIST_ID ($DIST_DOMAIN)"
 
 # ---------- 4. Bucket policy: CloudFront OAC read-only ----------
-cat > /tmp/sncf-bucket-policy.json <<JSON
+cat > "$WORK_DIR/sncf-bucket-policy.json" <<JSON
 {
   "Version": "2012-10-17",
   "Statement": [{
@@ -116,24 +143,30 @@ cat > /tmp/sncf-bucket-policy.json <<JSON
   }]
 }
 JSON
-aws s3api put-bucket-policy --bucket "$BUCKET" --policy file:///tmp/sncf-bucket-policy.json
+aws s3api put-bucket-policy --bucket "$BUCKET" --policy "file://$WORK_DIR/sncf-bucket-policy.json"
 info "Bucket policy applied"
 
 # ---------- 5. Route53 alias records ----------
 info "Upserting Route53 A/AAAA aliases for $DOMAIN"
 for TYPE in A AAAA; do
-  cat > /tmp/sncf-rrset.json <<JSON
+  cat > "$WORK_DIR/sncf-rrset.json" <<JSON
 { "Changes": [{ "Action": "UPSERT", "ResourceRecordSet": {
   "Name": "$DOMAIN", "Type": "$TYPE",
   "AliasTarget": { "HostedZoneId": "$CF_HOSTED_ZONE", "DNSName": "$DIST_DOMAIN", "EvaluateTargetHealth": false }
 }}]}
 JSON
   aws route53 change-resource-record-sets --hosted-zone-id "$HOSTED_ZONE_ID" \
-    --change-batch file:///tmp/sncf-rrset.json --query 'ChangeInfo.Status' --output text
+    --change-batch "file://$WORK_DIR/sncf-rrset.json" --query 'ChangeInfo.Status' --output text
 done
 
 # ---------- 6. IAM role for GitHub Actions (OIDC) ----------
-cat > /tmp/sncf-trust.json <<JSON
+# A new AWS account may not yet have the GitHub OIDC provider.
+OIDC_ARN="arn:aws:iam::$ACCOUNT_ID:oidc-provider/token.actions.githubusercontent.com"
+if ! aws iam get-open-id-connect-provider --open-id-connect-provider-arn "$OIDC_ARN" >/dev/null 2>&1; then
+  aws iam create-open-id-connect-provider --url https://token.actions.githubusercontent.com \
+    --client-id-list sts.amazonaws.com >/dev/null
+fi
+cat > "$WORK_DIR/sncf-trust.json" <<JSON
 {
   "Version": "2012-10-17",
   "Statement": [{
@@ -141,10 +174,11 @@ cat > /tmp/sncf-trust.json <<JSON
     "Principal": { "Federated": "arn:aws:iam::$ACCOUNT_ID:oidc-provider/token.actions.githubusercontent.com" },
     "Action": "sts:AssumeRoleWithWebIdentity",
     "Condition": {
-      "StringEquals": { "token.actions.githubusercontent.com:aud": "sts.amazonaws.com" },
-      "StringLike": { "token.actions.githubusercontent.com:sub": [
-        "repo:$GITHUB_REPO:*",
-        "repo:$GITHUB_REPO_IMMUTABLE:*"
+      "StringEquals": {
+        "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+        "token.actions.githubusercontent.com:sub": [
+        "repo:$GITHUB_REPO:environment:production",
+        "repo:$GITHUB_REPO_IMMUTABLE:environment:production"
       ]}
     }
   }]
@@ -152,15 +186,15 @@ cat > /tmp/sncf-trust.json <<JSON
 JSON
 if aws iam get-role --role-name "$ROLE_NAME" >/dev/null 2>&1; then
   info "Role $ROLE_NAME exists — refreshing trust policy"
-  aws iam update-assume-role-policy --role-name "$ROLE_NAME" --policy-document file:///tmp/sncf-trust.json
+  aws iam update-assume-role-policy --role-name "$ROLE_NAME" --policy-document "file://$WORK_DIR/sncf-trust.json"
 else
   info "Creating role $ROLE_NAME"
   aws iam create-role --role-name "$ROLE_NAME" \
-    --assume-role-policy-document file:///tmp/sncf-trust.json \
+    --assume-role-policy-document "file://$WORK_DIR/sncf-trust.json" \
     --description "GitHub Actions deploy role for $GITHUB_REPO" >/dev/null
 fi
 
-cat > /tmp/sncf-deploy-policy.json <<JSON
+cat > "$WORK_DIR/sncf-deploy-policy.json" <<JSON
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -177,7 +211,7 @@ cat > /tmp/sncf-deploy-policy.json <<JSON
 }
 JSON
 aws iam put-role-policy --role-name "$ROLE_NAME" --policy-name deploy-site \
-  --policy-document file:///tmp/sncf-deploy-policy.json
+  --policy-document "file://$WORK_DIR/sncf-deploy-policy.json"
 ROLE_ARN=$(aws iam get-role --role-name "$ROLE_NAME" --query Role.Arn --output text)
 info "Deploy role: $ROLE_ARN"
 
@@ -188,5 +222,7 @@ echo "  AWS_ROLE_ARN                = $ROLE_ARN"
 echo "  AWS_REGION                  = $REGION"
 echo "  S3_BUCKET                   = $BUCKET"
 echo "  CLOUDFRONT_DISTRIBUTION_ID  = $DIST_ID"
+echo "  VITE_CMS_URL                = public HTTPS origin of the deployed CMS"
+info "Protect the GitHub production environment with approved branches/reviewers."
 echo
 info "Site will serve at: https://$DOMAIN (after first deploy + CF propagation)"

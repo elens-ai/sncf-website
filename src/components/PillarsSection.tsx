@@ -1,3 +1,6 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSLink } from '../cms/links';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useEffect, useRef } from 'react';
 import { PillarState } from '../types';
 import { SncfLotus3D, SncfLotus3DHandle } from './SncfLotus3D';
@@ -869,7 +872,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
     <section
       id="pillars-section"
       ref={trackRef}
-      aria-label="Our work"
+      aria-label={getCMSCopy("copy.PillarsSection.fc967e87a6e8", "Our work")}
       /* NOT a snap point, unlike every other screen. `scroll-snap-align:
          start` would put a snap target where this track's top meets the
          viewport top — which is exactly `covered === 1`, the END of the
@@ -922,12 +925,8 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
           className="absolute left-1/2 top-[58%] -translate-x-1/2 z-40 pointer-events-none text-center w-[min(640px,88vw)]"
           style={{ opacity: 0, willChange: 'opacity, transform' }}
         >
-          <p className="font-artistic-display text-white/75 text-[10.5px] sm:text-[12px] tracking-[0.26em] uppercase mb-3">
-            Sant Nirankari Charitable Foundation
-          </p>
-          <p className="font-dancing-script text-[34px] sm:text-[44px] md:text-[52px] font-bold leading-none text-white drop-shadow-md">
-            Thank You for Visiting
-          </p>
+          <p className="font-artistic-display text-white/75 text-[10.5px] sm:text-[12px] tracking-[0.26em] uppercase mb-3">{getCMSCopy("copy.PillarsSection.a01941bf3134", "Sant Nirankari Charitable Foundation")}</p>
+          <p className="font-dancing-script text-[34px] sm:text-[44px] md:text-[52px] font-bold leading-none text-white drop-shadow-md">{getCMSCopy("copy.PillarsSection.7811af256594", "Thank You for Visiting")}</p>
         </div>
 
         <HallEntrance
@@ -1231,9 +1230,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                   strokeWidth="0.09"
                 />
                 <text className="lotus-gate-text" textAnchor="middle">
-                  <textPath href="#lotus-gate-arc" startOffset="50%">
-                    SANT NIRANKARI CHARITABLE FOUNDATION
-                  </textPath>
+                  <textPath href={getCMSLink("copy.Link.PillarsSection.40ebd77ced68", "#lotus-gate-arc")} startOffset="50%">{getCMSCopy("copy.PillarsSection.9c0af37f68ad", "SANT NIRANKARI CHARITABLE FOUNDATION")}</textPath>
                 </text>
               </g>
 
@@ -1272,27 +1269,21 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                 textAnchor="middle"
                 className="lotus-gate-motto font-dancing-script"
                 style={{ opacity: 'clamp(0, calc((var(--gate-in, 1) - 0.45) * 4 - var(--gate-exit, 0) * 6), 1)' }}
-              >
-                Service with Humility
-              </text>
+              >{getCMSCopy("copy.PillarsSection.56219e473693", "Service with Humility")}</text>
               <text
                 x="50"
                 y="32.8"
                 textAnchor="middle"
                 className="lotus-gate-journey"
                 style={{ opacity: 'clamp(0, calc((var(--gate-in, 1) - 0.5) * 4 - var(--gate-exit, 0) * 6), 1)' }}
-              >
-                JOURNEY BEGINS
-              </text>
+              >{getCMSCopy("copy.PillarsSection.7b220f6336b2", "JOURNEY BEGINS")}</text>
               <text
                 x="50"
                 y="36.2"
                 textAnchor="middle"
                 className="lotus-gate-since"
                 style={{ opacity: 'clamp(0, calc((var(--gate-in, 1) - 0.55) * 4 - var(--gate-exit, 0) * 6), 1)' }}
-              >
-                SINCE 2010
-              </text>
+              >{getCMSCopy("copy.PillarsSection.17225b356193", "SINCE 2010")}</text>
 
             </svg>
           </div>
@@ -1357,10 +1348,8 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                           onClick={() => setWallView(null)}
                           className="font-artistic-display text-[10.5px] tracking-[0.18em] uppercase text-white/70 hover:text-white underline decoration-white/30 underline-offset-4 cursor-pointer mb-3"
                         >
-                          &larr; {pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()} room
-                        </button>
-                        <p className="font-artistic-display text-[10px] sm:text-[11px] tracking-[0.2em] text-white/60 mb-1.5">
-                          ROOM {i + 1} · {pillar.label}
+                          &larr; {pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}{getCMSCopy("copy.PillarsSection.441ee378dd36", " room")}</button>
+                        <p className="font-artistic-display text-[10px] sm:text-[11px] tracking-[0.2em] text-white/60 mb-1.5">{getCMSCopy("copy.PillarsSection.839fa445d0d4", "ROOM ")}{i + 1} · {pillar.label}
                         </p>
                         <h3 className="font-artistic-display text-white text-[21px] sm:text-[25px] md:text-[30px] md:leading-[36px] mb-1 drop-shadow-md">
                           {wallView.act.title}
@@ -1406,7 +1395,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                                   } as React.CSSProperties}
                                 >
                                   <span className="lotus-plate-art">
-                                    {img ? <img src={img.src} alt={img.alt} loading="lazy" decoding="async" /> : null}
+                                    {img ? <img src={resolveCMSMedia(img.src)} alt={img.alt} loading="lazy" decoding="async" /> : null}
                                   </span>
                                   {img?.alt ? (
                                     <figcaption className="lotus-plate-label">{img.alt}</figcaption>
@@ -1426,8 +1415,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                   <div className="grid grid-cols-1 md:grid-cols-[minmax(0,0.46fr)_minmax(0,1fr)] gap-5 md:gap-8 lg:gap-12 items-center">
                     {/* the wall label */}
                     <div className="min-w-0">
-                      <p className="font-artistic-display text-[10px] sm:text-[11px] tracking-[0.2em] text-white/60 mb-1.5">
-                        ROOM {i + 1} OF {ROOM_IDS.length}
+                      <p className="font-artistic-display text-[10px] sm:text-[11px] tracking-[0.2em] text-white/60 mb-1.5">{getCMSCopy("copy.PillarsSection.839fa445d0d4", "ROOM ")}{i + 1}{getCMSCopy("copy.PillarsSection.b5a49d313727", " OF ")}{ROOM_IDS.length}
                       </p>
                       <p className="font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 drop-shadow-md select-none">
                         {pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}
@@ -1505,7 +1493,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                               >
                                 <span className="lotus-plate-art">
                                   {art ? (
-                                    <img src={art.src} alt={art.alt} loading="lazy" decoding="async" />
+                                    <img src={resolveCMSMedia(art.src)} alt={art.alt} loading="lazy" decoding="async" />
                                   ) : null}
                                 </span>
                                 <span className="lotus-plate-headline">
@@ -1550,7 +1538,7 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                                 >
                                   <span className="lotus-plate-art">
                                     {art ? (
-                                      <img src={art.src} alt={art.alt} loading="lazy" decoding="async" />
+                                      <img src={resolveCMSMedia(art.src)} alt={art.alt} loading="lazy" decoding="async" />
                                     ) : null}
                                   </span>
                                   <span className="lotus-plate-headline">
@@ -1569,14 +1557,12 @@ export const PillarsSection: React.FC<PillarsSectionProps> = ({ currentPillar })
                           one properly — and the catalogue, for a visitor who
                           would rather browse the lot than walk on */}
                       <p className="font-artistic-display text-white/55 text-[10px] tracking-[0.16em] uppercase mt-4">
-                        {acts.length} works · select one for its figures ·{' '}
+                        {acts.length}{getCMSCopy("copy.PillarsSection.df4169f2c253", " works · select one for its figures ·")}{' '}
                         <button
                           type="button"
                           onClick={() => setCatalogueOpen(true)}
                           className="text-white/80 underline decoration-white/40 underline-offset-4 hover:text-white hover:decoration-white/80 cursor-pointer uppercase tracking-[0.16em]"
-                        >
-                          browse all rooms
-                        </button>
+                        >{getCMSCopy("copy.PillarsSection.a87fb2f5ee39", "browse all rooms")}</button>
                       </p>
                     </div>
                   </div>

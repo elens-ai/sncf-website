@@ -4,9 +4,8 @@
 # Debian slim (glibc) avoids musl issues with Tailwind v4's native oxide/lightningcss binaries.
 FROM node:22-bookworm-slim AS deps
 WORKDIR /app
-COPY package.json ./
-# No package-lock.json in the repo, so `npm ci` is not usable here.
-RUN npm install --no-audit --no-fund
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
 
 ##########  dev: vite dev server with HMR  ##########
 FROM node:22-bookworm-slim AS dev
@@ -22,6 +21,8 @@ FROM node:22-bookworm-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ARG VITE_CMS_URL
+ENV VITE_CMS_URL=$VITE_CMS_URL
 RUN npm run build
 
 ##########  prod: nginx serving the static bundle  ##########

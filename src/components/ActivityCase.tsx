@@ -1,3 +1,5 @@
+import { resolveCMSMedia } from '../cms/media';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useEffect, useRef } from 'react';
 import { Activity } from '../data/activities';
 
@@ -62,10 +64,10 @@ export const ActivityCase: React.FC<ActivityCaseProps> = ({ activity, accent, on
     >
       {/* The gallery goes dark around the piece. Clicking the darkness steps
           back from it, the way walking away does. */}
-      <button className="activity-case-scrim" onClick={onClose} aria-label="Close" tabIndex={-1} />
+      <button className="activity-case-scrim" onClick={onClose} aria-label={getCMSCopy("copy.ActivityCase.7d9eb7acb13e", "Close")} tabIndex={-1} />
 
       <div className="activity-case-body">
-        <button ref={closeRef} className="activity-case-close" onClick={onClose} aria-label="Close">
+        <button ref={closeRef} className="activity-case-close" onClick={onClose} aria-label={getCMSCopy("copy.ActivityCase.7d9eb7acb13e", "Close")}>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18M6 6l12 12" />
           </svg>
@@ -75,13 +77,13 @@ export const ActivityCase: React.FC<ActivityCaseProps> = ({ activity, accent, on
           {/* the work */}
           <div className="activity-case-art-col">
             <figure className="activity-case-art" data-empty={hero ? 'false' : 'true'}>
-              {hero ? <img src={hero.src} alt={hero.alt} /> : null}
+              {hero ? <img src={resolveCMSMedia(hero.src)} alt={hero.alt} /> : null}
             </figure>
             {rest.length > 0 && (
               <div className="activity-case-strip">
                 {rest.map((img) => (
                   <figure key={img.src} className="activity-case-thumb">
-                    <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />
+                    <img src={resolveCMSMedia(img.src)} alt={img.alt} loading="lazy" decoding="async" />
                   </figure>
                 ))}
               </div>
@@ -94,7 +96,7 @@ export const ActivityCase: React.FC<ActivityCaseProps> = ({ activity, accent, on
             <h3 className="activity-case-title">{activity.title}</h3>
             <p className="activity-case-blurb">{activity.blurb}</p>
 
-            <p className="activity-case-figures-head">Figures as reported</p>
+            <p className="activity-case-figures-head">{getCMSCopy("copy.ActivityCase.449a83504dfb", "Figures as reported")}</p>
             <dl className="activity-case-figures">
               {activity.dataPoints.map((d) => (
                 <div key={d.label} className="activity-case-figure">
@@ -104,9 +106,7 @@ export const ActivityCase: React.FC<ActivityCaseProps> = ({ activity, accent, on
               ))}
             </dl>
 
-            <p className="activity-case-source">
-              SNCF Activity Report, March 2026
-            </p>
+            <p className="activity-case-source">{getCMSCopy("copy.ActivityCase.57224bb087e6", "SNCF Activity Report, March 2026")}</p>
           </div>
         </div>
       </div>

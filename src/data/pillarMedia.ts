@@ -1,3 +1,5 @@
+import { bindCMSData, resolveGalleryGroups, validPlate } from '../cms/data';
+
 /**
  * THE EXHIBITION'S PLATES — which activities hang on each pillar's wall.
  *
@@ -47,7 +49,7 @@ export interface ActivityPlate {
 
 /** Keyed by PillarState.id. Order matters — plate n hangs in slot n of that
     pillar's wall, so the shapes in WALLS are what each photograph must be. */
-export const PILLAR_PLATES: Record<string, ActivityPlate[]> = {
+export const DEFAULT_PILLAR_PLATES: Record<string, ActivityPlate[]> = {
   heal: [
     { title: 'Blood donation', highlight: 0, image: null, alt: '' },
     { title: 'Mobile dispensaries', highlight: 1, image: null, alt: '' },
@@ -91,3 +93,5 @@ export const PILLAR_PLATES: Record<string, ActivityPlate[]> = {
     { title: 'Water bodies', highlight: null, image: null, alt: '' },
   ],
 };
+
+export let PILLAR_PLATES: Record<string, ActivityPlate[]> = bindCMSData(DEFAULT_PILLAR_PLATES, (publication, fallback) => resolveGalleryGroups(publication, fallback, 'plates', validPlate), value => { PILLAR_PLATES = value; });

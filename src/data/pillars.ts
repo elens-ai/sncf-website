@@ -1,6 +1,7 @@
+import { bindCMSData, resolvePillars } from '../cms/data';
 import { PillarState } from '../types';
 
-export const PILLARS: PillarState[] = [
+export const DEFAULT_PILLARS: PillarState[] = [
   {
     id: 'heal',
     label: 'HEAL',
@@ -28,8 +29,8 @@ export const PILLARS: PillarState[] = [
   {
     id: 'enrich',
     label: 'ENRICH',
-    accentA: '#1565c0',
-    accentB: '#64b5f6',
+    accentA: '#2dacc3',
+    accentB: '#8dd4df',
     headline: 'Education that opens doors',
     body: 'Skill-development programs and educational support that build self-reliance in underserved communities.',
     cardImageAlt: 'Skill training classroom',
@@ -114,8 +115,8 @@ export const PILLARS: PillarState[] = [
  * CardIllustration still carries marks for both. Renamed off the old "HERO2"
  * prefix, which described a hero variant that no longer exists.
  */
-export const EXTENDED_PILLARS: PillarState[] = [
-  ...PILLARS,
+export const DEFAULT_EXTENDED_PILLARS: PillarState[] = [
+  ...DEFAULT_PILLARS,
   {
     id: 'amrit',
     label: 'AMRIT',
@@ -161,3 +162,6 @@ export const EXTENDED_PILLARS: PillarState[] = [
     subText: 'Realizing human brotherhood by knowing the Fatherhood of God.'
   }
 ];
+
+export let PILLARS: PillarState[] = bindCMSData(DEFAULT_PILLARS, resolvePillars, value => { PILLARS = value; });
+export let EXTENDED_PILLARS: PillarState[] = bindCMSData(DEFAULT_EXTENDED_PILLARS, resolvePillars, value => { EXTENDED_PILLARS = value; });
