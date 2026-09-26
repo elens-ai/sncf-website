@@ -12,6 +12,7 @@ import { MediaGallery } from '../components/MediaGallery';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ACTIVITIES, type Activity } from '../data/activities';
 import { mediaReady } from '../data/media';
+import { slug } from '../utils/slug';
 import './projects.css';
 
 const getProjects = () => ACTIVITIES.filter(a => a.pillarId === 'projects');
@@ -21,7 +22,6 @@ let FACES = bindCMSValue(() => ([
   { ink: '#98612b', light: '#f4dfb6', label: getCMSCopy("copy.ProjectsPage.b6baff9358dd", "Land"), scope: getCMSCopy("copy.ProjectsPage.c406304d0b71", "Arid-zone rejuvenation"), icon: Mountain, image: 'projects-4', alt: getCMSCopy("copy.ProjectsPage.7757a5c80e41", "Agricultural land in the evening light"), line: getCMSCopy("copy.ProjectsPage.c2dc7b1fa516", "Restoring the land that sustains us.") },
   { ink: '#856098', light: '#e6d9ee', label: getCMSCopy("copy.ProjectsPage.c864f329f5dd", "Communities"), scope: getCMSCopy("copy.ProjectsPage.904eb1d10ff3", "Since 2017 · Haryana"), icon: House, image: 'enrich-2', alt: getCMSCopy("copy.ProjectsPage.be0da16a46ae", "Students learning together in a classroom"), line: getCMSCopy("copy.ProjectsPage.c2eb86f270ec", "Growing stronger, together.") },
 ]), value => { FACES = value; });
-const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const inkStyle = (i: number) => ({ '--project-ink': FACES[i % FACES.length].ink, '--project-light': FACES[i % FACES.length].light } as React.CSSProperties);
 
 const ProjectsCover: React.FC = () => {

@@ -19,6 +19,66 @@
 }
 /* Let the shared page atmosphere emerge before the next chapter begins. */
 .home-page #events-section.events-journal{
-  background:linear-gradient(to bottom,#122f28 0%,#122f28 48%,rgba(18,47,40,.88) 70%,rgba(18,47,40,.35) 88%,transparent 100%);
+  /* fades in from the shared shade above and out again below — no seam at either edge */
+  background:linear-gradient(to bottom,transparent 0%,rgba(18,47,40,.6) 16%,#122f28 34%,#122f28 60%,rgba(18,47,40,.85) 78%,rgba(18,47,40,.3) 92%,transparent 100%),radial-gradient(ellipse at 0 35%,rgba(53,99,78,.7),transparent 60%);
   padding-bottom:clamp(90px,12vh,150px);
 }
+/* The pass: the moment's QR code, the poster to take, the invitation to open. */
+.journal-pass{display:flex;gap:18px;align-items:center;margin-top:26px;padding:16px 18px;border-radius:16px;background:color-mix(in srgb,var(--event-ink) 7%,#fff);border:1px solid color-mix(in srgb,var(--event-ink) 18%,transparent)}
+.journal-pass-code{flex:none;display:grid;place-items:center;width:104px;height:104px;border-radius:12px;background:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--event-ink) 18%,transparent);transition:transform .25s}
+.journal-pass-code:hover{transform:scale(1.04)}.journal-pass-code img{display:block;width:96px;height:96px;image-rendering:pixelated}.journal-pass-code>span{width:96px;height:96px;border-radius:8px;background:repeating-linear-gradient(45deg,#eef1ea 0 6px,#fff 6px 12px)}
+.journal-pass-copy{min-width:0}.journal-pass-title{display:flex;align-items:center;gap:7px;margin:0 0 4px;font:600 10px/1.6 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--event-ink)}
+.journal-pass-copy>p:not(.journal-pass-title){margin:0;font:400 12px/1.6 Inter,sans-serif;color:#5d6d62}
+.journal-pass-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
+#events-section .journal-pass-actions button,#events-section .journal-pass-actions a{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--event-ink);background:transparent;border:0;border-bottom:1px solid color-mix(in srgb,var(--event-ink) 40%,transparent);border-radius:0;padding:4px 0;box-shadow:none}
+#events-section .journal-pass-actions button:disabled{opacity:.6;cursor:progress}
+@media(max-width:550px){.journal-pass{flex-direction:column;align-items:flex-start}}
+
+/* One screen, whole: the journal fits the viewport it snaps to, so nothing below the fold is trimmed. */
+@media(min-width:951px){
+#events-section.events-journal{min-height:100svh;scroll-snap-align:start;padding:calc(var(--site-header-height,72px) + 18px) clamp(24px,6vw,76px) 28px;display:flex;flex-direction:column;justify-content:center}
+#events-section .journal-heading{align-items:center}
+#events-section .journal-heading h2{font-size:clamp(26px,2.8vw,40px);margin-top:6px}
+#events-section .journal-heading h2 em{display:inline;margin-left:.3em}
+#events-section .journal-filters{margin:16px auto 14px}
+#events-section .journal-filters button{padding:9px 0}
+#events-section .journal-spread{min-height:0;max-height:calc(100svh - var(--site-header-height,72px) - 190px)}
+#events-section .journal-feature{padding:22px 26px;gap:22px;grid-template-columns:.62fr 1.38fr}
+#events-section .journal-date{max-height:100%}
+#events-section .journal-date strong{font-size:clamp(64px,7vw,104px);line-height:1.05}
+#events-section .journal-chapter{padding-bottom:9px;margin-bottom:12px}
+#events-section .journal-tag{margin-bottom:8px}
+#events-section .journal-feature h3{font-size:clamp(22px,2.2vw,32px);margin:8px 0 10px}
+#events-section .journal-feature-copy>p{font-size:12.5px;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#events-section .journal-actions{margin-top:14px;gap:14px}
+#events-section .journal-actions a{padding:9px 12px}
+#events-section .journal-pass{margin-top:14px;padding:12px 14px;gap:14px}
+#events-section .journal-pass-code{width:84px;height:84px}#events-section .journal-pass-code img,#events-section .journal-pass-code>span{width:76px;height:76px}
+#events-section .journal-pass-copy>p:not(.journal-pass-title){font-size:11.5px;line-height:1.5}
+#events-section .journal-pass-actions{margin-top:6px}
+#events-section .journal-navigation{margin-top:12px}
+#events-section .journal-agenda{display:flex;flex-direction:column;min-height:0}
+#events-section .journal-agenda-scroll{flex:1;max-height:none}
+}
+@media(min-width:951px){
+/* The date panel takes the copy's height, never its own: it is a plate beside the words, not the ruler of the row. */
+#events-section .journal-feature{align-items:stretch}
+#events-section .journal-date{aspect-ratio:auto!important;height:auto!important;min-height:0;max-height:none;align-self:stretch}
+}
+@media(min-width:951px){
+/* The agenda list was the ruler of the row: give the spread a definite height so the row is one
+   screen and the list scrolls inside it, rather than stretching the feature past the fold. */
+#events-section .journal-spread{height:calc(100svh - var(--site-header-height,72px) - 190px);max-height:none;grid-template-rows:minmax(0,1fr)}
+#events-section .journal-feature,#events-section .journal-agenda{min-height:0}
+#events-section .journal-agenda-scroll{overflow-y:auto}
+}
+@media(min-width:951px){
+/* Exactly one screen: the heading and filters take what they need, the spread takes the rest. */
+#events-section.events-journal{height:100svh;min-height:0;justify-content:flex-start}
+#events-section .journal-heading,#events-section .journal-filters{flex:none;width:100%}
+#events-section .journal-spread{flex:1;height:auto;min-height:0;width:100%}
+#events-section .journal-heading h2{font-size:clamp(24px,2.4vw,34px)}
+}
+/* The filters sit at the right, where the eye goes after the title. */
+#events-section .journal-filters{justify-content:flex-end}
+@media(max-width:550px){#events-section .journal-filters{justify-content:flex-start}}

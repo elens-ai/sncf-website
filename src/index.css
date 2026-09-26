@@ -1351,45 +1351,8 @@
   }
 }
 
-/* The floating "jump to next section" chevron — a small, slow bob so it
-   reads as an invitation to scroll rather than a static icon. Opacity and
-   position are driven imperatively from HeroSection's scroll effect (they
-   need to track scroll position exactly, not run on a timer), so this
-   keyframe only ever touches the chevron glyph's own transform. */
-@keyframes heroJumpBob {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-}
 
-@keyframes heroJumpBobUp {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
 
-.hero-jump-chevron {
-  animation: heroJumpBob 1.8s ease-in-out infinite;
-}
-
-/* The return-to-top state bobs the other way, so the direction reads before
-   the glyph itself is parsed. */
-.hero-jump-chevron-up {
-  animation: heroJumpBobUp 1.8s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-jump-chevron,
-  .hero-jump-chevron-up {
-    animation: none;
-  }
-}
 
 /* Sound control when autoplay was refused: a slow halo so a visitor notices
    the anthem is waiting on them. Browser policy cannot be bypassed in JS, so
@@ -1831,30 +1794,6 @@
 /* THE DOCENT (ExhibitionNav.tsx) — the exhibition's floating navigator.
    Tinted by the live room through --nav-a/--nav-b so it walks the same
    colour sequence the screen does. */
-/* Page mode carries no room accent — the pill falls back to a neutral white
-   mix so color-mix() never sees an undefined variable (which would drop the
-   whole declaration and leave the pill borderless). */
-.section-nav {
-  --nav-a: #ffffff;
-  --nav-b: #ffffff;
-}
-.exhibition-nav-pill {
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--nav-a) 55%, rgb(255 255 255 / 0.35));
-  background: color-mix(in srgb, var(--nav-a) 26%, rgb(0 0 0 / 0.45));
-  color: rgb(255 255 255 / 0.94);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.7);
-}
-.exhibition-nav-cta {
-  padding: 12px 24px;
-  cursor: pointer;
-  transition: background-color 250ms ease, border-color 250ms ease, transform 250ms ease;
-}
-.exhibition-nav-cta:hover {
-  background: color-mix(in srgb, var(--nav-a) 40%, rgb(0 0 0 / 0.4));
-  transform: translateY(-1px);
-}
 .exhibition-nav-arrow {
   display: grid;
   place-items: center;
@@ -4431,10 +4370,16 @@
 }
 
 .award-nav {
-  margin-top: 18px;
+  position: absolute;
+  z-index: 60;
+  right: 1rem;
+  bottom: 1.5rem;
   display: flex;
   align-items: center;
   gap: 12px;
+}
+@media (min-width: 640px) {
+  .award-nav { right: 4rem; bottom: 4.5rem; }
 }
 
 .award-arrow {

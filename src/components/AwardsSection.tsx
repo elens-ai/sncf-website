@@ -84,10 +84,11 @@ let STANDIN = bindCMSValue(() => ([
     'Youth empowerment, plantation drives and disaster relief.'),
 ]), value => { STANDIN = value; });
 
-const STEP_MS = 900;
+const STEP_MS = 1100;
 /** How long each honour holds the centre before the stage turns itself. */
 const HOLD_MS = 4500;
-const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
+/* the house ease: a long, soft settle rather than a material snap */
+const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
 export const AwardsSection: React.FC = () => {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -209,7 +210,7 @@ export const AwardsSection: React.FC = () => {
     const t = calm ? 'none' : `transform ${STEP_MS}ms ${EASE}, filter ${STEP_MS}ms ${EASE}, opacity ${STEP_MS}ms ${EASE}, left ${STEP_MS}ms ${EASE}, height ${STEP_MS}ms ${EASE}, bottom ${STEP_MS}ms ${EASE}`;
     const base: React.CSSProperties = {
       position: 'absolute',
-      aspectRatio: '0.72 / 1',
+      aspectRatio: '1.42 / 1',
       transition: t,
       willChange: inView && role !== 'off' ? 'transform, opacity' : 'auto',
     };
@@ -219,26 +220,26 @@ export const AwardsSection: React.FC = () => {
            card about its centre, so it climbs as it grows — a card scaled
            1.18 reached the standfirst however low it was placed. */
         return { ...base,
-          left: '50%', bottom: narrow ? '28%' : '14%',
-          height: narrow ? '38%' : '52%',
-          transform: `translateX(-50%) scale(${narrow ? 1.04 : 1.08})`,
+          left: '50%', bottom: narrow ? '30%' : '17%',
+          height: narrow ? '30%' : '50%',
+          transform: `translateX(-50%) scale(${narrow ? 1.02 : 1.06})`,
           filter: 'none', opacity: 1, zIndex: 20 };
       case 'left':
         return { ...base,
-          left: narrow ? '16%' : '24%', bottom: narrow ? '34%' : '26%',
-          height: narrow ? '17%' : '26%',
+          left: narrow ? '14%' : '17%', bottom: narrow ? '36%' : '28%',
+          height: narrow ? '14%' : '23%',
           transform: 'translateX(-50%) scale(1)',
           filter: 'blur(2px)', opacity: 0.85, zIndex: 10 };
       case 'right':
         return { ...base,
-          left: narrow ? '84%' : '76%', bottom: narrow ? '34%' : '26%',
-          height: narrow ? '17%' : '26%',
+          left: narrow ? '86%' : '83%', bottom: narrow ? '36%' : '28%',
+          height: narrow ? '14%' : '23%',
           transform: 'translateX(-50%) scale(1)',
           filter: 'blur(2px)', opacity: 0.85, zIndex: 10 };
       case 'back':
         return { ...base,
-          left: '50%', bottom: narrow ? '36%' : '30%',
-          height: narrow ? '13%' : '20%',
+          left: '50%', bottom: narrow ? '40%' : '34%',
+          height: narrow ? '11%' : '18%',
           transform: 'translateX(-50%) scale(1)',
           filter: 'blur(4px)', opacity: 0.9, zIndex: 5 };
       default:
@@ -259,6 +260,7 @@ export const AwardsSection: React.FC = () => {
     >
       <div ref={rootRef} className={`award-screen${shown ? ' is-in' : ''}`}>
         {/* The word behind the stage — the year where an honour has one. */}
+        <div className="award-glow" aria-hidden="true" />
         <p className="award-ghost" aria-hidden="true">{current?.ghost}</p>
 
         <div className="award-stage" ref={stageRef}>
@@ -314,8 +316,9 @@ export const AwardsSection: React.FC = () => {
             {current?.award.awardedBy}
             {current?.award.year ? ` · ${current.award.year}` : ''}
           </p>
+        </div>
 
-          <div className="award-nav">
+        <div className="award-nav">
             <button type="button" className="award-arrow" onClick={() => navigate('prev')} aria-label={getCMSCopy("copy.AwardsSection.1b32d86cf43a", "Previous honour")}>
               <ArrowLeft size={26} strokeWidth={2.25} />
             </button>
@@ -325,7 +328,6 @@ export const AwardsSection: React.FC = () => {
             <p className="award-count">
               <b>{active + 1}</b> / {n}
             </p>
-          </div>
         </div>
 
         {!hasAwards && (

@@ -1,7 +1,8 @@
 import { getCMSLink } from '../cms/links';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
-import React, { useEffect } from 'react';
-import { X, CalendarPlus, ArrowUpRight, Phone, Infinity as InfinityIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X, CalendarPlus, ArrowUpRight, Phone, Download, Infinity as InfinityIcon } from 'lucide-react';
+import { renderPoster, downloadBlob } from '../utils/eventPoster';
 import { ResolvedEvent } from '../utils/events';
 import {
   MONTHS_SHORT,
@@ -35,6 +36,13 @@ interface InvitationCardProps {
 export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose }) => {
   const { event, date, days, accentA, accentB } = item;
   const pillar = PILLARS.find((p) => p.id === event.pillarId);
+  const [printing, setPrinting] = useState(false);
+  const poster = async () => {
+    if (printing) return;
+    setPrinting(true);
+    try { downloadBlob(await renderPoster(item), `${event.id}-poster.png`); } catch (error) { console.warn('poster', error); }
+    setPrinting(false);
+  };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -69,7 +77,7 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
 
       <div
         id="invitation-card"
-        className="relative w-full max-w-[380px] my-auto rounded-[28px] backdrop-blur-xl border border-white/25 shadow-2xl overflow-hidden text-center"
+        className="relative w-full max-w-[380px] md:max-w-[920px] my-auto rounded-[28px] backdrop-blur-xl border border-white/25 shadow-2xl overflow-hidden text-center md:grid md:grid-cols-[0.92fr_1.08fr] md:text-left"
         style={{
           /* Same graded volunteer-blue ink as the pass it was scanned from. */
           backgroundImage:
@@ -85,53 +93,55 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
           <X className="w-4 h-4" />
         </button>
 
-        {/* Vertical banner: the pillar owns this invitation. */}
-        <div
-          className="px-6 pt-5 pb-4"
-          style={{ background: `linear-gradient(120deg, ${accentA}, ${accentB})` }}
-        >
-          <p className="text-[9px] font-extrabold uppercase tracking-[0.3em] text-white/85 mb-2.5">{getCMSCopy("copy.InvitationCard.a01941bf3134", "Sant Nirankari Charitable Foundation")}</p>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 shadow">
-            <PillarGlyph pillarId={event.pillarId} className="w-4 h-4" />
-            <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-neutral-800">
-              {pillar?.label ?? event.pillarId}
-            </span>
+        {/* The left leaf on a wide screen, the top of the card on a phone: the
+            pillar's banner and the date at poster size. */}
+        <div className="md:flex md:flex-col md:justify-between md:min-h-[520px]">
+          <div
+            className="px-6 pt-5 pb-4 md:pt-7 md:pb-6 md:text-left"
+            style={{ background: `linear-gradient(120deg, ${accentA}, ${accentB})` }}
+          >
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.3em] text-white/85 mb-2.5">{getCMSCopy("copy.InvitationCard.a01941bf3134", "Sant Nirankari Charitable Foundation")}</p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 shadow">
+              <PillarGlyph pillarId={event.pillarId} className="w-4 h-4" />
+              <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-neutral-800">
+                {pillar?.label ?? event.pillarId}
+              </span>
+            </div>
+          </div>
+
+          <div className="px-6 pt-5 md:px-8 md:pt-8 md:pb-8 md:flex-1 md:flex md:flex-col md:justify-center md:text-center" style={{ background: 'rgba(255,255,255,0.04)' }}>
+            <p className="font-signature text-white text-[26px] md:text-[34px] leading-none mb-4">{getCMSCopy("copy.InvitationCard.23eee5083ad7", "You are warmly invited")}</p>
+            {event.kind === 'annual' && date ? (
+              <>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] mb-1" style={{ color: accentB }}>
+                  {date.toLocaleDateString('en-US', { weekday: 'long' })}
+                </p>
+                <p className="font-artistic-heading font-bold text-white text-[64px] md:text-[132px] leading-none tabular-nums">
+                  {date.getDate()}
+                </p>
+                <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-white/70 mt-1">
+                  {MONTHS_SHORT[date.getMonth()]} {date.getFullYear()}
+                  <span className="text-white/45"> · {countdownLabel(days as number).toLowerCase()}</span>
+                </p>
+              </>
+            ) : (
+              <p className="inline-flex items-center justify-center gap-2 font-artistic-heading font-bold text-white text-[28px] md:text-[44px]">
+                <InfinityIcon className="w-6 h-6" />{getCMSCopy("copy.InvitationCard.f0ba2cd588e0", "Year-round")}</p>
+            )}
           </div>
         </div>
 
-        <div className="px-6 pt-5 pb-6">
-          <p className="font-signature text-white text-[26px] leading-none mb-4">{getCMSCopy("copy.InvitationCard.23eee5083ad7", "You are warmly invited")}</p>
-
-          {event.kind === 'annual' && date ? (
-            <>
-              <p
-                className="text-[10px] font-extrabold uppercase tracking-[0.2em] mb-1"
-                style={{ color: accentB }}
-              >
-                {date.toLocaleDateString('en-US', { weekday: 'long' })}
-              </p>
-              <p className="font-artistic-heading font-bold text-white text-[64px] leading-none tabular-nums">
-                {date.getDate()}
-              </p>
-              <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-white/70 mt-1">
-                {MONTHS_SHORT[date.getMonth()]} {date.getFullYear()}
-                <span className="text-white/45"> · {countdownLabel(days as number).toLowerCase()}</span>
-              </p>
-            </>
-          ) : (
-            <p className="inline-flex items-center gap-2 font-artistic-heading font-bold text-white text-[28px]">
-              <InfinityIcon className="w-6 h-6" />{getCMSCopy("copy.InvitationCard.f0ba2cd588e0", "Year-round")}</p>
-          )}
-
-          <h2 className="font-artistic-heading font-bold text-white text-[24px] leading-tight mt-4 mb-2">
+        {/* The right leaf: the moment in words, and what to do about it. */}
+        <div className="px-6 pt-4 pb-6 md:px-9 md:pt-10 md:pb-0 md:flex md:flex-col md:min-h-full">
+          <h2 className="font-artistic-heading font-bold text-white text-[24px] md:text-[32px] leading-tight mt-2 mb-2 md:mt-6">
             {event.title}
           </h2>
 
-          <p className="font-artistic-serif text-white/85 text-[14px] leading-relaxed mb-5">
+          <p className="font-artistic-serif text-white/85 text-[14px] md:text-[15px] leading-relaxed mb-5">
             {event.blurb}
           </p>
 
-          <div className="flex flex-col items-stretch gap-2">
+          <div className="flex flex-col items-stretch gap-2 md:items-start">
             {event.kind === 'annual' && date && (
               <a
                 href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
@@ -140,6 +150,13 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
               >
                 <CalendarPlus className="w-4 h-4" />{getCMSCopy("copy.InvitationCard.9d60f9126db7", "Add to my calendar")}</a>
             )}
+            <button
+              type="button"
+              onClick={poster}
+              disabled={printing}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-[13px] font-bold text-white bg-white/10 border border-white/25 hover:bg-white/20 transition-colors cursor-pointer disabled:opacity-60"
+            >
+              <Download className="w-4 h-4" />{printing ? getCMSCopy("copy.InvitationCard.afc75f4b0552", "Preparing the poster…") : getCMSCopy("copy.InvitationCard.676166b956d1", "Download the poster")}</button>
             {event.href && (
               <a
                 href={event.href}
@@ -151,23 +168,23 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
             )}
             <a
               href={getCMSLink("copy.Link.InvitationCard.e3dc1a537132", "tel:+911147660380")}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold text-white/80 hover:text-white transition-colors cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 md:px-0 rounded-full text-[12px] font-bold text-white/80 hover:text-white transition-colors cursor-pointer"
             >
               <Phone className="w-3.5 h-3.5" />{getCMSCopy("copy.InvitationCard.56a8d952ed9d", "Venue near you: 011-47660380")}</a>
           </div>
 
-          <p className="font-signature text-white/85 text-[21px] leading-none mt-4">{getCMSCopy("copy.InvitationCard.56219e473693", "Service with Humility")}</p>
+          <p className="font-signature text-white/85 text-[21px] md:text-[24px] leading-none mt-4 md:mt-auto md:pt-6">{getCMSCopy("copy.InvitationCard.56219e473693", "Service with Humility")}</p>
 
           {/* The planning table closes the card, as the reference poster's
               team closes its invitation — the supplied volunteer artwork,
               background keyed out so it sits straight on the card's ink,
               full-bleed to the foot. */}
-          <div className="mt-3 -mx-6 -mb-6">
+          <div className="mt-3 -mx-6 -mb-6 md:-mx-9 md:mb-0 md:mt-4">
             <img
               src={resolveCMSAsset("asset.InvitationCard.76f684891a21", "/images/volunteers-planning.webp")}
               alt=""
               aria-hidden="true"
-              className="w-full h-auto block select-none"
+              className="w-full h-auto block select-none md:max-h-[200px] md:object-cover md:object-top"
               draggable={false}
             />
           </div>

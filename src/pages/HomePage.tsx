@@ -7,7 +7,7 @@ import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
-import { PavilionJourney } from '../components/PavilionJourney';
+import { ImpactMosaic } from '../components/ImpactMosaic';
 import { EventsSection } from '../components/EventsSection';
 import { AwardsSection } from '../components/AwardsSection';
 import { PartnersSection } from '../components/PartnersSection';
@@ -19,7 +19,6 @@ import { resolveEvents } from '../utils/events';
 import { PillarModal } from '../components/PillarModal';
 import { SearchModal } from '../components/SearchModal';
 import { WelcomeSplashScreen } from '../components/WelcomeSplashScreen';
-import { SectionJumpButton } from '../components/SectionJumpButton';
 import { GalleryModal } from '../components/GalleryModal';
 import { DonateModal } from '../components/DonateModal';
 import { DevotionalLightboxModal } from '../components/DevotionalLightboxModal';
@@ -96,11 +95,14 @@ export default function HomePage() {
   const activePillarsList = PILLARS;
   const currentPillar = activePillarsList[activeIndex] || activePillarsList[0];
 
-  /* --accent-a/--accent-b are written in exactly one place: the hero section,
-     which is the only thing that knows whether a pillar or the devotional
-     portrait is fronting. App used to write them too and, because child
-     effects run before parent effects, always won — painting the header chrome
-     in the pillar's colour while the stage was devotional rose. */
+  /* --accent-a/--accent-b are written on :root in exactly one place: the hero
+     section, which is the only thing that knows whether a pillar or the
+     devotional portrait is fronting. App used to write them too and, because
+     child effects run before parent effects, always won — painting the header
+     chrome in the pillar's colour while the stage was devotional rose. Below
+     the hero, ImpactMosaic overrides the pair INLINE on .home-page (a closer
+     ancestor of the canvas) for the chapter in view and lifts the override
+     above its first chapter — the hero's writer is never touched. */
 
   // Keyboard navigation
   useEffect(() => {
@@ -199,28 +201,19 @@ export default function HomePage() {
           (z-50). */}
       <CMSSection id="shared.SocialSidebar"><SocialSidebar /></CMSSection>
 
-      {/* Floating section-to-section jump. Root level for the same reason the
-          social rail is: it is a viewport fixture, and inside a section its
-          `position: fixed` would be captured by that section's transform /
-          will-change containing block. Hidden while the splash is up. */}
-      {!isSplashUp && <CMSSection id="shared.SectionJumpButton"><SectionJumpButton /></CMSSection>}
-
       {/* 2. HERO — the site's single hero. */}
       <CMSLayout sections={[
-        {id:'home.intro',node:(<div className="hero-pavilion-sequence">
-      <HeroSection
+        {id:'home.intro',node:(<HeroSection
         activeIndex={activeIndex}
         onActiveIndexChange={handleActiveIndexChange}
         isPaused={isPaused || isSplashUp}
         onTogglePause={() => setIsPaused((prev) => !prev)}
         onOpenDetails={pillar => navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`)}
         introActive={!isSplashUp}
-      />
-
-      {/* 3. THE SCREEN BELOW THE HERO. It carries the current pillar's accent
-             colors to maintain color continuity from the hero section. */}
-      <PavilionJourney />
-      </div>)},
+      />)},
+        /* 3. OUR WORK — the Living Mosaic. An ordinary scrolling section that
+              steers the page accent for the chapter in view (see ImpactMosaic). */
+        {id:'home.mosaic',node:<ImpactMosaic />},
         {id:'home.events',node:<EventsSection />},
         {id:'home.awards',node:<AwardsSection />},
         {id:'home.partners',node:(<PartnersSection

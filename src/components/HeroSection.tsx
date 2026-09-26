@@ -1,5 +1,4 @@
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
-import { HeroCurtain } from './HeroCurtain';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
@@ -90,8 +89,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     const measure = () => {
       // The model canvas and front-stage scale enlarge this slot by ~1.67x.
       // Size its silhouette against the copy while keeping narrow screens usable.
-      const widthLimit = window.innerWidth >= 900 ? window.innerWidth * 0.25 : window.innerWidth * 0.48;
-      setModelBaseSize(Math.round(Math.min(copy.offsetHeight * 0.8, widthLimit)));
+      const widthLimit = window.innerWidth >= 900 ? window.innerWidth * 0.15 : window.innerWidth * 0.34;
+      setModelBaseSize(Math.round(Math.min(copy.offsetHeight * 0.52, widthLimit)));
     };
     const observer = new ResizeObserver(measure);
     observer.observe(copy);
@@ -131,10 +130,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
     const stage = document.getElementById('hero-clone-stage');
     let raf = 0, measurementFrame = 0, extra = 0, viewport = window.innerHeight;
-    let previousHeight = -1, previousExtra = -1, wasFinished: boolean | undefined;
+    let previousHeight = -1, previousExtra = -1, wasFinished: boolean | undefined, lastExit = -1;
     const read = () => {
       raf = 0;
-      const finished = window.scrollY > extra + viewport * .53;
+      /* The exit: as the hero scrolls away its words, figures and wheel fade,
+         and only the watermark petals stay — the overture below picks them up. */
+      const exit = Math.round(Math.min(1, Math.max(0, window.scrollY / (viewport * .6))) * 100) / 100;
+      if (exit !== lastExit) { lastExit = exit; stage?.style.setProperty('--hero-exit', String(exit)); }
+      /* Finished = the hero has scrolled fully out of view. It used to fire at
+         .53 of a viewport, once the copy had faded behind the curtain. */
+      const finished = window.scrollY > extra + viewport;
       if (finished === wasFinished) return;
       wasFinished = finished;
       setHeroVisible(!finished);
@@ -292,8 +297,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none"
       style={{ willChange: 'transform, opacity', transformOrigin: '50% 42%' }}
     >
-      <div className="hero-restored-ground accent-canvas" aria-hidden="true" />
-      <HeroCurtain />
       {/* A quiet studio backdrop: a broad light pool frames the white cards,
           with every overlay fading before the hero hands off to Our Work. */}
       <div
@@ -312,7 +315,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         id="hero-lotus-watermark"
         className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
       >
-        <canvas className="hero-petal-transition-canvas" aria-hidden="true" />
         <img
           src={resolveCMSAsset("asset.HeroSection.51c5d5f403d2", "/images/lotus-watermark.png")}
           alt=""

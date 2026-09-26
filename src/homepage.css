@@ -93,19 +93,6 @@
 #hero-orbit-3d-stage { touch-action: pan-y; }
 #hero-design-studio-drawer { max-width: 1200px; width: 100%; margin-inline: auto; }
 
-/* The work gallery keeps its architectural scroll sequence. */
-#pillars-section .lotus-plaque {
-  background: linear-gradient(145deg, rgb(255 255 255 / .065), rgb(0 0 0 / .12));
-  border-color: rgb(255 255 255 / .13);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgb(0 0 0 / .06);
-  padding: 13px 15px;
-}
-#pillars-section .lotus-room h3 { font-family: 'Outfit', sans-serif; font-weight: 400; letter-spacing: -.025em; }
-#pillars-section .lotus-plate { border-radius: 14px; box-shadow: 0 18px 44px -20px rgb(0 0 0 / .5); }
-#pillars-section .lotus-plate-label { line-height: 1.5; letter-spacing: .1em; }
-#pillars-section .legend-work { transition: color 250ms ease; }
-
 /* Events read as a collection of invitation cards, on the same quiet ground. */
 #events-section { padding-top: 110px; padding-bottom: 34px; }
 #events-section > div > header { padding-bottom: 25px; border-bottom: 1px solid var(--home-line); margin-bottom: 20px; }
@@ -175,4 +162,41 @@
   .hero-chapter { gap: 8px; }
   .hero-chapter i { width: 24px; }
   .hero-playback { gap: 10px; }
+}
+/* Awards: a soft glow in the page's own accent drifts behind the stage; the ground stays the shared canvas. */
+#awards-section .award-glow { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 46% 42% at 50% 58%, color-mix(in srgb, var(--accent-b) 28%, transparent), transparent 70%), radial-gradient(ellipse 30% 30% at 18% 30%, color-mix(in srgb, var(--accent-a) 22%, transparent), transparent 70%); animation: award-glow-drift 14s ease-in-out infinite alternate; }
+@keyframes award-glow-drift { from { transform: translate3d(-2%, 1%, 0) scale(1); } to { transform: translate3d(2%, -2%, 0) scale(1.06); } }
+#awards-section .award-card { border-radius: 22px; transition-property: transform, filter, opacity, left, height, bottom, box-shadow; }
+#awards-section .award-card--center { box-shadow: 0 60px 120px -30px rgb(0 0 0 / .85), 0 0 0 1px rgb(255 255 255 / .25); }
+@media (prefers-reduced-motion: reduce) { #awards-section .award-glow { animation: none; } }
+/* The hero's exit (HeroSection writes --hero-exit as it scrolls away): everything but the petals fades,
+   and the watermark swells and brightens into the ghost petals the overture below assembles. */
+#hero-foreground-content, #hero-settings-trigger { opacity: calc(1 - var(--hero-exit, 0)); }
+#hero-lotus-watermark img { opacity: calc(.045 + var(--hero-exit, 0) * .16); transform: scale(calc(1 + var(--hero-exit, 0) * .22)); }
+
+
+/* ----- the hero wheel's model plates ---------------------------------------
+   Each pillar's 3D model floats over a brush stroke of foil (HeroModelPlate)
+   that carries the vertical's name. The plate reaches past the square slot
+   because the renderer draws into a canvas 44% larger than it
+   (PillarModelCard's -22% inset). */
+.hero-model-card { position: relative; }
+.hero-model-plate { position: absolute; z-index: 0; inset: -30% -30% -46%; }
+.hero-model-plate[data-tone='light'] { --foil: color-mix(in srgb, var(--plate-tint, #fff) 82%, #fff); --frame: rgb(255 255 255 / .95); }
+.hero-model-plate[data-tone='deep'] { --foil: color-mix(in srgb, var(--plate-accent, #000) 82%, #06202b); --frame: rgb(255 255 255 / .9); }
+.hero-plate-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 22px 26px rgb(0 0 0 / .38)); transition: filter 300ms ease; }
+.hero-model-card[data-front='true'] .hero-plate-art { filter: drop-shadow(0 30px 34px rgb(0 0 0 / .48)); }
+.hero-plate-ink { fill: var(--foil); }
+.hero-plate-frame { fill: none; stroke: var(--frame); stroke-width: 2.4; }
+.hero-model-name {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  margin: 0; text-align: center;
+  font: 600 calc(var(--hero-model-size, 320px) * .085)/1 'Cinzel', 'Times New Roman', serif;
+  letter-spacing: .3em; text-indent: .3em; text-transform: uppercase;
+  color: #fff; text-shadow: 0 2px 14px rgb(0 0 0 / .45);
+}
+.hero-model-name::before {
+  content: ''; position: absolute; left: 50%; bottom: calc(100% + var(--hero-model-size, 320px) * .05);
+  width: calc(var(--hero-model-size, 320px) * .16); height: 1px; transform: translateX(-50%);
+  background: rgb(255 255 255 / .6);
 }
