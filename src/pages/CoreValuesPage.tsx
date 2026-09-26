@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ArrowDown, ArrowUpRight, Pause, Play, CalendarDays, Search } from 'lucide-react';
 import { ValueCompass } from '../components/ValueCompass';
+import { ValueAnalytics } from '../components/ValueAnalytics';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
@@ -204,6 +205,7 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
           </article>
         </div>
       </div>
+      <ValueAnalytics pillarId={id} activities={activities} explorerId={`${id}-explorer`} onSelect={setSelectedId} />
       <aside className="value-purpose"><div><p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.3824d3f1b90d", "The purpose behind the progress")}</p><h3>{pillar.subText}</h3></div><ul>{pillar.keyHighlights.map((highlight, i) => <li key={highlight}><span>{getCMSCopy("copy.CoreValuesPage.5feceb66ffc8", "0")}{i + 1}</span>{highlight}</li>)}</ul></aside>
       {index < 2 && <a className="value-next-chapter" href={`#${CORNERSTONES[index + 1]}`}><span>{getCMSCopy("copy.CoreValuesPage.616fea83dd06", "Continue the journey")}</span><strong>{getCMSCopy("copy.CoreValuesPage.7ca10410b52c", "Discover ")}{CORNERSTONES[index + 1]}</strong><ArrowDown size={22} /></a>}
     </section>

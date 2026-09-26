@@ -108,7 +108,7 @@ one of these, with its source stated in the file header.
 | `activities.ts` | Every reported activity and its full data column set | Same report; `period` names the row |
 | `events.ts` | `annual` (fixed calendar date, year computed) and `ongoing` observances | UN / WHO / Mission calendar |
 | `partners.ts` | 12 partner organisations and what each collaboration delivered | `nirankarifoundation.org/our-partners/` |
-| `navigation.ts` | Header nav and the Core Values mega menu | Mirrors the live site |
+| `navigation.ts` | Header nav and the Core Values mega menu | Mirrors the live site Under each cornerstone, `ValueAnalytics` draws an analytics band from the activity data points alone — growth pairs for the dates the report gives, donuts of one measure at one date, share bars, pictograms and rings, all animated on arrival. |
 | `awards.ts` | Eight honours, transcribed from the photographs on the official Honours page | `nirankarifoundation.org/honors-and-recognitions/` (2026-09-26) |
 | `pillarMedia.ts` | Per-pillar imagery | — |
 
