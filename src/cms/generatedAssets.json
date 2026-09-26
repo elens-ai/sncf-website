@@ -446,5 +446,13 @@
   "asset.GuidingForcePage.rajpita": {
     "source": "/images/nirankari-rajpita-ramit-ji.jpg",
     "label": "GuidingForcePage · Rajpita portrait"
+  },
+  "asset.ProjectsPage.healthCity": {
+    "source": "/images/projects/health-city.webp",
+    "label": "ProjectsPage · health-city.webp"
+  },
+  "asset.InvitationCard.logo": {
+    "source": "/images/sncf-logo.webp",
+    "label": "InvitationCard · sncf-logo.webp"
   }
 }

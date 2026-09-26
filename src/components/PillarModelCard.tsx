@@ -4,11 +4,11 @@ import { pillarModelUrl } from '../utils/modelAssets';
 import { resolveCMSAsset, getCMSCopy } from '../cms/runtime';
 import React, { useEffect, useRef, useState } from 'react';
 import { Trees } from 'lucide-react';
-import type { ModelView } from './pillarRenderer';
+import type { Look, ModelView } from './pillarRenderer';
 export const MODEL_PILLARS = new Set(['heal', 'enrich', 'empower', 'projects']);
 
-export function PillarModelCard({ id, label, animate, active = false, rotationRef }: {
-  id: string; label: string; animate: boolean; active?: boolean; rotationRef?: { current: number };
+export function PillarModelCard({ id, label, animate, active = false, rotationRef, look = 'light' }: {
+  id: string; label: string; animate: boolean; active?: boolean; rotationRef?: { current: number }; look?: Look;
 }) {
   useCMSRevision();
   const modelURL = pillarModelUrl(id);
@@ -32,7 +32,7 @@ export function PillarModelCard({ id, label, animate, active = false, rotationRe
       try {
         const { attachModel } = await import('./pillarRenderer');
         if (disposed) return;
-        viewRef.current = attachModel(host, id, setPoster, setLive, () => stateRef.current.rotationRef?.current ?? 0, modelURL);
+        viewRef.current = attachModel(host, id, setPoster, setLive, () => stateRef.current.rotationRef?.current ?? 0, modelURL, look);
         viewRef.current.update({ ...stateRef.current, visible });
       } catch (error) { console.warn(`Unable to load ${id} model`, error); }
     });
@@ -43,7 +43,7 @@ export function PillarModelCard({ id, label, animate, active = false, rotationRe
       viewRef.current?.dispose();
       viewRef.current = null;
     };
-  }, [id, modelURL]);
+  }, [id, modelURL, look]);
   useEffect(() => { viewRef.current?.update({ active, animate }); }, [active, animate]);
   return (
     <div className="relative w-full h-full overflow-visible pointer-events-none" role="img" aria-label={`${label} floating 3D icon`}>

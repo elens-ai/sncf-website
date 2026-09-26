@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { PillarState } from '../types';
 import { CardIllustration } from './CardIllustration';
 import { PillarModelCard, MODEL_PILLARS } from './PillarModelCard';
+import { HeroModelPlate } from './HeroModelPlate';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 interface HeroOrbitWheelProps {
   pillars: PillarState[]; // 4 pillars: HEAL, ENRICH, EMPOWER, PROJECTS
@@ -371,9 +372,10 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
               >
                 {/* Independent Asynchronous Float/Drift Wrapper with extra curved border-radius */}
                 <div
-                  className={`w-full h-full rounded-[32px] ${hasModel ? 'overflow-visible' : 'overflow-hidden'} ${
+                  className={`w-full h-full rounded-[32px] ${hasModel ? 'overflow-visible hero-model-card' : 'overflow-hidden'} ${
                     !reducedMotion && !isPaused && inView && !isDragging ? driftClass : ''
                   } transition-[border,box-shadow] duration-300`}
+                  data-front={hasModel ? cardState.isFrontFacing : undefined}
                   style={{
                     boxShadow: hasModel ? 'none' : cardState.isFrontFacing
                       ? '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 255, 255, 0.25)'
@@ -383,7 +385,11 @@ export const HeroOrbitWheel: React.FC<HeroOrbitWheelProps> = ({
                       : '1.2px solid rgba(255, 255, 255, 0.35)',
                   }}
                 >
-                  {hasModel ? <PillarModelCard id={pillar.id} label={pillar.label} active={isCurrentActive} animate={!reducedMotion && !isPaused && inView && !isDragging} /> : <CardIllustration
+                  {/* The plate: a foil brush stroke the model floats over, the vertical's name beneath.
+                      The renderer's canvas is 44% larger than this slot, so the plate reaches past it too. */}
+                  {hasModel && <HeroModelPlate pillarId={pillar.id} label={pillar.label} accentA={pillar.accentA} accentB={pillar.accentB} tone={pillar.id === 'projects' ? 'deep' : 'light'} />}
+                  {/* the pillar models go dark on the white plate; the Projects bloom keeps its own inks, as authored */}
+                  {hasModel ? <PillarModelCard id={pillar.id} label={pillar.label} look={pillar.id === 'projects' ? 'light' : 'dark'} active={isCurrentActive} animate={!reducedMotion && !isPaused && inView && !isDragging} /> : <CardIllustration
                     pillar={pillar}
                     index={i}
                     roundedClass="rounded-[32px]"

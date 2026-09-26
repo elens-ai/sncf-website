@@ -30,7 +30,7 @@ The Vite development server proxies `/api` to port 3001. Set `CMS_PROXY_TARGET` 
 | Media | Images, videos, audio and GLB/glTF models, organised with folders, tags, alt text, credits, sources and an illustrative-media flag. |
 | Content slots | Existing headings, prose, labels, button text, accessibility descriptions and registered links, searchable by component and current text. |
 | Asset slots | Replace a specific component's source or a shared `/images/...`, `/video/...` or `/models/...` asset. |
-| Component settings | Enable/disable sections and shared controls. Home sections have an order field. The linked hero/pavilion introduction moves together. |
+| Component settings | Enable/disable sections and shared controls. Home sections (hero, Our work mosaic, events, awards, partners, footer) each have an order field. |
 | Site, navigation & branding | Global identity, logo, tagline, contact information, SEO, navigation menus and partner brands. |
 | Pavilion materials, lighting & motion | Material colours, roughness, metalness and texture URLs; room palettes; lights; film windows and frosting; model files; camera motion; bounded render quality; planters, barriers, benches, frames, carpet and finale mosaic settings. |
 | Pages | Page SEO and additional `/pages/:slug` pages using text, media, card grids and supported events/awards components. Existing bespoke page layouts use their content/component slots. |

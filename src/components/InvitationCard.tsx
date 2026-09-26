@@ -1,53 +1,77 @@
 import { getCMSLink } from '../cms/links';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
-import React, { useEffect } from 'react';
-import { X, CalendarPlus, ArrowUpRight, Phone, Infinity as InfinityIcon } from 'lucide-react';
-import { ResolvedEvent } from '../utils/events';
-import {
-  MONTHS_SHORT,
-  countdownLabel,
-  icsHref,
-  wrapCalendar,
-  vevent,
-  nowStamp,
-} from '../utils/events';
+import { resolveCMSMedia } from '../cms/media';
+import React, { useEffect, useState } from 'react';
+import { X, CalendarPlus, ArrowUpRight, Phone, Download, Music, FileImage, QrCode, CalendarDays, BadgeCheck, Infinity as InfinityIcon } from 'lucide-react';
+import { renderArtwork, eventQr, ARTWORK, type ArtworkKind } from '../utils/eventPoster';
+import { ResolvedEvent, MONTHS_SHORT, countdownLabel, icsHref, wrapCalendar, vevent, nowStamp } from '../utils/events';
 import { PILLARS } from '../data/pillars';
 import { PillarGlyph } from './CardIllustration';
+import { FoilStroke } from './FoilStroke';
+import { OdometerStatCounter } from './OdometerStatCounter';
+import './invitation.css';
+const c = (key: string, fallback: string) => getCMSCopy(`copy.InvitationCard.${key}`, fallback);
 
 /**
- * The invitation a scanned pass opens.
+ * THE INVITATION — what a scanned pass opens.
  *
- * A phone camera pointed at a pass's QR code lands here: the same event,
- * presented as a formal invitation card sized for a phone screen — pillar
- * colours as the ground, the vertical named and stamped with its own mark,
- * the date at poster size, and one-tap add-to-calendar. It also opens for
- * anyone following an ?invite= link directly.
+ * A phone camera pointed at a pass's QR code lands here: the moment as a
+ * page on the site's own dark ground — its date on a foil plate in its
+ * pillar's colour, the day rolling in, the words beside it, one-tap
+ * add-to-calendar — and beneath, THE KIT: everything to take away or
+ * share. The poster, banner and story are drawn on the spot (so they
+ * always carry the right date), the pass is the code itself, the calendar
+ * file, the foundation's anthem to play or keep, and the logo for print.
  *
  * Dismissing it clears the ?invite parameter from the URL, so a reload or a
  * share of the address afterwards is the plain site, not a stuck invitation.
  */
-
 interface InvitationCardProps {
   item: ResolvedEvent;
   onClose: () => void;
 }
 
+const KINDS: ArtworkKind[] = ['poster', 'banner', 'story'];
+
 export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose }) => {
   const { event, date, days, accentA, accentB } = item;
   const pillar = PILLARS.find((p) => p.id === event.pillarId);
+  /* The artwork, drawn once the invitation is open; object URLs, revoked on close. */
+  const [art, setArt] = useState<Partial<Record<ArtworkKind, string>>>({});
+  const [pass, setPass] = useState<string | null>(null);
+  useEffect(() => {
+    let live = true;
+    const urls: string[] = [];
+    eventQr(event.id, accentA).then(url => { if (live) setPass(url); }).catch(() => undefined);
+    (async () => {
+      for (const kind of KINDS) {
+        try {
+          const blob = await renderArtwork(item, kind);
+          if (!live) return;
+          const url = URL.createObjectURL(blob); urls.push(url);
+          setArt(current => ({ ...current, [kind]: url }));
+        } catch (error) { console.warn(kind, error); }
+      }
+    })();
+    return () => { live = false; urls.forEach(url => URL.revokeObjectURL(url)); };
+  }, [item]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener('keydown', onKey);
-    };
+    return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
   }, [onClose]);
+
+  const anthem = resolveCMSMedia(resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3"));
+  const logo = resolveCMSMedia(resolveCMSAsset("asset.InvitationCard.logo", "/images/sncf-logo.webp"));
+  const ics = date ? icsHref(wrapCalendar(vevent(event, date, nowStamp()))) : null;
+  const artLabel: Record<ArtworkKind, [string, string]> = {
+    poster: [c('poster', 'Poster'), c('posterMeta', 'Portrait · 1080 × 1350 · PNG')],
+    banner: [c('banner', 'Banner'), c('bannerMeta', 'Landscape · 1600 × 900 · PNG')],
+    story: [c('story', 'Story'), c('storyMeta', 'Portrait · 1080 × 1920 · PNG')],
+  };
 
   return (
     <div
@@ -55,123 +79,99 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
       role="dialog"
       aria-modal="true"
       aria-label={`Invitation: ${event.title}`}
-      className="fixed inset-0 z-[70] flex items-center justify-center p-4 overflow-y-auto animate-fadeIn"
-      style={{ background: `linear-gradient(160deg, ${accentA} 0%, ${accentB} 100%)` }}
+      className="invite-stage"
+      style={{ '--event-ink': accentA, '--event-tint': accentB } as React.CSSProperties}
       onClick={onClose}
     >
-      {/* The lotus the hero carries, as the invitation's watermark. */}
-      <img
-        src={resolveCMSAsset("asset.InvitationCard.51c5d5f403d2", "/images/lotus-watermark.png")}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-contain opacity-[0.08] pointer-events-none select-none"
-      />
+      <img src={resolveCMSAsset("asset.InvitationCard.51c5d5f403d2", "/images/lotus-watermark.png")} alt="" aria-hidden="true" className="invite-watermark" />
+      <div className="invite-motes" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
 
-      <div
-        id="invitation-card"
-        className="relative w-full max-w-[380px] my-auto rounded-[28px] backdrop-blur-xl border border-white/25 shadow-2xl overflow-hidden text-center"
-        style={{
-          /* Same graded volunteer-blue ink as the pass it was scanned from. */
-          backgroundImage:
-            'linear-gradient(172deg, rgba(42, 84, 179, 0.94) 0%, rgba(28, 62, 138, 0.95) 45%, rgba(16, 38, 92, 0.96) 100%)',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          aria-label={getCMSCopy("copy.InvitationCard.745148ba42e1", "Close invitation")}
-          className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 border border-white/15 text-white/80 hover:text-white grid place-items-center transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-        >
-          <X className="w-4 h-4" />
-        </button>
+      <div id="invitation-card" className="invite-card" onClick={(e) => e.stopPropagation()}>
+        <button type="button" onClick={onClose} aria-label={c('745148ba42e1', 'Close invitation')} className="invite-close"><X size={16} /></button>
 
-        {/* Vertical banner: the pillar owns this invitation. */}
-        <div
-          className="px-6 pt-5 pb-4"
-          style={{ background: `linear-gradient(120deg, ${accentA}, ${accentB})` }}
-        >
-          <p className="text-[9px] font-extrabold uppercase tracking-[0.3em] text-white/85 mb-2.5">{getCMSCopy("copy.InvitationCard.a01941bf3134", "Sant Nirankari Charitable Foundation")}</p>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 shadow">
-            <PillarGlyph pillarId={event.pillarId} className="w-4 h-4" />
-            <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-neutral-800">
-              {pillar?.label ?? event.pillarId}
-            </span>
+        <header className="invite-head">
+          <p className="invite-foundation">{c('a01941bf3134', 'Sant Nirankari Charitable Foundation')}</p>
+          <span className="invite-pillar"><PillarGlyph pillarId={event.pillarId} className="invite-pillar-glyph" />{pillar?.label ?? event.pillarId}</span>
+        </header>
+
+        <div className="invite-body">
+          <div className="invite-plate" aria-hidden="true">
+            <FoilStroke id="invite-plate" className="invite-plate-art" />
+            <span className="invite-plate-frame" />
+            <div className="invite-plate-face">
+              {event.kind === 'annual' && date ? (
+                <>
+                  <span className="invite-plate-line">{date.toLocaleDateString('en-GB', { weekday: 'long' })}</span>
+                  <strong className="invite-plate-day"><OdometerStatCounter value={String(date.getDate())} duration={900} /></strong>
+                  <span className="invite-plate-line">{MONTHS_SHORT[date.getMonth()]} {date.getFullYear()}</span>
+                  <span className="invite-plate-count">{countdownLabel(days as number)}</span>
+                </>
+              ) : (
+                <span className="invite-plate-forever"><InfinityIcon size={40} strokeWidth={1.4} /><span className="invite-plate-line">{c('f0ba2cd588e0', 'Year-round')}</span></span>
+              )}
+            </div>
+          </div>
+
+          <div className="invite-words">
+            <p className="invite-script">{c('23eee5083ad7', 'You are warmly invited')}</p>
+            <h2>{event.title}</h2>
+            <p className="invite-blurb">{event.blurb}</p>
+            <div className="invite-actions">
+              {ics && <a href={ics} download={`${event.id}.ics`} className="invite-primary"><CalendarPlus size={16} />{c('9d60f9126db7', 'Add to my calendar')}</a>}
+              {event.href && <a href={event.href} target="_blank" rel="noopener noreferrer" className="invite-secondary">{c('74fa7d10facc', 'Take part')}<ArrowUpRight size={15} /></a>}
+              <a href={getCMSLink("copy.Link.InvitationCard.e3dc1a537132", "tel:+911147660380")} className="invite-phone"><Phone size={13} />{c('56a8d952ed9d', 'Venue near you: 011-47660380')}</a>
+            </div>
+            <p className="invite-signature font-signature">{c('56219e473693', 'Service with Humility')}</p>
           </div>
         </div>
 
-        <div className="px-6 pt-5 pb-6">
-          <p className="font-signature text-white text-[26px] leading-none mb-4">{getCMSCopy("copy.InvitationCard.23eee5083ad7", "You are warmly invited")}</p>
-
-          {event.kind === 'annual' && date ? (
-            <>
-              <p
-                className="text-[10px] font-extrabold uppercase tracking-[0.2em] mb-1"
-                style={{ color: accentB }}
-              >
-                {date.toLocaleDateString('en-US', { weekday: 'long' })}
-              </p>
-              <p className="font-artistic-heading font-bold text-white text-[64px] leading-none tabular-nums">
-                {date.getDate()}
-              </p>
-              <p className="text-[13px] font-bold uppercase tracking-[0.14em] text-white/70 mt-1">
-                {MONTHS_SHORT[date.getMonth()]} {date.getFullYear()}
-                <span className="text-white/45"> · {countdownLabel(days as number).toLowerCase()}</span>
-              </p>
-            </>
-          ) : (
-            <p className="inline-flex items-center gap-2 font-artistic-heading font-bold text-white text-[28px]">
-              <InfinityIcon className="w-6 h-6" />{getCMSCopy("copy.InvitationCard.f0ba2cd588e0", "Year-round")}</p>
-          )}
-
-          <h2 className="font-artistic-heading font-bold text-white text-[24px] leading-tight mt-4 mb-2">
-            {event.title}
-          </h2>
-
-          <p className="font-artistic-serif text-white/85 text-[14px] leading-relaxed mb-5">
-            {event.blurb}
-          </p>
-
-          <div className="flex flex-col items-stretch gap-2">
-            {event.kind === 'annual' && date && (
-              <a
-                href={icsHref(wrapCalendar(vevent(event, date, nowStamp())))}
-                download={`${event.id}.ics`}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-[13px] font-bold text-neutral-900 bg-white shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              >
-                <CalendarPlus className="w-4 h-4" />{getCMSCopy("copy.InvitationCard.9d60f9126db7", "Add to my calendar")}</a>
-            )}
-            {event.href && (
-              <a
-                href={event.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-[13px] font-bold text-white bg-white/10 border border-white/25 hover:bg-white/20 transition-colors cursor-pointer"
-              >{getCMSCopy("copy.InvitationCard.74fa7d10facc", "Take part")}<ArrowUpRight className="w-4 h-4" />
-              </a>
-            )}
-            <a
-              href={getCMSLink("copy.Link.InvitationCard.e3dc1a537132", "tel:+911147660380")}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold text-white/80 hover:text-white transition-colors cursor-pointer"
-            >
-              <Phone className="w-3.5 h-3.5" />{getCMSCopy("copy.InvitationCard.56a8d952ed9d", "Venue near you: 011-47660380")}</a>
+        <section className="invite-kit" aria-labelledby="invite-kit-title">
+          <div className="invite-kit-head">
+            <p className="invite-kicker">{c('kitKicker', 'Take it with you')}</p>
+            <h3 id="invite-kit-title">{c('kitTitle', 'Poster, banner, story, pass — and the anthem')}</h3>
+            <p>{c('kitLead', "Everything to share or print, in the moment's own colours. The artwork is drawn the moment you open this, so it always carries the right date.")}</p>
           </div>
-
-          <p className="font-signature text-white/85 text-[21px] leading-none mt-4">{getCMSCopy("copy.InvitationCard.56219e473693", "Service with Humility")}</p>
-
-          {/* The planning table closes the card, as the reference poster's
-              team closes its invitation — the supplied volunteer artwork,
-              background keyed out so it sits straight on the card's ink,
-              full-bleed to the foot. */}
-          <div className="mt-3 -mx-6 -mb-6">
-            <img
-              src={resolveCMSAsset("asset.InvitationCard.76f684891a21", "/images/volunteers-planning.webp")}
-              alt=""
-              aria-hidden="true"
-              className="w-full h-auto block select-none"
-              draggable={false}
-            />
-          </div>
-        </div>
+          <ul className="invite-kit-grid">
+            {KINDS.map(kind => (
+              <li key={kind} className={`invite-kit-item invite-kit-${kind}`} data-ready={!!art[kind]}>
+                <span className="invite-kit-preview" style={{ aspectRatio: `${ARTWORK[kind].w} / ${ARTWORK[kind].h}` } as React.CSSProperties}>
+                  {art[kind] ? <img src={art[kind]} alt={`${artLabel[kind][0]} — ${event.title}`} /> : <span className="invite-kit-drawing"><FileImage size={22} strokeWidth={1.5} />{c('drawing', 'Drawing…')}</span>}
+                </span>
+                <span className="invite-kit-name">{artLabel[kind][0]}</span>
+                <span className="invite-kit-meta">{artLabel[kind][1]}</span>
+                <a className="invite-kit-get" href={art[kind] ?? '#'} download={`${event.id}-${kind}.png`} aria-disabled={!art[kind]} onClick={e => { if (!art[kind]) e.preventDefault(); }}><Download size={13} />{c('download', 'Download')}</a>
+              </li>
+            ))}
+            <li className="invite-kit-item invite-kit-pass" data-ready={!!pass}>
+              <span className="invite-kit-preview invite-kit-square">{pass ? <img src={pass} alt={c('passAlt', 'The QR code of this invitation')} className="invite-kit-qr" /> : <span className="invite-kit-drawing"><QrCode size={22} strokeWidth={1.5} /></span>}</span>
+              <span className="invite-kit-name">{c('pass', 'Pass')}</span>
+              <span className="invite-kit-meta">{c('passMeta', 'QR code · PNG')}</span>
+              <a className="invite-kit-get" href={pass ?? '#'} download={`${event.id}-pass.png`} aria-disabled={!pass} onClick={e => { if (!pass) e.preventDefault(); }}><Download size={13} />{c('download', 'Download')}</a>
+            </li>
+            {ics && (
+              <li className="invite-kit-item invite-kit-file" data-ready="true">
+                <span className="invite-kit-preview invite-kit-square invite-kit-icon"><CalendarDays size={34} strokeWidth={1.3} /></span>
+                <span className="invite-kit-name">{c('calendar', 'Calendar')}</span>
+                <span className="invite-kit-meta">{c('calendarMeta', 'Add the date · ICS')}</span>
+                <a className="invite-kit-get" href={ics} download={`${event.id}.ics`}><Download size={13} />{c('download', 'Download')}</a>
+              </li>
+            )}
+            <li className="invite-kit-item invite-kit-audio" data-ready="true">
+              <span className="invite-kit-preview invite-kit-square invite-kit-icon"><Music size={34} strokeWidth={1.3} /></span>
+              <span className="invite-kit-name">{c('anthem', 'Anthem')}</span>
+              <span className="invite-kit-meta">{c('anthemMeta', 'The SNCF anthem · MP3')}</span>
+              <audio className="invite-kit-player" controls preload="none" src={anthem} aria-label={c('anthemMeta', 'The SNCF anthem · MP3')} />
+              <a className="invite-kit-get" href={anthem} target="_blank" rel="noopener noreferrer"><ArrowUpRight size={13} />{c('open', 'Open')}</a>
+            </li>
+            <li className="invite-kit-item invite-kit-file" data-ready="true">
+              <span className="invite-kit-preview invite-kit-square invite-kit-icon"><img src={logo} alt="" className="invite-kit-logo" /></span>
+              <span className="invite-kit-name">{c('logo', 'Logo')}</span>
+              <span className="invite-kit-meta">{c('logoMeta', 'Foundation logo · WebP')}</span>
+              <a className="invite-kit-get" href={logo} download="sncf-logo.webp"><Download size={13} />{c('download', 'Download')}</a>
+            </li>
+          </ul>
+          <p className="invite-kit-note"><BadgeCheck size={13} />{c('kitNote', 'Share freely — the pass on every piece opens this same invitation.')}</p>
+        </section>
       </div>
     </div>
   );

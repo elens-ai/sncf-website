@@ -4,14 +4,17 @@ import { CMSSection } from '../cms/CMSContentProvider';
 import { getCMSLink } from '../cms/links';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, CalendarDays, Droplets, Trees, Mountain, House, Building2, Pause, Play } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, CalendarDays, Droplets, Trees, Mountain, House, Pause, Play } from 'lucide-react';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { PillarModelCard } from '../components/PillarModelCard';
 import { MediaGallery } from '../components/MediaGallery';
+import { ProjectAnalytics } from '../components/ProjectAnalytics';
+import { HealthCityFeature } from '../components/HealthCityFeature';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ACTIVITIES, type Activity } from '../data/activities';
 import { mediaReady } from '../data/media';
+import { slug } from '../utils/slug';
 import './projects.css';
 
 const getProjects = () => ACTIVITIES.filter(a => a.pillarId === 'projects');
@@ -21,7 +24,6 @@ let FACES = bindCMSValue(() => ([
   { ink: '#98612b', light: '#f4dfb6', label: getCMSCopy("copy.ProjectsPage.b6baff9358dd", "Land"), scope: getCMSCopy("copy.ProjectsPage.c406304d0b71", "Arid-zone rejuvenation"), icon: Mountain, image: 'projects-4', alt: getCMSCopy("copy.ProjectsPage.7757a5c80e41", "Agricultural land in the evening light"), line: getCMSCopy("copy.ProjectsPage.c2dc7b1fa516", "Restoring the land that sustains us.") },
   { ink: '#856098', light: '#e6d9ee', label: getCMSCopy("copy.ProjectsPage.c864f329f5dd", "Communities"), scope: getCMSCopy("copy.ProjectsPage.904eb1d10ff3", "Since 2017 · Haryana"), icon: House, image: 'enrich-2', alt: getCMSCopy("copy.ProjectsPage.be0da16a46ae", "Students learning together in a classroom"), line: getCMSCopy("copy.ProjectsPage.c2eb86f270ec", "Growing stronger, together.") },
 ]), value => { FACES = value; });
-const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const inkStyle = (i: number) => ({ '--project-ink': FACES[i % FACES.length].ink, '--project-light': FACES[i % FACES.length].light } as React.CSSProperties);
 
 const ProjectsCover: React.FC = () => {
@@ -38,7 +40,7 @@ const ProjectsCover: React.FC = () => {
       <h1 id="projects-heading">{getCMSCopy("copy.ProjectsPage.988b94ac8a81", "Built for people.")}<br /><em>{getCMSCopy("copy.ProjectsPage.27f463b7e8ab", "Rooted in purpose.")}</em></h1>
       <p>{getCMSCopy("copy.ProjectsPage.d90ca7d5eb20", "From reviving water bodies to growing forests and supporting villages, discover how our values become lasting projects.")}</p>
       <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#projects-directory")} className="project-primary-link">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={17} /></a>
-      <div className="projects-cover-index"><span><strong>{getCMSCopy("copy.ProjectsPage.6cd5b6e51936", "04")}</strong>{getCMSCopy("copy.ProjectsPage.ba61ddf6e8f7", " Named campaigns")}</span><span><strong>{getCMSCopy("copy.ProjectsPage.938db8c9f82c", "01")}</strong>{getCMSCopy("copy.ProjectsPage.c0c0d22814e2", " Healthcare campus in development")}</span></div>
+      <div className="projects-cover-index"><span><strong>{getCMSCopy("copy.ProjectsPage.6cd5b6e51936", "04")}</strong>{getCMSCopy("copy.ProjectsPage.ba61ddf6e8f7", " Named campaigns")}</span><span><strong>{getCMSCopy("copy.ProjectsPage.938db8c9f82c", "01")}</strong>{getCMSCopy("copy.ProjectsPage.c0c0d22814e2", " Healthcare campus · OPD services started")}</span></div>
     </div>
     <div className="projects-cover-art">
       <div className="projects-cover-model"><PillarModelCard id="projects" label={getCMSCopy("copy.ProjectsPage.04e2a9728af7", "Projects")} active={active} animate={active && !reduced} /></div>
@@ -87,6 +89,7 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
         <p className="project-source">{getCMSCopy("copy.ProjectsPage.7f9ff188f627", "Foundation activity report · Figures shown as reported.")}</p>
       </div>
     </div>
+    <ProjectAnalytics project={project} />
     {mediaReady(id) > 0 && <MediaGallery section={id} title={`${project.title} — photographs & films`} />}
     <a className="project-next" href={`#${getProjects()[index+1] ? slug(getProjects()[index + 1].title) : 'health-city'}`}><span>{getCMSCopy("copy.ProjectsPage.ba12ecefbd57", "Continue exploring")}</span><strong>{getProjects()[index+1] ? getProjects()[index + 1].title : 'Sant Nirankari Health City'}</strong><ArrowDown size={19} /></a>
   </section>;
@@ -103,7 +106,7 @@ export const ProjectsPage: React.FC = () => {
     <div className="projects-editorial">
       <CMSSection id="ProjectsPage.projects-directory"><section className="projects-directory" id="projects-directory" aria-labelledby="projects-directory-title"><div className="projects-directory-heading"><p className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.bacc0f922481", "Find your connection")}</p><h2 id="projects-directory-title">{getCMSCopy("copy.ProjectsPage.7fad847159d2", "Different paths. Shared purpose.")}</h2><p>{getCMSCopy("copy.ProjectsPage.f4f7c6cc0c7e", "Choose a project and explore its reported reach.")}</p></div><div className="projects-directory-grid">{getProjects().map((p,i) => { const Icon = FACES[i % FACES.length].icon; return <a key={p.id} href={`#${slug(p.title)}`} style={inkStyle(i)}><span><Icon size={25} strokeWidth={1.5} /><small>{getCMSCopy("copy.ProjectsPage.5feceb66ffc8", "0")}{i + 1}</small></span><h3>{p.title.replace(/^Project /,'')}</h3><p>{FACES[i % FACES.length].label}</p><ArrowUpRight size={20} /></a>; })}</div></section></CMSSection>
       {getProjects().map((project,index) => <ProjectChapter key={project.id} project={project} index={index} />)}
-      <CMSSection id="ProjectsPage.health-city"><section className="project-health-city" id="health-city" aria-labelledby="health-city-title"><div className="health-city-art" aria-hidden="true"><Building2 size={140} strokeWidth={.65} /><span>{getCMSCopy("copy.ProjectsPage.4fa87dc022be", "Care, built for tomorrow.")}</span></div><div><p className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.3532c25e1c80", "The next chapter / Under construction")}</p><h2 id="health-city-title">{getCMSCopy("copy.ProjectsPage.3eeeb717e545", "Sant Nirankari")}<br /><em>{getCMSCopy("copy.ProjectsPage.7560b5b78854", "Health City")}</em></h2><p>{getCMSCopy("copy.ProjectsPage.d39d7428ab57", "A multi-specialty charitable hospital campus in North Delhi, intended to make advanced treatment more accessible.")}</p><p className="project-health-note">{getCMSCopy("copy.ProjectsPage.25984a49f9a1", "Activity figures will be added when the campus opens and reporting begins.")}</p><a className="project-primary-link" href={getCMSLink("copy.Link.ProjectsPage.b03f7697e124", "https://www.nirankarihealthcity.org/")} target="_blank" rel="noopener noreferrer">{getCMSCopy("copy.ProjectsPage.5e3c06e2cdd5", "Follow its progress ")}<ArrowUpRight size={17} /></a></div></section></CMSSection>
+      <CMSSection id="ProjectsPage.health-city"><HealthCityFeature /></CMSSection>
       <p className="projects-report-note">{getCMSCopy("copy.ProjectsPage.4a4eb64be162", "Each project’s figures retain their own reporting period and units. Different measures are not combined into a single total.")}</p>
     </div>
   </PageShell>;
