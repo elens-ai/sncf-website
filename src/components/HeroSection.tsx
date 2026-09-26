@@ -81,19 +81,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     Math.min(72, Math.max(28, viewportWidth * 0.05325)) * pillarNameScale,
   );
 
-  const copySizeRef = useRef<HTMLDivElement>(null);
   const [modelBaseSize, setModelBaseSize] = useState(320);
   useEffect(() => {
-    const copy = copySizeRef.current;
-    if (!copy) return;
+    // Sized from the wheel's own stage, so the plate takes the same share of
+    // it on every screen. The front card is drawn at 1.16x (the wheel's front
+    // scale) and its foil plate reaches 1.6x wide and 1.76x tall past the
+    // slot, so these factors put the plate at about 80% of the stage's width
+    // and 90% of its height, whichever binds first.
+    const stage = document.getElementById('hero-orbit-3d-stage');
+    if (!stage) return;
     const measure = () => {
-      // The model canvas and front-stage scale enlarge this slot by ~1.67x.
-      // Size its silhouette against the copy while keeping narrow screens usable.
-      const widthLimit = window.innerWidth >= 900 ? window.innerWidth * 0.15 : window.innerWidth * 0.34;
-      setModelBaseSize(Math.round(Math.min(copy.offsetHeight * 0.52, widthLimit)));
+      const { width, height } = stage.getBoundingClientRect();
+      setModelBaseSize(Math.max(96, Math.round(Math.min(width * 0.431, height * 0.441))));
     };
     const observer = new ResizeObserver(measure);
-    observer.observe(copy);
+    observer.observe(stage);
     measure();
     return () => observer.disconnect();
   }, [viewportWidth]);
@@ -557,7 +559,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           }`}
         >
           <p className="home-eyebrow hero-eyebrow"><span />{getCMSCopy("copy.HeroSection.d5dc0eff1e60", " Service with Humility")}</p>
-          <div ref={copySizeRef} className="w-full flex flex-col">
+          <div className="w-full flex flex-col">
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
               id="hero-script-pillar-name"
