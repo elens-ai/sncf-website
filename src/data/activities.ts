@@ -221,9 +221,11 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
       { label: 'Vann Mahotsav drives', value: '80' },
       { label: 'Vann Mahotsav plantation', value: '16,000' },
     ],
-    images: [
-      { src: '/images/mataji-rajpita-planting.webp', alt: 'Satguru Mata Sudiksha Ji and Nirankari Rajpita Ramit Ji planting a sapling' },
-    ],
+    /* The planting photograph was taken off the album at Rahul's request
+       (26 Sep 2026) — its framing cropped badly in the lead print. A
+       replacement, as a PNG, goes here when supplied; until then the tile
+       borrows the pillar's illustrative set like the others. */
+    images: [],
   },
   {
     id: 'cleanliness',

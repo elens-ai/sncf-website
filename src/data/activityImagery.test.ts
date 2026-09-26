@@ -38,13 +38,18 @@ test('illustrative tiles are labelled and backed by JPEG files; a supplied photo
   assert.deepEqual(activityImage(own), { src: '/images/x.webp', alt: 'A real photograph', illustrative: false });
 });
 
-test('the genuine tree plantation photograph exists on disk as WebP', async () => {
-  const tree = DEFAULT_ACTIVITIES.find(a => a.id === 'tree-plantation')!;
-  const image = activityImage(tree)!;
-  assert.equal(image.illustrative, false);
-  const bytes = await readFile(new URL(`../../public${image.src}`, import.meta.url));
-  assert.equal(bytes.toString('ascii', 0, 4), 'RIFF');
-  assert.equal(bytes.toString('ascii', 8, 12), 'WEBP');
+test('every programme photograph of the foundation\'s own exists on disk as WebP, PNG or JPEG', async () => {
+  for (const activity of DEFAULT_ACTIVITIES) {
+    for (const own of activity.images) {
+      const image = activityImage(activity)!;
+      assert.equal(image.illustrative, false);
+      const bytes = await readFile(new URL(`../../public${own.src}`, import.meta.url));
+      const webp = bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP';
+      const png = bytes[0] === 0x89 && bytes.toString('ascii', 1, 4) === 'PNG';
+      const jpeg = bytes[0] === 0xff && bytes[1] === 0xd8;
+      assert.ok(webp || png || jpeg, `${own.src} is not a WebP, PNG or JPEG`);
+    }
+  }
 });
 
 test('explore links land on the page that owns the activity', () => {
@@ -67,9 +72,11 @@ test('every programme opens onto its own tile picture first, then five or more d
       else assert.ok(activity.images.some(own => own.src === image.src), `${image.src} is unlabelled but not the programme's own`);
     }
   }
-  const tree = activityGallery(DEFAULT_ACTIVITIES.find(a => a.id === 'tree-plantation')!);
-  assert.equal(tree[0].illustrative, false);
-  assert.equal(tree.filter(image => !image.illustrative).length, 1);
+  for (const activity of DEFAULT_ACTIVITIES.filter(a => a.images.length > 0)) {
+    const gallery = activityGallery(activity);
+    assert.equal(gallery[0].illustrative, false);
+    assert.equal(gallery.filter(image => !image.illustrative).length, activity.images.length);
+  }
 });
 
 test('the album turns: step 0 is the default, every step keeps the programmes of a pillar on different photographs, genuine ones stay', () => {
@@ -81,6 +88,7 @@ test('the album turns: step 0 is the default, every step keeps the programmes of
       assert.equal(new Set(shown).size, shown.length, `${pillar} step ${step} repeats a photograph`);
     }
   }
-  const tree = DEFAULT_ACTIVITIES.find(a => a.id === 'tree-plantation')!;
-  for (let step = 0; step < 6; step++) assert.equal(activityImageAt(tree, step)?.illustrative, false);
+  for (const activity of DEFAULT_ACTIVITIES.filter(a => a.images.length > 0)) {
+    for (let step = 0; step < 6; step++) assert.equal(activityImageAt(activity, step)?.illustrative, false, `${activity.id} rotated its own photograph away`);
+  }
 });

@@ -42,7 +42,7 @@ export const DEFAULT_ACTIVITY_IMAGERY: Record<string, string> = {
   'free-schools': 'enrich-gallery-1',      // Every beginning deserves a chance — books on a desk
   'skill-nima': 'enrich-gallery-3',        // Skills for a changing world — a learner with a laptop
   'skill-trades': 'enrich-gallery-5',      // Opening doors through education — open books and notes
-  /* empower — tree plantation carries its own photograph in activities.ts */
+  /* empower */
   'tree-plantation': 'empower-gallery-4',  // A shared responsibility — hands holding a small plant
   'cleanliness': 'empower-gallery-2',      // Change starts in our hands — gardening tools and soil
   'covid-relief': 'empower-gallery-1',     // Growing a more sustainable future — a harvest of vegetables
