@@ -259,9 +259,15 @@ export const AwardsSection: React.FC = () => {
       className="snap-screen relative z-10 w-full min-h-screen overflow-hidden"
     >
       <div ref={rootRef} className={`award-screen${shown ? ' is-in' : ''}`}>
-        {/* The word behind the stage — the year where an honour has one. */}
+        {/* The year behind the masthead, as a watermark; the ornaments — two
+            ticked rings turning slowly, dot grids, a few motes — under it. */}
         <div className="award-glow" aria-hidden="true" />
-        <p className="award-ghost" aria-hidden="true">{current?.ghost}</p>
+        <div className="award-ornaments" aria-hidden="true">
+          <span className="award-ring" /><span className="award-ring award-ring-2" />
+          <span className="award-dots award-dots-a" /><span className="award-dots award-dots-b" />
+          <i /><i /><i /><i /><i /><i />
+        </div>
+        <p className="award-ghost" aria-hidden="true" key={current?.ghost}>{current?.ghost}</p>
 
         <div className="award-stage" ref={stageRef}>
           {items.map((it, i) => {

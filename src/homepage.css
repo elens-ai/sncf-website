@@ -106,7 +106,34 @@
 #awards-section .award-card { border-radius: 18px; border: 1px solid rgb(255 255 255 / .2); box-shadow: 0 32px 65px -25px rgb(0 0 0 / .55); }
 #awards-section .award-title { font-family: 'Outfit', sans-serif; font-weight: 400; letter-spacing: -.035em; }
 #awards-section .award-title em { color: #e8d7b7; font-weight: 400; }
-#awards-section .award-ghost { color: rgb(255 255 255 / .055); }
+/* The year as a watermark behind the masthead: light, outlined, and it
+   fades up anew with every honour. */
+#awards-section .award-ghost {
+  top: clamp(36px, 7vh, 64px); z-index: 2;
+  font-size: clamp(64px, 16vw, 210px); font-weight: 500; letter-spacing: .04em;
+  color: rgb(255 255 255 / .05); -webkit-text-stroke: 1px rgb(255 255 255 / .16);
+  text-shadow: 0 0 40px rgb(255 255 255 / .06);
+  animation: award-ghost-in 1100ms var(--home-ease, cubic-bezier(.22, 1, .36, 1)) both;
+}
+@keyframes award-ghost-in { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+#awards-section .award-ornaments { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+#awards-section .award-ring {
+  position: absolute; left: 50%; top: clamp(120px, 21vh, 190px); width: min(560px, 64vw); aspect-ratio: 1; transform: translate(-50%, -50%);
+  border-radius: 50%; border: 1px solid rgb(255 255 255 / .07);
+  background: repeating-conic-gradient(from 0deg, rgb(255 255 255 / .22) 0deg .5deg, transparent .5deg 6deg);
+  -webkit-mask: radial-gradient(transparent 63%, #000 63.5%, #000 66%, transparent 66.5%); mask: radial-gradient(transparent 63%, #000 63.5%, #000 66%, transparent 66.5%);
+  animation: celestial-spin 140s linear infinite;
+}
+#awards-section .award-ring-2 { width: min(760px, 86vw); border: 0; background: repeating-conic-gradient(from 0deg, rgb(255 255 255 / .14) 0deg .4deg, transparent .4deg 3deg); -webkit-mask: radial-gradient(transparent 68%, #000 68.5%, #000 69.5%, transparent 70%); mask: radial-gradient(transparent 68%, #000 68.5%, #000 69.5%, transparent 70%); animation: celestial-spin-reverse 200s linear infinite; }
+#awards-section .award-dots { position: absolute; width: min(320px, 30vw); aspect-ratio: 1.5; background: radial-gradient(circle, rgb(255 255 255 / .18) 1px, transparent 1.6px) 0 0 / 14px 14px; -webkit-mask: radial-gradient(ellipse at center, #000 30%, transparent 72%); mask: radial-gradient(ellipse at center, #000 30%, transparent 72%); }
+#awards-section .award-dots-a { left: 4%; top: 6%; } #awards-section .award-dots-b { right: 3%; top: 12%; }
+#awards-section .award-ornaments i { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: rgb(255 236 200 / .7); box-shadow: 0 0 10px 3px rgb(255 236 200 / .22); animation: invite-drift 16s ease-in-out infinite alternate; }
+#awards-section .award-ornaments i:nth-child(5) { left: 14%; top: 26%; } #awards-section .award-ornaments i:nth-child(6) { left: 30%; top: 12%; animation-delay: -5s; width: 3px; height: 3px; }
+#awards-section .award-ornaments i:nth-child(7) { left: 68%; top: 9%; animation-delay: -9s; width: 4px; height: 4px; } #awards-section .award-ornaments i:nth-child(8) { left: 84%; top: 30%; animation-delay: -2s; }
+#awards-section .award-ornaments i:nth-child(9) { left: 52%; top: 34%; animation-delay: -12s; width: 3px; height: 3px; } #awards-section .award-ornaments i:nth-child(10) { left: 92%; top: 62%; animation-delay: -7s; width: 4px; height: 4px; }
+@keyframes invite-drift { from { transform: translate(0, 0); } to { transform: translate(24px, -60px); } }
+@media (max-width: 639px) { #awards-section .award-ghost { top: 44px; font-size: 22vw; } #awards-section .award-ring { top: 150px; } }
+@media (prefers-reduced-motion: reduce) { #awards-section .award-ghost, #awards-section .award-ring, #awards-section .award-ornaments i { animation: none !important; } }
 #awards-section .award-arrow { border-width: 1px; border-color: rgb(255 255 255 / .3); width: 42px; height: 42px; background: rgb(255 255 255 / .04); }
 #awards-section .award-standfirst { color: rgb(255 255 255 / .75); }
 
