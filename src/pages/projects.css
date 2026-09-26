@@ -30,3 +30,33 @@
 .project-amrit-emblem .project-motion{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);margin:0;font-size:9px;padding:6px 10px;white-space:nowrap;opacity:0;transition:opacity .2s}
 .project-amrit-emblem:hover .project-motion,.project-amrit-emblem:focus-within .project-motion{opacity:1}
 @media(max-width:600px){.project-impact-row{grid-template-columns:minmax(0,1fr) 100px;gap:12px;min-height:155px}.project-amrit-emblem{width:100px;height:150px}.project-amrit-model{width:84px;height:84px}.project-impact-row .project-selected-metric strong{font-size:clamp(25px,6.7vw,42px);overflow-wrap:anywhere}.project-impact-row .project-report-date{font-size:10px}}
+
+/* ----- Health City: from blueprint to reality (HealthCityFeature) ----- */
+.project-health-city{--hc-ink:#0d6a8c;--hc-tint:#6ac8ed;grid-template-columns:.85fr 1.15fr;background:linear-gradient(120deg,#f5f7f2,#e6f1f5 58%,#f8f1e4);overflow:hidden}
+.hc-copy{min-width:0}
+.hc-chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.hc-chips li{padding:6px 11px;border-radius:20px;border:1px solid #c6dbe3;background:#ffffffb0;font:600 10px/1.4 Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#245c6e}
+.hc-scene{position:relative;aspect-ratio:4/3;min-width:0;isolation:isolate}
+.hc-defs{position:absolute;width:0;height:0;overflow:hidden}
+.hc-dots{position:absolute;width:38%;aspect-ratio:1.5;background:radial-gradient(circle,rgb(13 106 140/.34) 1.2px,transparent 1.9px) 0 0/12px 12px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 72%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 72%);opacity:0;transition:opacity 1.2s ease .3s}
+.hc-dots-a{top:-3%;right:-3%}.hc-dots-b{bottom:-2%;left:-5%}
+.project-health-city[data-arrived='true'] .hc-dots{opacity:1}
+.hc-stroke{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 26px 30px rgb(13 60 80/.16));transform:scaleX(.55);transform-origin:left center;opacity:0;transition:transform 1.4s cubic-bezier(.22,1,.36,1),opacity .8s ease}
+.project-health-city[data-arrived='true'] .hc-stroke{transform:none;opacity:1}
+.hc-ink{fill:color-mix(in srgb,var(--hc-tint) 62%,#fff)}
+.hc-blueprint{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hc-blueprint path,.hc-blueprint rect{fill:none;stroke:var(--hc-ink);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.hc-blueprint .hc-grid{opacity:.13}
+.hc-blueprint .hc-draw{opacity:.55;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1) .35s}
+.project-health-city[data-arrived='true'] .hc-blueprint .hc-draw{stroke-dashoffset:0}
+.hc-render{position:absolute;inset:8% 2% 10% 6%;margin:0;opacity:0;transform:translateY(14px);transition:opacity 1s ease .9s,transform 1.3s cubic-bezier(.22,1,.36,1) .9s}
+.project-health-city[data-arrived='true'] .hc-render{opacity:1;transform:none}
+.hc-render-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hc-render figcaption{position:absolute;right:4%;bottom:-8%;font:500 9px/1.6 Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#4d6b78}
+.hc-badge{position:absolute;left:8%;top:8%;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:20px;background:var(--hc-ink);color:#fff;font:600 10px/1.4 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 12px 24px -10px rgb(13 106 140/.6);opacity:0;transform:scale(.8);transition:opacity .5s ease 1.7s,transform .6s cubic-bezier(.22,1,.36,1) 1.7s}
+.project-health-city[data-arrived='true'] .hc-badge{opacity:1;transform:none}
+.hc-badge i{width:8px;height:8px;border-radius:50%;background:#7ff0c0;box-shadow:0 0 0 0 rgb(127 240 192/.6);animation:hc-pulse 2s ease-out infinite}
+@keyframes hc-pulse{to{box-shadow:0 0 0 9px rgb(127 240 192/0)}}
+.project-analytics{--value-color:var(--project-ink);--value-light:var(--project-light);margin:34px 0 8px}
+@media(max-width:900px){.project-health-city{grid-template-columns:1fr}.hc-scene{aspect-ratio:1.25}}
+@media(prefers-reduced-motion:reduce){.hc-stroke,.hc-render,.hc-badge,.hc-dots{opacity:1!important;transform:none!important}.hc-blueprint .hc-draw{stroke-dashoffset:0}.hc-badge i{animation:none!important}}

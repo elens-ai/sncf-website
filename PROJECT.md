@@ -105,10 +105,11 @@ one of these, with its source stated in the file header.
 | File | Holds | Source |
 |---|---|---|
 | `pillars.ts` | The four pillars — Heal, Enrich, Empower, Projects — with accent colours, stats, highlights | SNCF activity report, March 2026 |
-| `activities.ts` | Every reported activity and its full data column set; Core Values' analytics band (`ValueAnalytics`) is drawn from these data points alone — growth pairs for the dates the report gives, donuts of one measure at one date, share bars, pictograms and rings | Same report; `period` names the row |
+| `activities.ts` | Every reported activity and its full data column set; Core Values' analytics bands (`ValueAnalytics`) and the Projects page's per-project bands (`ProjectAnalytics`) are drawn from these data points alone — growth pairs for the dates the report gives, donuts of one measure at one date, share bars, pictograms and rings | Same report; `period` names the row |
 | `events.ts` | `annual` (fixed calendar date, year computed) and `ongoing` observances | UN / WHO / Mission calendar |
 | `partners.ts` | 12 partner organisations and what each collaboration delivered | `nirankarifoundation.org/our-partners/` |
 | `navigation.ts` | Header nav and the Core Values mega menu | Mirrors the live site |
+| `HealthCityFeature.tsx` (component) | Sant Nirankari Health City, now open: the foundation's render washed onto a foil stroke over a self-drawing blueprint; every statement transcribed from the banner and the report's highlight, no activity figures yet | Foundation banner + activity report |
 | `awards.ts` | Eight honours, transcribed from the photographs on the official Honours page | `nirankarifoundation.org/honors-and-recognitions/` (2026-09-26) |
 | `pillarMedia.ts` | Per-pillar imagery | — |
 

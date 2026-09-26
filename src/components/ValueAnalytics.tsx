@@ -28,19 +28,19 @@ import './value-analytics.css';
  */
 type Cornerstone = 'heal' | 'enrich' | 'empower';
 
-const point = (activities: Activity[], id: string, label: string) =>
+export const point = (activities: Activity[], id: string, label: string) =>
   activities.find(a => a.id === id)?.dataPoints.find(p => p.label === label)?.value ?? '';
-const when = (activities: Activity[], id: string) => activities.find(a => a.id === id)?.period ?? '';
+export const when = (activities: Activity[], id: string) => activities.find(a => a.id === id)?.period ?? '';
 /** "₹4,82,19,252" → 48219252, "19,582,822 sq ft" → 19582822. Never used on prose values. */
-const num = (value: string) => Number(value.replace(/[^\d.]/g, '')) || 0;
-const group = (n: number) => n.toLocaleString('en-US');
-const pct = (part: string, whole: string) => (num(whole) ? Math.round((num(part) / num(whole)) * 1000) / 10 : 0);
+export const num = (value: string) => Number(value.replace(/[^\d.]/g, '')) || 0;
+export const group = (n: number) => n.toLocaleString('en-US');
+export const pct = (part: string, whole: string) => (num(whole) ? Math.round((num(part) / num(whole)) * 1000) / 10 : 0);
 
-const Figure: React.FC<{ value: string; size?: 'xl' | 'lg' | 'md' | 'sm'; plain?: boolean }> = ({ value, size = 'md', plain }) => (
+export const Figure: React.FC<{ value: string; size?: 'xl' | 'lg' | 'md' | 'sm'; plain?: boolean }> = ({ value, size = 'md', plain }) => (
   <span className={`va-figure va-figure-${size}`}>{plain ? value : <OdometerStatCounter value={value} duration={1400} />}</span>
 );
 
-const Card: React.FC<{ title: string; note?: string; period: string; span: number; activityId: string; explorerId: string; onSelect: (id: string) => void; children?: React.ReactNode }> =
+export const Card: React.FC<{ title: string; note?: string; period: string; span: number; activityId?: string; explorerId?: string; onSelect?: (id: string) => void; children?: React.ReactNode }> =
   ({ title, note, period, span, activityId, explorerId, onSelect, children }) => (
     <article className="va-card" style={{ '--span': span } as React.CSSProperties}>
       <header className="va-card-head">
@@ -49,19 +49,19 @@ const Card: React.FC<{ title: string; note?: string; period: string; span: numbe
       </header>
       {note && <p className="va-card-note">{note}</p>}
       <div className="va-card-body">{children}</div>
-      <a className="va-card-link" href={`#${explorerId}`} onClick={() => onSelect(activityId)}>{getCMSCopy("copy.ValueAnalytics.programme", "See the programme")} <ArrowUpRight size={14} aria-hidden="true" /></a>
+      {explorerId && activityId && <a className="va-card-link" href={`#${explorerId}`} onClick={() => onSelect?.(activityId)}>{getCMSCopy("copy.ValueAnalytics.programme", "See the programme")} <ArrowUpRight size={14} aria-hidden="true" /></a>}
     </article>
   );
 
 /* ----- the chart kit ----- */
 
 /** Horizontal bars for figures that share a unit. */
-const Bars: React.FC<{ items: { label: string; value: string; note?: string }[] }> = ({ items }) => {
+export const Bars: React.FC<{ items: { label: string; value: string; note?: string }[]; equal?: boolean }> = ({ items, equal }) => {
   const max = Math.max(1, ...items.map(item => num(item.value)));
   return (
     <ul className="va-bars">
       {items.map((item, i) => (
-        <li key={item.label} style={{ '--v': num(item.value) / max, '--d': `${i * 120}ms` } as React.CSSProperties}>
+        <li key={item.label} style={{ '--v': equal ? 1 : num(item.value) / max, '--d': `${i * 120}ms` } as React.CSSProperties}>
           <span className="va-bar-label">{item.label}{item.note && <small>{item.note}</small>}</span>
           <span className="va-bar-track"><span className="va-bar-fill" /></span>
           <Figure value={item.value} size="sm" />
@@ -72,7 +72,7 @@ const Bars: React.FC<{ items: { label: string; value: string; note?: string }[] 
 };
 
 /** One measure at one date, divided. */
-const Donut: React.FC<{ segments: { label: string; value: string }[]; centre: { value: string; label: string } }> = ({ segments, centre }) => {
+export const Donut: React.FC<{ segments: { label: string; value: string }[]; centre: { value: string; label: string } }> = ({ segments, centre }) => {
   const total = segments.reduce((sum, s) => sum + num(s.value), 0) || 1;
   const C = 2 * Math.PI * 42;
   let offset = 0;
@@ -86,7 +86,7 @@ const Donut: React.FC<{ segments: { label: string; value: string }[]; centre: { 
             style={{ '--len': arc.f * C, '--gap': C, '--d': `${arc.i * 140}ms`, strokeDashoffset: -arc.start * C, opacity: 1 - arc.i * (0.55 / Math.max(1, arcs.length - 1)) } as React.CSSProperties} />
         ))}
       </svg>
-      <div className="va-donut-centre" data-long={centre.value.replace(/\D/g, '').length > 6}><Figure value={centre.value} size="lg" /><span>{centre.label}</span></div>
+      <div className="va-donut-centre" data-long={centre.value.replace(/\D/g, '').length > 6}><Figure value={centre.value} size="lg" /><span className="va-donut-label">{centre.label}</span></div>
       <ul className="va-legend">
         {arcs.map(arc => <li key={arc.label} style={{ '--o': 1 - arc.i * (0.55 / Math.max(1, arcs.length - 1)) } as React.CSSProperties}><i /><span>{arc.label}</span><strong>{arc.value}</strong><small>{Math.round(arc.f * 100)}%</small></li>)}
       </ul>
@@ -95,7 +95,7 @@ const Donut: React.FC<{ segments: { label: string; value: string }[]; centre: { 
 };
 
 /** Two figures the report gives for two dates. */
-const Growth: React.FC<{ label: string; before: { value: string; when: string }; after: { value: string; when: string }; added?: string; addedNote: string }> = ({ label, before, after, added, addedNote }) => {
+export const Growth: React.FC<{ label: string; before: { value: string; when: string }; after: { value: string; when: string }; added?: string; addedNote: string }> = ({ label, before, after, added, addedNote }) => {
   const max = Math.max(1, num(before.value), num(after.value));
   const delta = added ?? group(num(after.value) - num(before.value));
   return (
@@ -116,20 +116,22 @@ const Growth: React.FC<{ label: string; before: { value: string; when: string };
 };
 
 /** A grid of symbols, one per `unit`. */
-const Pictogram: React.FC<{ total: string; unit: number; icon: LucideIcon; legend: string }> = ({ total, unit, icon: Icon, legend }) => {
+export const Pictogram: React.FC<{ total: string; unit: number; icon?: LucideIcon; legend: string }> = ({ total, unit, icon: Icon, legend }) => {
   const count = Math.max(1, Math.round(num(total) / unit));
   return (
     <div className="va-pictogram">
       <div className="va-pictogram-grid" aria-hidden="true">
-        {Array.from({ length: count }, (_, i) => <Icon key={i} size={22} strokeWidth={1.6} style={{ '--i': i } as React.CSSProperties} />)}
+        {Array.from({ length: count }, (_, i) => Icon
+          ? <Icon key={i} size={22} strokeWidth={1.6} style={{ '--i': i } as React.CSSProperties} />
+          : <i key={i} style={{ '--i': i } as React.CSSProperties} />)}
       </div>
-      <p className="va-pictogram-legend"><Icon size={13} strokeWidth={2} aria-hidden="true" /> {legend}</p>
+      <p className="va-pictogram-legend">{Icon ? <Icon size={13} strokeWidth={2} aria-hidden="true" /> : <i aria-hidden="true" />} {legend}</p>
     </div>
   );
 };
 
 /** A share of a stated whole. */
-const Ring: React.FC<{ part: { value: string; label: string }; whole: { value: string; label: string } }> = ({ part, whole }) => {
+export const Ring: React.FC<{ part: { value: string; label: string }; whole: { value: string; label: string } }> = ({ part, whole }) => {
   const share = pct(part.value, whole.value);
   const C = 2 * Math.PI * 42;
   return (
@@ -145,10 +147,10 @@ const Ring: React.FC<{ part: { value: string; label: string }; whole: { value: s
 };
 
 /** Icon, figure, label — for a handful of counts. */
-const Tiles: React.FC<{ items: { icon: LucideIcon; value: string; label: string }[] }> = ({ items }) => (
+export const Tiles: React.FC<{ items: { icon: LucideIcon; value: string; label: string }[] }> = ({ items }) => (
   <ul className="va-tiles">
     {items.map(({ icon: Icon, value, label }, i) => (
-      <li key={label} style={{ '--d': `${i * 90}ms` } as React.CSSProperties}><Icon size={20} strokeWidth={1.6} aria-hidden="true" /><Figure value={value} size="md" /><span>{label}</span></li>
+      <li key={label} style={{ '--d': `${i * 90}ms` } as React.CSSProperties}><Icon size={20} strokeWidth={1.6} aria-hidden="true" /><Figure value={value} size="md" /><span className="va-tile-label">{label}</span></li>
     ))}
   </ul>
 );
@@ -267,13 +269,13 @@ const EmpowerAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelec
 interface BandProps { activities: Activity[]; explorerId: string; onSelect: (id: string) => void }
 const BANDS: Record<Cornerstone, React.FC<BandProps>> = { heal: HealAnalytics, enrich: EnrichAnalytics, empower: EmpowerAnalytics };
 
-export const ValueAnalytics: React.FC<{ pillarId: Cornerstone; activities: Activity[]; explorerId: string; onSelect: (id: string) => void }> = ({ pillarId, activities, explorerId, onSelect }) => {
+/** The band: heading, grid and the one arrival registration that starts every chart in it. */
+export const ChartBand: React.FC<{ id: string; className?: string; children?: React.ReactNode }> = ({ id, className, children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [arrived, setArrived] = useState(false);
   useEffect(() => { const el = ref.current; if (!el) return; return onArrival(el, () => setArrived(true)); }, []);
-  const Band = BANDS[pillarId];
   return (
-    <div className="value-analytics" ref={ref} data-arrived={arrived} id={`${pillarId}-analytics`}>
+    <div className={`value-analytics${className ? ` ${className}` : ''}`} ref={ref} data-arrived={arrived} id={id}>
       <div className="va-heading">
         <div>
           <p className="value-kicker">{getCMSCopy("copy.ValueAnalytics.kicker", "Analytics")}</p>
@@ -281,7 +283,12 @@ export const ValueAnalytics: React.FC<{ pillarId: Cornerstone; activities: Activ
         </div>
         <p>{getCMSCopy("copy.ValueAnalytics.lead", "Every chart is drawn from the figures the foundation reports, each to its own date. Nothing here is estimated.")}</p>
       </div>
-      <div className="va-grid"><Band activities={activities} explorerId={explorerId} onSelect={onSelect} /></div>
+      <div className="va-grid">{children}</div>
     </div>
   );
+};
+
+export const ValueAnalytics: React.FC<{ pillarId: Cornerstone; activities: Activity[]; explorerId: string; onSelect: (id: string) => void }> = ({ pillarId, activities, explorerId, onSelect }) => {
+  const Band = BANDS[pillarId];
+  return <ChartBand id={`${pillarId}-analytics`}><Band activities={activities} explorerId={explorerId} onSelect={onSelect} /></ChartBand>;
 };

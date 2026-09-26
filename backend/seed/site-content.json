@@ -2416,7 +2416,7 @@
     "copy.ProjectsPage.6cd5b6e51936": "04",
     "copy.ProjectsPage.ba61ddf6e8f7": " Named campaigns",
     "copy.ProjectsPage.938db8c9f82c": "01",
-    "copy.ProjectsPage.c0c0d22814e2": " Healthcare campus in development",
+    "copy.ProjectsPage.c0c0d22814e2": " Healthcare campus · OPD services started",
     "copy.ProjectsPage.c71ce8ccf3b4": "Nature",
     "copy.ProjectsPage.bb501d7877eb": "Community",
     "copy.ProjectsPage.04e2a9728af7": "Projects",
@@ -2435,11 +2435,11 @@
     "copy.ProjectsPage.7fad847159d2": "Different paths. Shared purpose.",
     "copy.ProjectsPage.f4f7c6cc0c7e": "Choose a project and explore its reported reach.",
     "copy.ProjectsPage.4fa87dc022be": "Care, built for tomorrow.",
-    "copy.ProjectsPage.3532c25e1c80": "The next chapter / Under construction",
+    "copy.ProjectsPage.3532c25e1c80": "Now open / OPD services started",
     "copy.ProjectsPage.3eeeb717e545": "Sant Nirankari",
     "copy.ProjectsPage.d39d7428ab57": "A multi-specialty charitable hospital campus in North Delhi, intended to make advanced treatment more accessible.",
-    "copy.ProjectsPage.25984a49f9a1": "Activity figures will be added when the campus opens and reporting begins.",
-    "copy.ProjectsPage.5e3c06e2cdd5": "Follow its progress ",
+    "copy.ProjectsPage.25984a49f9a1": "OPD services have started. Activity figures will be added as the campus begins reporting.",
+    "copy.ProjectsPage.5e3c06e2cdd5": "Visit Health City ",
     "copy.ProjectsPage.4a4eb64be162": "Each project’s figures retain their own reporting period and units. Different measures are not combined into a single total.",
     "copy.WhoWeArePage.a01941bf3134": "Sant Nirankari Charitable Foundation",
     "copy.WhoWeArePage.696ab4d5bfb5": "Who we are",
@@ -2789,7 +2789,32 @@
     "copy.ValueAnalytics.sport": "youth sport (NBGSMCT)",
     "copy.ValueAnalytics.kicker": "Analytics",
     "copy.ValueAnalytics.title": "The figures, drawn out",
-    "copy.ValueAnalytics.lead": "Every chart is drawn from the figures the foundation reports, each to its own date. Nothing here is estimated."
+    "copy.ValueAnalytics.lead": "Every chart is drawn from the figures the foundation reports, each to its own date. Nothing here is estimated.",
+    "copy.ProjectsPage.hcChipsSource": "As the foundation reports it",
+    "copy.ProjectsPage.hcChip1": "1,000+ beds",
+    "copy.ProjectsPage.hcChip2": "Multispecialty super-hospital",
+    "copy.ProjectsPage.hcChip3": "North Delhi",
+    "copy.ProjectsPage.hcAlt": "Architectural rendering of Sant Nirankari Health City, its name across the top of the main block",
+    "copy.ProjectsPage.hcCaption": "Sant Nirankari Health City · North Delhi",
+    "copy.ProjectsPage.hcBadge": "OPD services started",
+    "copy.ProjectAnalytics.amrit1": "Amrit across the country",
+    "copy.ProjectAnalytics.amrit2": "Hands in the water",
+    "copy.ProjectAnalytics.volunteers": "volunteers participated",
+    "copy.ProjectAnalytics.volunteerLegend": "Each figure stands for 250,000 volunteers",
+    "copy.ProjectAnalytics.manhours": "manhours",
+    "copy.ProjectAnalytics.vann1": "Forests, plant by plant",
+    "copy.ProjectAnalytics.plantsAcross": "plants, across",
+    "copy.ProjectAnalytics.sites": "sites",
+    "copy.ProjectAnalytics.plantLegend": "Each tree stands for 25,000 plants",
+    "copy.ProjectAnalytics.vann2": "One area, three measures",
+    "copy.ProjectAnalytics.vann2note": "The same forest area, as the report gives it in each unit.",
+    "copy.ProjectAnalytics.watershed1": "Every hamlet, one by one",
+    "copy.ProjectAnalytics.hamletLegend": "Each square is one hamlet",
+    "copy.ProjectAnalytics.villages1": "Direct beneficiaries, of the villages' people",
+    "copy.ProjectAnalytics.direct": "direct beneficiaries",
+    "copy.ProjectAnalytics.villagers": "people in the villages",
+    "copy.ProjectAnalytics.adopted": "villages, adopted whole",
+    "copy.ProjectAnalytics.villages2": "Schools in the villages"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -3239,6 +3264,10 @@
     "asset.GuidingForcePage.rajpita": {
       "source": "/images/nirankari-rajpita-ramit-ji.jpg",
       "label": "GuidingForcePage · Rajpita portrait"
+    },
+    "asset.ProjectsPage.healthCity": {
+      "source": "/images/projects/health-city.webp",
+      "label": "ProjectsPage · health-city.webp"
     }
   },
   "components": {
