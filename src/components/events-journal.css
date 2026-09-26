@@ -1,84 +1,144 @@
-#events-section.events-journal{position:relative;z-index:10;min-height:90svh;padding:110px max(6vw,24px) 70px;background:radial-gradient(ellipse at 0 0,#35634e,transparent 65%),#122f28;color:#faf7ed;scroll-margin-top:70px}
-.journal-heading{display:flex;justify-content:space-between;align-items:end;gap:30px;max-width:1400px;margin:auto}.journal-heading p,.journal-tag,.journal-agenda-title{font:500 10px/1.6 Inter,sans-serif;text-transform:uppercase;letter-spacing:.18em}.journal-heading h2{font:400 clamp(32px,3.7vw,55px)/1.15 Outfit,sans-serif;max-width:730px;margin:12px 0 0}.journal-heading em{font-family:'Dancing Script',cursive;color:#c9d9b8}.journal-heading button{display:flex;gap:10px;align-items:center;white-space:nowrap;padding:13px 20px;border:1px solid #ffffff50;border-radius:30px;font-size:12px}.journal-filters{display:flex;gap:24px;max-width:1400px;margin:35px auto 24px;border-bottom:1px solid #ffffff24;overflow:auto}.journal-filters button{padding:12px 0;white-space:nowrap;font-size:12px;color:#b8cdc3;border-bottom:2px solid transparent}.journal-filters button[aria-pressed=true]{border-color:#e6e7c4;color:#fff}.journal-spread{display:grid;grid-template-columns:1.65fr 1fr;max-width:1400px;margin:auto;background:#f8f6ed;color:#25473a;border-radius:5px 25px 25px 5px;overflow:hidden;box-shadow:0 30px 60px #061c2440;min-height:450px}.journal-feature{display:grid;grid-template-columns:.8fr 1.2fr;gap:26px;padding:40px;animation:journal-turn .55s ease both}.journal-date{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;border:1px solid #29493622;border-radius:120px 120px 5px 5px;overflow:hidden;background:linear-gradient(160deg,#fff,#e5eadc);isolation:isolate}.journal-date span{font:500 11px/1.7 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;z-index:1}.journal-date strong{font:300 clamp(80px,9vw,140px)/1.15 Outfit,sans-serif;color:var(--event-ink);z-index:1}.journal-date i{position:absolute;width:200px;height:200px;background:var(--event-ink);opacity:.1;transform:rotate(35deg);border-radius:85% 8% 85% 8%;bottom:-100px;right:-45px}.journal-feature-copy{align-self:center}.journal-tag{color:var(--event-ink);margin-bottom:16px}.journal-when{font-size:10px!important;color:#6c7c70}.journal-feature h3{font:500 clamp(26px,2.7vw,40px)/1.15 Outfit,sans-serif;letter-spacing:-.025em;margin:15px 0 22px}.journal-feature-copy>p{font:400 13px/1.85 Inter,sans-serif}.journal-actions{display:flex;flex-wrap:wrap;gap:18px;margin-top:28px}.journal-actions a,.journal-actions button{display:inline-flex;align-items:center;gap:8px;font-size:11px;border-bottom:1px solid #8faaa0;padding:8px 0}.journal-agenda{border-left:1px solid #d6ddd1;background:#eff1e7;padding:26px}.journal-agenda-title{display:flex;justify-content:space-between;margin-bottom:17px}.journal-agenda-scroll{max-height:360px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}.journal-agenda button{display:flex;align-items:center;gap:15px;text-align:left;width:100%;padding:17px 10px;border-bottom:1px solid #d6ddd1;transition:background .2s}.journal-agenda button[aria-pressed=true]{background:#fffdf6;box-shadow:inset 3px 0 var(--event-ink)}.journal-mini-date{min-width:39px;display:flex;flex-direction:column;align-items:center;font-size:9px;text-transform:uppercase;color:var(--event-ink)}.journal-mini-date strong{font:400 27px/1.1 Outfit,sans-serif}.journal-agenda button>span:nth-child(2){flex:1}.journal-agenda small{display:block;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:#748373;margin-bottom:5px}.journal-agenda button>span>strong{display:block;font-weight:500;font-size:14px}.events-journal button{cursor:pointer}.events-journal :is(a,button):focus-visible{outline:3px solid #2dacc3;outline-offset:4px}.journal-empty{padding:45px}@keyframes journal-turn{from{opacity:.3;transform:translateY(12px)}to{opacity:1;transform:none}}@media(max-width:950px){.journal-spread{grid-template-columns:1fr}.journal-agenda{border-left:0;border-top:1px solid #d6ddd1}.journal-agenda-scroll{max-height:230px}.journal-feature{min-height:380px}.journal-heading{align-items:start}}@media(max-width:550px){#events-section.events-journal{padding:90px 20px 40px}.journal-heading{flex-direction:column;gap:20px}.journal-filters{gap:20px}.journal-feature{grid-template-columns:1fr;padding:25px;gap:22px}.journal-date{height:145px;border-radius:70px 70px 5px 5px}.journal-date strong{font-size:66px;line-height:1}.journal-feature h3{font-size:31px}.journal-agenda{padding:20px}}@media(prefers-reduced-motion:reduce){.journal-feature{animation:none}.journal-agenda button{transition:none}}
-#events-section.events-journal .journal-heading button{background:#f6f3e9;color:#25473a;border-color:#f6f3e9}#events-section.events-journal .journal-actions button{background:transparent;color:#25473a;border-radius:0;box-shadow:none}#events-section.events-journal .journal-filters button{background:transparent;box-shadow:none;border-radius:0}
-/* Event colours move through the whole spread as the reader chooses a moment. */
-#events-section .journal-spread{background:linear-gradient(120deg,color-mix(in srgb,var(--event-tint) 30%,#fffdf5),#fffaf2 72%);transition:background .6s;box-shadow:0 28px 70px #061c2450,0 0 65px color-mix(in srgb,var(--event-ink) 20%,transparent)}
-#events-section .journal-date{background:linear-gradient(155deg,color-mix(in srgb,var(--event-ink) 70%,#fff),var(--event-ink) 65%,color-mix(in srgb,var(--event-ink) 65%,#072b36));color:#fff;border-color:#ffffff70;box-shadow:inset 0 2px 2px #ffffff90,0 17px 28px color-mix(in srgb,var(--event-ink) 24%,transparent)}
-#events-section .journal-date strong{color:#fff;text-shadow:0 6px 20px #00252c25}.journal-date-mark{position:absolute;top:28px;width:45px;height:45px;color:#fff9;animation:journal-float 5s ease-in-out infinite alternate}.journal-date-mark svg{width:100%;height:100%}#events-section .journal-date i{width:360px;height:360px;bottom:-260px;right:-80px;background:#fff;opacity:.16;animation:journal-water 9s ease-in-out infinite alternate}#events-section .journal-date i.journal-wave-two{bottom:-285px;right:-120px;opacity:.2;animation-direction:alternate-reverse;animation-duration:7s}.journal-sparks b{position:absolute;width:6px;height:6px;background:#ffffffa0;border-radius:50%;left:20%;top:42%;animation:journal-float 4s ease-in-out infinite alternate}.journal-sparks b:nth-child(2){left:78%;top:64%;animation-delay:-2s;width:4px;height:4px}.journal-sparks b:nth-child(3){left:70%;top:22%;animation-delay:-1s;width:3px;height:3px}.journal-chapter{display:flex;justify-content:space-between;gap:15px;color:var(--event-ink);font:600 10px/1.5 Inter,sans-serif;letter-spacing:.12em;padding-bottom:15px;margin-bottom:22px;border-bottom:1px solid color-mix(in srgb,var(--event-ink) 25%,transparent)}.journal-chapter span{opacity:.65;white-space:nowrap}#events-section .journal-agenda{background:linear-gradient(160deg,color-mix(in srgb,var(--event-tint) 35%,#fff),#eef2e9)}#events-section .journal-agenda button{border-radius:10px;margin-bottom:6px;transition:background .3s,transform .3s,box-shadow .3s}#events-section .journal-agenda button:hover{transform:translateX(3px);background:#ffffffa0}#events-section .journal-agenda button[aria-pressed=true]{background:color-mix(in srgb,var(--event-ink) 12%,#fff);box-shadow:inset 4px 0 var(--event-ink),0 5px 16px #193c3010}#events-section .journal-mini-date{border-radius:8px;background:color-mix(in srgb,var(--event-ink) 10%,#fff);padding:8px;min-width:48px}#events-section .journal-actions a{padding:12px 14px;border:0;border-radius:8px;background:var(--event-ink);color:white;box-shadow:0 5px 13px color-mix(in srgb,var(--event-ink) 20%,transparent)}.journal-navigation{display:flex;align-items:center;gap:15px;margin-top:25px;color:var(--event-ink)}.journal-navigation span{font-size:10px;flex:1;text-align:center}#events-section .journal-navigation button{display:grid;place-items:center;width:34px;height:34px;border:1px solid color-mix(in srgb,var(--event-ink) 30%,transparent);border-radius:50%;background:#fff9;color:var(--event-ink);transition:transform .2s}.journal-navigation button:hover{transform:scale(1.1)}@keyframes journal-water{from{transform:rotate(25deg) translateY(0)}to{transform:rotate(55deg) translateY(-18px)}}@keyframes journal-float{from{transform:translateY(-5px)}to{transform:translateY(6px)}}#events-section[data-active=false] *{animation-play-state:paused!important}@media(max-width:550px){.journal-date-mark{top:16px;left:22px;width:30px;height:30px}.journal-chapter{margin-bottom:15px}.journal-navigation{margin-top:20px}}@media(prefers-reduced-motion:reduce){#events-section.events-journal *{animation:none!important;transition:none!important}}
-/* Keep the agenda easy to scan without oversized rows. */
-#events-section.events-journal .journal-agenda{padding:20px}
-#events-section.events-journal .journal-agenda-title{margin-bottom:12px}
-#events-section.events-journal .journal-agenda button{padding:10px 9px;gap:12px;margin-bottom:3px}
-#events-section.events-journal .journal-mini-date{padding:6px;min-width:40px;font-size:8px}
-#events-section.events-journal .journal-mini-date strong{font-size:22px}
-#events-section.events-journal .journal-agenda small{font-size:8px;margin-bottom:3px}
-#events-section.events-journal .journal-agenda button>span:nth-child(2)>strong{font-size:13px;line-height:1.35}
-@media(min-width:951px){
-  #events-section.events-journal .journal-spread{grid-template-columns:minmax(0,2.15fr) minmax(280px,1fr)}
-  #events-section.events-journal .journal-feature{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);padding:32px;gap:26px}
+/* ======================================================================
+   THE SERVICE JOURNAL — on the page's own dark ground (EventsSection).
+   The chosen moment's date stands on a foil plate; its pass is a print;
+   the year's moments are glass rows. --event-ink / --event-tint are the
+   chosen moment's pillar colours.
+   ====================================================================== */
+#events-section.events-journal {
+  position: relative; z-index: 10; min-height: 90svh; overflow: hidden;
+  padding: 110px max(6vw, 24px) 70px; color: #f6f1e4; scroll-margin-top: 70px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(18, 47, 40, .6) 16%, #122f28 34%, #122f28 60%, rgba(18, 47, 40, .85) 78%, rgba(18, 47, 40, .3) 92%, transparent 100%), radial-gradient(ellipse at 0 35%, rgba(53, 99, 78, .7), transparent 60%);
 }
-/* Let the shared page atmosphere emerge before the next chapter begins. */
-.home-page #events-section.events-journal{
-  /* fades in from the shared shade above and out again below — no seam at either edge */
-  background:linear-gradient(to bottom,transparent 0%,rgba(18,47,40,.6) 16%,#122f28 34%,#122f28 60%,rgba(18,47,40,.85) 78%,rgba(18,47,40,.3) 92%,transparent 100%),radial-gradient(ellipse at 0 35%,rgba(53,99,78,.7),transparent 60%);
-  padding-bottom:clamp(90px,12vh,150px);
-}
-/* The pass: the moment's QR code, the poster to take, the invitation to open. */
-.journal-pass{display:flex;gap:18px;align-items:center;margin-top:26px;padding:16px 18px;border-radius:16px;background:color-mix(in srgb,var(--event-ink) 7%,#fff);border:1px solid color-mix(in srgb,var(--event-ink) 18%,transparent)}
-.journal-pass-code{flex:none;display:grid;place-items:center;width:104px;height:104px;border-radius:12px;background:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--event-ink) 18%,transparent);transition:transform .25s}
-.journal-pass-code:hover{transform:scale(1.04)}.journal-pass-code img{display:block;width:96px;height:96px;image-rendering:pixelated}.journal-pass-code>span{width:96px;height:96px;border-radius:8px;background:repeating-linear-gradient(45deg,#eef1ea 0 6px,#fff 6px 12px)}
-.journal-pass-copy{min-width:0}.journal-pass-title{display:flex;align-items:center;gap:7px;margin:0 0 4px;font:600 10px/1.6 Inter,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--event-ink)}
-.journal-pass-copy>p:not(.journal-pass-title){margin:0;font:400 12px/1.6 Inter,sans-serif;color:#5d6d62}
-.journal-pass-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
-#events-section .journal-pass-actions button,#events-section .journal-pass-actions a{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;color:var(--event-ink);background:transparent;border:0;border-bottom:1px solid color-mix(in srgb,var(--event-ink) 40%,transparent);border-radius:0;padding:4px 0;box-shadow:none}
-#events-section .journal-pass-actions button:disabled{opacity:.6;cursor:progress}
-@media(max-width:550px){.journal-pass{flex-direction:column;align-items:flex-start}}
+.events-journal button { cursor: pointer; }
+.events-journal :is(a, button):focus-visible { outline: 3px solid #e6d9b4; outline-offset: 4px; }
 
-/* One screen, whole: the journal fits the viewport it snaps to, so nothing below the fold is trimmed. */
-@media(min-width:951px){
-#events-section.events-journal{min-height:100svh;scroll-snap-align:start;padding:calc(var(--site-header-height,72px) + 18px) clamp(24px,6vw,76px) 28px;display:flex;flex-direction:column;justify-content:center}
-#events-section .journal-heading{align-items:center}
-#events-section .journal-heading h2{font-size:clamp(26px,2.8vw,40px);margin-top:6px}
-#events-section .journal-heading h2 em{display:inline;margin-left:.3em}
-#events-section .journal-filters{margin:16px auto 14px}
-#events-section .journal-filters button{padding:9px 0}
-#events-section .journal-spread{min-height:0;max-height:calc(100svh - var(--site-header-height,72px) - 190px)}
-#events-section .journal-feature{padding:22px 26px;gap:22px;grid-template-columns:.62fr 1.38fr}
-#events-section .journal-date{max-height:100%}
-#events-section .journal-date strong{font-size:clamp(64px,7vw,104px);line-height:1.05}
-#events-section .journal-chapter{padding-bottom:9px;margin-bottom:12px}
-#events-section .journal-tag{margin-bottom:8px}
-#events-section .journal-feature h3{font-size:clamp(22px,2.2vw,32px);margin:8px 0 10px}
-#events-section .journal-feature-copy>p{font-size:12.5px;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-#events-section .journal-actions{margin-top:14px;gap:14px}
-#events-section .journal-actions a{padding:9px 12px}
-#events-section .journal-pass{margin-top:14px;padding:12px 14px;gap:14px}
-#events-section .journal-pass-code{width:84px;height:84px}#events-section .journal-pass-code img,#events-section .journal-pass-code>span{width:76px;height:76px}
-#events-section .journal-pass-copy>p:not(.journal-pass-title){font-size:11.5px;line-height:1.5}
-#events-section .journal-pass-actions{margin-top:6px}
-#events-section .journal-navigation{margin-top:12px}
-#events-section .journal-agenda{display:flex;flex-direction:column;min-height:0}
-#events-section .journal-agenda-scroll{flex:1;max-height:none}
+/* the heading and the filters */
+.journal-heading { display: flex; justify-content: space-between; align-items: end; gap: 30px; max-width: 1400px; margin: auto; }
+.journal-eyebrow, .journal-agenda-title, .journal-chapter { font: 500 10px/1.6 Inter, sans-serif; text-transform: uppercase; letter-spacing: .22em; color: rgb(246 241 228 / .62); }
+.journal-heading h2 { font: 400 clamp(30px, 3.4vw, 50px)/1.15 Outfit, sans-serif; letter-spacing: -.02em; max-width: 730px; margin: 10px 0 0; }
+.journal-heading em { font-family: 'Dancing Script', cursive; font-style: normal; color: #eee4cf; }
+.journal-heading button { display: flex; gap: 10px; align-items: center; white-space: nowrap; padding: 12px 20px; border: 1px solid rgb(255 255 255 / .28); border-radius: 30px; background: rgb(255 255 255 / .06); color: #f6f1e4; font: 600 12px/1 Inter, sans-serif; transition: background .25s, border-color .25s; }
+.journal-heading button:hover { background: rgb(255 255 255 / .12); border-color: rgb(255 255 255 / .5); }
+/* homepage.css still paints any events-section header button paper-white for the old journal; the glass pill wins here */
+#events-section.events-journal .journal-heading button { background: rgb(255 255 255 / .06); color: #f6f1e4; box-shadow: none; }
+#events-section.events-journal .journal-heading button:hover { background: rgb(255 255 255 / .12); }
+#events-section.events-journal .journal-heading h2 { max-width: 730px; }
+.journal-filters { display: flex; justify-content: flex-end; gap: 24px; max-width: 1400px; margin: 30px auto 22px; border-bottom: 1px solid rgb(255 255 255 / .14); overflow: auto; }
+.journal-filters button { padding: 12px 0; white-space: nowrap; font: 500 11px/1 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: rgb(246 241 228 / .6); background: transparent; border: 0; border-bottom: 2px solid transparent; border-radius: 0; margin-bottom: -1px; transition: color .2s, border-color .2s; }
+.journal-filters button[aria-pressed='true'] { color: #fff; border-color: #eee4cf; }
+
+/* the spread */
+.journal-spread { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(280px, 1fr); gap: clamp(24px, 3vw, 44px); max-width: 1400px; margin: auto; }
+.journal-feature { display: grid; grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr); gap: clamp(22px, 3vw, 40px); align-items: center; min-width: 0; }
+.journal-empty { padding: 45px 0; color: rgb(246 241 228 / .7); }
+
+/* the plate: the date on foil */
+.journal-plate { position: relative; container-type: inline-size; width: 100%; max-width: 420px; aspect-ratio: 400 / 440; margin: auto; --foil: color-mix(in srgb, var(--event-tint) 78%, #fff); }
+.journal-plate-art { position: absolute; inset: -5%; width: 110%; height: 110%; overflow: visible; filter: drop-shadow(0 30px 40px rgb(0 0 0 / .45)); animation: journal-breathe 9s ease-in-out infinite alternate; }
+.journal-plate-art .foil-ink { fill: var(--foil); transition: fill .7s ease; }
+.journal-plate-frame { position: absolute; inset: 15% 12%; border: 1.5px solid rgb(255 255 255 / .9); pointer-events: none; }
+.journal-plate-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--event-ink); }
+.journal-plate-mark { width: 11cqw; height: 11cqw; opacity: .7; margin-bottom: 3cqw; }
+.journal-plate-month, .journal-plate-year { font: 500 clamp(9px, 3cqw, 13px)/1.6 'Cinzel', 'Times New Roman', serif; letter-spacing: .3em; text-indent: .3em; text-transform: uppercase; }
+.journal-plate-day { display: block; font: 500 clamp(56px, 30cqw, 128px)/1 Outfit, sans-serif; letter-spacing: -.04em; margin: 1cqw 0; }
+.journal-plate .text-white { color: inherit; }
+.journal-plate .font-artistic-heading { font-family: Outfit, sans-serif; font-weight: 500; }
+
+/* the words */
+.journal-feature-copy { min-width: 0; }
+.journal-chapter { display: flex; justify-content: space-between; gap: 15px; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid rgb(255 255 255 / .14); }
+.journal-chapter span:first-child { color: var(--event-tint); }
+.journal-tag { margin: 0 0 8px; font: 500 clamp(11px, 1vw, 13px)/1.6 'Cinzel', 'Times New Roman', serif; letter-spacing: .28em; text-transform: uppercase; color: rgb(246 241 228 / .85); }
+.journal-feature h3 { margin: 0 0 8px; font: 500 clamp(26px, 2.6vw, 38px)/1.15 Outfit, sans-serif; letter-spacing: -.025em; color: #fff; }
+.journal-when { margin: 0 0 12px; font: 500 10px/1.6 Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: rgb(246 241 228 / .55); }
+.journal-blurb { margin: 0; font: 400 13px/1.75 Inter, sans-serif; color: rgb(246 241 228 / .82); max-width: 56ch; }
+.journal-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 20px; }
+.journal-actions a { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 30px; background: var(--event-ink); color: #fff; font: 600 12px/1 Inter, sans-serif; text-decoration: none; box-shadow: 0 12px 26px -12px color-mix(in srgb, var(--event-ink) 80%, black); transition: transform .25s var(--home-ease), box-shadow .25s; }
+.journal-actions a:hover { transform: translateY(-2px); box-shadow: 0 16px 30px -12px color-mix(in srgb, var(--event-ink) 90%, black); }
+.journal-actions button { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; background: transparent; border: 0; border-bottom: 1px solid rgb(246 241 228 / .45); border-radius: 0; color: #f6f1e4; font: 600 11px/1.6 Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; transition: gap .2s, border-color .2s; }
+.journal-actions button:hover { gap: 12px; border-color: #fff; }
+
+/* the pass: a print laid on the page */
+.journal-pass { display: flex; align-items: center; gap: 22px; margin-top: 22px; }
+.journal-pass-print { flex: none; display: flex; flex-direction: column; width: 124px; padding: 8px 8px 10px; background: #fbf7ee; color: #4a3d30; text-decoration: none; transform: rotate(-3deg); box-shadow: 0 1px 2px rgb(0 0 0 / .2), 0 22px 40px -18px rgb(0 0 0 / .7); transition: transform .35s var(--home-ease), box-shadow .35s; }
+.journal-pass-print:hover { transform: rotate(0deg) translateY(-4px); box-shadow: 0 2px 4px rgb(0 0 0 / .2), 0 30px 50px -18px rgb(0 0 0 / .75); }
+.journal-pass-photo { display: grid; place-items: center; aspect-ratio: 1; background: #fff; }
+.journal-pass-photo img { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.journal-pass-photo > span { width: 100%; aspect-ratio: 1; background: repeating-linear-gradient(45deg, #eef1ea 0 6px, #fff 6px 12px); }
+.journal-pass-caption { margin-top: 8px; font: 600 15px/1.1 'Dancing Script', cursive; }
+.journal-pass-sub { margin-top: 3px; font: 500 7px/1.4 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #8a7a66; }
+.journal-pass-copy { min-width: 0; }
+.journal-pass-copy > p { margin: 0; font: 400 12px/1.6 Inter, sans-serif; color: rgb(246 241 228 / .72); max-width: 40ch; }
+.journal-pass-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; }
+.journal-pass-actions button, .journal-pass-actions a { display: inline-flex; align-items: center; gap: 7px; padding: 4px 0; background: transparent; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--event-tint) 55%, transparent); border-radius: 0; color: var(--event-tint); font: 600 11px/1.6 Inter, sans-serif; text-decoration: none; transition: gap .2s, border-color .2s; }
+.journal-pass-actions button:hover, .journal-pass-actions a:hover { gap: 11px; border-color: var(--event-tint); }
+.journal-pass-actions button:disabled { opacity: .6; cursor: progress; }
+
+/* the navigation */
+.journal-navigation { display: flex; align-items: center; gap: 15px; margin-top: 22px; color: rgb(246 241 228 / .6); }
+.journal-navigation span { flex: 1; text-align: center; font: 500 10px/1.6 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.journal-navigation button { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid rgb(255 255 255 / .3); border-radius: 50%; background: rgb(255 255 255 / .06); color: #f6f1e4; transition: transform .2s, background .2s; }
+.journal-navigation button:hover { transform: scale(1.08); background: rgb(255 255 255 / .14); }
+
+/* the agenda: glass rows */
+.journal-agenda { display: flex; flex-direction: column; min-height: 0; }
+.journal-agenda-title { display: flex; justify-content: space-between; margin: 0 0 12px; padding: 0 4px; }
+.journal-agenda-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / .25) transparent; padding-right: 4px; }
+.journal-agenda button { display: flex; align-items: center; gap: 14px; width: 100%; margin-bottom: 8px; padding: 11px 12px; text-align: left; border: 1px solid rgb(255 255 255 / .1); border-radius: 14px; background: rgb(255 255 255 / .05); color: #f3ecdd; transition: background .3s, transform .3s var(--home-ease), border-color .3s, box-shadow .3s; }
+.journal-agenda button:hover { transform: translateX(4px); background: rgb(255 255 255 / .1); }
+.journal-agenda button[aria-pressed='true'] { background: color-mix(in srgb, var(--event-ink) 30%, rgb(255 255 255 / .06)); border-color: color-mix(in srgb, var(--event-tint) 45%, transparent); box-shadow: inset 3px 0 var(--event-tint); }
+.journal-mini-date { flex: none; display: flex; flex-direction: column; align-items: center; min-width: 46px; padding: 6px 4px; border-radius: 10px; background: color-mix(in srgb, var(--event-ink) 45%, transparent); color: #fff; font: 600 8px/1.4 Inter, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.journal-mini-date strong { font: 500 22px/1.1 Outfit, sans-serif; letter-spacing: -.02em; }
+.journal-mini-words { flex: 1; min-width: 0; }
+.journal-mini-words small { display: block; margin-bottom: 3px; font: 500 8px/1.4 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: rgb(246 241 228 / .55); }
+.journal-mini-words strong { display: block; font: 500 13px/1.35 Outfit, sans-serif; }
+.journal-agenda button > svg { flex: none; color: rgb(246 241 228 / .55); }
+
+/* arrival: the journal comes in as a cascade, and every chosen moment turns the page again */
+.events-journal:not([data-arrived='true']) :is(.journal-heading > *, .journal-filters, .journal-feature, .journal-agenda-title, .journal-agenda button) { opacity: 0; }
+.events-journal[data-arrived='true'] .journal-heading > *, .events-journal[data-arrived='true'] .journal-filters, .events-journal[data-arrived='true'] .journal-agenda-title { animation: journal-rise 700ms var(--home-ease) both; }
+.events-journal[data-arrived='true'] .journal-heading > :nth-child(2) { animation-delay: 80ms; }
+.events-journal[data-arrived='true'] .journal-filters { animation-delay: 160ms; }
+.events-journal[data-arrived='true'] .journal-agenda button { animation: journal-rise 600ms var(--home-ease) both; animation-delay: calc(240ms + var(--i, 0) * 60ms); }
+.events-journal[data-arrived='true'] .journal-feature { opacity: 1; }
+.events-journal[data-arrived='true'] .journal-plate { animation: journal-plate-in 900ms var(--home-ease) both; }
+.events-journal[data-arrived='true'] .journal-feature-copy > * { animation: journal-rise 600ms var(--home-ease) both; }
+.journal-feature-copy > :nth-child(2) { animation-delay: 70ms; } .journal-feature-copy > :nth-child(3) { animation-delay: 140ms; } .journal-feature-copy > :nth-child(4) { animation-delay: 210ms; }
+.journal-feature-copy > :nth-child(5) { animation-delay: 280ms; } .journal-feature-copy > :nth-child(6) { animation-delay: 350ms; } .journal-feature-copy > :nth-child(7) { animation-delay: 420ms; } .journal-feature-copy > :nth-child(8) { animation-delay: 490ms; }
+@keyframes journal-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes journal-plate-in { from { opacity: 0; transform: scale(.9) rotate(-5deg); } to { opacity: 1; transform: none; } }
+@keyframes journal-breathe { from { transform: scale(1) rotate(0deg); } to { transform: scale(1.025) rotate(.6deg); } }
+#events-section[data-active='false'] * { animation-play-state: paused !important; }
+
+/* one screen on desktop: the heading and filters take what they need, the spread takes the rest */
+@media (min-width: 951px) {
+  #events-section.events-journal { height: 100svh; min-height: 0; display: flex; flex-direction: column; justify-content: flex-start; scroll-snap-align: start; padding: calc(var(--site-header-height, 72px) + 18px) clamp(24px, 6vw, 76px) 28px; }
+  .journal-heading, .journal-filters { flex: none; width: 100%; align-items: center; }
+  .journal-heading h2 { font-size: clamp(24px, 2.4vw, 34px); margin-top: 6px; }
+  .journal-filters { margin: 16px auto 18px; }
+  .journal-filters button { padding: 9px 0; }
+  .journal-spread { flex: 1; min-height: 0; width: 100%; grid-template-rows: minmax(0, 1fr); }
+  .journal-feature, .journal-agenda { min-height: 0; }
+  .journal-agenda-scroll { flex: 1; }
+  .journal-plate { width: min(100%, calc((100svh - var(--site-header-height, 72px) - 250px) * 400 / 440)); }
+  .journal-blurb { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 }
-@media(min-width:951px){
-/* The date panel takes the copy's height, never its own: it is a plate beside the words, not the ruler of the row. */
-#events-section .journal-feature{align-items:stretch}
-#events-section .journal-date{aspect-ratio:auto!important;height:auto!important;min-height:0;max-height:none;align-self:stretch}
+@media (max-width: 950px) {
+  .journal-spread { grid-template-columns: 1fr; }
+  .journal-agenda-scroll { max-height: 300px; }
+  .journal-heading { align-items: start; }
+  .journal-plate { max-width: 320px; }
 }
-@media(min-width:951px){
-/* The agenda list was the ruler of the row: give the spread a definite height so the row is one
-   screen and the list scrolls inside it, rather than stretching the feature past the fold. */
-#events-section .journal-spread{height:calc(100svh - var(--site-header-height,72px) - 190px);max-height:none;grid-template-rows:minmax(0,1fr)}
-#events-section .journal-feature,#events-section .journal-agenda{min-height:0}
-#events-section .journal-agenda-scroll{overflow-y:auto}
+@media (max-width: 640px) {
+  #events-section.events-journal { padding: 90px 20px 40px; }
+  .journal-heading { flex-direction: column; gap: 20px; }
+  .journal-filters { justify-content: flex-start; gap: 18px; }
+  .journal-feature { grid-template-columns: 1fr; gap: 24px; }
+  .journal-plate { max-width: 260px; }
+  .journal-feature h3 { font-size: 28px; }
+  .journal-pass { flex-direction: column; align-items: flex-start; }
 }
-@media(min-width:951px){
-/* Exactly one screen: the heading and filters take what they need, the spread takes the rest. */
-#events-section.events-journal{height:100svh;min-height:0;justify-content:flex-start}
-#events-section .journal-heading,#events-section .journal-filters{flex:none;width:100%}
-#events-section .journal-spread{flex:1;height:auto;min-height:0;width:100%}
-#events-section .journal-heading h2{font-size:clamp(24px,2.4vw,34px)}
+@media (prefers-reduced-motion: reduce) {
+  #events-section.events-journal * { animation: none !important; transition: none !important; }
+  .events-journal :is(.journal-heading > *, .journal-filters, .journal-feature, .journal-agenda-title, .journal-agenda button) { opacity: 1 !important; }
 }
-/* The filters sit at the right, where the eye goes after the title. */
-#events-section .journal-filters{justify-content:flex-end}
-@media(max-width:550px){#events-section .journal-filters{justify-content:flex-start}}

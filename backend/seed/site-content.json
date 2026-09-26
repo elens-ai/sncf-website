@@ -2814,7 +2814,31 @@
     "copy.ProjectAnalytics.direct": "direct beneficiaries",
     "copy.ProjectAnalytics.villagers": "people in the villages",
     "copy.ProjectAnalytics.adopted": "villages, adopted whole",
-    "copy.ProjectAnalytics.villages2": "Schools in the villages"
+    "copy.ProjectAnalytics.villages2": "Schools in the villages",
+    "copy.ProjectAnalytics.waterLegend": "Each drop stands for 250 water bodies",
+    "copy.EventsJournal.scan": "Scan for your invitation",
+    "copy.InvitationCard.poster": "Poster",
+    "copy.InvitationCard.posterMeta": "Portrait · 1080 × 1350 · PNG",
+    "copy.InvitationCard.banner": "Banner",
+    "copy.InvitationCard.bannerMeta": "Landscape · 1600 × 900 · PNG",
+    "copy.InvitationCard.story": "Story",
+    "copy.InvitationCard.storyMeta": "Portrait · 1080 × 1920 · PNG",
+    "copy.InvitationCard.kitKicker": "Take it with you",
+    "copy.InvitationCard.kitTitle": "Poster, banner, story, pass — and the anthem",
+    "copy.InvitationCard.kitLead": "Everything to share or print, in the moment's own colours. The artwork is drawn the moment you open this, so it always carries the right date.",
+    "copy.InvitationCard.drawing": "Drawing…",
+    "copy.InvitationCard.download": "Download",
+    "copy.InvitationCard.passAlt": "The QR code of this invitation",
+    "copy.InvitationCard.pass": "Pass",
+    "copy.InvitationCard.passMeta": "QR code · PNG",
+    "copy.InvitationCard.calendar": "Calendar",
+    "copy.InvitationCard.calendarMeta": "Add the date · ICS",
+    "copy.InvitationCard.anthem": "Anthem",
+    "copy.InvitationCard.anthemMeta": "The SNCF anthem · MP3",
+    "copy.InvitationCard.open": "Open",
+    "copy.InvitationCard.logo": "Logo",
+    "copy.InvitationCard.logoMeta": "Foundation logo · WebP",
+    "copy.InvitationCard.kitNote": "Share freely — the pass on every piece opens this same invitation."
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -3268,6 +3292,10 @@
     "asset.ProjectsPage.healthCity": {
       "source": "/images/projects/health-city.webp",
       "label": "ProjectsPage · health-city.webp"
+    },
+    "asset.InvitationCard.logo": {
+      "source": "/images/sncf-logo.webp",
+      "label": "InvitationCard · sncf-logo.webp"
     }
   },
   "components": {
