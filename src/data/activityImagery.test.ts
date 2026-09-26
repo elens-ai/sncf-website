@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { DEFAULT_ACTIVITIES } from './activities';
 import { DEFAULT_PAVILION_GALLERY } from './pavilionGallery';
-import { DEFAULT_ACTIVITY_IMAGERY, activityImage, activityGallery, exploreHref } from './activityImagery';
+import { DEFAULT_ACTIVITY_IMAGERY, activityImage, activityGallery, exploreHref, activityImageAt } from './activityImagery';
 
 test('every reported activity borrows a photograph from its own pillar, and no two share one', () => {
   const photos = DEFAULT_PAVILION_GALLERY.flat();
@@ -70,4 +70,17 @@ test('every programme opens onto its own tile picture first, then five or more d
   const tree = activityGallery(DEFAULT_ACTIVITIES.find(a => a.id === 'tree-plantation')!);
   assert.equal(tree[0].illustrative, false);
   assert.equal(tree.filter(image => !image.illustrative).length, 1);
+});
+
+test('the album turns: step 0 is the default, every step keeps the programmes of a pillar on different photographs, genuine ones stay', () => {
+  for (const pillar of ['heal', 'enrich', 'empower', 'projects']) {
+    const group = DEFAULT_ACTIVITIES.filter(a => a.pillarId === pillar);
+    for (const activity of group) assert.equal(activityImageAt(activity, 0)?.src, activityImage(activity)?.src);
+    for (let step = 1; step < 12; step++) {
+      const shown = group.map(a => activityImageAt(a, step)?.src);
+      assert.equal(new Set(shown).size, shown.length, `${pillar} step ${step} repeats a photograph`);
+    }
+  }
+  const tree = DEFAULT_ACTIVITIES.find(a => a.id === 'tree-plantation')!;
+  for (let step = 0; step < 6; step++) assert.equal(activityImageAt(tree, step)?.illustrative, false);
 });

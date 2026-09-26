@@ -99,7 +99,7 @@
 .mosaic-print-face:hover { --lift: -5px; --zoom: 1.025; }
 .mosaic-print:not(.mosaic-print-lead) .mosaic-print-face:hover { box-shadow: 0 2px 4px rgb(0 0 0 / .18), 0 32px 54px -20px rgb(0 0 0 / .7); }
 .mosaic-print-face[aria-expanded='true'] { outline: 2px solid rgb(255 245 216 / .9); outline-offset: 4px; }
-.mosaic-print-photo { display: block; aspect-ratio: 5 / 4; overflow: hidden; background: #d9d2c6; }
+.mosaic-print-photo { position: relative; display: block; aspect-ratio: 5 / 4; overflow: hidden; background: #d9d2c6; }
 .mosaic-print[data-slot='a'] .mosaic-print-photo, .mosaic-print[data-slot='c'] .mosaic-print-photo { aspect-ratio: 4 / 5; }
 .mosaic-print-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .mosaic-tile-awaiting { display: grid; place-items: center; height: 100%; padding: 16px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a7a66; }
@@ -122,13 +122,26 @@
   -webkit-mask-image: radial-gradient(ellipse 66% 62% at 50% 50%, #000 58%, rgb(0 0 0 / .9) 70%, rgb(0 0 0 / .4) 84%, transparent 100%);
   mask-image: radial-gradient(ellipse 66% 62% at 50% 50%, #000 58%, rgb(0 0 0 / .9) 70%, rgb(0 0 0 / .4) 84%, transparent 100%);
 }
-.mosaic-wash-mask img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.9) contrast(.97); transition: transform 1400ms var(--home-ease); }
-.mosaic-print-lead .mosaic-print-face:hover .mosaic-wash-mask img { transform: scale(1.03); }
+.mosaic-wash-mask img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.9) contrast(.97); }
 .mosaic-print-lead .mosaic-print-caption { position: absolute; left: 7%; top: 7%; max-width: 70%; padding: 0; color: #fff; text-shadow: 0 1px 12px rgb(0 0 0 / .6); }
 .mosaic-print-lead .mosaic-print-title { font-size: clamp(16px, 3.4cqw, 26px); }
 .mosaic-print-figure:empty { display: none; }
 .mosaic-print-lead .mosaic-print-figure, .mosaic-print-lead .mosaic-print-mark { color: rgb(255 255 255 / .82); }
 .mosaic-tiles-note { margin: 12px 0 0; text-align: center; font: 500 9.5px/1.6 'Inter', sans-serif; letter-spacing: .3em; text-transform: uppercase; color: rgb(255 255 255 / .48); }
+
+/* The album turning: a new photograph settles over the one leaving, each
+   print a beat after the last. Between turns the prints breathe — a slow
+   drift inside their frames, each out of step with the next. The lead does
+   not: its wash is an SVG filter, and a moving picture under it would
+   re-run the filter every frame. */
+.mosaic-photo-stack { position: absolute; inset: 0; display: block; }
+.mosaic-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mosaic-photo-in { animation: mosaic-photo-in 1100ms var(--home-ease) both; animation-delay: calc(var(--i, 0) * 120ms); }
+.mosaic-photo-out { animation: mosaic-photo-out 1100ms ease both; animation-delay: calc(var(--i, 0) * 120ms); }
+.mosaic-chapter[data-current='true'] .mosaic-print-photo .mosaic-photo-stack { animation: mosaic-breathe-photo 16s ease-in-out infinite alternate; animation-delay: calc(var(--i, 0) * -4s); }
+@keyframes mosaic-photo-in { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: none; } }
+@keyframes mosaic-photo-out { to { opacity: 0; } }
+@keyframes mosaic-breathe-photo { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.07) translate(-1.5%, 1%); } }
 
 /* Laying the page: the wash develops first, then each print is set down
    in turn, the sprig blooming behind them. */
@@ -186,6 +199,7 @@
   .impact-mosaic [data-reveal] > *, .impact-mosaic .mosaic-foliage { opacity: 1 !important; transform: none !important; animation: none !important; }
   .impact-mosaic .mosaic-print { opacity: 1 !important; transform: rotate(var(--r, 0deg)) !important; animation: none !important; }
   .mosaic-print-face, .mosaic-print-photo img, .mosaic-wash-mask img { transform: none !important; }
+  .mosaic-photo-in, .mosaic-photo-out, .mosaic-photo-stack { animation: none !important; } .mosaic-photo-out { display: none; }
   .mosaic-halo { animation: none; }
   .mosaic-print-face, .mosaic-explore, .mosaic-explore-all, .mosaic-waves { transition: none; }
   .mosaic-spot-card, .mosaic-spotlight, .mosaic-spot-main img { animation: none; }

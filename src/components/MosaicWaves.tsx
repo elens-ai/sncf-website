@@ -81,7 +81,7 @@ function stackedMask(ctx: CanvasRenderingContext2D, height: number) {
 
 const size = (host: HTMLElement) => ({ w: Math.max(1, Math.ceil(host.clientWidth / SCALE)), h: Math.max(1, Math.ceil(host.clientHeight / SCALE)) });
 
-export interface WaveInput { travel: number }
+export interface WaveInput { travel: number; /** set by the album when it turns: one breath ripples through */ nudge?: boolean }
 
 interface MosaicWavesProps {
   /** The pillar on stage, or the programme the reader is on; a change starts the morph. */
@@ -137,6 +137,7 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
       pose.time += delta;
       const target = input.current?.travel ?? pose.travel;
       pose.travel += (target - pose.travel) * (1 - Math.exp(-delta / .25));
+      if (input.current?.nudge) { input.current.nudge = false; pose.ripple = Math.max(pose.ripple, .55); }
       /* with no cursor over the stage the picture sways on its own, a little */
       const swayX = s.tx + Math.sin(pose.time * .11) * .28, swayY = s.ty + Math.sin(pose.time * .07 + 1) * .18;
       pose.px += (swayX - pose.px) * (1 - Math.exp(-delta / .35));

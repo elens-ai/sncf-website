@@ -32,10 +32,29 @@ interface MosaicTileProps {
 /** Where each print lies on the page — the first is the washed lead. */
 const SLOTS = ['lead', 'a', 'b', 'c', 'd'];
 
+/** The photograph, and while the album turns, the one it replaces still
+    fading beneath it. Once the fade has settled the animation class comes
+    off again: the lead sits under an SVG filter, and Chromium keeps
+    re-rasterising a filtered subtree for as long as any animation — even a
+    finished one — remains on a descendant. */
+const Photo: React.FC<{ image: ActivityImage }> = ({ image }) => {
+  const [state, setState] = useState<{ shown: string; leaving: string | null; fresh: boolean }>({ shown: image.src, leaving: null, fresh: false });
+  useEffect(() => {
+    if (image.src === state.shown) return;
+    setState({ shown: image.src, leaving: state.shown, fresh: true });
+    const timer = window.setTimeout(() => setState(s => ({ ...s, leaving: null, fresh: false })), 1700);
+    return () => window.clearTimeout(timer);
+  }, [image.src]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new photograph starts a fade
+  return <span className="mosaic-photo-stack">
+    {state.leaving && <img className="mosaic-photo mosaic-photo-out" src={resolveCMSMedia(state.leaving)} alt="" aria-hidden="true" decoding="async" />}
+    <img key={state.shown} className={state.fresh ? 'mosaic-photo mosaic-photo-in' : 'mosaic-photo'} src={resolveCMSMedia(state.shown)} alt={image.alt} loading="lazy" decoding="async" />
+  </span>;
+};
+
 export const MosaicTile: React.FC<MosaicTileProps> = ({ activity, image, index, open, onOpen, onAttend }) => {
   const lead = index === 0;
   const picture = image
-    ? <img src={resolveCMSMedia(image.src)} alt={image.alt} loading="lazy" decoding="async" />
+    ? <Photo image={image} />
     : <span className="mosaic-tile-awaiting">{getCMSCopy("copy.MosaicTile.6e941a57fcb6", "Photograph to follow")}</span>;
   return (
     <li className={lead ? 'mosaic-print mosaic-print-lead' : 'mosaic-print'} data-slot={SLOTS[index] ?? 'd'} style={{ '--i': index } as React.CSSProperties}>

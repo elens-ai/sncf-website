@@ -5,7 +5,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { PILLARS } from '../data/pillars';
 import type { PillarState } from '../types';
 import { activitiesFor, type Activity } from '../data/activities';
-import { activityImage, exploreHref } from '../data/activityImagery';
+import { activityImageAt, exploreHref } from '../data/activityImagery';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { onArrival } from '../utils/arrival';
@@ -105,11 +105,24 @@ const useMediaFlag = (query: string) => {
 /** "HEAL" as the report writes it → "Heal" as the script face wants it. */
 const titleCase = (label: string) => label.charAt(0) + label.slice(1).toLowerCase();
 
-const MosaicChapter = React.memo(function MosaicChapter({ pillar, index, activities, live, reduced, stacked, openId, onOpen, onAttend }: {
+const TURN_MS = 6000;
+
+const MosaicChapter = React.memo(function MosaicChapter({ pillar, index, activities, live, reduced, stacked, cycle, openId, onOpen, onAttend, onTurn }: {
   pillar: PillarState; index: number; activities: Activity[]; live: boolean; reduced: boolean; stacked: boolean;
-  openId: string | null; onOpen: (activity: Activity) => void; onAttend: (activity: Activity | null) => void;
+  /** The album turns while the chapter rests on screen with nothing open. */
+  cycle: boolean; openId: string | null; onOpen: (activity: Activity) => void; onAttend: (activity: Activity | null) => void; onTurn: () => void;
 }) {
   const name = titleCase(pillar.label);
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    if (!cycle) return;
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      setStep(s => s + 1);
+      onTurn();
+    }, TURN_MS);
+    return () => window.clearInterval(timer);
+  }, [cycle, onTurn]);
   const flagship = pillar.id === 'projects';
   const marked = activities.some(activity => activity.images.length > 0);
   return (
@@ -135,7 +148,7 @@ const MosaicChapter = React.memo(function MosaicChapter({ pillar, index, activit
           <MosaicFoliage pillarId={pillar.id} />
           <ul className="mosaic-prints" aria-label={`${name} programmes`}>
             {activities.map((activity, i) => (
-              <MosaicTile key={activity.id} activity={activity} image={activityImage(activity)} index={i} open={openId === activity.id} onOpen={onOpen} onAttend={onAttend} />
+              <MosaicTile key={activity.id} activity={activity} image={activityImageAt(activity, step)} index={i} open={openId === activity.id} onOpen={onOpen} onAttend={onAttend} />
             ))}
           </ul>
         </div>
@@ -159,6 +172,7 @@ export const ImpactMosaic: React.FC = () => {
   /* The stage's progress, 0..1 across all four chapters, handed to the waves
      without a DOM read: the reader writes it, the wave clock reads it. */
   const waveInput = useRef<WaveInput>({ travel: 0 });
+  const turn = useCallback(() => { waveInput.current.nudge = true; }, []);
   const chapters = useMemo(() => PILLARS.map(pillar => ({ pillar, activities: activitiesFor(pillar.id) })), [revision]);
   const spotlightPillar = spotlight ? PILLARS.find(p => p.id === spotlight.pillarId) : undefined;
 
@@ -296,7 +310,9 @@ export const ImpactMosaic: React.FC = () => {
           live={current === pillar.id}
           reduced={reduced}
           stacked={!staged}
+          cycle={active && current === pillar.id && !spotlight && !reduced}
           openId={spotlight?.id ?? null}
+          onTurn={turn}
           onOpen={open}
           onAttend={setAttended}
         />

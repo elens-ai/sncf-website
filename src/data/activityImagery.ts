@@ -70,6 +70,24 @@ export function activityImage(activity: Activity): ActivityImage | null {
   return photo ? { src: photo.src, alt: photo.alt, illustrative: true } : null;
 }
 
+/**
+ * THE ALBUM TURNS. While a chapter rests on screen its illustrative prints
+ * change every few seconds: the pillar's whole set moves one place along,
+ * so at any step every programme still shows a different photograph, and
+ * step 0 is exactly the default pairing above. A programme's own photograph
+ * (a foundation one, labelled as such) never rotates.
+ */
+export function activityImageAt(activity: Activity, step: number): ActivityImage | null {
+  const start = activityImage(activity);
+  if (!start || !start.illustrative || step === 0) return start;
+  const room = PAVILION_IDS.indexOf(activity.pillarId);
+  const set = PAVILION_GALLERY[room] ?? [];
+  const base = set.findIndex(photo => photo.src === start.src);
+  if (base < 0 || set.length < 2) return start;
+  const photo = set[(base + step) % set.length];
+  return { src: photo.src, alt: photo.alt, illustrative: true };
+}
+
 /** Where "Explore" leads: the Projects page for flagship projects, Core Values otherwise. */
 export const exploreHref = (activity: Activity) =>
   activity.pillarId === 'projects' ? `/projects#${slug(activity.title)}` : `/core-values#${activity.id}`;
