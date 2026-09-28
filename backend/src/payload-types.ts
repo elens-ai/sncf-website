@@ -453,7 +453,7 @@ export interface Award {
   order?: number | null;
   title: string;
   awardedBy: string;
-  year: string;
+  year?: string | null;
   note?: string | null;
   featured?: boolean | null;
   photos?:
