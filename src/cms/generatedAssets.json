@@ -1,7 +1,7 @@
 {
   "asset.AnthemPlayer.bf1bfa524baa": {
-    "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3",
-    "label": "AnthemPlayer · sncf-anthem.mp3"
+    "source": "/media/sncf-anthem-instrumental-v1.2.mp3",
+    "label": "AnthemPlayer · sncf-anthem-instrumental-v1.2.mp3"
   },
   "asset.AwardsSection.56b9a5e0ea79": {
     "source": "/images/satguru-mata-sudiksha-ji.jpg",

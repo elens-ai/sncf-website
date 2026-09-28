@@ -4,9 +4,9 @@ import { resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
-const anthemURL = () => resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3");
-/** The anthem is cued past its intro. */
-const START_AT_SECONDS = 5;
+const anthemURL = () => resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "/media/sncf-anthem-instrumental-v1.2.mp3");
+/** The instrumental (v1.2, 3:05) plays from its first note. */
+const START_AT_SECONDS = 0;
 const VOLUME = 0.7;
 const MUTED_KEY = 'sncf:anthem-muted';
 

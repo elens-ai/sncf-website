@@ -64,7 +64,7 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
     return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
   }, [onClose]);
 
-  const anthem = resolveCMSMedia(resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-anthem.mp3"));
+  const anthem = resolveCMSMedia(resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "/media/sncf-anthem-instrumental-v1.2.mp3"));
   const logo = resolveCMSMedia(resolveCMSAsset("asset.InvitationCard.logo", "/images/sncf-logo.webp"));
   const ics = date ? icsHref(wrapCalendar(vevent(event, date, nowStamp()))) : null;
   const artLabel: Record<ArtworkKind, [string, string]> = {
@@ -161,7 +161,7 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
               <span className="invite-kit-name">{c('anthem', 'Anthem')}</span>
               <span className="invite-kit-meta">{c('anthemMeta', 'The SNCF anthem · MP3')}</span>
               <audio className="invite-kit-player" controls preload="none" src={anthem} aria-label={c('anthemMeta', 'The SNCF anthem · MP3')} />
-              <a className="invite-kit-get" href={anthem} target="_blank" rel="noopener noreferrer"><ArrowUpRight size={13} />{c('open', 'Open')}</a>
+              <a className="invite-kit-get" href={anthem} download="sncf-anthem-instrumental-v1.2.mp3"><Download size={13} />{c('download', 'Download')}</a>
             </li>
             <li className="invite-kit-item invite-kit-file" data-ready="true">
               <span className="invite-kit-preview invite-kit-square invite-kit-icon"><img src={logo} alt="" className="invite-kit-logo" /></span>
