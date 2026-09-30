@@ -1,0 +1,73 @@
+/* The hero and subsequent sections share one viewport-sized color surface.
+   Registered stops let both hero selections and chapter changes blend. */
+@property --backdrop-dark { syntax: '<color>'; inherits: true; initial-value: #174c3e; }
+@property --backdrop-mid { syntax: '<color>'; inherits: true; initial-value: #397f62; }
+@property --backdrop-light { syntax: '<color>'; inherits: true; initial-value: #90cfae; }
+@property --backdrop-pale { syntax: '<color>'; inherits: true; initial-value: #cde9d9; }
+
+.home-page, .heal-layered-backdrop {
+  --backdrop-dark: #174c3e;
+  --backdrop-mid: #397f62;
+  --backdrop-light: #90cfae;
+  --backdrop-pale: #cde9d9;
+  --backdrop-shadow: #0b573033;
+  --backdrop-edge: #e5ffeb44;
+}
+.home-page:not([data-chapter-theme])[data-hero-theme='enrich'],
+.home-page[data-chapter-theme='enrich'],
+.heal-layered-backdrop[data-theme='enrich'] {
+  --backdrop-dark: #164b60;
+  --backdrop-mid: #408ca8;
+  --backdrop-light: #9bd8eb;
+  --backdrop-pale: #e0f4fb;
+  --backdrop-shadow: #0c517e36;
+  --backdrop-edge: #eafaff55;
+}
+.home-page:not([data-chapter-theme])[data-hero-theme='empower'],
+.home-page[data-chapter-theme='empower'],
+.heal-layered-backdrop[data-theme='empower'] {
+  --backdrop-dark: #682e48;
+  --backdrop-mid: #ad6088;
+  --backdrop-light: #eeb5d2;
+  --backdrop-pale: #fbe5f0;
+  --backdrop-shadow: #8f28533b;
+  --backdrop-edge: #fff0f855;
+}
+.home-page:not([data-chapter-theme])[data-hero-theme='projects'],
+.home-page[data-chapter-theme='projects'],
+.heal-layered-backdrop[data-theme='projects'] {
+  --backdrop-dark: #20494d;
+  --backdrop-mid: #4b9094;
+  --backdrop-light: #b4ddd6;
+  --backdrop-pale: #e4f3ed;
+  --backdrop-shadow: #1c696333;
+  --backdrop-edge: #effff455;
+}
+.home-page {
+  transition: --backdrop-dark 850ms ease-in-out, --backdrop-mid 850ms ease-in-out,
+    --backdrop-light 850ms ease-in-out, --backdrop-pale 850ms ease-in-out;
+}
+.home-page > .accent-canvas {
+  background: linear-gradient(calc(var(--stage-angle, 135deg) - 35deg), var(--backdrop-dark), var(--backdrop-mid) 43%, var(--backdrop-light) 77%, var(--backdrop-pale));
+  transition: none;
+}
+.home-page > .accent-canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #031b1840, #03151f99);
+  opacity: var(--page-depth, 0);
+}
+/* Feather every hero-only layer, including the photo and both curved sheets,
+   so their lower edge reveals the very same surface as Our Work. */
+.home-page #hero-clone-stage > :is(.heal-layered-backdrop, .hero-studio-light, .hero-studio-ground) {
+  mask-image: linear-gradient(180deg, #000 45%, #000d 65%, #0005 85%, transparent 100%);
+}
+@media (max-width: 899px) {
+  .home-page > .accent-canvas {
+    background: linear-gradient(calc(var(--stage-angle, 135deg) + 25deg), var(--backdrop-dark), var(--backdrop-mid) 52%, var(--backdrop-light));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-page { transition: none; }
+}

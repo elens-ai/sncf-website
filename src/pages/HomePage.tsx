@@ -23,6 +23,7 @@ import { GalleryModal } from '../components/GalleryModal';
 import { DonateModal } from '../components/DonateModal';
 import { DevotionalLightboxModal } from '../components/DevotionalLightboxModal';
 import { DevotionalLeader } from '../components/DevotionalPhotoCard';
+import '../pillar-background.css';
 
 /** The invite id from the URL. Tolerates the mangled ?invite-<id> form some
     scanner apps and hand-typed addresses produce alongside the canonical
@@ -160,11 +161,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="home-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none">
-      {/* ONE gradient for the whole page. Absolute, not fixed, so it spans the
-          full document height and the ramp runs continuously from the top of
-          the hero to the bottom of the last screen — the sections themselves
-          paint nothing, so there is no boundary for a seam to appear at. */}
+    <div className="home-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none" data-hero-theme={currentPillar.id}>
+      {/* One fixed color surface beneath the hero and every following section.
+          The active chapter takes over the palette as it enters view. */}
       <div className="accent-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
 
       {/* 0. WELCOME SPLASH SCREEN — hands off to the hero via a shared-element
@@ -213,7 +212,7 @@ export default function HomePage() {
       />)},
         /* 3. OUR WORK — the Living Mosaic. An ordinary scrolling section that
               steers the page accent for the chapter in view (see ImpactMosaic). */
-        {id:'home.mosaic',node:<ImpactMosaic />},
+        {id:'home.mosaic',node:<ImpactMosaic heroPillar={currentPillar} />},
         {id:'home.events',node:<EventsSection />},
         {id:'home.awards',node:<AwardsSection />},
         {id:'home.partners',node:(<PartnersSection

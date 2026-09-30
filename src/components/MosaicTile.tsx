@@ -23,6 +23,7 @@ interface MosaicTileProps {
   activity: Activity;
   image: ActivityImage | null;
   index: number;
+  supplemental?: boolean;
   open: boolean;
   onOpen: (activity: Activity) => void;
   /** Hover or focus: the waves take the programme's mood while it lasts. */
@@ -30,7 +31,7 @@ interface MosaicTileProps {
 }
 
 /** Where each print lies on the page — the first is the washed lead. */
-const SLOTS = ['lead', 'a', 'b', 'c', 'd'];
+const SLOTS = ['lead', 'a', 'b', 'c', 'd', 'e', 'f'];
 
 /** The photograph, and while the album turns, the one it replaces still
     fading beneath it. Once the fade has settled the animation class comes
@@ -51,7 +52,7 @@ const Photo: React.FC<{ image: ActivityImage }> = ({ image }) => {
   </span>;
 };
 
-export const MosaicTile: React.FC<MosaicTileProps> = ({ activity, image, index, open, onOpen, onAttend }) => {
+export const MosaicTile: React.FC<MosaicTileProps> = ({ activity, image, index, supplemental = false, open, onOpen, onAttend }) => {
   const lead = index === 0;
   const picture = image
     ? <Photo image={image} />
@@ -60,7 +61,7 @@ export const MosaicTile: React.FC<MosaicTileProps> = ({ activity, image, index, 
     <li className={lead ? 'mosaic-print mosaic-print-lead' : 'mosaic-print'} data-slot={SLOTS[index] ?? 'd'} style={{ '--i': index } as React.CSSProperties}>
       <button
         type="button"
-        id={`mosaic-tile-${activity.id}`}
+        id={`mosaic-tile-${activity.id}${supplemental ? `-photo-${index}` : ''}`}
         className="mosaic-print-face"
         aria-expanded={open}
         aria-controls="mosaic-spotlight"
@@ -79,8 +80,8 @@ export const MosaicTile: React.FC<MosaicTileProps> = ({ activity, image, index, 
           <span className="mosaic-print-photo">{picture}</span>
         )}
         <span className="mosaic-print-caption">
-          <span className="mosaic-print-title">{activity.title}</span>
-          <span className="mosaic-print-figure">{`${activity.headline.value} ${activity.headline.label}`}</span>
+          <span className="mosaic-print-title">{supplemental ? image?.caption || activity.title : activity.title}</span>
+          {!supplemental && <span className="mosaic-print-figure">{`${activity.headline.value} ${activity.headline.label}`}</span>}
           {image && !image.illustrative && <span className="mosaic-print-mark">{getCMSCopy("copy.MosaicTile.5e18f08027f3", "Foundation photograph")}</span>}
         </span>
       </button>
@@ -113,9 +114,9 @@ export const MosaicSpotlight: React.FC<MosaicSpotlightProps> = ({ activity, pill
   const gallery = activityGallery(activity);
   const [shown, setShown] = useState(0);
   const closeRef = useRef<HTMLButtonElement>(null);
-  useEffect(() => { closeRef.current?.focus(); }, []);
+  useEffect(() => { closeRef.current?.focus({ preventScroll: true }); }, []);
   const picture = gallery[shown] ?? gallery[0];
-  const more = activity.dataPoints.filter(point => point.label !== activity.headline.label).slice(0, 3);
+  const more = activity.dataPoints.filter(point => point.label !== activity.headline.label);
   return (
     <div
       id="mosaic-spotlight"

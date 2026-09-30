@@ -15,12 +15,15 @@
 .home-page > .accent-canvas { position: fixed; inset: 0; }
 .home-page {
   --home-paper: #f4f1e9;
+  --pillar-ui-ink: color-mix(in srgb, var(--accent-a) 42%, #103932);
+  --pillar-ui-tint: color-mix(in srgb, var(--accent-b) 55%, #fff);
+  --pillar-ui-shadow: color-mix(in srgb, var(--pillar-ui-ink) 35%, transparent);
   --home-line: rgb(255 255 255 / .16);
   --home-ease: cubic-bezier(.22, 1, .36, 1);
 }
 .home-page :is(h1, h2, h3) { text-wrap: balance; }
 .home-page :is(button, a, input):focus-visible {
-  outline: 2px solid #f3ddb1;
+  outline: 2px solid var(--pillar-ui-tint);
   outline-offset: 5px;
 }
 .home-page :is(p, address) { user-select: text; }
@@ -38,7 +41,7 @@
 #hero-clone-stage { padding-top: 112px; padding-bottom: 28px; min-height: 100svh; }
 #hero-foreground-content { max-width: 1440px; margin-inline: auto; gap: 36px; }
 .hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-.hero-eyebrow > span { width: 28px; height: 1px; background: #ddc8a0; }
+.hero-eyebrow > span { width: 28px; height: 1px; background: var(--pillar-ui-tint, #ddc8a0); }
 #hero-script-pillar-name { color: #eee4cf; filter: none; margin-bottom: 12px; }
 #hero-headline {
   font-family: 'Outfit', sans-serif;
@@ -75,7 +78,7 @@
 .hero-impact > div > span:last-child { margin-top: 6px; font-family: 'Inter', sans-serif; font-size: 11px; color: rgb(255 255 255 / .62); }
 [id^='hero-learn-more-'] {
   background: var(--home-paper) !important;
-  color: #163a33;
+  color: var(--pillar-ui-ink, #163a33);
   box-shadow: 0 8px 28px rgb(0 0 0 / .12) !important;
   padding: 15px 24px;
   font-family: 'Inter', sans-serif;
@@ -227,3 +230,31 @@
   width: calc(var(--hero-model-size, 320px) * .16); height: 1px; transform: translateX(-50%);
   background: rgb(255 255 255 / .6);
 }
+
+/* A consistent gallery finish, with each activity keeping its own visual language. */
+.home-page #hero-clone-stage[data-pillar='heal'] .hero-impact { border-color: #a1d8ba55; }
+.home-page #hero-clone-stage[data-pillar='enrich'] .hero-impact { border-color: #a3dbe755; }
+.home-page #hero-clone-stage[data-pillar='empower'] .hero-impact { border-color: #f1afcd55; }
+.home-page #hero-clone-stage[data-pillar='projects'] .hero-impact { border-color: #a5dcec55; }
+.home-page .mosaic-explore-all { padding: 12px 18px; border: 1px solid color-mix(in srgb, var(--chapter-b) 45%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--chapter-a) 15%, transparent); }
+.home-page .mosaic-explore-all:hover { background: color-mix(in srgb, var(--chapter-a) 40%, transparent); }
+.home-page #events-section { background: radial-gradient(ellipse at 5% 25%, #f3d9a510, transparent 48%); }
+.home-page #events-section .home-event-ticket { box-shadow: 0 24px 50px -30px #0009; }
+.home-page #awards-section { background: radial-gradient(ellipse at 50% 65%, #dcc69a14, transparent 60%); }
+.home-page #partners-section { background: radial-gradient(ellipse at 90% 65%, color-mix(in srgb, var(--accent-b) 13%, transparent), transparent 62%); }
+.home-page #hero-clone-stage .hero-activity-art { opacity: calc(1 - var(--hero-exit, 0)); }
+
+/* The hero uses contextual line art in place of the former 3D carousel. */
+.hero-pillar-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 30px; }
+.hero-pillar-controls button { padding: 9px 14px; border: 1px solid #ffffff35; border-radius: 999px; font-size: 11px; color: #fff; cursor: pointer; background: #ffffff08; }
+.hero-pillar-controls button[aria-pressed='true'] { background: #f4f1e9; border-color: #f4f1e9; color: #163a33; }
+.hero-pillar-controls button:hover { border-color: #ffffffa0; }
+@media (min-width: 1024px) { #hero-clone-stage .hero-activity-art .pillar-artwork svg { right: -5%; width: 65%; } }
+@media (max-width: 1023px) { #hero-clone-stage .hero-activity-art .pillar-art-lines { opacity: .2; } }
+
+/* Header controls remain text and icons, without glass capsules. */
+#site-header .search-morph,
+#site-header .search-morph:hover,
+#site-header .search-morph:focus-within { background: transparent; border-color: transparent; box-shadow: none; backdrop-filter: none; }
+#site-header .search-morph::after,
+#site-header .search-sheen { display: none; }

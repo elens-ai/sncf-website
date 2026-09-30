@@ -1,8 +1,12 @@
-import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { PillarWordmark } from './PillarWordmark';
+import { PillarHeroBackdrop } from './PillarHeroBackdrop';
+import { getCMSCopy } from '../cms/runtime';
+import React, { useState, useEffect, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
-import { HeroOrbitWheel } from '../components/HeroOrbitWheel';
+import { PillarHeroVisual } from './PillarHeroVisual';
+import { AnimatePresence } from 'motion/react';
+import { PillarArtwork } from './PillarArtwork';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import {
   Sparkles,
@@ -59,8 +63,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   /* Multiplies the fluid clamp on the pillar script name, so the size stays
      responsive at every setting rather than being pinned to one pixel value. */
   const [pillarNameScale, setPillarNameScale] = useState<number>(1);
-  // User-adjustable icon size, based on the full editorial text block.
-  const [cardScale, setCardScale] = useState<number>(1);
   const [glowIntensity, setGlowIntensity] = useState<number>(0.85);
   const [showMetrics, setShowMetrics] = useState<boolean>(true);
 
@@ -81,29 +83,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     Math.min(72, Math.max(28, viewportWidth * 0.05325)) * pillarNameScale,
   );
 
-  const [modelBaseSize, setModelBaseSize] = useState(320);
-  useEffect(() => {
-    // Sized from the wheel's own stage, so the plate takes the same share of
-    // it on every screen. The front card is drawn at 1.16x (the wheel's front
-    // scale) and its foil plate reaches 1.6x wide and 1.76x tall past the
-    // slot, so these factors put the plate at about 80% of the stage's width
-    // and 90% of its height, whichever binds first.
-    const stage = document.getElementById('hero-orbit-3d-stage');
-    if (!stage) return;
-    const measure = () => {
-      const { width, height } = stage.getBoundingClientRect();
-      setModelBaseSize(Math.max(96, Math.round(Math.min(width * 0.431, height * 0.441))));
-    };
-    const observer = new ResizeObserver(measure);
-    observer.observe(stage);
-    measure();
-    return () => observer.disconnect();
-  }, [viewportWidth]);
-
-  useEffect(() => {
-    document.documentElement.style.setProperty('--hero-model-size', `${modelBaseSize}px`);
-  }, [modelBaseSize]);
-
   /* Published on :root so the stylesheet's clamp can compose with it. */
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -111,10 +90,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       String(pillarNameScale),
     );
   }, [pillarNameScale]);
-
-  useEffect(() => {
-    document.documentElement.style.setProperty('--card-scale', String(cardScale));
-  }, [cardScale]);
 
   const currentPillar = pillars[activeIndex] || pillars[0];
   const [heroVisible, setHeroVisible] = useState(true);
@@ -131,14 +106,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     mq.addEventListener('change', onMotionChange);
 
     const stage = document.getElementById('hero-clone-stage');
+    const page = stage?.closest<HTMLElement>('.home-page');
     let raf = 0, measurementFrame = 0, extra = 0, viewport = window.innerHeight;
     let previousHeight = -1, previousExtra = -1, wasFinished: boolean | undefined, lastExit = -1;
     const read = () => {
       raf = 0;
-      /* The exit: as the hero scrolls away its words, figures and wheel fade,
-         and only the watermark petals stay — the overture below picks them up. */
-      const exit = Math.round(Math.min(1, Math.max(0, window.scrollY / (viewport * .6))) * 100) / 100;
-      if (exit !== lastExit) { lastExit = exit; stage?.style.setProperty('--hero-exit', String(exit)); }
+      /* On tall mobile layouts, let the user reach the artwork before fading
+         the hero into the next section. */
+      const exit = Math.round(Math.min(1, Math.max(0, (window.scrollY - extra) / (viewport * .6))) * 100) / 100;
+      if (exit !== lastExit) {
+        lastExit = exit;
+        stage?.style.setProperty('--hero-exit', String(exit));
+        // Deepen the same page surface as the hero leaves, keeping white
+        // chapter copy legible without introducing another section background.
+        page?.style.setProperty('--page-depth', String(exit));
+      }
       /* Finished = the hero has scrolled fully out of view. It used to fire at
          .53 of a viewport, once the copy had faded behind the curtain. */
       const finished = window.scrollY > extra + viewport;
@@ -180,6 +162,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       geometry.disconnect();
       if (raf) cancelAnimationFrame(raf);
       if (measurementFrame) cancelAnimationFrame(measurementFrame);
+      page?.style.removeProperty('--page-depth');
     };
   }, []);
 
@@ -192,9 +175,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       : phase === 'entering'
         ? 'opacity-0 translate-y-4 !transition-none'
         : 'opacity-100 translate-y-0';
+  useEffect(() => {
+    if (isPaused || !introActive || !heroVisible) return;
+    const timer = window.setInterval(() => {
+      if (!document.hidden && !reducedMotionRef.current) onActiveIndexChange((activeIndex + 1) % pillars.length);
+    }, 8000);
+    return () => window.clearInterval(timer);
+  }, [activeIndex, isPaused, introActive, heroVisible, onActiveIndexChange, pillars.length]);
+
   const [displayPillar, setDisplayPillar] = useState<PillarState>(currentPillar);
-  const stageAccentA = currentPillar.accentA;
-  const stageAccentB = currentPillar.accentB;
+  const stageAccentA = displayPillar.accentA;
+  const stageAccentB = displayPillar.accentB;
 
   /* The single source for the page's colour. The .accent-canvas backdrop, the
      header ribbon and the donate panel all read these, so publishing them here
@@ -210,39 +201,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     document.documentElement.style.setProperty('--stage-angle', `${gradientAngle}deg`);
   }, [gradientAngle]);
 
-  const exitTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const enterTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const targetKey = `P${currentPillar.id}`;
-  const displayKey = `P${displayPillar.id}`;
-
+  // Cancel pending changes on every new selection, including returning to the
+  // displayed pillar during an exit. This prevents a stale timer showing the wrong icon.
   useEffect(() => {
-    if (targetKey !== displayKey) {
-      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
-      if (enterTimerRef.current) clearTimeout(enterTimerRef.current);
-
-      setPhase('exiting');
-
-      exitTimerRef.current = setTimeout(() => {
-        setDisplayPillar(currentPillar);
-        /* 'entering' stages the new copy BELOW its slot, invisible and with
-           transitions suppressed; two frames later 'idle' releases it to rise
-           up into place. Old copy left upward, new copy arrives from below —
-           one continuous vertical stream instead of a direction reversal. */
-        setPhase('entering');
-        enterTimerRef.current = setTimeout(() => {
-          setPhase('idle');
-        }, 40);
-      }, 380);
+    if (currentPillar.id === displayPillar.id) {
+      setPhase('idle');
+      return;
     }
-  }, [targetKey, displayKey, currentPillar]);
+    if (reducedMotionRef.current) {
+      setDisplayPillar(currentPillar);
+      setPhase('idle');
+      return;
+    }
+    setPhase('exiting');
+    const timer = window.setTimeout(() => {
+      setDisplayPillar(currentPillar);
+      setPhase('entering');
+    }, 280);
+    return () => window.clearTimeout(timer);
+  }, [currentPillar]);
 
   useEffect(() => {
-    return () => {
-      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
-      if (enterTimerRef.current) clearTimeout(enterTimerRef.current);
-    };
-  }, []);
+    if (phase !== 'entering') return;
+    const timer = window.setTimeout(() => setPhase('idle'), 40);
+    return () => window.clearTimeout(timer);
+  }, [phase]);
 
   const getPillarScriptTitle = (p: PillarState): string => {
     switch (p.id) {
@@ -282,23 +265,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <main
       id="hero-clone-stage"
-      /* No background of its own. The page-wide .accent-canvas layer paints
-         the gradient for every screen at once, so it cannot restart at the
-         fold — two sections each running their own 135deg ramp meant the
-         hero ended near accent-b just as the next screen began again at
-         accent-a, which is the seam. */
-      /* NO `transition-all` here any more. It was vestigial — this element
-         has no background and no inline style, nothing on it ever changes,
-         so it transitioned nothing (see the note above: the gradient moved
-         out to .accent-canvas). It was not harmless, though: PillarsSection
-         now writes this element's transform and opacity every frame to
-         recede the hero as the exhibition rises over it, and a 700ms
-         transition-all would have smeared each of those writes across
-         700ms — the reader's scroll and the hero's motion permanently out
-         of step. */
+      data-pillar={displayPillar.id}
+      /* The shared page canvas owns the color; only photography and the two
+         decorative curves live here and dissolve before the section ends. */
       className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none"
+      data-hero-theme={displayPillar.id}
       style={{ willChange: 'transform, opacity', transformOrigin: '50% 42%' }}
     >
+      <AnimatePresence initial={false}>
+        {(currentPillar.id === 'heal' || currentPillar.id === 'enrich' || currentPillar.id === 'empower' || currentPillar.id === 'projects') && <PillarHeroBackdrop key={currentPillar.id} pillar={currentPillar.id} />}
+      </AnimatePresence>
       {/* A quiet studio backdrop: a broad light pool frames the white cards,
           with every overlay fading before the hero hands off to Our Work. */}
       <div
@@ -312,19 +288,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="hero-studio-arc-inner" />
       </div>
 
-      {/* 4. FADED WHITE LOTUS HERO BACKGROUND GRAPHICS */}
-      <div
-        id="hero-lotus-watermark"
-        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
-      >
-        <img
-          src={resolveCMSAsset("asset.HeroSection.51c5d5f403d2", "/images/lotus-watermark.png")}
-          alt=""
-          role="presentation"
-          aria-hidden="true"
-          className="w-[75vw] h-[75vh] object-contain opacity-[0.09]"
-          referrerPolicy="no-referrer"
-        />
+      <div className="hero-activity-art" aria-hidden="true">
+        {pillars.map(pillar => <PillarArtwork key={pillar.id} pillarId={pillar.id} visible={pillar.id === displayPillar.id} />)}
       </div>
 
       {/* DISCREET SETTINGS TRIGGER (Opens the design studio drawer) */}
@@ -392,54 +357,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Pillar name size — multiplies the fluid clamp, so it stays responsive */}
-            <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-4">
-              <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5">
-                  <Type className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.d63db49427e8", " Pillar Name Size")}</span>
-                <span className="text-amber-300 tabular-nums normal-case tracking-normal">
-                  {Math.round(pillarNameScale * 100)}% · {pillarNamePx}{getCMSCopy("copy.HeroSection.2d61b94393b8", "px here")}</span>
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  id="hero-pillar-name-size"
-                  type="range"
-                  min="0.6"
-                  max="2"
-                  step="0.05"
-                  value={pillarNameScale}
-                  onChange={(e) => setPillarNameScale(Number(e.target.value))}
-                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400"
-                />
-                <button
-                  onClick={() => setPillarNameScale(1)}
-                  className="flex-shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2 cursor-pointer"
-                >{getCMSCopy("copy.HeroSection.daee7606b339", "Reset")}</button>
-              </div>
-              <p className="text-[11px] text-neutral-500 leading-snug">{getCMSCopy("copy.HeroSection.618a67ebf739", "Scales the fluid size — the name still grows and shrinks with the screen at every setting.")}</p>
-            </div>
-
-            <div className="flex flex-col gap-2 sm:col-span-2 lg:col-span-4">
-              <label htmlFor="hero-icon-size" className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center justify-between gap-2">
-                <span className="flex items-center gap-1.5"><Layout className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.eb84c28d0955", " 3D Icon Size")}</span>
-                <span className="text-amber-300 tabular-nums">{Math.round(cardScale * 100)}%</span>
-              </label>
-              <div className="flex items-center gap-3">
-                <button type="button" aria-label={getCMSCopy("copy.HeroSection.385ad56b7b5d", "Decrease 3D icon size")} disabled={cardScale <= 0.5}
-                  onClick={() => setCardScale(value => Math.max(0.5, Math.round((value - 0.1) * 100) / 100))}
-                  className="w-8 h-8 shrink-0 rounded-lg bg-white/10 text-white disabled:opacity-30">−</button>
-                <input id="hero-icon-size" type="range" min="0.5" max="1.8" step="0.05"
-                  value={cardScale} onChange={(e) => setCardScale(Number(e.target.value))}
-                  aria-valuetext={`${Math.round(cardScale * 100)} percent`}
-                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400" />
-                <button type="button" aria-label={getCMSCopy("copy.HeroSection.1f76c27ba811", "Increase 3D icon size")} disabled={cardScale >= 1.8}
-                  onClick={() => setCardScale(value => Math.min(1.8, Math.round((value + 0.1) * 100) / 100))}
-                  className="w-8 h-8 shrink-0 rounded-lg bg-white/10 text-white disabled:opacity-30">+</button>
-                <button type="button" onClick={() => setCardScale(1)}
-                  className="shrink-0 text-[11px] font-semibold text-neutral-400 hover:text-white underline underline-offset-2">{getCMSCopy("copy.HeroSection.daee7606b339", "Reset")}</button>
-              </div>
-              <p className="text-[11px] text-neutral-500 leading-snug">{getCMSCopy("copy.HeroSection.428325204f8f", "100% balances the featured icon with the full text block. Adjust from 50% to 180%.")}</p>
-            </div>
-
             {/* 2. Sacred Aura Visual Style */}
             <div className="flex flex-col gap-2">
               <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
@@ -531,7 +448,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       : 'bg-white/5 text-white/60 border border-white/10'
                   }`}
                 >
-                  <span>{getCMSCopy("copy.HeroSection.4f210fb57610", "Auto 3D Rotation")}</span>
+                  <span>{getCMSCopy("copy.HeroSection.4f210fb57610", "Automatic Theme Changes")}</span>
                   <span>{isPaused ? 'PAUSED' : 'ACTIVE'}</span>
                 </button>
               </div>
@@ -558,15 +475,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             introActive ? 'hero-intro-rise' : 'hero-intro-waiting'
           }`}
         >
+          <div className="hero-intro-title w-full">
           <p className="home-eyebrow hero-eyebrow"><span />{getCMSCopy("copy.HeroSection.d5dc0eff1e60", " Service with Humility")}</p>
-          <div className="w-full flex flex-col">
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
               id="hero-script-pillar-name"
               style={{ transitionDelay: phase === 'exiting' ? '90ms' : '0ms' }}
               className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
-              {getPillarScriptTitle(displayPillar)}
+              {(displayPillar.id === 'heal' || displayPillar.id === 'enrich' || displayPillar.id === 'empower' || displayPillar.id === 'projects') ? <><span className="sr-only">{displayPillar.label}</span><PillarWordmark pillar={displayPillar.id} /></> : getPillarScriptTitle(displayPillar)}
             </h2>
 
             {/* 2. Main Headline (Delay: 50ms) */}
@@ -578,6 +495,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {displayPillar.headline}
             </h1>
 
+          </div>
+          <div className="hero-details w-full flex flex-col">
             {/* 3. Body Copy (Delay: 100ms) */}
             <p
               id="hero-body-text"
@@ -637,28 +556,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </button>
             </div>
           </div>
+          <div className="hero-pillar-controls" role="group" aria-label="Choose a home theme">
+            {pillars.map((pillar, i) => <button key={pillar.id} type="button" aria-pressed={activeIndex === i} data-index={i + 1} onClick={() => onActiveIndexChange(i)}>{getPillarScriptTitle(pillar)}</button>)}
+            <button type="button" onClick={onTogglePause} aria-label={isPaused ? 'Resume theme rotation' : 'Pause theme rotation'}>{isPaused ? <Play size={14} /> : <Pause size={14} />}</button>
+          </div>
         </div>
-
-        {/* Floating 3D pillar icons — blooms in just after the copy */}
-        <div
-          className={`hero-sculptures w-full lg:w-1/2 flex justify-center lg:justify-start ${
-            introActive ? 'hero-intro-bloom' : 'hero-intro-waiting'
-          }`}
-        >
-          <HeroOrbitWheel
-            pillars={pillars}
-            activeIndex={activeIndex}
-            onActiveIndexChange={onActiveIndexChange}
-            isPaused={isPaused || !introActive || !heroVisible}
-            onCardClick={(clickedIndex) => {
-              // Clicking a pillar card opens that pillar's details
-              if (clickedIndex < pillars.length) {
-                onActiveIndexChange(clickedIndex);
-                onOpenDetails(pillars[clickedIndex]);
-              }
-            }}
-          />
-        </div>
+        {(currentPillar.id === 'heal' || currentPillar.id === 'enrich' || currentPillar.id === 'empower' || currentPillar.id === 'projects') && <PillarHeroVisual pillar={currentPillar.id} active={introActive} />}
       </div>
     </main>
 

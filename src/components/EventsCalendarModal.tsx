@@ -1,5 +1,6 @@
 import { getCMSCopy } from '../cms/runtime';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   ChevronLeft,
@@ -116,6 +117,8 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
   items,
   initialEventId = null,
 }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
   const dated = useMemo(() => items.filter((i) => i.days !== null), [items]);
   const ongoing = useMemo(() => items.filter((i) => i.days === null), [items]);
 
@@ -150,13 +153,26 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
 
   useEffect(() => {
     if (!isOpen) return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const siblings = Array.from(document.body.children).filter((el): el is HTMLElement => el instanceof HTMLElement && el !== dialog);
+    const previousInert = siblings.map(el => [el, el.inert] as const);
+    siblings.forEach(el => { el.inert = true; });
+    closeRef.current?.focus({ preventScroll: true });
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') { e.preventDefault(); onClose(); }
+      if (e.key !== 'Tab') return;
+      const controls = Array.from<HTMLElement>(dialog.querySelectorAll('button:not(:disabled), a[href], [tabindex="0"]'));
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
     };
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKey);
     return () => {
+      previousInert.forEach(([el, inert]) => { el.inert = inert; });
       document.body.style.overflow = prev;
       window.removeEventListener('keydown', onKey);
     };
@@ -187,13 +203,15 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
       return { year: d.getFullYear(), month: d.getMonth() };
     });
 
-  return (
+  return createPortal(
     <div
+      ref={dialogRef}
       id="events-calendar-backdrop"
       role="dialog"
       aria-modal="true"
       aria-label={getCMSCopy("copy.EventsCalendarModal.3ac6ecc4b6ea", "Events calendar")}
-      className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-xl animate-fadeIn"
+      className="journal-calendar-dialog fixed inset-0 flex items-start justify-center p-4 sm:p-6 overflow-y-auto backdrop-blur-xl animate-fadeIn"
+      style={{ '--calendar-ink': selected?.accentA ?? '#1d5961', '--calendar-tint': selected?.accentB ?? '#b4ddd6' } as React.CSSProperties}
       onClick={onClose}
     >
       <div
@@ -202,6 +220,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <button
+          ref={closeRef}
           onClick={onClose}
           aria-label={getCMSCopy("copy.EventsCalendarModal.294123d1da42", "Close calendar")}
           className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 border border-white/15 text-white/80 hover:text-white grid place-items-center transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
@@ -212,7 +231,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
         <div className="grid gap-6 md:grid-cols-[1.15fr_1fr]">
           {/* ------------------------------------------------ month grid */}
           <div>
-            <div className="flex items-center justify-between mb-4 pr-10 md:pr-0">
+            <div className="journal-calendar-monthbar flex items-center justify-between mb-4 pr-10 md:pr-0">
               <h2 className="font-artistic-heading text-white font-bold text-[22px]">
                 {MONTHS_LONG[month]}{' '}
                 <span className="text-white/50 tabular-nums">{year}</span>
@@ -470,6 +489,6 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>, document.body
   );
 };

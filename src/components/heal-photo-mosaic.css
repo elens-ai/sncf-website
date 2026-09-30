@@ -1,0 +1,97 @@
+/* Shared hero stage: steady geometry, with the reference contours kept intact. */
+.hero-heal-art { position: relative; width: 100%; min-width: 0; align-self: center; isolation: isolate; opacity: 1; }
+.hero-heal-art[data-ready="false"] { opacity: 0; pointer-events: none; }
+.pillar-art-panel { grid-area: 1 / 1; min-width: 0; transform-origin: 50% 55%; backface-visibility: hidden; }
+.pillar-art-contact-shadow { position: absolute; z-index: -1; left: 21%; right: 15%; bottom: 11%; height: 6%; border-radius: 50%; background: #080b0c52; filter: blur(23px); transform: rotate(-5deg); opacity: .42; pointer-events: none; }
+.heal-photo-mosaic { position: relative; width: 100%; margin: 0 auto; }
+.heal-photo-mosaic::before { content: ''; position: absolute; inset: -4% -3% 8%; border-radius: 50%; background: radial-gradient(ellipse, #ecfff329, transparent 67%); pointer-events: none; }
+.heal-photo-mosaic > svg { display: block; position: relative; width: 100%; height: auto; overflow: visible; filter: drop-shadow(-8px 18px 12px #080b0c59) drop-shadow(0 3px 2px #080b0c38); }
+.heal-photo-mosaic figcaption { position: relative; text-align: center; color: var(--pillar-ui-ink, #24494b); font: 400 23px/1.4 'Dancing Script', cursive; margin-top: 8px; }
+.heal-photo-mosaic figcaption span { display: block; margin-top: 6px; font: 500 8px/1.5 Inter, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: color-mix(in srgb, var(--pillar-ui-ink, #24494b) 66%, transparent); }
+.pillar-mosaic-depth { pointer-events: none; }
+.projects-centre-badge { filter: drop-shadow(0 1.4px 1.2px #254c6066); }
+
+@media (min-width: 1024px) {
+  #hero-foreground-content:has(.hero-heal-art) { display: grid; grid-template-columns: minmax(300px, .72fr) minmax(0, 1.28fr); max-width: 1660px; gap: clamp(28px, 3vw, 64px); padding-left: clamp(28px, 3vw, 52px); }
+  #hero-foreground-content:has(.hero-heal-art) .hero-editorial { width: 100%; min-width: 0; max-width: 470px; }
+  #hero-foreground-content:has(.hero-heal-art) #hero-script-pillar-name { display: flex; align-items: center; min-height: clamp(86px, 8vw, 116px); margin-bottom: 20px; }
+  #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: clamp(32px, 3.05vw, 48px); min-height: 2.3em; }
+  #hero-foreground-content:has(.hero-heal-art) #hero-body-text { max-width: 41ch; min-height: 7.2em; }
+}
+@media (max-width: 1023px) {
+  #hero-foreground-content:has(.hero-heal-art) { flex-direction: column; gap: 32px; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-editorial { width: 100%; }
+  .hero-heal-art { width: min(100%, 620px); }
+  .pillar-art-contact-shadow { filter: blur(15px); }
+}
+
+/* Only two sweeping background layers. Both fade with the selected theme. */
+.heal-layered-backdrop { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+/* The scene stays beneath both curves; luminosity keeps its photographic
+   detail while borrowing the selected pillar's hue. */
+.heal-background-photo { position: absolute; inset: 0 0 0 28%; background-position: center; background-size: cover; background-color: var(--backdrop-mid); background-blend-mode: luminosity; filter: contrast(1.08); opacity: .42; mask-image: linear-gradient(90deg, transparent, #000 45%, #000 85%, #0009); }
+.heal-layered-backdrop > i { position: absolute; width: 115vw; height: 140vw; left: 43%; top: -37vw; border-radius: 48%; transform: rotate(24deg); background: linear-gradient(120deg, #ffffff28, #ffffff06 60%); box-shadow: -25px 0 65px var(--backdrop-shadow), inset 1px 0 0 var(--backdrop-edge); }
+.heal-layered-backdrop > i:nth-of-type(2) { left: 62%; top: -32vw; background: #ffffff17; }
+.heal-layered-backdrop[data-theme="projects"] > i:nth-of-type(2) { background: linear-gradient(150deg, #b5dfad25, #edb8d325); }
+.pillar-backdrop-echo { position: absolute; width: 86vw; right: -12vw; top: -9%; transform: rotate(15deg); opacity: .11; mask-image: linear-gradient(90deg, transparent, #000 32%, #000 70%, transparent); pointer-events: none; }
+/* The same halftone corners belong to all four pillars, including Heal. */
+.pillar-backdrop-dots { position: absolute; inset: 0; background-image: radial-gradient(circle, color-mix(in srgb, var(--backdrop-light) 65%, white) 1.3px, transparent 1.8px); background-size: 14px 16px; opacity: .28; mask-image: radial-gradient(ellipse 300px 440px at 0 8%, #000 10%, transparent 100%), radial-gradient(ellipse 280px 400px at 100% 88%, #000 5%, transparent 100%); }
+@media (max-width: 639px) {
+  .pillar-backdrop-dots { background-size: 12px 14px; opacity: .22; mask-image: radial-gradient(ellipse 150px 280px at 0 4%, #000, transparent), radial-gradient(ellipse 140px 300px at 100% 88%, #000, transparent); }
+}
+.home-page #hero-clone-stage .hero-activity-art { opacity: calc(.12 * (1 - var(--hero-exit, 0))); }
+
+/* Typography and controls sit on the darker, quiet side of each scene. */
+.heal-wordmark { display: block; width: 100%; max-width: 430px; height: auto; margin: 4px 0; color: white; filter: drop-shadow(0 6px 12px #11332f30); }
+#hero-clone-stage .hero-impact > div > span:last-child { color: #ffffffbf; font-size: 12px; line-height: 1.4; }
+#hero-clone-stage .hero-impact { max-width: 410px; }
+#hero-clone-stage .hero-pillar-controls { flex-wrap: nowrap; gap: 6px; margin-top: 25px; }
+#hero-clone-stage .hero-pillar-controls button { min-height: 42px; padding: 10px 12px; border-color: #ffffff26; background: color-mix(in srgb, var(--pillar-ui-ink, #072c30) 18%, transparent); color: #ffffffcf; transition: color .25s ease, background .25s ease, box-shadow .25s ease, transform .25s ease; }
+#hero-clone-stage .hero-pillar-controls button[aria-pressed="true"] { background: #fffdf7; border-color: #fffdf7; color: var(--pillar-ui-ink, #194441); box-shadow: 0 4px 12px var(--pillar-ui-shadow, #09282f24); }
+#hero-clone-stage .hero-pillar-controls button:hover { transform: translateY(-2px); color: #fff; background: #ffffff20; }
+#hero-clone-stage .hero-pillar-controls button[aria-pressed="true"]:hover { color: var(--pillar-ui-ink, #194441); background: #fff; }
+#hero-clone-stage .hero-pillar-controls button:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+#hero-clone-stage .hero-pillar-controls button:last-child { flex: 0 0 42px; display: grid; place-items: center; padding: 0; }
+
+@media (max-width: 899px) {
+  .heal-wordmark { max-width: 320px; }
+  .heal-layered-backdrop > i { left: 45%; top: 30%; height: 170%; width: 220%; }
+  .heal-layered-backdrop > i:nth-of-type(2) { left: 80%; top: 45%; }
+  .heal-background-photo { inset: 24% -10% 0; opacity: .34; mask-image: linear-gradient(180deg, transparent, #000 20%, #000 48%, #0008 72%, transparent); }
+  .pillar-backdrop-echo { top: 36%; width: 120vw; right: -35vw; }
+  .heal-photo-mosaic figcaption { color: #ffffffe6; text-shadow: 0 1px 8px #142d3559; }
+  .heal-photo-mosaic figcaption span { color: #ffffffb3; }
+}
+@media (max-width: 639px) {
+  #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: 31px; margin-bottom: 16px; }
+  #hero-foreground-content:has(.hero-heal-art) #hero-body-text { line-height: 1.75; margin-bottom: 20px; }
+  #hero-clone-stage .hero-pillar-controls { gap: 5px; width: 100%; }
+  #hero-clone-stage .hero-pillar-controls button { padding-inline: 10px; font-size: 10px; flex: 1 1 auto; }
+  .heal-photo-mosaic figcaption { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hero-clone-stage .hero-pillar-controls button { transition: none; }
+}
+
+/* On a phone the sculpture follows the headline, before the supporting story. */
+@media (max-width: 639px) {
+  #hero-foreground-content:has(.hero-heal-art) { display: flex; gap: 0; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-editorial { display: contents; }
+  #hero-foreground-content .hero-intro-title { order: 0; }
+  #hero-foreground-content .hero-heal-art { order: 1; width: min(100%, 370px); margin: 8px auto 26px; }
+  #hero-foreground-content .hero-details { order: 2; }
+  #hero-foreground-content .hero-pillar-controls { order: 3; }
+  #hero-foreground-content .hero-intro-waiting > :is(.hero-intro-title, .hero-details, .hero-pillar-controls) { opacity: 0; }
+  #hero-foreground-content .hero-eyebrow { margin-bottom: 12px; }
+  #hero-foreground-content .heal-wordmark { max-width: 260px; }
+  #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: 28px; line-height: 1.18; min-height: 2.36em; margin-bottom: 4px; max-width: 320px; }
+  #hero-foreground-content .heal-photo-mosaic figcaption { font-size: 20px; margin-top: 4px; }
+  #hero-foreground-content:has(.hero-heal-art) #hero-body-text { font-size: 14px; line-height: 1.65; margin-bottom: 18px; }
+  #hero-clone-stage .hero-pillar-controls button { min-height: 44px; }
+  #hero-clone-stage .hero-pillar-controls { margin-top: 20px; }
+}
+@media (max-width: 639px) {
+  #hero-foreground-content #hero-script-pillar-name { display: flex; align-items: center; height: 76px; min-height: 76px; margin-bottom: 8px; }
+  #hero-foreground-content .heal-wordmark { max-height: 72px; object-fit: contain; object-position: left center; }
+}
+
