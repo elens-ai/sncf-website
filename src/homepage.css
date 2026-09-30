@@ -201,7 +201,7 @@
 @media (prefers-reduced-motion: reduce) { #awards-section .award-glow { animation: none; } }
 /* The hero's exit (HeroSection writes --hero-exit as it scrolls away): everything but the petals fades,
    and the watermark swells and brightens into the ghost petals the overture below assembles. */
-#hero-foreground-content, #hero-settings-trigger { opacity: calc(1 - var(--hero-exit, 0)); }
+#hero-foreground-content { opacity: calc(1 - var(--hero-exit, 0)); }
 #hero-lotus-watermark img { opacity: calc(.045 + var(--hero-exit, 0) * .16); transform: scale(calc(1 + var(--hero-exit, 0) * .22)); }
 
 

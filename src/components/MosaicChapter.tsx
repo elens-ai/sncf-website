@@ -26,6 +26,57 @@ const ACTIVITY_SYMBOLS: Record<string, LucideIcon> = {
   'project-amrit': Waves, 'oneness-vann': Sprout, watershed: Mountain, 'adopted-villages': House,
 };
 
+/** Photographs that blend in behind the chapter while a programme is hovered. */
+const ACTIVITY_BACKDROPS: Record<string, string[]> = {
+  'blood-donation': [
+    '/images/programmes/blood-donation-donor.jpg',
+    /* Cut-out with its white surround keyed to transparent. */
+    '/images/programmes/blood-donation-volunteers.png',
+    '/images/programmes/blood-donation-satguru.jpg',
+  ],
+  'health-checkup': [
+    '/images/programmes/health-checkup-sample-collection.jpg',
+    '/images/programmes/health-checkup-blood-draw.jpg',
+    '/images/programmes/health-checkup-camp.jpg',
+  ],
+  'health-centre': [
+    '/images/programmes/health-centre-building.jpg',
+    '/images/programmes/health-centre-team.jpg',
+    '/images/programmes/health-centre-inauguration.jpg',
+    '/images/programmes/health-centre-dedication.jpg',
+  ],
+};
+
+/** A spot in one collage photo shown clearly instead of faded: `slot` is the
+    photo's index, `x`/`y` the spot's centre within that photo's panel, and
+    `rx`/`ry` its radii. */
+interface BackdropFocus { slot: number; x: string; y: string; rx?: string; ry?: string }
+const BACKDROP_FOCUS: Record<string, BackdropFocus> = {
+  /* Satguru Mata ji and Ramit ji at the centre of the team photograph. */
+  'health-centre': { slot: 1, x: '52%', y: '63%' },
+  /* Satguru Mata ji beside the donor; the two fill most of the panel. */
+  'blood-donation': { slot: 2, x: '48%', y: '42%', rx: '34%', ry: '38%' },
+};
+
+/** Feathered photo collage; images load once its chapter is on screen, so the
+    first hover doesn't wait on the download. */
+const ActivityBackdrop: React.FC<{ photos: string[]; show: boolean; preload: boolean; focus?: BackdropFocus }> = ({ photos, show, preload, focus }) => {
+  const [primed, setPrimed] = React.useState(show || preload);
+  React.useEffect(() => { if (show || preload) setPrimed(true); }, [show, preload]);
+  if (!primed) return null;
+  return (
+    <>
+      <div className="activity-backdrop" data-show={show} aria-hidden="true">
+        {photos.map((src, i) => <span key={src} className="activity-backdrop-photo" data-slot={i} style={{ backgroundImage: `url(${src})` }} />)}
+      </div>
+      {focus && (
+        <span className="activity-backdrop-photo activity-backdrop-focus" data-slot={focus.slot} data-show={show} aria-hidden="true"
+          style={{ backgroundImage: `url(${photos[focus.slot]})`, '--focus-x': focus.x, '--focus-y': focus.y, '--focus-rx': focus.rx, '--focus-ry': focus.ry } as React.CSSProperties} />
+      )}
+    </>
+  );
+};
+
 interface MosaicChapterProps {
   pillar: PillarState;
   index: number;
@@ -56,6 +107,9 @@ export const MosaicChapter = React.memo(function MosaicChapter({
       style={{ '--chapter-a': pillar.accentA, '--chapter-b': pillar.accentB, '--chapter-edge': logo.edge } as React.CSSProperties}
       aria-labelledby={`mosaic-${id}-title`}>
       {stacked && <MosaicWavesStatic pillar={pillar} />}
+      {activities.filter(activity => ACTIVITY_BACKDROPS[activity.id]).map(activity => (
+        <ActivityBackdrop key={activity.id} photos={ACTIVITY_BACKDROPS[activity.id]} show={activity.id === attendedId || activity.id === openId} preload={live} focus={BACKDROP_FOCUS[activity.id]} />
+      ))}
       <PillarArtwork pillarId={id} />
       <header className="activity-chapter-heading" data-reveal>
         <div className="activity-chapter-identity">

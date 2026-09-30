@@ -9,6 +9,19 @@
 .heal-photo-mosaic figcaption { position: relative; text-align: center; color: var(--pillar-ui-ink, #24494b); font: 400 23px/1.4 'Dancing Script', cursive; margin-top: 8px; }
 .heal-photo-mosaic figcaption span { display: block; margin-top: 6px; font: 500 8px/1.5 Inter, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: color-mix(in srgb, var(--pillar-ui-ink, #24494b) 66%, transparent); }
 .pillar-mosaic-depth { pointer-events: none; }
+
+/* Heal: faint currents of air drift across behind the emblem (the soft wave
+   of light over its surface is SVG in PillarPhotoMosaic). */
+.heal-air path { fill: none; stroke: #fff; stroke-width: .55; stroke-linecap: round; opacity: 0; stroke-dasharray: 22 100; stroke-dashoffset: 122; }
+@media (prefers-reduced-motion: no-preference) {
+  .heal-air path { animation: heal-air-drift 8s linear infinite; }
+  @keyframes heal-air-drift {
+    0% { stroke-dashoffset: 122; opacity: 0; }
+    15% { opacity: .5; }
+    75% { opacity: .4; }
+    100% { stroke-dashoffset: 0; opacity: 0; }
+  }
+}
 .projects-centre-badge { filter: drop-shadow(0 1.4px 1.2px #254c6066); }
 
 @media (min-width: 1024px) {

@@ -73,6 +73,10 @@
 .value-programmes button[aria-pressed='true'] { color: #fff; background: var(--value-color); border-color: var(--value-color); }
 .value-programmes button:hover:not([aria-pressed='true']) { background: #edf2ef; }
 .value-detail { padding: 30px; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--value-color) 20%, #e1e7e3); background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--value-light) 8%, #fff)); min-height: 425px; }
+.value-detail { position: relative; isolation: isolate; overflow: hidden; }
+/* Programme photo sits behind the card's content at low opacity, full colour. */
+.value-detail-backdrop { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 30%; opacity: .14; pointer-events: none; animation: value-backdrop-in .6s ease-out; }
+@keyframes value-backdrop-in { from { opacity: 0; } }
 .value-detail-top { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; color: #5b746a; text-transform: uppercase; letter-spacing: .07em; font-size: 9px; }
 .value-detail-top > span:last-child { display: inline-flex; align-items: center; gap: 6px; }
 .value-detail h4 { margin-top: 24px; font: 500 26px/1.25 Outfit, sans-serif; }
@@ -149,6 +153,12 @@
   .values-cover { grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 24px; padding-top: 115px; }
   .values-cover > .service-compass { max-width: 380px; margin-block: 0 12px; }
   .values-cover-copy { padding-bottom: 28px; }
+  /* The cover and the sticky subnav (54px) fill exactly the first screen: the
+     compass scales with the viewport height so nothing is cropped on short
+     screens and there is no half-visible next section on tall ones. */
+  .values-cover { min-height: calc(100svh - 54px); grid-template-rows: 1fr auto; padding-top: clamp(96px, 13svh, 130px); }
+  .values-cover > .service-compass { max-width: clamp(260px, calc((100svh - 250px) * 1.08), 480px); }
+  .values-cover h1 { font-size: clamp(46px, min(5.8vw, 10svh), 88px); }
 }
 
 /* Paper-cut photo stories: white mounts, coloured rings and a torn centre print. */

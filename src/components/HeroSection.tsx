@@ -10,7 +10,6 @@ import { PillarArtwork } from './PillarArtwork';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import {
   Sparkles,
-  Settings,
   Palette,
   Type,
   RotateCw,
@@ -291,27 +290,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="hero-activity-art" aria-hidden="true">
         {pillars.map(pillar => <PillarArtwork key={pillar.id} pillarId={pillar.id} visible={pillar.id === displayPillar.id} />)}
       </div>
-
-      {/* DISCREET SETTINGS TRIGGER (Opens the design studio drawer) */}
-      <button
-        id="hero-settings-trigger"
-        onClick={() => setIsStudioOpen(!isStudioOpen)}
-        aria-label={isStudioOpen ? 'Close hero settings' : 'Open hero settings'}
-        aria-expanded={isStudioOpen}
-        title={getCMSCopy("copy.HeroSection.b4bf826ad7e8", "Hero settings")}
-        className={`group absolute top-[88px] right-4 sm:right-6 md:right-8 lg:right-10 z-40 grid place-items-center w-9 h-9 rounded-full border cursor-pointer transition-all duration-300 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/70 ${
-          isStudioOpen
-            ? 'opacity-100 rotate-90 bg-amber-400 text-neutral-950 border-amber-300 shadow-lg'
-            : 'opacity-[0.18] hover:opacity-100 hover:rotate-45 bg-black/30 hover:bg-black/60 text-white/90 border-white/15 hover:border-white/40 backdrop-blur-md'
-        }`}
-      >
-        <Settings className="w-4 h-4" />
-
-        {/* Faint marker that auto-rotation is paused, surfaced only on hover */}
-        {isPaused && !isStudioOpen && (
-          <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        )}
-      </button>
 
       {/* EXPANDABLE DESIGN STUDIO DRAWER */}
       {isStudioOpen && (

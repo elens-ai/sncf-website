@@ -16,6 +16,11 @@ import './core-values.css';
 const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
 type Cornerstone = typeof CORNERSTONES[number];
 
+/** Faded photographs behind the "Programme in focus" card, by activity id. */
+const PROGRAMME_BACKDROPS: Record<string, string> = {
+  'blood-donation': '/images/programmes/blood-donation.jpg',
+};
+
 /** A shared, responsive photo composition for all three cornerstones. */
 const ValuePhotoCollage: React.FC<{ id: Cornerstone; label: string }> = ({ id, label }) => (
   <figure className="value-photo-story" aria-label={`${label}: compassion in action`}>
@@ -95,6 +100,7 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
             ))}
           </div>
           <article className="value-detail" id={`${id}-detail`} aria-live="polite" aria-atomic="true">
+            {PROGRAMME_BACKDROPS[selected.id] && <div className="value-detail-backdrop" key={`backdrop-${selected.id}`} style={{ backgroundImage: `url(${PROGRAMME_BACKDROPS[selected.id]})` }} aria-hidden="true" />}
             <div className="value-detail-top"><span>{getCMSCopy("copy.CoreValuesPage.ad3a80a2651a", "Programme in focus")}</span><span><CalendarDays size={14} />{selected.period}</span></div>
             <div className="value-detail-summary">
             <h4 className="value-content-enter" key={selected.id}>{selected.title}</h4>
