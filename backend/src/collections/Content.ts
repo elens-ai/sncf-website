@@ -16,7 +16,7 @@ export const Events=contentCollection('events','Events',[
 ])
 Events.hooks!.beforeValidate=[({data})=>{if(data){const valid=validateAnnualDate(data);if(valid!==true)throw new APIError(valid,400)}return data}]
 export const Partners=contentCollection('partners','Partners',[text('name',true),area('contribution',true),area('note'),sourceField('logo'),mediaField('logoMedia'),sourceField('href')])
-export const Awards=contentCollection('awards','Awards',[text('title',true),text('awardedBy',true),text('year',true),area('note'),{name:'featured',type:'checkbox'},{name:'photos',type:'array',fields:imageFields}])
+export const Awards=contentCollection('awards','Awards',[text('title',true),text('awardedBy',true),text('year',false),area('note'),{name:'featured',type:'checkbox'},{name:'photos',type:'array',fields:imageFields}])
 export const GalleryItems=contentCollection('gallery-items','Galleries & pavilion photographs',[
   {name:'group',type:'text',required:true,index:true,admin:{description:'For example pavilion:heal or media:who-we-are. Keep the group to retain its website placement.'}},
   {name:'kind',type:'select',defaultValue:'photo',options:['photo','film','model']},...imageFields,sourceField('poster'),mediaField('posterMedia'),
