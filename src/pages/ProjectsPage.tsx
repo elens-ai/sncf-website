@@ -14,6 +14,7 @@ import { HealthCityFeature } from '../components/HealthCityFeature';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ACTIVITIES, type Activity } from '../data/activities';
 import { mediaReady } from '../data/media';
+import { roomPhotoFor } from '../data/pavilionGallery';
 import { slug } from '../utils/slug';
 import './projects.css';
 
@@ -74,7 +75,7 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
   return <section id={id} className="project-chapter" style={inkStyle(index)} aria-labelledby={`${id}-title`}>
     <header className="project-chapter-heading"><span className="project-chapter-number">{getCMSCopy("copy.ProjectsPage.5feceb66ffc8", "0")}{index + 1}</span><div><p className="project-eyebrow">{face.label} / {face.scope}</p><h2 id={`${id}-title`}>{project.title}</h2></div><Icon size={32} strokeWidth={1.4} aria-hidden="true" /></header>
     <div className="project-story-grid">
-      <figure className="project-landscape"><img src={resolveCMSMedia(`/images/pavilion/${face.image}.jpg`)} alt={`Illustrative photograph: ${face.alt}`} loading="lazy" decoding="async" /><div className="project-landscape-wash" /><div className="project-landscape-title"><Icon size={30} /><h3>{face.line}</h3></div><figcaption>{getCMSCopy("copy.ProjectsPage.9970f438a483", "Illustrative photography")}</figcaption></figure>
+      <figure className="project-landscape"><img src={resolveCMSMedia(roomPhotoFor(`/images/pavilion/${face.image}.jpg`))} alt={`Illustrative photograph: ${face.alt}`} loading="lazy" decoding="async" /><div className="project-landscape-wash" /><div className="project-landscape-title"><Icon size={30} /><h3>{face.line}</h3></div><figcaption>{getCMSCopy("copy.ProjectsPage.9970f438a483", "Illustrative photography")}</figcaption></figure>
       <div className="project-report"><div className="project-report-top"><span className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.6fb73aee5b23", "The project in focus")}</span></div>
         <p className="project-blurb">{project.blurb}</p>
         <div className={modelId ? 'project-impact-row' : undefined}>
@@ -90,7 +91,7 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
       </div>
     </div>
     <ProjectAnalytics project={project} />
-    {mediaReady(id) > 0 && <MediaGallery section={id} title={`${project.title} — photographs & films`} />}
+    {mediaReady(project.id) > 0 && <MediaGallery section={project.id} title={`${project.title} — photographs & films`} />}
     <a className="project-next" href={`#${getProjects()[index+1] ? slug(getProjects()[index + 1].title) : 'health-city'}`}><span>{getCMSCopy("copy.ProjectsPage.ba12ecefbd57", "Continue exploring")}</span><strong>{getProjects()[index+1] ? getProjects()[index + 1].title : 'Sant Nirankari Health City'}</strong><ArrowDown size={19} /></a>
   </section>;
 };

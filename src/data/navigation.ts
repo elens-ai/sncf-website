@@ -1,4 +1,4 @@
-import { bindCMSData, resolveSiteList, validNavigation, validNavGroup } from '../cms/data';
+import { bindCMSData, resolveSiteList, validNavigation } from '../cms/data';
 
 /**
  * Main navigation.
@@ -44,63 +44,40 @@ export interface NavItem {
   badge?: string;
   external?: boolean;
   links?: NavLink[];
-  /** Present only on Core Values — renders the pillar-coded mega menu. */
+  /** `programmes` builds the pillar-coded mega menu from the programmes;
+      `none` shows no drop-down; `links` (or absent) shows `links`. */
+  menu?: 'programmes' | 'links' | 'none';
+  /** Filled in from the programmes when `menu` is `programmes`. */
   groups?: PillarGroup[];
 }
 
-/* THE MENU IS GENERATED FROM THE PAGE'S OWN DATA.
-   These entries were written by hand, and a hand-written index of another
-   file's contents drifts: this one had already lost three real activities
-   (the Health Centre, mass marriages, the sewing and beautician trades) and
-   any renamed id would have become a dead anchor nobody noticed. Deriving
-   the rows from `activitiesFor` means the menu cannot promise an activity
-   the page does not have, or miss one it does.
-
-   Only the LABELS are curated — an activity's own title is written for a
-   record on the page ("Sant Nirankari Health Centre", "Sewing & Beautician")
-   and a menu wants it shorter. Anything without an entry here falls back to
-   its real title, so adding an activity surfaces it immediately rather than
-   silently omitting it. */
-const MENU_LABEL: Record<string, string> = {
-  'blood-donation': 'Blood Donation',
-  'health-checkup': 'Health Checkup Camps',
-  'eye-checkup': 'Eye Care',
-  'health-centre': 'Health Centre',
-  'blood-bank': 'Blood Bank',
-  'schools-colleges': 'Schools & Colleges',
-  scholarships: 'Scholarships',
-  'free-schools': 'Free Schools',
-  'skill-nima': 'NIMA Skill Centres',
-  'skill-trades': 'Sewing & Beautician',
-  'tree-plantation': 'Tree Plantation',
-  cleanliness: 'Cleanliness Drives',
-  'covid-relief': 'COVID-19 Relief',
-  'mass-marriages': 'Mass Marriages',
-  'financial-support': 'Financial Support',
-};
-
+/* THE CORE VALUES MENU IS GENERATED FROM THE PROGRAMMES THEMSELVES.
+   A hand-written index of another file's contents drifts: one had already
+   lost three real activities and any renamed id became a dead anchor. Rows
+   come from `activitiesFor`, so the menu cannot promise a programme the page
+   does not have, or miss one it does. Each programme's `menuLabel` (editable
+   in the CMS) shortens its record title for the menu. */
 const roomLinks = (pillarId: 'heal' | 'enrich' | 'empower'): NavLink[] => [
   { label: `All of ${pillarId[0].toUpperCase()}${pillarId.slice(1)}`, href: `/core-values#${pillarId}` },
-  ...activitiesFor(pillarId).map((a) => ({
-    label: MENU_LABEL[a.id] ?? a.title,
-    href: `/core-values#${a.id}`,
-  })),
+  ...activitiesFor(pillarId).map((a) => ({ label: a.menuLabel ?? a.title, href: `/core-values#${a.id}` })),
 ];
 
-export const DEFAULT_CORE_VALUE_GROUPS: PillarGroup[] = [
+export const programmeGroups = (): PillarGroup[] => [
   { pillarId: 'heal', title: 'Heal', blurb: 'Health & medical care', links: roomLinks('heal') },
   { pillarId: 'enrich', title: 'Enrich', blurb: 'Education & skills', links: roomLinks('enrich') },
-  {
-    pillarId: 'empower',
-    title: 'Empower',
-    blurb: 'Upliftment & environment',
-    links: roomLinks('empower'),
-  },
+  { pillarId: 'empower', title: 'Empower', blurb: 'Upliftment & environment', links: roomLinks('empower') },
 ];
+
+/** Menu items marked `programmes` get the pillar-coded mega menu, built live. */
+const withProgrammes = (items: NavItem[]): NavItem[] =>
+  items.map(item => item.menu === 'programmes'
+    ? { ...item, links: undefined, groups: programmeGroups() }
+    // A drop-down needs real links, and an item set to "none" in the CMS has none.
+    : { ...item, links: item.menu !== 'none' && item.links?.length ? item.links : undefined });
 
 export const DEFAULT_NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'Core Values', href: '/core-values', groups: DEFAULT_CORE_VALUE_GROUPS },
+  { label: 'Core Values', href: '/core-values', menu: 'programmes' },
   {
     label: 'Projects',
     href: '/projects',
@@ -132,5 +109,4 @@ export const DEFAULT_NAV_ITEMS: NavItem[] = [
   { label: 'Our Guiding Force', href: '/our-guiding-force' },
 ];
 
-export let CORE_VALUE_GROUPS: PillarGroup[] = bindCMSData(DEFAULT_CORE_VALUE_GROUPS, (publication, fallback) => resolveSiteList(publication, fallback, 'coreValueGroups', validNavGroup), value => { CORE_VALUE_GROUPS = value; });
-export let NAV_ITEMS: NavItem[] = bindCMSData(DEFAULT_NAV_ITEMS, (publication, fallback) => resolveSiteList(publication, fallback, 'navigation', validNavigation), value => { NAV_ITEMS = value; });
+export let NAV_ITEMS: NavItem[] = bindCMSData(DEFAULT_NAV_ITEMS, (publication, fallback) => withProgrammes(resolveSiteList(publication, fallback, 'navigation', validNavigation)), value => { NAV_ITEMS = value; });

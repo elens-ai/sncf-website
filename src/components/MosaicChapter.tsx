@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import type { Activity } from '../data/activities';
+import type { ActivityIcon } from '../data/activityIcons';
+import { resolveCMSMedia } from '../cms/media';
 import type { PillarState } from '../types';
 import { PillarArtwork } from './PillarArtwork';
 import { PillarPhotoMosaic } from './PillarPhotoMosaic';
@@ -16,47 +18,14 @@ import { MosaicWavesStatic } from './MosaicWaves';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import './mosaic-chapter.css';
 
-const ACTIVITY_SYMBOLS: Record<string, LucideIcon> = {
-  'blood-donation': Droplets, 'health-checkup': Stethoscope, 'eye-checkup': Eye,
-  'health-centre': Hospital, 'blood-bank': Droplet,
-  'schools-colleges': GraduationCap, scholarships: Award, 'free-schools': BookOpen,
-  'skill-nima': Laptop, 'skill-trades': Scissors,
-  'tree-plantation': Trees, cleanliness: Sparkles, 'covid-relief': PackageCheck,
-  'mass-marriages': Heart, 'financial-support': HandCoins,
-  'project-amrit': Waves, 'oneness-vann': Sprout, watershed: Mountain, 'adopted-villages': House,
+const ACTIVITY_SYMBOLS: Record<ActivityIcon, LucideIcon> = {
+  droplets: Droplets, droplet: Droplet, stethoscope: Stethoscope, eye: Eye, hospital: Hospital,
+  'graduation-cap': GraduationCap, award: Award, 'book-open': BookOpen, laptop: Laptop, scissors: Scissors,
+  trees: Trees, sparkles: Sparkles, 'package-check': PackageCheck, heart: Heart, 'hand-coins': HandCoins,
+  waves: Waves, sprout: Sprout, mountain: Mountain, house: House, 'heart-handshake': HeartHandshake,
 };
 
-/** Photographs that blend in behind the chapter while a programme is hovered. */
-const ACTIVITY_BACKDROPS: Record<string, string[]> = {
-  'blood-donation': [
-    '/images/programmes/blood-donation-donor.jpg',
-    /* Cut-out with its white surround keyed to transparent. */
-    '/images/programmes/blood-donation-volunteers.png',
-    '/images/programmes/blood-donation-satguru.jpg',
-  ],
-  'health-checkup': [
-    '/images/programmes/health-checkup-sample-collection.jpg',
-    '/images/programmes/health-checkup-blood-draw.jpg',
-    '/images/programmes/health-checkup-camp.jpg',
-  ],
-  'health-centre': [
-    '/images/programmes/health-centre-building.jpg',
-    '/images/programmes/health-centre-team.jpg',
-    '/images/programmes/health-centre-inauguration.jpg',
-    '/images/programmes/health-centre-dedication.jpg',
-  ],
-};
-
-/** A spot in one collage photo shown clearly instead of faded: `slot` is the
-    photo's index, `x`/`y` the spot's centre within that photo's panel, and
-    `rx`/`ry` its radii. */
-interface BackdropFocus { slot: number; x: string; y: string; rx?: string; ry?: string }
-const BACKDROP_FOCUS: Record<string, BackdropFocus> = {
-  /* Satguru Mata ji and Ramit ji at the centre of the team photograph. */
-  'health-centre': { slot: 1, x: '52%', y: '63%' },
-  /* Satguru Mata ji beside the donor; the two fill most of the panel. */
-  'blood-donation': { slot: 2, x: '48%', y: '42%', rx: '34%', ry: '38%' },
-};
+type BackdropFocus = NonNullable<Activity['hoverFocus']>;
 
 /** Feathered photo collage; images load once its chapter is on screen, so the
     first hover doesn't wait on the download. */
@@ -67,11 +36,11 @@ const ActivityBackdrop: React.FC<{ photos: string[]; show: boolean; preload: boo
   return (
     <>
       <div className="activity-backdrop" data-show={show} aria-hidden="true">
-        {photos.map((src, i) => <span key={src} className="activity-backdrop-photo" data-slot={i} style={{ backgroundImage: `url(${src})` }} />)}
+        {photos.map((src, i) => <span key={`${i}-${src}`} className="activity-backdrop-photo" data-slot={i} style={{ backgroundImage: `url(${resolveCMSMedia(src)})` }} />)}
       </div>
       {focus && (
-        <span className="activity-backdrop-photo activity-backdrop-focus" data-slot={focus.slot} data-show={show} aria-hidden="true"
-          style={{ backgroundImage: `url(${photos[focus.slot]})`, '--focus-x': focus.x, '--focus-y': focus.y, '--focus-rx': focus.rx, '--focus-ry': focus.ry } as React.CSSProperties} />
+        <span className="activity-backdrop-photo activity-backdrop-focus" data-slot={focus.photo - 1} data-show={show} aria-hidden="true"
+          style={{ backgroundImage: `url(${resolveCMSMedia(photos[focus.photo - 1])})`, '--focus-x': `${focus.x}%`, '--focus-y': `${focus.y}%`, '--focus-rx': `${focus.width}%`, '--focus-ry': `${focus.height}%` } as React.CSSProperties} />
       )}
     </>
   );
@@ -107,8 +76,8 @@ export const MosaicChapter = React.memo(function MosaicChapter({
       style={{ '--chapter-a': pillar.accentA, '--chapter-b': pillar.accentB, '--chapter-edge': logo.edge } as React.CSSProperties}
       aria-labelledby={`mosaic-${id}-title`}>
       {stacked && <MosaicWavesStatic pillar={pillar} />}
-      {activities.filter(activity => ACTIVITY_BACKDROPS[activity.id]).map(activity => (
-        <ActivityBackdrop key={activity.id} photos={ACTIVITY_BACKDROPS[activity.id]} show={activity.id === attendedId || activity.id === openId} preload={live} focus={BACKDROP_FOCUS[activity.id]} />
+      {activities.filter(activity => activity.hoverPhotos?.length).map(activity => (
+        <ActivityBackdrop key={activity.id} photos={activity.hoverPhotos!.map(photo => photo.src)} show={activity.id === attendedId || activity.id === openId} preload={live} focus={activity.hoverFocus} />
       ))}
       <PillarArtwork pillarId={id} />
       <header className="activity-chapter-heading" data-reveal>
@@ -142,11 +111,11 @@ export const MosaicChapter = React.memo(function MosaicChapter({
         </svg>
         <div className="activity-emblem">
           <div className="activity-emblem-art"><PillarPhotoMosaic pillar={id} caption={false} /></div>
-          <p className="activity-emblem-caption font-dancing-script">{logo.caption}</p>
+          <p className="activity-emblem-caption font-dancing-script">{pillar.emblemCaption ?? logo.caption}</p>
         </div>
         <ul className="activity-nodes" aria-label={`${name} programmes`}>
           {activities.map((activity, i) => {
-            const Symbol = ACTIVITY_SYMBOLS[activity.id] ?? HeartHandshake;
+            const Symbol = (activity.icon && ACTIVITY_SYMBOLS[activity.icon]) || HeartHandshake;
             const span = i % 2 ? leftCount : rightCount;
             return (
               <li key={activity.id} className="activity-node" data-side={i % 2 ? 'right' : 'left'}

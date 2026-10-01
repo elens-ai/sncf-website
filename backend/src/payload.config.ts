@@ -12,6 +12,7 @@ import {contentCollections} from './collections/Content'
 import {LiveStats,StatAudit} from './collections/LiveStats'
 import {SiteSettings,PavilionSettings} from './globals/Settings'
 import {endpoints} from './cms/endpoints'
+import {previewURL} from './cms/preview'
 const dirname=path.dirname(fileURLToPath(import.meta.url))
 const databaseURI=process.env.DATABASE_URI||'file:./cms-dev.db'
 const sqlite=databaseURI.startsWith('file:')||databaseURI.startsWith('libsql:')
@@ -19,8 +20,15 @@ const origins=[process.env.PAYLOAD_PUBLIC_SITE_URL||'http://localhost:3000',proc
 export default buildConfig({
   serverURL:process.env.PAYLOAD_PUBLIC_SERVER_URL||'http://localhost:3001',
   admin:{user:Users.slug,components:{beforeDashboard:['./components/CMSWelcome#CMSWelcome']},importMap:{baseDir:dirname},meta:{titleSuffix:'— SNCF Content Studio'},
-    livePreview:{url:`${process.env.PAYLOAD_PUBLIC_SITE_URL||'http://localhost:3000'}?cms-preview=true`,collections:contentCollections.map(c=>c.slug)}},
-  collections:[Users,Media,...contentCollections,LiveStats,StatAudit],globals:[SiteSettings,PavilionSettings],endpoints,
+    livePreview:{
+      url:({data,collectionConfig,globalConfig})=>previewURL(collectionConfig?.slug??globalConfig?.slug,data),
+      collections:[...contentCollections.map(c=>c.slug),LiveStats.slug],globals:[SiteSettings.slug,PavilionSettings.slug],
+      breakpoints:[{label:'Phone',name:'phone',width:390,height:844},{label:'Tablet',name:'tablet',width:820,height:1180},{label:'Desktop',name:'desktop',width:1440,height:900}],
+    }},
+  // Collection order sets the studio's sidebar: content, then text & images, setup, statistics, administration.
+  collections:[...contentCollections,Media,LiveStats,StatAudit,Users],
+  // The website reads one REST snapshot; nothing uses GraphQL.
+  graphQL:{disable:true},globals:[SiteSettings,PavilionSettings],endpoints,
   editor:lexicalEditor(),secret:process.env.PAYLOAD_SECRET||'',
   onInit:async()=>{if(process.env.NODE_ENV==='production'&&(!process.env.PAYLOAD_SECRET||process.env.PAYLOAD_SECRET.length<32||!process.env.DATABASE_URI))throw new Error('Production requires DATABASE_URI and a random PAYLOAD_SECRET of at least 32 characters.')},
   typescript:{outputFile:path.resolve(dirname,'payload-types.ts')},

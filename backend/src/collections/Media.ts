@@ -21,7 +21,13 @@ import { invalidateContent } from '../cms/cache'
  */
 export const Media: CollectionConfig = {
   slug: 'media',
-  admin: { useAsTitle: 'alt', group: 'Library' },
+  labels: { singular: 'Media file', plural: 'Media library' },
+  admin: {
+    useAsTitle: 'alt', group: 'Website text & images',
+    defaultColumns: ['filename', 'alt', 'folder', 'updatedAt'], listSearchableFields: ['alt', 'filename', 'caption', 'folder'],
+    description: 'Every photo, film, sound and 3D model uploaded for the website. Upload here, then choose the file wherever an image is asked for.',
+    pagination: { defaultLimit: 50, limits: [25, 50, 100] },
+  },
   access: {
     read: () => true, // the site is public; so are its pictures
     create: isLoggedIn,
@@ -37,6 +43,7 @@ export const Media: CollectionConfig = {
       { name: 'full', width: 1800 },
     ],
     focalPoint: true,
+    adminThumbnail: 'thumb',
   },
   hooks: {beforeOperation: [({args, operation, req}) => {
     if (operation === 'create' || operation === 'update') {

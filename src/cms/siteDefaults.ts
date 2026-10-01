@@ -15,4 +15,40 @@ export const siteDefaults = {
     description: 'Service with humility — Heal, Enrich, Empower.',
     image: '/images/sncf-logo.webp',
   },
+  /** Icons down the left edge; a platform without a URL is not shown. */
+  social: [
+    { platform: 'instagram', url: 'https://instagram.com' },
+    { platform: 'youtube', url: 'https://youtube.com' },
+    { platform: 'spotify', url: 'https://spotify.com' },
+    { platform: 'facebook', url: 'https://facebook.com' },
+    { platform: 'x', url: 'https://x.com' },
+  ] as SocialLink[],
+  /* Nothing here points at nirankarifoundation.org: that domain is being
+     decommissioned, so its material links to the pages here instead. Privacy
+     Policy, Terms, Social Media Guidelines and Foreign Contributions are held
+     back until those pages exist. */
+  footerColumns: [
+    { title: 'Explore', links: [
+      { label: 'Core Values', href: '/core-values' },
+      { label: 'Projects', href: '/projects' },
+      { label: 'Who We Are', href: '/who-we-are' },
+      { label: 'Our Guiding Force', href: '/our-guiding-force' },
+    ] },
+    { title: 'Useful links', links: [
+      { label: 'Awards and Honours', href: '/#awards' },
+      { label: 'Our Partners', href: '/who-we-are#partners' },
+      { label: 'Contact', href: '/who-we-are#contact' },
+    ] },
+    { title: 'Sant Nirankari Mission', links: [
+      { label: 'Sant Nirankari Mission', href: 'https://nirankari.org/' },
+      { label: 'Sant Nirankari Health City', href: 'https://www.nirankarihealthcity.org/' },
+      { label: 'Sant Nirankari Public School', href: 'https://snps.edu.in/' },
+      { label: 'NBGSM College, Sohna', href: 'https://nbgsmc.ac.in/' },
+      { label: 'Sant Nirankari Blood Bank', href: 'https://www.santnirankaribloodbank.org/' },
+    ] },
+  ] as FooterColumn[],
 };
+
+export const SOCIAL_PLATFORMS = ['instagram', 'youtube', 'spotify', 'facebook', 'x', 'linkedin', 'whatsapp'] as const;
+export interface SocialLink { platform: typeof SOCIAL_PLATFORMS[number]; url: string }
+export interface FooterColumn { title: string; links: { label: string; href: string }[] }

@@ -11,6 +11,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     body: 'Blood donation drives, eye-care camps, and free health checkups — over 9,100 camps and 1.5 million+ units of blood donated so far.',
     cardImageAlt: 'Health camp volunteers',
     shortTagline: 'Come for an evening of purpose — see how HEAL comes to life.',
+    emblemCaption: 'Care, in every leaf.',
     /* Figures from the SNCF activity report, March 2026. */
     stats: [
       { label: 'Blood Donation Camps', value: '9,174+' },
@@ -35,6 +36,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     body: 'Skill-development programs and educational support that build self-reliance in underserved communities.',
     cardImageAlt: 'Skill training classroom',
     shortTagline: 'Come for an evening of purpose — see how ENRICH comes to life.',
+    emblemCaption: 'Possibility, on every page.',
     /* Figures from the SNCF activity report, March 2026. Youth skilled sums
        the NIMA, sewing and beautician programmes (3,257 + 15,300 + 601). */
     stats: [
@@ -60,6 +62,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     body: 'Youth-led disaster relief, environmental conservation, and community support initiatives nationwide.',
     cardImageAlt: 'Youth volunteers planting trees',
     shortTagline: 'Come for an evening of purpose — see how EMPOWER comes to life.',
+    emblemCaption: 'Together, we rise.',
     /* Figures from the SNCF activity report, March 2026. */
     stats: [
       { label: 'Trees Planted', value: '2.6M+' },
@@ -91,6 +94,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     body: 'Sant Nirankari Health City · Oneness Vann · Watershed Program · Project Amrit — large-scale initiatives turning these three pillars into permanent infrastructure.',
     cardImageAlt: 'Sant Nirankari Health City campus',
     shortTagline: 'Come for an evening of purpose — see how PROJECTS comes to life.',
+    emblemCaption: 'One purpose. Lasting impact.',
     /* Figures from the SNCF activity report, March 2026. */
     stats: [
       { label: 'Water Bodies Revived', value: '5,962' },

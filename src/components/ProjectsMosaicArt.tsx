@@ -1,5 +1,6 @@
 import React, { useId } from 'react';
 import { resolveCMSMedia } from '../cms/media';
+import { roomPhotoFor } from '../data/pavilionGallery';
 import { PROJECTS_LOGO_OUTLINE } from './projectsLogoOutline';
 
 const PETALS = [
@@ -32,7 +33,7 @@ export const ProjectsMosaicArt: React.FC<{ photoFilter?: string }> = ({ photoFil
       <g clipPath={`url(#${id}-${i})`}>
         <rect width="146" height="120" fill="#fbfffc" />
         <g filter={photoFilter}>
-          {petal.tiles.map((tile, j) => <image key={j} x={tile.x} y={tile.y} width={tile.w} height={tile.h} href={resolveCMSMedia(tile.src)} preserveAspectRatio="xMidYMid slice" />)}
+          {petal.tiles.map((tile, j) => <image key={j} x={tile.x} y={tile.y} width={tile.w} height={tile.h} href={resolveCMSMedia(roomPhotoFor(tile.src))} preserveAspectRatio="xMidYMid slice" />)}
         </g>
         <rect width="146" height="120" fill={petal.colour} opacity=".2" />
       </g>

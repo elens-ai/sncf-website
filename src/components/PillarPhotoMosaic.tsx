@@ -3,6 +3,8 @@ import { ProjectsMosaicArt } from './ProjectsMosaicArt';
 import { resolveCMSMedia } from '../cms/media';
 import './heal-photo-mosaic.css';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
+import { PILLARS } from '../data/pillars';
+import { roomPhoto } from '../data/pavilionGallery';
 
 // Smooth brand contours preserve the model proportions without polygon edges.
 const BOOK_COVER = 'M6 23L11.65 20V95C35 92 54 97 71.3 105C94 97 116 92 132.34 95V20L138 23V105H6Z';
@@ -119,13 +121,13 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         <g id={`${clip}-photo-face`}>
         {pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} /> : <>
         {pillar === 'enrich' && <g clipPath={`url(#${clip}-cover)`}>
-          <image href={resolveCMSMedia('/images/pavilion/enrich-5.jpg')} width="146" height="120" preserveAspectRatio="xMidYMid slice" filter={photoFilter} />
+          <image href={resolveCMSMedia(roomPhoto('enrich', 5))} width="146" height="120" preserveAspectRatio="xMidYMid slice" filter={photoFilter} />
           <rect width="146" height="120" fill={logo.tint} opacity=".4" />
         </g>}
         <g clipPath={`url(#${clip})`}>
           <rect x="0" y="0" width="146" height="120" fill={logo.edge} />
           <g filter={photoFilter}>
-            {TILES.map((tile, i) => <image key={i} href={resolveCMSMedia(`/images/pavilion/${pillar}-${pillar === 'empower' && i === 1 || pillar === 'enrich' && i === 7 ? 3 : tile.photo}.jpg`)} x={tile.x} y={tile.y} width={tile.w} height={tile.h} preserveAspectRatio="xMidYMid slice" />)}
+            {TILES.map((tile, i) => <image key={i} href={resolveCMSMedia(roomPhoto(pillar, pillar === 'empower' && i === 1 || pillar === 'enrich' && i === 7 ? 3 : tile.photo))} x={tile.x} y={tile.y} width={tile.w} height={tile.h} preserveAspectRatio="xMidYMid slice" />)}
           </g>
           {pillar === 'enrich' && <rect width="146" height="120" fill={`url(#${clip}-fold)`} /> }
         </g>
@@ -140,6 +142,6 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         <use href={`#${clip}-outline`} fill="none" stroke={`url(#${clip}-bevel)`} strokeWidth=".45" strokeLinejoin="round" aria-hidden="true" />
       </g>
     </svg>
-    {caption && <figcaption>{logo.caption}<span>Illustrative photography</span></figcaption>}
+    {caption && <figcaption>{PILLARS.find(item => item.id === pillar)?.emblemCaption ?? logo.caption}<span>Illustrative photography</span></figcaption>}
   </figure>;
 };

@@ -1,4 +1,5 @@
 import type { Activity, DataPoint } from '../data/activities';
+import { ACTIVITY_ICONS, type ActivityIcon } from '../data/activityIcons';
 import type { Award } from '../data/awards';
 import type { SNCFEvent } from '../data/events';
 import type { Partner } from '../data/partners';
@@ -67,7 +68,7 @@ function statistic(publication: CMSPublication, key: string, fallback: DataPoint
 function validPillar(item: unknown): item is PillarState {
   return isRecord(item) && recordID(item.id) && fields(item, ['label', 'headline', 'body', 'cardImageAlt', 'shortTagline', 'subText']) &&
     color(item.accentA) && color(item.accentB) && Array.isArray(item.stats) && item.stats.every(point) &&
-    Array.isArray(item.keyHighlights) && item.keyHighlights.every(text);
+    Array.isArray(item.keyHighlights) && item.keyHighlights.every(text) && optionalFields(item, ['emblemCaption']);
 }
 export function resolvePillars(publication: CMSPublication, defaults: PillarState[]) {
   const incoming = collection(publication.pillars, defaults, validPillar);
@@ -83,8 +84,22 @@ function validActivity(item: unknown): item is Activity {
     fields(item, ['title', 'period', 'blurb']) && point(item.headline) && Array.isArray(item.dataPoints) &&
     item.dataPoints.every(point) && Array.isArray(item.images) && item.images.every(image);
 }
+const percent = (value: unknown) => typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 100;
+const photoRef = (value: unknown): value is { src: string; alt?: string } => isRecord(value) && safeCMSURL(value.src) && (value.alt === undefined || value.alt === null || text(value.alt));
+/** Presentation extras are optional: a malformed one is dropped on its own instead of hiding the programme. */
+function presentation(activity: Activity): Activity {
+  const result = { ...activity };
+  if (!ACTIVITY_ICONS.includes(result.icon as ActivityIcon)) delete result.icon;
+  if (!text(result.menuLabel) || !result.menuLabel.trim()) delete result.menuLabel;
+  result.hoverPhotos = Array.isArray(result.hoverPhotos) ? result.hoverPhotos.filter(photoRef).slice(0, 4) : [];
+  const focus = result.hoverFocus;
+  if (!isRecord(focus) || !Number.isInteger(focus.photo) || focus.photo < 1 || focus.photo > result.hoverPhotos.length ||
+      !['x', 'y', 'width', 'height'].every(key => percent(focus[key]))) delete result.hoverFocus;
+  if (!photoRef(result.cardPhoto)) delete result.cardPhoto;
+  return result;
+}
 export function resolveActivities(publication: CMSPublication, defaults: Activity[]) {
-  const incoming = collection(publication.activities, defaults, validActivity);
+  const incoming = collection(publication.activities, defaults, validActivity).map(presentation);
   for (const room of rooms) if (!incoming.some(item => item.pillarId === room)) {
     const fallback = defaults.find(item => item.pillarId === room);
     if (fallback) incoming.push(fallback);
@@ -129,8 +144,7 @@ export function resolveGalleryGroups<T>(publication: CMSPublication, defaults: R
   const groups = new Map<string, Record<string, unknown>[]>();
   for (const original of publication.gallery) {
     if (!isRecord(original) || !text(original.group) || !original.group.startsWith(`${prefix}:`)) continue;
-    // Gallery editors use one source field; legacy plates call that field `image`.
-    const item = prefix === 'plates' ? { ...original, image: original.src ?? original.image ?? null, highlight: original.highlight ?? null, title: original.title ?? original.caption } : original;
+    const item = original;
     const group = original.group.slice(prefix.length + 1);
     if (!recordID(group)) continue;
     if (!valid(item)) { result[group] = defaults[group] ?? []; continue; }
@@ -145,8 +159,6 @@ export function resolveGalleryGroups<T>(publication: CMSPublication, defaults: R
 export const validMedia = (item: Record<string, unknown>) => recordID(item.id) && ['photo', 'film'].includes(item.kind as string) &&
   (item.src === null || safeCMSURL(item.src)) && (item.poster === undefined || item.poster === null || safeCMSURL(item.poster)) && fields(item, ['alt', 'caption']);
 export const validPavilionPhoto = (item: Record<string, unknown>) => recordID(item.id) && safeCMSURL(item.src) && fields(item, ['alt', 'caption', 'source']);
-export const validPlate = (item: Record<string, unknown>) => fields(item, ['title', 'alt']) && (item.image === null || safeCMSURL(item.image)) &&
-  (item.highlight === null || (Number.isInteger(item.highlight) && (item.highlight as number) >= 0 && (item.highlight as number) < 4));
 
 export function resolvePavilionGallery<T extends { id: string }>(publication: CMSPublication, defaults: T[][]): T[][] {
   const grouped = resolveGalleryGroups(publication, Object.fromEntries(rooms.map((room, index) => [room, defaults[index]])), 'pavilion', validPavilionPhoto);
@@ -164,6 +176,7 @@ export function validNavGroup(item: unknown): boolean {
 }
 export function validNavigation(item: unknown): boolean {
   return isRecord(item) && text(item.label) && (item.href === undefined || safeCMSURL(item.href, true)) &&
+    (item.menu === undefined || ['programmes', 'links', 'none'].includes(item.menu as string)) &&
     (item.links === undefined || (Array.isArray(item.links) && item.links.every(validNavLink))) &&
     (item.groups === undefined || (Array.isArray(item.groups) && item.groups.every(validNavGroup)));
 }

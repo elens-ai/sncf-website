@@ -12,6 +12,8 @@ export interface PillarState {
   stats: { label: string; value: string }[];
   keyHighlights: string[];
   subText: string;
+  /** Script line under the pillar's photo emblem, e.g. "Care, in every leaf." */
+  emblemCaption?: string;
 }
 
 export interface DragState {

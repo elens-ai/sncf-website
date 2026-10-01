@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
+import { resolveCMSMedia } from '../cms/media';
 import { PETAL_ART, PALM_ART } from './petalArt';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import './mosaic-overture.css';
@@ -14,11 +15,11 @@ const box = {
   bottom: Math.max(...pieces.map(p => p.y + p.h)),
 };
 const width = box.right - box.x, height = box.bottom - box.y;
-const paths: { id: MosaicPillar; detail: string }[] = [
-  { id: 'heal', detail: 'Care & wellbeing' },
-  { id: 'enrich', detail: 'Learning & skills' },
-  { id: 'empower', detail: 'Community & planet' },
-  { id: 'projects', detail: 'Lasting change' },
+const paths = (): { id: MosaicPillar; detail: string }[] => [
+  { id: 'heal', detail: getCMSCopy('copy.MosaicOverture.heal', 'Care & wellbeing') },
+  { id: 'enrich', detail: getCMSCopy('copy.MosaicOverture.enrich', 'Learning & skills') },
+  { id: 'empower', detail: getCMSCopy('copy.MosaicOverture.empower', 'Community & planet') },
+  { id: 'projects', detail: getCMSCopy('copy.MosaicOverture.projects', 'Lasting change') },
 ];
 
 export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) => void }) {
@@ -39,7 +40,7 @@ export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) 
           </svg>
           <div className="mosaic-lotus" style={{ '--lotus-aspect': width / height } as React.CSSProperties}>
             {pieces.map((piece, index) => (
-              <img key={piece.id} className="mosaic-petal" data-piece={piece.id} src={piece.src} alt="" draggable={false}
+              <img key={piece.id} className="mosaic-petal" data-piece={piece.id} src={resolveCMSMedia(piece.src)} alt="" draggable={false}
                 style={{
                   left: `${(piece.x - box.x) / width * 100}%`, top: `${(piece.y - box.y) / height * 100}%`, width: `${piece.w / width * 100}%`,
                   '--fan-x': (index - 2) * 24, '--fan-turn': (index - 2) * 18,
@@ -58,12 +59,12 @@ export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) 
         </div>
       </div>
       <nav className="mosaic-paths" aria-label="Explore our four pillars">
-        {paths.map(({ id, detail }, index) => (
+        {paths().map(({ id, detail }, index) => (
           <button type="button" key={id} className="mosaic-path" onClick={() => onChoose(id)} aria-label={`View ${PILLAR_LOGOS[id].label} programmes`}
             style={{ '--path-ink': PILLAR_LOGOS[id].tint, '--path-order': index } as React.CSSProperties}>
             <span className="mosaic-path-number" aria-hidden="true">0{index + 1}</span>
             <svg viewBox="0 0 146 120" className="mosaic-path-icon" aria-hidden="true">{PILLAR_LOGOS[id].paths.map(d => <path key={d} d={d} />)}</svg>
-            <span className="mosaic-path-copy"><strong>{PILLAR_LOGOS[id].label}</strong><span>{getCMSCopy(`copy.MosaicOverture.${id}`, detail)}</span></span>
+            <span className="mosaic-path-copy"><strong>{PILLAR_LOGOS[id].label}</strong><span>{detail}</span></span>
             <ArrowUpRight className="mosaic-path-arrow" size={18} aria-hidden="true" />
           </button>
         ))}

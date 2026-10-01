@@ -1,6 +1,9 @@
 import { getCMSCopy } from '../cms/runtime';
 import React from 'react';
-import { Instagram, Youtube, Facebook } from 'lucide-react';
+import { Instagram, Youtube, Facebook, Linkedin, MessageCircle } from 'lucide-react';
+import { useCMSRevision } from '../cms/CMSContentProvider';
+import { getSiteSettings } from '../cms/siteSettings';
+import type { SocialLink } from '../cms/siteDefaults';
 
 // Custom clean SVG for Spotify & X to match exact official ghost circular iconography
 const SpotifyIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
@@ -15,44 +18,21 @@ const XIcon: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) 
   </svg>
 );
 
+/* How each platform is drawn; which platforms show, and where they link, is
+   Site settings → Social links in the CMS. */
+const PLATFORM: Record<SocialLink['platform'], { name: string; ariaLabel: string; icon: React.ReactNode; colorHover: string }> = {
+  instagram: { name: 'Instagram', ariaLabel: 'Follow Sant Nirankari Mission on Instagram', icon: <Instagram className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-pink-400 hover:border-pink-400/60 hover:shadow-[0_0_15px_rgba(244,114,182,0.35)]' },
+  youtube: { name: 'YouTube', ariaLabel: 'Watch Sant Nirankari Mission on YouTube', icon: <Youtube className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-red-400 hover:border-red-400/60 hover:shadow-[0_0_15px_rgba(248,113,113,0.35)]' },
+  spotify: { name: 'Spotify', ariaLabel: 'Listen to Nirankari Spiritual Discourses & Bhajans on Spotify', icon: <SpotifyIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-[0_0_15px_rgba(52,211,153,0.35)]' },
+  facebook: { name: 'Facebook', ariaLabel: 'Connect with Sant Nirankari Mission on Facebook', icon: <Facebook className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-blue-400 hover:border-blue-400/60 hover:shadow-[0_0_15px_rgba(96,165,250,0.35)]' },
+  x: { name: 'X (Twitter)', ariaLabel: 'Follow Sant Nirankari Mission on X', icon: <XIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />, colorHover: 'hover:text-white hover:border-white/80 hover:shadow-[0_0_15px_rgba(255,255,255,0.35)]' },
+  linkedin: { name: 'LinkedIn', ariaLabel: 'Follow Sant Nirankari Charitable Foundation on LinkedIn', icon: <Linkedin className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-sky-400 hover:border-sky-400/60 hover:shadow-[0_0_15px_rgba(56,189,248,0.35)]' },
+  whatsapp: { name: 'WhatsApp', ariaLabel: 'Message Sant Nirankari Charitable Foundation on WhatsApp', icon: <MessageCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-green-400 hover:border-green-400/60 hover:shadow-[0_0_15px_rgba(74,222,128,0.35)]' },
+};
+
 export const SocialSidebar: React.FC = () => {
-  const socialLinks = [
-    {
-      name: getCMSCopy("copy.SocialSidebar.bad57ef7837c", "Instagram"),
-      icon: <Instagram className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
-      url: 'https://instagram.com',
-      ariaLabel: 'Follow Sant Nirankari Mission on Instagram',
-      colorHover: 'hover:text-pink-400 hover:border-pink-400/60 hover:shadow-[0_0_15px_rgba(244,114,182,0.35)]',
-    },
-    {
-      name: getCMSCopy("copy.SocialSidebar.fb7accfff8c6", "YouTube"),
-      icon: <Youtube className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
-      url: 'https://youtube.com',
-      ariaLabel: 'Watch Sant Nirankari Mission on YouTube',
-      colorHover: 'hover:text-red-400 hover:border-red-400/60 hover:shadow-[0_0_15px_rgba(248,113,113,0.35)]',
-    },
-    {
-      name: getCMSCopy("copy.SocialSidebar.7005c0064bda", "Spotify"),
-      icon: <SpotifyIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
-      url: 'https://spotify.com',
-      ariaLabel: 'Listen to Nirankari Spiritual Discourses & Bhajans on Spotify',
-      colorHover: 'hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-[0_0_15px_rgba(52,211,153,0.35)]',
-    },
-    {
-      name: getCMSCopy("copy.SocialSidebar.d41f5b4977ee", "Facebook"),
-      icon: <Facebook className="w-4 h-4 sm:w-4.5 sm:h-4.5" />,
-      url: 'https://facebook.com',
-      ariaLabel: 'Connect with Sant Nirankari Mission on Facebook',
-      colorHover: 'hover:text-blue-400 hover:border-blue-400/60 hover:shadow-[0_0_15px_rgba(96,165,250,0.35)]',
-    },
-    {
-      name: getCMSCopy("copy.SocialSidebar.89c9b65356e3", "X (Twitter)"),
-      icon: <XIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />,
-      url: 'https://x.com',
-      ariaLabel: 'Follow Sant Nirankari Mission on X',
-      colorHover: 'hover:text-white hover:border-white/80 hover:shadow-[0_0_15px_rgba(255,255,255,0.35)]',
-    },
-  ];
+  useCMSRevision();
+  const socialLinks = getSiteSettings().social.map(link => ({ ...PLATFORM[link.platform], url: link.url }));
 
   return (
     <aside
@@ -70,7 +50,7 @@ export const SocialSidebar: React.FC = () => {
       <div className="flex flex-col items-center gap-2.5">
         {socialLinks.map((item) => (
           <a
-            key={item.name}
+            key={`${item.name}-${item.url}`}
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"

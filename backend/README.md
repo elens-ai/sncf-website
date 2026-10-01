@@ -17,13 +17,14 @@ The default `DATABASE_URI=file:./cms-dev.db` uses SQLite, so local setup needs n
 
 ## Authoring
 
-- **Website content:** pillars, activities and projects, events, partners, awards, pages and ordered section blocks.
-- **Text & labels:** individual existing text slots, named by component and copy. Keep their stable keys unchanged.
-- **Asset assignments:** replace existing file paths with a media-library upload or an HTTPS URL. Photos, videos, audio and glTF models can be assigned here.
-- **Media library:** searchable descriptions, tags, folders, captions, credit and licence. Image thumbnails are generated on upload. Upload limit: 150 MB per file.
-- **Pavilion design:** material colours/textures/roughness, chapter palettes, soft lighting, camera motion, pauses, adaptive rendering, component switches, window films/glass and 3D models. Numeric limits protect rendering performance.
-- **Live statistics:** the canonical figures used by the website. Changes published through the Activities/Pillars forms synchronize changed figures. External integrations can PATCH `/api/live-stats/:id` using an editor service user's API key (`Authorization: users API-Key YOUR_KEY`). Every published value change records its previous value and author in **Stat audit**.
-- **Site settings:** branding, navigation, partner branding, contact information and SEO.
+The sidebar groups the studio by task; [CMS.md](../CMS.md) has the full editor guide.
+
+- **Content:** pillars, programmes & projects (figures, tile symbol, menu name, hover photos and Core Values card photo), events, partners (with their logo and branding) and awards.
+- **Website text & images:** every text slot, filterable by page and searchable by its current words; design images with thumbnails; galleries (pillar photos and page galleries); the media library (alt text, credit, licence, folders, tags; 150 MB per file).
+- **Site setup:** site settings (identity, contact, main menu, footer columns, social links, search & sharing defaults), page titles & SEO, sections on/off, and 3D models.
+- **Statistics:** the canonical figures used by the website. Changes published through the Programme/Pillar forms synchronise changed figures. External integrations can PATCH `/api/live-stats/:id` using an editor service user's API key (`Authorization: users API-Key YOUR_KEY`). Every published value change records its previous value and author in **Statistics history**.
+
+Every image field pairs an upload with an optional file path and shows a live preview. Live preview opens the page where the edited record appears. GraphQL is disabled; the website uses the REST snapshot below.
 
 Contributors save drafts; editors publish and manage media; administrators manage people and roles. API keys inherit the user's role. Preview uses the authenticated CMS session: `/api/site-content?preview=true` is never public or cached. Do not embed an API key into the website bundle.
 

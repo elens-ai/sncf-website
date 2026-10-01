@@ -39,6 +39,11 @@ export const DEFAULT_PAVILION_GALLERY = PAVILION_IDS.map((id, room) => PHOTOS[ro
 
 export let PAVILION_GALLERY = bindCMSData(DEFAULT_PAVILION_GALLERY, resolvePavilionGallery, value => { PAVILION_GALLERY = value; });
 
+/** Photo `n` (1–5) of a pillar's set — the one place these photos are edited
+    (CMS Galleries → "Pillar photos"), whether shown as tiles, emblem or collage. */
+export const roomPhoto = (id: string, n: number) =>
+  PAVILION_GALLERY[PAVILION_IDS.indexOf(id as typeof PAVILION_IDS[number])]?.[n - 1]?.src ?? `/images/pavilion/${id}-${n}.jpg`;
+
 /** The farewell passage uses 40% of a full chapter's scroll distance. */
 export function pavilionProgress(scrollFraction: number) {
   const distance = Math.max(0, Math.min(1, scrollFraction)) * 4.4;
@@ -67,3 +72,9 @@ export function pavilionPhase(progress: number) {
   const part = Math.min(1, progress - room);
   return { room, gallery: part >= .3, photo: part < .5 ? 0 : Math.min(4, 1 + Math.floor((part-.5)/.11)), arrival: Math.max(0, Math.min(1, part / .1)) };
 }
+
+/** Maps a bundled room-photo path ("/images/pavilion/heal-2.jpg") to that photo's current source. */
+export const roomPhotoFor = (path: string) => {
+  const match = /^\/images\/pavilion\/(heal|enrich|empower|projects)-([1-5])\.jpg$/.exec(path);
+  return match ? roomPhoto(match[1], Number(match[2])) : path;
+};

@@ -15,7 +15,8 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'role'],
-    group: 'Settings',
+    group: 'Administration',
+    description: 'People who can sign in to the studio, and what each may do.',
   },
   access: {
     // A user may always read and update THEMSELVES (to change their password
@@ -61,7 +62,7 @@ export const Users: CollectionConfig = {
     ],
   },
   fields: [
-    { name: 'name', type: 'text', required: true },
+    { name: 'name', label: 'Name', type: 'text', required: true },
     {
       name: 'role',
       type: 'select',
@@ -70,7 +71,7 @@ export const Users: CollectionConfig = {
       options: [
         { label: 'Contributor — writes drafts, cannot publish', value: 'contributor' },
         { label: 'Editor — publishes content and manages media', value: 'editor' },
-        { label: 'Admin — also manages people and donations', value: 'admin' },
+        { label: 'Admin — also manages people and site setup', value: 'admin' },
       ],
       /* A user updating their own record must not be able to promote
          themselves; without this, the self-update rule above would be a

@@ -1,4 +1,5 @@
 import { bindCMSData, resolveActivities } from '../cms/data';
+import type { ActivityIcon } from './activityIcons';
 
 /**
  * EVERY ACTIVITY THE FOUNDATION REPORTS, and every figure it reports for it.
@@ -40,6 +41,17 @@ export interface Activity {
   /** First entry is the piece on the wall; the rest hang in the detail
       view. Empty until photographs are supplied — see pillarMedia.ts. */
   images: { src: string; alt: string }[];
+  /** Symbol on the programme's tile in the home page constellation. */
+  icon?: ActivityIcon;
+  /** Shorter name for the Core Values menu; the title is used when absent. */
+  menuLabel?: string;
+  /** Photographs that blend in behind the chapter while the tile is hovered. */
+  hoverPhotos?: { src: string; alt?: string }[];
+  /** One spot of a hover photo shown clearly rather than faded, in percent of
+      that photo's panel: `photo` is its 1-based position in `hoverPhotos`. */
+  hoverFocus?: { photo: number; x: number; y: number; width: number; height: number };
+  /** Faint photograph behind the "Programme in focus" card on Core Values. */
+  cardPhoto?: { src: string; alt?: string };
 }
 
 export const DEFAULT_ACTIVITIES: Activity[] = [
@@ -359,6 +371,46 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     images: [],
   },
 ];
+
+/* How each programme is presented: tile symbol, menu name and photographs.
+   Kept beside the figures so the CMS import carries them as editable fields. */
+const photo = (name: string) => ({ src: `/images/programmes/${name}` });
+const PRESENTATION: Record<string, Partial<Activity>> = {
+  'blood-donation': {
+    icon: 'droplets', menuLabel: 'Blood Donation',
+    hoverPhotos: [photo('blood-donation-donor.jpg'), photo('blood-donation-volunteers.png'), photo('blood-donation-satguru.jpg')],
+    /* Satguru Mata ji beside the donor; the two fill most of the panel. */
+    hoverFocus: { photo: 3, x: 48, y: 42, width: 34, height: 38 },
+    cardPhoto: photo('blood-donation.jpg'),
+  },
+  'health-checkup': {
+    icon: 'stethoscope', menuLabel: 'Health Checkup Camps',
+    hoverPhotos: [photo('health-checkup-sample-collection.jpg'), photo('health-checkup-blood-draw.jpg'), photo('health-checkup-camp.jpg')],
+  },
+  'eye-checkup': { icon: 'eye', menuLabel: 'Eye Care' },
+  'health-centre': {
+    icon: 'hospital', menuLabel: 'Health Centre',
+    hoverPhotos: [photo('health-centre-building.jpg'), photo('health-centre-team.jpg'), photo('health-centre-inauguration.jpg'), photo('health-centre-dedication.jpg')],
+    /* Satguru Mata ji and Ramit ji at the centre of the team photograph. */
+    hoverFocus: { photo: 2, x: 52, y: 63, width: 11, height: 21 },
+  },
+  'blood-bank': { icon: 'droplet', menuLabel: 'Blood Bank' },
+  'schools-colleges': { icon: 'graduation-cap', menuLabel: 'Schools & Colleges' },
+  scholarships: { icon: 'award', menuLabel: 'Scholarships' },
+  'free-schools': { icon: 'book-open', menuLabel: 'Free Schools' },
+  'skill-nima': { icon: 'laptop', menuLabel: 'NIMA Skill Centres' },
+  'skill-trades': { icon: 'scissors', menuLabel: 'Sewing & Beautician' },
+  'tree-plantation': { icon: 'trees', menuLabel: 'Tree Plantation' },
+  cleanliness: { icon: 'sparkles', menuLabel: 'Cleanliness Drives' },
+  'covid-relief': { icon: 'package-check', menuLabel: 'COVID-19 Relief' },
+  'mass-marriages': { icon: 'heart', menuLabel: 'Mass Marriages' },
+  'financial-support': { icon: 'hand-coins', menuLabel: 'Financial Support' },
+  'project-amrit': { icon: 'waves' },
+  'oneness-vann': { icon: 'sprout' },
+  watershed: { icon: 'mountain' },
+  'adopted-villages': { icon: 'house' },
+};
+for (const activity of DEFAULT_ACTIVITIES) Object.assign(activity, PRESENTATION[activity.id]);
 
 /** Activities for one pillar, in report order. */
 export let ACTIVITIES: Activity[] = bindCMSData(DEFAULT_ACTIVITIES, resolveActivities, value => { ACTIVITIES = value; });

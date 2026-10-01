@@ -8,9 +8,8 @@ import { DEFAULT_EVENTS } from '../src/data/events';
 import { DEFAULT_PARTNERS } from '../src/data/partners';
 import { DEFAULT_AWARDS } from '../src/data/awards';
 import { DEFAULT_MEDIA } from '../src/data/media';
-import { DEFAULT_PILLAR_PLATES } from '../src/data/pillarMedia';
 import { DEFAULT_PAVILION_GALLERY, PAVILION_IDS } from '../src/data/pavilionGallery';
-import { DEFAULT_NAV_ITEMS, DEFAULT_CORE_VALUE_GROUPS } from '../src/data/navigation';
+import { DEFAULT_NAV_ITEMS } from '../src/data/navigation';
 import { DEFAULT_BRAND } from '../src/data/partnerBrand';
 import { statisticKey } from '../src/cms/data';
 import { siteDefaults } from '../src/cms/siteDefaults';
@@ -40,17 +39,54 @@ for (const pillar of DEFAULT_EXTENDED_PILLARS) {
 const gallery = [
   ...DEFAULT_PAVILION_GALLERY.flatMap((photos, index) => photos.map(photo => ({ ...photo, group: `pavilion:${PAVILION_IDS[index]}`, kind: 'photo' }))),
   ...Object.entries(DEFAULT_MEDIA).flatMap(([group, photos]) => photos.map(photo => ({ ...photo, group: `media:${group}` }))),
-  ...Object.entries(DEFAULT_PILLAR_PLATES).flatMap(([group, photos]) => photos.map((photo, index) => ({
-    ...photo, id: `plate-${group}-${index}`, group: `plates:${group}`, kind: 'photo', src: photo.image, caption: photo.title,
-  }))),
 ];
 
+/* Where each component's text and images appear, so editors can filter the
+   CMS by page and recognise a slot by its section rather than its code. */
+const PAGE = { home: 'home', core: 'core-values', projects: 'projects', who: 'who-we-are', guiding: 'guiding-force', contribute: 'contribute', everywhere: 'everywhere', other: 'other' } as const;
+const COMPONENT_AREAS: Record<string, [string, string]> = {
+  HeroSection: [PAGE.home, 'Hero'], WelcomeSplashScreen: [PAGE.home, 'Welcome screen'],
+  ImpactMosaic: [PAGE.home, 'Our work'], MosaicOverture: [PAGE.home, 'Our work'], MosaicChapter: [PAGE.home, 'Our work'], MosaicTile: [PAGE.home, 'Our work'],
+  PillarModal: [PAGE.home, 'Pillar details pop-up'],
+  EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
+  AwardsSection: [PAGE.home, 'Awards'], AwardLightbox: [PAGE.home, 'Awards'], PartnersSection: [PAGE.home, 'Partners'],
+  CoreValuesPage: [PAGE.core, 'Page'], ValueAnalytics: [PAGE.core, 'Charts'],
+  ProjectsPage: [PAGE.projects, 'Page'], ProjectAnalytics: [PAGE.projects, 'Charts'],
+  WhoWeArePage: [PAGE.who, 'Page'], MissionVision: [PAGE.who, 'Mission & vision'], ServiceStory: [PAGE.who, 'Service story'], EditorialContent: [PAGE.who, 'Timeline & partners'],
+  GuidingForcePage: [PAGE.guiding, 'Page'],
+  ContributionPage: [PAGE.contribute, 'Contribute page'], DonationExperience: [PAGE.contribute, 'Donation form'], DonateModal: [PAGE.contribute, 'Donate pop-up'],
+  Header: [PAGE.everywhere, 'Header'], MainNav: [PAGE.everywhere, 'Menu'], SiteFooter: [PAGE.everywhere, 'Footer'], SocialSidebar: [PAGE.everywhere, 'Social links'],
+  SearchModal: [PAGE.everywhere, 'Search'], AnthemPlayer: [PAGE.everywhere, 'Anthem player'],
+  GalleryModal: [PAGE.everywhere, 'Gallery pop-up'], CardIllustration: [PAGE.everywhere, 'Gallery pop-up'], DevotionalPhotoCard: [PAGE.everywhere, 'Gallery pop-up'], DevotionalLightboxModal: [PAGE.everywhere, 'Gallery pop-up'],
+  MediaGallery: [PAGE.other, 'Photo & film galleries'], PillarModelCard: [PAGE.other, '3D model cards'], projects: [PAGE.other, '3D model cards'], CMSPage: [PAGE.other, 'Extra pages'],
+};
+const excerpt = (value: string) => { const text = value.replace(/s+/g, ' ').trim(); return text.length > 70 ? `${text.slice(0, 69)}…` : text || '(blank)'; };
+const area = (key: string) => {
+  if (key.startsWith('/images/petals/')) return { page: PAGE.home, section: 'Our work petals' };
+  if (key.startsWith('/')) return { page: PAGE.everywhere, section: 'Shared images' };
+  const parts = key.split('.');
+  const component = parts[1] === 'Link' ? parts[2] : parts[1];
+  const [page, section] = COMPONENT_AREAS[component] ?? [PAGE.other, component.replace(/([a-z])([A-Z])/g, '$1 $2')];
+  return { page, section, link: parts[1] === 'Link' };
+};
+const slots = {
+  copy: Object.fromEntries(Object.entries(copy as Record<string, string>).map(([key, value]) => {
+    const where = area(key);
+    return [key, { page: where.page, section: where.section, label: `${where.section} · ${where.link ? 'Link: ' : ''}${excerpt(value)}` }];
+  })),
+  assets: Object.fromEntries(Object.entries(assets as Record<string, { source: string }>).map(([key, entry]) => {
+    const where = area(key);
+    return [key, { page: where.page, section: where.section, label: `${where.section} · ${entry.source.split('/').pop()}` }];
+  })),
+};
+
 const seed = {
-  version: 'initial-bundled-content-v1',
+  version: 'bundled-content-v2',
   pillars: DEFAULT_EXTENDED_PILLARS,
   activities: DEFAULT_ACTIVITIES,
   events: DEFAULT_EVENTS,
-  partners: DEFAULT_PARTNERS,
+  // Each partner carries its own wall name, initials, colour and logo.
+  partners: DEFAULT_PARTNERS.map(partner => ({ ...partner, ...DEFAULT_BRAND[partner.id] })),
   awards: DEFAULT_AWARDS,
   gallery,
   pages: [
@@ -60,8 +96,9 @@ const seed = {
     { id: 'who-we-are', slug: 'who-we-are', title: 'Who We Are', description: 'About Sant Nirankari Charitable Foundation.', sections: [] },
     { id: 'our-guiding-force', slug: 'our-guiding-force', title: 'Our Guiding Force', description: 'The guidance behind a life of service.', sections: [] },
   ],
-  copy, assets, components, stats,
-  site: { ...siteDefaults, navigation: DEFAULT_NAV_ITEMS, coreValueGroups: DEFAULT_CORE_VALUE_GROUPS, partnerBrands: DEFAULT_BRAND },
+  copy, assets, slots, components, stats,
+  // The CMS shows an item's drop-down links only when its drop-down is set to "links".
+  site: { ...siteDefaults, navigation: DEFAULT_NAV_ITEMS.map(item => ({ ...item, menu: item.menu ?? (item.links?.length ? 'links' : 'none') })) },
   pavilion: pavilionDefaults,
 };
 const destination = resolve(root, process.argv[2] ?? 'backend/seed/site-content.json');

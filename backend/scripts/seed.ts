@@ -24,23 +24,24 @@ async function insert(slug:string,key:string,raw:Record<string,any>,order=0){
   if(keys.has(key)){skipped++;return}
   const {id,...data}=raw
   if(slug==='pillars'&&Array.isArray(data.keyHighlights))data.keyHighlights=data.keyHighlights.map((text:unknown)=>typeof text==='string'?{text}:text)
-  // Preserve new fields while structured CMS controls edit the known schema.
-  await payload.create({collection:slug as CollectionSlug,overrideAccess:true,data:{record:raw,...data,key,order,_status:'published'}})
+  await payload.create({collection:slug as CollectionSlug,overrideAccess:true,data:{...data,key,order,_status:'published'}})
   keys.add(key)
   created++
 }
 await runCMSCommand(async()=>{
   for(const [field,slug]of Object.entries(collections))for(const [order,doc]of(seed[field]||[]).entries())await insert(slug,doc.id||doc.key,doc,order)
-  for(const[key,value]of Object.entries(seed.copy||{}))await insert('content-slots',key,{label:(seed.copyLabels?.[key]||`${key.split('.')[1]||key} · ${typeof value==='string'?value.slice(0,80):key}`),value:typeof value==='string'?value:(value as any).value,...(typeof value==='object'?value:{})})
-  for(const[key,value]of Object.entries(seed.assets||{}))await insert('asset-slots',key,{label:key,...(typeof value==='string'?{source:value}:value as object)})
-  for(const[key,value]of Object.entries(seed.components||{}))await insert('component-settings',key,{label:key,...value as object})
+  // Text and image slots carry the page and section they appear in, so editors can filter by page.
+  const where=(kind:'copy'|'assets',key:string)=>seed.slots?.[kind]?.[key]??{label:key}
+  for(const[key,value]of Object.entries(seed.copy||{}))await insert('content-slots',key,{value,...where('copy',key)})
+  for(const[key,value]of Object.entries(seed.assets||{})){const {source:file}=(typeof value==='string'?{source:value}:value) as {source:string};await insert('asset-slots',key,{source:file,...where('assets',key)})}
+  for(const[key,value]of Object.entries(seed.components||{})){const {label,enabled,order}=value as {label?:string,enabled?:boolean,order?:number};await insert('component-settings',key,{label,enabled},order??0)}
   for(const[key,value]of Object.entries(seed.stats||{}))await insert('live-stats',key,{...value as object})
   for(const[slug,data]of[['site-settings',seed.site],['pavilion-settings',{settings:seed.pavilion}]] as const){
     const existing=await payload.findGlobal({slug:slug as 'site-settings',overrideAccess:true}) as any
     if(!existing.createdAt&&!existing.updatedAt&&data)await payload.updateGlobal({slug:slug as 'site-settings',overrideAccess:true,data:{...data,_status:'published'}})
     else if(fillMissingSettings&&data){
       const fill=(saved:any,defaults:any):any=>{
-        if(saved===undefined||saved===null)return defaults
+        if(saved===undefined||saved===null||(Array.isArray(saved)&&saved.length===0&&Array.isArray(defaults)))return defaults
         if(defaults&&typeof defaults==='object'&&!Array.isArray(defaults)&&saved&&typeof saved==='object'&&!Array.isArray(saved))return {...saved,...Object.fromEntries(Object.entries(defaults).map(([key,value])=>[key,fill(saved[key],value)]))}
         return saved
       }

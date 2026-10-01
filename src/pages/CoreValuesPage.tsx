@@ -11,15 +11,12 @@ import { SubsectionNav } from '../components/SubsectionNav';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
+import { roomPhoto } from '../data/pavilionGallery';
 import './core-values.css';
 
 const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
 type Cornerstone = typeof CORNERSTONES[number];
 
-/** Faded photographs behind the "Programme in focus" card, by activity id. */
-const PROGRAMME_BACKDROPS: Record<string, string> = {
-  'blood-donation': '/images/programmes/blood-donation.jpg',
-};
 
 /** A shared, responsive photo composition for all three cornerstones. */
 const ValuePhotoCollage: React.FC<{ id: Cornerstone; label: string }> = ({ id, label }) => (
@@ -30,7 +27,7 @@ const ValuePhotoCollage: React.FC<{ id: Cornerstone; label: string }> = ({ id, l
       {[1, 2, 3, 4, 5].map((photo) => (
         <div key={photo} className={`value-photo-frame value-photo-frame-${photo}`}>
           <img
-            src={resolveCMSMedia(`/images/pavilion/${id}-${photo}.jpg`)}
+            src={resolveCMSMedia(roomPhoto(id, photo))}
             alt=""
             loading="lazy"
             decoding="async"
@@ -100,7 +97,7 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
             ))}
           </div>
           <article className="value-detail" id={`${id}-detail`} aria-live="polite" aria-atomic="true">
-            {PROGRAMME_BACKDROPS[selected.id] && <div className="value-detail-backdrop" key={`backdrop-${selected.id}`} style={{ backgroundImage: `url(${PROGRAMME_BACKDROPS[selected.id]})` }} aria-hidden="true" />}
+            {selected.cardPhoto && <div className="value-detail-backdrop" key={`backdrop-${selected.id}`} style={{ backgroundImage: `url(${resolveCMSMedia(selected.cardPhoto.src)})` }} aria-hidden="true" />}
             <div className="value-detail-top"><span>{getCMSCopy("copy.CoreValuesPage.ad3a80a2651a", "Programme in focus")}</span><span><CalendarDays size={14} />{selected.period}</span></div>
             <div className="value-detail-summary">
             <h4 className="value-content-enter" key={selected.id}>{selected.title}</h4>

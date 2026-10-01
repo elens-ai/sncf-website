@@ -1,5 +1,5 @@
 {
-  "version": "initial-bundled-content-v1",
+  "version": "bundled-content-v2",
   "pillars": [
     {
       "id": "heal",
@@ -10,6 +10,7 @@
       "body": "Blood donation drives, eye-care camps, and free health checkups — over 9,100 camps and 1.5 million+ units of blood donated so far.",
       "cardImageAlt": "Health camp volunteers",
       "shortTagline": "Come for an evening of purpose — see how HEAL comes to life.",
+      "emblemCaption": "Care, in every leaf.",
       "stats": [
         {
           "label": "Blood Donation Camps",
@@ -45,6 +46,7 @@
       "body": "Skill-development programs and educational support that build self-reliance in underserved communities.",
       "cardImageAlt": "Skill training classroom",
       "shortTagline": "Come for an evening of purpose — see how ENRICH comes to life.",
+      "emblemCaption": "Possibility, on every page.",
       "stats": [
         {
           "label": "Students Benefitted",
@@ -80,6 +82,7 @@
       "body": "Youth-led disaster relief, environmental conservation, and community support initiatives nationwide.",
       "cardImageAlt": "Youth volunteers planting trees",
       "shortTagline": "Come for an evening of purpose — see how EMPOWER comes to life.",
+      "emblemCaption": "Together, we rise.",
       "stats": [
         {
           "label": "Trees Planted",
@@ -115,6 +118,7 @@
       "body": "Sant Nirankari Health City · Oneness Vann · Watershed Program · Project Amrit — large-scale initiatives turning these three pillars into permanent infrastructure.",
       "cardImageAlt": "Sant Nirankari Health City campus",
       "shortTagline": "Come for an evening of purpose — see how PROJECTS comes to life.",
+      "emblemCaption": "One purpose. Lasting impact.",
       "stats": [
         {
           "label": "Water Bodies Revived",
@@ -243,7 +247,30 @@
           "value": "8,644"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "droplets",
+      "menuLabel": "Blood Donation",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/blood-donation-donor.jpg"
+        },
+        {
+          "src": "/images/programmes/blood-donation-volunteers.png"
+        },
+        {
+          "src": "/images/programmes/blood-donation-satguru.jpg"
+        }
+      ],
+      "hoverFocus": {
+        "photo": 3,
+        "x": 48,
+        "y": 42,
+        "width": 34,
+        "height": 38
+      },
+      "cardPhoto": {
+        "src": "/images/programmes/blood-donation.jpg"
+      }
     },
     {
       "id": "health-checkup",
@@ -273,7 +300,20 @@
           "value": "9,585"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "stethoscope",
+      "menuLabel": "Health Checkup Camps",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/health-checkup-sample-collection.jpg"
+        },
+        {
+          "src": "/images/programmes/health-checkup-blood-draw.jpg"
+        },
+        {
+          "src": "/images/programmes/health-checkup-camp.jpg"
+        }
+      ]
     },
     {
       "id": "eye-checkup",
@@ -307,7 +347,9 @@
           "value": "160,821"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "eye",
+      "menuLabel": "Eye Care"
     },
     {
       "id": "health-centre",
@@ -361,7 +403,30 @@
           "value": "5"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "hospital",
+      "menuLabel": "Health Centre",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/health-centre-building.jpg"
+        },
+        {
+          "src": "/images/programmes/health-centre-team.jpg"
+        },
+        {
+          "src": "/images/programmes/health-centre-inauguration.jpg"
+        },
+        {
+          "src": "/images/programmes/health-centre-dedication.jpg"
+        }
+      ],
+      "hoverFocus": {
+        "photo": 2,
+        "x": 52,
+        "y": 63,
+        "width": 11,
+        "height": 21
+      }
     },
     {
       "id": "blood-bank",
@@ -391,7 +456,9 @@
           "value": "4,867"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "droplet",
+      "menuLabel": "Blood Bank"
     },
     {
       "id": "schools-colleges",
@@ -421,7 +488,9 @@
           "value": "24,580"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "graduation-cap",
+      "menuLabel": "Schools & Colleges"
     },
     {
       "id": "scholarships",
@@ -443,7 +512,9 @@
           "value": "₹4,82,19,252"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "award",
+      "menuLabel": "Scholarships"
     },
     {
       "id": "free-schools",
@@ -469,7 +540,9 @@
           "value": "2"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "book-open",
+      "menuLabel": "Free Schools"
     },
     {
       "id": "skill-nima",
@@ -499,7 +572,9 @@
           "value": "427 youth"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "laptop",
+      "menuLabel": "NIMA Skill Centres"
     },
     {
       "id": "skill-trades",
@@ -529,7 +604,9 @@
           "value": "601"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "scissors",
+      "menuLabel": "Sewing & Beautician"
     },
     {
       "id": "tree-plantation",
@@ -567,7 +644,9 @@
           "value": "16,000"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "trees",
+      "menuLabel": "Tree Plantation"
     },
     {
       "id": "cleanliness",
@@ -605,7 +684,9 @@
           "value": "5,449,767"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "sparkles",
+      "menuLabel": "Cleanliness Drives"
     },
     {
       "id": "covid-relief",
@@ -655,7 +736,9 @@
           "value": "₹7 Cr"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "package-check",
+      "menuLabel": "COVID-19 Relief"
     },
     {
       "id": "mass-marriages",
@@ -677,7 +760,9 @@
           "value": "57"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "heart",
+      "menuLabel": "Mass Marriages"
     },
     {
       "id": "financial-support",
@@ -703,7 +788,9 @@
           "value": "25 years, 25 tournaments"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "hand-coins",
+      "menuLabel": "Financial Support"
     },
     {
       "id": "project-amrit",
@@ -737,7 +824,8 @@
           "value": "23,565,690"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "waves"
     },
     {
       "id": "oneness-vann",
@@ -771,7 +859,8 @@
           "value": "182"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "sprout"
     },
     {
       "id": "watershed",
@@ -797,7 +886,8 @@
           "value": "144"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "mountain"
     },
     {
       "id": "adopted-villages",
@@ -835,7 +925,8 @@
           "value": "29,627"
         }
       ],
-      "images": []
+      "images": [],
+      "icon": "house"
     }
   ],
   "events": [
@@ -943,64 +1034,109 @@
       "id": "un",
       "name": "United Nations Organization",
       "contribution": "Consistently supporting UN Millennium Development Goals through awareness drives and initiatives.",
-      "note": "SNCF holds special consultative status with the UN."
+      "note": "SNCF holds special consultative status with the UN.",
+      "short": "United Nations",
+      "color": "#009edb",
+      "logo": "/images/partners/un.png",
+      "initials": "UN"
     },
     {
       "id": "railways",
       "name": "Ministry of Indian Railways",
-      "contribution": "Cleanliness drives at 263 railway stations pan India."
+      "contribution": "Cleanliness drives at 263 railway stations pan India.",
+      "short": "Indian Railways",
+      "color": "#c8102e",
+      "logo": "/images/partners/railways.png",
+      "initials": "IR"
     },
     {
       "id": "red-cross",
       "name": "Indian Red Cross Society",
-      "contribution": "Blood donation drives."
+      "contribution": "Blood donation drives.",
+      "short": "Indian Red Cross",
+      "color": "#ed1b2e",
+      "logo": "/images/partners/red-cross.png",
+      "initials": "RC"
     },
     {
       "id": "life-west",
       "name": "The Life Chiropractic College West",
-      "contribution": "Collaboration with Life West rendering free chiropractic treatment."
+      "contribution": "Collaboration with Life West rendering free chiropractic treatment.",
+      "short": "Life West",
+      "color": "#0077c8",
+      "logo": "/images/partners/life-west.svg",
+      "initials": "LW"
     },
     {
       "id": "urban-development",
       "name": "Ministry of Urban Development (India)",
-      "contribution": "Clean India Campaign for a hygienic and healthy country."
+      "contribution": "Clean India Campaign for a hygienic and healthy country.",
+      "short": "Urban Development",
+      "color": "#2e3092",
+      "logo": "/images/partners/urban-development.png",
+      "initials": "UD"
     },
     {
       "id": "ksct",
       "name": "Kailash Satyarthi Children’s Foundation",
       "contribution": "Supporting the nationwide Safe Childhood, Safe India campaign against the exploitation of children.",
-      "note": "Founded by Kailash Satyarthi, Nobel Peace Prize laureate, 2014."
+      "note": "Founded by Kailash Satyarthi, Nobel Peace Prize laureate, 2014.",
+      "short": "KSCF",
+      "color": "#ee7623",
+      "initials": "KS"
     },
     {
       "id": "ndtv",
       "name": "NDTV",
-      "contribution": "Cleanliness campaign across India for a cleaner environment."
+      "contribution": "Cleanliness campaign across India for a cleaner environment.",
+      "short": "NDTV",
+      "color": "#e4002b",
+      "logo": "/images/partners/ndtv.png",
+      "initials": "ND"
     },
     {
       "id": "toi",
       "name": "Times of India",
-      "contribution": "Tree plantation drives across India for a green planet."
+      "contribution": "Tree plantation drives across India for a green planet.",
+      "short": "Times of India",
+      "color": "#bb0000",
+      "logo": "/images/partners/toi.png",
+      "initials": "TOI"
     },
     {
       "id": "niit",
       "name": "NIIT",
       "contribution": "Computer courses for the skill development of youth.",
-      "note": "National Institute of Information Technology."
+      "note": "National Institute of Information Technology.",
+      "short": "NIIT",
+      "color": "#ed1c24",
+      "logo": "/images/partners/niit.png",
+      "initials": "NT"
     },
     {
       "id": "singer",
       "name": "Singer India Ltd.",
-      "contribution": "Vocational training for the empowerment of women."
+      "contribution": "Vocational training for the empowerment of women.",
+      "short": "Singer India",
+      "color": "#d21f2f",
+      "logo": "/images/partners/singer.png",
+      "initials": "SI"
     },
     {
       "id": "blind-relief",
       "name": "The Blind Relief Association, Delhi",
-      "contribution": "Skill development programmes for the visually challenged."
+      "contribution": "Skill development programmes for the visually challenged.",
+      "short": "Blind Relief Assn.",
+      "color": "#1b7a5a",
+      "initials": "BR"
     },
     {
       "id": "ebai",
       "name": "Eye Bank Association of India",
-      "contribution": "Eye donation pledge campaign."
+      "contribution": "Eye donation pledge campaign.",
+      "short": "Eye Bank Assn.",
+      "color": "#1273b8",
+      "initials": "EB"
     }
   ],
   "awards": [
@@ -1352,198 +1488,6 @@
       "kind": "photo"
     },
     {
-      "id": "heal-camp",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A blood donation camp on Manav Ekta Diwas",
-      "group": "media:heal"
-    },
-    {
-      "id": "heal-donor",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A first-time donor at the chair",
-      "group": "media:heal"
-    },
-    {
-      "id": "heal-eye",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "Cataract surgery at a free eye camp",
-      "group": "media:heal"
-    },
-    {
-      "id": "heal-spectacles",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "Spectacles handed out after a sight test",
-      "group": "media:heal"
-    },
-    {
-      "id": "heal-dispensary",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A mobile dispensary reaching a village",
-      "group": "media:heal"
-    },
-    {
-      "id": "heal-bank",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "Inside the foundation’s own blood bank",
-      "group": "media:heal"
-    },
-    {
-      "id": "heal-checkup",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A general health checkup camp",
-      "group": "media:heal"
-    },
-    {
-      "id": "heal-film",
-      "kind": "film",
-      "src": null,
-      "alt": "",
-      "caption": "Film — a day inside a mobile dispensary",
-      "group": "media:heal"
-    },
-    {
-      "id": "enrich-class",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A classroom at a foundation free school",
-      "group": "media:enrich"
-    },
-    {
-      "id": "enrich-scholar",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A Rajmata scholar collecting her award",
-      "group": "media:enrich"
-    },
-    {
-      "id": "enrich-lab",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A STEM lab in a rural school",
-      "group": "media:enrich"
-    },
-    {
-      "id": "enrich-nima",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A NIMA skill centre in session",
-      "group": "media:enrich"
-    },
-    {
-      "id": "enrich-sewing",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "The sewing and beautician trades class",
-      "group": "media:enrich"
-    },
-    {
-      "id": "enrich-library",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A school library at reading hour",
-      "group": "media:enrich"
-    },
-    {
-      "id": "enrich-college",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "NBGSM College, Sohna",
-      "group": "media:enrich"
-    },
-    {
-      "id": "enrich-film",
-      "kind": "film",
-      "src": null,
-      "alt": "",
-      "caption": "Film — a Rajmata scholar’s first term",
-      "group": "media:enrich"
-    },
-    {
-      "id": "empower-planting",
-      "kind": "photo",
-      "src": "/images/mataji-rajpita-planting.webp",
-      "alt": "A sapling being planted at a plantation drive",
-      "caption": "A sapling goes in at a plantation drive",
-      "group": "media:empower"
-    },
-    {
-      "id": "empower-vann",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A micro-forest three years on",
-      "group": "media:empower"
-    },
-    {
-      "id": "empower-clean",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A cleanliness drive at a railway station",
-      "group": "media:empower"
-    },
-    {
-      "id": "empower-relief",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A relief team at work after a flood",
-      "group": "media:empower"
-    },
-    {
-      "id": "empower-covid",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "Food packets prepared during the pandemic",
-      "group": "media:empower"
-    },
-    {
-      "id": "empower-youth",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "The Nirankari Youth Symposium",
-      "group": "media:empower"
-    },
-    {
-      "id": "empower-shg",
-      "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A women’s self-help group at work",
-      "group": "media:empower"
-    },
-    {
-      "id": "empower-film",
-      "kind": "film",
-      "src": null,
-      "alt": "",
-      "caption": "Film — the Nirankari Youth Symposium",
-      "group": "media:empower"
-    },
-    {
       "id": "amrit-ghat",
       "kind": "photo",
       "src": null,
@@ -1575,7 +1519,7 @@
       "alt": "",
       "caption": "A micro-forest three years on",
       "wide": true,
-      "group": "media:project-oneness-vann"
+      "group": "media:oneness-vann"
     },
     {
       "id": "vann-planting",
@@ -1583,7 +1527,7 @@
       "src": "/images/mataji-rajpita-planting.webp",
       "alt": "A sapling being planted",
       "caption": "The first sapling of a new vann",
-      "group": "media:project-oneness-vann"
+      "group": "media:oneness-vann"
     },
     {
       "id": "vann-film",
@@ -1591,7 +1535,7 @@
       "src": null,
       "alt": "",
       "caption": "Film — how a vann is grown",
-      "group": "media:project-oneness-vann"
+      "group": "media:oneness-vann"
     },
     {
       "id": "ws-check",
@@ -1600,7 +1544,7 @@
       "alt": "",
       "caption": "A check dam holding the monsoon",
       "wide": true,
-      "group": "media:watershed-programme"
+      "group": "media:watershed"
     },
     {
       "id": "ws-field",
@@ -1608,7 +1552,7 @@
       "src": null,
       "alt": "",
       "caption": "A field under crop where the land was arid",
-      "group": "media:watershed-programme"
+      "group": "media:watershed"
     },
     {
       "id": "ws-film",
@@ -1616,7 +1560,7 @@
       "src": null,
       "alt": "",
       "caption": "Film — the water that stayed",
-      "group": "media:watershed-programme"
+      "group": "media:watershed"
     },
     {
       "id": "av-school",
@@ -1708,270 +1652,6 @@
       "alt": "",
       "caption": "Film — Her Holiness on service and oneness",
       "group": "media:guiding-force"
-    },
-    {
-      "title": "Blood donation",
-      "highlight": 0,
-      "image": null,
-      "alt": "",
-      "id": "plate-heal-0",
-      "group": "plates:heal",
-      "kind": "photo",
-      "src": null,
-      "caption": "Blood donation"
-    },
-    {
-      "title": "Mobile dispensaries",
-      "highlight": 1,
-      "image": null,
-      "alt": "",
-      "id": "plate-heal-1",
-      "group": "plates:heal",
-      "kind": "photo",
-      "src": null,
-      "caption": "Mobile dispensaries"
-    },
-    {
-      "title": "Eye care",
-      "highlight": 2,
-      "image": null,
-      "alt": "",
-      "id": "plate-heal-2",
-      "group": "plates:heal",
-      "kind": "photo",
-      "src": null,
-      "caption": "Eye care"
-    },
-    {
-      "title": "Disaster relief",
-      "highlight": 3,
-      "image": null,
-      "alt": "",
-      "id": "plate-heal-3",
-      "group": "plates:heal",
-      "kind": "photo",
-      "src": null,
-      "caption": "Disaster relief"
-    },
-    {
-      "title": "Health checkups",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-heal-4",
-      "group": "plates:heal",
-      "kind": "photo",
-      "src": null,
-      "caption": "Health checkups"
-    },
-    {
-      "title": "Spectacles",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-heal-5",
-      "group": "plates:heal",
-      "kind": "photo",
-      "src": null,
-      "caption": "Spectacles"
-    },
-    {
-      "title": "Vocational training",
-      "highlight": 0,
-      "image": null,
-      "alt": "",
-      "id": "plate-enrich-0",
-      "group": "plates:enrich",
-      "kind": "photo",
-      "src": null,
-      "caption": "Vocational training"
-    },
-    {
-      "title": "Scholarships",
-      "highlight": 1,
-      "image": null,
-      "alt": "",
-      "id": "plate-enrich-1",
-      "group": "plates:enrich",
-      "kind": "photo",
-      "src": null,
-      "caption": "Scholarships"
-    },
-    {
-      "title": "Digital classrooms",
-      "highlight": 2,
-      "image": null,
-      "alt": "",
-      "id": "plate-enrich-2",
-      "group": "plates:enrich",
-      "kind": "photo",
-      "src": null,
-      "caption": "Digital classrooms"
-    },
-    {
-      "title": "Self-help groups",
-      "highlight": 3,
-      "image": null,
-      "alt": "",
-      "id": "plate-enrich-3",
-      "group": "plates:enrich",
-      "kind": "photo",
-      "src": null,
-      "caption": "Self-help groups"
-    },
-    {
-      "title": "STEM labs",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-enrich-4",
-      "group": "plates:enrich",
-      "kind": "photo",
-      "src": null,
-      "caption": "STEM labs"
-    },
-    {
-      "title": "Artisan workshops",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-enrich-5",
-      "group": "plates:enrich",
-      "kind": "photo",
-      "src": null,
-      "caption": "Artisan workshops"
-    },
-    {
-      "title": "Cleanliness drives",
-      "highlight": 0,
-      "image": null,
-      "alt": "",
-      "id": "plate-empower-0",
-      "group": "plates:empower",
-      "kind": "photo",
-      "src": null,
-      "caption": "Cleanliness drives"
-    },
-    {
-      "title": "Tree plantation",
-      "highlight": 1,
-      "image": "/images/mataji-rajpita-planting.webp",
-      "alt": "Satguru Mata Sudiksha Ji and Nirankari Rajpita Ramit Ji planting a sapling",
-      "id": "plate-empower-1",
-      "group": "plates:empower",
-      "kind": "photo",
-      "src": "/images/mataji-rajpita-planting.webp",
-      "caption": "Tree plantation"
-    },
-    {
-      "title": "Disaster response",
-      "highlight": 2,
-      "image": null,
-      "alt": "",
-      "id": "plate-empower-2",
-      "group": "plates:empower",
-      "kind": "photo",
-      "src": null,
-      "caption": "Disaster response"
-    },
-    {
-      "title": "Youth leadership",
-      "highlight": 3,
-      "image": null,
-      "alt": "",
-      "id": "plate-empower-3",
-      "group": "plates:empower",
-      "kind": "photo",
-      "src": null,
-      "caption": "Youth leadership"
-    },
-    {
-      "title": "Riverbank cleanups",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-empower-4",
-      "group": "plates:empower",
-      "kind": "photo",
-      "src": null,
-      "caption": "Riverbank cleanups"
-    },
-    {
-      "title": "Micro-forests",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-empower-5",
-      "group": "plates:empower",
-      "kind": "photo",
-      "src": null,
-      "caption": "Micro-forests"
-    },
-    {
-      "title": "Health City",
-      "highlight": 0,
-      "image": null,
-      "alt": "",
-      "id": "plate-projects-0",
-      "group": "plates:projects",
-      "kind": "photo",
-      "src": null,
-      "caption": "Health City"
-    },
-    {
-      "title": "Project Amrit",
-      "highlight": 1,
-      "image": null,
-      "alt": "",
-      "id": "plate-projects-1",
-      "group": "plates:projects",
-      "kind": "photo",
-      "src": null,
-      "caption": "Project Amrit"
-    },
-    {
-      "title": "Oneness Vann",
-      "highlight": 2,
-      "image": "/images/volunteers-planning.webp",
-      "alt": "Volunteers planning a project together",
-      "id": "plate-projects-2",
-      "group": "plates:projects",
-      "kind": "photo",
-      "src": "/images/volunteers-planning.webp",
-      "caption": "Oneness Vann"
-    },
-    {
-      "title": "Watershed",
-      "highlight": 3,
-      "image": null,
-      "alt": "",
-      "id": "plate-projects-3",
-      "group": "plates:projects",
-      "kind": "photo",
-      "src": null,
-      "caption": "Watershed"
-    },
-    {
-      "title": "Super-hospital",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-projects-4",
-      "group": "plates:projects",
-      "kind": "photo",
-      "src": null,
-      "caption": "Super-hospital"
-    },
-    {
-      "title": "Water bodies",
-      "highlight": null,
-      "image": null,
-      "alt": "",
-      "id": "plate-projects-5",
-      "group": "plates:projects",
-      "kind": "photo",
-      "src": null,
-      "caption": "Water bodies"
     }
   ],
   "pages": [
@@ -2012,9 +1692,6 @@
     }
   ],
   "copy": {
-    "copy.ActivityCase.7d9eb7acb13e": "Close",
-    "copy.ActivityCase.449a83504dfb": "Figures as reported",
-    "copy.ActivityCase.57224bb087e6": "SNCF Activity Report, March 2026",
     "copy.AwardLightbox.ed90d2b23113": "Close photograph",
     "copy.AwardLightbox.c7cd30884cd6": "Previous photograph",
     "copy.AwardLightbox.a471f92bee76": "Next photograph",
@@ -2023,9 +1700,6 @@
     "copy.AwardsSection.39a8c7496bcc": "Awards & ",
     "copy.AwardsSection.6d628e092af8": "Recognitions",
     "copy.AwardsSection.146746cd2494": "Your appreciation makes us stronger to serve humanity.",
-    "copy.AwardsSection.1b32d86cf43a": "Previous honour",
-    "copy.AwardsSection.a6de5d452df2": "Next honour",
-    "copy.AwardsSection.865ecb3b60c6": "The honours are still being catalogued — each will take the stage here with the body that conferred it and the year it was given.",
     "copy.DevotionalLightboxModal.8d5e2ed870c4": "Close Lightbox",
     "copy.DevotionalLightboxModal.6a4aa2122de2": "Spiritual Guidance",
     "copy.DevotionalLightboxModal.1cd0846b2924": "ੴ",
@@ -2033,34 +1707,7 @@
     "copy.DevotionalLightboxModal.7506d87af357": "“Know One, Believe in One, Become One. Spreading universal brotherhood, love, peace, and selfless service across humanity.”",
     "copy.DevotionalPhotoCard.e19d3f2c98e2": "Satguru Mata Sudiksha Ji Maharaj",
     "copy.DevotionalPhotoCard.9b46c96cea64": "Nirankari Rajpita Ramit Ji",
-    "copy.DonateModal.3e668943d374": "As an Individual",
-    "copy.DonateModal.b2f17b50cfe5": "A personal contribution of any size, given once or whenever you are able.",
-    "copy.DonateModal.f45a5e04aae6": "As a Corporate",
-    "copy.DonateModal.abc0c507ea90": "Company giving and CSR partnerships directed at the foundation’s programmes.",
-    "copy.DonateModal.29e98f698033": "As a Society or Foundation",
-    "copy.DonateModal.d287e37ac350": "Institutional grants and partnerships between organisations working alongside us.",
-    "copy.DonateModal.0d21bd52022c": "Online",
-    "copy.DonateModal.6ac7e156e834": "Debit card, credit card, net banking, bank transfer, e-wallets and UPI — handled by Razorpay (powered by HDFC Bank) and PayUmoney.",
-    "copy.DonateModal.172fbeaeda3b": "Cheque or DD",
-    "copy.DonateModal.4511c3b7229d": "Drawn in favour of “Sant Nirankari Charitable Foundation”, payable at Delhi, posted to the office or submitted at your nearest branch.",
-    "copy.DonateModal.5cf02dbb1e63": "In person",
-    "copy.DonateModal.38d4e3fd8526": "By card at the SNCF office in Nirankari Colony on working days, 9:30 AM – 6:00 PM, or at the SNCF counter during Sunday Satsang in Delhi.",
     "copy.DonateModal.ca9e7065cc38": "Ways to contribute",
-    "copy.DonateModal.7d9eb7acb13e": "Close",
-    "copy.DonateModal.a5e07daca875": "How to give",
-    "copy.DonateModal.97b0c61b99f6": "Contribute",
-    "copy.DonateModal.b90c0ed18088": "SNCF heals, enriches and empowers the less fortunate to reach their potential and lead a more fulfilling life — irrespective of race, caste, creed, colour or nationality. You can join this movement by gifting your time, talent or treasure.",
-    "copy.DonateModal.08d4574fb8eb": "Talk to the accounts team",
-    "copy.DonateModal.5210e7a0aa69": "Donations are deductible u/s 80G(5)(vi)",
-    "copy.DonateModal.a227814cb736": "Monetary gifts",
-    "copy.DonateModal.5ffbded46693": "Donations to Sant Nirankari Charitable Foundation are tax deductible under section ",
-    "copy.DonateModal.dfd680b022db": "80G(5)(vi)",
-    "copy.DonateModal.b9128d48c204": " of the Income Tax Act, 1961. Contributions are accepted in Indian Rupees.",
-    "copy.DonateModal.a01941bf3134": "Sant Nirankari Charitable Foundation",
-    "copy.DonateModal.beb1d4c609ce": "80-A, Avtar Marg, Sant Nirankari Colony, Delhi 110009",
-    "copy.DonateModal.a4c324b95c22": "011-47660380",
-    "copy.DonateModal.bee1eacddce6": "accounts@nirankarifoundation.org",
-    "copy.DonateModal.6a795d9b33d1": "Office counter 9:30 AM – 6:00 PM, working days",
     "copy.EditorialContent.7ea80acf5f85": "Foundation milestones",
     "copy.EditorialContent.5feceb66ffc8": "0",
     "copy.EditorialContent.fbcc95dc9ecc": "Explore this chapter ",
@@ -2076,29 +1723,6 @@
     "copy.EventsCalendarModal.c7d65e75702a": "Pick a highlighted day.",
     "copy.EventsCalendarModal.08b74adf3453": "Running all year",
     "copy.EventsCalendarModal.0d1519148f4f": "Export all as .ics",
-    "copy.EventsSection.c4e42b974c33": "Every day",
-    "copy.EventsSection.f0ba2cd588e0": "Year-round",
-    "copy.EventsSection.4ca25532480e": "Ongoing · join anytime",
-    "copy.EventsSection.d0efffa65ea7": "Add to calendar",
-    "copy.EventsSection.74fa7d10facc": "Take part",
-    "copy.EventsSection.287a49a0546d": "Scan me",
-    "copy.EventsSection.992eecae9ee5": "Upcoming events deck",
-    "copy.EventsSection.df9110b56fb1": "Upcoming events",
-    "copy.EventsSection.e795b70c71c8": "What’s next",
-    "copy.EventsSection.6f24c80240f1": "A little time. A lasting difference.",
-    "copy.EventsSection.ec19ea2a34bb": "Next · ",
-    "copy.EventsSection.206eea992f2d": "View calendar",
-    "copy.EventsSection.ea4171ae8d53": "TODAY",
-    "copy.FoundationIntro.56219e473693": "Service with Humility",
-    "copy.GalleryCatalogue.7d9eb7acb13e": "Close",
-    "copy.GalleryCatalogue.987904b82edf": "Close the catalogue",
-    "copy.GalleryCatalogue.a4bdb4cd85f2": "The Catalogue",
-    "copy.GalleryCatalogue.f4ea9612fe30": "Four rooms · ",
-    "copy.GalleryCatalogue.93952640c625": " works",
-    "copy.GalleryCatalogue.e68ce14dabba": "Select any piece to step up to its figures",
-    "copy.GalleryCatalogue.5fdb0c060d10": "Room ",
-    "copy.GalleryCatalogue.a4282e4b2298": " of ",
-    "copy.GalleryCatalogue.b77d9413553b": "Figures as reported · March 2026",
     "copy.GalleryModal.352cfc749e55": "Gallery",
     "copy.GalleryModal.01ea6241c111": " pillars · ",
     "copy.GalleryModal.7f2c43d85472": " spiritual portraits",
@@ -2107,11 +1731,6 @@
     "copy.GalleryModal.9a92a27a2688": "View ",
     "copy.GalleryModal.5090fffeca9e": "Spiritual Guides",
     "copy.GalleryModal.0e00e36c4422": "View Portrait",
-    "copy.HallEntrance.fc967e87a6e8": "Our work",
-    "copy.HallEntrance.f4ea9612fe30": "Four rooms · ",
-    "copy.HallEntrance.93952640c625": " works",
-    "copy.HallEntrance.b77d9413553b": "Figures as reported · March 2026",
-    "copy.HallEntrance.45bfe4f17af7": "Browse the catalogue",
     "copy.Header.a01941bf3134": "Sant Nirankari Charitable Foundation",
     "copy.Header.b79520f8055a": "Sant Nirankari Charitable Foundation logo",
     "copy.Header.44e3df1518ac": "Sant Nirankari Charitable Foundation Logo",
@@ -2122,43 +1741,11 @@
     "copy.Header.dfe870d90b82": "⌘K",
     "copy.Header.50ce48b9c623": "Open search",
     "copy.Header.adc4c5775cdb": "Search (⌘K)",
-    "copy.Header.c6580e851793": "Open the gallery",
     "copy.Header.e26586bdf140": "Support the foundation",
     "copy.Header.3f598427e78e": "Support the foundation — ways to contribute",
     "copy.Header.c91ee0f2799d": "Donate",
-    "copy.HeroCurtain.aa3be0db1ca9": "Scroll to open the curtain",
-    "copy.HeroSection.b4bf826ad7e8": "Hero settings",
-    "copy.HeroSection.d72fe2c6264a": "Live Style & Motion Customizer",
-    "copy.HeroSection.9dc429d2bbc2": "Interactive design adjustments for the orbit carousel",
-    "copy.HeroSection.5caadabe7659": " Editorial Typography",
-    "copy.HeroSection.c70470565292": "Marcellus",
-    "copy.HeroSection.1cc364db0d2c": "Cinzel",
-    "copy.HeroSection.b28a8d4af9c3": "Garamond",
-    "copy.HeroSection.fd293ff4e23b": "Syne Neo",
-    "copy.HeroSection.d63db49427e8": " Pillar Name Size",
-    "copy.HeroSection.2d61b94393b8": "px here",
-    "copy.HeroSection.daee7606b339": "Reset",
-    "copy.HeroSection.618a67ebf739": "Scales the fluid size — the name still grows and shrinks with the screen at every setting.",
-    "copy.HeroSection.eb84c28d0955": " 3D Icon Size",
-    "copy.HeroSection.385ad56b7b5d": "Decrease 3D icon size",
-    "copy.HeroSection.1f76c27ba811": "Increase 3D icon size",
-    "copy.HeroSection.428325204f8f": "100% balances the featured icon with the full text block. Adjust from 50% to 180%.",
-    "copy.HeroSection.9ddebdbc2e7e": " Background Aura",
-    "copy.HeroSection.893b99492c3e": "Mandala",
-    "copy.HeroSection.bab4c75d0722": "Rings",
-    "copy.HeroSection.04b8dcba096f": "Nebula",
-    "copy.HeroSection.057b5de48d7b": "Minimal",
-    "copy.HeroSection.a2d1351cc8ee": " Gradient & Glow",
-    "copy.HeroSection.cbe72fa83d95": "Wipe Angle: ",
-    "copy.HeroSection.0213b9349f96": " +45°",
-    "copy.HeroSection.eb6170d865df": "Glow Intensity: ",
-    "copy.HeroSection.7ad1aff3ea68": " Layout Features",
-    "copy.HeroSection.faac55222144": "Impact Metrics Bar",
-    "copy.HeroSection.4f210fb57610": "Auto 3D Rotation",
     "copy.HeroSection.d5dc0eff1e60": " Service with Humility",
     "copy.HeroSection.2e1ac6e9292a": "Explore ",
-    "copy.HeroSection.f41de8da275f": "Compassion in action. Possibilities for everyone.",
-    "copy.HeroSection.5feceb66ffc8": "0",
     "copy.InvitationCard.745148ba42e1": "Close invitation",
     "copy.InvitationCard.a01941bf3134": "Sant Nirankari Charitable Foundation",
     "copy.InvitationCard.23eee5083ad7": "You are warmly invited",
@@ -2169,9 +1756,6 @@
     "copy.InvitationCard.56219e473693": "Service with Humility",
     "copy.MainNav.eb814be3ca3b": "Main",
     "copy.MainNav.7b06d0dd6977": "Site navigation",
-    "copy.MainNav.99904db30de4": "Close navigation",
-    "copy.MainNav.79c84b48c2f0": "Close ",
-    "copy.MainNav.b8039d1d54bf": "Open ",
     "copy.MediaGallery.f5540d923002": "Filter media",
     "copy.MediaGallery.d50d1277878f": "Source illustration",
     "copy.MediaGallery.a4282e4b2298": " of ",
@@ -2189,43 +1773,11 @@
     "copy.MissionVision.7197209907ef": "Living the spirit of service. The foundation works towards a world in which people are healthy, educated and able to stand on their own — and it expects to get there through ordinary volunteers doing extraordinary amounts of quiet work, alongside others who want the same thing.",
     "copy.MissionVision.fd978c2cda84": "A shared future, shaped together.",
     "copy.MissionVision.d416dc3ddd2f": "Mission and vision",
-    "copy.PartnersHero.c3c27cfe4426": "United Nations",
-    "copy.PartnersHero.3007e1e3446d": "A health camp",
-    "copy.PartnersHero.4cc0b4376458": "Indian Red Cross Society",
-    "copy.PartnersHero.9e351718fa06": "Ministry of Indian Railways",
-    "copy.PartnersHero.5f84470d9613": "A classroom",
-    "copy.PartnersHero.98d12a4fc755": "Times of India",
-    "copy.PartnersHero.2a5a44b61ff2": "Volunteers planning a drive",
-    "copy.PartnersHero.ae869749ce31": "A plantation drive",
-    "copy.PartnersHero.08b3dd67f846": "NIIT",
-    "copy.PartnersHero.9a314cf92be3": "The Life Chiropractic College West",
-    "copy.PartnersHero.7b8eb828684b": "Ministry of Urban Development",
-    "copy.PartnersHero.180b26bb6065": "NDTV",
-    "copy.PartnersHero.a6c36a338c46": "Singer India Ltd.",
-    "copy.PartnersHero.f1beb9d2a979": "All partners",
-    "copy.PartnersHero.be3dde060bae": "Partner With Us",
-    "copy.PartnersHero.7e9dc538a648": "Our partners",
-    "copy.PartnersHero.66a18f4d2672": "Become a partner",
-    "copy.PartnersHero.5dab502bfba3": "Partners",
     "copy.PartnersSection.1eac70612fcd": "blood units",
     "copy.PartnersSection.5d8fee134d25": "trees planted",
     "copy.PartnersSection.34412c88d963": "stations cleaned",
     "copy.PartnersSection.dac4970ce624": "students",
-    "copy.PartnersSection.cdd9e6909c7f": "Partners and CSR collaboration",
     "copy.PartnersSection.2e9686b783ba": "Partnerships · CSR · Walking together",
-    "copy.PartnersSection.0363d0e439f3": "Partner media wall — select any mark to read that collaboration",
-    "copy.PartnersSection.a01941bf3134": "Sant Nirankari Charitable Foundation",
-    "copy.PartnersSection.56219e473693": "Service with Humility",
-    "copy.PartnersSection.32cd5e384c6c": "Your organisation — reserve this space",
-    "copy.PartnersSection.e968b8fbdcaf": "UN special consultative status · Serving since 2010 · 250+ branches nationwide · 12 collaborations, one space reserved",
-    "copy.PartnersSection.7d9eb7acb13e": "Close",
-    "copy.PartnersSection.a818e27e9d52": "Prospect organisation's name…",
-    "copy.PartnersSection.1cd7b9621ccb": "Prospect organisation's name",
-    "copy.PartnersSection.33bb9c6ad169": "Save brochure (PDF)",
-    "copy.PartnersSection.258150cb3ee4": "Start a conversation",
-    "copy.PartnersSection.906115657390": "Delivered",
-    "copy.PartnersSection.14ac8db7b70d": "Delivered outcomes",
-    "copy.PartnersSection.9e9379dff36e": "Point at a mark — its every appearance lights. Select the dashed space to reserve yours.",
     "copy.PartnersSection.33760ea355b0": "Sant Nirankari Charitable Foundation · CSR Partnership",
     "copy.PartnersSection.c243ca6c4682": "Walking together",
     "copy.PartnersSection.9f0d1afadeed": "An invitation to ",
@@ -2236,49 +1788,6 @@
     "copy.PartnersSection.fbebd4737aa7": "This space is reserved.",
     "copy.PartnersSection.ec90341de6fc": "UN special consultative status · Registered charitable foundation, serving since 2010 · 250+ branches nationwide · Every figure from our published activity report",
     "copy.PartnersSection.553ce52fba22": "Sant Nirankari Charitable Foundation · Begin the conversation — the wall has room.",
-    "copy.PartnershipSection.c3c27cfe4426": "United Nations",
-    "copy.PartnershipSection.58a0fcc79c90": "Indian Railways",
-    "copy.PartnershipSection.4cc0b4376458": "Indian Red Cross Society",
-    "copy.PartnershipSection.64dc92e5769c": "Life Chiropractic College West",
-    "copy.PartnershipSection.7b8eb828684b": "Ministry of Urban Development",
-    "copy.PartnershipSection.180b26bb6065": "NDTV",
-    "copy.PartnershipSection.98d12a4fc755": "Times of India",
-    "copy.PartnershipSection.08b3dd67f846": "NIIT",
-    "copy.PartnershipSection.3a3e717bf725": "Singer India",
-    "copy.PartnershipSection.4f5bd81a46bc": "Foundation of the",
-    "copy.PartnershipSection.e8543633032e": "new digital epoch",
-    "copy.PartnershipSection.af504e81b4d5": "Designing products, powering ecosystems and laying the foundation of a decentralized web for enterprises, builders and communities alike.",
-    "copy.PartnershipSection.98b67063cf8e": "Contact Us",
-    "copy.PartnershipSection.b61dd8f40159": "Partnership",
-    "copy.PartnershipSection.4edc8bfafc6b": "Products",
-    "copy.PartnershipSection.7af023c43013": "Docs",
-    "copy.PartnershipSection.115e410f01dc": "Get in touch",
-    "copy.PartnershipSection.a33c4bd321ea": " organisations named on the foundation’s partners page. Marks shown for the ",
-    "copy.PartnershipSection.f3d8aad9367d": " that publish one.",
-    "copy.PavilionExitCurtain.1694e6fe9cb5": "Sant Nirankari Charitable Foundation. Thank you for visiting.",
-    "copy.PavilionExitCurtain.75a7badb6b66": "Thank you for visiting",
-    "copy.PavilionExitCurtain.4fb4c68e0de2": "Service with humility. Always.",
-    "copy.PavilionJourney.388eff14452d": "Our work — an immersive journey",
-    "copy.PavilionJourney.720c2c4bc21b": "SNCF / The pavilion of service",
-    "copy.PavilionJourney.5feceb66ffc8": "0",
-    "copy.PavilionJourney.f7bce165377c": " — 06",
-    "copy.PavilionJourney.1bb6c2bb5cce": "Skip tour ",
-    "copy.PavilionJourney.269b4d29d9e2": "Compassion, given a place to grow",
-    "copy.PavilionJourney.fc967e87a6e8": "Our work",
-    "copy.PavilionJourney.3a7b474ee02a": "A walk through the lives we touch.",
-    "copy.PavilionJourney.eee670c33892": "Four paths. One shared purpose.",
-    "copy.PavilionJourney.115f75f7ffd1": "Step inside",
-    "copy.PavilionJourney.2b20284541a9": "Discover what’s next ",
-    "copy.PavilionJourney.103c5169871d": "The ",
-    "copy.PavilionJourney.e15716af068c": " gallery · ",
-    "copy.PavilionJourney.44a0728e8c60": " / 5",
-    "copy.PavilionJourney.97a31a8fc765": " · Scroll to walk through the gallery",
-    "copy.PavilionJourney.09d5da25e90b": "Continue the journey ",
-    "copy.PavilionJourney.db4b169d05b4": " / A cornerstone of service",
-    "copy.PavilionJourney.94af8c6e3737": "Explore the full story ",
-    "copy.PavilionJourney.a094532951fd": "Close activity details",
-    "copy.PavilionJourney.753ae72bda65": "The story behind the service",
-    "copy.PavilionJourney.4fb8b288060e": "Source: SNCF activity report. Figures as reported.",
     "copy.PillarModal.c8df66c5fe3f": "Close dialog",
     "copy.PillarModal.1da514561ad6": "Pillar: ",
     "copy.PillarModal.cb971f19cfd5": "Mission Overview",
@@ -2287,37 +1796,11 @@
     "copy.PillarModal.ef358cdee538": "Explore Other Pillars",
     "copy.PillarModal.49df5771f033": "Sant Nirankari Charitable Foundation · Serving Humanity with Selfless Devotion",
     "copy.PillarModal.0356ce03b498": "Back to Hero Wheel",
-    "copy.PillarsSection.fc967e87a6e8": "Our work",
-    "copy.PillarsSection.a01941bf3134": "Sant Nirankari Charitable Foundation",
-    "copy.PillarsSection.7811af256594": "Thank You for Visiting",
-    "copy.PillarsSection.9c0af37f68ad": "SANT NIRANKARI CHARITABLE FOUNDATION",
-    "copy.PillarsSection.56219e473693": "Service with Humility",
-    "copy.PillarsSection.7b220f6336b2": "JOURNEY BEGINS",
-    "copy.PillarsSection.17225b356193": "SINCE 2010",
-    "copy.PillarsSection.441ee378dd36": " room",
-    "copy.PillarsSection.839fa445d0d4": "ROOM ",
-    "copy.PillarsSection.b5a49d313727": " OF ",
-    "copy.PillarsSection.df4169f2c253": " works · select one for its figures ·",
-    "copy.PillarsSection.a87fb2f5ee39": "browse all rooms",
     "copy.SearchModal.ddb2ca828a96": "Search Results ",
     "copy.SearchModal.52f878edb34f": "Esc",
     "copy.SearchModal.31624ae223af": "Matched ",
     "copy.SearchModal.27bffbe80ece": "No direct matches found for \"",
     "copy.SearchModal.b9500117371b": "\". Try searching \"blood\", \"education\", \"trees\", or \"health city\".",
-    "copy.SiteFooter.3b73900b8d29": "Explore",
-    "copy.SiteFooter.5912782f153a": "Core Values",
-    "copy.SiteFooter.04e2a9728af7": "Projects",
-    "copy.SiteFooter.10a516acef81": "Who We Are",
-    "copy.SiteFooter.b733f26c2ca4": "Our Guiding Force",
-    "copy.SiteFooter.44cf6ffe1e9a": "Useful links",
-    "copy.SiteFooter.d0db09ad56c2": "Awards and Honours",
-    "copy.SiteFooter.8a787be23f3f": "Our Partners",
-    "copy.SiteFooter.2b5c3d26721a": "Contact",
-    "copy.SiteFooter.4e51d6a701d7": "Sant Nirankari Mission",
-    "copy.SiteFooter.3c66946f7a8a": "Sant Nirankari Health City",
-    "copy.SiteFooter.74740a4515c9": "Sant Nirankari Public School",
-    "copy.SiteFooter.ff19513517ce": "NBGSM College, Sohna",
-    "copy.SiteFooter.52bd35a89e0e": "Sant Nirankari Blood Bank",
     "copy.SiteFooter.3eeeb717e545": "Sant Nirankari",
     "copy.SiteFooter.4b0937769465": "Charitable Foundation",
     "copy.SiteFooter.56219e473693": "Service with Humility",
@@ -2329,11 +1812,6 @@
     "copy.SiteFooter.fc07ad55cde7": "© 2010–",
     "copy.SiteFooter.e69147f309ca": " Sant Nirankari Charitable Foundation",
     "copy.SiteFooter.4e29309898d7": "Donations are tax deductible under section 80G(5)(vi) of the Income Tax Act, 1961.",
-    "copy.SocialSidebar.bad57ef7837c": "Instagram",
-    "copy.SocialSidebar.fb7accfff8c6": "YouTube",
-    "copy.SocialSidebar.7005c0064bda": "Spotify",
-    "copy.SocialSidebar.d41f5b4977ee": "Facebook",
-    "copy.SocialSidebar.89c9b65356e3": "X (Twitter)",
     "copy.SocialSidebar.e6a6fd6c2f93": "Social Media Connections",
     "copy.WelcomeSplashScreen.da87301fca5f": "Sant Nirankari Charitable Foundation — Service with Humility",
     "copy.WelcomeSplashScreen.44e3df1518ac": "Sant Nirankari Charitable Foundation Logo",
@@ -2343,17 +1821,11 @@
     "copy.CoreValuesPage.19b476bc912f": "cornerstones.",
     "copy.CoreValuesPage.eddff23d6323": "Care that reaches further. Learning that opens doors. Communities that grow stronger.",
     "copy.CoreValuesPage.c7a3284847f9": "Preview a core value",
-    "copy.CoreValuesPage.2e1ac6e9292a": "Explore ",
     "copy.CoreValuesPage.d677190e0a99": "Service",
     "copy.CoreValuesPage.bb8643e88aae": "with humility",
     "copy.CoreValuesPage.4109634bf723": "Compassion, made visible.",
     "copy.CoreValuesPage.1cd27a19c41a": "Explore the values · Meet the programmes · Discover the impact",
     "copy.CoreValuesPage.5feceb66ffc8": "0",
-    "copy.CoreValuesPage.ebcd38e5576a": " / Our core values",
-    "copy.CoreValuesPage.09d7832f2393": " Service with humility",
-    "copy.CoreValuesPage.80cc8fe42e1e": "Explore the impact ",
-    "copy.CoreValuesPage.0915ad644d68": "The impact at a glance",
-    "copy.CoreValuesPage.43bef1db87f1": " programmes · Reporting dates below",
     "copy.CoreValuesPage.e7b186e662f2": "Behind the numbers",
     "copy.CoreValuesPage.6ae8bf36f85f": "Small actions. Lasting change.",
     "copy.CoreValuesPage.92fcbaad24fc": "Choose a programme to explore its reach.",
@@ -2412,10 +1884,7 @@
     "copy.ProjectsPage.ba61ddf6e8f7": " Named campaigns",
     "copy.ProjectsPage.938db8c9f82c": "01",
     "copy.ProjectsPage.c0c0d22814e2": " Healthcare campus · OPD services started",
-    "copy.ProjectsPage.c71ce8ccf3b4": "Nature",
-    "copy.ProjectsPage.bb501d7877eb": "Community",
     "copy.ProjectsPage.04e2a9728af7": "Projects",
-    "copy.ProjectsPage.20e446db95de": " 3D emblem",
     "copy.ProjectsPage.5feceb66ffc8": "0",
     "copy.ProjectsPage.9970f438a483": "Illustrative photography",
     "copy.ProjectsPage.6fb73aee5b23": "The project in focus",
@@ -2429,7 +1898,6 @@
     "copy.ProjectsPage.bacc0f922481": "Find your connection",
     "copy.ProjectsPage.7fad847159d2": "Different paths. Shared purpose.",
     "copy.ProjectsPage.f4f7c6cc0c7e": "Choose a project and explore its reported reach.",
-    "copy.ProjectsPage.4fa87dc022be": "Care, built for tomorrow.",
     "copy.ProjectsPage.3532c25e1c80": "Now open / OPD services started",
     "copy.ProjectsPage.3eeeb717e545": "Sant Nirankari",
     "copy.ProjectsPage.d39d7428ab57": "A multi-specialty charitable hospital campus in North Delhi, intended to make advanced treatment more accessible.",
@@ -2441,10 +1909,6 @@
     "copy.WhoWeArePage.5f1d766bc647": "The Sant Nirankari Charitable Foundation is the Mission’s working hands — the part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.",
     "copy.WhoWeArePage.3c34f30db957": "Discover our story ",
     "copy.WhoWeArePage.368abdd6a9dc": " Service with humility · Since 2010",
-    "copy.WhoWeArePage.5879b4fa1245": "Source illustration of volunteers planning a service drive",
-    "copy.WhoWeArePage.54f53f33a2a7": "Volunteer planning · Source illustration",
-    "copy.WhoWeArePage.d677190e0a99": "Service",
-    "copy.WhoWeArePage.feb554a592af": "with Humility.",
     "copy.WhoWeArePage.eefebe5695c5": "Who We Are · About the foundation",
     "copy.WhoWeArePage.b96d49653114": "The Sant Nirankari Charitable Foundation is the Mission’s working hands\n      — the part of it that builds hospitals, funds classrooms, plants forests\n      and turns up after a flood.",
     "copy.WhoWeArePage.788281056a5e": "About the foundation",
@@ -2486,39 +1950,7 @@
     "copy.WhoWeArePage.67ba1a790310": "Service begins with a willingness",
     "copy.WhoWeArePage.57911c50add4": "to make a difference.",
     "copy.WhoWeArePage.afa302c27b7e": "Discover our projects ",
-    "copy.ActivityCase.694018943365": "dialog",
-    "copy.AwardLightbox.694018943365": "dialog",
-    "copy.CardIllustration.b29814cf5792": "img",
-    "copy.DonateModal.694018943365": "dialog",
-    "copy.EventsCalendarModal.694018943365": "dialog",
     "copy.EventsCalendarModal.15f450a59134": "numeric",
-    "copy.EventsSection.cd94ec90364d": "timer",
-    "copy.EventsSection.ad936fcbed63": "group",
-    "copy.FoundationIntro.0b819a2b703a": "We are the ",
-    "copy.FoundationIntro.a01941bf3134": "Sant Nirankari Charitable Foundation",
-    "copy.FoundationIntro.71173b91e15d": " — we ",
-    "copy.FoundationIntro.599f8341fe3e": "heal",
-    "copy.FoundationIntro.9e7ef9e260ae": "enrich",
-    "copy.FoundationIntro.e3ee915a8e8c": " and ",
-    "copy.FoundationIntro.b823c439f9e1": "empower",
-    "copy.FoundationIntro.35f3de0998e3": " communities through selfless service.",
-    "copy.GalleryCatalogue.694018943365": "dialog",
-    "copy.GalleryModal.694018943365": "dialog",
-    "copy.HeroOrbitWheel.c697d2981bf4": "region",
-    "copy.HeroOrbitWheel.c3e2d78f3ff3": "button",
-    "copy.HeroSection.bfac314fefdc": "presentation",
-    "copy.InvitationCard.694018943365": "dialog",
-    "copy.MainNav.694018943365": "dialog",
-    "copy.MediaGallery.62955ff792fd": "radiogroup",
-    "copy.MediaGallery.aa3a05d9d57c": "radio",
-    "copy.MediaGallery.694018943365": "dialog",
-    "copy.PartnersHero.b29814cf5792": "img",
-    "copy.PartnersSection.ad936fcbed63": "group",
-    "copy.PartnersSection.073c1634c496": "status",
-    "copy.PillarModal.694018943365": "dialog",
-    "copy.PillarModelCard.b29814cf5792": "img",
-    "copy.WelcomeSplashScreen.694018943365": "dialog",
-    "copy.CoreValuesPage.ad936fcbed63": "group",
     "copy.GuidingForcePage.3e41e2816cc7": "A multi-specialty charitable hospital campus taking shape in North Delhi, meant to put advanced care within reach of those who cannot pay for it.",
     "copy.GuidingForcePage.04b3679a46a7": "Volunteers turning small plots into dense indigenous micro-forests across the country.",
     "copy.GuidingForcePage.0ad8c918c908": "A national effort with the Government of India to clean and revive rivers, ponds, ghats and beaches, and to keep them clean afterwards.",
@@ -2531,7 +1963,6 @@
     "copy.ProjectsPage.c2dc7b1fa516": "Restoring the land that sustains us.",
     "copy.ProjectsPage.904eb1d10ff3": "Since 2017 · Haryana",
     "copy.ProjectsPage.c2eb86f270ec": "Growing stronger, together.",
-    "copy.ProjectsPage.ad936fcbed63": "group",
     "copy.WhoWeArePage.7d12ba56e9f8": "2010",
     "copy.WhoWeArePage.86c8252ee47f": "The foundation is established as the Mission’s charitable arm.",
     "copy.WhoWeArePage.96da37e95d5c": "2014",
@@ -2545,24 +1976,7 @@
     "copy.WhoWeArePage.d5af85a6a90e": "UN special consultative status",
     "copy.WhoWeArePage.2068b81b75d4": "Reach",
     "copy.WhoWeArePage.9d3f458ea970": "250+ branches nationwide",
-    "copy.Link.DonateModal.0ad460126563": "mailto:accounts@nirankarifoundation.org?subject=Contributing%20to%20SNCF",
-    "copy.Link.DonateModal.e3dc1a537132": "tel:+911147660380",
-    "copy.Link.DonateModal.536060a063aa": "mailto:accounts@nirankarifoundation.org",
     "copy.Link.InvitationCard.e3dc1a537132": "tel:+911147660380",
-    "copy.Link.PartnersHero.4d589e9db012": "https://nirankarifoundation.org/our-partners/",
-    "copy.Link.PartnershipSection.4d589e9db012": "https://nirankarifoundation.org/our-partners/",
-    "copy.Link.PartnershipSection.eae35520563d": "https://nirankarifoundation.org/about-us/",
-    "copy.Link.PillarsSection.40ebd77ced68": "#lotus-gate-arc",
-    "copy.Link.SiteFooter.2a4827271280": "/core-values",
-    "copy.Link.SiteFooter.902ceeb21a5f": "/projects",
-    "copy.Link.SiteFooter.3146c10d2d72": "/who-we-are",
-    "copy.Link.SiteFooter.bd0b0305afe8": "/our-guiding-force",
-    "copy.Link.SiteFooter.eab672aebd73": "/#awards",
-    "copy.Link.SiteFooter.a23cd263f359": "https://nirankari.org/",
-    "copy.Link.SiteFooter.b03f7697e124": "https://www.nirankarihealthcity.org/",
-    "copy.Link.SiteFooter.5050e737372d": "https://snps.edu.in/",
-    "copy.Link.SiteFooter.ddd6fdf34d33": "https://nbgsmc.ac.in/",
-    "copy.Link.SiteFooter.e164241f70f5": "https://www.santnirankaribloodbank.org/",
     "copy.CMSPage.ec7c20b5b09e": "Watch the video",
     "copy.CMSPage.2e1ac6e9292a": "Explore ",
     "copy.CMSPage.cb6f188292dd": "Page unavailable",
@@ -2580,17 +1994,8 @@
     "copy.Link.WhoWeArePage.87f2c7a16748": "mailto:sncf@nirankarifoundation.org",
     "copy.Link.WhoWeArePage.536060a063aa": "mailto:accounts@nirankarifoundation.org",
     "copy.Link.WhoWeArePage.902ceeb21a5f": "/projects",
-    "copy.SearchModal.694018943365": "dialog",
     "copy.SearchModal.9d87aeddb779": "Search the foundation",
     "copy.SearchModal.62ebafd01583": "Search activities, projects and stories",
-    "copy.ValueCompass.title": "A compass for compassion",
-    "copy.ValueCompass.previous": "Previous core value",
-    "copy.ValueCompass.hint": "Swipe or choose a value",
-    "copy.ValueCompass.next": "Next core value",
-    "copy.ValueCompass.reduced": "Reduced motion",
-    "copy.ValueCompass.resume": "Resume motion",
-    "copy.ValueCompass.pause": "Pause motion",
-    "copy.ValueCompass.selectedValue": "Selected core value",
     "copy.DonationExperience.whereNeeded": "Where needed most",
     "copy.DonationExperience.individual": "Individual",
     "copy.DonationExperience.company": "Corporate",
@@ -2600,7 +2005,6 @@
     "copy.DonationExperience.givingAs": "Giving as",
     "copy.DonationExperience.preferredCause": "Preferred cause",
     "copy.DonationExperience.proposedGift": "Proposed gift",
-    "copy.DonationExperience.timeOffer": "Time or skills I can offer",
     "copy.DonationExperience.discussOptions": "I would like to discuss the options.",
     "copy.DonationExperience.emailRequest": "Please guide me on the next steps and any applicable documentation.",
     "copy.DonationExperience.emailThanks": "Thank you.",
@@ -2628,10 +2032,6 @@
     "copy.DonationExperience.contributionTitle": "I’d like to contribute",
     "copy.DonationExperience.financialGift": "A financial gift",
     "copy.DonationExperience.timeSkills": "A non-monetary gift",
-    "copy.DonationExperience.amountTitle": "An amount in mind",
-    "copy.DonationExperience.currency": "INR · a proposed contribution",
-    "copy.DonationExperience.custom": "Other",
-    "copy.DonationExperience.customAmount": "Custom contribution amount in rupees",
     "copy.DonationExperience.offerTitle": "Tell us about your contribution",
     "copy.DonationExperience.offerPlaceholder": "For example: teaching, organising events or sharing a professional skill…",
     "copy.DonationExperience.optionalNote": "Optional. Please leave personal or financial details out.",
@@ -2665,7 +2065,6 @@
     "copy.DonationExperience.taxAnswer": "The foundation’s donation page states that contributions qualify for deduction under section 80G(5)(vi) of the Income Tax Act, 1961. Contact the accounts team for documentation.",
     "copy.DonationExperience.offlineAnswer": "Make cheques or demand drafts payable to Sant Nirankari Charitable Foundation at Delhi. Post them to the office below or submit them at your nearest branch.",
     "copy.DonationExperience.counterAnswer": "Card contributions are accepted at the Delhi office on working days, 9:30 AM–6:00 PM, and at the SNCF counter during Sunday Satsang in Delhi.",
-    "copy.Link.DonationExperience.contribute": "https://contribute.nirankarifoundation.org/contribute",
     "copy.ContributionPage.mobile": "Mobile Number",
     "copy.ContributionPage.email": "Email",
     "copy.ContributionPage.amount": "Amount",
@@ -2688,14 +2087,11 @@
     "copy.ContributionPage.subtitle": "A world of difference.",
     "copy.ContributionPage.intro": "Every contribution begins with care. Complete your details below to prepare for the next step.",
     "copy.ContributionPage.integrationNotice": "Your contribution details stay on this page. Mobile and email verification are required before payment.",
-    "copy.ContributionPage.direct": "Go directly to the official portal",
     "copy.ContributionPage.required": "Fields marked * are required.",
     "copy.ContributionPage.panFormat": "5 letters, 4 digits, then 1 letter.",
     "copy.ContributionPage.remarks": "Remarks",
     "copy.ContributionPage.check": "Review contribution",
     "copy.ContributionPage.ready": "Your contribution summary",
-    "copy.ContributionPage.handoff": "Continue to the official portal to enter these details, verify your mobile number and email, and complete your contribution. Details are not transferred automatically.",
-    "copy.ContributionPage.continue": "Continue to official SNCF portal",
     "copy.ContributionPage.verificationPending": "Mobile verification, email verification and payment are not yet available. No contribution has been submitted or charged.",
     "copy.ContributionPage.paymentPending": "Payment setup pending",
     "copy.ServiceStory.listen": "Listen",
@@ -2717,36 +2113,26 @@
     "copy.EventsJournal.calendar": "View calendar",
     "copy.EventsJournal.filter": "Filter by value",
     "copy.EventsJournal.all": "All moments",
-    "copy.EventsJournal.projects": "Projects",
-    "copy.EventsJournal.ongoing": "Every day",
     "copy.EventsJournal.yearRound": "Year round",
     "copy.EventsJournal.join": "An ongoing initiative",
     "copy.EventsJournal.save": "Save the date",
-    "copy.EventsJournal.details": "Explore calendar",
     "copy.EventsJournal.empty": "No events in this category yet.",
     "copy.EventsJournal.agenda": "Choose a moment",
     "copy.EventsJournal.ongoingShort": "Ongoing",
     "copy.EventsJournal.previous": "Previous event",
-    "copy.EventsJournal.discover": "Find your next moment",
     "copy.EventsJournal.next": "Next event",
     "copy.ImpactMosaic.3b73900b8d29": "Explore",
     "copy.ImpactMosaic.d51afc068025": "Photography is illustrative unless marked.",
     "copy.ImpactMosaic.a216e016d42c": "Photography is illustrative.",
     "copy.ImpactMosaic.fc967e87a6e8": "Our work",
-    "copy.ImpactMosaic.be2f5e9cfc4f": "Four paths. One purpose.",
-    "copy.ImpactMosaic.942ee319c0e6": "Every figure below is as the foundation reports it.",
     "copy.MosaicTile.6e941a57fcb6": "Photograph to follow",
     "copy.MosaicTile.5e18f08027f3": "Foundation photograph",
     "copy.MosaicTile.f6bd5e33b6e7": "Illustrative photograph",
     "copy.MosaicTile.3b73900b8d29": "Explore",
     "copy.EventsJournal.passOpen": "Open the invitation",
-    "copy.EventsJournal.pass": "Your pass",
-    "copy.EventsJournal.passHint": "Scan the code for the invitation on your phone, or take the poster with you.",
     "copy.EventsJournal.passBusy": "Preparing…",
     "copy.EventsJournal.poster": "Download poster",
     "copy.EventsJournal.invite": "View invitation",
-    "copy.InvitationCard.676166b956d1": "Download the poster",
-    "copy.InvitationCard.afc75f4b0552": "Preparing the poster…",
     "copy.ValueAnalytics.programme": "See the programme",
     "copy.ValueAnalytics.of": "of",
     "copy.ValueAnalytics.heal1": "Blood donation, April 2025 to March 2026",
@@ -2811,7 +2197,6 @@
     "copy.ProjectAnalytics.adopted": "villages, adopted whole",
     "copy.ProjectAnalytics.villages2": "Schools in the villages",
     "copy.ProjectAnalytics.waterLegend": "Each drop stands for 250 water bodies",
-    "copy.EventsJournal.scan": "Scan for your invitation",
     "copy.InvitationCard.poster": "Poster",
     "copy.InvitationCard.posterMeta": "Portrait · 1080 × 1350 · PNG",
     "copy.InvitationCard.banner": "Banner",
@@ -2830,10 +2215,28 @@
     "copy.InvitationCard.calendarMeta": "Add the date · ICS",
     "copy.InvitationCard.anthem": "Anthem",
     "copy.InvitationCard.anthemMeta": "The SNCF anthem · MP3",
-    "copy.InvitationCard.open": "Open",
     "copy.InvitationCard.logo": "Logo",
     "copy.InvitationCard.logoMeta": "Foundation logo · WebP",
-    "copy.InvitationCard.kitNote": "Share freely — the pass on every piece opens this same invitation."
+    "copy.InvitationCard.kitNote": "Share freely — the pass on every piece opens this same invitation.",
+    "copy.EventsJournal.invitationNote": "Small moments. Lasting change.",
+    "copy.EventsJournal.joinAnytime": "Join anytime",
+    "copy.EventsJournal.illustrative": "Illustrative photography",
+    "copy.EventsJournal.takeMoment": "Take this moment with you.",
+    "copy.EventsJournal.scanHint": "Scan for your invitation, or share the poster.",
+    "copy.EventsJournal.posterError": "The poster could not be prepared. Please try again.",
+    "copy.EventsJournal.emptyHint": "There are more ways to take part across our other pillars.",
+    "copy.EventsJournal.showAll": "Explore all moments",
+    "copy.EventsJournal.emptyAgenda": "New dates will appear here as they are announced.",
+    "copy.MosaicChapter.discover": "Every activity, a story. Select one to discover more.",
+    "copy.MosaicOverture.heal": "Care & wellbeing",
+    "copy.MosaicOverture.enrich": "Learning & skills",
+    "copy.MosaicOverture.empower": "Community & planet",
+    "copy.MosaicOverture.projects": "Lasting change",
+    "copy.ImpactMosaic.eee670c33892": "Four paths. One purpose.",
+    "copy.MosaicOverture.purpose": "A helping hand. An open door. A greener tomorrow. Together, we make a difference.",
+    "copy.ImpactMosaic.c18aacd51665": "Every figure below is as the foundation reports it.",
+    "copy.PartnersSection.intro": "Working alongside organisations that share our commitment to people, communities and the planet.",
+    "copy.CoreValuesPage.illustrativePhotos": "Illustrative photography"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -2880,10 +2283,6 @@
       "source": "/images/vertical-empower.webp",
       "label": "CardIllustration · vertical-empower.webp"
     },
-    "asset.CurtainEntrance.2aec77b1523f": {
-      "source": "/images/curtain-ghost-palm.svg",
-      "label": "CurtainEntrance · curtain-ghost-palm.svg"
-    },
     "asset.DevotionalPhotoCard.4daa8ff53979": {
       "source": "/images/mataji-rajpita-planting.webp",
       "label": "DevotionalPhotoCard · mataji-rajpita-planting.webp"
@@ -2892,129 +2291,17 @@
       "source": "/images/nirankari-rajpita-ramit-ji.jpg",
       "label": "DevotionalPhotoCard · nirankari-rajpita-ramit-ji.jpg"
     },
-    "asset.EventsSection.51c5d5f403d2": {
-      "source": "/images/lotus-watermark.png",
-      "label": "EventsSection · lotus-watermark.png"
-    },
-    "asset.EventsSection.76f684891a21": {
-      "source": "/images/volunteers-planning.webp",
-      "label": "EventsSection · volunteers-planning.webp"
-    },
     "asset.Header.25aa35189463": {
       "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
       "label": "Header · sncf-logo-only.webp"
-    },
-    "asset.HeroSection.51c5d5f403d2": {
-      "source": "/images/lotus-watermark.png",
-      "label": "HeroSection · lotus-watermark.png"
     },
     "asset.InvitationCard.51c5d5f403d2": {
       "source": "/images/lotus-watermark.png",
       "label": "InvitationCard · lotus-watermark.png"
     },
-    "asset.InvitationCard.76f684891a21": {
-      "source": "/images/volunteers-planning.webp",
-      "label": "InvitationCard · volunteers-planning.webp"
-    },
     "asset.MediaGallery.76f684891a21": {
       "source": "/images/volunteers-planning.webp",
       "label": "MediaGallery · volunteers-planning.webp"
-    },
-    "asset.PartnersHero.836c7e928538": {
-      "source": "/images/partners/un.png",
-      "label": "PartnersHero · un.png"
-    },
-    "asset.PartnersHero.7144da391fb1": {
-      "source": "/images/vertical-heal.webp",
-      "label": "PartnersHero · vertical-heal.webp"
-    },
-    "asset.PartnersHero.46bbc9f2d591": {
-      "source": "/images/partners/red-cross.png",
-      "label": "PartnersHero · red-cross.png"
-    },
-    "asset.PartnersHero.848a29a67689": {
-      "source": "/images/partners/railways.png",
-      "label": "PartnersHero · railways.png"
-    },
-    "asset.PartnersHero.486823e29a83": {
-      "source": "/images/vertical-enrich.webp",
-      "label": "PartnersHero · vertical-enrich.webp"
-    },
-    "asset.PartnersHero.81c0e1df48f3": {
-      "source": "/images/partners/toi.png",
-      "label": "PartnersHero · toi.png"
-    },
-    "asset.PartnersHero.76f684891a21": {
-      "source": "/images/volunteers-planning.webp",
-      "label": "PartnersHero · volunteers-planning.webp"
-    },
-    "asset.PartnersHero.7e886446b163": {
-      "source": "/images/vertical-empower.webp",
-      "label": "PartnersHero · vertical-empower.webp"
-    },
-    "asset.PartnersHero.e4d851213c84": {
-      "source": "/images/partners/niit.png",
-      "label": "PartnersHero · niit.png"
-    },
-    "asset.PartnersHero.39811b65f44a": {
-      "source": "/images/partners/life-west.svg",
-      "label": "PartnersHero · life-west.svg"
-    },
-    "asset.PartnersHero.9f2bded92dc1": {
-      "source": "/images/partners/urban-development.png",
-      "label": "PartnersHero · urban-development.png"
-    },
-    "asset.PartnersHero.752cd88f3494": {
-      "source": "/images/partners/ndtv.png",
-      "label": "PartnersHero · ndtv.png"
-    },
-    "asset.PartnersHero.7985ebc52923": {
-      "source": "/images/partners/singer.png",
-      "label": "PartnersHero · singer.png"
-    },
-    "asset.PartnershipSection.836c7e928538": {
-      "source": "/images/partners/un.png",
-      "label": "PartnershipSection · un.png"
-    },
-    "asset.PartnershipSection.848a29a67689": {
-      "source": "/images/partners/railways.png",
-      "label": "PartnershipSection · railways.png"
-    },
-    "asset.PartnershipSection.46bbc9f2d591": {
-      "source": "/images/partners/red-cross.png",
-      "label": "PartnershipSection · red-cross.png"
-    },
-    "asset.PartnershipSection.39811b65f44a": {
-      "source": "/images/partners/life-west.svg",
-      "label": "PartnershipSection · life-west.svg"
-    },
-    "asset.PartnershipSection.9f2bded92dc1": {
-      "source": "/images/partners/urban-development.png",
-      "label": "PartnershipSection · urban-development.png"
-    },
-    "asset.PartnershipSection.752cd88f3494": {
-      "source": "/images/partners/ndtv.png",
-      "label": "PartnershipSection · ndtv.png"
-    },
-    "asset.PartnershipSection.81c0e1df48f3": {
-      "source": "/images/partners/toi.png",
-      "label": "PartnershipSection · toi.png"
-    },
-    "asset.PartnershipSection.e4d851213c84": {
-      "source": "/images/partners/niit.png",
-      "label": "PartnershipSection · niit.png"
-    },
-    "asset.PartnershipSection.7985ebc52923": {
-      "source": "/images/partners/singer.png",
-      "label": "PartnershipSection · singer.png"
-    },
-    "asset.PartnershipSection.d0662fd992e8": {
-      "source": "/video/partnership.mp4",
-      "label": "PartnershipSection · partnership.mp4"
-    },
-    "asset.PavilionExitCurtain.25aa35189463": {
-      "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
-      "label": "PavilionExitCurtain · sncf-logo-only.webp"
     },
     "asset.PillarModelCard.c73c056cfd4f": {
       "source": "/images/projects/amrit.webp",
@@ -3036,22 +2323,6 @@
       "source": "/images/mataji-rajpita-planting.webp",
       "label": "GuidingForcePage · mataji-rajpita-planting.webp"
     },
-    "asset.WhoWeArePage.76f684891a21": {
-      "source": "/images/volunteers-planning.webp",
-      "label": "WhoWeArePage · volunteers-planning.webp"
-    },
-    "/video/oneness-forest.mp4": {
-      "source": "/video/oneness-forest.mp4",
-      "label": "oneness-forest.mp4"
-    },
-    "/video/amrit-lake.mp4": {
-      "source": "/video/amrit-lake.mp4",
-      "label": "amrit-lake.mp4"
-    },
-    "/video/partnership.mp4": {
-      "source": "/video/partnership.mp4",
-      "label": "partnership.mp4"
-    },
     "/images/vertical-empower.webp": {
       "source": "/images/vertical-empower.webp",
       "label": "vertical-empower.webp"
@@ -3060,10 +2331,6 @@
       "source": "/images/satguru-mata-sudiksha-ji.jpg",
       "label": "satguru-mata-sudiksha-ji.jpg"
     },
-    "/images/curtain-ghost-petals.svg": {
-      "source": "/images/curtain-ghost-petals.svg",
-      "label": "curtain-ghost-petals.svg"
-    },
     "/images/sncf-mark.svg": {
       "source": "/images/sncf-mark.svg",
       "label": "sncf-mark.svg"
@@ -3071,10 +2338,6 @@
     "/images/lotus-watermark.png": {
       "source": "/images/lotus-watermark.png",
       "label": "lotus-watermark.png"
-    },
-    "/images/curtain-ghost-palm.svg": {
-      "source": "/images/curtain-ghost-palm.svg",
-      "label": "curtain-ghost-palm.svg"
     },
     "/images/sncf-logo.webp": {
       "source": "/images/sncf-logo.webp",
@@ -3088,10 +2351,6 @@
       "source": "/images/volunteers-planning.webp",
       "label": "volunteers-planning.webp"
     },
-    "/images/curtain-ghost.svg": {
-      "source": "/images/curtain-ghost.svg",
-      "label": "curtain-ghost.svg"
-    },
     "/images/vertical-enrich.webp": {
       "source": "/images/vertical-enrich.webp",
       "label": "vertical-enrich.webp"
@@ -3104,133 +2363,29 @@
       "source": "/images/nirankari-rajpita-ramit-ji.jpg",
       "label": "nirankari-rajpita-ramit-ji.jpg"
     },
-    "/images/pavilion/projects-1.jpg": {
-      "source": "/images/pavilion/projects-1.jpg",
-      "label": "projects-1.jpg"
-    },
-    "/images/pavilion/heal-2.jpg": {
-      "source": "/images/pavilion/heal-2.jpg",
-      "label": "heal-2.jpg"
-    },
-    "/images/pavilion/heal-3.jpg": {
-      "source": "/images/pavilion/heal-3.jpg",
-      "label": "heal-3.jpg"
-    },
-    "/images/pavilion/projects-2.jpg": {
-      "source": "/images/pavilion/projects-2.jpg",
-      "label": "projects-2.jpg"
-    },
-    "/images/pavilion/heal-1.jpg": {
-      "source": "/images/pavilion/heal-1.jpg",
-      "label": "heal-1.jpg"
-    },
-    "/images/pavilion/projects-3.jpg": {
-      "source": "/images/pavilion/projects-3.jpg",
-      "label": "projects-3.jpg"
-    },
-    "/images/pavilion/heal-4.jpg": {
-      "source": "/images/pavilion/heal-4.jpg",
-      "label": "heal-4.jpg"
-    },
-    "/images/pavilion/heal-5.jpg": {
-      "source": "/images/pavilion/heal-5.jpg",
-      "label": "heal-5.jpg"
-    },
-    "/images/pavilion/projects-4.jpg": {
-      "source": "/images/pavilion/projects-4.jpg",
-      "label": "projects-4.jpg"
-    },
-    "/images/pavilion/mosaic-wall.svg": {
-      "source": "/images/pavilion/mosaic-wall.svg",
-      "label": "mosaic-wall.svg"
-    },
-    "/images/pavilion/projects-5.jpg": {
-      "source": "/images/pavilion/projects-5.jpg",
-      "label": "projects-5.jpg"
-    },
-    "/images/pavilion/enrich-1.jpg": {
-      "source": "/images/pavilion/enrich-1.jpg",
-      "label": "enrich-1.jpg"
-    },
-    "/images/pavilion/enrich-2.jpg": {
-      "source": "/images/pavilion/enrich-2.jpg",
-      "label": "enrich-2.jpg"
-    },
-    "/images/pavilion/empower-5.jpg": {
-      "source": "/images/pavilion/empower-5.jpg",
-      "label": "empower-5.jpg"
-    },
-    "/images/pavilion/empower-4.jpg": {
-      "source": "/images/pavilion/empower-4.jpg",
-      "label": "empower-4.jpg"
-    },
-    "/images/pavilion/enrich-3.jpg": {
-      "source": "/images/pavilion/enrich-3.jpg",
-      "label": "enrich-3.jpg"
-    },
-    "/images/pavilion/empower-1.jpg": {
-      "source": "/images/pavilion/empower-1.jpg",
-      "label": "empower-1.jpg"
-    },
-    "/images/pavilion/enrich-4.jpg": {
-      "source": "/images/pavilion/enrich-4.jpg",
-      "label": "enrich-4.jpg"
-    },
-    "/images/pavilion/empower-3.jpg": {
-      "source": "/images/pavilion/empower-3.jpg",
-      "label": "empower-3.jpg"
-    },
-    "/images/pavilion/empower-2.jpg": {
-      "source": "/images/pavilion/empower-2.jpg",
-      "label": "empower-2.jpg"
-    },
-    "/images/pavilion/enrich-5.jpg": {
-      "source": "/images/pavilion/enrich-5.jpg",
-      "label": "enrich-5.jpg"
-    },
     "/images/projects/amrit.webp": {
       "source": "/images/projects/amrit.webp",
       "label": "amrit.webp"
     },
-    "/images/partners/toi.png": {
-      "source": "/images/partners/toi.png",
-      "label": "toi.png"
-    },
-    "/images/partners/singer.png": {
-      "source": "/images/partners/singer.png",
-      "label": "singer.png"
-    },
-    "/images/partners/ndtv.png": {
-      "source": "/images/partners/ndtv.png",
-      "label": "ndtv.png"
-    },
-    "/images/partners/niit.png": {
-      "source": "/images/partners/niit.png",
-      "label": "niit.png"
-    },
-    "/images/partners/urban-development.png": {
-      "source": "/images/partners/urban-development.png",
-      "label": "urban-development.png"
-    },
-    "/images/partners/railways.png": {
-      "source": "/images/partners/railways.png",
-      "label": "railways.png"
-    },
-    "/images/partners/red-cross.png": {
-      "source": "/images/partners/red-cross.png",
-      "label": "red-cross.png"
-    },
-    "/images/partners/life-west.svg": {
-      "source": "/images/partners/life-west.svg",
-      "label": "life-west.svg"
-    },
-    "/images/partners/un.png": {
-      "source": "/images/partners/un.png",
-      "label": "un.png"
-    },
     "/images/petals/palm.webp": {
       "source": "/images/petals/palm.webp",
       "label": "palm.webp"
+    },
+    "asset.GuidingForcePage.rajpita": {
+      "source": "/images/nirankari-rajpita-ramit-ji.jpg",
+      "label": "GuidingForcePage · Rajpita portrait"
+    },
+    "asset.ProjectsPage.healthCity": {
+      "source": "/images/projects/health-city.webp",
+      "label": "ProjectsPage · health-city.webp"
+    },
+    "asset.InvitationCard.logo": {
+      "source": "/images/sncf-logo.webp",
+      "label": "InvitationCard · sncf-logo.webp"
+    },
+    "asset.projects.bloom": {
+      "source": "/images/projects-bloom.png?v=balanced",
+      "label": "projects · projects-bloom.png?v=balanced"
     },
     "/images/petals/petal-empower.webp": {
       "source": "/images/petals/petal-empower.webp",
@@ -3251,46 +2406,2947 @@
     "/images/petals/petal-projects.webp": {
       "source": "/images/petals/petal-projects.webp",
       "label": "petal-projects.webp"
+    }
+  },
+  "slots": {
+    "copy": {
+      "copy.AwardLightbox.ed90d2b23113": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Clo e photograph"
+      },
+      "copy.AwardLightbox.c7cd30884cd6": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Previou  photograph"
+      },
+      "copy.AwardLightbox.a471f92bee76": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Next photograph"
+      },
+      "copy.AwardsSection.589b32fb4660": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Award  and recognition"
+      },
+      "copy.AwardsSection.22466b5a68ad": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Recognition"
+      },
+      "copy.AwardsSection.39a8c7496bcc": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Award  &"
+      },
+      "copy.AwardsSection.6d628e092af8": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Recognition"
+      },
+      "copy.AwardsSection.146746cd2494": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Your appreciation make  u   tronger to  erve humanity."
+      },
+      "copy.DevotionalLightboxModal.8d5e2ed870c4": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Clo e Lightbox"
+      },
+      "copy.DevotionalLightboxModal.6a4aa2122de2": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Spiritual Guidance"
+      },
+      "copy.DevotionalLightboxModal.1cd0846b2924": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · ੴ"
+      },
+      "copy.DevotionalLightboxModal.4e51d6a701d7": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Sant Nirankari Mi ion"
+      },
+      "copy.DevotionalLightboxModal.7506d87af357": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · “Know One, Believe in One, Become One. Spreading univer al brotherhoo…"
+      },
+      "copy.DevotionalPhotoCard.e19d3f2c98e2": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Satguru Mata Sudik ha Ji Maharaj"
+      },
+      "copy.DevotionalPhotoCard.9b46c96cea64": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Nirankari Rajpita Ramit Ji"
+      },
+      "copy.DonateModal.ca9e7065cc38": {
+        "page": "contribute",
+        "section": "Donate pop-up",
+        "label": "Donate pop-up · Way  to contribute"
+      },
+      "copy.EditorialContent.7ea80acf5f85": {
+        "page": "who-we-are",
+        "section": "Timeline & partners",
+        "label": "Timeline & partners · Foundation mile tone"
+      },
+      "copy.EditorialContent.5feceb66ffc8": {
+        "page": "who-we-are",
+        "section": "Timeline & partners",
+        "label": "Timeline & partners · 0"
+      },
+      "copy.EditorialContent.fbcc95dc9ecc": {
+        "page": "who-we-are",
+        "section": "Timeline & partners",
+        "label": "Timeline & partners · Explore thi  chapter"
+      },
+      "copy.EventsCalendarModal.3ac6ecc4b6ea": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Event  calendar"
+      },
+      "copy.EventsCalendarModal.294123d1da42": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Clo e calendar"
+      },
+      "copy.EventsCalendarModal.6a2769502a5d": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Previou  month"
+      },
+      "copy.EventsCalendarModal.2b065c7c9ce4": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Today"
+      },
+      "copy.EventsCalendarModal.74e53211fef4": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Next month"
+      },
+      "copy.EventsCalendarModal.97bfc0d9913d": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · NOW"
+      },
+      "copy.EventsCalendarModal.2a453afa6665": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · · every year"
+      },
+      "copy.EventsCalendarModal.9d60f9126db7": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Add to my calendar"
+      },
+      "copy.EventsCalendarModal.74fa7d10facc": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Take part"
+      },
+      "copy.EventsCalendarModal.c7d65e75702a": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Pick a highlighted day."
+      },
+      "copy.EventsCalendarModal.08b74adf3453": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Running all year"
+      },
+      "copy.EventsCalendarModal.0d1519148f4f": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · Export all a  .ic"
+      },
+      "copy.GalleryModal.352cfc749e55": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Gallery"
+      },
+      "copy.GalleryModal.01ea6241c111": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · pillar  ·"
+      },
+      "copy.GalleryModal.7f2c43d85472": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · piritual portrait"
+      },
+      "copy.GalleryModal.69e9e2930ad0": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Clo e gallery"
+      },
+      "copy.GalleryModal.f42f9bcba9d1": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · The Four Pillar"
+      },
+      "copy.GalleryModal.9a92a27a2688": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · View"
+      },
+      "copy.GalleryModal.5090fffeca9e": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · Spiritual Guide"
+      },
+      "copy.GalleryModal.0e00e36c4422": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · View Portrait"
+      },
+      "copy.Header.a01941bf3134": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Sant Nirankari Charitable Foundation"
+      },
+      "copy.Header.b79520f8055a": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Sant Nirankari Charitable Foundation logo"
+      },
+      "copy.Header.44e3df1518ac": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Sant Nirankari Charitable Foundation Logo"
+      },
+      "copy.Header.3eeeb717e545": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Sant Nirankari"
+      },
+      "copy.Header.4b0937769465": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Charitable Foundation"
+      },
+      "copy.Header.4c1e7031859e": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Search pillar , camp , initiative ..."
+      },
+      "copy.Header.3b7ea51793e9": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Clear  earch"
+      },
+      "copy.Header.dfe870d90b82": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · ⌘K"
+      },
+      "copy.Header.50ce48b9c623": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Open  earch"
+      },
+      "copy.Header.adc4c5775cdb": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Search (⌘K)"
+      },
+      "copy.Header.e26586bdf140": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Support the foundation"
+      },
+      "copy.Header.3f598427e78e": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Support the foundation — way  to contribute"
+      },
+      "copy.Header.c91ee0f2799d": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · Donate"
+      },
+      "copy.HeroSection.d5dc0eff1e60": {
+        "page": "home",
+        "section": "Hero",
+        "label": "Hero · Service with Humility"
+      },
+      "copy.HeroSection.2e1ac6e9292a": {
+        "page": "home",
+        "section": "Hero",
+        "label": "Hero · Explore"
+      },
+      "copy.InvitationCard.745148ba42e1": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Clo e invitation"
+      },
+      "copy.InvitationCard.a01941bf3134": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Sant Nirankari Charitable Foundation"
+      },
+      "copy.InvitationCard.23eee5083ad7": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · You are warmly invited"
+      },
+      "copy.InvitationCard.f0ba2cd588e0": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Year-round"
+      },
+      "copy.InvitationCard.9d60f9126db7": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Add to my calendar"
+      },
+      "copy.InvitationCard.74fa7d10facc": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Take part"
+      },
+      "copy.InvitationCard.56a8d952ed9d": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Venue near you: 011-47660380"
+      },
+      "copy.InvitationCard.56219e473693": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Service with Humility"
+      },
+      "copy.MainNav.eb814be3ca3b": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Main"
+      },
+      "copy.MainNav.7b06d0dd6977": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Site navigation"
+      },
+      "copy.MediaGallery.f5540d923002": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · Filter media"
+      },
+      "copy.MediaGallery.d50d1277878f": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · Source illu tration"
+      },
+      "copy.MediaGallery.a4282e4b2298": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · of"
+      },
+      "copy.MediaGallery.db810ff10618": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · available · the re t arrive a  the foundation’  archive i  catalogued"
+      },
+      "copy.MediaGallery.7d9eb7acb13e": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · Clo e"
+      },
+      "copy.MediaGallery.a57b08a480b8": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · Previou"
+      },
+      "copy.MediaGallery.1ff57a29d7c9": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · Next"
+      },
+      "copy.MediaGallery.28173abab5d6": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · Thi  plate i  re erved. It goe  up when the foundation’  archive reac…"
+      },
+      "copy.MissionVision.cf198785f902": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Our mi ion"
+      },
+      "copy.MissionVision.da1d72247ac3": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Give with"
+      },
+      "copy.MissionVision.e84df2244dc8": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · To  erve with humility and to  hare what the foundation ha  — to heal…"
+      },
+      "copy.MissionVision.0310283e4357": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Every act of care  tart  with u ."
+      },
+      "copy.MissionVision.2642f93dd297": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Our vi ion"
+      },
+      "copy.MissionVision.7e9be7ae33a1": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · A world where"
+      },
+      "copy.MissionVision.7197209907ef": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Living the  pirit of  ervice. The foundation work  toward  a world in…"
+      },
+      "copy.MissionVision.fd978c2cda84": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · A  hared future,  haped together."
+      },
+      "copy.MissionVision.d416dc3ddd2f": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Mi ion and vi ion"
+      },
+      "copy.PartnersSection.1eac70612fcd": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · blood unit"
+      },
+      "copy.PartnersSection.5d8fee134d25": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · tree  planted"
+      },
+      "copy.PartnersSection.34412c88d963": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · tation  cleaned"
+      },
+      "copy.PartnersSection.dac4970ce624": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · tudent"
+      },
+      "copy.PartnersSection.2e9686b783ba": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Partner hip  · CSR · Walking together"
+      },
+      "copy.PartnersSection.33760ea355b0": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Sant Nirankari Charitable Foundation · CSR Partner hip"
+      },
+      "copy.PartnersSection.c243ca6c4682": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Walking together"
+      },
+      "copy.PartnersSection.9f0d1afadeed": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · An invitation to"
+      },
+      "copy.PartnersSection.b8f22d4fc6de": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Twelve organi ation  have put their name be ide our  — government , n…"
+      },
+      "copy.PartnersSection.088d7a1f0e2d": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · blood unit  collected"
+      },
+      "copy.PartnersSection.673690e9221e": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · railway  tation  cleaned"
+      },
+      "copy.PartnersSection.18595f7a1a29": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Companion  already walking with u"
+      },
+      "copy.PartnersSection.fbebd4737aa7": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Thi   pace i  re erved."
+      },
+      "copy.PartnersSection.ec90341de6fc": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · UN  pecial con ultative  tatu  · Regi tered charitable foundation,  e…"
+      },
+      "copy.PartnersSection.553ce52fba22": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Sant Nirankari Charitable Foundation · Begin the conver ation — the w…"
+      },
+      "copy.PillarModal.c8df66c5fe3f": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Clo e dialog"
+      },
+      "copy.PillarModal.1da514561ad6": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Pillar:"
+      },
+      "copy.PillarModal.cb971f19cfd5": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Mi ion Overview"
+      },
+      "copy.PillarModal.f2d466ee4bb2": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Key Mile tone  & Reach"
+      },
+      "copy.PillarModal.2dabdf0f9c1b": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Core Initiative"
+      },
+      "copy.PillarModal.ef358cdee538": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Explore Other Pillar"
+      },
+      "copy.PillarModal.49df5771f033": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Sant Nirankari Charitable Foundation · Serving Humanity with Selfle  …"
+      },
+      "copy.PillarModal.0356ce03b498": {
+        "page": "home",
+        "section": "Pillar details pop-up",
+        "label": "Pillar details pop-up · Back to Hero Wheel"
+      },
+      "copy.SearchModal.ddb2ca828a96": {
+        "page": "everywhere",
+        "section": "Search",
+        "label": "Search · Search Re ult"
+      },
+      "copy.SearchModal.52f878edb34f": {
+        "page": "everywhere",
+        "section": "Search",
+        "label": "Search · E c"
+      },
+      "copy.SearchModal.31624ae223af": {
+        "page": "everywhere",
+        "section": "Search",
+        "label": "Search · Matched"
+      },
+      "copy.SearchModal.27bffbe80ece": {
+        "page": "everywhere",
+        "section": "Search",
+        "label": "Search · No direct matche  found for \""
+      },
+      "copy.SearchModal.b9500117371b": {
+        "page": "everywhere",
+        "section": "Search",
+        "label": "Search · \". Try  earching \"blood\", \"education\", \"tree \", or \"health city\"."
+      },
+      "copy.SiteFooter.3eeeb717e545": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Sant Nirankari"
+      },
+      "copy.SiteFooter.4b0937769465": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Charitable Foundation"
+      },
+      "copy.SiteFooter.56219e473693": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Service with Humility"
+      },
+      "copy.SiteFooter.beb1d4c609ce": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · 80-A, Avtar Marg, Sant Nirankari Colony, Delhi 110009"
+      },
+      "copy.SiteFooter.a4c324b95c22": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · 011-47660380"
+      },
+      "copy.SiteFooter.bee1eacddce6": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · account @nirankarifoundation.org"
+      },
+      "copy.SiteFooter.97b0c61b99f6": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Contribute"
+      },
+      "copy.SiteFooter.26c87bb51e69": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Footer"
+      },
+      "copy.SiteFooter.fc07ad55cde7": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · © 2010–"
+      },
+      "copy.SiteFooter.e69147f309ca": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Sant Nirankari Charitable Foundation"
+      },
+      "copy.SiteFooter.4e29309898d7": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Donation  are tax deductible under  ection 80G(5)(vi) of the Income T…"
+      },
+      "copy.SocialSidebar.e6a6fd6c2f93": {
+        "page": "everywhere",
+        "section": "Social links",
+        "label": "Social links · Social Media Connection"
+      },
+      "copy.WelcomeSplashScreen.da87301fca5f": {
+        "page": "home",
+        "section": "Welcome screen",
+        "label": "Welcome screen · Sant Nirankari Charitable Foundation — Service with Humility"
+      },
+      "copy.WelcomeSplashScreen.44e3df1518ac": {
+        "page": "home",
+        "section": "Welcome screen",
+        "label": "Welcome screen · Sant Nirankari Charitable Foundation Logo"
+      },
+      "copy.WelcomeSplashScreen.56219e473693": {
+        "page": "home",
+        "section": "Welcome screen",
+        "label": "Welcome screen · Service with Humility"
+      },
+      "copy.CoreValuesPage.bb5f4b8db550": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · One purpo e. Three way  to make a difference."
+      },
+      "copy.CoreValuesPage.1872c282a338": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · The three"
+      },
+      "copy.CoreValuesPage.19b476bc912f": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · corner tone ."
+      },
+      "copy.CoreValuesPage.eddff23d6323": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Care that reache  further. Learning that open  door . Communitie  tha…"
+      },
+      "copy.CoreValuesPage.c7a3284847f9": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Preview a core value"
+      },
+      "copy.CoreValuesPage.d677190e0a99": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Service"
+      },
+      "copy.CoreValuesPage.bb8643e88aae": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · with humility"
+      },
+      "copy.CoreValuesPage.4109634bf723": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Compa ion, made vi ible."
+      },
+      "copy.CoreValuesPage.1cd27a19c41a": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Explore the value  · Meet the programme  · Di cover the impact"
+      },
+      "copy.CoreValuesPage.5feceb66ffc8": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · 0"
+      },
+      "copy.CoreValuesPage.e7b186e662f2": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Behind the number"
+      },
+      "copy.CoreValuesPage.6ae8bf36f85f": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Small action . La ting change."
+      },
+      "copy.CoreValuesPage.92fcbaad24fc": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Choo e a programme to explore it  reach."
+      },
+      "copy.CoreValuesPage.a3885e77e515": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Find a programme…"
+      },
+      "copy.CoreValuesPage.b458f304b1f0": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · No programme  match. Try another word."
+      },
+      "copy.CoreValuesPage.ad3a80a2651a": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Programme in focu"
+      },
+      "copy.CoreValuesPage.91c1f9479c9a": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Source: foundation activity report · Figure   hown a  reported."
+      },
+      "copy.CoreValuesPage.cd9fb71ad9c3": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Di cover the next programme"
+      },
+      "copy.CoreValuesPage.3824d3f1b90d": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · The purpo e behind the progre"
+      },
+      "copy.CoreValuesPage.616fea83dd06": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Continue the journey"
+      },
+      "copy.CoreValuesPage.7ca10410b52c": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Di cover"
+      },
+      "copy.CoreValuesPage.c83be5fde065": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Core Value  · Heal · Enrich · Empower"
+      },
+      "copy.CoreValuesPage.97ff86ab30e2": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · The three corner tone"
+      },
+      "copy.CoreValuesPage.1d90a9e6fdbc": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Compa ion in action. Di cover the programme , people and reported pro…"
+      },
+      "copy.CoreValuesPage.64263b3319f0": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Explore our impact"
+      },
+      "copy.CoreValuesPage.9fd0ca7a7af7": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Figure  reflect each programme’   tated reporting period. Different m…"
+      },
+      "copy.GuidingForcePage.3c66946f7a8a": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Sant Nirankari Health City"
+      },
+      "copy.GuidingForcePage.b98c09f4d313": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Onene  Vann"
+      },
+      "copy.GuidingForcePage.a81619ca1e37": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Project Amrit"
+      },
+      "copy.GuidingForcePage.fb4c55902430": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Nirankari Youth Sympo ium & NIMA"
+      },
+      "copy.GuidingForcePage.b733f26c2ca4": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Our Guiding Force"
+      },
+      "copy.GuidingForcePage.bab255b4564b": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Our guiding force"
+      },
+      "copy.GuidingForcePage.ff4066e1863f": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Every camp, cla room and fore t in thi   ite trace  back to  piritual…"
+      },
+      "copy.GuidingForcePage.bc1bc49859a9": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · The pre ent Satguru"
+      },
+      "copy.GuidingForcePage.e19d3f2c98e2": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Satguru Mata Sudik ha Ji Maharaj"
+      },
+      "copy.GuidingForcePage.8b08fcc76f90": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Every camp, cla room and fore t in thi   ite trace  back to  piritual…"
+      },
+      "copy.GuidingForcePage.d16757403eaf": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · The pre ent Satguru"
+      },
+      "copy.GuidingForcePage.d42bb56cd2a9": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Head of the Sant Nirankari Mi ion, who e  ubject i  univer al love, i…"
+      },
+      "copy.GuidingForcePage.9c10007c694f": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Her Holine  i  the head of the Sant Nirankari Mi ion, a worldwide  pi…"
+      },
+      "copy.GuidingForcePage.789311938ee2": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · What that produce  i  vi ible rather than theoretical. Volunteer  rea…"
+      },
+      "copy.GuidingForcePage.6c4e91b61bcb": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · “Become One with the Formle  One,  o that we can become One with Ever…"
+      },
+      "copy.GuidingForcePage.a367e6652e45": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · What follow  from it"
+      },
+      "copy.GuidingForcePage.457585ce2838": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Under Her guidance"
+      },
+      "copy.GuidingForcePage.ee5bdda7de91": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Four undertaking  the Mi ion run , and one emergency it wa  counted t…"
+      },
+      "copy.GuidingForcePage.b779045462c9": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · A  apling planted at a Onene  Vann drive"
+      },
+      "copy.GuidingForcePage.b19c990fc4cd": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Hi torical re pon e · 2022 total"
+      },
+      "copy.GuidingForcePage.b9c6d4099b41": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · The COVID-19 emergency, a  it wa  counted"
+      },
+      "copy.GuidingForcePage.747466c9112f": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · COVID-19 relief figure"
+      },
+      "copy.GuidingForcePage.0bfa7d2ab669": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · · the Mi ion'  own centre , given over to quarantine, care and vaccin…"
+      },
+      "copy.GuidingForcePage.cfc915c141b5": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · An invitation to li ten"
+      },
+      "copy.GuidingForcePage.be3639b3ac91": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · To hear any of thi  properly, attend a Sat ang. Thi  page can only po…"
+      },
+      "copy.ProjectsPage.7ca7dea90680": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Water"
+      },
+      "copy.ProjectsPage.5753ec312396": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · A river flowing through a green fore t"
+      },
+      "copy.ProjectsPage.62d19b520233": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Fore t"
+      },
+      "copy.ProjectsPage.99d9cffb9d24": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Sunlight falling through a fore t canopy"
+      },
+      "copy.ProjectsPage.b6baff9358dd": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Land"
+      },
+      "copy.ProjectsPage.7757a5c80e41": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Agricultural land in the evening light"
+      },
+      "copy.ProjectsPage.c864f329f5dd": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Communitie"
+      },
+      "copy.ProjectsPage.be0da16a46ae": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Student  learning together in a cla room"
+      },
+      "copy.ProjectsPage.982a72dda0d4": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Service that take   hape"
+      },
+      "copy.ProjectsPage.988b94ac8a81": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Built for people."
+      },
+      "copy.ProjectsPage.27f463b7e8ab": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Rooted in purpo e."
+      },
+      "copy.ProjectsPage.d90ca7d5eb20": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · From reviving water bodie  to growing fore t  and  upporting village …"
+      },
+      "copy.ProjectsPage.1102171bd1b3": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Explore our project"
+      },
+      "copy.ProjectsPage.6cd5b6e51936": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 04"
+      },
+      "copy.ProjectsPage.ba61ddf6e8f7": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Named campaign"
+      },
+      "copy.ProjectsPage.938db8c9f82c": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 01"
+      },
+      "copy.ProjectsPage.c0c0d22814e2": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Healthcare campu  · OPD  ervice   tarted"
+      },
+      "copy.ProjectsPage.04e2a9728af7": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Project"
+      },
+      "copy.ProjectsPage.5feceb66ffc8": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 0"
+      },
+      "copy.ProjectsPage.9970f438a483": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Illu trative photography"
+      },
+      "copy.ProjectsPage.6fb73aee5b23": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · The project in focu"
+      },
+      "copy.ProjectsPage.3bf1f1dbe9e6": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Choo e a mea ure to bring it into focu"
+      },
+      "copy.ProjectsPage.7f9ff188f627": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Foundation activity report · Figure   hown a  reported."
+      },
+      "copy.ProjectsPage.ba12ecefbd57": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Continue exploring"
+      },
+      "copy.ProjectsPage.36fc0059896e": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Our project"
+      },
+      "copy.ProjectsPage.995f1e05cac7": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Service with a la ting footprint."
+      },
+      "copy.ProjectsPage.69c5a4506f97": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Explore project"
+      },
+      "copy.ProjectsPage.7560b5b78854": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Health City"
+      },
+      "copy.ProjectsPage.bacc0f922481": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Find your connection"
+      },
+      "copy.ProjectsPage.7fad847159d2": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Different path . Shared purpo e."
+      },
+      "copy.ProjectsPage.f4f7c6cc0c7e": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Choo e a project and explore it  reported reach."
+      },
+      "copy.ProjectsPage.3532c25e1c80": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Now open / OPD  ervice   tarted"
+      },
+      "copy.ProjectsPage.3eeeb717e545": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Sant Nirankari"
+      },
+      "copy.ProjectsPage.d39d7428ab57": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · A multi- pecialty charitable ho pital campu  in North Delhi, intended…"
+      },
+      "copy.ProjectsPage.25984a49f9a1": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · OPD  ervice  have  tarted. Activity figure  will be added a  the camp…"
+      },
+      "copy.ProjectsPage.5e3c06e2cdd5": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Vi it Health City"
+      },
+      "copy.ProjectsPage.4a4eb64be162": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Each project’  figure  retain their own reporting period and unit . D…"
+      },
+      "copy.WhoWeArePage.a01941bf3134": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Sant Nirankari Charitable Foundation"
+      },
+      "copy.WhoWeArePage.696ab4d5bfb5": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Who we are"
+      },
+      "copy.WhoWeArePage.5f1d766bc647": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The Sant Nirankari Charitable Foundation i  the Mi ion’  working hand…"
+      },
+      "copy.WhoWeArePage.3c34f30db957": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Di cover our  tory"
+      },
+      "copy.WhoWeArePage.368abdd6a9dc": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Service with humility · Since 2010"
+      },
+      "copy.WhoWeArePage.eefebe5695c5": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Who We Are · About the foundation"
+      },
+      "copy.WhoWeArePage.b96d49653114": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The Sant Nirankari Charitable Foundation i  the Mi ion’  working hand…"
+      },
+      "copy.WhoWeArePage.788281056a5e": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · About the foundation"
+      },
+      "copy.WhoWeArePage.faac0dc151a5": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · A purpo e bigger than our elve ."
+      },
+      "copy.WhoWeArePage.428e0aab4777": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The belief that bring  u  together, and the work that carrie  it forw…"
+      },
+      "copy.WhoWeArePage.8fb1d447ef9c": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The foundation wa   et up in 2010 to act on a  ingle line of Baba Har…"
+      },
+      "copy.WhoWeArePage.d9b601893e49": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · It  governing phra e i"
+      },
+      "copy.WhoWeArePage.56219e473693": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Service with Humility"
+      },
+      "copy.WhoWeArePage.1ae89fe4f166": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · . The humility matter  a  much a  the  ervice: the work i  done witho…"
+      },
+      "copy.WhoWeArePage.d4ef378ef3af": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The work i  organi ed into three corner tone  — healing, enriching an…"
+      },
+      "copy.WhoWeArePage.25c28cead1f0": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Three value . Everyday action."
+      },
+      "copy.WhoWeArePage.2e1ac6e9292a": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Explore"
+      },
+      "copy.WhoWeArePage.daa59bc900b6": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · One figure per corner tone — the large t plain count each of them rep…"
+      },
+      "copy.WhoWeArePage.1d3009abb21e": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Since 2010"
+      },
+      "copy.WhoWeArePage.77d72aaa5ec2": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The road  o far"
+      },
+      "copy.WhoWeArePage.d018d79f674c": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Four date  the foundation mark  it  own hi tory by."
+      },
+      "copy.WhoWeArePage.b68d1e8eda83": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Support  & collaboration"
+      },
+      "copy.WhoWeArePage.b66e8cc28209": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Who walk  with u"
+      },
+      "copy.WhoWeArePage.447786a75a38": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Search foundation partner"
+      },
+      "copy.WhoWeArePage.f3bd895aae45": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Find an organi ation or a cau e…"
+      },
+      "copy.WhoWeArePage.26f9857f2b6f": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · collaboration"
+      },
+      "copy.WhoWeArePage.7d25129d73f9": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · No collaboration  match that  earch. Try another name or cau e."
+      },
+      "copy.WhoWeArePage.630add5617cc": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The regi tered office"
+      },
+      "copy.WhoWeArePage.d06af8e88b68": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Where to find u"
+      },
+      "copy.WhoWeArePage.dbfafcc18936": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Where the foundation i , and under what term  a gift to it i  made."
+      },
+      "copy.WhoWeArePage.bc395eb428a7": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Regi tered office"
+      },
+      "copy.WhoWeArePage.129d2c4eafb3": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Service begin"
+      },
+      "copy.WhoWeArePage.6265a53e30a6": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · with a conver ation."
+      },
+      "copy.WhoWeArePage.e1df9065fffb": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · 80-A, Avtar Marg, Nirankari Colony"
+      },
+      "copy.WhoWeArePage.f59cf0b8fe44": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Delhi 110009, India"
+      },
+      "copy.WhoWeArePage.84ecd6328b80": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Telephone"
+      },
+      "copy.WhoWeArePage.c80396e2c603": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · +91 11 4766 0380"
+      },
+      "copy.WhoWeArePage.4d6d92142f22": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · +91 11 4766 0200"
+      },
+      "copy.WhoWeArePage.969ccbd3cf63": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Email"
+      },
+      "copy.WhoWeArePage.e7896d85308f": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · ncf@nirankarifoundation.org"
+      },
+      "copy.WhoWeArePage.bee1eacddce6": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · account @nirankarifoundation.org"
+      },
+      "copy.WhoWeArePage.ee8c63df0992": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Tax  tatu"
+      },
+      "copy.WhoWeArePage.6491cd959e1d": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Donation  are deductible under  ection 80G(5)(vi) of the Income Tax A…"
+      },
+      "copy.WhoWeArePage.67ba1a790310": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Service begin  with a willingne"
+      },
+      "copy.WhoWeArePage.57911c50add4": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · to make a difference."
+      },
+      "copy.WhoWeArePage.afa302c27b7e": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Di cover our project"
+      },
+      "copy.EventsCalendarModal.15f450a59134": {
+        "page": "home",
+        "section": "Events calendar",
+        "label": "Events calendar · numeric"
+      },
+      "copy.GuidingForcePage.3e41e2816cc7": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · A multi- pecialty charitable ho pital campu  taking  hape in North De…"
+      },
+      "copy.GuidingForcePage.04b3679a46a7": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Volunteer  turning  mall plot  into den e indigenou  micro-fore t  ac…"
+      },
+      "copy.GuidingForcePage.0ad8c918c908": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · A national effort with the Government of India to clean and revive ri…"
+      },
+      "copy.GuidingForcePage.625e24c33bf4": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Platform  for young people — one for their que tion , one for mu ic a…"
+      },
+      "copy.ProjectsPage.41bcc0f77ef0": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Launched 2023 · with the Government of India"
+      },
+      "copy.ProjectsPage.4463a32132e7": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · A fre h chapter for our water."
+      },
+      "copy.ProjectsPage.f2371d5ab799": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Launched 2021 · indigenou  micro-fore t"
+      },
+      "copy.ProjectsPage.a13a9cf8fa7d": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Small fore t . A greener future."
+      },
+      "copy.ProjectsPage.c406304d0b71": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Arid-zone rejuvenation"
+      },
+      "copy.ProjectsPage.c2dc7b1fa516": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Re toring the land that  u tain  u ."
+      },
+      "copy.ProjectsPage.904eb1d10ff3": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Since 2017 · Haryana"
+      },
+      "copy.ProjectsPage.c2eb86f270ec": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Growing  tronger, together."
+      },
+      "copy.WhoWeArePage.7d12ba56e9f8": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · 2010"
+      },
+      "copy.WhoWeArePage.86c8252ee47f": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The foundation i  e tabli hed a  the Mi ion’  charitable arm."
+      },
+      "copy.WhoWeArePage.96da37e95d5c": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · 2014"
+      },
+      "copy.WhoWeArePage.2be360738982": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The Rajmata  cholar hip  cheme begin   upporting  tudent  on merit an…"
+      },
+      "copy.WhoWeArePage.1bea20e1df19": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · 2021"
+      },
+      "copy.WhoWeArePage.e12b02013977": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Onene  Vann  tart  planting indigenou  micro-fore t  acro  the countr…"
+      },
+      "copy.WhoWeArePage.d398b29d3dbb": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · 2023"
+      },
+      "copy.WhoWeArePage.aa6779f55c5f": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Project Amrit launche  with the Government of India to revive water b…"
+      },
+      "copy.WhoWeArePage.6520e4488973": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Founded"
+      },
+      "copy.WhoWeArePage.e4b35726fbaf": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Standing"
+      },
+      "copy.WhoWeArePage.d5af85a6a90e": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · UN  pecial con ultative  tatu"
+      },
+      "copy.WhoWeArePage.2068b81b75d4": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Reach"
+      },
+      "copy.WhoWeArePage.9d3f458ea970": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · 250+ branche  nationwide"
+      },
+      "copy.Link.InvitationCard.e3dc1a537132": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Link: tel:+911147660380"
+      },
+      "copy.CMSPage.ec7c20b5b09e": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · Watch the video"
+      },
+      "copy.CMSPage.2e1ac6e9292a": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · Explore"
+      },
+      "copy.CMSPage.cb6f188292dd": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · Page unavailable"
+      },
+      "copy.CMSPage.16ff4ce94280": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · SNCF"
+      },
+      "copy.CMSPage.10ae4997444f": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · Thi  page i  not currently publi hed."
+      },
+      "copy.Link.CMSPage.8a5edab28263": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · Link: /"
+      },
+      "copy.CMSPage.bbcc935e4263": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · Return home"
+      },
+      "copy.CMSPage.a01941bf3134": {
+        "page": "other",
+        "section": "Extra pages",
+        "label": "Extra pages · Sant Nirankari Charitable Foundation"
+      },
+      "copy.Link.GuidingForcePage.7783614ae9f5": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Link: # atguru"
+      },
+      "copy.Link.ProjectsPage.6a68430d8c61": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Link: #project -directory"
+      },
+      "copy.Link.ProjectsPage.b03f7697e124": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Link: http ://www.nirankarihealthcity.org/"
+      },
+      "copy.Link.WhoWeArePage.f24daa84860f": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Link: #account"
+      },
+      "copy.Link.WhoWeArePage.e3dc1a537132": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Link: tel:+911147660380"
+      },
+      "copy.Link.WhoWeArePage.1cc23dc8cae1": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Link: tel:+911147660200"
+      },
+      "copy.Link.WhoWeArePage.87f2c7a16748": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Link: mailto: ncf@nirankarifoundation.org"
+      },
+      "copy.Link.WhoWeArePage.536060a063aa": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Link: mailto:account @nirankarifoundation.org"
+      },
+      "copy.Link.WhoWeArePage.902ceeb21a5f": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Link: /project"
+      },
+      "copy.SearchModal.9d87aeddb779": {
+        "page": "everywhere",
+        "section": "Search",
+        "label": "Search · Search the foundation"
+      },
+      "copy.SearchModal.62ebafd01583": {
+        "page": "everywhere",
+        "section": "Search",
+        "label": "Search · Search activitie , project  and  torie"
+      },
+      "copy.DonationExperience.whereNeeded": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Where needed mo t"
+      },
+      "copy.DonationExperience.individual": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Individual"
+      },
+      "copy.DonationExperience.company": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Corporate"
+      },
+      "copy.DonationExperience.organisation": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Society / foundation"
+      },
+      "copy.DonationExperience.emailGreeting": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Hello SNCF account  team,"
+      },
+      "copy.DonationExperience.emailIntro": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · I would like to di cu  a contribution to the foundation."
+      },
+      "copy.DonationExperience.givingAs": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Giving a"
+      },
+      "copy.DonationExperience.preferredCause": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Preferred cau e"
+      },
+      "copy.DonationExperience.proposedGift": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Propo ed gift"
+      },
+      "copy.DonationExperience.discussOptions": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · I would like to di cu  the option ."
+      },
+      "copy.DonationExperience.emailRequest": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Plea e guide me on the next  tep  and any applicable documentation."
+      },
+      "copy.DonationExperience.emailThanks": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Thank you."
+      },
+      "copy.DonationExperience.emailSubject": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · An enquiry about contributing to SNCF"
+      },
+      "copy.DonationExperience.close": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Clo e contribution planner"
+      },
+      "copy.DonationExperience.eyebrow": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Genero ity, made per onal"
+      },
+      "copy.DonationExperience.headline": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · A little care."
+      },
+      "copy.DonationExperience.headlineScript": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · A la ting difference."
+      },
+      "copy.DonationExperience.intro": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · There i  more than one way to give. Help care reach a door tep, open …"
+      },
+      "copy.DonationExperience.bloomCaption": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · One  hared purpo e."
+      },
+      "copy.DonationExperience.reportedImpact": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Reported programme impact"
+      },
+      "copy.DonationExperience.sharedPurpose": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Heal · Enrich · Empower"
+      },
+      "copy.DonationExperience.service": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Service with humility."
+      },
+      "copy.DonationExperience.purposeBody": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Your genero ity. Our  hared commitment to care."
+      },
+      "copy.DonationExperience.inclusive": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · For everyone. With compa ion. Alway ."
+      },
+      "copy.DonationExperience.steps": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Contribution enquiry  tep"
+      },
+      "copy.DonationExperience.personalise": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Make it per onal"
+      },
+      "copy.DonationExperience.connect": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Let’  connect"
+      },
+      "copy.DonationExperience.plannerTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · How would you like to help?"
+      },
+      "copy.DonationExperience.reviewTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · A conver ation  tart  here."
+      },
+      "copy.DonationExperience.plannerIntro": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Choo e what feel  right. We’ll help with the next  tep."
+      },
+      "copy.DonationExperience.reviewIntro": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Review your preference , then continue with your contribution."
+      },
+      "copy.DonationExperience.causeTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · What  peak  to you?"
+      },
+      "copy.DonationExperience.causeOptional": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · A preference, not a re triction"
+      },
+      "copy.DonationExperience.contributionTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · I’d like to contribute"
+      },
+      "copy.DonationExperience.financialGift": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · A financial gift"
+      },
+      "copy.DonationExperience.timeSkills": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · A non-monetary gift"
+      },
+      "copy.DonationExperience.offerTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Tell u  about your contribution"
+      },
+      "copy.DonationExperience.offerPlaceholder": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · For example: teaching, organi ing event  or  haring a profe ional  ki…"
+      },
+      "copy.DonationExperience.optionalNote": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Optional. Plea e leave per onal or financial detail  out."
+      },
+      "copy.DonationExperience.reviewAction": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · CONTRIBUTE NOW"
+      },
+      "copy.DonationExperience.enquiryNotice": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Continue to enter your contribution detail . Other gift  begin with a…"
+      },
+      "copy.DonationExperience.summaryTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Your contribution, your way"
+      },
+      "copy.DonationExperience.offering": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Offering"
+      },
+      "copy.DonationExperience.emailAction": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Open email draft"
+      },
+      "copy.DonationExperience.draftNotice": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Open  your email app with the e preference . You can edit the me age …"
+      },
+      "copy.DonationExperience.callInstead": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Prefer to call?"
+      },
+      "copy.DonationExperience.editPreferences": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Edit my preference"
+      },
+      "copy.DonationExperience.practicalTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · A little guidance"
+      },
+      "copy.DonationExperience.offlineQuestion": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Can I contribute by cheque or in per on?"
+      },
+      "copy.DonationExperience.receiptQuestion": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Who can help with receipt  and documentation?"
+      },
+      "copy.DonationExperience.receiptAnswer": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Our account  team can guide you on payment option , receipt  and the …"
+      },
+      "copy.DonationExperience.fullPage": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Open the contribution page"
+      },
+      "copy.GuidingForcePage.rajpitaName": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Nirankari Rajpita Ramit Ji"
+      },
+      "copy.GuidingForcePage.rajpitaEyebrow": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · A  hared  pirit of  ervice"
+      },
+      "copy.GuidingForcePage.rajpitaBody": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · At the heart of the Nirankari  pirit i  a  imple invitation: to  ee h…"
+      },
+      "copy.GuidingForcePage.rajpitaService": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Thi   pirit find  expre ion in everyday act  of care — giving time,  …"
+      },
+      "copy.GuidingForcePage.rajpitaSignature": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Together, in the  pirit of onene ."
+      },
+      "copy.DonationExperience.volunteer": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Volunteer time"
+      },
+      "copy.DonationExperience.talent": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Fundrai e through talent"
+      },
+      "copy.DonationExperience.resources": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Re ource  or equipment"
+      },
+      "copy.DonationExperience.nonMonetaryTitle": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Way  to give"
+      },
+      "copy.DonationExperience.contributeAction": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Continue to contribute"
+      },
+      "copy.DonationExperience.portalNotice": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · You’ll choo e your amount and enter your detail  on the official port…"
+      },
+      "copy.DonationExperience.onlineQuestion": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · How can I donate online?"
+      },
+      "copy.DonationExperience.onlineAnswer": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · The foundation li t  debit and credit card , net banking, bank tran f…"
+      },
+      "copy.DonationExperience.taxQuestion": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Are donation  tax deductible?"
+      },
+      "copy.DonationExperience.taxAnswer": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · The foundation’  donation page  tate  that contribution  qualify for …"
+      },
+      "copy.DonationExperience.offlineAnswer": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Make cheque  or demand draft  payable to Sant Nirankari Charitable Fo…"
+      },
+      "copy.DonationExperience.counterAnswer": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Card contribution  are accepted at the Delhi office on working day , …"
+      },
+      "copy.ContributionPage.mobile": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Mobile Number"
+      },
+      "copy.ContributionPage.email": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Email"
+      },
+      "copy.ContributionPage.amount": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Amount"
+      },
+      "copy.ContributionPage.name": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Name"
+      },
+      "copy.ContributionPage.pan": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · PAN"
+      },
+      "copy.ContributionPage.aadhaar": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · AADHAR Number"
+      },
+      "copy.ContributionPage.voterId": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Voter ID No. / Pa port No."
+      },
+      "copy.ContributionPage.flat": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Flat / Door / Building"
+      },
+      "copy.ContributionPage.road": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Road / Street / Block / Sector"
+      },
+      "copy.ContributionPage.area": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Village / Area / Locality"
+      },
+      "copy.ContributionPage.pincode": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · PIN Code"
+      },
+      "copy.ContributionPage.city": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Di trict / City"
+      },
+      "copy.ContributionPage.state": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · State"
+      },
+      "copy.ContributionPage.contactTitle": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Your contribution"
+      },
+      "copy.ContributionPage.identityTitle": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Your detail"
+      },
+      "copy.ContributionPage.addressTitle": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Your addre"
+      },
+      "copy.ContributionPage.title": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · A ge ture of genero ity."
+      },
+      "copy.ContributionPage.eyebrow": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Contribute"
+      },
+      "copy.ContributionPage.back": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Way  to contribute"
+      },
+      "copy.ContributionPage.subtitle": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · A world of difference."
+      },
+      "copy.ContributionPage.intro": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Every contribution begin  with care. Complete your detail  below to p…"
+      },
+      "copy.ContributionPage.integrationNotice": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Your contribution detail   tay on thi  page. Mobile and email verific…"
+      },
+      "copy.ContributionPage.required": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Field  marked * are required."
+      },
+      "copy.ContributionPage.panFormat": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · 5 letter , 4 digit , then 1 letter."
+      },
+      "copy.ContributionPage.remarks": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Remark"
+      },
+      "copy.ContributionPage.check": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Review contribution"
+      },
+      "copy.ContributionPage.ready": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Your contribution  ummary"
+      },
+      "copy.ContributionPage.verificationPending": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Mobile verification, email verification and payment are not yet avail…"
+      },
+      "copy.ContributionPage.paymentPending": {
+        "page": "contribute",
+        "section": "Contribute page",
+        "label": "Contribute page · Payment  etup pending"
+      },
+      "copy.ServiceStory.listen": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Li ten"
+      },
+      "copy.ServiceStory.listenTitle": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Start with a per on."
+      },
+      "copy.ServiceStory.listenBody": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · A need i  more than a number. Care begin  with li tening, under tandi…"
+      },
+      "copy.ServiceStory.together": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Come together"
+      },
+      "copy.ServiceStory.togetherTitle": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Many hand . One purpo e."
+      },
+      "copy.ServiceStory.togetherBody": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Time,  kill  and compa ion come together to turn an intention into th…"
+      },
+      "copy.ServiceStory.serve": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Serve"
+      },
+      "copy.ServiceStory.serveTitle": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Let kindne  take  hape."
+      },
+      "copy.ServiceStory.serveBody": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · In a cla room, a health camp or a greener neighbourhood,  ervice beco…"
+      },
+      "copy.ServiceStory.motto": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Service with humility"
+      },
+      "copy.ServiceStory.choose": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Explore how  ervice take   hape"
+      },
+      "copy.ServiceStory.next": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Explore the next moment"
+      },
+      "copy.EventsJournal.label": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Event  and ob ervance"
+      },
+      "copy.EventsJournal.eyebrow": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · The  ervice journal"
+      },
+      "copy.EventsJournal.title": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Make time for"
+      },
+      "copy.EventsJournal.titleAccent": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · omething meaningful."
+      },
+      "copy.EventsJournal.calendar": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · View calendar"
+      },
+      "copy.EventsJournal.filter": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Filter by value"
+      },
+      "copy.EventsJournal.all": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · All moment"
+      },
+      "copy.EventsJournal.yearRound": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Year round"
+      },
+      "copy.EventsJournal.join": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · An ongoing initiative"
+      },
+      "copy.EventsJournal.save": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Save the date"
+      },
+      "copy.EventsJournal.empty": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · No event  in thi  category yet."
+      },
+      "copy.EventsJournal.agenda": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Choo e a moment"
+      },
+      "copy.EventsJournal.ongoingShort": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Ongoing"
+      },
+      "copy.EventsJournal.previous": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Previou  event"
+      },
+      "copy.EventsJournal.next": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Next event"
+      },
+      "copy.ImpactMosaic.3b73900b8d29": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Explore"
+      },
+      "copy.ImpactMosaic.d51afc068025": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Photography i  illu trative unle  marked."
+      },
+      "copy.ImpactMosaic.a216e016d42c": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Photography i  illu trative."
+      },
+      "copy.ImpactMosaic.fc967e87a6e8": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Our work"
+      },
+      "copy.MosaicTile.6e941a57fcb6": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Photograph to follow"
+      },
+      "copy.MosaicTile.5e18f08027f3": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Foundation photograph"
+      },
+      "copy.MosaicTile.f6bd5e33b6e7": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Illu trative photograph"
+      },
+      "copy.MosaicTile.3b73900b8d29": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Explore"
+      },
+      "copy.EventsJournal.passOpen": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Open the invitation"
+      },
+      "copy.EventsJournal.passBusy": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Preparing…"
+      },
+      "copy.EventsJournal.poster": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Download po ter"
+      },
+      "copy.EventsJournal.invite": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · View invitation"
+      },
+      "copy.ValueAnalytics.programme": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · See the programme"
+      },
+      "copy.ValueAnalytics.of": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of"
+      },
+      "copy.ValueAnalytics.heal1": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Blood donation, April 2025 to March 2026"
+      },
+      "copy.ValueAnalytics.computed": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · difference between the two reported figure"
+      },
+      "copy.ValueAnalytics.heal2": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · One unit, three live"
+      },
+      "copy.ValueAnalytics.heal2note": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · The report'  potentially  aved live , again t the unit  collected."
+      },
+      "copy.ValueAnalytics.heal3": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Eye care, of every OPD vi it"
+      },
+      "copy.ValueAnalytics.heal4": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · The health-centre network"
+      },
+      "copy.ValueAnalytics.listed": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · facilitie  li ted"
+      },
+      "copy.ValueAnalytics.heal5": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Six month  of checkup  and the blood bank"
+      },
+      "copy.ValueAnalytics.reported": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · a  reported"
+      },
+      "copy.ValueAnalytics.enrich1": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Where the learner  are"
+      },
+      "copy.ValueAnalytics.within": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · within the total"
+      },
+      "copy.ValueAnalytics.enrich2": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Youth  killed, by trade"
+      },
+      "copy.ValueAnalytics.youth": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · youth, all trade"
+      },
+      "copy.ValueAnalytics.enrich3": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Centre  acro  the country"
+      },
+      "copy.ValueAnalytics.enrich4": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · NIMA,  ix month  on"
+      },
+      "copy.ValueAnalytics.addedYouth": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · added in the  ame  ix month , a  reported"
+      },
+      "copy.ValueAnalytics.enrich5": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Scholar hip"
+      },
+      "copy.ValueAnalytics.disbursedTo": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · di bur ed, to"
+      },
+      "copy.ValueAnalytics.students": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · cholar hip  tudent"
+      },
+      "copy.ValueAnalytics.empower1": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · A fore t, tree by tree"
+      },
+      "copy.ValueAnalytics.treesIn": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · tree  planted, in"
+      },
+      "copy.ValueAnalytics.drives": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · drive"
+      },
+      "copy.ValueAnalytics.treeLegend": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Each tree  tand  for 100,000 tree  planted"
+      },
+      "copy.ValueAnalytics.empower2": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Volunteer , by  ite"
+      },
+      "copy.ValueAnalytics.volunteers": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · volunteer , both"
+      },
+      "copy.ValueAnalytics.manhours": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · manhour  in all"
+      },
+      "copy.ValueAnalytics.empower3": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Site  cleaned"
+      },
+      "copy.ValueAnalytics.empower4": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · COVID-19 relief, 2022"
+      },
+      "copy.ValueAnalytics.empower5": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Ma  marriage   ince 1998"
+      },
+      "copy.ValueAnalytics.couplesIn": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · couple  married, in"
+      },
+      "copy.ValueAnalytics.events": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · event"
+      },
+      "copy.ValueAnalytics.empower6": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Financial  upport"
+      },
+      "copy.ValueAnalytics.sport": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · youth  port (NBGSMCT)"
+      },
+      "copy.ValueAnalytics.kicker": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Analytic"
+      },
+      "copy.ValueAnalytics.title": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · The figure , drawn out"
+      },
+      "copy.ValueAnalytics.lead": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Every chart i  drawn from the figure  the foundation report , each to…"
+      },
+      "copy.ProjectsPage.hcChipsSource": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · A  the foundation report  it"
+      },
+      "copy.ProjectsPage.hcChip1": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 1,000+ bed"
+      },
+      "copy.ProjectsPage.hcChip2": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Multi pecialty  uper-ho pital"
+      },
+      "copy.ProjectsPage.hcChip3": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · North Delhi"
+      },
+      "copy.ProjectsPage.hcAlt": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Architectural rendering of Sant Nirankari Health City, it  name acro …"
+      },
+      "copy.ProjectsPage.hcCaption": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Sant Nirankari Health City · North Delhi"
+      },
+      "copy.ProjectsPage.hcBadge": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · OPD  ervice   tarted"
+      },
+      "copy.ProjectAnalytics.amrit1": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Amrit acro  the country"
+      },
+      "copy.ProjectAnalytics.amrit2": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Hand  in the water"
+      },
+      "copy.ProjectAnalytics.volunteers": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · volunteer  participated"
+      },
+      "copy.ProjectAnalytics.volunteerLegend": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Each figure  tand  for 250,000 volunteer"
+      },
+      "copy.ProjectAnalytics.manhours": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · manhour"
+      },
+      "copy.ProjectAnalytics.vann1": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Fore t , plant by plant"
+      },
+      "copy.ProjectAnalytics.plantsAcross": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · plant , acro"
+      },
+      "copy.ProjectAnalytics.sites": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · ite"
+      },
+      "copy.ProjectAnalytics.plantLegend": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Each tree  tand  for 25,000 plant"
+      },
+      "copy.ProjectAnalytics.vann2": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · One area, three mea ure"
+      },
+      "copy.ProjectAnalytics.vann2note": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · The  ame fore t area, a  the report give  it in each unit."
+      },
+      "copy.ProjectAnalytics.watershed1": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Every hamlet, one by one"
+      },
+      "copy.ProjectAnalytics.hamletLegend": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Each  quare i  one hamlet"
+      },
+      "copy.ProjectAnalytics.villages1": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Direct beneficiarie , of the village ' people"
+      },
+      "copy.ProjectAnalytics.direct": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · direct beneficiarie"
+      },
+      "copy.ProjectAnalytics.villagers": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · people in the village"
+      },
+      "copy.ProjectAnalytics.adopted": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · village , adopted whole"
+      },
+      "copy.ProjectAnalytics.villages2": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · School  in the village"
+      },
+      "copy.ProjectAnalytics.waterLegend": {
+        "page": "projects",
+        "section": "Charts",
+        "label": "Charts · Each drop  tand  for 250 water bodie"
+      },
+      "copy.InvitationCard.poster": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Po ter"
+      },
+      "copy.InvitationCard.posterMeta": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Portrait · 1080 × 1350 · PNG"
+      },
+      "copy.InvitationCard.banner": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Banner"
+      },
+      "copy.InvitationCard.bannerMeta": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Land cape · 1600 × 900 · PNG"
+      },
+      "copy.InvitationCard.story": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Story"
+      },
+      "copy.InvitationCard.storyMeta": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Portrait · 1080 × 1920 · PNG"
+      },
+      "copy.InvitationCard.kitKicker": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Take it with you"
+      },
+      "copy.InvitationCard.kitTitle": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Po ter, banner,  tory, pa  — and the anthem"
+      },
+      "copy.InvitationCard.kitLead": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Everything to  hare or print, in the moment'  own colour . The artwor…"
+      },
+      "copy.InvitationCard.drawing": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Drawing…"
+      },
+      "copy.InvitationCard.download": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Download"
+      },
+      "copy.InvitationCard.passAlt": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · The QR code of thi  invitation"
+      },
+      "copy.InvitationCard.pass": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Pa"
+      },
+      "copy.InvitationCard.passMeta": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · QR code · PNG"
+      },
+      "copy.InvitationCard.calendar": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Calendar"
+      },
+      "copy.InvitationCard.calendarMeta": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Add the date · ICS"
+      },
+      "copy.InvitationCard.anthem": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Anthem"
+      },
+      "copy.InvitationCard.anthemMeta": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · The SNCF anthem · MP3"
+      },
+      "copy.InvitationCard.logo": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Logo"
+      },
+      "copy.InvitationCard.logoMeta": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Foundation logo · WebP"
+      },
+      "copy.InvitationCard.kitNote": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · Share freely — the pa  on every piece open  thi   ame invitation."
+      },
+      "copy.EventsJournal.invitationNote": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Small moment . La ting change."
+      },
+      "copy.EventsJournal.joinAnytime": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Join anytime"
+      },
+      "copy.EventsJournal.illustrative": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Illu trative photography"
+      },
+      "copy.EventsJournal.takeMoment": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Take thi  moment with you."
+      },
+      "copy.EventsJournal.scanHint": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Scan for your invitation, or  hare the po ter."
+      },
+      "copy.EventsJournal.posterError": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · The po ter could not be prepared. Plea e try again."
+      },
+      "copy.EventsJournal.emptyHint": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · There are more way  to take part acro  our other pillar ."
+      },
+      "copy.EventsJournal.showAll": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Explore all moment"
+      },
+      "copy.EventsJournal.emptyAgenda": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · New date  will appear here a  they are announced."
+      },
+      "copy.MosaicChapter.discover": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Every activity, a  tory. Select one to di cover more."
+      },
+      "copy.MosaicOverture.heal": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Care & wellbeing"
+      },
+      "copy.MosaicOverture.enrich": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Learning &  kill"
+      },
+      "copy.MosaicOverture.empower": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Community & planet"
+      },
+      "copy.MosaicOverture.projects": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · La ting change"
+      },
+      "copy.ImpactMosaic.eee670c33892": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Four path . One purpo e."
+      },
+      "copy.MosaicOverture.purpose": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · A helping hand. An open door. A greener tomorrow. Together, we make a…"
+      },
+      "copy.ImpactMosaic.c18aacd51665": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Every figure below i  a  the foundation report  it."
+      },
+      "copy.PartnersSection.intro": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Working along ide organi ation  that  hare our commitment to people, …"
+      },
+      "copy.CoreValuesPage.illustrativePhotos": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Illu trative photography"
+      }
     },
-    "/models/sncf-emblem.glb": {
-      "source": "/models/sncf-emblem.glb",
-      "label": "sncf-emblem.glb"
-    },
-    "/models/oneness.glb": {
-      "source": "/models/oneness.glb",
-      "label": "oneness.glb"
-    },
-    "/models/amrit.glb": {
-      "source": "/models/amrit.glb",
-      "label": "amrit.glb"
-    },
-    "/models/empower.glb": {
-      "source": "/models/empower.glb",
-      "label": "empower.glb"
-    },
-    "/models/projects.glb": {
-      "source": "/models/projects.glb",
-      "label": "projects.glb"
-    },
-    "/models/enrich.glb": {
-      "source": "/models/enrich.glb",
-      "label": "enrich.glb"
-    },
-    "/models/heal.glb": {
-      "source": "/models/heal.glb",
-      "label": "heal.glb"
-    },
-    "asset.GuidingForcePage.rajpita": {
-      "source": "/images/nirankari-rajpita-ramit-ji.jpg",
-      "label": "GuidingForcePage · Rajpita portrait"
-    },
-    "asset.ProjectsPage.healthCity": {
-      "source": "/images/projects/health-city.webp",
-      "label": "ProjectsPage · health-city.webp"
-    },
-    "asset.InvitationCard.logo": {
-      "source": "/images/sncf-logo.webp",
-      "label": "InvitationCard · sncf-logo.webp"
+    "assets": {
+      "asset.AnthemPlayer.bf1bfa524baa": {
+        "page": "everywhere",
+        "section": "Anthem player",
+        "label": "Anthem player · sncf-anthem-instrumental-v1.2.mp3"
+      },
+      "asset.AwardsSection.56b9a5e0ea79": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · satguru-mata-sudiksha-ji.jpg"
+      },
+      "asset.AwardsSection.4daa8ff53979": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · mataji-rajpita-planting.webp"
+      },
+      "asset.AwardsSection.b4324b25c1ce": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · nirankari-rajpita-ramit-ji.jpg"
+      },
+      "asset.AwardsSection.76f684891a21": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · volunteers-planning.webp"
+      },
+      "asset.AwardsSection.7144da391fb1": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · vertical-heal.webp"
+      },
+      "asset.AwardsSection.486823e29a83": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · vertical-enrich.webp"
+      },
+      "asset.AwardsSection.7e886446b163": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · vertical-empower.webp"
+      },
+      "asset.CardIllustration.7144da391fb1": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · vertical-heal.webp"
+      },
+      "asset.CardIllustration.486823e29a83": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · vertical-enrich.webp"
+      },
+      "asset.CardIllustration.7e886446b163": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · vertical-empower.webp"
+      },
+      "asset.DevotionalPhotoCard.4daa8ff53979": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · mataji-rajpita-planting.webp"
+      },
+      "asset.DevotionalPhotoCard.b4324b25c1ce": {
+        "page": "everywhere",
+        "section": "Gallery pop-up",
+        "label": "Gallery pop-up · nirankari-rajpita-ramit-ji.jpg"
+      },
+      "asset.Header.25aa35189463": {
+        "page": "everywhere",
+        "section": "Header",
+        "label": "Header · sncf-logo-only.webp"
+      },
+      "asset.InvitationCard.51c5d5f403d2": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · lotus-watermark.png"
+      },
+      "asset.MediaGallery.76f684891a21": {
+        "page": "other",
+        "section": "Photo & film galleries",
+        "label": "Photo & film galleries · volunteers-planning.webp"
+      },
+      "asset.PillarModelCard.c73c056cfd4f": {
+        "page": "other",
+        "section": "3D model cards",
+        "label": "3D model cards · amrit.webp"
+      },
+      "asset.SiteFooter.25aa35189463": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · sncf-logo-only.webp"
+      },
+      "asset.WelcomeSplashScreen.25aa35189463": {
+        "page": "home",
+        "section": "Welcome screen",
+        "label": "Welcome screen · sncf-logo-only.webp"
+      },
+      "asset.GuidingForcePage.56b9a5e0ea79": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · satguru-mata-sudiksha-ji.jpg"
+      },
+      "asset.GuidingForcePage.4daa8ff53979": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · mataji-rajpita-planting.webp"
+      },
+      "/images/vertical-empower.webp": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · vertical-empower.webp"
+      },
+      "/images/satguru-mata-sudiksha-ji.jpg": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · satguru-mata-sudiksha-ji.jpg"
+      },
+      "/images/sncf-mark.svg": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · sncf-mark.svg"
+      },
+      "/images/lotus-watermark.png": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · lotus-watermark.png"
+      },
+      "/images/sncf-logo.webp": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · sncf-logo.webp"
+      },
+      "/images/vertical-heal.webp": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · vertical-heal.webp"
+      },
+      "/images/volunteers-planning.webp": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · volunteers-planning.webp"
+      },
+      "/images/vertical-enrich.webp": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · vertical-enrich.webp"
+      },
+      "/images/mataji-rajpita-planting.webp": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · mataji-rajpita-planting.webp"
+      },
+      "/images/nirankari-rajpita-ramit-ji.jpg": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · nirankari-rajpita-ramit-ji.jpg"
+      },
+      "/images/projects/amrit.webp": {
+        "page": "everywhere",
+        "section": "Shared images",
+        "label": "Shared images · amrit.webp"
+      },
+      "/images/petals/palm.webp": {
+        "page": "home",
+        "section": "Our work petals",
+        "label": "Our work petals · palm.webp"
+      },
+      "asset.GuidingForcePage.rajpita": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · nirankari-rajpita-ramit-ji.jpg"
+      },
+      "asset.ProjectsPage.healthCity": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · health-city.webp"
+      },
+      "asset.InvitationCard.logo": {
+        "page": "home",
+        "section": "Event invitation",
+        "label": "Event invitation · sncf-logo.webp"
+      },
+      "asset.projects.bloom": {
+        "page": "other",
+        "section": "3D model cards",
+        "label": "3D model cards · projects-bloom.png?v=balanced"
+      },
+      "/images/petals/petal-empower.webp": {
+        "page": "home",
+        "section": "Our work petals",
+        "label": "Our work petals · petal-empower.webp"
+      },
+      "/images/petals/petal-heal.webp": {
+        "page": "home",
+        "section": "Our work petals",
+        "label": "Our work petals · petal-heal.webp"
+      },
+      "/images/petals/petal-enrich.webp": {
+        "page": "home",
+        "section": "Our work petals",
+        "label": "Our work petals · petal-enrich.webp"
+      },
+      "/images/petals/petal-welcome.webp": {
+        "page": "home",
+        "section": "Our work petals",
+        "label": "Our work petals · petal-welcome.webp"
+      },
+      "/images/petals/petal-projects.webp": {
+        "page": "home",
+        "section": "Our work petals",
+        "label": "Our work petals · petal-projects.webp"
+      }
     }
   },
   "components": {
@@ -4117,109 +6173,103 @@
       "description": "Service with humility — Heal, Enrich, Empower.",
       "image": "/images/sncf-logo.webp"
     },
+    "social": [
+      {
+        "platform": "instagram",
+        "url": "https://instagram.com"
+      },
+      {
+        "platform": "youtube",
+        "url": "https://youtube.com"
+      },
+      {
+        "platform": "spotify",
+        "url": "https://spotify.com"
+      },
+      {
+        "platform": "facebook",
+        "url": "https://facebook.com"
+      },
+      {
+        "platform": "x",
+        "url": "https://x.com"
+      }
+    ],
+    "footerColumns": [
+      {
+        "title": "Explore",
+        "links": [
+          {
+            "label": "Core Values",
+            "href": "/core-values"
+          },
+          {
+            "label": "Projects",
+            "href": "/projects"
+          },
+          {
+            "label": "Who We Are",
+            "href": "/who-we-are"
+          },
+          {
+            "label": "Our Guiding Force",
+            "href": "/our-guiding-force"
+          }
+        ]
+      },
+      {
+        "title": "Useful links",
+        "links": [
+          {
+            "label": "Awards and Honours",
+            "href": "/#awards"
+          },
+          {
+            "label": "Our Partners",
+            "href": "/who-we-are#partners"
+          },
+          {
+            "label": "Contact",
+            "href": "/who-we-are#contact"
+          }
+        ]
+      },
+      {
+        "title": "Sant Nirankari Mission",
+        "links": [
+          {
+            "label": "Sant Nirankari Mission",
+            "href": "https://nirankari.org/"
+          },
+          {
+            "label": "Sant Nirankari Health City",
+            "href": "https://www.nirankarihealthcity.org/"
+          },
+          {
+            "label": "Sant Nirankari Public School",
+            "href": "https://snps.edu.in/"
+          },
+          {
+            "label": "NBGSM College, Sohna",
+            "href": "https://nbgsmc.ac.in/"
+          },
+          {
+            "label": "Sant Nirankari Blood Bank",
+            "href": "https://www.santnirankaribloodbank.org/"
+          }
+        ]
+      }
+    ],
     "navigation": [
       {
         "label": "Home",
-        "href": "/"
+        "href": "/",
+        "menu": "none"
       },
       {
         "label": "Core Values",
         "href": "/core-values",
-        "groups": [
-          {
-            "pillarId": "heal",
-            "title": "Heal",
-            "blurb": "Health & medical care",
-            "links": [
-              {
-                "label": "All of Heal",
-                "href": "/core-values#heal"
-              },
-              {
-                "label": "Blood Donation",
-                "href": "/core-values#blood-donation"
-              },
-              {
-                "label": "Health Checkup Camps",
-                "href": "/core-values#health-checkup"
-              },
-              {
-                "label": "Eye Care",
-                "href": "/core-values#eye-checkup"
-              },
-              {
-                "label": "Health Centre",
-                "href": "/core-values#health-centre"
-              },
-              {
-                "label": "Blood Bank",
-                "href": "/core-values#blood-bank"
-              }
-            ]
-          },
-          {
-            "pillarId": "enrich",
-            "title": "Enrich",
-            "blurb": "Education & skills",
-            "links": [
-              {
-                "label": "All of Enrich",
-                "href": "/core-values#enrich"
-              },
-              {
-                "label": "Schools & Colleges",
-                "href": "/core-values#schools-colleges"
-              },
-              {
-                "label": "Scholarships",
-                "href": "/core-values#scholarships"
-              },
-              {
-                "label": "Free Schools",
-                "href": "/core-values#free-schools"
-              },
-              {
-                "label": "NIMA Skill Centres",
-                "href": "/core-values#skill-nima"
-              },
-              {
-                "label": "Sewing & Beautician",
-                "href": "/core-values#skill-trades"
-              }
-            ]
-          },
-          {
-            "pillarId": "empower",
-            "title": "Empower",
-            "blurb": "Upliftment & environment",
-            "links": [
-              {
-                "label": "All of Empower",
-                "href": "/core-values#empower"
-              },
-              {
-                "label": "Tree Plantation",
-                "href": "/core-values#tree-plantation"
-              },
-              {
-                "label": "Cleanliness Drives",
-                "href": "/core-values#cleanliness"
-              },
-              {
-                "label": "COVID-19 Relief",
-                "href": "/core-values#covid-relief"
-              },
-              {
-                "label": "Mass Marriages",
-                "href": "/core-values#mass-marriages"
-              },
-              {
-                "label": "Financial Support",
-                "href": "/core-values#financial-support"
-              }
-            ]
-          }
-        ]
+        "menu": "programmes"
       },
       {
         "label": "Projects",
@@ -4250,7 +6300,8 @@
             "href": "https://www.nirankarihealthcity.org/",
             "external": true
           }
-        ]
+        ],
+        "menu": "links"
       },
       {
         "label": "Who We Are",
@@ -4280,363 +6331,17 @@
             "label": "Honors & Recognitions",
             "href": "/#awards"
           }
-        ]
+        ],
+        "menu": "links"
       },
       {
         "label": "Our Guiding Force",
-        "href": "/our-guiding-force"
+        "href": "/our-guiding-force",
+        "menu": "none"
       }
-    ],
-    "coreValueGroups": [
-      {
-        "pillarId": "heal",
-        "title": "Heal",
-        "blurb": "Health & medical care",
-        "links": [
-          {
-            "label": "All of Heal",
-            "href": "/core-values#heal"
-          },
-          {
-            "label": "Blood Donation",
-            "href": "/core-values#blood-donation"
-          },
-          {
-            "label": "Health Checkup Camps",
-            "href": "/core-values#health-checkup"
-          },
-          {
-            "label": "Eye Care",
-            "href": "/core-values#eye-checkup"
-          },
-          {
-            "label": "Health Centre",
-            "href": "/core-values#health-centre"
-          },
-          {
-            "label": "Blood Bank",
-            "href": "/core-values#blood-bank"
-          }
-        ]
-      },
-      {
-        "pillarId": "enrich",
-        "title": "Enrich",
-        "blurb": "Education & skills",
-        "links": [
-          {
-            "label": "All of Enrich",
-            "href": "/core-values#enrich"
-          },
-          {
-            "label": "Schools & Colleges",
-            "href": "/core-values#schools-colleges"
-          },
-          {
-            "label": "Scholarships",
-            "href": "/core-values#scholarships"
-          },
-          {
-            "label": "Free Schools",
-            "href": "/core-values#free-schools"
-          },
-          {
-            "label": "NIMA Skill Centres",
-            "href": "/core-values#skill-nima"
-          },
-          {
-            "label": "Sewing & Beautician",
-            "href": "/core-values#skill-trades"
-          }
-        ]
-      },
-      {
-        "pillarId": "empower",
-        "title": "Empower",
-        "blurb": "Upliftment & environment",
-        "links": [
-          {
-            "label": "All of Empower",
-            "href": "/core-values#empower"
-          },
-          {
-            "label": "Tree Plantation",
-            "href": "/core-values#tree-plantation"
-          },
-          {
-            "label": "Cleanliness Drives",
-            "href": "/core-values#cleanliness"
-          },
-          {
-            "label": "COVID-19 Relief",
-            "href": "/core-values#covid-relief"
-          },
-          {
-            "label": "Mass Marriages",
-            "href": "/core-values#mass-marriages"
-          },
-          {
-            "label": "Financial Support",
-            "href": "/core-values#financial-support"
-          }
-        ]
-      }
-    ],
-    "partnerBrands": {
-      "un": {
-        "short": "United Nations",
-        "color": "#009edb",
-        "logo": "/images/partners/un.png",
-        "initials": "UN"
-      },
-      "railways": {
-        "short": "Indian Railways",
-        "color": "#c8102e",
-        "logo": "/images/partners/railways.png",
-        "initials": "IR"
-      },
-      "red-cross": {
-        "short": "Indian Red Cross",
-        "color": "#ed1b2e",
-        "logo": "/images/partners/red-cross.png",
-        "initials": "RC"
-      },
-      "life-west": {
-        "short": "Life West",
-        "color": "#0077c8",
-        "logo": "/images/partners/life-west.svg",
-        "initials": "LW"
-      },
-      "urban-development": {
-        "short": "Urban Development",
-        "color": "#2e3092",
-        "logo": "/images/partners/urban-development.png",
-        "initials": "UD"
-      },
-      "ksct": {
-        "short": "KSCF",
-        "color": "#ee7623",
-        "initials": "KS"
-      },
-      "ndtv": {
-        "short": "NDTV",
-        "color": "#e4002b",
-        "logo": "/images/partners/ndtv.png",
-        "initials": "ND"
-      },
-      "toi": {
-        "short": "Times of India",
-        "color": "#bb0000",
-        "logo": "/images/partners/toi.png",
-        "initials": "TOI"
-      },
-      "niit": {
-        "short": "NIIT",
-        "color": "#ed1c24",
-        "logo": "/images/partners/niit.png",
-        "initials": "NT"
-      },
-      "singer": {
-        "short": "Singer India",
-        "color": "#d21f2f",
-        "logo": "/images/partners/singer.png",
-        "initials": "SI"
-      },
-      "blind-relief": {
-        "short": "Blind Relief Assn.",
-        "color": "#1b7a5a",
-        "initials": "BR"
-      },
-      "ebai": {
-        "short": "Eye Bank Assn.",
-        "color": "#1273b8",
-        "initials": "EB"
-      }
-    }
+    ]
   },
   "pavilion": {
-    "materials": {
-      "stone": {
-        "color": "#d8cdb8",
-        "roughness": 0.85,
-        "texture": ""
-      },
-      "trim": {
-        "color": "#80745e",
-        "roughness": 0.7,
-        "texture": ""
-      },
-      "plaster": {
-        "color": "#f2eadb",
-        "roughness": 0.85,
-        "texture": ""
-      },
-      "brass": {
-        "color": "#88724b",
-        "roughness": 0.32,
-        "metalness": 0.78,
-        "texture": ""
-      },
-      "wall": {
-        "color": "#bcbcaf",
-        "roughness": 0.9,
-        "texture": ""
-      },
-      "wood": {
-        "color": "#544738",
-        "roughness": 0.65,
-        "texture": ""
-      },
-      "displayBase": {
-        "color": "#243e38",
-        "roughness": 0.8,
-        "texture": ""
-      },
-      "floor": {
-        "color": "#f4ead9",
-        "roughness": 0.68,
-        "texture": ""
-      },
-      "carpet": {
-        "color": "#cf203b",
-        "roughness": 0.95,
-        "texture": ""
-      },
-      "queueMetal": {
-        "color": "#b5a17b",
-        "roughness": 0.3,
-        "metalness": 0.72,
-        "texture": ""
-      },
-      "queueBelt": {
-        "color": "#244b42",
-        "roughness": 0.94,
-        "texture": ""
-      },
-      "planterColors": [
-        "#e3d2b8",
-        "#454d49",
-        "#ad6f4c"
-      ]
-    },
-    "chapters": [
-      {
-        "id": "heal",
-        "wall": "#709d83",
-        "panel": "#a8cbb5",
-        "led": "#53d695",
-        "ink": "#91d6ae"
-      },
-      {
-        "id": "enrich",
-        "wall": "#498995",
-        "panel": "#b1dfe6",
-        "led": "#2dacc3",
-        "ink": "#2dacc3"
-      },
-      {
-        "id": "empower",
-        "wall": "#bc839f",
-        "panel": "#dfb3c9",
-        "led": "#ed79b3",
-        "ink": "#e6a4be"
-      },
-      {
-        "id": "projects",
-        "wall": "#6da7a9",
-        "panel": "#a4d1d0",
-        "led": "#55d5dc",
-        "ink": "#9cd5da"
-      }
-    ],
-    "lighting": {
-      "exposure": 1.02,
-      "background": "#111714",
-      "fogNear": 25,
-      "fogFar": 90,
-      "pendantColor": "#fff1db",
-      "pendantIntensity": 60,
-      "edgeIntensity": 14,
-      "pictureColor": "#fff2de",
-      "pictureIntensity": 14,
-      "exhibitColor": "#fff5e3",
-      "exhibitIntensity": 32,
-      "frameGlow": 1,
-      "beamOpacity": 0.055
-    },
-    "camera": {
-      "fieldOfView": 48,
-      "positionSmoothing": 16,
-      "turnSmoothing": 12,
-      "scrollSmoothing": 8,
-      "photoPause": 0.25,
-      "modelFloat": 0.09,
-      "modelSway": 0.35
-    },
-    "performance": {
-      "maxWidth": 1280,
-      "maxHeight": 1000,
-      "fps": 60,
-      "adaptiveQuality": true,
-      "minScale": 0.65,
-      "maxScale": 1,
-      "photoLoadDistance": 70
-    },
-    "components": {
-      "planters": true,
-      "barriers": true,
-      "benches": true,
-      "pendants": true,
-      "photoLights": true,
-      "frameBacklights": true,
-      "edgeStrips": true,
-      "models": true,
-      "windows": true,
-      "carpet": true
-    },
-    "finale": {
-      "logo": "/images/sncf-logo.webp",
-      "model": "/models/sncf-emblem.glb",
-      "modelSize": 2.4,
-      "modelHeight": 4.35,
-      "modelLightIntensity": 8,
-      "title": "Thank you for visiting",
-      "subtitle": "SERVICE WITH HUMILITY",
-      "background": "#183d36",
-      "textColor": "#d6eee4",
-      "mosaic": true,
-      "mosaicHue": 157,
-      "mosaicSaturation": 28,
-      "tileSize": 24
-    },
-    "windows": {
-      "amrit": {
-        "video": "/video/amrit-lake.mp4",
-        "poster": "/images/pavilion/projects-1.jpg",
-        "woodColor": "#ffffff",
-        "grainColor": "#f5f4ef",
-        "woodRoughness": 0.48,
-        "glassColor": "#e8f5f3",
-        "glassOpacity": 0.07,
-        "frost": true,
-        "frostOpacity": 0.94,
-        "frostBlur": 0.024,
-        "autoplay": true
-      },
-      "oneness": {
-        "video": "/video/oneness-forest.mp4",
-        "poster": "/images/pavilion/projects-2.jpg",
-        "woodColor": "#ffffff",
-        "grainColor": "#f5f4ef",
-        "woodRoughness": 0.48,
-        "glassColor": "#e8f5f3",
-        "glassOpacity": 0.07,
-        "frost": false,
-        "frostOpacity": 0.94,
-        "frostBlur": 0.024,
-        "autoplay": true
-      }
-    },
     "models": {
       "heal": "/models/heal.glb",
       "enrich": "/models/enrich.glb?v=2dacc3",

@@ -1,14 +1,13 @@
 # Sant Nirankari Charitable Foundation
 
-The SNCF website combines a responsive React frontend, an interactive Three.js pavilion, and a Payload CMS for content, media, statistics and exhibition settings.
+The SNCF website combines a responsive React frontend, interactive 3D pillar models, and a Payload CMS (the Content Studio) for content, media, statistics and site settings.
 
 ## Features
 
-- A scroll-driven journey from the hero's ghost petals through the curtain entrance into the pavilion.
-- Four galleries for Heal, Enrich, Empower and Projects, with framed photography, soft lighting, video windows and a mosaic finale featuring the 3D SNCF emblem.
-- Phone, tablet and landscape layouts, including responsive camera framing, accessible navigation and mobile search.
+- A home page that rotates through Heal, Enrich, Empower and Projects, then opens “Our work”: each pillar's photo emblem among its programmes, with hover photo collages and a soft light wave.
+- Phone, tablet and landscape layouts, with accessible navigation and mobile search.
 - Pages for core values, projects, the foundation and its guiding force, alongside events, partners and awards.
-- CMS controls for text, photos, videos, audio, models, statistics, navigation, component visibility/order and pavilion materials, lighting and camera settings.
+- CMS controls for every text slot, photos and galleries, programme figures and presentation, menu, footer, social links, 3D models, statistics and section visibility/order — see [CMS.md](CMS.md).
 - Drafts, authenticated previews, editor publishing and an audit trail for statistics. Published changes update open tabs; cached and bundled content keep the site usable when the CMS is unavailable.
 
 ## Run the website

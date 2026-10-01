@@ -61,3 +61,14 @@ test('draft preview overlays only changed metrics and respects newer separate ed
   const result=mergePreviewStats({[key]:{...newer}},[periodDraft],[base],'activity',[newer])[key]
   assert.equal(result.period,'April');assert.equal(result.value,'99')
 })
+
+test('live preview opens the page where the edited record appears',async()=>{
+  const {previewURL}=await import('../src/cms/preview')
+  const site=process.env.PAYLOAD_PUBLIC_SITE_URL||'http://localhost:3000'
+  assert.equal(previewURL('activities',{key:'blood-donation',pillarId:'heal'}),`${site}/core-values?cms-preview=true#blood-donation`)
+  assert.equal(previewURL('activities',{key:'project-amrit',pillarId:'projects'}),`${site}/projects?cms-preview=true`)
+  assert.equal(previewURL('content-slots',{page:'who-we-are'}),`${site}/who-we-are?cms-preview=true`)
+  assert.equal(previewURL('gallery-items',{group:'media:guiding-force'}),`${site}/our-guiding-force?cms-preview=true`)
+  assert.equal(previewURL('awards',{}),`${site}/?cms-preview=true#awards`)
+  assert.equal(previewURL('site-settings',{}),`${site}/?cms-preview=true`)
+})

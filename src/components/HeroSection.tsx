@@ -8,16 +8,7 @@ import { PillarHeroVisual } from './PillarHeroVisual';
 import { AnimatePresence } from 'motion/react';
 import { PillarArtwork } from './PillarArtwork';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
-import {
-  Sparkles,
-  Palette,
-  Type,
-  RotateCw,
-  Layout,
-  Flame,
-  Pause,
-  Play,
-} from 'lucide-react';
+import { Pause, Play } from 'lucide-react';
 
 interface HeroSectionProps {
   activeIndex: number;
@@ -29,18 +20,6 @@ interface HeroSectionProps {
       lands on the header logo, which is when the content plays its entrance. */
   introActive: boolean;
 }
-
-export type ArtisticFontTheme =
-  | 'marcellus-editorial'
-  | 'cinzel-monumental'
-  | 'garamond-poetic'
-  | 'syne-modern';
-
-export type SacredAuraEffect =
-  | 'sacred-mandala'
-  | 'celestial-rings'
-  | 'cosmic-nebula'
-  | 'minimal-clean';
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   activeIndex,
@@ -54,41 +33,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const pillars = PILLARS;
 
 
-  // Live design studio controls
-  const [isStudioOpen, setIsStudioOpen] = useState<boolean>(false);
-  const [fontTheme, setFontTheme] = useState<ArtisticFontTheme>('marcellus-editorial');
-  const [auraEffect, setAuraEffect] = useState<SacredAuraEffect>('sacred-mandala');
-  const [gradientAngle, setGradientAngle] = useState<number>(135);
-  /* Multiplies the fluid clamp on the pillar script name, so the size stays
-     responsive at every setting rather than being pinned to one pixel value. */
-  const [pillarNameScale, setPillarNameScale] = useState<number>(1);
-  const [glowIntensity, setGlowIntensity] = useState<number>(0.85);
-  const [showMetrics, setShowMetrics] = useState<boolean>(true);
-
-  /* Mirrors the .pillar-script-name clamp so the studio can report the size the
-     heading is actually rendering at on this screen, not just the multiplier. */
-  const [viewportWidth, setViewportWidth] = useState<number>(
-    typeof window === 'undefined' ? 1280 : window.innerWidth,
-  );
-
-  useEffect(() => {
-    const onResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  // Mirrors calc(clamp(1.725rem, 5.325vw, 4.5rem) * --pillar-name-scale)
-  const pillarNamePx = Math.round(
-    Math.min(72, Math.max(28, viewportWidth * 0.05325)) * pillarNameScale,
-  );
-
-  /* Published on :root so the stylesheet's clamp can compose with it. */
-  useEffect(() => {
-    document.documentElement.style.setProperty(
-      '--pillar-name-scale',
-      String(pillarNameScale),
-    );
-  }, [pillarNameScale]);
+  /* The settled look; the stylesheet's own defaults cover the stage angle and
+     pillar name scale. */
+  const glowIntensity = 0.85;
+  const showMetrics = true;
 
   const currentPillar = pillars[activeIndex] || pillars[0];
   const [heroVisible, setHeroVisible] = useState(true);
@@ -196,10 +144,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     root.setProperty('--accent-b', stageAccentB);
   }, [stageAccentA, stageAccentB]);
 
-  useEffect(() => {
-    document.documentElement.style.setProperty('--stage-angle', `${gradientAngle}deg`);
-  }, [gradientAngle]);
-
   // Cancel pending changes on every new selection, including returning to the
   // displayed pillar during an exit. This prevents a stale timer showing the wrong icon.
   useEffect(() => {
@@ -245,21 +189,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     }
   };
 
-  // Dynamic Typography Helpers
-  const getHeadingFontClass = () => {
-    switch (fontTheme) {
-      case 'cinzel-monumental':
-        return 'font-artistic-display uppercase tracking-widest font-semibold';
-      case 'marcellus-editorial':
-        return 'font-artistic-heading font-normal tracking-wide';
-      case 'garamond-poetic':
-        return 'font-artistic-serif italic font-medium tracking-wide';
-      case 'syne-modern':
-        return 'font-artistic-modern font-extrabold uppercase tracking-tight';
-      default:
-        return 'font-artistic-heading';
-    }
-  };
+  const getHeadingFontClass = () => 'font-artistic-heading font-normal tracking-wide';
 
   return (
     <main
@@ -290,150 +220,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="hero-activity-art" aria-hidden="true">
         {pillars.map(pillar => <PillarArtwork key={pillar.id} pillarId={pillar.id} visible={pillar.id === displayPillar.id} />)}
       </div>
-
-      {/* EXPANDABLE DESIGN STUDIO DRAWER */}
-      {isStudioOpen && (
-        <div
-          id="hero-design-studio-drawer"
-          className="relative z-30 mb-6 p-4 sm:p-6 rounded-3xl bg-neutral-950/80 backdrop-blur-xl border border-white/20 shadow-2xl text-white animate-fadeIn"
-        >
-          <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-3 mb-4 pr-12">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <h3 className="font-artistic-heading text-base sm:text-lg font-bold tracking-wide">{getCMSCopy("copy.HeroSection.d72fe2c6264a", "Live Style & Motion Customizer")}</h3>
-            </div>
-            <span className="text-xs text-neutral-400">{getCMSCopy("copy.HeroSection.9dc429d2bbc2", "Interactive design adjustments for the orbit carousel")}</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {/* 1. Typography Pairings */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Type className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.5caadabe7659", " Editorial Typography")}</label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {(
-                  [
-                    { id: 'marcellus-editorial', name: getCMSCopy("copy.HeroSection.c70470565292", "Marcellus") },
-                    { id: 'cinzel-monumental', name: getCMSCopy("copy.HeroSection.1cc364db0d2c", "Cinzel") },
-                    { id: 'garamond-poetic', name: getCMSCopy("copy.HeroSection.b28a8d4af9c3", "Garamond") },
-                    { id: 'syne-modern', name: getCMSCopy("copy.HeroSection.fd293ff4e23b", "Syne Neo") },
-                  ] as const
-                ).map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setFontTheme(t.id)}
-                    className={`px-3 py-2 rounded-xl text-xs font-medium text-left transition-all ${
-                      fontTheme === t.id
-                        ? 'bg-amber-400/20 text-amber-300 border border-amber-400/50'
-                        : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/10'
-                    }`}
-                  >
-                    {t.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Pillar name size — multiplies the fluid clamp, so it stays responsive */}
-            {/* 2. Sacred Aura Visual Style */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.9ddebdbc2e7e", " Background Aura")}</label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {(
-                  [
-                    { id: 'sacred-mandala', name: getCMSCopy("copy.HeroSection.893b99492c3e", "Mandala") },
-                    { id: 'celestial-rings', name: getCMSCopy("copy.HeroSection.bab4c75d0722", "Rings") },
-                    { id: 'cosmic-nebula', name: getCMSCopy("copy.HeroSection.04b8dcba096f", "Nebula") },
-                    { id: 'minimal-clean', name: getCMSCopy("copy.HeroSection.057b5de48d7b", "Minimal") },
-                  ] as const
-                ).map((a) => (
-                  <button
-                    key={a.id}
-                    onClick={() => setAuraEffect(a.id)}
-                    className={`px-3 py-2 rounded-xl text-xs font-medium text-left transition-all ${
-                      auraEffect === a.id
-                        ? 'bg-amber-400/20 text-amber-300 border border-amber-400/50'
-                        : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white border border-white/10'
-                    }`}
-                  >
-                    {a.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* 3. Gradient Angle & Glow Sliders */}
-            <div className="flex flex-col gap-2.5">
-              <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Palette className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.a2d1351cc8ee", " Gradient & Glow")}</label>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between text-xs text-neutral-300">
-                  <span>{getCMSCopy("copy.HeroSection.cbe72fa83d95", "Wipe Angle: ")}{gradientAngle}°</span>
-                  <button
-                    onClick={() => setGradientAngle((prev) => (prev + 45) % 360)}
-                    className="text-amber-400 hover:underline flex items-center gap-1 text-[11px]"
-                  >
-                    <RotateCw className="w-3 h-3" />{getCMSCopy("copy.HeroSection.0213b9349f96", " +45°")}</button>
-                </div>
-                <input
-                  type="range"
-                  min="0"
-                  max="360"
-                  step="15"
-                  value={gradientAngle}
-                  onChange={(e) => setGradientAngle(Number(e.target.value))}
-                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400"
-                />
-
-                <div className="flex items-center justify-between text-xs text-neutral-300 mt-1">
-                  <span>{getCMSCopy("copy.HeroSection.eb6170d865df", "Glow Intensity: ")}{Math.round(glowIntensity * 100)}%</span>
-                </div>
-                <input
-                  type="range"
-                  min="0.2"
-                  max="1.5"
-                  step="0.05"
-                  value={glowIntensity}
-                  onChange={(e) => setGlowIntensity(Number(e.target.value))}
-                  className="w-full h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400"
-                />
-              </div>
-            </div>
-
-            {/* 4. Content Elements & Preset Tags */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs uppercase font-bold text-neutral-300 tracking-wider flex items-center gap-1.5">
-                <Layout className="w-3.5 h-3.5 text-amber-400" />{getCMSCopy("copy.HeroSection.7ad1aff3ea68", " Layout Features")}</label>
-              <div className="flex flex-col gap-2">
-                <button
-                  onClick={() => setShowMetrics(!showMetrics)}
-                  className={`w-full py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-between transition-all ${
-                    showMetrics
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-white/5 text-white/60 border border-white/10'
-                  }`}
-                >
-                  <span>{getCMSCopy("copy.HeroSection.faac55222144", "Impact Metrics Bar")}</span>
-                  <span>{showMetrics ? 'ON' : 'OFF'}</span>
-                </button>
-
-                <button
-                  onClick={onTogglePause}
-                  className={`w-full py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-between transition-all ${
-                    isPaused
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                      : 'bg-white/5 text-white/60 border border-white/10'
-                  }`}
-                >
-                  <span>{getCMSCopy("copy.HeroSection.4f210fb57610", "Automatic Theme Changes")}</span>
-                  <span>{isPaused ? 'PAUSED' : 'ACTIVE'}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* MAIN HERO CONTENT GRID */}
       <div

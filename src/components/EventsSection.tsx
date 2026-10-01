@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CalendarDays, CalendarPlus, ArrowUpRight, ChevronLeft, ChevronRight, Download, QrCode, Sparkles } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
+import { roomPhoto } from '../data/pavilionGallery';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { EVENTS } from '../data/events';
 import { PILLARS } from '../data/pillars';
@@ -125,7 +126,7 @@ export const EventsSection: React.FC = () => {
           </div>
           <div className="journal-feature-scene" key={selected.event.id}>
             <div className="journal-emblem-stage" aria-hidden="true">
-              <img className="journal-scene-photo" src={resolveCMSMedia(`/images/pavilion/${pillar}-2.jpg`)} alt="" loading="lazy" />
+              <img className="journal-scene-photo" src={resolveCMSMedia(roomPhoto(pillar, 2))} alt="" loading="lazy" />
               <PillarArtwork pillarId={pillar} />
               <svg className="journal-emblem-orbits" viewBox="0 0 400 370" fill="none">
                 <ellipse cx="200" cy="165" rx="170" ry="135" transform="rotate(-16 200 165)" />
