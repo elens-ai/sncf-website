@@ -4,8 +4,6 @@ The website is connected to a Payload CMS (the "Content Studio"). Published chan
 
 ## Start locally
 
-On Windows, double-click `start.cmd` (or run `.\start.ps1`): it installs dependencies, creates `backend\.env`, seeds the database on first run and starts both servers. `stop.cmd` stops them. Otherwise:
-
 1. In the repository root, install the frontend dependencies with `npm ci`.
 2. In `backend`, install the CMS dependencies with `npm ci`.
 3. Copy `backend/.env.example` to `backend/.env` **only if the file does not already exist**. Set `PAYLOAD_SECRET` to a new random secret from `openssl rand -base64 32`. Keep this file private. SQLite (`DATABASE_URI=file:./cms-dev.db`) works locally without another service.
