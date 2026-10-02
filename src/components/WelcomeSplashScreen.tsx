@@ -77,6 +77,8 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
 
   const brandRef = useRef<HTMLDivElement>(null);
   const brandSlotRef = useRef<HTMLDivElement>(null);
+  const placementRef = useRef<BrandPlacement | null>(null);
+  placementRef.current = placement;
 
   /* The parent passes inline arrows, so these change identity on every render.
      Holding them in refs keeps the timer effect's deps stable — otherwise each
@@ -128,12 +130,25 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     const src = document.getElementById('splash-sncf-logo');
     const dst = document.getElementById('header-sncf-logo');
     if (src && dst) {
+      /* Measure the logo where the brand group is HEADING, not where it is
+         mid-glide: if the arrow is pressed while the group is still settling,
+         a mid-motion reading would land the logo short of the header slot. */
+      const group = brandRef.current;
+      const settled = group?.style.transform;
+      if (group) {
+        group.style.transition = 'none';
+        group.style.transform = placementRef.current ? `translateY(${placementRef.current.dy}px) scale(${placementRef.current.scale})` : 'none';
+      }
       const s = src.getBoundingClientRect();
       const d = dst.getBoundingClientRect();
       /* The logo sits inside the (possibly scaled) brand group, so its own
          transform is in the group's units: divide screen offsets by that scale. */
-      const group = brandRef.current;
       const groupScale = group ? group.getBoundingClientRect().width / group.offsetWidth : 1;
+      if (group) {
+        group.style.transform = settled ?? '';
+        void group.offsetWidth;
+        group.style.transition = `transform ${BRAND_MOVE_MS}ms ${BRAND_EASE}`;
+      }
       setFlight({
         dx: (d.left + d.width / 2 - (s.left + s.width / 2)) / groupScale,
         dy: (d.top + d.height / 2 - (s.top + s.height / 2)) / groupScale,
@@ -235,7 +250,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
               <span className="splash-welcome-name">{c("welcome-full-name", "Sant Nirankari Charitable Foundation")}</span>
             </h1>
             {/* Editable in the CMS. */}
-            <p className="splash-welcome-text">{c("welcome-text", "The Sant Nirankari Charitable Foundation isn’t just about handing out aid. Guided by the principle of oneness, we bring compassion, care, and kindness to communities across the globe. Our work extends beyond basic charity, tackling social and environmental issues head-on. We strive to empower the underprivileged and protect our planet, creating a better world for all.")}</p>
+            <p className="splash-welcome-text">{c("welcome-text", "The Sant Nirankari Charitable Foundation (SNCF) goes beyond just charity. Our mission is to spread kindness and care throughout the world, building a better society for those in need. Founded in 2010 to implement the vision of Nirankari Baba Ji,“Life gets a meaning, if it is lived for others”, SNCF focuses on social and charitable work.")}</p>
           </div>
         )}
         {onMission && (
@@ -253,6 +268,18 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
               <p className="splash-mission-text">{c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")}</p>
             </section>
           </div>
+        )}
+        {onMission && (
+          <figure className="splash-satguru">
+            <img
+              src={resolveCMSAsset("asset.WelcomeSplashScreen.satguru-photo", "/images/satguru-mata-sudiksha-ji-cutout.webp")}
+              alt={c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}
+            />
+            <figcaption>
+              <blockquote>{c("satguru-quote", "“Become One with the Formless One, so that we can become One with Everyone.”")}</blockquote>
+              <cite>— {c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite>
+            </figcaption>
+          </figure>
         )}
       </div>
 

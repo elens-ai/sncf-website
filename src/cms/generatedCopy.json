@@ -571,7 +571,7 @@
   "copy.HealStory.quoteSource": "From the banner above a health checkup camp",
   "copy.WelcomeSplashScreen.welcome-short-name": "SNCF",
   "copy.WelcomeSplashScreen.welcome-full-name": "Sant Nirankari Charitable Foundation",
-  "copy.WelcomeSplashScreen.welcome-text": "The Sant Nirankari Charitable Foundation isn’t just about handing out aid. Guided by the principle of oneness, we bring compassion, care, and kindness to communities across the globe. Our work extends beyond basic charity, tackling social and environmental issues head-on. We strive to empower the underprivileged and protect our planet, creating a better world for all.",
+  "copy.WelcomeSplashScreen.welcome-text": "The Sant Nirankari Charitable Foundation (SNCF) goes beyond just charity. Our mission is to spread kindness and care throughout the world, building a better society for those in need. Founded in 2010 to implement the vision of Nirankari Baba Ji,“Life gets a meaning, if it is lived for others”, SNCF focuses on social and charitable work.",
   "copy.WelcomeSplashScreen.mission-title": "Our Mission",
   "copy.WelcomeSplashScreen.mission-quote": "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed.",
   "copy.WelcomeSplashScreen.mission-text-1": "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring.",
@@ -579,5 +579,7 @@
   "copy.WelcomeSplashScreen.vision-title": "Our Vision",
   "copy.WelcomeSplashScreen.vision-quote": "“Living the spirit of service”",
   "copy.WelcomeSplashScreen.vision-text": "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.",
-  "copy.WelcomeSplashScreen.next-label": "Next"
+  "copy.WelcomeSplashScreen.next-label": "Next",
+  "copy.WelcomeSplashScreen.satguru-name": "Satguru Mata Sudiksha Ji Maharaj",
+  "copy.WelcomeSplashScreen.satguru-quote": "“Become One with the Formless One, so that we can become One with Everyone.”"
 }

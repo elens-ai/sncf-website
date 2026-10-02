@@ -186,5 +186,9 @@
   "asset.WelcomeSplashScreen.welcome-photo": {
     "source": "/images/welcome-volunteers.jpg",
     "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
+  },
+  "asset.WelcomeSplashScreen.satguru-photo": {
+    "source": "/images/satguru-mata-sudiksha-ji-cutout.webp",
+    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-cutout.webp"
   }
 }
