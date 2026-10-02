@@ -1,7 +1,8 @@
-import { PillarWordmark } from './PillarWordmark';
+import { HeroPillarWordmark } from './PillarWordmark';
+import { HeroHealWordmark } from './HealWordmark';
 import { PillarHeroBackdrop } from './PillarHeroBackdrop';
 import { getCMSCopy } from '../cms/runtime';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { PillarHeroVisual } from './PillarHeroVisual';
@@ -43,6 +44,38 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
   // Keep the original carousel mounted while the curtain carries it away.
   const contentGridRef = useRef<HTMLDivElement | null>(null);
+
+  /* Every pillar reserves the height of the LONGEST body copy at the current
+     width, so the stats and buttons below start at the same point on all four
+     whatever length the CMS text is. Each body is measured in an invisible
+     copy of the paragraph (same id, so the same styles apply). */
+  const bodyRef = useRef<HTMLParagraphElement | null>(null);
+  const [bodyMinHeight, setBodyMinHeight] = useState<number | undefined>(undefined);
+  useLayoutEffect(() => {
+    const el = bodyRef.current;
+    const parent = el?.parentElement;
+    if (!el || !parent) return;
+    const measure = () => {
+      const width = el.getBoundingClientRect().width;
+      if (!width) return;
+      let tallest = 0;
+      for (const pillar of pillars) {
+        const probe = el.cloneNode(false) as HTMLElement;
+        probe.setAttribute('aria-hidden', 'true');
+        probe.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;min-height:0;width:${width}px;transition:none`;
+        probe.textContent = pillar.body;
+        parent.appendChild(probe);
+        tallest = Math.max(tallest, probe.getBoundingClientRect().height);
+        probe.remove();
+      }
+      setBodyMinHeight(Math.ceil(tallest));
+    };
+    measure();
+    document.fonts?.ready.then(measure);
+    const observer = new ResizeObserver(measure);
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, [pillars]);
   const reducedMotionRef = useRef(false);
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -240,14 +273,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           }`}
         >
           <div className="hero-intro-title w-full">
-          <p className="home-eyebrow hero-eyebrow"><span />{getCMSCopy("copy.HeroSection.d5dc0eff1e60", " Service with Humility")}</p>
+          <p className="home-eyebrow hero-eyebrow">{getCMSCopy("copy.HeroSection.d5dc0eff1e60", " Service with Humility")}</p>
             {/* 1. Large Script-Style Pillar Name Heading in Dancing Script (Delay: 0ms) */}
             <h2
               id="hero-script-pillar-name"
               style={{ transitionDelay: phase === 'exiting' ? '90ms' : '0ms' }}
               className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
-              {(displayPillar.id === 'heal' || displayPillar.id === 'enrich' || displayPillar.id === 'empower' || displayPillar.id === 'projects') ? <><span className="sr-only">{displayPillar.label}</span><PillarWordmark pillar={displayPillar.id} /></> : getPillarScriptTitle(displayPillar)}
+              {(displayPillar.id === 'heal' || displayPillar.id === 'enrich' || displayPillar.id === 'empower' || displayPillar.id === 'projects') ? <><span className="sr-only">{displayPillar.label}</span>{displayPillar.id === 'heal' ? <HeroHealWordmark /> : <HeroPillarWordmark pillar={displayPillar.id} />}</> : getPillarScriptTitle(displayPillar)}
             </h2>
 
             {/* 2. Main Headline (Delay: 50ms) */}
@@ -264,7 +297,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {/* 3. Body Copy (Delay: 100ms) */}
             <p
               id="hero-body-text"
-              style={{ transitionDelay: phase === 'exiting' ? '45ms' : '120ms' }}
+              ref={bodyRef}
+              style={{ transitionDelay: phase === 'exiting' ? '45ms' : '120ms', minHeight: bodyMinHeight }}
               className={`font-artistic-serif text-white/95 text-[16px] sm:text-[17px] md:text-[18px] leading-relaxed mb-5 min-h-[6.6em] drop-shadow-sm max-w-[420px] transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.body}

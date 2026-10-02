@@ -182,5 +182,9 @@
   "asset.HealStory.doorL": {
     "source": "/images/programmes/blood-donation.jpg",
     "label": "HealStory · blood-donation.jpg"
+  },
+  "asset.WelcomeSplashScreen.welcome-photo": {
+    "source": "/images/welcome-volunteers.jpg",
+    "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
   }
 }

@@ -72,7 +72,12 @@ export const Header: React.FC<HeaderProps> = ({
           id="logo-badge-btn"
           to="/"
           onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
-          className="group relative w-[52px] h-[52px] rounded-full bg-white overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer p-0 border-none"
+          className="group relative w-[52px] h-[52px] rounded-full overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer p-0 border-none"
+          /* White disc sized to the emblem's outer ring rather than the whole
+             badge: the logo image has transparent padding, so a full-size disc
+             left a white rim around the ring. The ring spans ~93.4% of the box,
+             slightly above and left of centre; the disc sits just inside it. */
+          style={{ background: 'radial-gradient(circle closest-side, #fff 99%, transparent 100%) 37.2% 38.6% / 92.8% 92.8% no-repeat' }}
           title={getCMSCopy("copy.Header.a01941bf3134", "Sant Nirankari Charitable Foundation")}
           aria-label={getCMSCopy("copy.Header.b79520f8055a", "Sant Nirankari Charitable Foundation logo")}
         >

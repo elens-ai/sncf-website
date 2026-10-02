@@ -1,6 +1,21 @@
 /* Shared hero stage: steady geometry, with the reference contours kept intact. */
 .hero-heal-art { position: relative; width: 100%; min-width: 0; align-self: center; isolation: isolate; opacity: 1; }
 .hero-heal-art[data-ready="false"] { opacity: 0; pointer-events: none; }
+/* Entrance once the welcome screen hands over: the emblem fades in while it
+   settles from slightly low and small, just after the copy starts to rise; its
+   contact shadow and caption follow. Transform only, so it stays separate from
+   the layout's translate offset. */
+@keyframes hero-emblem-in {
+  from { opacity: 0; transform: translateY(26px) scale(.94); }
+  70% { opacity: 1; }
+  to { opacity: 1; transform: none; }
+}
+@keyframes hero-emblem-soft-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .hero-heal-art[data-ready="true"] .pillar-art-panel { animation: hero-emblem-in 1.6s cubic-bezier(.33, .8, .3, 1) .25s both; }
+  .hero-heal-art[data-ready="true"] .pillar-art-contact-shadow { animation: hero-emblem-soft-in 1.2s ease-out .7s both; }
+  .hero-heal-art[data-ready="true"] figcaption { animation: hero-emblem-soft-in 1s ease-out 1.1s both; }
+}
 .pillar-art-panel { grid-area: 1 / 1; min-width: 0; transform-origin: 50% 55%; backface-visibility: hidden; }
 .pillar-art-contact-shadow { position: absolute; z-index: -1; left: 21%; right: 15%; bottom: 11%; height: 6%; border-radius: 50%; background: #080b0c52; filter: blur(23px); transform: rotate(-5deg); opacity: .42; pointer-events: none; }
 .heal-photo-mosaic { position: relative; width: 100%; margin: 0 auto; }
@@ -24,12 +39,30 @@
 }
 .projects-centre-badge { filter: drop-shadow(0 1.4px 1.2px #254c6066); }
 
+/* Wide screens: a compact text column and a large emblem set high on the right,
+   so the whole hero reads on one screen. Sizes follow the viewport width. */
 @media (min-width: 1024px) {
-  #hero-foreground-content:has(.hero-heal-art) { display: grid; grid-template-columns: minmax(300px, .72fr) minmax(0, 1.28fr); max-width: 1660px; gap: clamp(28px, 3vw, 64px); padding-left: clamp(28px, 3vw, 52px); }
-  #hero-foreground-content:has(.hero-heal-art) .hero-editorial { width: 100%; min-width: 0; max-width: 470px; }
-  #hero-foreground-content:has(.hero-heal-art) #hero-script-pillar-name { display: flex; align-items: center; min-height: clamp(86px, 8vw, 116px); margin-bottom: 20px; }
-  #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: clamp(32px, 3.05vw, 48px); min-height: 2.3em; }
-  #hero-foreground-content:has(.hero-heal-art) #hero-body-text { max-width: 41ch; min-height: 7.2em; }
+  #hero-foreground-content:has(.hero-heal-art) { display: grid; grid-template-columns: minmax(300px, 1fr) min(53.3vw, 900px); align-items: start; align-content: center; translate: 0 -14px; max-width: 1660px; gap: clamp(28px, 3vw, 64px); padding-left: clamp(40px, 6.25vw, 120px); }
+  #hero-foreground-content:has(.hero-heal-art) .hero-editorial { width: 100%; min-width: 0; max-width: 470px; align-self: start; justify-content: flex-start; margin-top: -1.35vw; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-eyebrow { font-size: clamp(13px, 1.2vw, 18px); font-weight: 600; letter-spacing: .1em; color: rgb(255 255 255 / .82); margin-bottom: clamp(10px, 1.1vw, 18px); }
+  #hero-foreground-content:has(.hero-heal-art) #hero-script-pillar-name { display: flex; align-items: center; min-height: 0; margin-bottom: clamp(18px, 2.4vw, 40px); }
+  #hero-foreground-content:has(.hero-heal-art) .heal-wordmark { max-width: clamp(260px, 25.3vw, 420px); margin: 0; }
+  #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: clamp(30px, 2.85vw, 46px); line-height: 1.18; min-height: 2.36em; margin-bottom: clamp(6px, .6vw, 10px); }
+  #hero-foreground-content:has(.hero-heal-art) #hero-body-text { max-width: 340px; font-size: clamp(13px, 1.09vw, 17px); line-height: 1.62; color: rgb(255 255 255 / .84); min-height: 4.9em; margin-bottom: clamp(8px, .8vw, 14px); }
+  #hero-foreground-content:has(.hero-heal-art) .hero-impact { max-width: 345px; padding: clamp(9px, .95vw, 16px) 0 clamp(9px, .95vw, 16px) 12px; margin-bottom: clamp(14px, 1.65vw, 28px); gap: 16px; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-impact > div + div { border-left: 0; padding-left: 0; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-impact > div > span:first-child { font-size: clamp(18px, 1.65vw, 26px); font-weight: 600; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-impact > div > span:last-child { margin-top: 2px; font-size: clamp(10px, .83vw, 13px); font-weight: 600; color: rgb(255 255 255 / .82); }
+  #hero-foreground-content:has(.hero-heal-art) [id^='hero-learn-more-'] { padding: clamp(6px, .55vw, 9px) clamp(12px, 1.05vw, 18px); border-radius: 10px; font-size: clamp(12px, 1.05vw, 16px); font-weight: 700; letter-spacing: 0; box-shadow: 0 6px 18px rgb(0 0 0 / .1) !important; }
+  #hero-foreground-content:has(.hero-heal-art) [id^='hero-learn-more-'] > svg { display: none; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls { margin-top: clamp(10px, 1.2vw, 20px); gap: 8px; }
+  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button { min-height: 0; padding: clamp(2px, .25vw, 4px) clamp(8px, .75vw, 12px); border-radius: 7px; border-color: #ffffff59; background: #ffffff1f; color: #fff; font-size: clamp(9px, .75vw, 12px); font-weight: 700; box-shadow: none; }
+  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button[aria-pressed="true"] { background: #ffffff47; border-color: #ffffffa6; color: #fff; }
+  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button:last-child { flex: 0 0 auto; display: grid; place-items: center; padding: clamp(2px, .25vw, 4px) clamp(5px, .45vw, 8px); }
+  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button:last-child svg { width: clamp(10px, .8vw, 13px); height: clamp(10px, .8vw, 13px); }
+  /* The emblem sits high and slightly past the right gutter; its caption tucks under the leaves. */
+  #hero-foreground-content:has(.hero-heal-art) .hero-heal-art { align-self: start; width: 103.5%; margin-top: -3.9vw; translate: 4.2vw 0; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-heal-art figcaption { margin-top: -4.5vw; padding-right: 18%; font-size: clamp(22px, 2.1vw, 32px); line-height: 1.2; }
 }
 @media (max-width: 1023px) {
   #hero-foreground-content:has(.hero-heal-art) { flex-direction: column; gap: 32px; }
@@ -106,5 +139,14 @@
 @media (max-width: 639px) {
   #hero-foreground-content #hero-script-pillar-name { display: flex; align-items: center; height: 76px; min-height: 76px; margin-bottom: 8px; }
   #hero-foreground-content .heal-wordmark { max-height: 72px; object-fit: contain; object-position: left center; }
+}
+
+/* Hero titles: every pillar uses one letter height, sized so the longest name
+   (PROJECTS, 789 x 112 units) fits the text column; shorter names stay left-aligned
+   on the same baseline, so the copy below lines up across all four. */
+#hero-foreground-content #hero-script-pillar-name { container-type: inline-size; align-self: stretch; width: 100%; height: auto; min-height: 0; }
+#hero-foreground-content #hero-script-pillar-name .heal-wordmark { width: auto; max-width: none; max-height: none; height: calc(100cqw * 112 / 789); flex-shrink: 0; margin: 0; }
+@media (min-width: 1024px) {
+  #hero-foreground-content #hero-script-pillar-name .heal-wordmark { height: min(calc((100cqw + 4.5vw) * 112 / 789), 118px); }
 }
 

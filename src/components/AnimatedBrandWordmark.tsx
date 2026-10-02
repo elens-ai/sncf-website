@@ -12,7 +12,10 @@ export const AnimatedBrandWordmark: React.FC<{
   hidden?: boolean;
 }> = ({ name, descriptor, hidden = false }) => {
   const reducedMotion = useReducedMotion();
-  const [compact, setCompact] = useState(false);
+  /* Hidden behind the welcome splash, the wordmark waits as the S.N.C.F
+     monogram, so it appears that way beside the landed logo; the usual
+     full-name cycle follows. */
+  const [compact, setCompact] = useState(hidden);
   const [engaged, setEngaged] = useState(false);
   const [visible, setVisible] = useState(() => !document.hidden);
   const [positions, setPositions] = useState<LetterPosition[]>([]);
@@ -23,7 +26,7 @@ export const AnimatedBrandWordmark: React.FC<{
   const targetLetters = useRef<(HTMLSpanElement | null)[]>([]);
   const rows = [name.trim().split(/\s+/), descriptor.trim().split(/\s+/)];
   const words = rows.flat();
-  const isCompact = compact && !engaged && !reducedMotion && !hidden;
+  const isCompact = compact && !engaged && !reducedMotion;
 
   useEffect(() => {
     const onVisibility = () => setVisible(!document.hidden);

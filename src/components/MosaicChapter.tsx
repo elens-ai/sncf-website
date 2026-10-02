@@ -27,9 +27,22 @@ const ACTIVITY_SYMBOLS: Record<ActivityIcon, LucideIcon> = {
 
 type BackdropFocus = NonNullable<Activity['hoverFocus']>;
 
-/** Always-on photo collage drifting faintly behind a chapter's constellation. */
-const AMBIENT_PHOTOS: Partial<Record<MosaicPillar, string>> = {
-  heal: '/images/heal-collage.jpg',
+/** Always-on photo collage drifting faintly behind a chapter's constellation:
+    separate photographs, feathered into one another at slight angles, so the
+    wash reads as one soft collage with no gutters between pictures. Positions
+    and sizes are percentages of the chapter. */
+interface AmbientTile { src: string; x: number; y: number; w: number; h: number; rot: number }
+const AMBIENT_COLLAGES: Partial<Record<MosaicPillar, AmbientTile[]>> = {
+  heal: [
+    { src: '/images/programmes/health-checkup-snhc-team.jpg', x: -6, y: -6, w: 44, h: 46, rot: -3 },
+    { src: '/images/programmes/eye-checkup-examination.jpg', x: 30, y: -8, w: 40, h: 42, rot: 2 },
+    { src: '/images/programmes/blood-bank-processing.jpg', x: 62, y: -4, w: 44, h: 46, rot: -2 },
+    { src: '/images/programmes/blood-donation.jpg', x: -8, y: 36, w: 40, h: 44, rot: 2.5 },
+    { src: '/images/programmes/health-checkup-blood-pressure.jpg', x: 28, y: 30, w: 46, h: 42, rot: -1.5 },
+    { src: '/images/programmes/eye-checkup-vision-test.jpg', x: 66, y: 38, w: 40, h: 42, rot: 3 },
+    { src: '/images/programmes/health-centre-team.jpg', x: 10, y: 64, w: 44, h: 42, rot: -2 },
+    { src: '/images/programmes/health-checkup-camp.jpg', x: 52, y: 66, w: 46, h: 40, rot: 1.5 },
+  ],
 };
 
 /** Feathered photo collage; images load once its chapter is on screen, so the
@@ -80,9 +93,13 @@ export const MosaicChapter = React.memo(function MosaicChapter({
       data-busy={openId !== null} data-attending={attendedId !== null}
       style={{ '--chapter-a': pillar.accentA, '--chapter-b': pillar.accentB, '--chapter-edge': logo.edge } as React.CSSProperties}
       aria-labelledby={`mosaic-${id}-title`}>
-      {AMBIENT_PHOTOS[id] && (
-        <div className="activity-ambient" data-current={live} aria-hidden="true"
-          style={{ backgroundImage: `url(${resolveCMSMedia(AMBIENT_PHOTOS[id]!)})` }} />
+      {AMBIENT_COLLAGES[id] && (
+        <div className="activity-ambient" data-current={live} aria-hidden="true">
+          {AMBIENT_COLLAGES[id]!.map((tile, i) => (
+            <span key={tile.src} className="activity-ambient-tile"
+              style={{ backgroundImage: `url(${resolveCMSMedia(tile.src)})`, left: `${tile.x}%`, top: `${tile.y}%`, width: `${tile.w}%`, height: `${tile.h}%`, '--tile-rot': `${tile.rot}deg`, animationDelay: `${-i * 4.5}s` } as React.CSSProperties} />
+          ))}
+        </div>
       )}
       {stacked && <MosaicWavesStatic pillar={pillar} />}
       {activities.filter(activity => activity.hoverPhotos?.length).map(activity => (

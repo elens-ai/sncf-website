@@ -40,8 +40,8 @@
 #hero-social-sidebar:hover, #hero-social-sidebar:focus-within { opacity: 1; }
 #hero-clone-stage { padding-top: 112px; padding-bottom: 28px; min-height: 100svh; }
 #hero-foreground-content { max-width: 1440px; margin-inline: auto; gap: 36px; }
-.hero-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-.hero-eyebrow > span { width: 28px; height: 1px; background: var(--pillar-ui-tint, #ddc8a0); }
+/* Starts on the same line as the HEAL letters, which sit a few pixels inside their box. */
+.hero-eyebrow { display: flex; align-items: center; margin-bottom: 24px; padding-left: 3px; font-size: 12px; color: rgb(255 255 255 / .86); }
 #hero-script-pillar-name { color: #eee4cf; filter: none; margin-bottom: 12px; }
 #hero-headline {
   font-family: 'Outfit', sans-serif;
@@ -165,7 +165,7 @@
 }
 @media (max-width: 639px) {
   #hero-clone-stage { padding-inline: 24px; padding-top: 100px; }
-  .hero-eyebrow { margin-bottom: 18px; font-size: 9px; }
+  .hero-eyebrow { margin-bottom: 18px; font-size: 10.8px; }
   #hero-script-pillar-name { font-size: calc(44px * var(--pillar-name-scale, 1)); }
   #hero-headline { font-size: 34px; }
   .hero-impact { margin-bottom: 22px; }
