@@ -22,11 +22,11 @@
         },
         {
           "label": "Patients Treated",
-          "value": "454,233+"
+          "value": "483,439+"
         },
         {
           "label": "Cataract Surgeries",
-          "value": "15,443+"
+          "value": "15,493+"
         }
       ],
       "keyHighlights": [
@@ -219,7 +219,7 @@
       "id": "blood-donation",
       "pillarId": "heal",
       "title": "Blood Donation Camp",
-      "period": "As on March 2026",
+      "period": "As on September 2026",
       "blurb": "Nationwide voluntary blood donation camps, held on Manav Ekta Diwas and year-round.",
       "headline": {
         "label": "Units collected",
@@ -276,24 +276,36 @@
       "id": "health-checkup",
       "pillarId": "heal",
       "title": "Health Checkup Camps",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "blurb": "General health checkup camps reaching communities without nearby care.",
       "headline": {
         "label": "Patients treated",
-        "value": "454,233"
+        "value": "483,439"
       },
       "dataPoints": [
         {
           "label": "Patients treated",
-          "value": "454,233"
+          "value": "483,439"
         },
         {
           "label": "Camps organised",
+          "value": "727"
+        },
+        {
+          "label": "Patients — September 2025",
+          "value": "454,233"
+        },
+        {
+          "label": "Camps — September 2025",
           "value": "671"
         },
         {
           "label": "Patients — March 2025",
           "value": "444,648"
+        },
+        {
+          "label": "Camps — March 2025",
+          "value": "668"
         },
         {
           "label": "Added Mar–Sep 2025",
@@ -305,13 +317,13 @@
       "menuLabel": "Health Checkup Camps",
       "hoverPhotos": [
         {
-          "src": "/images/programmes/health-checkup-sample-collection.jpg"
+          "src": "/images/programmes/health-checkup-blood-pressure.jpg"
         },
         {
-          "src": "/images/programmes/health-checkup-blood-draw.jpg"
+          "src": "/images/programmes/health-checkup-snhc-team.jpg"
         },
         {
-          "src": "/images/programmes/health-checkup-camp.jpg"
+          "src": "/images/programmes/health-checkup-satguru-banner.jpg"
         }
       ]
     },
@@ -319,43 +331,66 @@
       "id": "eye-checkup",
       "pillarId": "heal",
       "title": "Eye Checkup Camp",
-      "period": "As on August 2026",
+      "period": "As on September 2026",
       "blurb": "Ophthalmic camps, free cataract operations and spectacles distribution.",
       "headline": {
         "label": "OPD",
-        "value": "164,797"
+        "value": "165,122"
       },
       "dataPoints": [
         {
           "label": "OPD",
-          "value": "164,797"
+          "value": "165,122"
         },
         {
           "label": "Camps",
-          "value": "511"
+          "value": "512"
         },
         {
           "label": "Cataract surgeries",
-          "value": "15,443"
+          "value": "15,493"
         },
         {
           "label": "Free spectacles",
-          "value": "37,999"
+          "value": "38,148"
+        },
+        {
+          "label": "OPD — August 2026",
+          "value": "164,797"
         },
         {
           "label": "OPD — September 2025",
           "value": "160,821"
+        },
+        {
+          "label": "OPD — March 2025",
+          "value": "158,558"
+        },
+        {
+          "label": "Added Mar–Sep 2025",
+          "value": "2,263"
         }
       ],
       "images": [],
       "icon": "eye",
-      "menuLabel": "Eye Care"
+      "menuLabel": "Eye Care",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/eye-checkup-trial-lens.jpg"
+        },
+        {
+          "src": "/images/programmes/eye-checkup-examination.jpg"
+        },
+        {
+          "src": "/images/programmes/eye-checkup-vision-test.jpg"
+        }
+      ]
     },
     {
       "id": "health-centre",
       "pillarId": "heal",
       "title": "Sant Nirankari Health Centre",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "blurb": "Standing facilities — clinics, labs, pharmacy and ambulances.",
       "headline": {
         "label": "Allopathic centres",
@@ -376,7 +411,7 @@
         },
         {
           "label": "Oneness labs",
-          "value": "8"
+          "value": "4"
         },
         {
           "label": "Chiropractic",
@@ -432,33 +467,124 @@
       "id": "blood-bank",
       "pillarId": "heal",
       "title": "Blood Bank",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "blurb": "The foundation’s own blood banking, separate from the donation camps.",
       "headline": {
         "label": "Units",
-        "value": "43,904"
+        "value": "54,261"
       },
       "dataPoints": [
         {
           "label": "Units",
-          "value": "43,904"
+          "value": "54,261"
         },
         {
           "label": "Camps",
-          "value": "363"
+          "value": "444"
         },
         {
-          "label": "Units — March 2025",
-          "value": "39,037"
+          "label": "Units — 2016",
+          "value": "1,827"
         },
         {
-          "label": "Added Mar–Sep 2025",
-          "value": "4,867"
+          "label": "Camps — 2016",
+          "value": "22"
+        },
+        {
+          "label": "Units — 2017",
+          "value": "5,188"
+        },
+        {
+          "label": "Camps — 2017",
+          "value": "42"
+        },
+        {
+          "label": "Units — 2018",
+          "value": "1,409"
+        },
+        {
+          "label": "Camps — 2018",
+          "value": "16"
+        },
+        {
+          "label": "Units — 2019",
+          "value": "4,522"
+        },
+        {
+          "label": "Camps — 2019",
+          "value": "39"
+        },
+        {
+          "label": "Units — 2020",
+          "value": "2,816"
+        },
+        {
+          "label": "Camps — 2020",
+          "value": "20"
+        },
+        {
+          "label": "Units — 2021",
+          "value": "4,821"
+        },
+        {
+          "label": "Camps — 2021",
+          "value": "45"
+        },
+        {
+          "label": "Units — 2022",
+          "value": "5,531"
+        },
+        {
+          "label": "Camps — 2022",
+          "value": "41"
+        },
+        {
+          "label": "Units — 2023",
+          "value": "5,211"
+        },
+        {
+          "label": "Camps — 2023",
+          "value": "45"
+        },
+        {
+          "label": "Units — 2024",
+          "value": "7,115"
+        },
+        {
+          "label": "Camps — 2024",
+          "value": "53"
+        },
+        {
+          "label": "Units — 2025",
+          "value": "8,312"
+        },
+        {
+          "label": "Camps — 2025",
+          "value": "64"
+        },
+        {
+          "label": "Units — 2026",
+          "value": "7,509"
+        },
+        {
+          "label": "Camps — 2026",
+          "value": "57"
         }
       ],
       "images": [],
       "icon": "droplet",
-      "menuLabel": "Blood Bank"
+      "menuLabel": "Blood Bank",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/blood-bank-processing.jpg"
+        },
+        {
+          "src": "/images/programmes/blood-bank-storage.jpg"
+        },
+        {
+          "src": "/images/programmes/blood-bank-centrifuge.jpg"
+        }
+      ]
     },
     {
       "id": "schools-colleges",
@@ -2143,7 +2269,6 @@
     "copy.ValueAnalytics.heal4": "The health-centre network",
     "copy.ValueAnalytics.listed": "facilities listed",
     "copy.ValueAnalytics.heal5": "Six months of checkups and the blood bank",
-    "copy.ValueAnalytics.reported": "as reported",
     "copy.ValueAnalytics.enrich1": "Where the learners are",
     "copy.ValueAnalytics.within": "within the total",
     "copy.ValueAnalytics.enrich2": "Youth skilled, by trade",
@@ -2236,7 +2361,33 @@
     "copy.MosaicOverture.purpose": "A helping hand. An open door. A greener tomorrow. Together, we make a difference.",
     "copy.ImpactMosaic.c18aacd51665": "Every figure below is as the foundation reports it.",
     "copy.PartnersSection.intro": "Working alongside organisations that share our commitment to people, communities and the planet.",
-    "copy.CoreValuesPage.illustrativePhotos": "Illustrative photography"
+    "copy.CoreValuesPage.illustrativePhotos": "Illustrative photography",
+    "copy.ValueAnalytics.heal6": "The blood bank, year by year",
+    "copy.ValueAnalytics.heal6note": "Units collected each year, with the camps held; the years sum to the total.",
+    "copy.ValueAnalytics.bloodBankTotal": "units in all, from",
+    "copy.ValueAnalytics.camps": "camps",
+    "copy.HealStory.hPhrase": "Health, brought home.",
+    "copy.HealStory.hText": "Checkup camps travel to communities without a clinic nearby, while health centres — allopathy and homeopathy, physiotherapy, labs and pharmacy — stay open every day.",
+    "copy.HealStory.hAlt": "Nurses in green uniforms take a blood sample from a young man inside a camp tent.",
+    "copy.HealStory.ePhrase": "Eyes, given back their light.",
+    "copy.HealStory.eText": "Eye camps test vision, fit free spectacles and arrange cataract surgery — bringing reading, work and familiar faces back into focus.",
+    "copy.HealStory.eAlt": "A doctor examines an elderly woman’s eye at a free eye checkup camp.",
+    "copy.HealStory.aPhrase": "Always ready.",
+    "copy.HealStory.aText": "The blood bank processes, separates and stores every donated unit, so that blood is already waiting when a patient needs it.",
+    "copy.HealStory.aAlt": "Blood bank staff in lab coats sort and label bags of donated blood.",
+    "copy.HealStory.lPhrase": "Lifeblood, freely given.",
+    "copy.HealStory.lText": "On Manav Ekta Diwas and all through the year, volunteers roll up their sleeves at donation camps across the country — one stranger’s gift to another.",
+    "copy.HealStory.lAlt": "A volunteer at a blood donation camp holds a sign: “This isn’t a band aid. It’s a badge of honor.”",
+    "copy.HealStory.quote": "मानव को हो मानव प्यारा, एक दूजे का बने सहारा।",
+    "copy.HealStory.kicker": "Cornerstone · I",
+    "copy.HealStory.tagline": "Service with Humility",
+    "copy.HealStory.lede": "Healthcare for every",
+    "copy.HealStory.ledeAccent": "doorstep.",
+    "copy.HealStory.intro1": "Healing begins where people already are — a satsang bhawan, a community hall, a tent pitched for the day. Volunteers, doctors and nurses bring checkups, eye care and blood donation to the doorstep, so that care is never too far away.",
+    "copy.HealStory.intro2": "Between the camps, the work goes on: health centres that keep their doors open, ambulances on call, and a blood bank that holds every gift of blood ready for the moment someone needs it.",
+    "copy.HealStory.doorsLabel": "Every letter, a doorway.",
+    "copy.HealStory.quoteTranslation": "May every human hold the other dear; may we become each other’s support.",
+    "copy.HealStory.quoteSource": "From the banner above a health checkup camp"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -2406,6 +2557,22 @@
     "/images/petals/petal-projects.webp": {
       "source": "/images/petals/petal-projects.webp",
       "label": "petal-projects.webp"
+    },
+    "asset.HealStory.doorH": {
+      "source": "/images/programmes/health-checkup-snhc-team.jpg",
+      "label": "HealStory · health-checkup-snhc-team.jpg"
+    },
+    "asset.HealStory.doorE": {
+      "source": "/images/programmes/eye-checkup-examination.jpg",
+      "label": "HealStory · eye-checkup-examination.jpg"
+    },
+    "asset.HealStory.doorA": {
+      "source": "/images/programmes/blood-bank-processing.jpg",
+      "label": "HealStory · blood-bank-processing.jpg"
+    },
+    "asset.HealStory.doorL": {
+      "source": "/images/programmes/blood-donation.jpg",
+      "label": "HealStory · blood-donation.jpg"
     }
   },
   "slots": {
@@ -4665,11 +4832,6 @@
         "section": "Charts",
         "label": "Charts · Six month  of checkup  and the blood bank"
       },
-      "copy.ValueAnalytics.reported": {
-        "page": "core-values",
-        "section": "Charts",
-        "label": "Charts · a  reported"
-      },
       "copy.ValueAnalytics.enrich1": {
         "page": "core-values",
         "section": "Charts",
@@ -5134,6 +5296,136 @@
         "page": "core-values",
         "section": "Page",
         "label": "Page · Illu trative photography"
+      },
+      "copy.ValueAnalytics.heal6": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · The blood bank, year by year"
+      },
+      "copy.ValueAnalytics.heal6note": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Unit  collected each year, with the camp  held; the year   um to the …"
+      },
+      "copy.ValueAnalytics.bloodBankTotal": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · unit  in all, from"
+      },
+      "copy.ValueAnalytics.camps": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · camp"
+      },
+      "copy.HealStory.hPhrase": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Health, brought home."
+      },
+      "copy.HealStory.hText": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Checkup camp  travel to communitie  without a clinic nearby, while he…"
+      },
+      "copy.HealStory.hAlt": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Nur e  in green uniform  take a blood  ample from a young man in ide …"
+      },
+      "copy.HealStory.ePhrase": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Eye , given back their light."
+      },
+      "copy.HealStory.eText": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Eye camp  te t vi ion, fit free  pectacle  and arrange cataract  urge…"
+      },
+      "copy.HealStory.eAlt": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · A doctor examine  an elderly woman’  eye at a free eye checkup camp."
+      },
+      "copy.HealStory.aPhrase": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Alway  ready."
+      },
+      "copy.HealStory.aText": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · The blood bank proce e ,  eparate  and  tore  every donated unit,  o …"
+      },
+      "copy.HealStory.aAlt": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Blood bank  taff in lab coat   ort and label bag  of donated blood."
+      },
+      "copy.HealStory.lPhrase": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Lifeblood, freely given."
+      },
+      "copy.HealStory.lText": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · On Manav Ekta Diwa  and all through the year, volunteer  roll up thei…"
+      },
+      "copy.HealStory.lAlt": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · A volunteer at a blood donation camp hold  a  ign: “Thi  i n’t a band…"
+      },
+      "copy.HealStory.quote": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · मानव को हो मानव प्यारा, एक दूजे का बने सहारा।"
+      },
+      "copy.HealStory.kicker": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Corner tone · I"
+      },
+      "copy.HealStory.tagline": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Service with Humility"
+      },
+      "copy.HealStory.lede": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Healthcare for every"
+      },
+      "copy.HealStory.ledeAccent": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · door tep."
+      },
+      "copy.HealStory.intro1": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Healing begin  where people already are — a  at ang bhawan, a communi…"
+      },
+      "copy.HealStory.intro2": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Between the camp , the work goe  on: health centre  that keep their d…"
+      },
+      "copy.HealStory.doorsLabel": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Every letter, a doorway."
+      },
+      "copy.HealStory.quoteTranslation": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · May every human hold the other dear; may we become each other’   uppo…"
+      },
+      "copy.HealStory.quoteSource": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · From the banner above a health checkup camp"
       }
     },
     "assets": {
@@ -5346,6 +5638,26 @@
         "page": "home",
         "section": "Our work petals",
         "label": "Our work petals · petal-projects.webp"
+      },
+      "asset.HealStory.doorH": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · health-checkup-snhc-team.jpg"
+      },
+      "asset.HealStory.doorE": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · eye-checkup-examination.jpg"
+      },
+      "asset.HealStory.doorA": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · blood-bank-processing.jpg"
+      },
+      "asset.HealStory.doorL": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · blood-donation.jpg"
       }
     }
   },
@@ -5475,175 +5787,331 @@
     "activity:blood-donation:metric:units-collected": {
       "label": "Units collected",
       "value": "1,500,230",
-      "period": "As on March 2026",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:blood-donation:metric:camps-organised": {
       "label": "Camps organised",
       "value": "9,174",
-      "period": "As on March 2026",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:blood-donation:metric:potentially-saved-lives": {
       "label": "Potentially saved lives",
       "value": "4,500,690",
-      "period": "As on March 2026",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:blood-donation:metric:units-april-2025": {
       "label": "Units — April 2025",
       "value": "1,405,177",
-      "period": "As on March 2026",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:blood-donation:metric:camps-april-2025": {
       "label": "Camps — April 2025",
       "value": "8,644",
-      "period": "As on March 2026",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-checkup:metric:patients-treated": {
       "label": "Patients treated",
-      "value": "454,233",
-      "period": "As on September 2025",
+      "value": "483,439",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-checkup:metric:camps-organised": {
       "label": "Camps organised",
+      "value": "727",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:health-checkup:metric:patients-september-2025": {
+      "label": "Patients — September 2025",
+      "value": "454,233",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:health-checkup:metric:camps-september-2025": {
+      "label": "Camps — September 2025",
       "value": "671",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-checkup:metric:patients-march-2025": {
       "label": "Patients — March 2025",
       "value": "444,648",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:health-checkup:metric:camps-march-2025": {
+      "label": "Camps — March 2025",
+      "value": "668",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-checkup:metric:added-mar-sep-2025": {
       "label": "Added Mar–Sep 2025",
       "value": "9,585",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:eye-checkup:metric:opd": {
       "label": "OPD",
-      "value": "164,797",
-      "period": "As on August 2026",
+      "value": "165,122",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:eye-checkup:metric:camps": {
       "label": "Camps",
-      "value": "511",
-      "period": "As on August 2026",
+      "value": "512",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:eye-checkup:metric:cataract-surgeries": {
       "label": "Cataract surgeries",
-      "value": "15,443",
-      "period": "As on August 2026",
+      "value": "15,493",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:eye-checkup:metric:free-spectacles": {
       "label": "Free spectacles",
-      "value": "37,999",
-      "period": "As on August 2026",
+      "value": "38,148",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:eye-checkup:metric:opd-august-2026": {
+      "label": "OPD — August 2026",
+      "value": "164,797",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:eye-checkup:metric:opd-september-2025": {
       "label": "OPD — September 2025",
       "value": "160,821",
-      "period": "As on August 2026",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:eye-checkup:metric:opd-march-2025": {
+      "label": "OPD — March 2025",
+      "value": "158,558",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:eye-checkup:metric:added-mar-sep-2025": {
+      "label": "Added Mar–Sep 2025",
+      "value": "2,263",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:allopathic": {
       "label": "Allopathic",
       "value": "47",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:homeopathic": {
       "label": "Homeopathic",
       "value": "37",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:physiotherapy": {
       "label": "Physiotherapy",
       "value": "4",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:oneness-labs": {
       "label": "Oneness labs",
-      "value": "8",
-      "period": "As on September 2025",
+      "value": "4",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:chiropractic": {
       "label": "Chiropractic",
       "value": "1",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:oneness-pharmacy": {
       "label": "Oneness pharmacy",
       "value": "1",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:ambulances": {
       "label": "Ambulances",
       "value": "16",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:x-ray-centres": {
       "label": "X-ray centres",
       "value": "2",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:dental-centres": {
       "label": "Dental centres",
       "value": "6",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:metric:eye-centres": {
       "label": "Eye centres",
       "value": "5",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:health-centre:headline": {
       "label": "Allopathic centres",
       "value": "47",
-      "period": "As on September 2025",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:blood-bank:metric:units": {
       "label": "Units",
-      "value": "43,904",
-      "period": "As on September 2025",
+      "value": "54,261",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:blood-bank:metric:camps": {
       "label": "Camps",
-      "value": "363",
-      "period": "As on September 2025",
+      "value": "444",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
-    "activity:blood-bank:metric:units-march-2025": {
-      "label": "Units — March 2025",
-      "value": "39,037",
-      "period": "As on September 2025",
+    "activity:blood-bank:metric:units-2016": {
+      "label": "Units — 2016",
+      "value": "1,827",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
-    "activity:blood-bank:metric:added-mar-sep-2025": {
-      "label": "Added Mar–Sep 2025",
-      "value": "4,867",
-      "period": "As on September 2025",
+    "activity:blood-bank:metric:camps-2016": {
+      "label": "Camps — 2016",
+      "value": "22",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2017": {
+      "label": "Units — 2017",
+      "value": "5,188",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2017": {
+      "label": "Camps — 2017",
+      "value": "42",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2018": {
+      "label": "Units — 2018",
+      "value": "1,409",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2018": {
+      "label": "Camps — 2018",
+      "value": "16",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2019": {
+      "label": "Units — 2019",
+      "value": "4,522",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2019": {
+      "label": "Camps — 2019",
+      "value": "39",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2020": {
+      "label": "Units — 2020",
+      "value": "2,816",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2020": {
+      "label": "Camps — 2020",
+      "value": "20",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2021": {
+      "label": "Units — 2021",
+      "value": "4,821",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2021": {
+      "label": "Camps — 2021",
+      "value": "45",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2022": {
+      "label": "Units — 2022",
+      "value": "5,531",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2022": {
+      "label": "Camps — 2022",
+      "value": "41",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2023": {
+      "label": "Units — 2023",
+      "value": "5,211",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2023": {
+      "label": "Camps — 2023",
+      "value": "45",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2024": {
+      "label": "Units — 2024",
+      "value": "7,115",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2024": {
+      "label": "Camps — 2024",
+      "value": "53",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2025": {
+      "label": "Units — 2025",
+      "value": "8,312",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2025": {
+      "label": "Camps — 2025",
+      "value": "64",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:units-2026": {
+      "label": "Units — 2026",
+      "value": "7,509",
+      "period": "As on September 2026",
+      "source": "SNCF activity report — existing website data"
+    },
+    "activity:blood-bank:metric:camps-2026": {
+      "label": "Camps — 2026",
+      "value": "57",
+      "period": "As on September 2026",
       "source": "SNCF activity report — existing website data"
     },
     "activity:schools-colleges:metric:students-benefitted": {
@@ -6048,12 +6516,12 @@
     },
     "pillar:heal:stat:patients-treated": {
       "label": "Patients Treated",
-      "value": "454,233+",
+      "value": "483,439+",
       "source": "Existing website pillar summary"
     },
     "pillar:heal:stat:cataract-surgeries": {
       "label": "Cataract Surgeries",
-      "value": "15,443+",
+      "value": "15,493+",
       "source": "Existing website pillar summary"
     },
     "pillar:enrich:stat:students-benefitted": {

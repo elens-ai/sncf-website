@@ -166,5 +166,21 @@
   "/images/petals/petal-projects.webp": {
     "source": "/images/petals/petal-projects.webp",
     "label": "petal-projects.webp"
+  },
+  "asset.HealStory.doorH": {
+    "source": "/images/programmes/health-checkup-snhc-team.jpg",
+    "label": "HealStory · health-checkup-snhc-team.jpg"
+  },
+  "asset.HealStory.doorE": {
+    "source": "/images/programmes/eye-checkup-examination.jpg",
+    "label": "HealStory · eye-checkup-examination.jpg"
+  },
+  "asset.HealStory.doorA": {
+    "source": "/images/programmes/blood-bank-processing.jpg",
+    "label": "HealStory · blood-bank-processing.jpg"
+  },
+  "asset.HealStory.doorL": {
+    "source": "/images/programmes/blood-donation.jpg",
+    "label": "HealStory · blood-donation.jpg"
   }
 }

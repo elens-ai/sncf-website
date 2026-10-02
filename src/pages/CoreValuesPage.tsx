@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { ArrowDown, ArrowUpRight, CalendarDays, Search } from 'lucide-react';
 import { ValueCompass } from '../components/ValueCompass';
 import { ValueAnalytics } from '../components/ValueAnalytics';
+import { HealStory } from '../components/HealStory';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
@@ -71,18 +72,22 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   }, [linkedActivity, id]);
   return (
     <section id={id} className="value-chapter" aria-labelledby={`${id}-title`} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties}>
-      <header className="value-hero">
-        <h2 id={`${id}-title`} className="value-hero-title font-dancing-script">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</h2>
-        <ValuePhotoCollage id={id} label={pillar.label} />
-        {activities.slice(0, 4).map((activity, i) => (
-          <a key={activity.id} href={`#${id}-explorer`} className={`value-hero-stat value-hero-stat-${i + 1}`} onClick={() => setSelectedId(activity.id)}>
-            <span className="value-hero-stat-label">{activity.title}<ArrowUpRight size={16} aria-hidden="true" /></span>
-            <strong>{activity.headline.value}</strong>
-            <span className="value-hero-stat-unit">{activity.headline.label}</span>
-            <small>{activity.period}</small>
-          </a>
-        ))}
-      </header>
+      {id === 'heal' ? (
+        <HealStory titleId={`${id}-title`} name={pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()} activities={activities} explorerId={`${id}-explorer`} onSelect={setSelectedId} />
+      ) : (
+        <header className="value-hero">
+          <h2 id={`${id}-title`} className="value-hero-title font-dancing-script">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</h2>
+          <ValuePhotoCollage id={id} label={pillar.label} />
+          {activities.slice(0, 5).map((activity, i) => (
+            <a key={activity.id} href={`#${id}-explorer`} className={`value-hero-stat value-hero-stat-${i + 1}`} onClick={() => setSelectedId(activity.id)}>
+              <span className="value-hero-stat-label">{activity.title}<ArrowUpRight size={16} aria-hidden="true" /></span>
+              <strong>{activity.headline.value}</strong>
+              <span className="value-hero-stat-unit">{activity.headline.label}</span>
+              <small>{activity.period}</small>
+            </a>
+          ))}
+        </header>
+      )}
 
       <div className="value-explorer" id={`${id}-explorer`}>
         <div className="value-explorer-heading"><div><p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.e7b186e662f2", "Behind the numbers")}</p><h3>{getCMSCopy("copy.CoreValuesPage.6ae8bf36f85f", "Small actions. Lasting change.")}</h3></div><p>{getCMSCopy("copy.CoreValuesPage.92fcbaad24fc", "Choose a programme to explore its reach.")}</p></div>
