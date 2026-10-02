@@ -163,6 +163,7 @@ const HealAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelect }
   const facilities = ['Allopathic', 'Homeopathic', 'Oneness labs', 'Dental centres', 'Eye centres', 'Physiotherapy', 'X-ray centres', 'Chiropractic', 'Oneness pharmacy']
     .map(label => ({ label, value: v('health-centre', label) })).filter(s => s.value);
   const listed = group(facilities.reduce((sum, s) => sum + num(s.value), 0));
+  const bloodBankYears = Array.from({ length: 11 }, (_, i) => String(2016 + i));
   return <>
     <Card title={getCMSCopy("copy.ValueAnalytics.heal1", "Blood donation, April 2025 to March 2026")} period={w('blood-donation')} span={3} activityId="blood-donation" explorerId={explorerId} onSelect={onSelect}>
       <Growth label="Units collected" before={{ value: v('blood-donation', 'Units — April 2025'), when: 'April 2025' }} after={{ value: v('blood-donation', 'Units collected'), when: 'March 2026' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
@@ -182,9 +183,13 @@ const HealAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelect }
       <Donut segments={facilities} centre={{ value: listed, label: getCMSCopy("copy.ValueAnalytics.listed", "facilities listed") }} />
       <div className="va-aside"><Ambulance size={16} strokeWidth={1.6} aria-hidden="true" /><Figure value={v('health-centre', 'Ambulances')} size="sm" /> Ambulances</div>
     </Card>
-    <Card title={getCMSCopy("copy.ValueAnalytics.heal5", "Six months of checkups and the blood bank")} period={w('health-checkup')} span={2} activityId="health-checkup" explorerId={explorerId} onSelect={onSelect}>
-      <Growth label="Patients treated" before={{ value: v('health-checkup', 'Patients — March 2025'), when: 'March 2025' }} after={{ value: v('health-checkup', 'Patients treated'), when: 'September 2025' }} added={v('health-checkup', 'Added Mar–Sep 2025')} addedNote={getCMSCopy("copy.ValueAnalytics.reported", "as reported")} />
-      <Growth label="Blood bank units" before={{ value: v('blood-bank', 'Units — March 2025'), when: 'March 2025' }} after={{ value: v('blood-bank', 'Units'), when: 'September 2025' }} added={v('blood-bank', 'Added Mar–Sep 2025')} addedNote={getCMSCopy("copy.ValueAnalytics.reported", "as reported")} />
+    <Card title={getCMSCopy("copy.ValueAnalytics.heal5", "A year of health checkups")} period={w('health-checkup')} span={2} activityId="health-checkup" explorerId={explorerId} onSelect={onSelect}>
+      <Growth label="Patients treated" before={{ value: v('health-checkup', 'Patients — September 2025'), when: 'September 2025' }} after={{ value: v('health-checkup', 'Patients treated'), when: 'September 2026' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
+      <Growth label="Camps organised" before={{ value: v('health-checkup', 'Camps — September 2025'), when: 'September 2025' }} after={{ value: v('health-checkup', 'Camps organised'), when: 'September 2026' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
+    </Card>
+    <Card title={getCMSCopy("copy.ValueAnalytics.heal6", "The blood bank, year by year")} note={getCMSCopy("copy.ValueAnalytics.heal6note", "Units collected each year, with the camps held; the years sum to the total.")} period={w('blood-bank')} span={6} activityId="blood-bank" explorerId={explorerId} onSelect={onSelect}>
+      <Bars items={bloodBankYears.map(year => ({ label: year, value: v('blood-bank', `Units — ${year}`), note: `${v('blood-bank', `Camps — ${year}`)} camps` })).filter(item => item.value)} />
+      <div className="va-aside"><Droplet size={16} strokeWidth={1.6} aria-hidden="true" /><Figure value={v('blood-bank', 'Units')} size="sm" /> {getCMSCopy("copy.ValueAnalytics.bloodBankTotal", "units in all, from")} {v('blood-bank', 'Camps')} {getCMSCopy("copy.ValueAnalytics.camps", "camps")}</div>
     </Card>
   </>;
 };

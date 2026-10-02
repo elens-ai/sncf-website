@@ -12,12 +12,12 @@ export const DEFAULT_PILLARS: PillarState[] = [
     cardImageAlt: 'Health camp volunteers',
     shortTagline: 'Come for an evening of purpose — see how HEAL comes to life.',
     emblemCaption: 'Care, in every leaf.',
-    /* Figures from the SNCF activity report, March 2026. */
+    /* Figures from the SNCF Heal activity sheet, September 2026. */
     stats: [
       { label: 'Blood Donation Camps', value: '9,174+' },
       { label: 'Blood Units Collected', value: '1.5M+' },
-      { label: 'Patients Treated', value: '454,233+' },
-      { label: 'Cataract Surgeries', value: '15,443+' }
+      { label: 'Patients Treated', value: '483,439+' },
+      { label: 'Cataract Surgeries', value: '15,493+' }
     ],
     keyHighlights: [
       'Nationwide voluntary blood donation camps on Manav Ekta Diwas and year-round.',

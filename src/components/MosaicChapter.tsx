@@ -27,6 +27,11 @@ const ACTIVITY_SYMBOLS: Record<ActivityIcon, LucideIcon> = {
 
 type BackdropFocus = NonNullable<Activity['hoverFocus']>;
 
+/** Always-on photo collage drifting faintly behind a chapter's constellation. */
+const AMBIENT_PHOTOS: Partial<Record<MosaicPillar, string>> = {
+  heal: '/images/heal-collage.jpg',
+};
+
 /** Feathered photo collage; images load once its chapter is on screen, so the
     first hover doesn't wait on the download. */
 const ActivityBackdrop: React.FC<{ photos: string[]; show: boolean; preload: boolean; focus?: BackdropFocus }> = ({ photos, show, preload, focus }) => {
@@ -72,9 +77,13 @@ export const MosaicChapter = React.memo(function MosaicChapter({
 
   return (
     <article className="mosaic-chapter activity-chapter" data-stage={id} data-current={live}
-      data-busy={openId !== null}
+      data-busy={openId !== null} data-attending={attendedId !== null}
       style={{ '--chapter-a': pillar.accentA, '--chapter-b': pillar.accentB, '--chapter-edge': logo.edge } as React.CSSProperties}
       aria-labelledby={`mosaic-${id}-title`}>
+      {AMBIENT_PHOTOS[id] && (
+        <div className="activity-ambient" data-current={live} aria-hidden="true"
+          style={{ backgroundImage: `url(${resolveCMSMedia(AMBIENT_PHOTOS[id]!)})` }} />
+      )}
       {stacked && <MosaicWavesStatic pillar={pillar} />}
       {activities.filter(activity => activity.hoverPhotos?.length).map(activity => (
         <ActivityBackdrop key={activity.id} photos={activity.hoverPhotos!.map(photo => photo.src)} show={activity.id === attendedId || activity.id === openId} preload={live} focus={activity.hoverFocus} />
