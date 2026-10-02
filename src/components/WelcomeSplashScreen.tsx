@@ -1,4 +1,5 @@
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
+import { FlaredWordmark } from './PillarWordmark';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface WelcomeSplashScreenProps {
@@ -58,10 +59,9 @@ const LEAVE_MS = 1000;
 const HANDOFF_FADE_MS = 300;
 /* Share of the viewport height the logo + tagline may take on the welcome
    page, and the size limits for that group (relative to the first screen). */
-const BRAND_SHARE_OF_VIEWPORT = 0.3;
+const BRAND_SHARE_OF_VIEWPORT = 0.28;
 const BRAND_SCALE_MIN = 0.3;
 const BRAND_SCALE_MAX = 0.5;
-const BRAND_GAP_PX = 18;
 
 export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   onExitStart,
@@ -119,42 +119,64 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     setPlacement({ dy: s.top + s.height / 2 - (b.top + b.height / 2), scale: brandScale });
   }, [stage, placement, brandScale]);
 
-  /* Sends the logo from wherever it is to the header slot, and places the
-     S.N.C.F monogram exactly where the header will show it. Runs once. */
-  const hasFlownRef = useRef(false);
-  const flyLogoToHeader = useCallback(() => {
-    if (hasFlownRef.current) return;
-    hasFlownRef.current = true;
-    onExitStartRef.current();
-
+  /* The logo's own resting geometry, measured once before its first flight:
+     every later flight is expressed relative to it. Measured where the brand
+     group is HEADING, not mid-glide — if the arrow is pressed while the group is
+     still settling, a mid-motion reading would land the logo short. */
+  const baseRef = useRef<{ rect: DOMRect; groupScale: number } | null>(null);
+  const measureBase = () => {
+    if (baseRef.current) return baseRef.current;
     const src = document.getElementById('splash-sncf-logo');
-    const dst = document.getElementById('header-sncf-logo');
-    if (src && dst) {
-      /* Measure the logo where the brand group is HEADING, not where it is
-         mid-glide: if the arrow is pressed while the group is still settling,
-         a mid-motion reading would land the logo short of the header slot. */
-      const group = brandRef.current;
-      const settled = group?.style.transform;
-      if (group) {
-        group.style.transition = 'none';
-        group.style.transform = placementRef.current ? `translateY(${placementRef.current.dy}px) scale(${placementRef.current.scale})` : 'none';
-      }
-      const s = src.getBoundingClientRect();
-      const d = dst.getBoundingClientRect();
-      /* The logo sits inside the (possibly scaled) brand group, so its own
-         transform is in the group's units: divide screen offsets by that scale. */
-      const groupScale = group ? group.getBoundingClientRect().width / group.offsetWidth : 1;
-      if (group) {
-        group.style.transform = settled ?? '';
-        void group.offsetWidth;
-        group.style.transition = `transform ${BRAND_MOVE_MS}ms ${BRAND_EASE}`;
-      }
-      setFlight({
-        dx: (d.left + d.width / 2 - (s.left + s.width / 2)) / groupScale,
-        dy: (d.top + d.height / 2 - (s.top + s.height / 2)) / groupScale,
-        scale: d.width / s.width,
-      });
+    if (!src) return null;
+    const group = brandRef.current;
+    const settled = group?.style.transform;
+    if (group) {
+      group.style.transition = 'none';
+      group.style.transform = placementRef.current ? `translateY(${placementRef.current.dy}px) scale(${placementRef.current.scale})` : 'none';
     }
+    const rect = src.getBoundingClientRect();
+    /* The logo sits inside the (possibly scaled) brand group, so its own
+       transform is in the group's units: divide screen offsets by that scale. */
+    const groupScale = group ? group.getBoundingClientRect().width / group.offsetWidth : 1;
+    if (group) {
+      group.style.transform = settled ?? '';
+      void group.offsetWidth;
+      group.style.transition = `transform ${BRAND_MOVE_MS}ms ${BRAND_EASE}`;
+    }
+    baseRef.current = { rect, groupScale };
+    return baseRef.current;
+  };
+  const flyTo = (d: DOMRect) => {
+    const base = measureBase();
+    if (!base) return;
+    const s = base.rect;
+    setFlight({
+      dx: (d.left + d.width / 2 - (s.left + s.width / 2)) / base.groupScale,
+      dy: (d.top + d.height / 2 - (s.top + s.height / 2)) / base.groupScale,
+      scale: d.width / s.width,
+    });
+  };
+
+  /* The logo first lands just before the foundation's name on the mission
+     page, and moves on to the header slot as the hero loads. */
+  const flightRef = useRef<'none' | 'title' | 'header'>('none');
+  const titleSlotRef = useRef<HTMLSpanElement>(null);
+  const flyLogoToTitle = useCallback(() => {
+    const slot = titleSlotRef.current?.getBoundingClientRect();
+    if (flightRef.current !== 'none' || !slot?.width) return;
+    flightRef.current = 'title';
+    onExitStartRef.current();
+    flyTo(slot);
+  }, []);
+
+  /* Sends the logo to the header slot, and places the S.N.C.F monogram exactly
+     where the header will show it. Runs once. */
+  const flyLogoToHeader = useCallback(() => {
+    if (flightRef.current === 'header') return;
+    if (flightRef.current === 'none') onExitStartRef.current();
+    flightRef.current = 'header';
+    const dst = document.getElementById('header-sncf-logo');
+    if (dst) flyTo(dst.getBoundingClientRect());
     /* The header wordmark is laid out (just transparent) under the splash; its
        hidden monogram measure gives the exact spot and size of S.N.C.F. */
     const measure = document.querySelector('#site-wordmark .brand-monogram-measure');
@@ -164,10 +186,13 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     }
   }, []);
 
-  const beginMission = useCallback(() => {
-    flyLogoToHeader();
-    setStage('mission');
-  }, [flyLogoToHeader]);
+  const beginMission = useCallback(() => setStage('mission'), []);
+
+  /* Once the mission page is laid out, land the logo before the name; it stays
+     there until the hero loads, then flies on to the header (beginLeave). */
+  useLayoutEffect(() => {
+    if (stage === 'mission') flyLogoToTitle();
+  }, [stage, flyLogoToTitle]);
 
   /* Fades the splash to the hero. The real header logo is revealed under the
      splash copy at the same moment; its opacity is set directly on the DOM,
@@ -177,7 +202,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   const beginLeave = useCallback(() => {
     if (hasLeftRef.current) return;
     hasLeftRef.current = true;
-    const alreadyLanded = hasFlownRef.current;
+    const alreadyLanded = flightRef.current === 'header';
     flyLogoToHeader();
     setStage('leaving');
     window.setTimeout(() => {
@@ -243,50 +268,75 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         {revealed && (
           <div className="splash-welcome-content" data-gone={onMission}>
             {/* Room for the logo + tagline, which glide in from the first screen. */}
-            <div ref={brandSlotRef} aria-hidden="true" style={{ height: brandHeight * brandScale, marginBottom: BRAND_GAP_PX, flex: 'none' }} />
+            <div ref={brandSlotRef} aria-hidden="true" style={{ height: brandHeight * brandScale, marginBottom: 'calc(var(--wp-s) * 2.6)', flex: 'none' }} />
             <h1 className="splash-welcome-heading">
-              <span className="splash-welcome-sncf">{c("welcome-short-name", "SNCF")}</span>
-              <span className="splash-welcome-rule" aria-hidden="true" />
-              <span className="splash-welcome-name">{c("welcome-full-name", "Sant Nirankari Charitable Foundation")}</span>
+              <FlaredWordmark text={c("welcome-short-name", "SNCF")} className="splash-welcome-sncf" />
+              <span className="splash-welcome-name"><span>{c("welcome-full-name", "Sant Nirankari Charitable Foundation")}</span></span>
             </h1>
             {/* Editable in the CMS. */}
             <p className="splash-welcome-text">{c("welcome-text", "The Sant Nirankari Charitable Foundation (SNCF) goes beyond just charity. Our mission is to spread kindness and care throughout the world, building a better society for those in need. Founded in 2010 to implement the vision of Nirankari Baba Ji,“Life gets a meaning, if it is lived for others”, SNCF focuses on social and charitable work.")}</p>
           </div>
         )}
+        {/* Mission page: one editorial grid. The copy column carries the name,
+            a full-width standfirst, then the introduction set in two justified
+            columns that line up exactly with Mission | Vision beneath it (same
+            gutter, same hairlines). The portrait column spans the copy's full
+            height, standing on its quotation, whose last line meets the copy's. */}
         {onMission && (
-          <div className="splash-mission">
-            <section className="splash-mission-block">
-              <h2 className="splash-mission-title">{c("mission-title", "Our Mission")}</h2>
-              <p className="splash-mission-quote">{c("mission-quote", "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed.")}</p>
-              <p className="splash-mission-text">{c("mission-text-1", "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring.")}</p>
-              <p className="splash-mission-text">{c("mission-text-2", "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe.")}</p>
-            </section>
-            <div className="splash-mission-divider" aria-hidden="true" />
-            <section className="splash-mission-block">
-              <h2 className="splash-mission-title">{c("vision-title", "Our Vision")}</h2>
-              <p className="splash-mission-quote">{c("vision-quote", "“Living the spirit of service”")}</p>
-              <p className="splash-mission-text">{c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")}</p>
-            </section>
+          <div className="splash-mission-page">
+            <div className="splash-mission-copy">
+              <header className="splash-intro">
+                <h2 className="splash-intro-name">
+                  {/* The flying logo lands here, and stays until the hero loads. */}
+                  <span ref={titleSlotRef} className="splash-intro-logo-slot" aria-hidden="true" />
+                  <FlaredWordmark text={c("mission-intro-name", "Sant Nirankari Charitable Foundation")} className="splash-intro-wordmark" />
+                </h2>
+                <p className="splash-intro-lead">{c("mission-intro-1", "SNCF is dedicated to serving humanity through selfless service and meaningful social initiatives.")}</p>
+                {/* One justified block: three editable sentences, run together. */}
+                <p className="splash-intro-body">{c("mission-intro-2", "From healthcare and community empowerment to environmental conservation, SNCF works to address vital social and ecological needs.")}{' '}
+                  {c("mission-intro-3", "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation.")}{' '}
+                  {c("mission-intro-4", "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society.")}</p>
+              </header>
+              <div className="splash-mission">
+                <section className="splash-mission-block">
+                  <h3 className="splash-mission-title">{c("mission-title", "Our Mission")}</h3>
+                  <p className="splash-mission-quote">{c("mission-quote", "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed.")}</p>
+                  <div className="splash-mission-body">
+                    <p className="splash-mission-text">{c("mission-text-1", "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring.")}</p>
+                    <p className="splash-mission-text">{c("mission-text-2", "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe.")}</p>
+                  </div>
+                </section>
+                <section className="splash-mission-block">
+                  <h3 className="splash-mission-title">{c("vision-title", "Our Vision")}</h3>
+                  <p className="splash-mission-quote">{c("vision-quote", "“Living the spirit of service”")}</p>
+                  <div className="splash-mission-body">
+                    <p className="splash-mission-text">{c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")}</p>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <figure className="splash-satguru">
+              <div className="splash-satguru-frame">
+                <img
+                  src={resolveCMSAsset("asset.WelcomeSplashScreen.satguru-photo", "/images/satguru-mata-sudiksha-ji-cutout.webp")}
+                  alt={c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}
+                />
+              </div>
+              <figcaption>
+                <blockquote>{c("satguru-quote", "“Become One with the Formless One, so that we can become One with Everyone.”")}</blockquote>
+                <cite>— {c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite>
+              </figcaption>
+            </figure>
           </div>
-        )}
-        {onMission && (
-          <figure className="splash-satguru">
-            <img
-              src={resolveCMSAsset("asset.WelcomeSplashScreen.satguru-photo", "/images/satguru-mata-sudiksha-ji-cutout.webp")}
-              alt={c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}
-            />
-            <figcaption>
-              <blockquote>{c("satguru-quote", "“Become One with the Formless One, so that we can become One with Everyone.”")}</blockquote>
-              <cite>— {c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite>
-            </figcaption>
-          </figure>
         )}
       </div>
 
-      {/* White first screen. Fades slowly as the welcome page takes over. */}
+      {/* White first screen. Fades slowly as the welcome page takes over. It sits
+          above the welcome copy (so nothing shows through it while it fades)
+          and below the logo, motto and arrow. */}
       <div
         id="splash-veil"
-        className="absolute inset-0 bg-white pointer-events-none"
+        className="absolute inset-0 z-[5] bg-white pointer-events-none"
         style={{
           opacity: revealed ? 0 : 1,
           transition: `opacity ${WHITE_FADE_MS}ms ease-in-out`,

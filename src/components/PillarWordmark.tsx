@@ -67,3 +67,54 @@ export const HeroPillarWordmark: React.FC<{ pillar: MosaicPillar }> = ({ pillar 
     </g>
   </svg>;
 };
+
+/* Further letters in the same flared style, for names beyond the pillar
+   titles (A and L come straight from the traced HEAL). */
+const NAME_GLYPHS: Record<string, { width: number; dx?: number; path: string }> = {
+  ...HERO_GLYPHS,
+  A: { width: 99, dx: -202, path: 'M243.4 6.2L259.9 6.2Q260.2 6.6 261.1 6.4L262.9 7.2L264.4 8.5L266.6 12.4L273.5 27.3L278.7 39.4Q280 43.7 281.8 47.4L282.2 49L283.2 50.9L283.6 52.5L284.2 53.5L293.7 80.5L293.7 81.1L297.5 92.6L297.7 94L298.7 96.6L301.1 105.7Q300.9 107 300 107.6L298.6 108.2L278.8 108.2Q276.6 107.9 275.7 106.3L275.3 105.1L275.1 98.8L274.9 98.6L274.7 95.4L274.1 92.2L272.9 88.3L270.4 85.6L266.9 83.6L261.7 82.4L260.1 82.4L258.3 82L244.8 82L243.2 82.4L241.8 82.4L236.7 83.6Q233.2 85 231 87.7L229.6 90.8L229.2 93.6L228.8 94.6L228.8 95.6L228.4 97L228.4 99.2L228.3 99.4L228.3 104.9L227.7 106.5L227.2 107L225.8 107.8L224.2 108.2L204.5 108.2Q203.2 107.9 202.6 106.9Q202 106.3 202.3 104.7L205.8 92.2L210.4 78.3L210.4 77.7L219.3 52.9L226.3 35.7L228.1 32.1L231.6 23.6L238.2 10.1Q238.9 8.4 240.3 7.4Q241.5 6.5 243.4 6.2ZM251.3 32.8L250.5 33.2Q248.7 34.8 247.9 37.2L244.9 46.1L243.7 50.6L242.7 53.2L242.7 54L241.3 58.8Q241.2 61.8 240.2 64.3Q239.8 66.9 241 68.1L242.3 69.1L244.9 70.3L245.9 70.5L248.9 70.5L249.1 70.7L257.4 70.5L259 70.1L261.4 68.9Q262.8 68.1 263.2 66.3L263.2 64.1Q262.6 62.9 262.6 61.4L260.2 52.4L259.2 49.9L259 48.5L255.6 39.1L255.4 37.9L253.5 34L252.1 32.8L251.3 32.8Z' },
+  L: { width: 89, dx: -310, path: 'M317.5 6.2L336.7 6.2L338.2 7L339.2 8.9L339.2 10.5L338.2 14.4L338 16.6L337 20.4L336.6 23.6L335.6 27.7L335.4 30.3L334.4 34.9L334.2 37.8L333.2 43.6L333 47.4L332.8 47.6L332.8 49.4L332.4 51.3L332.4 53.3L332.2 53.5L332.2 55.5L332 55.7L331.6 71.6L331.8 71.8L332 75.8L333.2 79.5Q334.9 82.9 337.7 85.2Q340 87 342.9 88.2L344.2 88.4L346.8 89.3L351.2 89.7L354 90.3L362.7 90.3L365.7 89.7L369.7 89.5L375.4 88Q381.6 85.6 385.4 80.9Q388.2 77.6 390.2 73.6L391.3 72.5Q392.1 71.5 394.1 71.7Q395.6 72.1 396.3 73.4L396.7 74.4L396.9 76.9L397.1 77.1L397.1 78.9L397.3 79.1L397.5 85.9L397.7 86.1L397.7 89.2L397.9 89.4L397.9 92L398.1 92.2L398.1 95.8L398.3 96L398.7 105.1Q398.4 106.7 397.2 107.4L396 108Q395.1 107.8 394.9 108.2L312.5 108.2L311.9 108L310.4 106.5L310.2 104.3L310 104.1L310 101.4L310.2 101.2L310.2 93L310 92.8L310 90.2L310.2 90L310.2 75.8L310.4 75.6L310.6 58.9L310.8 58.7L311 46L311.4 44L311.4 35.1L311.6 34.9L311.8 25.3L312 25.1L312.2 17.6L312.6 15.4L312.6 10.7Q313.1 10.4 312.8 9.3L313.9 7.6L315.3 6.8L317.5 6.2Z' },
+  B: { width: 90, path: 'M4 6H50Q84 6 84 33Q84 49 72 55Q90 62 90 80Q90 108 52 108H4Q0 108 0 104Q1.5 57 0 10Q0 6 4 6ZM28 27V47H46Q57 47 57 37Q57 27 46 27ZM28 66V87H49Q62 87 62 76.5Q62 66 49 66Z' },
+  D: { width: 96, path: 'M4 6H44Q96 6 96 57Q96 108 44 108H4Q0 108 0 104Q1.5 57 0 10Q0 6 4 6ZM28 28V86H42Q68 86 68 57Q68 28 42 28Z' },
+  F: { width: 84, path: 'M4 6H80Q84 6 84 10V22Q84 28 78 28H28V46H70Q74 46 74 50V60Q74 66 68 66H28Q27 88 28 104Q28 108 24 108H4Q0 108 0 104Q1.5 57 0 10Q0 6 4 6Z' },
+  K: { width: 94, path: 'M4 6H22Q26 6 26 10Q25.5 30 26 46L62 9Q65 6 70 6H90Q95 6 92 10L52 52L93 102Q96 108 90 108H70Q65 108 62 104L35 70L26 79Q25.5 92 26 104Q26 108 22 108H4Q0 108 0 104Q1.5 57 0 10Q0 6 4 6Z' },
+  U: { width: 94, path: 'M4 6H22Q26 6 26 10Q25 40 26 66Q26 86 47 86Q68 86 68 66Q69 40 68 10Q68 6 72 6H90Q94 6 94 10Q93 40 94 66Q94 110 47 110Q0 110 0 66Q1 40 0 10Q0 6 4 6Z' },
+};
+const NAME_SPACE = 40;
+
+/** Any short name in the flared HEAL lettering, broken over two lines where
+    they balance best (the longer line never longer than it must be). Falls
+    back to plain text for unsupported letters. */
+export const FlaredWordmark: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
+  const words = text.toUpperCase().trim().split(/\s+/);
+  if (!words.every(word => [...word].every(letter => NAME_GLYPHS[letter]))) return <span className={className}>{text}</span>;
+  const wordWidth = (word: string) => [...word].reduce((sum, letter) => sum + NAME_GLYPHS[letter].width + 8, -8);
+  const lineWidth = (line: string[]) => line.reduce((sum, word) => sum + wordWidth(word), NAME_SPACE * (line.length - 1));
+  let split = words.length;
+  for (let i = 1, best = Infinity; i < words.length; i++) {
+    const widest = Math.max(lineWidth(words.slice(0, i)), lineWidth(words.slice(i)));
+    if (widest < best) { best = widest; split = i; }
+  }
+  const lines = [words.slice(0, split), words.slice(split)].filter(line => line.length);
+  return <span className={className} role="img" aria-label={text}>
+    {lines.map((line, li) => {
+      let width = 3;
+      const placed = line.flatMap((word, wi) => {
+        if (wi > 0) width += NAME_SPACE;
+        return [...word].map(letter => {
+          const glyph = NAME_GLYPHS[letter];
+          const x = width + (glyph.dx ?? 0);
+          width += glyph.width + 8;
+          return { letter, glyph, x };
+        });
+      });
+      return <svg key={li} viewBox={`0 0 ${width - 5} 112`} preserveAspectRatio="xMinYMid meet" aria-hidden="true">
+        <g fill="currentColor" fillRule="evenodd">
+          {/* Each letter sits in its own positioned group, so a CSS animation on
+              the letter itself can never override where it is placed. */}
+          {placed.map(({ letter, glyph, x }, i) => <g key={`${letter}-${i}`} transform={`translate(${x} 0)`}><path d={glyph.path} /></g>)}
+        </g>
+      </svg>;
+    })}
+  </span>;
+};
