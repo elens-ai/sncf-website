@@ -1,6 +1,8 @@
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { introFocus, introSeconds } from '../cms/introSettings';
 import { FlaredWordmark } from './PillarWordmark';
+import { MissionChapters, type MissionChapter } from './MissionChapters';
+import { useReducedMotion } from 'motion/react';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface WelcomeSplashScreenProps {
@@ -34,8 +36,8 @@ interface MonogramPlacement {
 /* 'intro'   — the white first screen: logo + signature tagline.
    'welcome' — the white fades away, uncovering the welcome photo; the logo and
                tagline shrink and rise to sit above the heading and message.
-   'mission' — the logo slides to its header slot with S.N.C.F beside it, the
-               welcome copy gives way to Our Mission and Our Vision.
+   'mission' — the logo lands before the foundation's name, and who we are,
+               Our Mission and Our Vision play beneath it as chapters.
    'leaving' — the page fades to the hero; the splash logo and monogram
                crossfade into the real header logo and wordmark. */
 type Stage = 'intro' | 'welcome' | 'mission' | 'leaving';
@@ -49,11 +51,12 @@ const WHITE_FADE_MS = 2200;
 const BRAND_MOVE_MS = 1600;
 const BRAND_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
 /* How long each page stays before moving on by itself, in seconds: editable in
-   the CMS ("Intro · … time"). The copy animates in during the first few seconds
-   (timings in index.css: WELCOME PAGE / MISSION PAGE) and then stays readable;
-   the arrow button moves on at any time. */
+   the CMS ("Intro · … time"). The welcome copy animates in during the first few
+   seconds (index.css: WELCOME PAGE) and then stays readable; the mission page's
+   time is shared out among its three chapters (MissionChapters). The arrow
+   button moves on at any time. */
 const WELCOME_SECONDS = 11;
-const MISSION_SECONDS = 24;
+const MISSION_SECONDS = 36;
 /* Where the welcome photo and the Satguru portrait are centred: editable in the
    CMS as "across% down%", for when an editor swaps either picture. */
 const WELCOME_PHOTO_FOCUS = { x: '47%', y: '46%' };
@@ -81,9 +84,11 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
 }) => {
   const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
   const welcomeMs = introSeconds(c("welcome-seconds", "11"), WELCOME_SECONDS);
-  const missionMs = introSeconds(c("mission-seconds", "24"), MISSION_SECONDS);
+  const missionMs = introSeconds(c("mission-seconds", "36"), MISSION_SECONDS);
   const photoFocus = introFocus(c("welcome-photo-focus", "47% 46%"), WELCOME_PHOTO_FOCUS);
   const portraitFocus = introFocus(c("satguru-photo-focus", "50% 20%"), PORTRAIT_FOCUS);
+  /* With reduced motion the chapters are set one after another, and the page simply holds. */
+  const still = useReducedMotion() ?? false;
 
   const [stage, setStage] = useState<Stage>('intro');
   const [brandScale, setBrandScale] = useState(1);
@@ -234,28 +239,71 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   }, [completeOnce, flyLogoToHeader]);
 
   /* Each page moves on by itself after its hold; the arrow moves on early.
-     Rescheduled per stage, so skipping a page restarts the next one's clock. */
+     Rescheduled per stage, so skipping a page restarts the next one's clock.
+     The mission page's chapters keep their own time, which a viewer can pause,
+     and end the page themselves; set still, the page holds like the others. */
   useEffect(() => {
     const next = stage === 'intro' ? [beginWelcome, HOLD_MS]
       : stage === 'welcome' ? [beginMission, welcomeMs]
-      : stage === 'mission' ? [beginLeave, missionMs]
+      : stage === 'mission' && still ? [beginLeave, missionMs]
       : null;
     if (!next) return;
     const timer = setTimeout(next[0] as () => void, next[1] as number);
     return () => clearTimeout(timer);
-  }, [stage, beginWelcome, beginMission, beginLeave, welcomeMs, missionMs]);
+  }, [stage, still, beginWelcome, beginMission, beginLeave, welcomeMs, missionMs]);
 
-  // Distant last resort, in case a stage's timer never fires.
+  /* Distant last resort, in case a stage's timer never fires: re-armed with
+     each stage for the time still to come. It stands down while the chapters
+     play, since a viewer may pause them for as long as they like. */
   useEffect(() => {
-    const finishTimer = setTimeout(completeOnce, HOLD_MS + welcomeMs + missionMs + FLY_MS + 6000);
+    const rest = stage === 'intro' ? HOLD_MS + welcomeMs + missionMs
+      : stage === 'welcome' ? welcomeMs + missionMs
+      : stage === 'mission' ? (still ? missionMs : null)
+      : 0;
+    if (rest === null) return;
+    const finishTimer = setTimeout(completeOnce, rest + FLY_MS + 6000);
     return () => clearTimeout(finishTimer);
-  }, [completeOnce, welcomeMs, missionMs]);
+  }, [completeOnce, stage, still, welcomeMs, missionMs]);
 
   const advance = () => (stage === 'welcome' ? beginMission() : beginLeave());
 
   const revealed = stage !== 'intro';
   const onMission = stage === 'mission' || stage === 'leaving';
   const brandTransform = placement ? `translateY(${placement.dy}px) scale(${placement.scale})` : 'none';
+
+  /* The mission page's chapters, every line editable in the CMS. */
+  const missionTitle = c("mission-title", "Our Mission");
+  const visionTitle = c("vision-title", "Our Vision");
+  const chapters: MissionChapter[] = [
+    {
+      id: 'who-we-are',
+      label: c("mission-intro-label", "Who we are"),
+      statement: c("mission-intro-1", "SNCF is dedicated to serving humanity through selfless service and meaningful social initiatives."),
+      /* one block: three editable sentences, run together */
+      body: [[
+        c("mission-intro-2", "From healthcare and community empowerment to environmental conservation, SNCF works to address vital social and ecological needs."),
+        c("mission-intro-3", "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation."),
+        c("mission-intro-4", "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society."),
+      ].join(' ')],
+    },
+    {
+      id: 'mission',
+      label: missionTitle,
+      title: missionTitle,
+      quote: c("mission-quote", "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed."),
+      body: [
+        c("mission-text-1", "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring."),
+        c("mission-text-2", "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe."),
+      ],
+    },
+    {
+      id: 'vision',
+      label: visionTitle,
+      title: visionTitle,
+      quote: c("vision-quote", "“Living the spirit of service”"),
+      body: [c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")],
+    },
+  ];
 
   return (
     <div
@@ -301,11 +349,11 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
             <p className="splash-welcome-text">{c("welcome-text", "The Sant Nirankari Charitable Foundation (SNCF) goes beyond just charity. Our mission is to spread kindness and care throughout the world, building a better society for those in need. Founded in 2010 to implement the vision of Nirankari Baba Ji,“Life gets a meaning, if it is lived for others”, SNCF focuses on social and charitable work.")}</p>
           </div>
         )}
-        {/* Mission page: one editorial grid. The copy column carries the name,
-            a full-width standfirst, then the introduction set in two justified
-            columns that line up exactly with Mission | Vision beneath it (same
-            gutter, same hairlines). The portrait column spans the copy's full
-            height, standing on its quotation, whose last line meets the copy's. */}
+        {/* Mission page: the foundation's name at the top of the copy column,
+            and beneath it who we are, Our Mission and Our Vision played one at
+            a time as a title sequence, its rail at the foot (MissionChapters).
+            The portrait column spans the page's height, standing on its
+            quotation, whose last line meets the rail. */}
         {onMission && (
           <div className="splash-mission-page">
             <div className="splash-mission-copy">
@@ -315,29 +363,14 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                   <span ref={titleSlotRef} className="splash-intro-logo-slot" aria-hidden="true" />
                   <FlaredWordmark text={c("mission-intro-name", "Sant Nirankari Charitable Foundation")} className="splash-intro-wordmark" />
                 </h2>
-                <p className="splash-intro-lead">{c("mission-intro-1", "SNCF is dedicated to serving humanity through selfless service and meaningful social initiatives.")}</p>
-                {/* One justified block: three editable sentences, run together. */}
-                <p className="splash-intro-body">{c("mission-intro-2", "From healthcare and community empowerment to environmental conservation, SNCF works to address vital social and ecological needs.")}{' '}
-                  {c("mission-intro-3", "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation.")}{' '}
-                  {c("mission-intro-4", "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society.")}</p>
               </header>
-              <div className="splash-mission">
-                <section className="splash-mission-block">
-                  <h3 className="splash-mission-title">{c("mission-title", "Our Mission")}</h3>
-                  <p className="splash-mission-quote">{c("mission-quote", "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed.")}</p>
-                  <div className="splash-mission-body">
-                    <p className="splash-mission-text">{c("mission-text-1", "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring.")}</p>
-                    <p className="splash-mission-text">{c("mission-text-2", "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe.")}</p>
-                  </div>
-                </section>
-                <section className="splash-mission-block">
-                  <h3 className="splash-mission-title">{c("vision-title", "Our Vision")}</h3>
-                  <p className="splash-mission-quote">{c("vision-quote", "“Living the spirit of service”")}</p>
-                  <div className="splash-mission-body">
-                    <p className="splash-mission-text">{c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")}</p>
-                  </div>
-                </section>
-              </div>
+              <MissionChapters
+                chapters={chapters}
+                totalMs={missionMs}
+                still={still}
+                labels={{ rail: c("mission-chapters-label", "Chapters"), pause: c("mission-pause", "Pause"), play: c("mission-play", "Play") }}
+                onEnd={beginLeave}
+              />
             </div>
             <figure className="splash-satguru" style={{ '--portrait-focus': `${portraitFocus.x} ${portraitFocus.y}` } as React.CSSProperties}>
               <div className="splash-satguru-frame">

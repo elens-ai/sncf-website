@@ -571,7 +571,7 @@
   "copy.WelcomeSplashScreen.mission-intro-4": "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society.",
   "copy.WelcomeSplashScreen.mission-intro-name": "Sant Nirankari Charitable Foundation",
   "copy.WelcomeSplashScreen.welcome-seconds": "11",
-  "copy.WelcomeSplashScreen.mission-seconds": "24",
+  "copy.WelcomeSplashScreen.mission-seconds": "36",
   "copy.WelcomeSplashScreen.welcome-photo-focus": "47% 46%",
   "copy.WelcomeSplashScreen.satguru-photo-focus": "50% 20%",
   "copy.DonationExperience.closeAnswer": "Close answer",
@@ -596,5 +596,9 @@
   "copy.ProjectsPage.faceWaterAlt": "Project Amrit volunteers clearing a riverbank in Mantova, Italy",
   "copy.ProjectsPage.faceForestAlt": "Women planting saplings for a Oneness Vann micro-forest in Solapur",
   "copy.ProjectsPage.faceLandAlt": "A volunteer plants a sapling on a hillside",
-  "copy.ProjectsPage.faceCommunitiesAlt": "A volunteer checks an elderly villager in Mandaura, an adopted village"
+  "copy.ProjectsPage.faceCommunitiesAlt": "A volunteer checks an elderly villager in Mandaura, an adopted village",
+  "copy.WelcomeSplashScreen.mission-intro-label": "Who we are",
+  "copy.WelcomeSplashScreen.mission-chapters-label": "Chapters",
+  "copy.WelcomeSplashScreen.mission-pause": "Pause",
+  "copy.WelcomeSplashScreen.mission-play": "Play"
 }

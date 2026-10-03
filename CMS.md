@@ -71,8 +71,8 @@ The intro that opens the home page (first screen, welcome page, then the mission
 | --- | --- |
 | **Intro · First screen** | The *Service with Humility* signature and the logo. |
 | **Intro · Welcome page** | The SNCF wordmark, the foundation's full name, the welcome paragraph, the arrow's label and the welcome photo. |
-| **Intro · Mission & vision page** | The foundation's name, the introduction, Our Mission, Our Vision, the Satguru's quotation and name, and her portrait. |
-| **Intro · Welcome page time (seconds)** / **Mission page time (seconds)** | How long each page stays before moving on by itself (3–120 seconds). The arrow always moves on early. |
+| **Intro · Mission & vision page** | The foundation's name, the three chapters that play beneath it (*Who we are* and its introduction, Our Mission, Our Vision), the chapter bar's labels, the Satguru's quotation and name, and her portrait. |
+| **Intro · Welcome page time (seconds)** / **Mission page time (seconds)** | How long each page stays before moving on by itself (3–120 seconds). The mission page's time is shared among its three chapters by how much each says (at least 6 seconds each); visitors can pause it or jump between chapters. The arrow always moves on early. |
 | **Intro · Welcome photo focus** / **Satguru portrait focus** | Where a photograph is centred, as *across% down%* (for example `47% 46%`). Set this after replacing either picture so the people who matter stay in view. |
 
 A value the site cannot read (a time out of range, a focus such as `centre`) falls back to the design default, so the intro never stalls. To skip the intro entirely, switch off **Home · Welcome intro** under **Site setup → Sections on/off**. The name and the SNCF wordmark are drawn in the house's flared lettering; letters it does not have yet fall back to plain text.
