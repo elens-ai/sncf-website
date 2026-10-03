@@ -28,7 +28,7 @@
 }
 .home-page :is(p, address) { user-select: text; }
 .home-eyebrow {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 500;
   letter-spacing: .24em;
@@ -44,7 +44,7 @@
 .hero-eyebrow { display: flex; align-items: center; margin-bottom: 24px; padding-left: 3px; font-size: 12px; color: rgb(255 255 255 / .86); }
 #hero-script-pillar-name { color: #eee4cf; filter: none; margin-bottom: 12px; }
 #hero-headline {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(32px, 3.35vw, 50px);
   font-weight: 400;
   line-height: 1.12;
@@ -53,12 +53,12 @@
   margin-bottom: 22px;
   filter: none;
 }
-#hero-headline.font-artistic-display { font-family: 'Cinzel', serif; }
-#hero-headline.font-artistic-serif { font-family: Georgia, serif; }
-#hero-headline.font-artistic-modern { font-family: 'Plus Jakarta Sans', sans-serif; }
+#hero-headline.font-artistic-display { font-family: var(--font-sans); }
+#hero-headline.font-artistic-serif { font-family: var(--font-sans); }
+#hero-headline.font-artistic-modern { font-family: var(--font-sans); }
 #hero-body-text {
   max-width: 43ch;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(14px, 1.14vw, 16px);
   line-height: 1.8;
   color: rgb(255 255 255 / .76);
@@ -74,17 +74,17 @@
   gap: 20px;
 }
 .hero-impact > div + div { border-left: 1px solid var(--home-line); padding-left: 24px; }
-.hero-impact > div > span:first-child { font-family: 'Outfit', sans-serif; font-weight: 400; font-size: 29px; }
-.hero-impact > div > span:last-child { margin-top: 6px; font-family: 'Inter', sans-serif; font-size: 11px; color: rgb(255 255 255 / .62); }
+.hero-impact > div > span:first-child { font-family: var(--font-sans); font-weight: 400; font-size: 29px; }
+.hero-impact > div > span:last-child { margin-top: 6px; font-family: var(--font-sans); font-size: 11px; color: rgb(255 255 255 / .62); }
 [id^='hero-learn-more-'] {
   background: var(--home-paper) !important;
   color: var(--pillar-ui-ink, #163a33);
   box-shadow: 0 8px 28px rgb(0 0 0 / .12) !important;
   padding: 15px 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px; font-weight: 600; text-transform: none; letter-spacing: .025em;
 }
-.hero-bottom-line { position: relative; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 20px auto 0; width: 100%; max-width: 1280px; padding: 20px 0 0; border-top: 1px solid var(--home-line); color: rgb(255 255 255 / .5); font: 11px 'Inter', sans-serif; }
+.hero-bottom-line { position: relative; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 20px auto 0; width: 100%; max-width: 1280px; padding: 20px 0 0; border-top: 1px solid var(--home-line); color: rgb(255 255 255 / .5); font: 11px var(--font-sans); }
 .hero-playback { display: flex; align-items: center; gap: 20px; padding-right: 180px; }
 .hero-chapter { display: flex; align-items: center; gap: 12px; font-variant-numeric: tabular-nums; }
 .hero-chapter i { display: block; width: 40px; height: 1px; background: rgb(255 255 255 / .25); }
@@ -99,15 +99,15 @@
 /* Events read as a collection of invitation cards, on the same quiet ground. */
 #events-section { padding-top: 110px; padding-bottom: 34px; }
 #events-section > div > header { padding-bottom: 25px; border-bottom: 1px solid var(--home-line); margin-bottom: 20px; }
-#events-section h2 { font-family: 'Outfit', sans-serif; font-weight: 400; letter-spacing: -.035em; font-size: clamp(28px, 3.2vw, 44px); max-width: 19ch; }
+#events-section h2 { font-family: var(--font-heading); font-weight: 800; letter-spacing: 0; font-size: clamp(24px, 2.5vw, 36px); max-width: 19ch; }
 #events-section header button { background: var(--home-paper); box-shadow: none; font-weight: 500; }
 .home-event-ticket { border-radius: 24px; }
-.home-event-ticket h3 { font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 18px; }
+.home-event-ticket h3 { font-family: var(--font-heading); font-weight: 800; font-size: 16px; }
 .home-event-ticket > div > p { line-height: 1.7; }
 
 /* Photographs retain their revolving arrangement; framing is softened. */
 #awards-section .award-card { border-radius: 18px; border: 1px solid rgb(255 255 255 / .2); box-shadow: 0 32px 65px -25px rgb(0 0 0 / .55); }
-#awards-section .award-title { font-family: 'Outfit', sans-serif; font-weight: 400; letter-spacing: -.035em; }
+#awards-section .award-title { font-family: var(--font-sans); font-weight: 400; letter-spacing: -.035em; }
 #awards-section .award-title em { color: #e8d7b7; font-weight: 400; }
 /* The year as a watermark behind the masthead: light, outlined, and it
    fades up anew with every honour. */
@@ -185,7 +185,7 @@
   #hero-clone-stage *, #hero-clone-stage *::before, #hero-clone-stage *::after { animation: none !important; transition: none !important; }
   .hero-intro-rise, .hero-intro-bloom { opacity: 1; }
 }
-.hero-impact [id^='odometer-stat-'] .font-artistic-heading { font-family: 'Outfit', sans-serif; font-weight: 400; }
+.hero-impact [id^='odometer-stat-'] .font-artistic-heading { font-family: var(--font-sans); font-weight: 400; }
 @media (max-width: 639px) {
   #site-footer nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   #site-footer nav > div:last-child { grid-column: 1 / -1; }

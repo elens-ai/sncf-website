@@ -13,7 +13,8 @@ import { resolveCMSMedia } from '../cms/media';
 import type { PillarState } from '../types';
 import { PillarArtwork } from './PillarArtwork';
 import { PillarPhotoMosaic } from './PillarPhotoMosaic';
-import { PillarWordmark } from './PillarWordmark';
+import { HeroPillarWordmark } from './PillarWordmark';
+import { HeroHealWordmark } from './HealWordmark';
 import { MosaicWavesStatic } from './MosaicWaves';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import './mosaic-chapter.css';
@@ -112,7 +113,7 @@ export const MosaicChapter = React.memo(function MosaicChapter({
         <div className="activity-chapter-identity">
           <span className="activity-chapter-number" aria-hidden="true">0{index + 1}</span>
           <h3 id={`mosaic-${id}-title`} tabIndex={-1}>
-            <span className="sr-only">{name}</span><PillarWordmark pillar={id} />
+            <span className="sr-only">{name}</span>{id === 'heal' ? <HeroHealWordmark /> : <HeroPillarWordmark pillar={id} />}
           </h3>
           <p>{pillar.headline}</p>
         </div>

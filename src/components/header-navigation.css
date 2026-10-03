@@ -8,15 +8,15 @@
 .site-mobile-menu :is(a, button):focus-visible { outline: 2px solid #267769; outline-offset: 4px; border-radius: 4px; }
 .mobile-menu-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-shrink: 0; }
 .mobile-menu-eyebrow { font-size: 9px; text-transform: uppercase; letter-spacing: .2em; color: #5c7470; }
-.mobile-menu-heading p { font: 500 34px/1.3 'Outfit', sans-serif; letter-spacing: -.04em; margin-top: 6px; }
+.mobile-menu-heading p { font: 500 34px/1.3 var(--font-sans); letter-spacing: -.04em; margin-top: 6px; }
 .mobile-menu-heading p > span { color: #319b77; }
 .mobile-menu-heading button { display: grid; place-items: center; width: 44px; flex-shrink: 0; background: transparent; }
 .mobile-menu-search { display: flex; align-items: center; gap: 12px; width: 100%; padding: 15px 0; margin: 20px 0 10px; border-block: 1px solid #153e3e24; color: #556d67; text-align: left; font-size: 12px; flex-shrink: 0; }
 .mobile-menu-search > span { flex: 1; }
 .mobile-menu-links { padding-bottom: 24px; }
 .mobile-menu-item { border-bottom: 1px solid #153e3e18; animation: menu-row-in .45s ease both; animation-delay: calc(.08s + var(--item-index) * .045s); }
-.mobile-menu-row { display: flex; align-items: center; gap: 13px; padding: 20px 0; width: 100%; text-align: left; font: 500 clamp(20px, 5.7vw, 25px)/1.25 'Outfit', sans-serif; letter-spacing: -.025em; color: var(--menu-ink); }
-.mobile-menu-number { font: 500 10px/1.5 'Inter', sans-serif; letter-spacing: .05em; color: #79918b; align-self: center; }
+.mobile-menu-row { display: flex; align-items: center; gap: 13px; padding: 20px 0; width: 100%; text-align: left; font: 500 clamp(20px, 5.7vw, 25px)/1.25 var(--font-sans); letter-spacing: -.025em; color: var(--menu-ink); }
+.mobile-menu-number { font: 500 10px/1.5 var(--font-sans); letter-spacing: .05em; color: #79918b; align-self: center; }
 .mobile-menu-row > span:nth-child(2) { flex: 1; }
 .mobile-menu-row > svg { flex-shrink: 0; transition: transform .25s ease; }
 .mobile-menu-submenu { padding: 0 0 18px 28px; }
@@ -27,7 +27,7 @@
 .mobile-menu-group { margin-top: 16px; padding-left: 14px; border-left: 2px solid #153e3e18; }
 .mobile-menu-group p { font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 4px; }
 .mobile-menu-footer { margin-top: auto; padding-top: 12px; flex-shrink: 0; }
-.mobile-menu-footer p { font: 400 24px/1.3 'Outfit', sans-serif; letter-spacing: -.03em; margin-bottom: 18px; }
+.mobile-menu-footer p { font: 400 24px/1.3 var(--font-sans); letter-spacing: -.03em; margin-bottom: 18px; }
 .mobile-menu-footer strong { font-weight: 400; color: #72847a; }
 .mobile-menu-footer button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 52px; border-radius: 8px; padding: 14px 18px; background: #174f41; color: #fff; font-weight: 600; font-size: 13px; }
 .mobile-menu-footer button > svg:last-child { margin-left: auto; }

@@ -89,7 +89,7 @@ const DoorArch: React.FC<{ door: Door }> = ({ door }) => {
   );
 };
 
-export const HealStory: React.FC<{ titleId: string; name: string; activities: Activity[]; explorerId: string; onSelect: (id: string) => void }> = ({ titleId, name, activities, explorerId, onSelect }) => {
+export const HealStory: React.FC<{ titleId: string; activities: Activity[]; explorerId: string; onSelect: (id: string) => void }> = ({ titleId, activities, explorerId, onSelect }) => {
   useCMSRevision();
   const list = useRef<HTMLOListElement>(null);
   const [arrived, setArrived] = useState(false);
@@ -100,11 +100,10 @@ export const HealStory: React.FC<{ titleId: string; name: string; activities: Ac
     <header className="heal-story">
       <div className="heal-story-masthead">
         <p className="heal-story-kicker"><span>{c('kicker', 'Cornerstone · I')}</span><i aria-hidden="true" /><span>{c('tagline', 'Service with Humility')}</span></p>
-        <h2 id={titleId} className="value-hero-title font-dancing-script">{name}</h2>
+        <h2 id={titleId} className="value-hero-title heal-story-title">{c('title', 'Healing Mankind')}</h2>
         <p className="heal-story-lede">{c('lede', 'Healthcare for every')} <em>{c('ledeAccent', 'doorstep.')}</em></p>
         <div className="heal-story-intro">
-          <p>{c('intro1', 'Healing begins where people already are — a satsang bhawan, a community hall, a tent pitched for the day. Volunteers, doctors and nurses bring checkups, eye care and blood donation to the doorstep, so that care is never too far away.')}</p>
-          <p>{c('intro2', 'Between the camps, the work goes on: health centres that keep their doors open, ambulances on call, and a blood bank that holds every gift of blood ready for the moment someone needs it.')}</p>
+          <p>{c('introLead', 'For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.')}</p>
         </div>
       </div>
 

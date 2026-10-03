@@ -22,8 +22,8 @@
 .heal-photo-mosaic { position: relative; width: 100%; margin: 0 auto; }
 .heal-photo-mosaic::before { content: ''; position: absolute; inset: -4% -3% 8%; border-radius: 50%; background: radial-gradient(ellipse, #ecfff329, transparent 67%); pointer-events: none; }
 .heal-photo-mosaic > svg { display: block; position: relative; width: 100%; height: auto; overflow: visible; filter: drop-shadow(-8px 18px 12px #080b0c59) drop-shadow(0 3px 2px #080b0c38); }
-.heal-photo-mosaic figcaption { position: relative; text-align: center; color: var(--pillar-ui-ink, #24494b); font: 400 23px/1.4 'Dancing Script', cursive; margin-top: 8px; }
-.heal-photo-mosaic figcaption span { display: block; margin-top: 6px; font: 500 8px/1.5 Inter, sans-serif; letter-spacing: .2em; text-transform: uppercase; color: color-mix(in srgb, var(--pillar-ui-ink, #24494b) 66%, transparent); }
+.heal-photo-mosaic figcaption { position: relative; text-align: center; color: var(--pillar-ui-ink, #24494b); font: 400 23px/1.4 var(--font-script); margin-top: 8px; }
+.heal-photo-mosaic figcaption span { display: block; margin-top: 6px; font: 500 8px/1.5 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; color: color-mix(in srgb, var(--pillar-ui-ink, #24494b) 66%, transparent); }
 .pillar-mosaic-depth { pointer-events: none; }
 
 /* Heal: faint currents of air drift across behind the emblem (the soft wave

@@ -3,11 +3,12 @@ import { Pause, Play } from 'lucide-react';
 
 /**
  * THE MISSION PAGE AS A TITLE SEQUENCE. Rather than setting every block of
- * copy at once, the page plays it in chapters, as a film's titles do: who we
- * are (its statement assembling word by word out of a soft focus), then Our
- * Mission and Our Vision (each heading rising with a glint, its quotation
- * written in like ink, its body swept into view). A chapter lifts away into a
- * blur as the next one rises. Timings live in index.css (MISSION PAGE).
+ * copy at once, the page plays it in chapters, as a film's titles do: One
+ * Purpose (its statement assembling word by word out of a soft focus), then
+ * Our Mission and Our Vision side by side (each heading rising with a glint,
+ * its quotation written in like ink, its body swept into view).
+ * A chapter lifts away into a blur as the next one rises. Timings live in
+ * index.css (MISSION PAGE).
  *
  * The rail at the foot shows the sequence's progress and steers it: each
  * chapter's line fills while it plays, pressing a chapter's name plays it, and
@@ -19,9 +20,15 @@ import { Pause, Play } from 'lucide-react';
  * order. Set still (reduced motion), the chapters are simply set one after
  * another and the page keeps its own time.
  */
+/** A titled half of a chapter: its heading, a quotation and its body. */
+export interface MissionPart {
+  title: string;
+  quote?: string;
+  body: string[];
+}
 export interface MissionChapter {
   id: string;
-  /** The chapter's name on the rail, and its heading unless it has a title. */
+  /** The chapter's name on the rail, and its heading unless it has a title or parts. */
   label: string;
   title?: string;
   /** An opening statement, assembled word by word. */
@@ -29,12 +36,25 @@ export interface MissionChapter {
   /** A line written in, as if by hand. */
   quote?: string;
   body: string[];
+  /** Two titled halves set side by side, as Our Mission and Our Vision are. */
+  parts?: MissionPart[];
+  /** A phrase picked out wherever the body says it, in the script. */
+  highlight?: string;
 }
+
+/* The paragraph with each mention of the phrase picked out. */
+const marked = (paragraph: string, phrase?: string) => {
+  if (!phrase || !paragraph.includes(phrase)) return paragraph;
+  return paragraph.split(phrase).map((piece, at) => (
+    <React.Fragment key={at}>{at > 0 && <em className="mission-chapter-highlight">{phrase}</em>}{piece}</React.Fragment>
+  ));
+};
 
 /* Roughly how long a chapter takes to read. The page's total is shared out in
    these proportions, with a floor so a short chapter still has time to land. */
-const readingWeight = (chapter: MissionChapter) =>
-  2400 + ((chapter.statement?.length ?? 0) + (chapter.quote?.length ?? 0)) * 30 + chapter.body.join(' ').length * 28;
+const readingWeight = (chapter: MissionChapter): number =>
+  2400 + ((chapter.statement?.length ?? 0) + (chapter.quote?.length ?? 0)) * 30 + chapter.body.join(' ').length * 28
+  + (chapter.parts ?? []).reduce((sum, part) => sum + readingWeight({ id: '', label: '', ...part }) - 2400, 0);
 const SHORTEST_MS = 6000;
 
 const numeral = (index: number) => String(index + 1).padStart(2, '0');
@@ -96,7 +116,7 @@ export const MissionChapters: React.FC<{
   if (still) {
     return (
       <div className="mission-chapters" data-still="true">
-        {chapters.map((chapter, index) => <Chapter key={chapter.id} chapter={chapter} index={index} state="active" />)}
+        {chapters.map(chapter => <Chapter key={chapter.id} chapter={chapter} state="active" />)}
       </div>
     );
   }
@@ -118,8 +138,6 @@ export const MissionChapters: React.FC<{
           <Chapter
             key={chapter.id}
             chapter={chapter}
-            index={index}
-            ms={durations[index]}
             state={index === active ? 'active' : index === leaving ? 'leaving' : 'waiting'}
             onPoint={canHover && index === active ? setPointing : undefined}
           />
@@ -156,22 +174,32 @@ export const MissionChapters: React.FC<{
 
 const Chapter: React.FC<{
   chapter: MissionChapter;
-  index: number;
   state: 'active' | 'leaving' | 'waiting';
-  ms?: number;
   onPoint?: (pointing: boolean) => void;
-}> = ({ chapter, index, state, ms, onPoint }) => {
+}> = ({ chapter, state, onPoint }) => {
   const words = chapter.statement?.split(/\s+/).filter(Boolean) ?? [];
   return (
     <article
       className="mission-chapter"
       data-state={state}
       data-kind={chapter.statement ? 'statement' : 'titled'}
-      style={{ '--words': words.length, '--d': ms ? `${ms}ms` : undefined } as React.CSSProperties}
+      style={{ '--words': words.length } as React.CSSProperties}
       onPointerEnter={onPoint && (() => onPoint(true))}
       onPointerLeave={onPoint && (() => onPoint(false))}
     >
-      <span className="mission-chapter-numeral" aria-hidden="true">{numeral(index)}</span>
+      {chapter.parts ? (
+        <div className="mission-chapter-parts">
+          {chapter.parts.map(part => (
+            <section key={part.title} className="mission-chapter-part">
+              <h3 className="mission-chapter-title">{part.title}</h3>
+              {part.quote && <p className="mission-chapter-quote">{part.quote}</p>}
+              <div className="mission-chapter-body">
+                {part.body.map((paragraph, at) => <p key={at} style={{ '--p': at } as React.CSSProperties}>{paragraph}</p>)}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : <>
       {chapter.title
         ? <h3 className="mission-chapter-title">{chapter.title}</h3>
         : <h3 className="mission-chapter-eyebrow">{chapter.label}</h3>}
@@ -185,8 +213,9 @@ const Chapter: React.FC<{
       )}
       {chapter.quote && <p className="mission-chapter-quote">{chapter.quote}</p>}
       <div className="mission-chapter-body">
-        {chapter.body.map((paragraph, at) => <p key={at} style={{ '--p': at } as React.CSSProperties}>{paragraph}</p>)}
+        {chapter.body.map((paragraph, at) => <p key={at} style={{ '--p': at } as React.CSSProperties}>{marked(paragraph, chapter.highlight)}</p>)}
       </div>
+      </>}
     </article>
   );
 };

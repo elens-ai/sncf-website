@@ -53,10 +53,10 @@ const BRAND_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
 /* How long each page stays before moving on by itself, in seconds: editable in
    the CMS ("Intro · … time"). The welcome copy animates in during the first few
    seconds (index.css: WELCOME PAGE) and then stays readable; the mission page's
-   time is shared out among its three chapters (MissionChapters). The arrow
+   time is shared out among its two chapters (MissionChapters). The arrow
    button moves on at any time. */
 const WELCOME_SECONDS = 11;
-const MISSION_SECONDS = 36;
+const MISSION_SECONDS = 34;
 /* Where the welcome photo and the Satguru portrait are centred: editable in the
    CMS as "across% down%", for when an editor swaps either picture. */
 const WELCOME_PHOTO_FOCUS = { x: '47%', y: '46%' };
@@ -84,7 +84,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
 }) => {
   const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
   const welcomeMs = introSeconds(c("welcome-seconds", "11"), WELCOME_SECONDS);
-  const missionMs = introSeconds(c("mission-seconds", "36"), MISSION_SECONDS);
+  const missionMs = introSeconds(c("mission-seconds", "34"), MISSION_SECONDS);
   const photoFocus = introFocus(c("welcome-photo-focus", "47% 46%"), WELCOME_PHOTO_FOCUS);
   const portraitFocus = introFocus(c("satguru-photo-focus", "50% 20%"), PORTRAIT_FOCUS);
   /* With reduced motion the chapters are set one after another, and the page simply holds. */
@@ -272,12 +272,10 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   const brandTransform = placement ? `translateY(${placement.dy}px) scale(${placement.scale})` : 'none';
 
   /* The mission page's chapters, every line editable in the CMS. */
-  const missionTitle = c("mission-title", "Our Mission");
-  const visionTitle = c("vision-title", "Our Vision");
   const chapters: MissionChapter[] = [
     {
       id: 'who-we-are',
-      label: c("mission-intro-label", "Who we are"),
+      label: c("mission-intro-label", "One Purpose"),
       statement: c("mission-intro-1", "SNCF is dedicated to serving humanity through selfless service and meaningful social initiatives."),
       /* one block: three editable sentences, run together */
       body: [[
@@ -285,23 +283,28 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         c("mission-intro-3", "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation."),
         c("mission-intro-4", "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society."),
       ].join(' ')],
+      highlight: c("mission-intro-highlight", "Service with Humility"),
     },
     {
-      id: 'mission',
-      label: missionTitle,
-      title: missionTitle,
-      quote: c("mission-quote", "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed."),
-      body: [
-        c("mission-text-1", "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring."),
-        c("mission-text-2", "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe."),
+      /* Our Mission and Our Vision, side by side */
+      id: 'mission-vision',
+      label: c("mission-vision-label", "Mission & Vision"),
+      body: [],
+      parts: [
+        {
+          title: c("mission-title", "Our Mission"),
+          quote: c("mission-quote", "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed."),
+          body: [
+            c("mission-text-1", "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring."),
+            c("mission-text-2", "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe."),
+          ],
+        },
+        {
+          title: c("vision-title", "Our Vision"),
+          quote: c("vision-quote", "“Living the spirit of service”"),
+          body: [c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")],
+        },
       ],
-    },
-    {
-      id: 'vision',
-      label: visionTitle,
-      title: visionTitle,
-      quote: c("vision-quote", "“Living the spirit of service”"),
-      body: [c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")],
     },
   ];
 
@@ -346,7 +349,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
               <span className="splash-welcome-name"><span>{c("welcome-full-name", "Sant Nirankari Charitable Foundation")}</span></span>
             </h1>
             {/* Editable in the CMS. */}
-            <p className="splash-welcome-text">{c("welcome-text", "The Sant Nirankari Charitable Foundation (SNCF) goes beyond just charity. Our mission is to spread kindness and care throughout the world, building a better society for those in need. Founded in 2010 to implement the vision of Nirankari Baba Ji,“Life gets a meaning, if it is lived for others”, SNCF focuses on social and charitable work.")}</p>
+            <p className="splash-welcome-text">{c("welcome-text", "Established in 2010, the Sant Nirankari Charitable Foundation was created to give organized direction to diverse social initiatives. Guided by the principle of oneness, we bring compassion, care, and kindness to communities worldwide. Our mission extends beyond charity. We tackle social and environmental challenges, empower the underprivileged, and safeguard our planet to build a better world for all. Staying true to our motto ‘Service with Humility,’ we strive to uplift lives with dignity and selflessness.")}</p>
           </div>
         )}
         {/* Mission page: the foundation's name at the top of the copy column,

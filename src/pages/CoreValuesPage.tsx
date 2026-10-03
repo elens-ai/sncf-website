@@ -6,6 +6,7 @@ import { ArrowDown, ArrowUpRight, CalendarDays, Search } from 'lucide-react';
 import { ValueCompass } from '../components/ValueCompass';
 import { ValueAnalytics } from '../components/ValueAnalytics';
 import { HealStory } from '../components/HealStory';
+import { EnrichScrapbook } from '../components/EnrichScrapbook';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
@@ -19,7 +20,8 @@ const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
 type Cornerstone = typeof CORNERSTONES[number];
 
 
-/** A shared, responsive photo composition for all three cornerstones. */
+/** A responsive photo composition for a cornerstone (Empower; Heal has its
+    doorways, Enrich its scrapbook). */
 const ValuePhotoCollage: React.FC<{ id: Cornerstone; label: string }> = ({ id, label }) => (
   <figure className="value-photo-story" aria-label={`${label}: compassion in action`}>
     <div className="value-photo-collage">
@@ -73,11 +75,13 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   return (
     <section id={id} className="value-chapter" aria-labelledby={`${id}-title`} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties}>
       {id === 'heal' ? (
-        <HealStory titleId={`${id}-title`} name={pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()} activities={activities} explorerId={`${id}-explorer`} onSelect={setSelectedId} />
+        <HealStory titleId={`${id}-title`} activities={activities} explorerId={`${id}-explorer`} onSelect={setSelectedId} />
       ) : (
         <header className="value-hero">
-          <h2 id={`${id}-title`} className="value-hero-title font-dancing-script">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</h2>
-          <ValuePhotoCollage id={id} label={pillar.label} />
+          <h2 id={`${id}-title`} className="value-hero-title">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</h2>
+          {id === 'enrich'
+            ? <EnrichScrapbook activities={activities} name={pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()} motto={pillar.headline} caption={getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')} />
+            : <ValuePhotoCollage id={id} label={pillar.label} />}
           {activities.slice(0, 5).map((activity, i) => (
             <a key={activity.id} href={`#${id}-explorer`} className={`value-hero-stat value-hero-stat-${i + 1}`} onClick={() => setSelectedId(activity.id)}>
               <span className="value-hero-stat-label">{activity.title}<ArrowUpRight size={16} aria-hidden="true" /></span>

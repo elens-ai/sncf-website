@@ -3,6 +3,9 @@ import { HEAL_LOGO_OUTLINE } from './healLogoOutline';
 
 export type MosaicPillar = 'heal' | 'enrich' | 'empower' | 'projects';
 
+/** The Enrich book's cover, showing past its pages at the sides and the foot. */
+export const BOOK_COVER = 'M6 23L11.65 20V95C35 92 54 97 71.3 105C94 97 116 92 132.34 95V20L138 23V105H6Z';
+
 // Curves measured in reference-image coordinates, then uniformly scaled to the
 // shared viewBox. The book's continuous spine and Empower's flat base are intentional.
 export const PILLAR_LOGOS = {

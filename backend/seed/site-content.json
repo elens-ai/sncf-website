@@ -2695,14 +2695,12 @@
     "copy.HealStory.tagline": "Service with Humility",
     "copy.HealStory.lede": "Healthcare for every",
     "copy.HealStory.ledeAccent": "doorstep.",
-    "copy.HealStory.intro1": "Healing begins where people already are — a satsang bhawan, a community hall, a tent pitched for the day. Volunteers, doctors and nurses bring checkups, eye care and blood donation to the doorstep, so that care is never too far away.",
-    "copy.HealStory.intro2": "Between the camps, the work goes on: health centres that keep their doors open, ambulances on call, and a blood bank that holds every gift of blood ready for the moment someone needs it.",
     "copy.HealStory.doorsLabel": "Every letter, a doorway.",
     "copy.HealStory.quoteTranslation": "May every human hold the other dear; may we become each other’s support.",
     "copy.HealStory.quoteSource": "From the banner above a health checkup camp",
     "copy.WelcomeSplashScreen.welcome-short-name": "SNCF",
     "copy.WelcomeSplashScreen.welcome-full-name": "Sant Nirankari Charitable Foundation",
-    "copy.WelcomeSplashScreen.welcome-text": "The Sant Nirankari Charitable Foundation (SNCF) goes beyond just charity. Our mission is to spread kindness and care throughout the world, building a better society for those in need. Founded in 2010 to implement the vision of Nirankari Baba Ji,“Life gets a meaning, if it is lived for others”, SNCF focuses on social and charitable work.",
+    "copy.WelcomeSplashScreen.welcome-text": "Established in 2010, the Sant Nirankari Charitable Foundation was created to give organized direction to diverse social initiatives. Guided by the principle of oneness, we bring compassion, care, and kindness to communities worldwide. Our mission extends beyond charity. We tackle social and environmental challenges, empower the underprivileged, and safeguard our planet to build a better world for all. Staying true to our motto ‘Service with Humility,’ we strive to uplift lives with dignity and selflessness.",
     "copy.WelcomeSplashScreen.mission-title": "Our Mission",
     "copy.WelcomeSplashScreen.mission-quote": "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed.",
     "copy.WelcomeSplashScreen.mission-text-1": "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring.",
@@ -2719,7 +2717,7 @@
     "copy.WelcomeSplashScreen.mission-intro-4": "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society.",
     "copy.WelcomeSplashScreen.mission-intro-name": "Sant Nirankari Charitable Foundation",
     "copy.WelcomeSplashScreen.welcome-seconds": "11",
-    "copy.WelcomeSplashScreen.mission-seconds": "36",
+    "copy.WelcomeSplashScreen.mission-seconds": "34",
     "copy.WelcomeSplashScreen.welcome-photo-focus": "47% 46%",
     "copy.WelcomeSplashScreen.satguru-photo-focus": "50% 20%",
     "copy.DonationExperience.closeAnswer": "Close answer",
@@ -2745,10 +2743,21 @@
     "copy.ProjectsPage.faceForestAlt": "Women planting saplings for a Oneness Vann micro-forest in Solapur",
     "copy.ProjectsPage.faceLandAlt": "A volunteer plants a sapling on a hillside",
     "copy.ProjectsPage.faceCommunitiesAlt": "A volunteer checks an elderly villager in Mandaura, an adopted village",
-    "copy.WelcomeSplashScreen.mission-intro-label": "Who we are",
+    "copy.WelcomeSplashScreen.mission-intro-label": "One Purpose",
     "copy.WelcomeSplashScreen.mission-chapters-label": "Chapters",
     "copy.WelcomeSplashScreen.mission-pause": "Pause",
-    "copy.WelcomeSplashScreen.mission-play": "Play"
+    "copy.WelcomeSplashScreen.mission-play": "Play",
+    "copy.EnrichScrapbook.label": "Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres",
+    "copy.EnrichScrapbook.kicker": "Our scrapbook",
+    "copy.EnrichScrapbook.closing": "And the next page is still being written…",
+    "copy.EnrichScrapbook.previous": "Previous page",
+    "copy.EnrichScrapbook.play": "Play",
+    "copy.EnrichScrapbook.pause": "Pause",
+    "copy.EnrichScrapbook.next": "Next page",
+    "copy.HealStory.title": "Healing Mankind",
+    "copy.HealStory.introLead": "For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.",
+    "copy.WelcomeSplashScreen.mission-vision-label": "Mission & Vision",
+    "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -5706,16 +5715,6 @@
         "section": "Heal Story",
         "label": "Heal Story · doorstep."
       },
-      "copy.HealStory.intro1": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Healing begins where people already are — a satsang bhawan, a communi…"
-      },
-      "copy.HealStory.intro2": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Between the camps, the work goes on: health centres that keep their d…"
-      },
       "copy.HealStory.doorsLabel": {
         "page": "other",
         "section": "Heal Story",
@@ -5744,7 +5743,7 @@
       "copy.WelcomeSplashScreen.welcome-text": {
         "page": "home",
         "section": "Intro · Welcome page",
-        "label": "Intro · Welcome page · The Sant Nirankari Charitable Foundation (SNCF) goes beyond just char…"
+        "label": "Intro · Welcome page · Established in 2010, the Sant Nirankari Charitable Foundation was cre…"
       },
       "copy.WelcomeSplashScreen.mission-title": {
         "page": "home",
@@ -5829,7 +5828,7 @@
       "copy.WelcomeSplashScreen.mission-seconds": {
         "page": "home",
         "section": "Intro · Mission page time (seconds)",
-        "label": "Intro · Mission page time (seconds) · 36"
+        "label": "Intro · Mission page time (seconds) · 34"
       },
       "copy.WelcomeSplashScreen.welcome-photo-focus": {
         "page": "home",
@@ -5959,7 +5958,7 @@
       "copy.WelcomeSplashScreen.mission-intro-label": {
         "page": "home",
         "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · Who we are"
+        "label": "Intro · Mission & vision page · One Purpose"
       },
       "copy.WelcomeSplashScreen.mission-chapters-label": {
         "page": "home",
@@ -5975,6 +5974,61 @@
         "page": "home",
         "section": "Intro · Mission & vision page",
         "label": "Intro · Mission & vision page · Play"
+      },
+      "copy.EnrichScrapbook.label": {
+        "page": "core-values",
+        "section": "Enrich scrapbook",
+        "label": "Enrich scrapbook · Enrich: a scrapbook of the foundation’s schools, scholarships and ski…"
+      },
+      "copy.EnrichScrapbook.kicker": {
+        "page": "core-values",
+        "section": "Enrich scrapbook",
+        "label": "Enrich scrapbook · Our scrapbook"
+      },
+      "copy.EnrichScrapbook.closing": {
+        "page": "core-values",
+        "section": "Enrich scrapbook",
+        "label": "Enrich scrapbook · And the next page is still being written…"
+      },
+      "copy.EnrichScrapbook.previous": {
+        "page": "core-values",
+        "section": "Enrich scrapbook",
+        "label": "Enrich scrapbook · Previous page"
+      },
+      "copy.EnrichScrapbook.play": {
+        "page": "core-values",
+        "section": "Enrich scrapbook",
+        "label": "Enrich scrapbook · Play"
+      },
+      "copy.EnrichScrapbook.pause": {
+        "page": "core-values",
+        "section": "Enrich scrapbook",
+        "label": "Enrich scrapbook · Pause"
+      },
+      "copy.EnrichScrapbook.next": {
+        "page": "core-values",
+        "section": "Enrich scrapbook",
+        "label": "Enrich scrapbook · Next page"
+      },
+      "copy.HealStory.title": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · Healing Mankind"
+      },
+      "copy.HealStory.introLead": {
+        "page": "other",
+        "section": "Heal Story",
+        "label": "Heal Story · For decades, the Mission has been committed to preventive and curativ…"
+      },
+      "copy.WelcomeSplashScreen.mission-vision-label": {
+        "page": "home",
+        "section": "Intro · Mission & vision page",
+        "label": "Intro · Mission & vision page · Mission & Vision"
+      },
+      "copy.WelcomeSplashScreen.mission-intro-highlight": {
+        "page": "home",
+        "section": "Intro · Mission & vision page",
+        "label": "Intro · Mission & vision page · Service with Humility"
       }
     },
     "assets": {

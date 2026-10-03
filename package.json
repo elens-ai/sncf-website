@@ -11,7 +11,8 @@
     "lint": "tsc --noEmit",
     "test": "node --import tsx --test src/utils/*.test.ts src/data/*.test.ts src/cms/*.test.ts",
     "cms:seed": "node --import tsx scripts/generate-cms-seed.ts",
-    "cms:registry": "node --import tsx scripts/cms-registry.ts"
+    "cms:registry": "node --import tsx scripts/cms-registry.ts",
+    "font:headings": "node --import tsx scripts/build-heading-font.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
@@ -34,6 +35,7 @@
     "@types/three": "^0.185.4",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
+    "opentype.js": "^1.3.4",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

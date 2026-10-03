@@ -53,7 +53,7 @@ const COMPONENT_AREAS: Record<string, [string, string]> = {
   PillarModal: [PAGE.home, 'Pillar details pop-up'],
   EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
   AwardsSection: [PAGE.home, 'Awards'], AwardLightbox: [PAGE.home, 'Awards'], PartnersSection: [PAGE.home, 'Partners'],
-  CoreValuesPage: [PAGE.core, 'Page'], ValueAnalytics: [PAGE.core, 'Charts'],
+  CoreValuesPage: [PAGE.core, 'Page'], ValueAnalytics: [PAGE.core, 'Charts'], EnrichScrapbook: [PAGE.core, 'Enrich scrapbook'],
   ProjectsPage: [PAGE.projects, 'Page'], ProjectAnalytics: [PAGE.projects, 'Charts'],
   WhoWeArePage: [PAGE.who, 'Page'], MissionVision: [PAGE.who, 'Mission & vision'], ServiceStory: [PAGE.who, 'Service story'], EditorialContent: [PAGE.who, 'Timeline & partners'],
   GuidingForcePage: [PAGE.guiding, 'Page'],

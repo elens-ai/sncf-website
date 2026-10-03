@@ -1,5 +1,5 @@
 /* One fixed typographic stage: only the four initials and word endings move. */
-#site-header #site-wordmark.animated-brand-wordmark { --monogram-size: 29px; position: relative; display: inline-flex; align-items: center; min-height: 48px; min-width: calc(var(--monogram-size) * 4.9); color: #fff; text-align: left; font-family: 'Plus Jakarta Sans', sans-serif; text-transform: uppercase; opacity: 1; transition: opacity .5s ease; }
+#site-header #site-wordmark.animated-brand-wordmark { --monogram-size: 29px; position: relative; display: inline-flex; align-items: center; min-height: 48px; min-width: calc(var(--monogram-size) * 4.9); color: #fff; text-align: left; font-family: var(--font-sans); text-transform: uppercase; opacity: 1; transition: opacity .5s ease; }
 #site-header #site-wordmark[data-hidden='true'] { opacity: 0; pointer-events: none; }
 .brand-full-lockup { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
 .brand-word-line { display: block; width: max-content; white-space: nowrap; line-height: 1; }

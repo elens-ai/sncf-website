@@ -122,7 +122,7 @@ export const PageShell: React.FC<PageShellProps> = ({
         </div>
         <header className="page-masthead">
           <p className="page-eyebrow">{eyebrow}</p>
-          <h1 className="page-title font-dancing-script">{title}</h1>
+          <h1 className="page-title">{title}</h1>
           <div className="page-rule" aria-hidden="true" />
           <p className="page-standfirst font-artistic-serif">{standfirst}</p>
         </header>

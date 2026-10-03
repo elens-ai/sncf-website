@@ -5,16 +5,16 @@
 .heal-story::before { content: ''; position: absolute; z-index: -1; inset: 4% -4% 30%; pointer-events: none; background: radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--value-light) 16%, transparent), transparent 66%); }
 
 /* ---- masthead ---- */
-.heal-story-kicker { display: flex; align-items: center; gap: 18px; color: var(--value-color); font: 600 11px/1.4 Cinzel, Georgia, serif; letter-spacing: .24em; text-transform: uppercase; }
+.heal-story-kicker { display: flex; align-items: center; gap: 18px; color: var(--value-color); font: 600 11px/1.4 var(--font-sans); letter-spacing: .24em; text-transform: uppercase; }
 .heal-story-kicker i { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--value-color) 32%, transparent), transparent); }
-.heal-story .value-hero-title { margin: 4px 0 2px; text-align: center; }
-.heal-story-lede { margin: 0 auto; max-width: 15em; text-align: center; font: 400 clamp(32px, 4.6vw, 64px)/1.06 Outfit, sans-serif; letter-spacing: -.05em; text-wrap: balance; }
-.heal-story-lede em { font: 700 1.14em/1 'Dancing Script', cursive; letter-spacing: -.01em; color: var(--value-color); }
-.heal-story-intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; max-width: 940px; margin: 44px auto 0; padding-top: 32px; border-top: 1px solid color-mix(in srgb, var(--value-color) 16%, transparent); font: 400 15.5px/1.85 Inter, sans-serif; color: #4e625c; text-wrap: pretty; }
-.heal-story-intro p:first-child::first-letter { float: left; margin: .1em .14em 0 0; font: 600 4.2em/.8 Cinzel, Georgia, serif; color: var(--value-color); }
+.heal-story .value-hero-title { margin: 14px 0 6px; text-align: center; }
+.heal-story-lede { margin: 0 auto; max-width: 15em; text-align: center; font: 600 clamp(28px, 4vw, 54px)/1.08 var(--font-sans); letter-spacing: -.035em; text-wrap: balance; }
+.heal-story-lede em { font: 700 1.14em/1 var(--font-script); letter-spacing: -.01em; color: var(--value-color); }
+/* centred on the masthead's axis, like the title and lede above it */
+.heal-story-intro { max-width: 640px; margin: 40px auto 0; padding-top: 30px; border-top: 1px solid color-mix(in srgb, var(--value-color) 16%, transparent); font: 400 15.5px/1.85 var(--font-sans); color: #4e625c; text-align: center; text-wrap: balance; }
 
 /* ---- the four doorways ---- */
-.heal-doors-label { display: flex; align-items: center; gap: 22px; margin: 76px 0 40px; color: var(--value-color); font: 700 clamp(25px, 2.5vw, 34px)/1.2 'Dancing Script', cursive; white-space: nowrap; }
+.heal-doors-label { display: flex; align-items: center; gap: 22px; margin: 76px 0 40px; color: var(--value-color); font: 700 clamp(25px, 2.5vw, 34px)/1.2 var(--font-script); white-space: nowrap; }
 .heal-doors-label::before, .heal-doors-label::after { content: ''; flex: 1; height: 1px; background: color-mix(in srgb, var(--value-color) 24%, transparent); }
 .heal-doors { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(22px, 3vw, 46px); margin: 0; padding: 0; list-style: none; }
 .heal-door { position: relative; min-width: 0; }
@@ -27,10 +27,10 @@
 .heal-door-photo { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.07); filter: saturate(.92) brightness(.93) contrast(1.06); transition: transform 1.4s cubic-bezier(.2,.7,.2,1), filter .8s ease; }
 .heal-door-veil, .heal-door-line { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .heal-door-veil { transition: opacity .9s cubic-bezier(.22,1,.36,1); }
-.heal-door-glyph { font: 800 420px/1 Outfit, sans-serif; }
+.heal-door-glyph { font: 800 420px/1 var(--font-sans); }
 .heal-door-line text { fill: none; stroke: var(--value-color); stroke-opacity: .6; stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke .6s ease, stroke-opacity .6s ease; }
 /* The keystone. */
-.heal-door-numeral { position: absolute; top: 7%; left: 50%; translate: -50% 0; color: var(--value-color); font: 600 12px/1 Cinzel, Georgia, serif; letter-spacing: .2em; padding-left: .2em; transition: opacity .4s ease; }
+.heal-door-numeral { position: absolute; top: 7%; left: 50%; translate: -50% 0; color: var(--value-color); font: 600 12px/1 var(--font-sans); letter-spacing: .2em; padding-left: .2em; transition: opacity .4s ease; }
 /* The doorstep: one long tread and a shorter riser beneath it. */
 .heal-door-step { position: absolute; left: -7%; right: -7%; bottom: 4px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--value-color) 70%, transparent); }
 .heal-door-step::after { content: ''; position: absolute; left: 9%; right: 9%; top: 6px; height: 1px; background: color-mix(in srgb, var(--value-color) 32%, transparent); }
@@ -44,11 +44,11 @@
 }
 
 .heal-door-copy { padding: 26px 2px 0; }
-.heal-door-copy h3 { font: 500 clamp(21px, 1.85vw, 26px)/1.18 Outfit, sans-serif; letter-spacing: -.03em; text-wrap: balance; }
+.heal-door-copy h3 { font: 800 clamp(18px, 1.6vw, 22px)/1.2 var(--font-heading); letter-spacing: 0; text-wrap: balance; }
 .heal-door-copy h3::first-letter { color: var(--value-color); }
-.heal-door-copy p { margin-top: 12px; font: 400 14px/1.75 Inter, sans-serif; color: #5b6f69; text-wrap: pretty; }
+.heal-door-copy p { margin-top: 12px; font: 400 14px/1.75 var(--font-sans); color: #5b6f69; text-wrap: pretty; }
 .heal-door-links { display: grid; justify-items: start; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
-.heal-door-links a { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 4px; border-bottom: 1px solid color-mix(in srgb, var(--value-color) 30%, transparent); color: var(--value-color); font: 600 10.5px/1.5 Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; transition: border-color .25s; }
+.heal-door-links a { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 4px; border-bottom: 1px solid color-mix(in srgb, var(--value-color) 30%, transparent); color: var(--value-color); font: 600 10.5px/1.5 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; transition: border-color .25s; }
 .heal-door-links a svg { flex-shrink: 0; transition: transform .25s; }
 .heal-door-links a:hover { border-color: currentColor; }
 .heal-door-links a:hover svg { transform: translate(2px, -2px); }
@@ -65,11 +65,11 @@
 
 /* ---- the banner's line ---- */
 .heal-motto { max-width: 780px; margin: 96px auto 0; text-align: center; }
-.heal-motto::before { content: '\201C'; display: block; height: .42em; color: color-mix(in srgb, var(--value-color) 34%, transparent); font: 600 112px/1 Cinzel, Georgia, serif; }
+.heal-motto::before { content: '\201C'; display: block; height: .42em; color: color-mix(in srgb, var(--value-color) 34%, transparent); font: 800 96px/1 var(--font-heading); }
 .heal-motto blockquote { margin: 0; font: 400 clamp(28px, 3.5vw, 46px)/1.5 'Tiro Devanagari Hindi', 'Noto Serif Devanagari', 'Nirmala UI', 'Kohinoor Devanagari', Mangal, serif; color: #1d3a33; }
 .heal-motto blockquote span { display: block; }
-.heal-motto-translation { margin-top: 14px; font: italic 400 clamp(16px, 1.45vw, 19px)/1.6 'Plus Jakarta Sans', sans-serif; color: #4e625c; }
-.heal-motto figcaption { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 18px; color: #677a73; font: 600 10px/1.6 Cinzel, Georgia, serif; letter-spacing: .24em; text-transform: uppercase; }
+.heal-motto-translation { margin-top: 14px; font: italic 400 clamp(16px, 1.45vw, 19px)/1.6 var(--font-sans); color: #4e625c; }
+.heal-motto figcaption { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 18px; color: #677a73; font: 600 10px/1.6 var(--font-sans); letter-spacing: .24em; text-transform: uppercase; }
 .heal-motto figcaption::before, .heal-motto figcaption::after { content: ''; width: 36px; height: 1px; background: currentColor; opacity: .4; }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -91,9 +91,6 @@
   .heal-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 56px; }
   .heal-door { justify-self: center; width: min(100%, 340px); }
 }
-@media (max-width: 760px) {
-  .heal-story-intro { grid-template-columns: 1fr; gap: 18px; }
-}
 @media (max-width: 640px) {
   .heal-story { padding: 0 0 48px; }
   .heal-story-kicker { gap: 12px; font-size: 9.5px; letter-spacing: .2em; }
@@ -104,7 +101,7 @@
   .heal-doors { grid-template-columns: 1fr; row-gap: 36px; }
   .heal-door { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: center; width: 100%; }
   .heal-door-copy { padding: 0; }
-  .heal-door-copy h3 { font-size: 20px; }
+  .heal-door-copy h3 { font-size: 18px; }
   .heal-door-copy p { margin-top: 8px; font-size: 13px; line-height: 1.65; }
   .heal-door-links { margin-top: 12px; }
   .heal-door-numeral { font-size: 10px; }

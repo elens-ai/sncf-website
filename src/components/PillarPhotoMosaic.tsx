@@ -3,12 +3,11 @@ import { ProjectsMosaicArt } from './ProjectsMosaicArt';
 import { resolveCMSMedia } from '../cms/media';
 import { resolveCMSAsset } from '../cms/runtime';
 import './heal-photo-mosaic.css';
-import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
+import { BOOK_COVER, PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
 import { roomPhoto } from '../data/pavilionGallery';
 
 // Smooth brand contours preserve the model proportions without polygon edges.
-const BOOK_COVER = 'M6 23L11.65 20V95C35 92 54 97 71.3 105C94 97 116 92 132.34 95V20L138 23V105H6Z';
 const TILES = [
   { x: 0, y: 0, w: 48, h: 40, photo: 1 },
   { x: 49, y: 0, w: 45, h: 40, photo: 2 },
