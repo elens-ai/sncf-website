@@ -63,10 +63,26 @@ Supported uploads: JPEG, PNG, WebP, AVIF, GIF, MP4, WebM, MP3, M4A, Ogg, WAV and
 
 Keep a record's **Website ID** (in the sidebar) unchanged; only administrators can edit it. Titles, text and media can change freely.
 
+## The welcome intro
+
+The intro that opens the home page (first screen, welcome page, then the mission & vision page) is edited under **Website text** and **Website images**, filtered to **Page: Home**. Its slots are grouped by section:
+
+| Section | What it holds |
+| --- | --- |
+| **Intro · First screen** | The *Service with Humility* signature and the logo. |
+| **Intro · Welcome page** | The SNCF wordmark, the foundation's full name, the welcome paragraph, the arrow's label and the welcome photo. |
+| **Intro · Mission & vision page** | The foundation's name, the introduction, Our Mission, Our Vision, the Satguru's quotation and name, and her portrait. |
+| **Intro · Welcome page time (seconds)** / **Mission page time (seconds)** | How long each page stays before moving on by itself (3–120 seconds). The arrow always moves on early. |
+| **Intro · Welcome photo focus** / **Satguru portrait focus** | Where a photograph is centred, as *across% down%* (for example `47% 46%`). Set this after replacing either picture so the people who matter stay in view. |
+
+A value the site cannot read (a time out of range, a focus such as `centre`) falls back to the design default, so the intro never stalls. To skip the intro entirely, switch off **Home · Welcome intro** under **Site setup → Sections on/off**. The name and the SNCF wordmark are drawn in the house's flared lettering; letters it does not have yet fall back to plain text.
+
 ## For developers
 
 - **Text and image slots.** Components read editable text with `getCMSCopy(key, fallback)` and design images with `resolveCMSAsset(key, fallback)` / `resolveCMSMedia(path)`. The registries `src/cms/generatedCopy.json` and `generatedAssets.json` list every slot; `npm run cms:registry` reports slots the code uses but the CMS lacks, and slots nothing uses, and `npm run cms:registry -- --write` fixes both. A test fails CI when they drift. After changing slots, run `npm run cms:seed` and re-seed.
-- **Page and section labels.** `scripts/generate-cms-seed.ts` maps each component to the page and section editors see (`COMPONENT_AREAS`). Add new components there.
+- **Page and section labels.** `scripts/generate-cms-seed.ts` maps each component to the page and section editors see (`COMPONENT_AREAS`; the welcome intro's slots are split further by `INTRO_SECTIONS`). Add new components there. Seeding only creates missing slots; `npm run seed -- --refresh-labels` (in `backend`) also rewrites the page, section and label of existing slots from the seed, never their text or images. Run it with the CMS stopped when using the local SQLite database.
+- **A new activity report.** The figures in `src/data/activities.ts` and `src/data/pillars.ts` are transcribed from the foundation's activity report (latest row of each sheet; set `REPORT` in `scripts/generate-cms-seed.ts` to name it). Charts look figures up by label, so keep existing labels and add new ones. Then run `npm run cms:seed` and `npm run seed -- --refresh-figures` (in `backend`): it sets each programme's period, description, headline and figures, each pillar's stats and highlights, and every live statistic from the seed, leaving everything else editors set alone; the Statistics history records each change.
+- **New photographs.** Programme photos live in each record of `src/data/activities.ts` (`images`, `hoverPhotos`, `cardPhoto`) and in `public/images/programmes`; the five photos per pillar are `public/images/pavilion/{pillar}-1…5.jpg`, described in `src/data/pavilionGallery.ts`. Export them upright, about 1400–1600px on the long edge, with camera and location metadata stripped. Then run `npm run cms:seed` and `npm run seed -- --refresh-photos` (in `backend`): a programme without photos of its own, and a gallery slot still showing the seed's file (or none), take the seed's; a photo an editor chose or uploaded is never replaced.
 - **Programme presentation** (icon, menu label, hover photos/focus, card photo) is part of each record in `src/data/activities.ts`; the icon list lives in `src/data/activityIcons.ts` and the CMS offers the same options.
 - **Uploads in the snapshot.** An upload field named `media` fills `src`; any field named `<name>Media` fills `<name>` (e.g. `logoMedia` → `logo`), so new upload/path pairs need no snapshot code.
 - **Schema changes** need a PostgreSQL migration (`npm run migrate:create <name>` in `backend` with a Postgres `DATABASE_URI`); CI rejects schema drift. Drizzle asks whether new columns are renames; answer *create* unless you are deliberately renaming. Adding or changing labels, descriptions, tabs, rows and other admin-only options needs no migration.

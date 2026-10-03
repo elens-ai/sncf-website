@@ -139,7 +139,6 @@ export const EventsSection: React.FC = () => {
                 <strong>{selected.date ? String(selected.date.getDate()).padStart(2, '0') : '∞'}</strong>
                 <span>{selected.date?.toLocaleDateString('en-GB', { month: 'long' }) ?? c('yearRound', 'Year round')}<small>{selected.date?.getFullYear() ?? c('joinAnytime', 'Join anytime')}</small></span>
               </div>
-              <span className="journal-photo-note">{c('illustrative', 'Illustrative photography')}</span>
             </div>
             <div className="journal-feature-copy">
               <p className="journal-tag">{selected.event.tag}</p>

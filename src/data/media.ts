@@ -9,7 +9,8 @@ import { bindCMSData, resolveGalleryGroups, validMedia } from '../cms/data';
  * so a gallery reads as a gallery being hung rather than collapsing to a
  * different layout and back again once the real file lands.
  *
- * The foundation has not yet supplied its photo and film archive. Every
+ * Photographs from the foundation's 2026 exhibition archive hang where one
+ * fits the slot. The rest of the archive has not been supplied yet. Every
  * entry below whose `src` is null is a real, named piece of that archive
  * that we know exists in the world and are waiting on. Nothing here is
  * invented: no stock imagery, and — this matters — no fabricated video
@@ -55,12 +56,12 @@ export interface MediaItem {
 export const DEFAULT_MEDIA: Record<string, MediaItem[]> = {
   /* ---- PROJECTS: keyed by the project's id, so renaming one keeps its gallery. */
   'project-amrit': [
-    { id: 'amrit-ghat', kind: 'photo', src: null, alt: '', caption: 'A ghat before and after a cleaning drive', wide: true },
+    { id: 'amrit-ghat', kind: 'photo', src: '/images/programmes/amrit-riverbank.webp', alt: 'Project Amrit volunteers clearing a riverbank in Mantova, Italy', caption: 'Clearing a riverbank in Mantova, Italy', wide: true },
     { id: 'amrit-volunteers', kind: 'photo', src: '/images/volunteers-planning.webp', alt: 'Volunteers planning a service drive', caption: 'Volunteers plan the day’s stretch of bank' },
     { id: 'amrit-film', kind: 'film', src: null, alt: '', caption: 'Film — one river, one morning' },
   ],
   'oneness-vann': [
-    { id: 'vann-forest', kind: 'photo', src: null, alt: '', caption: 'A micro-forest three years on', wide: true },
+    { id: 'vann-forest', kind: 'photo', src: '/images/programmes/oneness-vann-group.webp', alt: 'Volunteers planting beneath the Oneness Vann banner in Solapur', caption: 'A new Oneness Vann in Solapur, August 2026', wide: true },
     { id: 'vann-planting', kind: 'photo', src: '/images/mataji-rajpita-planting.webp', alt: 'A sapling being planted', caption: 'The first sapling of a new vann' },
     { id: 'vann-film', kind: 'film', src: null, alt: '', caption: 'Film — how a vann is grown' },
   ],
@@ -70,8 +71,8 @@ export const DEFAULT_MEDIA: Record<string, MediaItem[]> = {
     { id: 'ws-film', kind: 'film', src: null, alt: '', caption: 'Film — the water that stayed' },
   ],
   'adopted-villages': [
-    { id: 'av-school', kind: 'photo', src: null, alt: '', caption: 'A village school after adoption', wide: true },
-    { id: 'av-street', kind: 'photo', src: null, alt: '', caption: 'A paved lane in Patti Kalyana' },
+    { id: 'av-school', kind: 'photo', src: '/images/programmes/adopted-villages-health-camp.webp', alt: 'Villagers at a health screening camp in Mandaura, one of the adopted villages', caption: 'A health camp in Mandaura, March 2026', wide: true },
+    { id: 'av-street', kind: 'photo', src: '/images/programmes/adopted-villages-mandaura.webp', alt: 'A volunteer checks an elderly villager in Mandaura', caption: 'Care in Mandaura' },
     { id: 'av-film', kind: 'film', src: null, alt: '', caption: 'Film — four villages, eight years' },
   ],
 

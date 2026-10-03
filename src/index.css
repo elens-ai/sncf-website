@@ -1407,7 +1407,9 @@
 .splash-welcome-photo { overflow: hidden; background: #0d2f2b; }
 
 .splash-welcome-photo-image {
-  background-position: center;
+  /* Satguru Mata Ji and Rajpita Ji stand at about 47% across, 46% down: with
+     cover, the same percentages keep them at that spot on every screen shape */
+  background-position: var(--focus-x, 47%) var(--focus-y, 46%);
   background-size: cover;
   transform: scale(1.08);
 }
@@ -1422,9 +1424,11 @@
   content: '';
   position: absolute;
   inset: 0;
+  /* a spotlight on Satguru Mata Ji and Rajpita Ji: almost no tint over them,
+     deepening towards the edges of the frame */
   background:
-    radial-gradient(ellipse at center, rgb(6 32 29 / 0.35) 0%, rgb(6 32 29 / 0.78) 100%),
-    linear-gradient(rgb(10 48 43 / 0.4), rgb(10 48 43 / 0.4));
+    radial-gradient(ellipse min(40vw, 520px) min(28vh, 300px) at var(--focus-x, 47%) var(--focus-y, 46%), rgb(6 32 29 / 0) 0%, rgb(6 32 29 / 0.32) 62%, rgb(6 32 29 / 0.7) 100%),
+    linear-gradient(rgb(10 48 43 / 0.2), rgb(10 48 43 / 0.2));
 }
 
 /* Set like a book's title page: the seal and motto (carried over from the
@@ -1436,19 +1440,21 @@
    while the team stays visible around it. */
 .splash-welcome-content {
   --u: min(1vw, 1.62vh);
-  --wp-s: clamp(6px, calc(var(--u) * 0.7), 14px);
+  --wp-s: clamp(4px, calc(var(--u) * 0.7), 14px);
   --wp-measure: min(40rem, 100%);
-  --wp-sncf: clamp(54px, calc(var(--u) * 7), 128px);
-  --wp-name: clamp(11px, calc(var(--u) * 1.02), 16px);
-  --wp-body: clamp(14px, calc(var(--u) * 1.18), 19px);
+  --wp-sncf: clamp(36px, calc(var(--u) * 5.4), 100px);
+  --wp-name: clamp(9.5px, calc(var(--u) * 1.02), 16px);
+  --wp-body: clamp(12px, calc(var(--u) * 1.18), 19px);
   position: absolute;
   inset: 0;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 0 24px;
+  justify-content: flex-start;
+  /* seal and motto at the top, wordmark, name and foreword at the foot: the
+     middle of the frame stays open over Satguru Mata Ji and Rajpita Ji */
+  padding: clamp(16px, 4vh, 44px) 24px clamp(28px, 6vh, 64px);
   text-align: center;
   color: #fff;
 }
@@ -1458,7 +1464,10 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(ellipse 46% 54% at 50% 58%, rgb(4 22 20 / 0.62), rgb(4 22 20 / 0.3) 55%, transparent 82%);
+  /* washes behind the seal at the top and the copy at the foot only */
+  background:
+    linear-gradient(to bottom, rgb(4 22 20 / 0.5) 0%, rgb(4 22 20 / 0) 30%),
+    linear-gradient(to top, rgb(4 22 20 / 0.84) 0%, rgb(4 22 20 / 0.5) 30%, rgb(4 22 20 / 0) 52%);
 }
 
 .splash-welcome-heading {
@@ -1466,7 +1475,7 @@
   flex-direction: column;
   align-items: center;
   width: var(--wp-measure);
-  margin: 0;
+  margin: auto 0 0;
 }
 
 /* SNCF in the flared lettering, mint like the name on the mission page; the
@@ -1480,12 +1489,8 @@
 .splash-welcome-sncf path {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: flaredLetterIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.15s both;
+  animation: flaredLetterIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(1.15s + var(--i, 0) * 0.12s) both;
 }
-.splash-welcome-sncf g > g:nth-child(2) > path { animation-delay: 1.27s; }
-.splash-welcome-sncf g > g:nth-child(3) > path { animation-delay: 1.39s; }
-.splash-welcome-sncf g > g:nth-child(4) > path { animation-delay: 1.51s; }
-.splash-welcome-sncf g > g:nth-child(n + 5) > path { animation-delay: 1.63s; }
 
 /* The full name between hairline rules that draw outwards from it. */
 .splash-welcome-name {
@@ -1517,7 +1522,7 @@
 .splash-welcome-text {
   width: var(--wp-measure);
   margin: calc(var(--wp-s) * 2.2) 0 0;
-  font: 400 var(--wp-body) / 1.78 'Inter', sans-serif;
+  font: 400 var(--wp-body) / 1.74 'Inter', sans-serif;
   letter-spacing: 0.002em;
   color: rgb(255 255 255 / 0.88);
   text-align: justify;
@@ -1529,21 +1534,67 @@
   animation: welcomeRise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 2.6s both;
 }
 
-/* Welcome copy steps aside when the mission page takes over. */
-.splash-welcome-content { transition: opacity 0.7s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
-.splash-welcome-content[data-gone='true'] { opacity: 0; transform: translateY(-24px); pointer-events: none; }
+/* Phones: keep the foreword's last line clear of the arrow. */
+@media (max-width: 639px) {
+  .splash-welcome-content { padding-bottom: 88px; }
+}
 
 /* ==========================================================================
-   MISSION PAGE — who we are, Our Mission | Our Vision, and the Satguru
-   One editorial grid. The copy column (7 parts) holds the name, a full-width
-   standfirst and the introduction, then Mission | Vision beneath a hairline:
-   every block shares the column's two edges. The portrait column (5 parts) spans the copy's
-   full height and stands on its quotation, whose last line meets the copy's.
+   HAND-OFF — welcome page to mission page, cut like a film transition
+   The camera pushes in on the photograph and drifts as it softens and
+   dissolves into the deep green, a rack focus onto what comes next. The welcome
+   copy leaves like closing titles: SNCF's letters lift away one by one, the
+   name's letters spread and dissolve as its rules draw back in, the foreword
+   rises into a blur and the wash behind them clears. Meanwhile the logo glides
+   onto the foundation's name and the mission page writes itself in.
+   ========================================================================== */
+@keyframes cameraPushPan {
+  from { transform: none; filter: none; }
+  to { transform: scale(1.14) translate3d(-2.5%, -1.2%, 0); filter: blur(2.5px) saturate(0.9); }
+}
+@keyframes flaredLetterOut { to { opacity: 0; transform: translateY(-38%) scale(1.08); } }
+@keyframes welcomeBlurOut { to { filter: blur(8px); } }
+@keyframes welcomeNameOut { to { opacity: 0; letter-spacing: 0.62em; filter: blur(6px); } }
+@keyframes welcomeRuleOut { to { opacity: 0; transform: scaleX(0); } }
+@keyframes welcomeTextOut { to { opacity: 0; transform: translateY(-18px); filter: blur(8px); } }
+@keyframes softFadeOut { to { opacity: 0; } }
+
+/* The photograph dissolves away as the camera moves, so the mission page sits
+   on the plain deep green beneath it. The fade is a transition, not part of
+   the camera move, so it still happens (gently) with reduced motion. */
+.splash-camera { transform-origin: 62% 45%; transition: opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s; }
+.splash-welcome-photo.is-mission .splash-camera { animation: cameraPushPan 3.2s cubic-bezier(0.6, 0, 0.2, 1) both; opacity: 0; }
+
+.splash-welcome-content[data-gone='true'] { pointer-events: none; }
+.splash-welcome-content[data-gone='true']::before { animation: softFadeOut 1.4s ease 0.3s forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-sncf { animation: welcomeBlurOut 0.9s ease forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-sncf path {
+  animation: flaredLetterOut 0.8s cubic-bezier(0.7, 0, 0.84, 0) calc(var(--i, 0) * 0.07s) forwards;
+}
+.splash-welcome-content[data-gone='true'] .splash-welcome-name { animation: welcomeNameOut 0.9s cubic-bezier(0.5, 0, 0.75, 0) 0.15s forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-name::before,
+.splash-welcome-content[data-gone='true'] .splash-welcome-name::after { animation: welcomeRuleOut 0.7s cubic-bezier(0.5, 0, 0.75, 0) 0.1s forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-text { animation: welcomeTextOut 0.9s cubic-bezier(0.5, 0, 0.75, 0) 0.25s forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-welcome-photo.is-mission .splash-camera { animation: none; }
+  .splash-welcome-content[data-gone='true'] * ,
+  .splash-welcome-content[data-gone='true']::before,
+  .splash-welcome-content[data-gone='true'] .splash-welcome-name::before,
+  .splash-welcome-content[data-gone='true'] .splash-welcome-name::after { animation-duration: 0.01s !important; animation-delay: 0s !important; }
+}
+
+/* ==========================================================================
+   MISSION PAGE — who we are, Our Mission and Our Vision, and the Satguru
+   The copy keeps to the left 40% of the screen and uses its full height: the
+   name, standfirst and introduction at the top, Mission and Vision at the
+   foot, every block on the column's two edges. The Satguru's cover portrait
+   fills the remaining 60%, and her quotation's last line meets the copy's.
 
    Type and spacing scale together from one fluid unit (--u, the smaller of
-   1vw and 1.62vh), so the page keeps its proportions on every screen and fits
-   short laptops without crowding large ones. Body copy is justified with
-   hyphenation; later paragraphs are indented rather than spaced, book-style.
+   1vw and 1.62vh), so the page keeps its proportions on every screen. Body
+   copy is justified with hyphenation; later paragraphs are indented rather
+   than spaced, book-style.
    ========================================================================== */
 @keyframes missionDivider {
   from { transform: scaleY(0); }
@@ -1554,27 +1605,41 @@
   to { transform: scaleX(1); }
 }
 @keyframes introNameIn { from { opacity: 0; } }
+/* A line of type rising out of a hidden baseline, as film titles do. */
+@keyframes maskRise {
+  from { opacity: 0; transform: translateY(0.9em); clip-path: inset(-40% -10% 100% -10%); }
+  to { opacity: 1; transform: none; clip-path: inset(-40% -10% -40% -10%); }
+}
+/* The portrait arrives as a focus pull: soft and slightly near, then sharp. */
+@keyframes portraitFocus {
+  from { opacity: 0; transform: translate3d(5%, 1%, 0) scale(1.08); filter: blur(16px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
 
 .splash-mission-shade {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: rgb(5 26 24 / 0.5);
+  /* darker on the copy side, lighter towards the portrait */
+  background: linear-gradient(90deg, rgb(4 22 20 / 0.72), rgb(4 22 20 / 0.46) 45%, rgb(4 22 20 / 0.32));
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 .splash-welcome-photo.is-mission .splash-mission-shade { opacity: 1; }
 
 .splash-mission-page {
   --u: min(1vw, 1.62vh);
+  --mp-pad: clamp(24px, 3.5vw, 56px);
   --mp-s: clamp(6px, calc(var(--u) * 0.62), 12px);
   --mp-gutter: clamp(26px, calc(var(--u) * 3.2), 56px);
   --mp-body: clamp(11px, calc(var(--u) * 0.84), 14.5px);
   --mp-lead: clamp(14px, calc(var(--u) * 1.22), 20px);
   --mp-title: clamp(18px, calc(var(--u) * 1.62), 28px);
   --mp-quote: clamp(13.5px, calc(var(--u) * 1.08), 18px);
-  --name-line: clamp(22px, calc(var(--u) * 2.4), 40px);
+  /* The name's two lines share one letter height, as large as the copy column
+     allows (the longer line, logo included, is about 20 heights wide). */
+  --name-line: min(clamp(22px, calc(var(--u) * 2.4), 40px), calc(100cqw / 20.2));
   --mp-rule: rgb(255 255 255 / 0.2);
   --mp-ink: rgb(255 255 255 / 0.84);
   --mp-mint: #a9ecc9;
@@ -1583,19 +1648,40 @@
   inset: 0;
   z-index: 2;
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  column-gap: clamp(32px, calc(var(--u) * 4.4), 88px);
-  align-content: safe center;
-  max-width: 1680px;
+  /* The copy keeps to the left 40% of the screen; short screens, which
+     cannot stack the same copy as high, widen it a little (see below). */
+  --mp-copy: max(40%, 33rem);
+  --mp-lh: 1.72;
+  grid-template-columns: minmax(0, var(--mp-copy)) minmax(0, 1fr);
+  /* one row: as tall as the copy needs, stretched to fill the screen when it
+     needs less, so the copy spreads top to bottom and the page scrolls only
+     when a short screen cannot hold it */
+  grid-template-rows: minmax(max-content, 1fr);
+  /* beyond 1920px the composition centres, so copy and portrait stay together
+     (the photograph behind still runs edge to edge) */
+  max-width: 1920px;
   margin-inline: auto;
-  padding: clamp(40px, 7vh, 88px) clamp(24px, 3.5vw, 56px) clamp(36px, 6.5vh, 76px);
+  --mp-pad-top: clamp(28px, 5.5vh, 64px);
+  --mp-pad-bottom: clamp(28px, 5vh, 60px);
+  padding: var(--mp-pad-top) 0 var(--mp-pad-bottom);
   overflow: hidden auto;
   color: #fff;
 }
 
-/* The copy column is a size container, so its inner columns follow its own
-   width rather than the window's. */
-.splash-mission-copy { position: relative; z-index: 1; min-width: 0; container-type: inline-size; }
+/* The copy column is a size container, so its contents follow its own width
+   rather than the window's. Intro at the top, Mission and Vision at the foot. */
+.splash-mission-copy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* the 40% column, but never lines too long to read on very wide screens */
+  max-width: calc(var(--mp-pad) + 45rem);
+  padding-left: var(--mp-pad);
+}
 
 /* Name: flared HEAL lettering in mint, with the landed logo before it. */
 .splash-intro-name {
@@ -1606,7 +1692,13 @@
   color: var(--mp-mint);
   filter: drop-shadow(0 3px 14px rgb(0 0 0 / 0.4));
   /* Fade only, no rise: the logo's landing spot is measured as this mounts. */
-  animation: introNameIn 0.9s ease 0.5s both;
+  animation: introNameIn 0.6s ease 0.6s both;
+}
+/* the name's letters rise in turn, while the logo glides in beside them */
+.splash-intro-wordmark path {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flaredLetterIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) calc(0.75s + var(--i, 0) * 0.035s) both;
 }
 .splash-intro-logo-slot {
   flex: none;
@@ -1624,14 +1716,14 @@
   color: #fff;
   text-align: justify;
   text-shadow: 0 2px 16px rgb(0 0 0 / 0.45);
-  animation: welcomeRise 1s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both;
+  animation: maskRise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.3s both;
 }
 
-/* Body copy shared by the introduction and Mission | Vision. */
+/* Body copy shared by the introduction and Mission / Vision. */
 .splash-intro-body,
 .splash-mission-text {
   margin: 0;
-  font: 400 var(--mp-body) / 1.72 'Inter', sans-serif;
+  font: 400 var(--mp-body) / var(--mp-lh) 'Inter', sans-serif;
   letter-spacing: 0.003em;
   color: var(--mp-ink);
   text-align: justify;
@@ -1640,24 +1732,18 @@
   hyphenate-limit-chars: 7 3 3;
   text-shadow: 0 2px 12px rgb(0 0 0 / 0.45);
 }
-/* The introduction is one justified block across the column, a step larger
-   than Mission | Vision so its longer lines stay comfortable to read. */
-.splash-intro-body { font-size: calc(var(--mp-body) * 1.08); animation: welcomeRise 1s cubic-bezier(0.22, 1, 0.36, 1) 1s both; }
+/* The introduction is a step larger than Mission / Vision. */
+.splash-intro-body { font-size: calc(var(--mp-body) * 1.08); animation: welcomeRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.5s both; }
 
-/* Mission | Vision: a hairline across the column, then two columns whose
-   title, quote and body rows are shared (subgrid), so both bodies start on
-   the same line however long each quote runs. The vertical hairline sits in
-   the gutter, meeting the horizontal one. */
+/* Mission and Vision under a hairline, one above the other with a hairline
+   between them (the 40% column is too narrow for two justified columns). */
 .splash-mission {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-rows: auto auto auto;
-  column-gap: var(--mp-gutter);
   margin-top: calc(var(--mp-s) * 3.4);
   padding-top: calc(var(--mp-s) * 3);
 }
-.splash-mission::before {
+.splash-mission::before,
+.splash-mission-block + .splash-mission-block::before {
   content: '';
   position: absolute;
   top: 0;
@@ -1666,66 +1752,74 @@
   height: 1px;
   background: var(--mp-rule);
   transform-origin: left;
-  animation: missionRule 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.1s both;
+  animation: missionRule 1.4s cubic-bezier(0.65, 0, 0.25, 1) 1.7s both;
 }
-.splash-mission::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-  translate: -0.5px 0;
-  background: linear-gradient(var(--mp-rule) 70%, transparent);
-  transform-origin: top;
-  animation: missionDivider 1.4s cubic-bezier(0.22, 1, 0.36, 1) 1.3s both;
+.splash-mission-block { min-width: 0; }
+.splash-mission-block + .splash-mission-block {
+  position: relative;
+  margin-top: calc(var(--mp-s) * 2.6);
+  padding-top: calc(var(--mp-s) * 2.6);
 }
-.splash-mission-block {
-  grid-row: 1 / span 3;
-  display: grid;
-  grid-template-rows: subgrid;
-  align-content: start;
-  min-width: 0;
-}
+.splash-mission-block + .splash-mission-block::before { animation-delay: 2.1s; }
 .splash-mission-title {
   margin: 0 0 var(--mp-s);
   font: 600 var(--mp-title) / 1.08 'Outfit', 'Inter', sans-serif;
   letter-spacing: -0.012em;
   text-shadow: 0 4px 24px rgb(0 0 0 / 0.35);
-  animation: welcomeRise 1s cubic-bezier(0.22, 1, 0.36, 1) 1.3s both;
+  animation: maskRise 1s cubic-bezier(0.16, 1, 0.3, 1) 1.9s both;
 }
 .splash-mission-quote {
   margin: 0 0 calc(var(--mp-s) * 1.5);
   font: 600 var(--mp-quote) / 1.4 'Dancing Script', cursive;
   color: var(--mp-quote-ink);
+  text-wrap: balance;
   text-shadow: 0 2px 14px rgb(0 0 0 / 0.4);
-  animation: welcomeRise 1s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both;
+  animation: maskRise 1s cubic-bezier(0.16, 1, 0.3, 1) 2.05s both;
 }
-.splash-mission-body { min-width: 0; animation: welcomeRise 1s cubic-bezier(0.22, 1, 0.36, 1) 1.7s both; }
+.splash-mission-body { min-width: 0; animation: welcomeRise 1.1s cubic-bezier(0.16, 1, 0.3, 1) 2.2s both; }
 /* Book convention: following paragraphs are indented, not spaced. */
 .splash-mission-text + .splash-mission-text { text-indent: 1.6em; }
-.splash-mission-block + .splash-mission-block .splash-mission-title { animation-delay: 1.5s; }
-.splash-mission-block + .splash-mission-block .splash-mission-quote { animation-delay: 1.7s; }
-.splash-mission-block + .splash-mission-block .splash-mission-body { animation-delay: 1.9s; }
+.splash-mission-block + .splash-mission-block .splash-mission-title { animation-delay: 2.25s; }
+.splash-mission-block + .splash-mission-block .splash-mission-quote { animation-delay: 2.4s; }
+.splash-mission-block + .splash-mission-block .splash-mission-body { animation-delay: 2.55s; }
 
-/* Narrow copy column (tablets, phones): Mission and Vision stack. */
-@container (max-width: 559px) {
-  .splash-mission { grid-template-columns: minmax(0, 1fr); row-gap: calc(var(--mp-s) * 3.4); }
-  .splash-mission::after { display: none; }
-  .splash-mission-block { grid-row: auto; display: block; }
+/* A wide copy column (tablets, where the copy takes the full width) sets
+   Mission | Vision side by side: their title, quote and body rows are shared
+   (subgrid), so both bodies start on the same line, with a hairline between. */
+@container (min-width: 640px) {
+  .splash-mission {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    column-gap: var(--mp-gutter);
+  }
+  .splash-mission::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    translate: -0.5px 0;
+    background: linear-gradient(var(--mp-rule) 70%, transparent);
+    transform-origin: top;
+    animation: missionDivider 1.6s cubic-bezier(0.65, 0, 0.25, 1) 1.9s both;
+  }
+  .splash-mission-block { grid-row: 1 / span 3; display: grid; grid-template-rows: subgrid; align-content: start; }
+  .splash-mission-block + .splash-mission-block { margin-top: 0; padding-top: 0; }
+  .splash-mission-block + .splash-mission-block::before { display: none; }
 }
 
-/* Satguru: a cover portrait. It fills the right 60% of the screen at full
-   height, bleeding off the top and right edges behind the copy, scaled to
-   cover so her face reads large. Its left edge feathers away before the copy
-   column and the shawl dissolves at the bottom, under her quotation. The
-   figure itself stays unpositioned so the portrait measures against the
-   whole page; the quotation keeps the column, its last line level with the
-   copy's. */
+/* Satguru: a cover portrait filling the right of the screen, from the top
+   edge down to just above her quotation, scaled to cover so her face reads
+   large. Its left edge feathers away and the shawl fades out before the
+   quotation, which sits below the picture on the plain background, its last
+   line level with the copy's. */
 .splash-satguru {
   min-width: 0;
   min-height: 0;
   margin: 0;
+  padding: 0 var(--mp-pad) 0 clamp(16px, 2vw, 40px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -1734,43 +1828,36 @@
   text-align: center;
 }
 .splash-satguru-frame {
-  position: absolute;
-  top: 0;
-  right: -6%;
-  bottom: 0;
+  position: relative;
   z-index: 0;
-  width: 60%;
+  /* takes all the height above the quotation, and bleeds out to the top and
+     right edges of the screen and back to the copy's edge */
+  flex: 1 1 0;
+  min-height: 0;
+  align-self: stretch;
+  margin: calc(-1 * var(--mp-pad-top)) calc(-1 * var(--mp-pad)) 0 calc(-1 * clamp(16px, 2vw, 40px));
   pointer-events: none;
+  animation: portraitFocus 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
 }
 .splash-satguru img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* lifts her face clear of the quotation (the picture is taller than the frame) */
-  object-position: 50% 40%;
-  -webkit-mask-image: linear-gradient(#000 70%, transparent 98%), linear-gradient(90deg, transparent 0%, #000 28%);
+  /* the crop keeps her head and shawl clear of the top edge (CMS-adjustable) */
+  object-position: var(--portrait-focus, 50% 20%);
+  -webkit-mask-image: linear-gradient(#000 70%, transparent 98%), linear-gradient(90deg, transparent 0%, #000 18%);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(#000 70%, transparent 98%), linear-gradient(90deg, transparent 0%, #000 28%);
+  mask-image: linear-gradient(#000 70%, transparent 98%), linear-gradient(90deg, transparent 0%, #000 18%);
   mask-composite: intersect;
-  filter: drop-shadow(0 22px 48px rgb(0 0 0 / 0.5));
-  animation: welcomeRise 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1s both;
 }
 .splash-satguru figcaption {
   position: relative;
   z-index: 1;
   flex: none;
   max-width: min(100%, 30em);
-  animation: welcomeRise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 1.9s both;
-}
-/* a soft dark glow, so the quotation reads over the fading shawl */
-.splash-satguru figcaption::before {
-  content: '';
-  position: absolute;
-  inset: -45% -14%;
-  z-index: -1;
-  background: radial-gradient(closest-side, rgb(5 26 24 / 0.62), transparent);
-  pointer-events: none;
+  margin-top: calc(var(--mp-s) * 2.4);
+  animation: welcomeRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.6s both;
 }
 .splash-satguru blockquote {
   margin: 0;
@@ -1789,16 +1876,55 @@
   color: rgb(255 255 255 / 0.72);
 }
 
-/* Below desktop: one scrolling column of copy; the portrait steps aside. */
+/* Short desktop screens: the same copy needs more width to fit the height,
+   and a touch tighter leading. */
+@media (min-width: 1024px) and (max-height: 860px) {
+  .splash-mission-page { --mp-copy: max(44%, 33rem); --mp-lh: 1.66; }
+}
+@media (min-width: 1024px) and (max-height: 720px) {
+  .splash-mission-page { --mp-copy: max(50%, 34rem); --mp-lh: 1.6; }
+}
+@media (min-width: 1024px) and (max-height: 600px) {
+  .splash-mission-page { --mp-copy: max(56%, 36rem); --mp-lh: 1.56; }
+}
+
+/* Below desktop: one scrolling column. The copy runs full width, and the
+   portrait follows it, standing on her quotation, before the arrow. */
 @media (max-width: 1023px) {
-  .splash-mission-page { grid-template-columns: minmax(0, 1fr); align-content: start; padding: 84px 22px 104px; }
-  .splash-satguru { display: none; }
+  .splash-mission-page {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    --mp-pad-top: clamp(28px, 6vh, 72px);
+    --mp-pad-bottom: 112px;
+  }
+  .splash-mission-copy { max-width: none; padding-inline: clamp(20px, 5vw, 40px); }
+  /* sized by its content here: it follows the copy rather than sharing its row */
+  .splash-satguru { min-height: auto; justify-content: flex-start; padding: calc(var(--mp-s) * 5) clamp(20px, 5vw, 40px) 0; }
+  .splash-satguru-frame {
+    flex: none;
+    align-self: center;
+    margin: 0;
+    width: min(100%, 440px);
+    aspect-ratio: 553 / 600;
+  }
+  .splash-satguru img {
+    object-position: 50% 0%;
+    -webkit-mask-image: linear-gradient(#000 62%, transparent 98%);
+    mask-image: linear-gradient(#000 62%, transparent 98%);
+  }
+  .splash-satguru figcaption { margin-top: calc(var(--mp-s) * 1.6); }
+}
+/* A narrow copy column puts the logo above the name, so the name can use the
+   full width. */
+@container (max-width: 480px) {
+  .splash-intro-name { flex-direction: column; align-items: flex-start; --name-line: min(34px, calc(100cqw / 17.6)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .splash-mission-page *,
   .splash-mission::before,
-  .splash-mission::after { animation-duration: 0.01s !important; animation-delay: 0s !important; }
+  .splash-mission::after,
+  .splash-mission-block::before { animation-duration: 0.01s !important; animation-delay: 0s !important; }
 }
 
 /* S.N.C.F beside the landed logo — same metrics as the header monogram it

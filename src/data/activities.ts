@@ -4,12 +4,12 @@ import type { ActivityIcon } from './activityIcons';
 /**
  * EVERY ACTIVITY THE FOUNDATION REPORTS, and every figure it reports for it.
  *
- * Transcribed from SNCF_Activity_Report_March2026 — the executive dashboard
+ * Transcribed from SNCF_Activity_Report_Sept2026 — the executive dashboard
  * and the four per-pillar detail sheets, which the report itself calls the
- * source of truth. Where a sheet gives several periods, the figures here are
- * the LATEST row, and `period` names it; that is why the periods differ
- * between activities (the sheets were last updated at different times) and
- * why each one is stated on the piece rather than assumed.
+ * source of truth. Only the report's latest figures are shown, and every
+ * activity is dated to the report: As on September 2026. Earlier rows of a
+ * sheet (previous periods, yearly breakdowns, "added" rows) are left out, as
+ * the foundation asked.
  *
  * `dataPoints` is the whole column set for that activity, not a selection —
  * this is what the frame opens onto, so nothing the report gives should be
@@ -68,8 +68,6 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
       { label: 'Units collected', value: '1,500,230' },
       { label: 'Camps organised', value: '9,174' },
       { label: 'Potentially saved lives', value: '4,500,690' },
-      { label: 'Units — April 2025', value: '1,405,177' },
-      { label: 'Camps — April 2025', value: '8,644' },
     ],
     images: [],
   },
@@ -83,11 +81,6 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     dataPoints: [
       { label: 'Patients treated', value: '483,439' },
       { label: 'Camps organised', value: '727' },
-      { label: 'Patients — September 2025', value: '454,233' },
-      { label: 'Camps — September 2025', value: '671' },
-      { label: 'Patients — March 2025', value: '444,648' },
-      { label: 'Camps — March 2025', value: '668' },
-      { label: 'Added Mar–Sep 2025', value: '9,585' },
     ],
     images: [],
   },
@@ -104,10 +97,6 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
       { label: 'Camps', value: '512' },
       { label: 'Cataract surgeries', value: '15,493' },
       { label: 'Free spectacles', value: '38,148' },
-      { label: 'OPD — August 2026', value: '164,797' },
-      { label: 'OPD — September 2025', value: '160,821' },
-      { label: 'OPD — March 2025', value: '158,558' },
-      { label: 'Added Mar–Sep 2025', value: '2,263' },
     ],
     images: [],
   },
@@ -139,18 +128,9 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     period: 'As on September 2026',
     blurb: 'The foundation’s own blood banking, separate from the donation camps.',
     headline: { label: 'Units', value: '54,261' },
-    /* Totals, then the sheet's year-by-year rows (2016–2026), which sum to them. */
     dataPoints: [
       { label: 'Units', value: '54,261' },
       { label: 'Camps', value: '444' },
-      ...([
-        ['2016', '1,827', '22'], ['2017', '5,188', '42'], ['2018', '1,409', '16'], ['2019', '4,522', '39'],
-        ['2020', '2,816', '20'], ['2021', '4,821', '45'], ['2022', '5,531', '41'], ['2023', '5,211', '45'],
-        ['2024', '7,115', '53'], ['2025', '8,312', '64'], ['2026', '7,509', '57'],
-      ] as const).flatMap(([year, units, camps]) => [
-        { label: `Units — ${year}`, value: units },
-        { label: `Camps — ${year}`, value: camps },
-      ]),
     ],
     images: [],
   },
@@ -160,14 +140,14 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'schools-colleges',
     pillarId: 'enrich',
     title: 'Schools & Colleges',
-    period: 'As on September 2025',
+    period: 'As on September 2026',
     blurb: 'Institutions run by the foundation, and the students in them.',
-    headline: { label: 'Students benefitted', value: '209,038' },
+    headline: { label: 'Students benefitted', value: '217,723' },
     dataPoints: [
-      { label: 'Students benefitted', value: '209,038' },
-      { label: 'Schools', value: '13' },
+      { label: 'Students benefitted', value: '217,723' },
+      { label: 'Schools', value: '14' },
       { label: 'Colleges', value: '1' },
-      { label: 'College students', value: '24,580' },
+      { label: 'College students', value: '25,880' },
     ],
     images: [],
   },
@@ -175,12 +155,12 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'scholarships',
     pillarId: 'enrich',
     title: 'Scholarships',
-    period: 'As on September 2025',
+    period: 'As on September 2026',
     blurb: 'Merit-cum-means aid and higher-education scholarships.',
-    headline: { label: 'Disbursed', value: '₹4,82,19,252' },
+    headline: { label: 'Disbursed', value: '₹5,40,97,718' },
     dataPoints: [
-      { label: 'Scholarship students', value: '1,631' },
-      { label: 'Disbursed', value: '₹4,82,19,252' },
+      { label: 'Scholarship students', value: '1,829' },
+      { label: 'Disbursed', value: '₹5,40,97,718' },
     ],
     images: [],
   },
@@ -188,13 +168,17 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'free-schools',
     pillarId: 'enrich',
     title: 'Free Schools',
-    period: 'As on September 2025',
-    blurb: 'Schools charging no fees, plus schools the foundation supports.',
-    headline: { label: 'Students', value: '9,057' },
+    period: 'As on September 2026',
+    blurb: 'Schools charging no fees, schools the foundation supports, and free coaching centres.',
+    headline: { label: 'Students', value: '9,696' },
+    /* The free coaching centres come from the report's skill development
+       sheet; they are kept here, with the other free classrooms. */
     dataPoints: [
       { label: 'Free schools', value: '4' },
-      { label: 'Students in free schools', value: '9,057' },
+      { label: 'Students in free schools', value: '9,696' },
       { label: 'Schools supported by SNCF', value: '2' },
+      { label: 'Free coaching centres', value: '3' },
+      { label: 'Free coaching students', value: '1,370' },
     ],
     images: [],
   },
@@ -202,14 +186,12 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'skill-nima',
     pillarId: 'enrich',
     title: 'NIMA Skill Centres',
-    period: 'As on September 2025',
-    blurb: 'Vocational training centres in computing and allied trades.',
-    headline: { label: 'Youth benefitted', value: '3,257' },
+    period: 'As on September 2026',
+    blurb: 'Music, dance and painting, taught at the Nirankari Institute of Music and Art.',
+    headline: { label: 'Youth benefitted', value: '4,114' },
     dataPoints: [
-      { label: 'NIMA centres', value: '22' },
-      { label: 'Youth benefitted', value: '3,257' },
-      { label: 'Centres — March 2025', value: '17' },
-      { label: 'Added Mar–Sep 2025', value: '427 youth' },
+      { label: 'NIMA centres', value: '27' },
+      { label: 'Youth benefitted', value: '4,114' },
     ],
     images: [],
   },
@@ -217,14 +199,14 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'skill-trades',
     pillarId: 'enrich',
     title: 'Sewing & Beautician',
-    period: 'As on September 2025',
+    period: 'As on September 2026',
     blurb: 'Livelihood trades taught to women and youth in local centres.',
-    headline: { label: 'Youth benefitted', value: '15,901' },
+    headline: { label: 'Youth benefitted', value: '17,131' },
     dataPoints: [
       { label: 'Sewing centres', value: '45' },
-      { label: 'Sewing youth benefitted', value: '15,300' },
-      { label: 'Beautician centres', value: '2' },
-      { label: 'Beautician youth benefitted', value: '601' },
+      { label: 'Sewing youth benefitted', value: '16,500' },
+      { label: 'Beautician centres', value: '1' },
+      { label: 'Beautician youth benefitted', value: '631' },
     ],
     images: [],
   },
@@ -234,37 +216,38 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'tree-plantation',
     pillarId: 'empower',
     title: 'Tree Plantation Drives',
-    period: 'As on March 2026',
+    period: 'As on September 2026',
     blurb:
       'Plantation drives including World Environment Day and Vann Mahotsav.',
-    headline: { label: 'Trees planted', value: '2,639,177' },
+    /* "Trees planted" is the dashboard's total, which counts Oneness Vann's
+       600,330 plants; the sheet's own column leaves them out (2,041,947). */
+    headline: { label: 'Trees planted', value: '2,642,277' },
     dataPoints: [
-      { label: 'Trees planted', value: '2,639,177' },
-      { label: 'Total drives', value: '3,500' },
+      { label: 'Trees planted', value: '2,642,277' },
+      { label: 'Excluding Oneness Vann', value: '2,041,947' },
+      { label: 'Total drives', value: '3,518' },
       { label: 'WED drives', value: '18' },
-      { label: 'WED plantation', value: '2,200' },
+      { label: 'WED plantation', value: '3,100' },
       { label: 'Vann Mahotsav drives', value: '80' },
       { label: 'Vann Mahotsav plantation', value: '16,000' },
     ],
-    /* The planting photograph was taken off the album at Rahul's request
-       (26 Sep 2026) — its framing cropped badly in the lead print. A
-       replacement, as a PNG, goes here when supplied; until then the tile
-       borrows the pillar's illustrative set like the others. */
     images: [],
   },
   {
     id: 'cleanliness',
     pillarId: 'empower',
     title: 'Cleanliness Drives',
-    period: 'As on September 2025 (cumulative)',
+    period: 'As on September 2026',
     blurb:
       'Mega drives across railway stations, hospitals and riverbanks.',
-    headline: { label: 'Manhours', value: '35,163,330' },
+    headline: { label: 'Manhours', value: '35,223,330' },
     dataPoints: [
-      { label: 'Total manhours', value: '35,163,330' },
+      { label: 'Total manhours', value: '35,223,330' },
+      { label: 'Total drives', value: '7,809' },
       { label: 'Railway stations', value: '444' },
       { label: 'Hospitals', value: '1,385' },
-      { label: 'Rly / hospital volunteers', value: '410,788' },
+      { label: 'WED drives', value: '18' },
+      { label: 'Rly / hospital volunteers', value: '420,788' },
       { label: 'Waterbodies', value: '5,962' },
       { label: 'Waterbody volunteers', value: '5,449,767' },
     ],
@@ -274,7 +257,7 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'covid-relief',
     pillarId: 'empower',
     title: 'COVID-19 Relief',
-    period: '2022 total',
+    period: 'As on September 2026',
     blurb: 'Oxygen, food, care centres and beds through the pandemic.',
     headline: { label: 'Food packets', value: '5,000,000' },
     dataPoints: [
@@ -294,12 +277,12 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'mass-marriages',
     pillarId: 'empower',
     title: 'Mass Marriages',
-    period: 'As on September 2025',
+    period: 'As on September 2026',
     blurb: 'Collective weddings held since 1998, at no cost to the families.',
-    headline: { label: 'Couples married', value: '5,317' },
+    headline: { label: 'Couples married', value: '5,652' },
     dataPoints: [
-      { label: 'Couples married', value: '5,317' },
-      { label: 'Events (1998–2025)', value: '57' },
+      { label: 'Couples married', value: '5,652' },
+      { label: 'Events held', value: '61' },
     ],
     images: [],
   },
@@ -307,13 +290,13 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'financial-support',
     pillarId: 'empower',
     title: 'Financial & Support',
-    period: 'Till 15 May 2025',
+    period: 'As on September 2026',
     blurb: 'Direct financial help, disaster relief, and support for youth sport.',
     headline: { label: 'Financial help', value: '₹10,45,83,834' },
     dataPoints: [
       { label: 'Financial help', value: '₹10,45,83,834' },
       { label: 'Disaster relief & fund', value: '₹7,95,21,918' },
-      { label: 'Youth sport (NBGSMCT)', value: '25 years, 25 tournaments' },
+      { label: 'Youth sport (NBGSMCT)', value: '26 years, 26 tournaments' },
     ],
     images: [],
   },
@@ -323,7 +306,7 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'project-amrit',
     pillarId: 'projects',
     title: 'Project Amrit',
-    period: 'As on March 2026',
+    period: 'As on September 2026',
     blurb: '“Clean Water, Pure Mind” — cleaning and reviving water bodies.',
     headline: { label: 'Water bodies', value: '5,962' },
     dataPoints: [
@@ -339,15 +322,16 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'oneness-vann',
     pillarId: 'projects',
     title: 'Project Oneness Vann',
-    period: 'As on September 2025',
+    period: 'As on September 2026',
     blurb: 'Dense indigenous urban forests, grown to cut air pollution.',
-    headline: { label: 'Plants', value: '550,000' },
+    headline: { label: 'Plants', value: '600,330' },
     dataPoints: [
-      { label: 'Plants', value: '550,000' },
-      { label: 'Sites', value: '630' },
+      { label: 'Plants', value: '600,330' },
+      { label: 'Sites', value: '700' },
       { label: 'Area', value: '19,582,822 sq ft' },
       { label: 'Acres', value: '449' },
       { label: 'Hectares', value: '182' },
+      { label: 'States / UTs', value: '27' },
     ],
     images: [],
   },
@@ -355,7 +339,7 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'watershed',
     pillarId: 'projects',
     title: 'Watershed Programme',
-    period: 'As on September 2025',
+    period: 'As on September 2026',
     blurb: 'Rejuvenating arid zones for sustainable local agriculture.',
     headline: { label: 'People benefitted', value: '30,000' },
     dataPoints: [
@@ -369,28 +353,50 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     id: 'adopted-villages',
     pillarId: 'projects',
     title: 'Adopted Villages',
-    period: 'Since 2017 · Haryana',
+    period: 'As on September 2026',
     blurb:
-      'Patti Kalyana, Bhodwal Majri, Panchi Gujran and Mandaura, adopted whole.',
-    headline: { label: 'Impacted population', value: '100,000' },
+      'Patti Kalyana, Bhodwal Majri, Panchi Gujran and Mandaura in Haryana, adopted whole.',
+    headline: { label: 'Impacted population', value: '112,500' },
+    /* The overview row, then the village-level sheet's totals. */
     dataPoints: [
       { label: 'Villages', value: '4' },
-      { label: 'Impacted population', value: '100,000' },
+      { label: 'Impacted population', value: '112,500' },
       { label: 'Schools', value: '7' },
-      { label: 'School children', value: '8,000' },
+      { label: 'School children', value: '10,000' },
       { label: 'Total village population', value: '35,127' },
       { label: 'Direct beneficiaries', value: '29,627' },
+      { label: 'Health & eye camps', value: '19' },
+      { label: 'Patients treated', value: '3,420' },
+      { label: 'Students benefitting', value: '7,750' },
+      { label: 'Sewing centres', value: '3' },
+      { label: 'Saplings planted', value: '91,500' },
+      { label: 'Green cover', value: '732,000 sq ft' },
     ],
     images: [],
   },
 ];
 
 /* How each programme is presented: tile symbol, menu name and photographs.
-   Kept beside the figures so the CMS import carries them as editable fields. */
+   Kept beside the figures so the CMS import carries them as editable fields.
+
+   `images` are the programme's own photographs, from the foundation's 2026
+   exhibition archive: the first leads its tile, the rest hang in its detail
+   view. Programmes without hover photographs of their own blend these in
+   instead, and the lead one sits behind their card. COVID-19 relief and the
+   watershed programme have none in the archive yet, so their tiles still
+   borrow a pillar photograph, marked illustrative. */
 const photo = (name: string) => ({ src: `/images/programmes/${name}` });
+const own = (name: string, alt: string) => ({ src: `/images/programmes/${name}`, alt });
+const album = (images: { src: string; alt: string }[]): Partial<Activity> =>
+  ({ images, hoverPhotos: images.map(({ src, alt }) => ({ src, alt })), cardPhoto: { src: images[0].src, alt: images[0].alt } });
 const PRESENTATION: Record<string, Partial<Activity>> = {
   'blood-donation': {
     icon: 'droplets', menuLabel: 'Blood Donation',
+    images: [
+      own('blood-donation-manav-ekta-diwas.webp', 'Donors giving blood at the Manav Ekta Diwas drive in Delhi, April 2026'),
+      own('blood-donation-donor-2026.webp', 'A young woman donating blood at a foundation camp'),
+      own('blood-donation-badge-of-honour.webp', 'A volunteer holds a sign reading “This isn’t a band-aid, it’s a badge of honor”'),
+    ],
     hoverPhotos: [photo('blood-donation-donor.jpg'), photo('blood-donation-volunteers.png'), photo('blood-donation-satguru.jpg')],
     /* Satguru Mata ji beside the donor; the two fill most of the panel. */
     hoverFocus: { photo: 3, x: 48, y: 42, width: 34, height: 38 },
@@ -398,36 +404,102 @@ const PRESENTATION: Record<string, Partial<Activity>> = {
   },
   'health-checkup': {
     icon: 'stethoscope', menuLabel: 'Health Checkup Camps',
+    images: [
+      own('health-checkup-school-camp.webp', 'A doctor examines a student at a school health checkup camp'),
+      own('health-checkup-blood-pressure-2026.webp', 'A volunteer checks an elderly woman’s blood pressure at a health screening camp'),
+      own('health-checkup-screening.webp', 'A woman has her blood pressure taken at a health screening camp'),
+    ],
     hoverPhotos: [photo('health-checkup-blood-pressure.jpg'), photo('health-checkup-snhc-team.jpg'), photo('health-checkup-satguru-banner.jpg')],
   },
   'eye-checkup': {
     icon: 'eye', menuLabel: 'Eye Care',
+    images: [
+      own('eye-checkup-trial-frame.webp', 'An elderly woman tries trial lenses at a free eye checkup camp in Mumbai'),
+      own('eye-checkup-khopoli.webp', 'A woman in a trial frame during an eye test at Khopoli'),
+      own('eye-checkup-barnala.webp', 'A volunteer examines a woman’s eyes at an eye checkup camp in Barnala'),
+    ],
     hoverPhotos: [photo('eye-checkup-trial-lens.jpg'), photo('eye-checkup-examination.jpg'), photo('eye-checkup-vision-test.jpg')],
   },
   'health-centre': {
     icon: 'hospital', menuLabel: 'Health Centre',
+    images: [
+      own('health-centre-building.jpg', 'The Sant Nirankari Health Centre'),
+      own('health-centre-team.jpg', 'Satguru Mata Sudiksha Ji Maharaj with the health centre’s team'),
+      own('health-centre-inauguration.jpg', 'The inauguration of the health centre'),
+    ],
     hoverPhotos: [photo('health-centre-building.jpg'), photo('health-centre-team.jpg'), photo('health-centre-inauguration.jpg'), photo('health-centre-dedication.jpg')],
     /* Satguru Mata ji and Ramit ji at the centre of the team photograph. */
     hoverFocus: { photo: 2, x: 52, y: 63, width: 11, height: 21 },
   },
   'blood-bank': {
     icon: 'droplet', menuLabel: 'Blood Bank',
+    images: [
+      own('blood-bank-mixer.webp', 'A unit of blood on a collection mixer'),
+      own('blood-bank-bags.webp', 'Collected units of blood'),
+      own('blood-bank-samples.webp', 'Blood samples racked for testing'),
+    ],
     hoverPhotos: [photo('blood-bank-processing.jpg'), photo('blood-bank-storage.jpg'), photo('blood-bank-centrifuge.jpg')],
   },
-  'schools-colleges': { icon: 'graduation-cap', menuLabel: 'Schools & Colleges' },
-  scholarships: { icon: 'award', menuLabel: 'Scholarships' },
-  'free-schools': { icon: 'book-open', menuLabel: 'Free Schools' },
-  'skill-nima': { icon: 'laptop', menuLabel: 'NIMA Skill Centres' },
-  'skill-trades': { icon: 'scissors', menuLabel: 'Sewing & Beautician' },
-  'tree-plantation': { icon: 'trees', menuLabel: 'Tree Plantation' },
-  cleanliness: { icon: 'sparkles', menuLabel: 'Cleanliness Drives' },
+  'schools-colleges': { icon: 'graduation-cap', menuLabel: 'Schools & Colleges', ...album([
+    own('schools-classroom.webp', 'Students in a classroom at Sant Nirankari Public School, Tilak Nagar'),
+    own('schools-library.webp', 'Students reading in the school library, Malviya Nagar'),
+    own('schools-band.webp', 'The school band of Sant Nirankari Public School, Govindpuri'),
+  ]) },
+  scholarships: { icon: 'award', menuLabel: 'Scholarships', ...album([
+    own('scholarships-graduation.webp', 'Young graduates at a Sant Nirankari Public School graduation ceremony'),
+    own('scholarships-graduates.webp', 'Graduates gathered at the graduation ceremony, Nirankari Colony'),
+  ]) },
+  'free-schools': { icon: 'book-open', menuLabel: 'Free Schools', ...album([
+    own('free-schools-independence-day.webp', 'Students celebrating Independence Day at Sant Nirankari School, Paharganj'),
+    own('free-schools-assembly.webp', 'A Republic Day assembly at Sant Nirankari School, Paharganj'),
+    own('free-schools-group-work.webp', 'Students working together around a table'),
+  ]) },
+  'skill-nima': { icon: 'laptop', menuLabel: 'NIMA Skill Centres', ...album([
+    own('nima-tabla.webp', 'Two students playing tabla at a Nirankari Institute of Music and Art evening in Mumbai'),
+    own('nima-music-class.webp', 'A music class with harmonium and tabla in Mumbai'),
+    own('nima-vocational-centre.webp', 'Students with their instruments at the new Nirankari Vocational Centre'),
+  ]) },
+  'skill-trades': { icon: 'scissors', menuLabel: 'Sewing & Beautician', ...album([
+    own('sewing-centre-machines.webp', 'Women at their sewing machines in the Yamuna Nagar sewing centre'),
+    own('sewing-centre-learner.webp', 'A learner at a sewing machine in Matiala'),
+    own('sewing-centre-class.webp', 'A full class at the Mukandpur sewing centre'),
+  ]) },
+  'tree-plantation': { icon: 'trees', menuLabel: 'Tree Plantation', ...album([
+    own('tree-plantation-hillside.webp', 'A volunteer plants a sapling on a hillside in Mussoorie on World Environment Day'),
+    own('tree-plantation-forest.webp', 'Volunteers planting in a pine forest in Manali'),
+    own('tree-plantation-drive.webp', 'Planting a tree at a World Environment Day drive in Lonavala'),
+  ]) },
+  cleanliness: { icon: 'sparkles', menuLabel: 'Cleanliness Drives', ...album([
+    own('cleanliness-lake-shore.webp', 'Volunteers clearing the shore of the Tehri lake on World Environment Day'),
+    own('cleanliness-hillside.webp', 'Volunteers bagging litter on a hillside in Mussoorie'),
+    own('cleanliness-recycle.webp', 'Students with reduce, reuse and recycle placards in Shimla'),
+  ]) },
   'covid-relief': { icon: 'package-check', menuLabel: 'COVID-19 Relief' },
-  'mass-marriages': { icon: 'heart', menuLabel: 'Mass Marriages' },
-  'financial-support': { icon: 'hand-coins', menuLabel: 'Financial Support' },
-  'project-amrit': { icon: 'waves' },
-  'oneness-vann': { icon: 'sprout' },
+  'mass-marriages': { icon: 'heart', menuLabel: 'Mass Marriages', ...album([
+    own('mass-marriages-couples.webp', 'Couples at the mass marriage ceremony, showered with rose petals'),
+    own('mass-marriages-hall.webp', 'The mass marriage ceremony, April 2026'),
+    own('mass-marriages-petals.webp', 'Newly married couples beneath falling petals'),
+  ]) },
+  'financial-support': { icon: 'hand-coins', menuLabel: 'Financial Support', ...album([
+    own('youth-sport-sprint.webp', 'Athletes sprinting at Jawaharlal Nehru Stadium, Delhi'),
+    own('youth-sport-para-athletes.webp', 'Volunteers with para-athletes at Jawaharlal Nehru Stadium'),
+    own('youth-sport-hurdles.webp', 'A hurdles race at Jawaharlal Nehru Stadium'),
+  ]) },
+  'project-amrit': { icon: 'waves', ...album([
+    own('amrit-riverbank.webp', 'Project Amrit volunteers clearing a riverbank in Mantova, Italy'),
+    own('amrit-volunteers.webp', 'Volunteers filling bags with litter in Mantova'),
+    own('amrit-christchurch.webp', 'Project Amrit volunteers by the water in Christchurch, New Zealand'),
+  ]) },
+  'oneness-vann': { icon: 'sprout', ...album([
+    own('oneness-vann-planting.webp', 'Women planting saplings for Oneness Vann in Solapur'),
+    own('oneness-vann-sapling.webp', 'A woman and a child plant a sapling in Solapur'),
+    own('oneness-vann-group.webp', 'Planting beneath the Oneness Vann banner in Solapur'),
+  ]) },
   watershed: { icon: 'mountain' },
-  'adopted-villages': { icon: 'house' },
+  'adopted-villages': { icon: 'house', ...album([
+    own('adopted-villages-health-camp.webp', 'Villagers at a health screening camp in Mandaura, one of the adopted villages'),
+    own('adopted-villages-mandaura.webp', 'A volunteer checks an elderly villager in Mandaura'),
+  ]) },
 };
 for (const activity of DEFAULT_ACTIVITIES) Object.assign(activity, PRESENTATION[activity.id]);
 

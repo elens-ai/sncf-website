@@ -190,5 +190,25 @@
   "asset.WelcomeSplashScreen.satguru-photo": {
     "source": "/images/satguru-mata-sudiksha-ji-cutout.webp",
     "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-cutout.webp"
+  },
+  "asset.PillarHeroBackdrop.heal-background": {
+    "source": "/images/heal-emblem/background.webp",
+    "label": "PillarHeroBackdrop · background.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-leaf-top-right": {
+    "source": "/images/heal-emblem/leaf-top-right.webp",
+    "label": "PillarPhotoMosaic · leaf-top-right.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-leaf-top-left": {
+    "source": "/images/heal-emblem/leaf-top-left.webp",
+    "label": "PillarPhotoMosaic · leaf-top-left.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-leaf-bottom-right": {
+    "source": "/images/heal-emblem/leaf-bottom-right.webp",
+    "label": "PillarPhotoMosaic · leaf-bottom-right.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-leaf-bottom-left": {
+    "source": "/images/heal-emblem/leaf-bottom-left.webp",
+    "label": "PillarPhotoMosaic · leaf-bottom-left.webp"
   }
 }

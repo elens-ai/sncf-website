@@ -38,7 +38,7 @@ const ValuePhotoCollage: React.FC<{ id: Cornerstone; label: string }> = ({ id, l
         </div>
       ))}
     </div>
-    <figcaption><span>{getCMSCopy('copy.CoreValuesPage.illustrativePhotos', 'Illustrative photography')}</span></figcaption>
+    <figcaption><span>{getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')}</span></figcaption>
   </figure>
 );
 

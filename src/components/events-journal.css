@@ -56,7 +56,6 @@
 .journal-date-ticket > strong { font: 400 clamp(36px, 4vw, 60px)/1 Outfit, sans-serif; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
 .journal-date-ticket > span { font: 500 12px/1.5 Inter, sans-serif; }
 .journal-date-ticket small { display: block; font-size: 10px; font-weight: 400; letter-spacing: .06em; color: #426364; }
-.journal-photo-note { position: absolute; bottom: -1%; left: 0; right: 0; text-align: center; font: 400 7px/1.5 Inter, sans-serif; letter-spacing: .17em; text-transform: uppercase; color: #ffffff70; }
 .journal-feature-copy { min-width: 0; position: relative; }
 .journal-tag { margin: 0 0 12px; color: var(--event-tint); font: 500 9px/1.5 Inter, sans-serif; letter-spacing: .2em; text-transform: uppercase; }
 .journal-feature h3 { margin: 0 0 18px; color: #fffdf7; font: 400 clamp(27px, 2.5vw, 40px)/1.12 Marcellus, Georgia, serif; letter-spacing: -.03em; text-wrap: balance; }
@@ -182,7 +181,6 @@
   .journal-date-ticket > svg { display: block; }
   .journal-date-ticket > strong { font-size: 43px; }
   .journal-date-ticket > span { font-size: 11px; }
-  .journal-photo-note { bottom: -6%; font-size: 6px; }
   .journal-feature h3 { font-size: 31px; max-width: 22ch; text-wrap: initial; margin-bottom: 16px; }
   .journal-tag { margin-bottom: 9px; }
   .journal-when { font-size: 11px; }

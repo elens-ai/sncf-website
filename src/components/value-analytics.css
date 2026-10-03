@@ -61,17 +61,6 @@
 .va-ring-caption { font-size: 12px; line-height: 1.6; color: #3f5750; }
 
 /* growth pairs */
-.va-growth { display: flex; flex-direction: column; gap: 10px; }
-.va-growth + .va-growth { padding-top: 14px; border-top: 1px solid #e3eae5; }
-.va-growth-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #5a706b; }
-.va-growth-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: end; }
-.va-growth-step { display: flex; flex-direction: column; gap: 6px; }
-.va-growth-bar { display: block; height: 54px; border-radius: 8px; background: color-mix(in srgb, var(--value-light) 22%, #eef2ef); overflow: hidden; display: flex; align-items: flex-end; }
-.va-growth-bar span { display: block; width: 100%; height: 100%; border-radius: 8px; background: linear-gradient(180deg, color-mix(in srgb, var(--value-light) 70%, var(--value-color)), var(--value-color)); transform: scaleY(0); transform-origin: bottom; transition: transform 1.2s cubic-bezier(.22, 1, .36, 1) var(--d, 0ms); }
-.value-analytics[data-arrived='true'] .va-growth-bar span { transform: scaleY(var(--v, 0)); }
-.va-growth-when { font-size: 10px; color: #7c8e87; }
-.va-growth-delta { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: 11px; color: #63776e; }
-.va-growth-delta strong { padding: 3px 9px; border-radius: 20px; background: color-mix(in srgb, var(--value-light) 30%, #fff); color: var(--value-color); font: 600 13px/1.3 Outfit, sans-serif; }
 
 /* pictograms, tiles, ratio, money, timeline */
 .va-pictogram { display: flex; flex-direction: column; gap: 8px; }
@@ -107,7 +96,7 @@
 @media (max-width: 900px) { .va-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .va-card { grid-column: span 1; } .va-card[style*='--span: 6'], .va-card[style*='--span: 4'] { grid-column: span 2; } .va-heading { flex-direction: column; align-items: start; } }
 @media (max-width: 640px) { .va-grid { grid-template-columns: 1fr; } .va-card, .va-card[style*='--span: 6'], .va-card[style*='--span: 4'] { grid-column: span 1; } .va-split { grid-template-columns: 1fr; } .va-bars li { grid-template-columns: minmax(0, 1fr) auto; } .va-bar-track { grid-column: 1 / -1; } .va-card { padding: 18px; } }
 @media (prefers-reduced-motion: reduce) {
-  .va-bar-fill, .va-donut-arc, .va-growth-bar span, .va-pictogram-grid svg, .va-tiles li, .va-ratio-hearts svg, .va-timeline-fill { transition: none !important; }
-  .va-bar-fill { transform: scaleX(var(--v, 0)); } .va-donut-arc { stroke-dasharray: var(--len) var(--gap); } .va-growth-bar span { transform: scaleY(var(--v, 0)); }
+  .va-bar-fill, .va-donut-arc, .va-pictogram-grid svg, .va-tiles li, .va-ratio-hearts svg, .va-timeline-fill { transition: none !important; }
+  .va-bar-fill { transform: scaleX(var(--v, 0)); } .va-donut-arc { stroke-dasharray: var(--len) var(--gap); }
   .va-pictogram-grid svg, .va-pictogram-grid i, .va-tiles li, .va-ratio-hearts svg { opacity: 1; transform: none; } .va-timeline-fill { transform: scaleX(1); }
 }

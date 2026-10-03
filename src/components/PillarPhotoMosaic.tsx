@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useRef } from 'react';
 import { ProjectsMosaicArt } from './ProjectsMosaicArt';
 import { resolveCMSMedia } from '../cms/media';
+import { resolveCMSAsset } from '../cms/runtime';
 import './heal-photo-mosaic.css';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
@@ -37,6 +38,18 @@ const SHEEN_STOPS = SINE_STEPS.map(o => {
   const s = Math.sin(o * Math.PI * 2);
   return { offset: o, color: s >= 0 ? '#ffffff' : '#0b2a24', opacity: +(Math.abs(s) * (s >= 0 ? .12 : .09)).toFixed(3) };
 });
+/* The hero's Heal emblem carries the foundation's own photographs: one collage
+   per leaf (the Health City and its inauguration, the camps, the pharmacy and
+   lab, registration), each replaceable in the CMS. Each box places its image
+   over its leaf, in emblem units, in the order of the outline's paths; images
+   fill their box, so a replacement photo of any shape still covers its leaf. */
+const healHeroLeaves = (): { box: [number, number, number, number]; src: string }[] => [
+  { box: [61.62, 4.12, 76.77, 67.85], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-top-right", "/images/heal-emblem/leaf-top-right.webp") },
+  { box: [3.54, 20.12, 57.24, 51.52], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-top-left", "/images/heal-emblem/leaf-top-left.webp") },
+  { box: [61.62, 72.64, 30.81, 27.78], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-bottom-right", "/images/heal-emblem/leaf-bottom-right.webp") },
+  { box: [18.52, 73.15, 42.26, 38.38], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-bottom-left", "/images/heal-emblem/leaf-bottom-left.webp") },
+];
+
 /* Faint currents of air drifting across the emblem, left to right. */
 const HEAL_AIR_CURRENTS = [
   { d: 'M-2 30C28 22 48 38 78 30S132 20 166 28', duration: 7.5, delay: 0 },
@@ -44,8 +57,10 @@ const HEAL_AIR_CURRENTS = [
   { d: 'M-2 96C28 88 54 102 90 94S140 86 166 92', duration: 8.2, delay: -6 },
 ];
 
-export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boolean }> = ({ pillar, caption = true }) => {
+export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boolean; heroArt?: boolean }> = ({ pillar, caption = true, heroArt = false }) => {
   const logo = PILLAR_LOGOS[pillar];
+  /* Only the hero's Heal emblem shows the foundation's own photographs. */
+  const ownPhotos = heroArt && pillar === 'heal';
   const clip = useId().replace(/:/g, '');
   const tintChannels = [1, 3, 5].map(offset => parseInt(logo.tint.slice(offset, offset + 2), 16) / 255);
   const photoFilter = `url(#${clip}-photo-tone)`;
@@ -70,6 +85,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
       <defs>
         <g id={`${clip}-outline`}>{logo.paths.map(d => <path key={d} d={d} />)}</g>
         <clipPath id={clip}>{logo.paths.map(d => <path key={d} d={d} />)}</clipPath>
+        {ownPhotos && logo.paths.map((d, i) => <clipPath key={d} id={`${clip}-leaf-${i}`}><path d={d} /></clipPath>)}
         {/* Blend a pillar-coloured duotone with the original photograph so
             faces and activity details remain readable through the colour. */}
         <filter id={`${clip}-photo-tone`} colorInterpolationFilters="sRGB">
@@ -119,7 +135,14 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
       </g>
       <g className="heal-mosaic-leaves">
         <g id={`${clip}-photo-face`}>
-        {pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} /> : <>
+        {ownPhotos ? <>
+          {/* the photographs keep their own colour, as in the foundation's print */}
+          {healHeroLeaves().map((leaf, i) => <g key={i} clipPath={`url(#${clip}-leaf-${i})`}>
+            <rect x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} fill={logo.edge} />
+            <image href={leaf.src} x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} preserveAspectRatio="xMidYMid slice" />
+          </g>)}
+          {logo.paths.map(d => <path key={d} d={d} fill="none" stroke={logo.edge} strokeWidth=".3" strokeLinejoin="round" />)}
+        </> : pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} /> : <>
         {pillar === 'enrich' && <g clipPath={`url(#${clip}-cover)`}>
           <image href={resolveCMSMedia(roomPhoto('enrich', 5))} width="146" height="120" preserveAspectRatio="xMidYMid slice" filter={photoFilter} />
           <rect width="146" height="120" fill={logo.tint} opacity=".4" />
@@ -142,6 +165,6 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         <use href={`#${clip}-outline`} fill="none" stroke={`url(#${clip}-bevel)`} strokeWidth=".45" strokeLinejoin="round" aria-hidden="true" />
       </g>
     </svg>
-    {caption && <figcaption>{PILLARS.find(item => item.id === pillar)?.emblemCaption ?? logo.caption}<span>Illustrative photography</span></figcaption>}
+    {caption && <figcaption>{PILLARS.find(item => item.id === pillar)?.emblemCaption ?? logo.caption}</figcaption>}
   </figure>;
 };

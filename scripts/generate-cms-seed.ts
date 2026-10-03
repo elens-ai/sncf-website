@@ -21,18 +21,20 @@ const [copy, assets, components] = await Promise.all([
   registry('generatedCopy.json'), registry('generatedAssets.json'), registry('generatedComponents.json'),
 ]);
 
+/* The report the figures in src/data are transcribed from: change it with them. */
+const REPORT = 'SNCF Activity Report, September 2026';
 const stats: Record<string, { label: string; value: string; period?: string; source: string }> = {};
 for (const activity of DEFAULT_ACTIVITIES) {
   for (const metric of activity.dataPoints) {
-    stats[`activity:${activity.id}:metric:${statisticKey(metric.label)}`] = { ...metric, period: activity.period, source: 'SNCF activity report — existing website data' };
+    stats[`activity:${activity.id}:metric:${statisticKey(metric.label)}`] = { ...metric, period: activity.period, source: REPORT };
   }
   if (!activity.dataPoints.some(metric => metric.label === activity.headline.label)) {
-    stats[`activity:${activity.id}:headline`] = { ...activity.headline, period: activity.period, source: 'SNCF activity report — existing website data' };
+    stats[`activity:${activity.id}:headline`] = { ...activity.headline, period: activity.period, source: REPORT };
   }
 }
 for (const pillar of DEFAULT_EXTENDED_PILLARS) {
   for (const metric of pillar.stats) stats[`pillar:${pillar.id}:stat:${statisticKey(metric.label)}`] = {
-    ...metric, source: 'Existing website pillar summary',
+    ...metric, source: `${REPORT} (pillar summary)`,
   };
 }
 
@@ -46,6 +48,7 @@ const gallery = [
 const PAGE = { home: 'home', core: 'core-values', projects: 'projects', who: 'who-we-are', guiding: 'guiding-force', contribute: 'contribute', everywhere: 'everywhere', other: 'other' } as const;
 const COMPONENT_AREAS: Record<string, [string, string]> = {
   HeroSection: [PAGE.home, 'Hero'], WelcomeSplashScreen: [PAGE.home, 'Welcome screen'],
+  PillarPhotoMosaic: [PAGE.home, 'Hero · Heal emblem photos'], PillarHeroBackdrop: [PAGE.home, 'Hero · Heal background'],
   ImpactMosaic: [PAGE.home, 'Our work'], MosaicOverture: [PAGE.home, 'Our work'], MosaicChapter: [PAGE.home, 'Our work'], MosaicTile: [PAGE.home, 'Our work'],
   PillarModal: [PAGE.home, 'Pillar details pop-up'],
   EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
@@ -60,9 +63,23 @@ const COMPONENT_AREAS: Record<string, [string, string]> = {
   GalleryModal: [PAGE.everywhere, 'Gallery pop-up'], CardIllustration: [PAGE.everywhere, 'Gallery pop-up'], DevotionalPhotoCard: [PAGE.everywhere, 'Gallery pop-up'], DevotionalLightboxModal: [PAGE.everywhere, 'Gallery pop-up'],
   MediaGallery: [PAGE.other, 'Photo & film galleries'], PillarModelCard: [PAGE.other, '3D model cards'], projects: [PAGE.other, '3D model cards'], CMSPage: [PAGE.other, 'Extra pages'],
 };
-const excerpt = (value: string) => { const text = value.replace(/s+/g, ' ').trim(); return text.length > 70 ? `${text.slice(0, 69)}…` : text || '(blank)'; };
+const excerpt = (value: string) => { const text = value.replace(/\s+/g, ' ').trim(); return text.length > 70 ? `${text.slice(0, 69)}…` : text || '(blank)'; };
+/* The welcome intro is one component but three screens, plus the settings that
+   time it and centre its photographs: each part gets its own section, named so
+   an editor knows what a value means (the label then quotes the value). */
+const INTRO_SECTIONS: [RegExp, string][] = [
+  [/\.welcome-seconds$/, 'Intro · Welcome page time (seconds)'],
+  [/\.mission-seconds$/, 'Intro · Mission page time (seconds)'],
+  [/\.welcome-photo-focus$/, 'Intro · Welcome photo focus (across% down%)'],
+  [/\.satguru-photo-focus$/, 'Intro · Satguru portrait focus (across% down%)'],
+  [/\.(welcome-|next-label)/, 'Intro · Welcome page'],
+  [/\.(mission-|vision-|satguru-)/, 'Intro · Mission & vision page'],
+];
 const area = (key: string) => {
   if (key.startsWith('/images/petals/')) return { page: PAGE.home, section: 'Our work petals' };
+  if (key.includes('.WelcomeSplashScreen.')) {
+    return { page: PAGE.home, section: INTRO_SECTIONS.find(([pattern]) => pattern.test(key))?.[1] ?? 'Intro · First screen' };
+  }
   if (key.startsWith('/')) return { page: PAGE.everywhere, section: 'Shared images' };
   const parts = key.split('.');
   const component = parts[1] === 'Link' ? parts[2] : parts[1];

@@ -61,9 +61,11 @@ export const HeroPillarWordmark: React.FC<{ pillar: MosaicPillar }> = ({ pillar 
     width += glyph.width + 10;
     return { letter, glyph, x };
   });
+  /* Each letter sits in its own group, so the hero can animate the letter
+     itself without disturbing where the group places it. */
   return <svg className="heal-wordmark pillar-wordmark hero-pillar-wordmark" viewBox={`0 0 ${width - 7} 112`} preserveAspectRatio="xMinYMax meet" aria-hidden="true">
     <g fill="currentColor" fillRule="evenodd">
-      {letters.map(({ letter, glyph, x }, i) => <path key={`${letter}-${i}`} d={glyph.path} transform={`translate(${x} 0)`} />)}
+      {letters.map(({ letter, glyph, x }, i) => <g key={`${letter}-${i}`} transform={`translate(${x} 0)`} style={{ '--i': i } as React.CSSProperties}><path d={glyph.path} /></g>)}
     </g>
   </svg>;
 };
@@ -96,6 +98,7 @@ export const FlaredWordmark: React.FC<{ text: string; className?: string }> = ({
     if (widest < best) { best = widest; split = i; }
   }
   const lines = [words.slice(0, split), words.slice(split)].filter(line => line.length);
+  let running = 0;
   return <span className={className} role="img" aria-label={text}>
     {lines.map((line, li) => {
       let width = 3;
@@ -112,7 +115,7 @@ export const FlaredWordmark: React.FC<{ text: string; className?: string }> = ({
         <g fill="currentColor" fillRule="evenodd">
           {/* Each letter sits in its own positioned group, so a CSS animation on
               the letter itself can never override where it is placed. */}
-          {placed.map(({ letter, glyph, x }, i) => <g key={`${letter}-${i}`} transform={`translate(${x} 0)`}><path d={glyph.path} /></g>)}
+          {placed.map(({ letter, glyph, x }, i) => <g key={`${letter}-${i}`} transform={`translate(${x} 0)`} style={{ '--i': running++ } as React.CSSProperties}><path d={glyph.path} /></g>)}
         </g>
       </svg>;
     })}

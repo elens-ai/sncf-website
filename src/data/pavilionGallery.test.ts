@@ -38,11 +38,11 @@ test('each icon appears before all five gallery photographs', () => {
   }
 });
 
-test('all 20 illustrative images exist as local JPEG assets', async () => {
+test('all 20 foundation photographs exist as local JPEG assets, described for what they show', async () => {
   assert.equal(PAVILION_GALLERY.flat().length, 20);
   for (const photo of PAVILION_GALLERY.flat()) {
     const bytes = await readFile(new URL(`../../public${photo.src}`, import.meta.url));
     assert.equal(bytes.readUInt16BE(0), 0xffd8);
-    assert.match(photo.alt, /^Illustrative photograph:/);
+    assert.ok(photo.alt.length > 20 && !/illustrative/i.test(photo.alt), photo.alt);
   }
 });

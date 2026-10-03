@@ -1,41 +1,44 @@
 import { bindCMSData, resolvePavilionGallery } from '../cms/data';
 
 export const PAVILION_IDS = ['heal', 'enrich', 'empower', 'projects'] as const;
-// User-approved illustrative images, not photographs of SNCF programmes.
+/* The foundation's own photographs, five to a pillar, chosen from its 2026
+   exhibition archive (H:/For sncf exhibition 2026): each pillar's programmes
+   at work. [caption, alt] — the alt says what is happening in the frame. */
 const PHOTOS = [
   [
-    ['1576091160399-112ba8d25d1d', 'Care begins with a connection', 'A healthcare professional holding a phone'],
-    ['1579684385127-1ef15d508118', 'Working together for better health', 'A surgical team around an operating light'],
-    ['1559757148-5c350d0d3c56', 'Knowledge that supports care', 'An anatomical teaching model of the brain'],
-    ['1584516150909-c43483ee7932', 'The person at the heart of care', 'A doctor speaking with a patient'],
-    ['1582750433449-648ed127bb54', 'Ready to serve', 'A healthcare professional wearing a mask'],
+    ['Manav Ekta Diwas blood drive', 'Donors giving blood at the foundation’s Manav Ekta Diwas drive in Delhi, April 2026'],
+    ['A free eye checkup camp', 'An elderly woman tries trial lenses at a free eye checkup camp in Chembur, Mumbai'],
+    ['Health checkup at a school', 'A doctor examines a student at a health checkup camp in a Sant Nirankari Public School'],
+    ['A health screening camp', 'A volunteer checks an elderly woman’s blood pressure at a health screening camp'],
+    ['International Yoga Day', 'Participants meditating at the foundation’s International Yoga Day session in Ludhiana'],
   ],
   [
-    ['1503676260728-1c00da094a0b', 'Every beginning deserves a chance', 'Books and learning materials on a desk'],
-    ['1509062522246-3755977927d7', 'Learning, together', 'Students learning in a classroom'],
-    ['1513258496099-48168024aec0', 'Skills for a changing world', 'A learner studying with a laptop'],
-    ['1523580494863-6f3031224c94', 'Ideas grow when we share them', 'An audience at an educational gathering'],
-    ['1456513080510-7bf3a84b82f8', 'Opening doors through education', 'Open books and study notes'],
+    ['In the classroom', 'Students at their desks at Sant Nirankari Public School, Tilak Nagar'],
+    ['The computer lab', 'Students at work in the computer lab of Sant Nirankari Public School, Nirankari Colony'],
+    ['Music at NIMA', 'Students playing harmonium and tabla at the Nirankari Institute of Music and Art, Mumbai'],
+    ['Sant Nirankari Public School', 'Students of Sant Nirankari Public School, Avtar Enclave, in the school garden'],
+    ['A sewing centre', 'Women learning to stitch at the foundation’s sewing centre in Yamuna Nagar'],
   ],
   [
-    ['1464226184884-fa280b87c399', 'Growing a more sustainable future', 'A harvest of fresh vegetables'],
-    ['1416879595882-3373a0480b5b', 'Change starts in our hands', 'Gardening tools and soil'],
-    ['1466692476868-aef1dfb1e735', 'Small beginnings. Lasting growth.', 'Young seedlings growing in pots'],
-    ['1542601906990-b4d3fb778b09', 'A shared responsibility', 'Hands holding a small plant and soil'],
-    ['1441974231531-c6227db76b6e', 'Protecting what sustains us', 'Sunlight reaching a forest floor'],
+    ['World Environment Day, Tehri', 'Volunteers clearing litter from the shore of the Tehri lake on World Environment Day 2026'],
+    ['A sapling in Mussoorie', 'A volunteer plants a sapling on a hillside in Mussoorie on World Environment Day'],
+    ['Youth athletics', 'Athletes racing at Jawaharlal Nehru Stadium, Delhi, April 2026'],
+    ['Mass marriages', 'Couples at the foundation’s mass marriage ceremony, April 2026'],
+    ['Reduce, reuse, recycle', 'Students carrying reduce, reuse and recycle placards on World Environment Day in Shimla'],
   ],
   [
-    ['1473448912268-2022ce9509d8', 'Project Amrit — Clean Water, Pure Mind', 'A river surrounded by forest'],
-    ['1433086966358-54859d0ed716', 'Oneness Vann — a living forest', 'A waterfall in a green landscape'],
-    ['1447752875215-b2761acb3c5d', 'Making room for nature', 'A walkway through a forest'],
-    ['1500382017468-9049fed747ef', 'Resilient land. Stronger communities.', 'Farmland at sunset'],
-    ['1518837695005-2083093ee35b', 'A future worth protecting', 'Open water and gentle waves'],
+    ['Project Amrit, Mantova', 'Project Amrit volunteers clearing a riverbank in Mantova, Italy'],
+    ['Oneness Vann, Solapur', 'Women planting saplings for a Oneness Vann micro-forest in Solapur'],
+    ['Project Amrit volunteers', 'Project Amrit volunteers in Mantova with the litter they gathered'],
+    ['Planting a Oneness Vann', 'Volunteers planting beneath the Oneness Vann banner in Solapur'],
+    ['Project Amrit, Christchurch', 'Project Amrit volunteers by the water in Christchurch, New Zealand'],
   ],
 ];
-export const DEFAULT_PAVILION_GALLERY = PAVILION_IDS.map((id, room) => PHOTOS[room].map(([photo, caption, alt], i) => ({
-  id: `${id}-gallery-${i + 1}`, src: `/images/pavilion/${id}-${i + 1}.jpg`,
-  caption, alt: `Illustrative photograph: ${alt}`, source: `https://images.unsplash.com/photo-${photo}`,
-})));
+/* `source` is the photograph's credit link: the foundation's own file. */
+export const DEFAULT_PAVILION_GALLERY = PAVILION_IDS.map((id, room) => PHOTOS[room].map(([caption, alt], i) => {
+  const src = `/images/pavilion/${id}-${i + 1}.jpg`;
+  return { id: `${id}-gallery-${i + 1}`, src, caption, alt, source: src };
+}));
 
 export let PAVILION_GALLERY = bindCMSData(DEFAULT_PAVILION_GALLERY, resolvePavilionGallery, value => { PAVILION_GALLERY = value; });
 

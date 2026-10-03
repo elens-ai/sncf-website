@@ -86,7 +86,9 @@ export const MosaicChapter = React.memo(function MosaicChapter({
   const leftCount = Math.max(1, Math.ceil(activities.length / 2));
   const rightCount = Math.max(1, Math.floor(activities.length / 2));
   const rows = leftCount * rightCount;
-  const marked = activities.some(activity => activity.images.length > 0);
+  /* How many programmes show their own photograph; the rest borrow one of the
+     pillar's, marked illustrative on the tile. */
+  const own = activities.filter(activity => activity.images.length > 0).length;
 
   return (
     <article className="mosaic-chapter activity-chapter" data-stage={id} data-current={live}
@@ -166,7 +168,7 @@ export const MosaicChapter = React.memo(function MosaicChapter({
 
       <footer className="activity-chapter-footer">
         <span><span className="activity-live-dot" aria-hidden="true" />{getCMSCopy('copy.MosaicChapter.discover', 'Every activity, a story. Select one to discover more.')}<ArrowUpRight size={13} aria-hidden="true" /></span>
-        <small>{marked ? getCMSCopy('copy.ImpactMosaic.d51afc068025', 'Photography is illustrative unless marked.') : getCMSCopy('copy.ImpactMosaic.a216e016d42c', 'Photography is illustrative.')}</small>
+        <small>{own === activities.length ? getCMSCopy('copy.MosaicChapter.ownPhotos', 'Photographs from the foundation’s own work.') : own > 0 ? getCMSCopy('copy.MosaicChapter.mostlyOwnPhotos', 'Photographs from the foundation’s work; a tile marked illustrative shows another programme.') : getCMSCopy('copy.ImpactMosaic.a216e016d42c', 'Photography is illustrative.')}</small>
       </footer>
     </article>
   );

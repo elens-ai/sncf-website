@@ -11,11 +11,9 @@ import './value-analytics.css';
  *
  * Every chart here is drawn from figures the foundation reports, read out
  * of the activity's own data points (so a CMS edit flows through), and each
- * card carries the activity's reporting date. Nothing is estimated:
+ * card carries the activity's reporting date. Only the report's latest
+ * figures are drawn (no earlier periods), and nothing is estimated:
  *
- *  - a GROWTH pair shows two figures the report gives for two dates, and the
- *    difference between them is either the report's own "added" figure or
- *    plain subtraction, labelled as such;
  *  - a DONUT only ever divides one measure at one date (facility types,
  *    youth by trade, volunteers by site) — never figures from different
  *    sheets;
@@ -94,26 +92,6 @@ export const Donut: React.FC<{ segments: { label: string; value: string }[]; cen
   );
 };
 
-/** Two figures the report gives for two dates. */
-export const Growth: React.FC<{ label: string; before: { value: string; when: string }; after: { value: string; when: string }; added?: string; addedNote: string }> = ({ label, before, after, added, addedNote }) => {
-  const max = Math.max(1, num(before.value), num(after.value));
-  const delta = added ?? group(num(after.value) - num(before.value));
-  return (
-    <div className="va-growth">
-      <p className="va-growth-label">{label}</p>
-      <div className="va-growth-bars">
-        {[before, after].map((step, i) => (
-          <div key={step.when} className="va-growth-step" style={{ '--v': num(step.value) / max, '--d': `${i * 180}ms` } as React.CSSProperties}>
-            <Figure value={step.value} size="sm" />
-            <span className="va-growth-bar"><span /></span>
-            <span className="va-growth-when">{step.when}</span>
-          </div>
-        ))}
-      </div>
-      <p className="va-growth-delta"><strong>+{delta}</strong><span>{addedNote}</span></p>
-    </div>
-  );
-};
 
 /** A grid of symbols, one per `unit`. */
 export const Pictogram: React.FC<{ total: string; unit: number; icon?: LucideIcon; legend: string }> = ({ total, unit, icon: Icon, legend }) => {
@@ -163,11 +141,10 @@ const HealAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelect }
   const facilities = ['Allopathic', 'Homeopathic', 'Oneness labs', 'Dental centres', 'Eye centres', 'Physiotherapy', 'X-ray centres', 'Chiropractic', 'Oneness pharmacy']
     .map(label => ({ label, value: v('health-centre', label) })).filter(s => s.value);
   const listed = group(facilities.reduce((sum, s) => sum + num(s.value), 0));
-  const bloodBankYears = Array.from({ length: 11 }, (_, i) => String(2016 + i));
   return <>
-    <Card title={getCMSCopy("copy.ValueAnalytics.heal1", "Blood donation, April 2025 to March 2026")} period={w('blood-donation')} span={3} activityId="blood-donation" explorerId={explorerId} onSelect={onSelect}>
-      <Growth label="Units collected" before={{ value: v('blood-donation', 'Units — April 2025'), when: 'April 2025' }} after={{ value: v('blood-donation', 'Units collected'), when: 'March 2026' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
-      <Growth label="Camps organised" before={{ value: v('blood-donation', 'Camps — April 2025'), when: 'April 2025' }} after={{ value: v('blood-donation', 'Camps organised'), when: 'March 2026' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
+    <Card title={getCMSCopy("copy.ValueAnalytics.healDonation", "Blood donation camps")} period={w('blood-donation')} span={3} activityId="blood-donation" explorerId={explorerId} onSelect={onSelect}>
+      <div className="va-money"><Figure value={v('blood-donation', 'Units collected')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.unitsIn", "units collected, in")} <Figure value={v('blood-donation', 'Camps organised')} size="md" /> {getCMSCopy("copy.ValueAnalytics.camps", "camps")}</span></div>
+      <Pictogram total={v('blood-donation', 'Units collected')} unit={100000} icon={Droplet} legend={getCMSCopy("copy.ValueAnalytics.unitLegend", "Each drop stands for 100,000 units collected")} />
     </Card>
     <Card title={getCMSCopy("copy.ValueAnalytics.heal2", "One unit, three lives")} note={getCMSCopy("copy.ValueAnalytics.heal2note", "The report's potentially saved lives, against the units collected.")} period={w('blood-donation')} span={3} activityId="blood-donation" explorerId={explorerId} onSelect={onSelect}>
       <div className="va-ratio">
@@ -183,13 +160,13 @@ const HealAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelect }
       <Donut segments={facilities} centre={{ value: listed, label: getCMSCopy("copy.ValueAnalytics.listed", "facilities listed") }} />
       <div className="va-aside"><Ambulance size={16} strokeWidth={1.6} aria-hidden="true" /><Figure value={v('health-centre', 'Ambulances')} size="sm" /> Ambulances</div>
     </Card>
-    <Card title={getCMSCopy("copy.ValueAnalytics.heal5", "A year of health checkups")} period={w('health-checkup')} span={2} activityId="health-checkup" explorerId={explorerId} onSelect={onSelect}>
-      <Growth label="Patients treated" before={{ value: v('health-checkup', 'Patients — September 2025'), when: 'September 2025' }} after={{ value: v('health-checkup', 'Patients treated'), when: 'September 2026' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
-      <Growth label="Camps organised" before={{ value: v('health-checkup', 'Camps — September 2025'), when: 'September 2025' }} after={{ value: v('health-checkup', 'Camps organised'), when: 'September 2026' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
+    <Card title={getCMSCopy("copy.ValueAnalytics.healCheckups", "Health checkup camps")} period={w('health-checkup')} span={2} activityId="health-checkup" explorerId={explorerId} onSelect={onSelect}>
+      <div className="va-money"><Figure value={v('health-checkup', 'Patients treated')} size="lg" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.patientsIn", "patients treated, in")} <Figure value={v('health-checkup', 'Camps organised')} size="md" /> {getCMSCopy("copy.ValueAnalytics.camps", "camps")}</span></div>
+      <Pictogram total={v('health-checkup', 'Patients treated')} unit={25000} icon={Users} legend={getCMSCopy("copy.ValueAnalytics.patientLegend", "Each figure stands for 25,000 patients")} />
     </Card>
-    <Card title={getCMSCopy("copy.ValueAnalytics.heal6", "The blood bank, year by year")} note={getCMSCopy("copy.ValueAnalytics.heal6note", "Units collected each year, with the camps held; the years sum to the total.")} period={w('blood-bank')} span={6} activityId="blood-bank" explorerId={explorerId} onSelect={onSelect}>
-      <Bars items={bloodBankYears.map(year => ({ label: year, value: v('blood-bank', `Units — ${year}`), note: `${v('blood-bank', `Camps — ${year}`)} camps` })).filter(item => item.value)} />
-      <div className="va-aside"><Droplet size={16} strokeWidth={1.6} aria-hidden="true" /><Figure value={v('blood-bank', 'Units')} size="sm" /> {getCMSCopy("copy.ValueAnalytics.bloodBankTotal", "units in all, from")} {v('blood-bank', 'Camps')} {getCMSCopy("copy.ValueAnalytics.camps", "camps")}</div>
+    <Card title={getCMSCopy("copy.ValueAnalytics.healBloodBank", "The blood bank")} period={w('blood-bank')} span={6} activityId="blood-bank" explorerId={explorerId} onSelect={onSelect}>
+      <div className="va-money"><Figure value={v('blood-bank', 'Units')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.bloodBankUnits", "units collected by the foundation’s own blood bank, in")} <Figure value={v('blood-bank', 'Camps')} size="md" /> {getCMSCopy("copy.ValueAnalytics.camps", "camps")}</span></div>
+      <Pictogram total={v('blood-bank', 'Units')} unit={2500} icon={Droplet} legend={getCMSCopy("copy.ValueAnalytics.bankLegend", "Each drop stands for 2,500 units")} />
     </Card>
   </>;
 };
@@ -220,9 +197,9 @@ const EnrichAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelect
         { icon: GraduationCap, value: v('schools-colleges', 'Colleges'), label: 'Colleges' },
       ]} />
     </Card>
-    <Card title={getCMSCopy("copy.ValueAnalytics.enrich4", "NIMA, six months on")} period={w('skill-nima')} span={3} activityId="skill-nima" explorerId={explorerId} onSelect={onSelect}>
-      <Growth label="NIMA centres" before={{ value: v('skill-nima', 'Centres — March 2025'), when: 'March 2025' }} after={{ value: v('skill-nima', 'NIMA centres'), when: 'September 2025' }} addedNote={getCMSCopy("copy.ValueAnalytics.computed", "difference between the two reported figures")} />
-      <div className="va-aside"><Users size={16} strokeWidth={1.6} aria-hidden="true" /><Figure value={v('skill-nima', 'Added Mar–Sep 2025')} size="sm" plain /> {getCMSCopy("copy.ValueAnalytics.addedYouth", "added in the same six months, as reported")}</div>
+    <Card title={getCMSCopy("copy.ValueAnalytics.enrichNima", "NIMA skill centres")} period={w('skill-nima')} span={3} activityId="skill-nima" explorerId={explorerId} onSelect={onSelect}>
+      <div className="va-money"><Figure value={v('skill-nima', 'Youth benefitted')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.youthIn", "youth benefitted, in")} <Figure value={v('skill-nima', 'NIMA centres')} size="md" /> {getCMSCopy("copy.ValueAnalytics.centres", "centres")}</span></div>
+      <Pictogram total={v('skill-nima', 'Youth benefitted')} unit={250} icon={Users} legend={getCMSCopy("copy.ValueAnalytics.youthLegend", "Each figure stands for 250 youth")} />
     </Card>
     <Card title={getCMSCopy("copy.ValueAnalytics.enrich5", "Scholarships")} period={w('scholarships')} span={6} activityId="scholarships" explorerId={explorerId} onSelect={onSelect}>
       <div className="va-money"><Figure value={v('scholarships', 'Disbursed')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.disbursedTo", "disbursed, to")} <Figure value={v('scholarships', 'Scholarship students')} size="md" /> {getCMSCopy("copy.ValueAnalytics.students", "scholarship students")}</span></div>
@@ -247,7 +224,7 @@ const EmpowerAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelec
     <Card title={getCMSCopy("copy.ValueAnalytics.empower3", "Sites cleaned")} period={w('cleanliness')} span={2} activityId="cleanliness" explorerId={explorerId} onSelect={onSelect}>
       <Bars items={[{ label: 'Waterbodies', value: v('cleanliness', 'Waterbodies') }, { label: 'Hospitals', value: v('cleanliness', 'Hospitals') }, { label: 'Railway stations', value: v('cleanliness', 'Railway stations') }]} />
     </Card>
-    <Card title={getCMSCopy("copy.ValueAnalytics.empower4", "COVID-19 relief, 2022")} period={w('covid-relief')} span={4} activityId="covid-relief" explorerId={explorerId} onSelect={onSelect}>
+    <Card title={getCMSCopy("copy.ValueAnalytics.empowerCovid", "COVID-19 relief")} period={w('covid-relief')} span={4} activityId="covid-relief" explorerId={explorerId} onSelect={onSelect}>
       <div className="va-split">
         <Tiles items={[
           { icon: Package, value: v('covid-relief', 'Food packets'), label: 'Food packets' },
@@ -261,8 +238,8 @@ const EmpowerAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelec
       </div>
     </Card>
     <Card title={getCMSCopy("copy.ValueAnalytics.empower5", "Mass marriages since 1998")} period={w('mass-marriages')} span={3} activityId="mass-marriages" explorerId={explorerId} onSelect={onSelect}>
-      <div className="va-money"><Figure value={v('mass-marriages', 'Couples married')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.couplesIn", "couples married, in")} <Figure value={v('mass-marriages', 'Events (1998–2025)')} size="md" /> {getCMSCopy("copy.ValueAnalytics.events", "events")}</span></div>
-      <div className="va-timeline" aria-hidden="true"><span className="va-timeline-fill" /><span className="va-timeline-year">1998</span><span className="va-timeline-year">2025</span></div>
+      <div className="va-money"><Figure value={v('mass-marriages', 'Couples married')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.couplesIn", "couples married, in")} <Figure value={v('mass-marriages', 'Events held')} size="md" /> {getCMSCopy("copy.ValueAnalytics.events", "events")}</span></div>
+      <div className="va-timeline" aria-hidden="true"><span className="va-timeline-fill" /><span className="va-timeline-year">1998</span><span className="va-timeline-year">{w('mass-marriages').match(/\d{4}/)?.[0]}</span></div>
     </Card>
     <Card title={getCMSCopy("copy.ValueAnalytics.empower6", "Financial support")} period={w('financial-support')} span={3} activityId="financial-support" explorerId={explorerId} onSelect={onSelect}>
       <Bars items={[{ label: 'Financial help', value: v('financial-support', 'Financial help') }, { label: 'Disaster relief & fund', value: v('financial-support', 'Disaster relief & fund') }]} />

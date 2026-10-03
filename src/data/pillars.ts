@@ -37,13 +37,14 @@ export const DEFAULT_PILLARS: PillarState[] = [
     cardImageAlt: 'Skill training classroom',
     shortTagline: 'Come for an evening of purpose — see how ENRICH comes to life.',
     emblemCaption: 'Possibility, on every page.',
-    /* Figures from the SNCF activity report, March 2026. Youth skilled sums
-       the NIMA, sewing and beautician programmes (3,257 + 15,300 + 601). */
+    /* Figures from the SNCF activity report, September 2026. Youth skilled
+       sums the NIMA, sewing and beautician programmes (4,114 + 16,500 + 631
+       = 21,245); schools & colleges is 14 schools and 1 college. */
     stats: [
-      { label: 'Students Benefitted', value: '209,038+' },
-      { label: 'Youth Skilled', value: '19,150+' },
-      { label: 'Scholarship Students', value: '1,631' },
-      { label: 'Schools & Colleges', value: '14' }
+      { label: 'Students Benefitted', value: '217,723+' },
+      { label: 'Youth Skilled', value: '21,200+' },
+      { label: 'Scholarship Students', value: '1,829' },
+      { label: 'Schools & Colleges', value: '15' }
     ],
     keyHighlights: [
       'Sant Nirankari Vocational Training Centers offering tailoring, computer science, and technical skills.',
@@ -63,12 +64,14 @@ export const DEFAULT_PILLARS: PillarState[] = [
     cardImageAlt: 'Youth volunteers planting trees',
     shortTagline: 'Come for an evening of purpose — see how EMPOWER comes to life.',
     emblemCaption: 'Together, we rise.',
-    /* Figures from the SNCF activity report, March 2026. */
+    /* Figures from the SNCF activity report, September 2026: 2,642,277 trees
+       planted in 4,218 drives (3,518 plantation drives and 700 Oneness Vann
+       sites, as the dashboard counts them), 35,223,330 cleanliness manhours. */
     stats: [
       { label: 'Trees Planted', value: '2.6M+' },
-      { label: 'Cleanliness Manhours', value: '35.1M+' },
-      { label: 'Couples Married', value: '5,317' },
-      { label: 'Drives Held', value: '3,900+' }
+      { label: 'Cleanliness Manhours', value: '35.2M+' },
+      { label: 'Couples Married', value: '5,652' },
+      { label: 'Drives Held', value: '4,200+' }
     ],
     keyHighlights: [
       'Mega cleanliness drives across railway stations, public heritage sites, and riverbanks.',
@@ -95,16 +98,16 @@ export const DEFAULT_PILLARS: PillarState[] = [
     cardImageAlt: 'Sant Nirankari Health City campus',
     shortTagline: 'Come for an evening of purpose — see how PROJECTS comes to life.',
     emblemCaption: 'One purpose. Lasting impact.',
-    /* Figures from the SNCF activity report, March 2026. */
+    /* Figures from the SNCF activity report, September 2026. */
     stats: [
       { label: 'Water Bodies Revived', value: '5,962' },
-      { label: 'Oneness Vann Plants', value: '550,000' },
+      { label: 'Oneness Vann Plants', value: '600,330' },
       { label: 'Cities Reached', value: '3,460' },
       { label: 'Adopted Villages', value: '4' }
     ],
     keyHighlights: [
       'Sant Nirankari Health City: A 1,000+ bed multispecialty super-hospital in North Delhi.',
-      'Project Amrit: "Clean Water, Pure Mind" cleaning 1,100+ water bodies across 27 states.',
+      'Project Amrit: "Clean Water, Pure Mind" cleaning 5,962 water bodies across 28 states and UTs.',
       'Oneness Vann: Developing indigenous dense urban forests to combat air pollution.',
       'Watershed & Soil Conservation: Rejuvenating arid zones for sustainable local agriculture.'
     ],
@@ -127,14 +130,14 @@ export const DEFAULT_EXTENDED_PILLARS: PillarState[] = [
     accentA: '#00796b',
     accentB: '#4db6ac',
     headline: 'Project Amrit: Clean Water, Pure Mind',
-    body: 'A massive nationwide initiative to clean, restore, and safeguard natural water bodies, rivers, lakes, and coastal shores across 27 states.',
+    body: 'A massive nationwide initiative to clean, restore, and safeguard natural water bodies, rivers, lakes, and coastal shores across 28 states and UTs.',
     cardImageAlt: 'Volunteers cleaning lake shore',
     shortTagline: 'Come for an evening of purpose — see how AMRIT comes to life.',
     stats: [
-      { label: 'Water Bodies Cleaned', value: '1,100+' },
-      { label: 'Participating States', value: '27' },
+      { label: 'Water Bodies Cleaned', value: '5,962' },
+      { label: 'Participating States', value: '28' },
       { label: 'Tons Waste Removed', value: '15,000+' },
-      { label: 'Water Volunteers', value: '300,000+' }
+      { label: 'Water Volunteers', value: '3.9M+' }
     ],
     keyHighlights: [
       'Pan-India water conservation and rejuvenating riverfronts, ponds, and reservoirs.',

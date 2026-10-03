@@ -157,7 +157,7 @@ return (
             date — so the ledger states its period once rather than per plate. */}
         {RELIEF.length > 0 && (
           <CMSSection id="GuidingForcePage.gf-relief"><section id="gf-relief" className="gf-relief" aria-labelledby="gf-relief-title" data-reveal>
-            <p className="ed-eyebrow">{getCMSCopy("copy.GuidingForcePage.b19c990fc4cd", "Historical response · 2022 total")}</p>
+            <p className="ed-eyebrow">{getCMSCopy("copy.GuidingForcePage.reliefEyebrow", "Pandemic response")}{COVID?.period ? ` · ${COVID.period}` : ''}</p>
             <h3 id="gf-relief-title" className="cv-sub cv-sub-wide font-artistic-display">{getCMSCopy("copy.GuidingForcePage.b9c6d4099b41", "The COVID-19 emergency, as it was counted")}</h3>
             <ul className="cv-ledger" aria-label={getCMSCopy("copy.GuidingForcePage.747466c9112f", "COVID-19 relief figures")}>
               {RELIEF.map((d) => (

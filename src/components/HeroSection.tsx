@@ -280,7 +280,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               style={{ transitionDelay: phase === 'exiting' ? '90ms' : '0ms' }}
               className={`font-dancing-script pillar-script-name font-bold text-white leading-tight sm:leading-none mb-1 sm:mb-2 drop-shadow-md select-none transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
-              {(displayPillar.id === 'heal' || displayPillar.id === 'enrich' || displayPillar.id === 'empower' || displayPillar.id === 'projects') ? <><span className="sr-only">{displayPillar.label}</span>{displayPillar.id === 'heal' ? <HeroHealWordmark /> : <HeroPillarWordmark pillar={displayPillar.id} />}</> : getPillarScriptTitle(displayPillar)}
+              {(displayPillar.id === 'heal' || displayPillar.id === 'enrich' || displayPillar.id === 'empower' || displayPillar.id === 'projects') ? <><span className="sr-only">{displayPillar.label}</span>{displayPillar.id === 'heal' ? <HeroHealWordmark /> : <HeroPillarWordmark key={displayPillar.id} pillar={displayPillar.id} />}</> : getPillarScriptTitle(displayPillar)}
             </h2>
 
             {/* 2. Main Headline (Delay: 50ms) */}

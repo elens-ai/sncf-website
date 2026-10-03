@@ -1,4 +1,5 @@
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
+import { introFocus, introSeconds } from '../cms/introSettings';
 import { FlaredWordmark } from './PillarWordmark';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
@@ -13,6 +14,8 @@ interface FlightGeometry {
   dx: number;
   dy: number;
   scale: number;
+  ms: number;
+  ease: string;
 }
 
 /** Where the logo + tagline group settles on the welcome page. */
@@ -45,28 +48,43 @@ const HOLD_MS = 4700;
 const WHITE_FADE_MS = 2200;
 const BRAND_MOVE_MS = 1600;
 const BRAND_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
-/* How long each page stays before moving on by itself. The copy animates in
-   during the first few seconds (timings in index.css: WELCOME PAGE / MISSION
-   PAGE) and then stays readable; the arrow button moves on at any time. */
-const WELCOME_MS = 11000;
-const MISSION_MS = 24000;
+/* How long each page stays before moving on by itself, in seconds: editable in
+   the CMS ("Intro · … time"). The copy animates in during the first few seconds
+   (timings in index.css: WELCOME PAGE / MISSION PAGE) and then stays readable;
+   the arrow button moves on at any time. */
+const WELCOME_SECONDS = 11;
+const MISSION_SECONDS = 24;
+/* Where the welcome photo and the Satguru portrait are centred: editable in the
+   CMS as "across% down%", for when an editor swaps either picture. */
+const WELCOME_PHOTO_FOCUS = { x: '47%', y: '46%' };
+const PORTRAIT_FOCUS = { x: '50%', y: '20%' };
 /* Logo flight to the header slot, and the splash fading to the hero. */
 const FLY_MS = 1050;
 const FLY_EASE = 'cubic-bezier(0.3, 0.7, 0.25, 1)';
+/* The glide onto the foundation's name, as the welcome page dissolves: slower,
+   easing in and out like a camera move. */
+const TITLE_FLY_MS = 1500;
+const TITLE_FLY_EASE = 'cubic-bezier(0.65, 0, 0.25, 1)';
 const LEAVE_MS = 1000;
 /* The header logo is revealed under the splash copy as the page fades, so the
    swap reads as one motion rather than a cut. */
 const HANDOFF_FADE_MS = 300;
 /* Share of the viewport height the logo + tagline may take on the welcome
    page, and the size limits for that group (relative to the first screen). */
-const BRAND_SHARE_OF_VIEWPORT = 0.28;
-const BRAND_SCALE_MIN = 0.3;
+const BRAND_SHARE_OF_VIEWPORT = 0.24;
+const BRAND_SCALE_MIN = 0.22;
 const BRAND_SCALE_MAX = 0.5;
 
 export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   onExitStart,
   onComplete,
 }) => {
+  const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
+  const welcomeMs = introSeconds(c("welcome-seconds", "11"), WELCOME_SECONDS);
+  const missionMs = introSeconds(c("mission-seconds", "24"), MISSION_SECONDS);
+  const photoFocus = introFocus(c("welcome-photo-focus", "47% 46%"), WELCOME_PHOTO_FOCUS);
+  const portraitFocus = introFocus(c("satguru-photo-focus", "50% 20%"), PORTRAIT_FOCUS);
+
   const [stage, setStage] = useState<Stage>('intro');
   const [brandScale, setBrandScale] = useState(1);
   const [brandHeight, setBrandHeight] = useState(0);
@@ -146,7 +164,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     baseRef.current = { rect, groupScale };
     return baseRef.current;
   };
-  const flyTo = (d: DOMRect) => {
+  const flyTo = (d: DOMRect, ms = FLY_MS, ease = FLY_EASE) => {
     const base = measureBase();
     if (!base) return;
     const s = base.rect;
@@ -154,6 +172,8 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
       dx: (d.left + d.width / 2 - (s.left + s.width / 2)) / base.groupScale,
       dy: (d.top + d.height / 2 - (s.top + s.height / 2)) / base.groupScale,
       scale: d.width / s.width,
+      ms,
+      ease,
     });
   };
 
@@ -166,7 +186,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     if (flightRef.current !== 'none' || !slot?.width) return;
     flightRef.current = 'title';
     onExitStartRef.current();
-    flyTo(slot);
+    flyTo(slot, TITLE_FLY_MS, TITLE_FLY_EASE);
   }, []);
 
   /* Sends the logo to the header slot, and places the S.N.C.F monogram exactly
@@ -217,26 +237,25 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
      Rescheduled per stage, so skipping a page restarts the next one's clock. */
   useEffect(() => {
     const next = stage === 'intro' ? [beginWelcome, HOLD_MS]
-      : stage === 'welcome' ? [beginMission, WELCOME_MS]
-      : stage === 'mission' ? [beginLeave, MISSION_MS]
+      : stage === 'welcome' ? [beginMission, welcomeMs]
+      : stage === 'mission' ? [beginLeave, missionMs]
       : null;
     if (!next) return;
     const timer = setTimeout(next[0] as () => void, next[1] as number);
     return () => clearTimeout(timer);
-  }, [stage, beginWelcome, beginMission, beginLeave]);
+  }, [stage, beginWelcome, beginMission, beginLeave, welcomeMs, missionMs]);
 
   // Distant last resort, in case a stage's timer never fires.
   useEffect(() => {
-    const finishTimer = setTimeout(completeOnce, HOLD_MS + WELCOME_MS + MISSION_MS + FLY_MS + 6000);
+    const finishTimer = setTimeout(completeOnce, HOLD_MS + welcomeMs + missionMs + FLY_MS + 6000);
     return () => clearTimeout(finishTimer);
-  }, [completeOnce]);
+  }, [completeOnce, welcomeMs, missionMs]);
 
   const advance = () => (stage === 'welcome' ? beginMission() : beginLeave());
 
   const revealed = stage !== 'intro';
   const onMission = stage === 'mission' || stage === 'leaving';
   const brandTransform = placement ? `translateY(${placement.dy}px) scale(${placement.scale})` : 'none';
-  const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
 
   return (
     <div
@@ -248,22 +267,27 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         stage === 'leaving' ? 'pointer-events-none' : 'pointer-events-auto'
       }`}
     >
-      {/* Welcome and mission pages: one full-screen photo under the white first
-          screen, uncovered as the white fades; on leaving it fades as a whole
-          to reveal the hero. Opacity fades are GPU-composited, so they cost the
-          same at any screen size. */}
+      {/* Welcome page: one full-screen photo under the white first screen,
+          uncovered as the white fades. It dissolves away as the mission page
+          arrives, leaving that page on deep green (index.css: HAND-OFF); on
+          leaving, the whole layer fades to reveal the hero. Opacity fades are
+          GPU-composited, so they cost the same at any screen size. */}
       <div
         id="splash-welcome-photo"
         className={`splash-welcome-photo absolute inset-0 ${revealed ? 'is-revealed' : ''} ${onMission ? 'is-mission' : ''}`}
         style={{
           opacity: stage === 'leaving' ? 0 : 1,
           transition: `opacity ${LEAVE_MS}ms ease-in-out`,
-        }}
+          '--focus-x': photoFocus.x,
+          '--focus-y': photoFocus.y,
+        } as React.CSSProperties}
       >
+        <div className="splash-camera absolute inset-0">
         <div
           className="splash-welcome-photo-image absolute inset-0"
           style={{ backgroundImage: `url("${resolveCMSAsset("asset.WelcomeSplashScreen.welcome-photo", "/images/welcome-volunteers.jpg")}")` }}
         />
+        </div>
         <div className="splash-mission-shade" aria-hidden="true" />
         {revealed && (
           <div className="splash-welcome-content" data-gone={onMission}>
@@ -315,7 +339,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                 </section>
               </div>
             </div>
-            <figure className="splash-satguru">
+            <figure className="splash-satguru" style={{ '--portrait-focus': `${portraitFocus.x} ${portraitFocus.y}` } as React.CSSProperties}>
               <div className="splash-satguru-frame">
                 <img
                   src={resolveCMSAsset("asset.WelcomeSplashScreen.satguru-photo", "/images/satguru-mata-sudiksha-ji-cutout.webp")}
@@ -365,20 +389,23 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
           transition: `transform ${BRAND_MOVE_MS}ms ${BRAND_EASE}`,
         }}
       >
-        {/* SNCF logo, rendered exactly as in the header */}
+        {/* SNCF logo, rendered exactly as in the header: a white disc sized to
+            the emblem's outer ring (not the whole image box), so its see-through
+            parts stay white over the photo without a white rim around the ring. */}
         <img
           id="splash-sncf-logo"
           src={resolveCMSAsset("asset.WelcomeSplashScreen.25aa35189463", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp")}
           alt={getCMSCopy("copy.WelcomeSplashScreen.44e3df1518ac", "Sant Nirankari Charitable Foundation Logo")}
-          className="object-contain rounded-full bg-white"
+          className="object-contain"
           style={{
             width: 'clamp(140px, 22vw, 280px)',
             height: 'clamp(140px, 22vw, 280px)',
+            background: 'radial-gradient(circle closest-side, #fff 99%, transparent 100%) 37.2% 38.6% / 92.8% 92.8% no-repeat',
             ...(flight
               ? {
                   transform: `translate(${flight.dx}px, ${flight.dy}px) scale(${flight.scale})`,
                   opacity: logoLanded ? 0 : 1,
-                  transition: `transform ${FLY_MS}ms ${FLY_EASE}, opacity ${HANDOFF_FADE_MS}ms ease-out`,
+                  transition: `transform ${flight.ms}ms ${flight.ease}, opacity ${HANDOFF_FADE_MS}ms ease-out`,
                   willChange: 'transform, opacity',
                 }
               : {}),

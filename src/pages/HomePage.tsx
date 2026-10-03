@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { CMSSection } from '../cms/CMSContentProvider';
+import { CMSSection, useCMSRevision } from '../cms/CMSContentProvider';
+import { getCMSSnapshot } from '../cms/runtime';
 import { CMSLayout } from '../components/CMSLayout';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { usePageMotion } from '../hooks/useSectionActivity';
@@ -36,6 +37,8 @@ const parseInviteParam = (): string | null => {
 };
 
 const WELCOME_SESSION_KEY = 'sncf.welcome.shown';
+/* Editors can switch the whole welcome intro off under "Sections on/off". */
+const introSwitchedOff = () => getCMSSnapshot().components?.['home.welcome']?.enabled === false;
 let welcomeShownInMemory = false;
 const welcomeWasShown = () => {
   try { return welcomeShownInMemory || sessionStorage.getItem(WELCOME_SESSION_KEY) === '1'; }
@@ -52,10 +55,16 @@ export default function HomePage() {
   const [splashPhase, setSplashPhase] = useState<'showing' | 'exiting' | 'done'>(() =>
     /* partner-invite: the CSR desk's personalised links (PartnersSection)
        skip the splash for the same reason event passes do */
-    welcomeWasShown() || parseInviteParam() || new URLSearchParams(window.location.search).has('partner-invite')
+    welcomeWasShown() || introSwitchedOff() || parseInviteParam() || new URLSearchParams(window.location.search).has('partner-invite')
       ? 'done'
       : 'showing',
   );
+  /* A first visit may start before the CMS publication arrives: if it turns
+     out the intro is switched off, close it as soon as that is known. */
+  const cmsRevision = useCMSRevision();
+  useEffect(() => {
+    if (splashPhase === 'showing' && introSwitchedOff()) setSplashPhase('done');
+  }, [cmsRevision, splashPhase]);
   useEffect(() => {
     if (splashPhase === 'done') return;
     welcomeShownInMemory = true;
