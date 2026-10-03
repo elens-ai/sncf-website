@@ -2,7 +2,7 @@ import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, CalendarDays, Search } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, BookOpen, CalendarDays, Heart, Search, Sprout, type LucideIcon } from 'lucide-react';
 import { ValueCompass } from '../components/ValueCompass';
 import { ValueAnalytics } from '../components/ValueAnalytics';
 import { HealStory } from '../components/HealStory';
@@ -44,9 +44,21 @@ const ValuePhotoCollage: React.FC<{ id: Cornerstone; label: string }> = ({ id, l
   </figure>
 );
 
+/* The three ways, one to each cornerstone, in the compass's order and icons. */
+const WAYS: { id: Cornerstone; icon: LucideIcon; text: () => string }[] = [
+  { id: 'heal', icon: Heart, text: () => getCMSCopy("copy.CoreValuesPage.way-heal", "Care that reaches further.") },
+  { id: 'enrich', icon: BookOpen, text: () => getCMSCopy("copy.CoreValuesPage.way-enrich", "Learning that opens doors.") },
+  { id: 'empower', icon: Sprout, text: () => getCMSCopy("copy.CoreValuesPage.way-empower", "Communities that grow stronger.") },
+];
+
+/** The cover: the three ways, set as a legend for the compass beside them.
+    Pointing at a way (or moving to it by keyboard) turns the compass to its
+    cornerstone and holds it there; choosing it goes to that chapter. */
 const ValueCover: React.FC = () => {
   useCMSRevision();
   const [choice, setChoice] = useState<Cornerstone>('heal');
+  const [pointing, setPointing] = useState(false);
+  const [focused, setFocused] = useState(false);
   const root = useRef<HTMLElement>(null);
   const active = useSectionActivity(root);
   const pillar = PILLARS.find(p => p.id === choice)!;
@@ -54,10 +66,30 @@ const ValueCover: React.FC = () => {
     <div className="values-cover-copy">
       <p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.bb5f4b8db550", "One purpose. Three ways to make a difference.")}</p>
       <h1 id="values-cover-title">{getCMSCopy("copy.CoreValuesPage.1872c282a338", "The three")}<br /><em>{getCMSCopy("copy.CoreValuesPage.19b476bc912f", "cornerstones.")}</em></h1>
-      <p>{getCMSCopy("copy.CoreValuesPage.eddff23d6323", "Care that reaches further. Learning that opens doors. Communities that grow stronger.")}</p>
-
+      <ul className="values-cover-ways"
+        onPointerEnter={() => setPointing(true)} onPointerLeave={() => setPointing(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
+        {WAYS.map(({ id, icon: Icon, text }) => {
+          const way = PILLARS.find(p => p.id === id)!;
+          return <li key={id}>
+            <a href={`#${id}`} data-active={choice === id}
+              style={{ '--way-ink': way.accentA, '--way-light': way.accentB } as React.CSSProperties}
+              onPointerEnter={() => setChoice(id)} onFocus={() => setChoice(id)}>
+              <span className="values-cover-way-icon" aria-hidden="true"><Icon size={17} strokeWidth={1.7} /></span>
+              <span className="values-cover-way-name">{way.label}</span>
+              <span className="values-cover-way-text">{text()}</span>
+              <ArrowDown className="values-cover-way-arrow" size={16} aria-hidden="true" />
+            </a>
+          </li>;
+        })}
+      </ul>
+      <div className="values-cover-actions">
+        <a className="values-cover-cta" href="#heal">{getCMSCopy("copy.CoreValuesPage.cover-explore", "Explore the cornerstones")}<ArrowDown size={16} aria-hidden="true" /></a>
+        <a className="values-cover-link" href="#heal-explorer">{getCMSCopy("copy.CoreValuesPage.cover-programmes", "Find a programme")}<ArrowUpRight size={15} aria-hidden="true" /></a>
+      </div>
     </div>
-    <ValueCompass choice={choice} onChange={setChoice} active={active} />
+    <ValueCompass choice={choice} onChange={setChoice} active={active} held={pointing || focused} />
     <div className="values-cover-footer"><span>{getCMSCopy("copy.CoreValuesPage.4109634bf723", "Compassion, made visible.")}</span><span>{getCMSCopy("copy.CoreValuesPage.1cd27a19c41a", "Explore the values · Meet the programmes · Discover the impact")}</span></div>
   </section>;
 };

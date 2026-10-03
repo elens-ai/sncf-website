@@ -2274,7 +2274,6 @@
     "copy.CoreValuesPage.bb5f4b8db550": "One purpose. Three ways to make a difference.",
     "copy.CoreValuesPage.1872c282a338": "The three",
     "copy.CoreValuesPage.19b476bc912f": "cornerstones.",
-    "copy.CoreValuesPage.eddff23d6323": "Care that reaches further. Learning that opens doors. Communities that grow stronger.",
     "copy.CoreValuesPage.c7a3284847f9": "Preview a core value",
     "copy.CoreValuesPage.d677190e0a99": "Service",
     "copy.CoreValuesPage.bb8643e88aae": "with humility",
@@ -2757,7 +2756,12 @@
     "copy.HealStory.title": "Healing Mankind",
     "copy.HealStory.introLead": "For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.",
     "copy.WelcomeSplashScreen.mission-vision-label": "Mission & Vision",
-    "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility"
+    "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility",
+    "copy.CoreValuesPage.way-heal": "Care that reaches further.",
+    "copy.CoreValuesPage.way-enrich": "Learning that opens doors.",
+    "copy.CoreValuesPage.way-empower": "Communities that grow stronger.",
+    "copy.CoreValuesPage.cover-explore": "Explore the cornerstones",
+    "copy.CoreValuesPage.cover-programmes": "Find a programme"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -3609,11 +3613,6 @@
         "page": "core-values",
         "section": "Page",
         "label": "Page · cornerstones."
-      },
-      "copy.CoreValuesPage.eddff23d6323": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Care that reaches further. Learning that opens doors. Communities tha…"
       },
       "copy.CoreValuesPage.c7a3284847f9": {
         "page": "core-values",
@@ -6029,6 +6028,31 @@
         "page": "home",
         "section": "Intro · Mission & vision page",
         "label": "Intro · Mission & vision page · Service with Humility"
+      },
+      "copy.CoreValuesPage.way-heal": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Care that reaches further."
+      },
+      "copy.CoreValuesPage.way-enrich": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Learning that opens doors."
+      },
+      "copy.CoreValuesPage.way-empower": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Communities that grow stronger."
+      },
+      "copy.CoreValuesPage.cover-explore": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Explore the cornerstones"
+      },
+      "copy.CoreValuesPage.cover-programmes": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Find a programme"
       }
     },
     "assets": {
