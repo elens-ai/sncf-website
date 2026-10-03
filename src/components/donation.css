@@ -4,7 +4,7 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-page { padding: 130px max(4%,24px) 56px; position: relative; z-index: 1; background: #f3f4ec; }
 .donation-page > .donation-experience { max-width: 1240px; margin: auto; border: 1px solid #e2e7dd; border-radius: 30px; overflow: hidden; box-shadow: 0 24px 75px #1d45320a; }
 .reading-room:has(.donation-page) > main { display: none; }
-.donation-experience { position: relative; display: grid; grid-template-columns: .9fr 1.1fr; color: #244035; font-family: Inter,sans-serif; background: #fdfcf8; }
+.donation-experience { position: relative; display: grid; grid-template-columns: .9fr 1.1fr; color: #244035; font-family: var(--font-sans); background: #fdfcf8; }
 .donation-experience button, .donation-experience a, .donation-experience summary { -webkit-tap-highlight-color: transparent; }
 .donation-experience :is(button,a,input,textarea,summary):focus-visible { outline: 3px solid var(--give-ink); outline-offset: 4px; }
 .donation-close { position: absolute; top: 13px; right: 13px; z-index: 3; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: #f0f2eb; color: #3b584b; cursor: pointer; transition: background .2s,transform .2s; }
@@ -12,10 +12,10 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-story { padding: 45px 38px 28px; position: relative; overflow: hidden; background: radial-gradient(ellipse at 30% 35%,#fffffba1,transparent 75%),linear-gradient(155deg,#f0f3e7,color-mix(in srgb,var(--give-light) 28%,#edf2e7)); border-right: 1px solid #dce5d7; transition: background .5s; }
 .donation-story::before { content:''; position:absolute; inset:0; opacity:.22; pointer-events:none; background-image:repeating-linear-gradient(90deg,transparent 0 3px,#ffffff60 3px 4px); }
 .donation-story > * { position: relative; }
-.donation-eyebrow { display: flex; align-items: center; gap: 9px; font: 600 9px/1.7 Inter,sans-serif; text-transform: uppercase; letter-spacing: .17em; color: #567061; }
+.donation-eyebrow { display: flex; align-items: center; gap: 9px; font: 600 9px/1.7 var(--font-sans); text-transform: uppercase; letter-spacing: .17em; color: #567061; }
 .donation-eyebrow > span { width: 6px; height: 6px; border-radius: 50%; background: var(--give-ink); }
-.donation-story :is(h1,h2) { margin: 27px 0 20px; font: 500 clamp(36px,3.9vw,55px)/1.06 Outfit,sans-serif; letter-spacing: -.045em; }
-.donation-story :is(h1,h2) em { display: inline-block; margin-top: 8px; color: var(--give-ink); font: 400 1.07em/1.04 'Dancing Script',cursive; letter-spacing: -.025em; }
+.donation-story :is(h1,h2) { margin: 27px 0 20px; font: 800 clamp(30px,3.1vw,44px)/1.08 var(--font-heading); letter-spacing: 0; text-wrap: balance; }
+.donation-story :is(h1,h2) em { display: inline-block; margin-top: 8px; color: var(--give-ink); font: 400 1.07em/1.04 var(--font-script); letter-spacing: -.025em; }
 .donation-intro { color: #546b5e; font-size: 13px; line-height: 1.85; max-width: 340px; }
 .donation-bloom { position: relative; margin: 25px auto 3px; width: min(100%,320px); aspect-ratio: 1; }
 .donation-bloom-orbit { position: absolute; inset: 5%; border-radius: 50%; border: 1px solid #6c92752b; transform: rotate(-25deg) scaleY(.86); }
@@ -27,10 +27,10 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-petal-enrich { background:linear-gradient(120deg,#f4fcfd,#2dacc3); transform:rotate(85deg); }
 .donation-petal-empower { background:linear-gradient(120deg,#fff3f4,#e9b5c8); transform:rotate(205deg); }
 .donation-bloom-heart { position:absolute; left:37%; top:37%; width:26%; height:26%; display:grid; place-items:center; border-radius:50%; color:var(--give-ink); background:#fcfcf4; border:1px solid white; box-shadow:0 8px 20px #244f3514; animation:donation-heart-float 5s ease-in-out infinite; }
-.donation-bloom-caption { position:absolute; bottom:0; left:0; right:0; text-align:center; color:#678170; font:400 17px/1.3 'Dancing Script',cursive; }
+.donation-bloom-caption { position:absolute; bottom:0; left:0; right:0; text-align:center; color:#678170; font:400 17px/1.3 var(--font-script); }
 .donation-impact { border-top: 1px solid #759b802f; padding: 23px 0 20px; margin-top:22px; min-height:151px; }
 .donation-impact > div { animation:donation-reveal .45s ease both; }
-.donation-impact strong { display:block; font:500 38px/1.1 Outfit,sans-serif; letter-spacing:-.035em; color:var(--give-ink); margin:10px 0 6px; overflow-wrap:anywhere; }
+.donation-impact strong { display:block; font:500 38px/1.1 var(--font-sans); letter-spacing:-.035em; color:var(--give-ink); margin:10px 0 6px; overflow-wrap:anywhere; }
 .donation-impact strong.donation-impact-purpose { font-size:30px; }
 .donation-impact p { font-size:11px; line-height:1.7; color:#4f6a59; }
 .donation-impact small { display:block; font-size:9px; color:#5d7665; margin-top:5px; }
@@ -43,7 +43,7 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-stepper [aria-current='step'] i { color:white; background:var(--give-ink); border-color:var(--give-ink); }
 .donation-stepper b { flex:1; height:1px; min-width:12px; background:#dbe2d7; }
 .donation-step-content { animation:donation-reveal .35s ease both; }
-.donation-planner-title { font:500 28px/1.2 Outfit,sans-serif; letter-spacing:-.035em; margin-bottom:10px; }
+.donation-planner-title { font:800 23px/1.2 var(--font-heading); letter-spacing:0; margin-bottom:10px; }
 .donation-planner-title:focus { outline:none; }
 .donation-planner-intro { font-size:12px; line-height:1.7; color:#708074; margin-bottom:26px; }
 .donation-field { border:0; padding:0; margin:0 0 23px; min-width:0; display:block; }
@@ -70,7 +70,7 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-amounts button[aria-pressed='true'] { border-color:var(--give-ink); color:var(--give-ink); background:color-mix(in srgb,var(--give-light) 15%,#fffefa); font-weight:600; }
 .donation-custom { display:flex; align-items:center; gap:10px; margin-top:10px; padding:10px 14px; border:1px solid #bdcdbd; border-radius:9px; }
 .donation-custom input { background:transparent; width:100%; min-width:0; font-size:17px; color:var(--give-ink); }
-.donation-offer textarea { display:block; width:100%; resize:vertical; min-height:95px; max-height:180px; padding:12px; margin-top:10px; border:1px solid #cdd9ca; border-radius:10px; background:#fffefa; color:#365640; font:400 12px/1.6 Inter,sans-serif; }
+.donation-offer textarea { display:block; width:100%; resize:vertical; min-height:95px; max-height:180px; padding:12px; margin-top:10px; border:1px solid #cdd9ca; border-radius:10px; background:#fffefa; color:#365640; font:400 12px/1.6 var(--font-sans); }
 .donation-offer small { display:block; margin-top:7px; color:#7b887d; font-size:9px; font-weight:400; }
 .donation-primary { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:15px 20px; min-height:52px; background:var(--give-ink); color:white; border-radius:11px; font-size:12px; font-weight:500; box-shadow:0 8px 18px color-mix(in srgb,var(--give-ink) 15%,transparent); cursor:pointer; transition:transform .2s,box-shadow .2s; }
 .donation-primary > svg:last-child { margin-left:auto; }
@@ -78,7 +78,8 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-primary:hover { transform:translateY(-2px); box-shadow:0 12px 22px color-mix(in srgb,var(--give-ink) 24%,transparent); }
 .donation-disclosure { margin:11px auto 0; text-align:center; max-width:350px; color:#738071; font-size:9px; line-height:1.7; }
 .donation-practical { margin-top:27px; border-top:1px solid #e1e6dc; padding-top:20px; }
-.donation-practical > p { margin-bottom:8px; }
+.donation-practical-head { margin-bottom:8px; }
+.donation-answer-title,.donation-answer-close { display:none; }
 .donation-practical details { border-bottom:1px solid #e1e6dc; }
 .donation-practical summary { display:flex; align-items:center; justify-content:space-between; gap:12px; cursor:pointer; list-style:none; min-height:48px; padding:10px 0; font-size:11px; line-height:1.5; color:#506754; }
 .donation-practical summary::-webkit-details-marker { display:none; }
@@ -88,12 +89,12 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-practical details p:has(svg),.donation-practical details a { display:flex; align-items:start; gap:7px; }
 .donation-practical details svg { flex:none; margin-top:3px; }
 .donation-summary { padding:23px; border-radius:16px; background:linear-gradient(145deg,#f2f5e9,color-mix(in srgb,var(--give-light) 13%,#fbfcf5)); border:1px solid #dce6d5; margin:27px 0 25px; }
-.donation-summary > p:first-child { display:flex; align-items:center; gap:10px; font:500 18px/1.4 Outfit,sans-serif; color:var(--give-ink); }
+.donation-summary > p:first-child { display:flex; align-items:center; gap:10px; font:500 18px/1.4 var(--font-sans); color:var(--give-ink); }
 .donation-summary dl { margin-top:20px; }
 .donation-summary dl > div { display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:14px 0; border-top:1px solid #6d8c7326; }
 .donation-summary dt { color:#6d7f6d; font-size:11px; }
 .donation-summary dd { text-align:right; color:#294e35; font-size:13px; font-weight:500; overflow-wrap:anywhere; }
-.donation-summary dl > div:last-child dd { font:500 27px/1.3 Outfit,sans-serif; color:var(--give-ink); }
+.donation-summary dl > div:last-child dd { font:500 27px/1.3 var(--font-sans); color:var(--give-ink); }
 .donation-review-offer { font-size:12px; line-height:1.8; color:#536e58; white-space:pre-wrap; overflow-wrap:anywhere; margin-top:12px; }
 .donation-call { display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; min-height:44px; margin-top:18px; font-size:11px; color:var(--give-ink); }
 .donation-back { display:flex; align-items:center; gap:8px; min-height:44px; margin:8px auto 0; font-size:11px; color:#6a7f6d; cursor:pointer; }
@@ -101,10 +102,166 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 @keyframes donation-heart-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-5px); } }
 @keyframes donation-reveal { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 @media (max-width:950px) { .donation-story { padding:38px 26px 25px; } .donation-planner { padding:38px 26px 25px; } .donation-stepper { margin-right:26px; gap:6px; font-size:9px; } .donation-story :is(h1,h2) { font-size:40px; } }
-@media (max-width:700px) { dialog#donate-modal-backdrop { width:calc(100% - 20px); max-height:calc(100dvh - 20px); padding:0; border-radius:20px; } .donation-experience { grid-template-columns:1fr; } .donation-story { padding:32px 24px 24px; border-right:0; border-bottom:1px solid #dce5d7; } .donation-story :is(h1,h2) { font-size:42px; max-width:380px; margin:20px 0 16px; } .donation-intro { max-width:400px; font-size:12px; } .donation-bloom { position:absolute; width:190px; right:-45px; top:28px; opacity:.24; pointer-events:none; } .donation-story > :is(h1,h2,p) { z-index:1; } .donation-bloom-caption { display:none; } .donation-impact { min-height:0; margin-top:22px; padding:17px 0 0; } .donation-impact strong { font-size:30px; } .donation-impact strong.donation-impact-purpose { font-size:25px; } .donation-story-foot { display:none; } .donation-planner { padding:26px 24px; } .donation-stepper { margin:0 0 25px; } .donation-planner-title { font-size:26px; } .donation-close { background:#ffffffc9; } .donation-page { padding:100px 12px 30px; } .donation-page > .donation-experience { border-radius:21px; } }
+@media (max-width:700px) { dialog#donate-modal-backdrop { width:calc(100% - 20px); max-height:calc(100dvh - 20px); padding:0; border-radius:20px; } .donation-experience { grid-template-columns:1fr; } .donation-story { padding:32px 24px 24px; border-right:0; border-bottom:1px solid #dce5d7; } .donation-story :is(h1,h2) { font-size:42px; max-width:380px; margin:20px 0 16px; } .donation-intro { max-width:400px; font-size:12px; } .donation-bloom { position:absolute; width:190px; right:-45px; top:28px; opacity:.24; pointer-events:none; } .donation-story > :is(h1,h2,p) { z-index:1; } .donation-bloom-caption { display:none; } .donation-impact { min-height:0; margin-top:22px; padding:17px 0 0; } .donation-impact strong { font-size:30px; } .donation-impact strong.donation-impact-purpose { font-size:25px; } .donation-story-foot { display:none; } .donation-planner { padding:26px 24px; } .donation-stepper { margin:0 0 25px; } .donation-planner-title { font-size:23px; } .donation-close { background:#ffffffc9; } .donation-page { padding:100px 12px 30px; } .donation-page > .donation-experience { border-radius:21px; } }
 @media (max-width:380px) { .donation-story,.donation-planner { padding-inline:19px; } .donation-field legend small { float:none; display:block; margin:6px 0 0; } .donation-causes { gap:6px; } .donation-causes label > span { padding:10px 8px; gap:7px; font-size:10px; } .donation-amounts { gap:5px; } .donation-amounts button { font-size:10px; } }
 @media (prefers-reduced-motion:reduce) { .donation-experience * { animation:none!important; transition:none!important; } }
 html[data-background-paused='true'] .donation-page .donation-bloom-heart { animation-play-state:paused; }
 .donation-page[data-motion='paused'] .donation-bloom-heart { animation-play-state:paused; }
 
 .donation-experience[data-active="false"] .donation-bloom-heart { animation-play-state: paused; }
+
+/* ==========================================================================
+   MODAL FIT — the contribution planner fits the screen without scrolling
+   One unit, --k, scales the modal's vertical rhythm with the screen height:
+   1px when there is room for the full design, less on shorter screens.
+   Floors keep type readable and controls at least 44px to tap (the gift
+   toggle 34px). The bloom takes whatever height the story column has left
+   and steps aside when there is none. The guidance questions sit in two
+   columns, and an answer opens as a card over the form rather than making
+   the modal taller. The dialog keeps overflow:auto only as a last resort for
+   very small screens. The contribution page (/donate) is not affected.
+   ========================================================================== */
+@property --k { syntax: '<length>'; inherits: true; initial-value: 1px; }
+#donate-modal-panel .donation-experience { --k: min(1px, calc((100dvh - 42px) / 960)); transition: --k .45s ease; }
+#donate-modal-panel .donation-experience[data-kind='time'] { --k: min(1px, calc((100dvh - 42px) / 1020)); }
+
+#donate-modal-panel .donation-planner { padding-block: calc(40 * var(--k)) calc(22 * var(--k)); }
+#donate-modal-panel .donation-stepper { margin-bottom: calc(28 * var(--k)); }
+#donate-modal-panel .donation-planner-title { font-size: max(19px, calc(24 * var(--k))); margin-bottom: calc(8 * var(--k)); }
+#donate-modal-panel .donation-planner-intro { margin-bottom: calc(22 * var(--k)); }
+#donate-modal-panel .donation-field { margin-bottom: calc(20 * var(--k)); }
+#donate-modal-panel :is(.donation-field legend, .donation-offer) { margin-bottom: max(6px, calc(10 * var(--k))); }
+#donate-modal-panel .donation-donors label > span { min-height: max(48px, calc(67 * var(--k))); gap: max(4px, calc(8 * var(--k))); }
+#donate-modal-panel .donation-causes { gap: max(6px, calc(8 * var(--k))); }
+#donate-modal-panel .donation-causes label > span { min-height: max(44px, calc(58 * var(--k))); padding-block: max(6px, calc(12 * var(--k))); }
+#donate-modal-panel .donation-kind label > span { min-height: max(34px, calc(38 * var(--k))); }
+#donate-modal-panel .donation-offer textarea { min-height: max(64px, calc(95 * var(--k))); margin-top: max(6px, calc(10 * var(--k))); line-height: 1.4; }
+#donate-modal-panel .donation-primary { min-height: max(44px, calc(52 * var(--k))); padding-block: max(8px, calc(15 * var(--k))); }
+#donate-modal-panel .donation-disclosure { margin-top: max(6px, calc(11 * var(--k))); }
+#donate-modal-panel .donation-summary { padding-block: max(14px, calc(23 * var(--k))); margin: calc(24 * var(--k)) 0 calc(22 * var(--k)); }
+#donate-modal-panel .donation-summary dl { margin-top: calc(18 * var(--k)); }
+#donate-modal-panel .donation-summary dl > div { padding-block: max(8px, calc(14 * var(--k))); }
+#donate-modal-panel .donation-call { margin-top: calc(14 * var(--k)); }
+#donate-modal-panel .donation-back { margin-top: calc(4 * var(--k)); }
+
+#donate-modal-panel .donation-practical { position: relative; margin-top: calc(24 * var(--k)); padding-top: calc(14 * var(--k)); }
+#donate-modal-panel .donation-practical-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 12px; margin-bottom: calc(2 * var(--k)); }
+#donate-modal-panel .donation-practical-head .donation-page-link { margin: 0 0 0 auto; min-height: 32px; }
+#donate-modal-panel .donation-faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
+#donate-modal-panel .donation-practical summary { min-height: max(38px, calc(46 * var(--k))); padding-block: calc(8 * var(--k)); }
+#donate-modal-panel .donation-practical details[open] summary { color: var(--give-ink); font-weight: 600; }
+/* an open answer: a card lifted over the form, the question as its title */
+#donate-modal-panel .donation-answer { position: absolute; z-index: 4; left: -16px; right: -16px; bottom: calc(100% + 8px); padding: 18px 20px 6px; border: 1px solid #dce3d8; border-radius: 16px; background: #fffefa; box-shadow: 0 24px 56px #14352829, 0 2px 8px #1435281a; animation: donation-answer-in .28s cubic-bezier(.2, .7, .2, 1) both; }
+#donate-modal-panel .donation-answer-title { display: block; padding-right: 40px; margin-bottom: 8px; font: 500 16px/1.35 var(--font-sans); letter-spacing: -.01em; color: var(--give-ink); }
+#donate-modal-panel .donation-answer-close { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: #f0f2eb; color: #3b584b; cursor: pointer; transition: background .2s; }
+#donate-modal-panel .donation-answer-close:hover { background: #e0e8dd; }
+@keyframes donation-answer-in { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+/* The guidance is about giving money (online, tax, cheques, receipts), so the
+   non-monetary planner leaves it out and keeps its room for the offer. */
+#donate-modal-panel [data-kind='time'] :is(.donation-faq, .donation-practical-head .donation-eyebrow) { display: none; }
+#donate-modal-panel [data-kind='time'] .donation-practical { margin-top: calc(12 * var(--k)); padding-top: calc(6 * var(--k)); }
+
+@media (min-width: 701px) {
+  #donate-modal-panel .donation-story { display: flex; flex-direction: column; padding-block: calc(42 * var(--k)) calc(24 * var(--k)); }
+  #donate-modal-panel .donation-story :is(h1, h2) { margin: calc(26 * var(--k)) 0 calc(18 * var(--k)); font-size: max(30px, min(clamp(36px, 3.9vw, 55px), calc(55 * var(--k)))); }
+  #donate-modal-panel .donation-story :is(h1, h2) em { margin-top: calc(8 * var(--k)); }
+  /* the bloom: square, filling the height left over, up to its full 320px */
+  #donate-modal-panel .donation-bloom { flex: 1 1 0; min-height: 0; max-height: 320px; width: auto; max-width: 100%; aspect-ratio: 1; margin: calc(18 * var(--k)) auto 0; container-type: size; }
+  #donate-modal-panel .donation-impact { min-height: max(108px, calc(151 * var(--k))); margin-top: calc(20 * var(--k)); padding-block: calc(20 * var(--k)) calc(12 * var(--k)); }
+  #donate-modal-panel .donation-impact strong { font-size: max(28px, calc(38 * var(--k))); margin: calc(10 * var(--k)) 0 calc(5 * var(--k)); }
+  #donate-modal-panel .donation-impact strong.donation-impact-purpose { font-size: max(24px, calc(30 * var(--k))); }
+  #donate-modal-panel .donation-story-foot { margin-top: calc(14 * var(--k)); }
+}
+/* Short laptop screens: the planner's one-line intro steps aside (its title
+   already asks the question) and every row tightens to a compact size. */
+@media (min-width: 701px) and (max-height: 720px) {
+  #donate-modal-panel .donation-planner-intro { display: none; }
+  #donate-modal-panel .donation-planner-title { margin-bottom: calc(20 * var(--k)); }
+  #donate-modal-panel .donation-stepper i { width: 21px; height: 21px; }
+  #donate-modal-panel :is(.donation-field legend, .donation-offer) { line-height: 1.3; }
+  #donate-modal-panel .donation-donors label > span { flex-direction: row; min-height: 40px; }
+  #donate-modal-panel .donation-causes label > span { min-height: 40px; }
+  #donate-modal-panel .donation-kind label > span { min-height: 31px; }
+  #donate-modal-panel .donation-offer textarea { min-height: 0; height: 56px; }
+  #donate-modal-panel .donation-primary { min-height: 42px; }
+  #donate-modal-panel .donation-practical { margin-top: calc(18 * var(--k)); padding-top: calc(10 * var(--k)); }
+  #donate-modal-panel .donation-practical-head .donation-page-link { min-height: 24px; }
+  #donate-modal-panel .donation-practical summary { min-height: 32px; padding-block: 5px; }
+  #donate-modal-panel [data-kind='time'] .donation-practical { display: none; }
+}
+/* The non-monetary planner asks two more questions: below 960px tall its intro
+   steps aside and the offer's note sits beside its label; below 860px its
+   rows take the compact size too. */
+@media (min-width: 701px) and (max-height: 960px) {
+  #donate-modal-panel [data-kind='time'] .donation-planner-intro { display: none; }
+  #donate-modal-panel [data-kind='time'] .donation-planner-title { margin-bottom: calc(20 * var(--k)); }
+  #donate-modal-panel [data-kind='time'] .donation-offer { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: baseline; column-gap: 14px; }
+  #donate-modal-panel [data-kind='time'] .donation-offer textarea { grid-column: 1 / -1; grid-row: 2; min-height: 0; height: 60px; padding-block: 9px; }
+  #donate-modal-panel [data-kind='time'] .donation-offer small { grid-column: 2; grid-row: 1; margin: 0; text-align: right; }
+}
+@media (min-width: 701px) and (max-height: 860px) {
+  #donate-modal-panel [data-kind='time'] :is(.donation-field legend, .donation-offer) { line-height: 1.3; }
+  #donate-modal-panel [data-kind='time'] .donation-donors label > span { flex-direction: row; min-height: 40px; }
+  #donate-modal-panel [data-kind='time'] .donation-causes label > span { min-height: 40px; }
+}
+/* The shortest laptop screens (about 600px tall) */
+@media (min-width: 701px) and (max-height: 640px) {
+  #donate-modal-panel .donation-planner { padding-block: 14px 10px; }
+  #donate-modal-panel .donation-stepper { margin-bottom: 10px; }
+  #donate-modal-panel .donation-stepper i { width: 20px; height: 20px; }
+  #donate-modal-panel .donation-field { margin-bottom: max(8px, calc(13 * var(--k))); }
+  #donate-modal-panel :is(.donation-donors, .donation-causes) label > span { min-height: 38px; }
+  #donate-modal-panel [data-kind='time'] .donation-planner-title { margin-bottom: 8px; }
+  #donate-modal-panel [data-kind='time'] .donation-offer textarea { height: 50px; padding-block: 6px; }
+}
+@media (min-width: 701px) and (max-width: 950px) {
+  #donate-modal-panel .donation-story :is(h1, h2) { font-size: max(30px, min(40px, calc(55 * var(--k)))); }
+}
+@container (max-height: 150px) { #donate-modal-panel .donation-bloom-caption { display: none; } }
+@container (max-height: 90px) { #donate-modal-panel .donation-bloom > * { display: none; } }
+/* Phones: the story becomes a slim header (just the headline) above the
+   planner, whose rows all take the compact size, at least 44px to tap. */
+@media (max-width: 700px) {
+  #donate-modal-panel .donation-experience { --k: min(1px, calc((100dvh - 22px) / 900)); }
+  #donate-modal-panel .donation-story { padding-block: calc(24 * var(--k)) calc(16 * var(--k)); }
+  #donate-modal-panel :is(.donation-story > .donation-eyebrow, .donation-intro, .donation-impact) { display: none; }
+  #donate-modal-panel .donation-story :is(h1, h2) { margin: 0; padding-right: 48px; font-size: max(26px, calc(34 * var(--k))); }
+  #donate-modal-panel .donation-story :is(h1, h2) em { margin-top: 4px; }
+  #donate-modal-panel .donation-planner { padding-block: calc(22 * var(--k)) calc(14 * var(--k)); }
+  #donate-modal-panel .donation-stepper { margin-bottom: max(10px, calc(14 * var(--k))); }
+  #donate-modal-panel .donation-stepper i { width: 22px; height: 22px; }
+  #donate-modal-panel .donation-planner-title { font-size: max(18px, calc(22 * var(--k))); margin-bottom: max(8px, calc(12 * var(--k))); }
+  #donate-modal-panel .donation-planner-intro { display: none; }
+  #donate-modal-panel .donation-field { margin-bottom: max(8px, calc(12 * var(--k))); }
+  #donate-modal-panel :is(.donation-field legend, .donation-offer) { line-height: 1.3; }
+  #donate-modal-panel .donation-donors label > span { flex-direction: row; min-height: 44px; padding-inline: 6px; text-align: center; }
+  #donate-modal-panel .donation-causes label > span { min-height: 44px; }
+  #donate-modal-panel .donation-kind label > span { min-height: 36px; }
+  #donate-modal-panel .donation-offer textarea { min-height: 0; height: 52px; padding-block: 8px; }
+  #donate-modal-panel .donation-practical { margin-top: max(8px, calc(12 * var(--k))); padding-top: max(6px, calc(8 * var(--k))); }
+  #donate-modal-panel .donation-practical-head .donation-page-link { min-height: 26px; }
+  #donate-modal-panel .donation-faq { column-gap: 14px; }
+  #donate-modal-panel .donation-practical summary { min-height: 40px; padding-block: 4px; font-size: 10.5px; line-height: 1.35; }
+  #donate-modal-panel [data-kind='time'] .donation-practical { display: none; }
+  #donate-modal-panel .donation-answer { left: -10px; right: -10px; padding: 16px 16px 4px; }
+  #donate-modal-panel .donation-answer-close { top: 6px; right: 6px; width: 40px; height: 40px; }
+}
+/* Shorter phones: the headline steps aside as well and the planner's own
+   title leads, clear of the close button. */
+@media (max-width: 700px) and (max-height: 719px) {
+  #donate-modal-panel .donation-story { display: none; }
+  #donate-modal-panel .donation-stepper { margin-right: 52px; }
+}
+/* Shorter phones, non-monetary planner: its five questions sit a little closer. */
+@media (max-width: 700px) and (max-height: 680px) {
+  #donate-modal-panel [data-kind='time'] .donation-field { margin-bottom: 6px; }
+  #donate-modal-panel .donation-offer textarea { height: 48px; padding-block: 6px; }
+}
+/* The smallest phones (an iPhone SE with its browser bars): the first step
+   leaves out its step bar and the note under the button. */
+@media (max-width: 700px) and (max-height: 600px) {
+  #donate-modal-panel [data-step='1'] :is(.donation-stepper, .donation-disclosure) { display: none; }
+  #donate-modal-panel [data-step='1'] .donation-planner-title { padding-right: 52px; }
+  #donate-modal-panel [data-kind='time'] :is(.donation-donors, .donation-causes) label > span { min-height: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { #donate-modal-panel .donation-experience { transition: none; } }

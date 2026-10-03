@@ -1,5 +1,4 @@
 import { resolveCMSMedia } from '../cms/media';
-import { getCMSLink } from '../cms/links';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { getSiteSettings, siteOverride } from '../cms/siteSettings';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
@@ -23,43 +22,7 @@ import { MapPin, Phone, Mail, Heart } from 'lucide-react';
  * would strand the reader on a wall of links.
  */
 
-/* Nothing here points at nirankarifoundation.org. This site replaces it and
-   that domain is being decommissioned, so every link that used to leave for
-   it now goes to the page here that carries the same material. The Mission's
-   OTHER properties are separate live sites and still link out.
-
-   Not yet rehoused: Privacy Policy, Terms of Service, Social Media Guidelines
-   and Foreign Contributions had no equivalent page here, so rather than link
-   to a dying domain they are held back until those pages exist. */
-const getGroups = (): { title: string; links: { label: string; href: string }[] }[] => [
-  {
-    title: getCMSCopy("copy.SiteFooter.3b73900b8d29", "Explore"),
-    links: [
-      { label: getCMSCopy("copy.SiteFooter.5912782f153a", "Core Values"), href: getCMSLink("copy.Link.SiteFooter.2a4827271280", "/core-values") },
-      { label: getCMSCopy("copy.SiteFooter.04e2a9728af7", "Projects"), href: getCMSLink("copy.Link.SiteFooter.902ceeb21a5f", "/projects") },
-      { label: getCMSCopy("copy.SiteFooter.10a516acef81", "Who We Are"), href: getCMSLink("copy.Link.SiteFooter.3146c10d2d72", "/who-we-are") },
-      { label: getCMSCopy("copy.SiteFooter.b733f26c2ca4", "Our Guiding Force"), href: getCMSLink("copy.Link.SiteFooter.bd0b0305afe8", "/our-guiding-force") },
-    ],
-  },
-  {
-    title: getCMSCopy("copy.SiteFooter.44cf6ffe1e9a", "Useful links"),
-    links: [
-      { label: getCMSCopy("copy.SiteFooter.d0db09ad56c2", "Awards and Honours"), href: getCMSLink("copy.Link.SiteFooter.eab672aebd73", "/#awards") },
-      { label: getCMSCopy("copy.SiteFooter.8a787be23f3f", "Our Partners"), href: getCMSLink("copy.Link.SiteFooter.3146c10d2d72", "/who-we-are") },
-      { label: getCMSCopy("copy.SiteFooter.2b5c3d26721a", "Contact"), href: getCMSLink("copy.Link.SiteFooter.3146c10d2d72", "/who-we-are") },
-    ],
-  },
-  {
-    title: getCMSCopy("copy.SiteFooter.4e51d6a701d7", "Sant Nirankari Mission"),
-    links: [
-      { label: getCMSCopy("copy.SiteFooter.4e51d6a701d7", "Sant Nirankari Mission"), href: getCMSLink("copy.Link.SiteFooter.a23cd263f359", "https://nirankari.org/") },
-      { label: getCMSCopy("copy.SiteFooter.3c66946f7a8a", "Sant Nirankari Health City"), href: getCMSLink("copy.Link.SiteFooter.b03f7697e124", "https://www.nirankarihealthcity.org/") },
-      { label: getCMSCopy("copy.SiteFooter.74740a4515c9", "Sant Nirankari Public School"), href: getCMSLink("copy.Link.SiteFooter.5050e737372d", "https://snps.edu.in/") },
-      { label: getCMSCopy("copy.SiteFooter.ff19513517ce", "NBGSM College, Sohna"), href: getCMSLink("copy.Link.SiteFooter.ddd6fdf34d33", "https://nbgsmc.ac.in/") },
-      { label: getCMSCopy("copy.SiteFooter.52bd35a89e0e", "Sant Nirankari Blood Bank"), href: getCMSLink("copy.Link.SiteFooter.e164241f70f5", "https://www.santnirankaribloodbank.org/") },
-    ],
-  },
-];
+/* The link columns are Site settings → Footer columns in the CMS. */
 
 interface SiteFooterProps {
   onOpenDonate: () => void;
@@ -68,7 +31,7 @@ interface SiteFooterProps {
 export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
   useCMSRevision();
   const site = getSiteSettings();
-  const GROUPS = getGroups();
+  const GROUPS = site.footerColumns;
   return (
   <footer
     id="site-footer"
@@ -133,7 +96,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
                      sites open in a new tab */
                   const internal = link.href.startsWith('/');
                   return (
-                    <li key={link.label}>
+                    <li key={`${link.label}-${link.href}`}>
                       {internal ? (
                         <Link to={link.href} className={cls}>
                           {link.label}

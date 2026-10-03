@@ -1,4 +1,10 @@
 {
+  "home.welcome": {
+    "enabled": true,
+    "order": 0,
+    "options": {},
+    "label": "Home · Welcome intro (first screen, welcome page, mission & vision)"
+  },
   "home.intro": {
     "enabled": true,
     "order": 0,

@@ -1,0 +1,112 @@
+/* HEAL, told rather than counted: a masthead, four doorways that spell the
+   word in real photographs, and the line from the camp banner. The figures
+   live further down the chapter, in the explorer and the charts. */
+.heal-story { position: relative; isolation: isolate; padding: 0 12px 72px; color: #1d3a33; }
+.heal-story::before { content: ''; position: absolute; z-index: -1; inset: 4% -4% 30%; pointer-events: none; background: radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--value-light) 16%, transparent), transparent 66%); }
+
+/* ---- masthead ---- */
+.heal-story-kicker { display: flex; align-items: center; gap: 18px; color: var(--value-color); font: 600 11px/1.4 var(--font-sans); letter-spacing: .24em; text-transform: uppercase; }
+.heal-story-kicker i { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--value-color) 32%, transparent), transparent); }
+.heal-story .value-hero-title { margin: 14px 0 6px; text-align: center; }
+.heal-story-lede { margin: 0 auto; max-width: 15em; text-align: center; font: 600 clamp(28px, 4vw, 54px)/1.08 var(--font-sans); letter-spacing: -.035em; text-wrap: balance; }
+.heal-story-lede em { font: 700 1.14em/1 var(--font-script); letter-spacing: -.01em; color: var(--value-color); }
+/* centred on the masthead's axis, like the title and lede above it */
+.heal-story-intro { max-width: 640px; margin: 40px auto 0; padding-top: 30px; border-top: 1px solid color-mix(in srgb, var(--value-color) 16%, transparent); font: 400 15.5px/1.85 var(--font-sans); color: #4e625c; text-align: center; text-wrap: balance; }
+
+/* ---- the four doorways ---- */
+.heal-doors-label { display: flex; align-items: center; gap: 22px; margin: 76px 0 40px; color: var(--value-color); font: 700 clamp(25px, 2.5vw, 34px)/1.2 var(--font-script); white-space: nowrap; }
+.heal-doors-label::before, .heal-doors-label::after { content: ''; flex: 1; height: 1px; background: color-mix(in srgb, var(--value-color) 24%, transparent); }
+.heal-doors { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(22px, 3vw, 46px); margin: 0; padding: 0; list-style: none; }
+.heal-door { position: relative; min-width: 0; }
+
+.heal-door-frame { position: relative; padding-bottom: 14px; transition: opacity .5s ease, filter .5s ease; }
+/* An arch, semicircular at the top; the bottom corners stay square. */
+.heal-door-arch { position: relative; overflow: hidden; aspect-ratio: 4 / 5; border-radius: 999px 999px 3px 3px; background: #eef3ee; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--value-color) 18%, transparent), 0 26px 40px -30px #1c4a3466; }
+/* Taller than the arch so the scene can drift behind the letter as the page scrolls. */
+.heal-door-depth { position: absolute; inset: -7% 0; }
+.heal-door-photo { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.07); filter: saturate(.92) brightness(.93) contrast(1.06); transition: transform 1.4s cubic-bezier(.2,.7,.2,1), filter .8s ease; }
+.heal-door-veil, .heal-door-line { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.heal-door-veil { transition: opacity .9s cubic-bezier(.22,1,.36,1); }
+.heal-door-glyph { font: 800 420px/1 var(--font-sans); }
+.heal-door-line text { fill: none; stroke: var(--value-color); stroke-opacity: .6; stroke-width: 1.5px; vector-effect: non-scaling-stroke; transition: stroke .6s ease, stroke-opacity .6s ease; }
+/* The keystone. */
+.heal-door-numeral { position: absolute; top: 7%; left: 50%; translate: -50% 0; color: var(--value-color); font: 600 12px/1 var(--font-sans); letter-spacing: .2em; padding-left: .2em; transition: opacity .4s ease; }
+/* The doorstep: one long tread and a shorter riser beneath it. */
+.heal-door-step { position: absolute; left: -7%; right: -7%; bottom: 4px; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--value-color) 70%, transparent); }
+.heal-door-step::after { content: ''; position: absolute; left: 9%; right: 9%; top: 6px; height: 1px; background: color-mix(in srgb, var(--value-color) 32%, transparent); }
+
+.heal-door:is(:hover, :focus-within) .heal-door-veil { opacity: 0; }
+.heal-door:is(:hover, :focus-within) .heal-door-photo { transform: scale(1); filter: none; }
+.heal-door:is(:hover, :focus-within) .heal-door-line text { stroke: #fff; stroke-opacity: .9; }
+.heal-door:is(:hover, :focus-within) .heal-door-numeral { opacity: 0; }
+@media (hover: hover) {
+  .heal-doors:has(.heal-door:hover) .heal-door:not(:hover) .heal-door-frame { opacity: .55; filter: saturate(.6); }
+}
+
+.heal-door-copy { padding: 26px 2px 0; }
+.heal-door-copy h3 { font: 800 clamp(18px, 1.6vw, 22px)/1.2 var(--font-heading); letter-spacing: 0; text-wrap: balance; }
+.heal-door-copy h3::first-letter { color: var(--value-color); }
+.heal-door-copy p { margin-top: 12px; font: 400 14px/1.75 var(--font-sans); color: #5b6f69; text-wrap: pretty; }
+.heal-door-links { display: grid; justify-items: start; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+.heal-door-links a { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 4px; border-bottom: 1px solid color-mix(in srgb, var(--value-color) 30%, transparent); color: var(--value-color); font: 600 10.5px/1.5 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; transition: border-color .25s; }
+.heal-door-links a svg { flex-shrink: 0; transition: transform .25s; }
+.heal-door-links a:hover { border-color: currentColor; }
+.heal-door-links a:hover svg { transform: translate(2px, -2px); }
+/* The whole doorway follows its first programme; a second one stays clickable above it. */
+.heal-door-links li:first-child a::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+.heal-door-links li + li a { position: relative; z-index: 2; }
+
+/* Doorways rise into place and their photographs develop through the letters. */
+.heal-doors[data-arrived='false'] .heal-door { opacity: 0; }
+.heal-doors[data-arrived='true'] .heal-door { animation: heal-door-rise 1s cubic-bezier(.22,1,.36,1) calc(var(--i) * 120ms) both; }
+.heal-doors[data-arrived='true'] .heal-door-photo { animation: heal-door-develop 1.6s ease calc(var(--i) * 120ms + .3s) both; }
+@keyframes heal-door-rise { from { opacity: 0; transform: translateY(28px); } }
+@keyframes heal-door-develop { from { opacity: 0; } }
+
+/* ---- the banner's line ---- */
+.heal-motto { max-width: 780px; margin: 96px auto 0; text-align: center; }
+.heal-motto::before { content: '\201C'; display: block; height: .42em; color: color-mix(in srgb, var(--value-color) 34%, transparent); font: 800 96px/1 var(--font-heading); }
+.heal-motto blockquote { margin: 0; font: 400 clamp(28px, 3.5vw, 46px)/1.5 'Tiro Devanagari Hindi', 'Noto Serif Devanagari', 'Nirmala UI', 'Kohinoor Devanagari', Mangal, serif; color: #1d3a33; }
+.heal-motto blockquote span { display: block; }
+.heal-motto-translation { margin-top: 14px; font: italic 400 clamp(16px, 1.45vw, 19px)/1.6 var(--font-sans); color: #4e625c; }
+.heal-motto figcaption { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 18px; color: #677a73; font: 600 10px/1.6 var(--font-sans); letter-spacing: .24em; text-transform: uppercase; }
+.heal-motto figcaption::before, .heal-motto figcaption::after { content: ''; width: 36px; height: 1px; background: currentColor; opacity: .4; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    /* The scene slides behind the fixed letter, like looking through a doorway while walking past. */
+    .heal-door-depth { animation: heal-door-depth linear both; animation-timeline: view(); }
+    @keyframes heal-door-depth { from { transform: translateY(-5%); } to { transform: translateY(5%); } }
+  }
+}
+/* Without hover, each doorway opens by itself as it passes the middle of the screen. */
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .heal-door-veil { animation: heal-door-open linear both; animation-timeline: view(); animation-range: contain; }
+    @keyframes heal-door-open { 0%, 18% { opacity: 1; } 50% { opacity: .08; } 82%, 100% { opacity: 1; } }
+  }
+}
+
+@media (max-width: 1023px) {
+  .heal-doors { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 56px; }
+  .heal-door { justify-self: center; width: min(100%, 340px); }
+}
+@media (max-width: 640px) {
+  .heal-story { padding: 0 0 48px; }
+  .heal-story-kicker { gap: 12px; font-size: 9.5px; letter-spacing: .2em; }
+  .heal-story-lede { font-size: clamp(30px, 9vw, 40px); }
+  .heal-story-intro { margin-top: 30px; padding-top: 24px; font-size: 14.5px; }
+  .heal-doors-label { gap: 14px; margin: 52px 0 28px; font-size: 25px; }
+  /* One doorway per row: the letters read H, E, A, L down the page. */
+  .heal-doors { grid-template-columns: 1fr; row-gap: 36px; }
+  .heal-door { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: center; width: 100%; }
+  .heal-door-copy { padding: 0; }
+  .heal-door-copy h3 { font-size: 18px; }
+  .heal-door-copy p { margin-top: 8px; font-size: 13px; line-height: 1.65; }
+  .heal-door-links { margin-top: 12px; }
+  .heal-door-numeral { font-size: 10px; }
+  .heal-motto { margin-top: 64px; }
+  .heal-motto::before { font-size: 84px; }
+  .heal-motto figcaption { letter-spacing: .18em; }
+  .heal-motto figcaption::before, .heal-motto figcaption::after { display: none; }
+}

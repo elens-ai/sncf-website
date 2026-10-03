@@ -1,0 +1,42 @@
+.pillar-artwork { --art-ink: #9be8c3; position: absolute; pointer-events: none; user-select: none; color: var(--art-ink); }
+.pillar-artwork[data-art='enrich'] { --art-ink: #9de8f6; }
+.pillar-artwork[data-art='empower'] { --art-ink: #f9b8cf; }
+.pillar-artwork[data-art='projects'] { --art-ink: #a5dcec; }
+.pillar-artwork svg { display: block; width: 100%; height: 100%; }
+.pillar-art-wash { opacity: .08; }
+.pillar-art-lines { opacity: .36; }
+.pillar-art-sparks { opacity: .5; }
+.pillar-artwork--background { inset: 0; z-index: 0; overflow: hidden; }
+.pillar-artwork--background svg { position: absolute; width: min(100%, 1150px); height: 100%; right: -12%; top: 0; }
+.pillar-artwork--album { width: 72%; height: 70%; left: -22%; bottom: -4%; transform: rotate(-12deg); }
+.pillar-artwork--album .pillar-art-lines { opacity: .75; stroke-width: 3px; }
+.pillar-artwork--album .pillar-art-wash { opacity: .2; }
+.hero-activity-art { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.hero-activity-art > .pillar-artwork { opacity: 0; transition: opacity 900ms ease; }
+.hero-activity-art > .pillar-artwork[data-visible='true'] { opacity: 1; }
+/* The chapter's drawings frame the work without sitting over its controls. */
+.mosaic-chapter { isolation: isolate; }
+.mosaic-chapter > .pillar-artwork { z-index: -1; inset: -5% -5%; }
+.mosaic-chapter > .pillar-artwork svg { right: -18%; opacity: .8; }
+.mosaic-chapter[data-stage='heal'] .mosaic-halo { border-radius: 50% 50% 42% 42%; }
+.mosaic-chapter[data-stage='enrich'] .mosaic-halo { border-radius: 12px 38px 12px 38px; transform: rotate(-8deg); }
+.mosaic-chapter[data-stage='empower'] .mosaic-halo { border-radius: 65% 35% 65% 35%; }
+.mosaic-chapter[data-stage='projects'] .mosaic-halo { border-radius: 6px; transform: rotate(8deg); }
+.mosaic-chapter[data-stage='heal'] .mosaic-print:not(.mosaic-print-lead) .mosaic-print-face { border-radius: 20px 20px 5px 5px; }
+.mosaic-chapter[data-stage='heal'] .mosaic-print-photo { border-radius: 12px; }
+.mosaic-chapter[data-stage='enrich'] .mosaic-print:not(.mosaic-print-lead) .mosaic-print-face { border-bottom: 5px solid #b0dce4; }
+.mosaic-chapter[data-stage='empower'] .mosaic-print[data-slot='a'] .mosaic-print-photo { border-radius: 48% 48% 8px 8px; }
+.mosaic-chapter[data-stage='projects'] .mosaic-print:not(.mosaic-print-lead) .mosaic-print-face { outline: 1px solid #6fabbc; outline-offset: 5px; }
+@media (max-width: 640px) {
+  .pillar-artwork--background svg { width: 145%; max-width: none; right: -35%; opacity: .65; }
+  .pillar-artwork--album { left: -12%; width: 65%; }
+}
+@media (prefers-reduced-motion: reduce) { .hero-activity-art > .pillar-artwork { transition: none; } }
+.hero-activity-art > [data-art='heal'] { background: radial-gradient(ellipse at 85% 65%, #73cba42b, transparent 62%); }
+.hero-activity-art > [data-art='enrich'] { background: repeating-linear-gradient(0deg, transparent 0 79px, #9de8f609 79px 80px), radial-gradient(ellipse at 80% 35%, #5bafc52b, transparent 62%); }
+.hero-activity-art > [data-art='empower'] { background: radial-gradient(ellipse at 95% 100%, #e991ac30, transparent 60%), radial-gradient(ellipse at 75% 15%, #a0b78e16, transparent 55%); }
+.hero-activity-art > [data-art='projects'] { background: repeating-linear-gradient(90deg, transparent 0 99px, #a5dcec08 99px 100px), repeating-linear-gradient(0deg, transparent 0 99px, #a5dcec08 99px 100px), radial-gradient(ellipse at 90% 65%, #55bbd82b, transparent 65%); }
+.mosaic-chapter[data-stage='heal'] > .pillar-artwork { background: radial-gradient(ellipse at 80% 50%, #7be0b018, transparent 65%); }
+.mosaic-chapter[data-stage='enrich'] > .pillar-artwork { background: radial-gradient(ellipse at 80% 50%, #91dced20, transparent 65%); }
+.mosaic-chapter[data-stage='empower'] > .pillar-artwork { background: radial-gradient(ellipse at 80% 50%, #eeb0c31c, transparent 65%); }
+.mosaic-chapter[data-stage='projects'] > .pillar-artwork { background: radial-gradient(ellipse at 80% 50%, #80cde820, transparent 65%); }

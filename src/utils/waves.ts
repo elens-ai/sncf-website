@@ -27,7 +27,7 @@ export const BANDS = 5;
 const FREQ = [.9, 1.7, 3.1];
 const BAND_SCALE = [1, .85, 1.15, .95, 1.05];
 /** Idle drift, rad/s — two forward, one back, periods of 31–70 s: alive, never busy. */
-const DRIFT = [.2, -.14, .09];
+const DRIFT = [.24, -.17, .11];
 /** A slow vertical breath on every band, as a fraction of the height. */
 const BREATH = .006;
 const BASE = [.28, .42, .56, .70, .84];
@@ -84,7 +84,7 @@ export const oklabMix = (a: Lab, b: Lab, t: number): Lab => [a[0] + (b[0] - a[0]
 /* ----- the genome ----- */
 export function genome(pillar: Subject): Genome {
   const A = hexToOklab(pillar.accentA), B = hexToOklab(pillar.accentB);
-  const neutral = hexToOklab(pillar.id === 'empower' ? '#e6d6b0' : '#f3e7b7');
+  const neutral = hexToOklab('#edf8f6');
   const white = hexToOklab('#ffffff'), ink = hexToOklab('#0b1a1a');
   const temper = TEMPER[pillar.id] ?? 1, slope = SLOPE[pillar.id] ?? 1;
   return {
@@ -95,7 +95,7 @@ export function genome(pillar: Subject): Genome {
     /* a fixed table, nothing random per render — the same rule as the tiles' flight table */
     phase: Array.from({ length: BANDS }, (_, i) => FREQ.map((_, k) => (i * 1.7 + k * 2.3 + temper * 3) % TAU)),
     colour: [
-      oklabMix(neutral, B, .18),                 // cream, tinted a little toward the pillar
+      oklabMix(neutral, B, .28),                 // pearl white, tinted toward the pillar
       oklabMix(B, white, .35),                   // the pastel of the light accent
       oklabMix(oklabMix(B, A, .35), white, .18), // the mid tone
       oklabMix(A, B, .25),                       // the deep accent
@@ -186,7 +186,10 @@ export function paintWaves(ctx: CanvasRenderingContext2D, g: Genome, width: numb
     const [r, gg, b] = oklabToRgb(g.colour[i]);
     const [r2, g2, b2] = oklabToRgb(oklabMix(g.colour[i], INK, .22));
     const shade = ctx.createLinearGradient(0, y0, 0, Math.max(y0 + 1, y1));
-    shade.addColorStop(0, `rgb(${r} ${gg} ${b})`);
+    const [lr, lg, lb] = oklabToRgb(oklabMix(g.colour[i], hexToOklab('#ffffff'), .2));
+    shade.addColorStop(0, `rgb(${lr} ${lg} ${lb})`);
+    shade.addColorStop(.18, `rgb(${r} ${gg} ${b})`);
+    shade.addColorStop(.62, `rgb(${r2} ${g2} ${b2})`);
     shade.addColorStop(1, `rgb(${r2} ${g2} ${b2})`);
     ctx.fillStyle = shade;
     ctx.fill();
@@ -194,11 +197,11 @@ export function paintWaves(ctx: CanvasRenderingContext2D, g: Genome, width: numb
   /* the light on the crests: a soft rim, brightest where a slow highlight passes */
   for (let i = 0; i < BANDS; i++) {
     const top = edges[i];
-    const centre = ((pose.time * .045 + i * .23) % 1 + 1) % 1;
+    const centre = .5 + .38 * Math.sin(pose.time * .14 + i * 1.3);
     const light = ctx.createLinearGradient(0, 0, width, 0);
     light.addColorStop(0, 'rgb(255 255 255 / .07)');
     light.addColorStop(Math.max(0, centre - .16), 'rgb(255 255 255 / .07)');
-    light.addColorStop(centre, 'rgb(255 255 255 / .38)');
+    light.addColorStop(centre, 'rgb(255 255 255 / .58)');
     light.addColorStop(Math.min(1, centre + .16), 'rgb(255 255 255 / .07)');
     light.addColorStop(1, 'rgb(255 255 255 / .07)');
     ctx.beginPath();
@@ -208,6 +211,26 @@ export function paintWaves(ctx: CanvasRenderingContext2D, g: Genome, width: numb
     ctx.closePath();
     ctx.fillStyle = light;
     ctx.fill();
+  }
+  /* Fine translucent currents follow each ribbon, with a different phase
+     at each depth. They never cross the neighbouring ribbon. */
+  for (let i = 0; i < BANDS - 1; i++) {
+    for (let strand = 0; strand < 2; strand++) {
+      ctx.beginPath();
+      for (let c = 0; c < cols; c++) {
+        const u = c / (cols - 1);
+        const blend = .2 + strand * .16 + .045 * Math.sin(u * TAU + pose.time * .18 + i);
+        const y = edges[i][c] + (edges[i + 1][c] - edges[i][c]) * blend;
+        if (c === 0) ctx.moveTo(0, y); else ctx.lineTo(c * step, y);
+      }
+      const glint = ctx.createLinearGradient(0, 0, width, 0);
+      glint.addColorStop(0, 'rgba(255,255,255,0)');
+      glint.addColorStop(.5 + .25 * Math.sin(pose.time * .12 + i), 'rgba(255,255,255,.16)');
+      glint.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = glint;
+      ctx.lineWidth = .55;
+      ctx.stroke();
+    }
   }
   /* the motes: a soft halo and a bright core each */
   for (const m of motes) {

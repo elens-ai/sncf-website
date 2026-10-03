@@ -9,7 +9,7 @@ import type { Access, FieldAccess } from 'payload'
  *   contributor — may write, may not publish. Their work sits as a draft
  *                 until someone else looks at it.
  *   editor      — may publish content, and may manage the media library.
- *   admin       — may additionally manage users and see donation records.
+ *   admin       — may additionally manage users and site setup.
  *
  * The split exists because the damaging action here is not editing, it is
  * PUBLISHING: this site is the foundation's record of itself, and a wrong

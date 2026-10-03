@@ -14,15 +14,16 @@ import { HealthCityFeature } from '../components/HealthCityFeature';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ACTIVITIES, type Activity } from '../data/activities';
 import { mediaReady } from '../data/media';
+import { roomPhotoFor } from '../data/pavilionGallery';
 import { slug } from '../utils/slug';
 import './projects.css';
 
 const getProjects = () => ACTIVITIES.filter(a => a.pillarId === 'projects');
 let FACES = bindCMSValue(() => ([
-  { ink: '#087d8b', light: '#bce7e5', label: getCMSCopy("copy.ProjectsPage.7ca7dea90680", "Water"), scope: getCMSCopy("copy.ProjectsPage.41bcc0f77ef0", "Launched 2023 · with the Government of India"), icon: Droplets, image: 'projects-1', alt: getCMSCopy("copy.ProjectsPage.5753ec312396", "A river flowing through a green forest"), line: getCMSCopy("copy.ProjectsPage.4463a32132e7", "A fresh chapter for our water.") },
-  { ink: '#36744b', light: '#d2e8b7', label: getCMSCopy("copy.ProjectsPage.62d19b520233", "Forests"), scope: getCMSCopy("copy.ProjectsPage.f2371d5ab799", "Launched 2021 · indigenous micro-forests"), icon: Trees, image: 'empower-5', alt: getCMSCopy("copy.ProjectsPage.99d9cffb9d24", "Sunlight falling through a forest canopy"), line: getCMSCopy("copy.ProjectsPage.a13a9cf8fa7d", "Small forests. A greener future.") },
-  { ink: '#98612b', light: '#f4dfb6', label: getCMSCopy("copy.ProjectsPage.b6baff9358dd", "Land"), scope: getCMSCopy("copy.ProjectsPage.c406304d0b71", "Arid-zone rejuvenation"), icon: Mountain, image: 'projects-4', alt: getCMSCopy("copy.ProjectsPage.7757a5c80e41", "Agricultural land in the evening light"), line: getCMSCopy("copy.ProjectsPage.c2dc7b1fa516", "Restoring the land that sustains us.") },
-  { ink: '#856098', light: '#e6d9ee', label: getCMSCopy("copy.ProjectsPage.c864f329f5dd", "Communities"), scope: getCMSCopy("copy.ProjectsPage.904eb1d10ff3", "Since 2017 · Haryana"), icon: House, image: 'enrich-2', alt: getCMSCopy("copy.ProjectsPage.be0da16a46ae", "Students learning together in a classroom"), line: getCMSCopy("copy.ProjectsPage.c2eb86f270ec", "Growing stronger, together.") },
+  { ink: '#087d8b', light: '#bce7e5', label: getCMSCopy("copy.ProjectsPage.7ca7dea90680", "Water"), scope: getCMSCopy("copy.ProjectsPage.41bcc0f77ef0", "Launched 2023 · with the Government of India"), icon: Droplets, image: 'projects-1', alt: getCMSCopy("copy.ProjectsPage.faceWaterAlt", "Project Amrit volunteers clearing a riverbank in Mantova, Italy"), line: getCMSCopy("copy.ProjectsPage.4463a32132e7", "A fresh chapter for our water.") },
+  { ink: '#36744b', light: '#d2e8b7', label: getCMSCopy("copy.ProjectsPage.62d19b520233", "Forests"), scope: getCMSCopy("copy.ProjectsPage.f2371d5ab799", "Launched 2021 · indigenous micro-forests"), icon: Trees, image: 'projects-2', alt: getCMSCopy("copy.ProjectsPage.faceForestAlt", "Women planting saplings for a Oneness Vann micro-forest in Solapur"), line: getCMSCopy("copy.ProjectsPage.a13a9cf8fa7d", "Small forests. A greener future.") },
+  { ink: '#98612b', light: '#f4dfb6', label: getCMSCopy("copy.ProjectsPage.b6baff9358dd", "Land"), scope: getCMSCopy("copy.ProjectsPage.c406304d0b71", "Arid-zone rejuvenation"), icon: Mountain, image: 'empower-2', illustrative: true, alt: getCMSCopy("copy.ProjectsPage.faceLandAlt", "A volunteer plants a sapling on a hillside"), line: getCMSCopy("copy.ProjectsPage.c2dc7b1fa516", "Restoring the land that sustains us.") },
+  { ink: '#856098', light: '#e6d9ee', label: getCMSCopy("copy.ProjectsPage.c864f329f5dd", "Communities"), scope: getCMSCopy("copy.ProjectsPage.904eb1d10ff3", "Since 2017 · Haryana"), icon: House, image: '/images/programmes/adopted-villages-mandaura.webp', alt: getCMSCopy("copy.ProjectsPage.faceCommunitiesAlt", "A volunteer checks an elderly villager in Mandaura, an adopted village"), line: getCMSCopy("copy.ProjectsPage.c2eb86f270ec", "Growing stronger, together.") },
 ]), value => { FACES = value; });
 const inkStyle = (i: number) => ({ '--project-ink': FACES[i % FACES.length].ink, '--project-light': FACES[i % FACES.length].light } as React.CSSProperties);
 
@@ -74,7 +75,7 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
   return <section id={id} className="project-chapter" style={inkStyle(index)} aria-labelledby={`${id}-title`}>
     <header className="project-chapter-heading"><span className="project-chapter-number">{getCMSCopy("copy.ProjectsPage.5feceb66ffc8", "0")}{index + 1}</span><div><p className="project-eyebrow">{face.label} / {face.scope}</p><h2 id={`${id}-title`}>{project.title}</h2></div><Icon size={32} strokeWidth={1.4} aria-hidden="true" /></header>
     <div className="project-story-grid">
-      <figure className="project-landscape"><img src={resolveCMSMedia(`/images/pavilion/${face.image}.jpg`)} alt={`Illustrative photograph: ${face.alt}`} loading="lazy" decoding="async" /><div className="project-landscape-wash" /><div className="project-landscape-title"><Icon size={30} /><h3>{face.line}</h3></div><figcaption>{getCMSCopy("copy.ProjectsPage.9970f438a483", "Illustrative photography")}</figcaption></figure>
+      <figure className="project-landscape"><img src={resolveCMSMedia(face.image.startsWith('/') ? face.image : roomPhotoFor(`/images/pavilion/${face.image}.jpg`))} alt={face.illustrative ? `Illustrative photograph: ${face.alt}` : face.alt} loading="lazy" decoding="async" /><div className="project-landscape-wash" /><div className="project-landscape-title"><Icon size={30} /><h3>{face.line}</h3></div>{face.illustrative && <figcaption>{getCMSCopy("copy.ProjectsPage.9970f438a483", "Illustrative photography")}</figcaption>}</figure>
       <div className="project-report"><div className="project-report-top"><span className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.6fb73aee5b23", "The project in focus")}</span></div>
         <p className="project-blurb">{project.blurb}</p>
         <div className={modelId ? 'project-impact-row' : undefined}>
@@ -90,7 +91,7 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
       </div>
     </div>
     <ProjectAnalytics project={project} />
-    {mediaReady(id) > 0 && <MediaGallery section={id} title={`${project.title} — photographs & films`} />}
+    {mediaReady(project.id) > 0 && <MediaGallery section={project.id} title={`${project.title} — photographs & films`} />}
     <a className="project-next" href={`#${getProjects()[index+1] ? slug(getProjects()[index + 1].title) : 'health-city'}`}><span>{getCMSCopy("copy.ProjectsPage.ba12ecefbd57", "Continue exploring")}</span><strong>{getProjects()[index+1] ? getProjects()[index + 1].title : 'Sant Nirankari Health City'}</strong><ArrowDown size={19} /></a>
   </section>;
 };

@@ -2,10 +2,13 @@ import { resolveCMSMedia } from '../cms/media';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { siteOverride } from '../cms/siteSettings';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AnimatedBrandWordmark } from './AnimatedBrandWordmark';
+import { Link } from 'react-router-dom';
 import { AnthemPlayer } from './AnthemPlayer';
 import { MainNav } from './MainNav';
 import { PillarState } from '../types';
+import './header-navigation.css';
 
 interface HeaderProps {
   currentPillar: PillarState;
@@ -24,12 +27,10 @@ export const Header: React.FC<HeaderProps> = ({
   onSearchClick,
   searchQuery,
   onSearchChange,
-  onOpenDetails,
-  onOpenGallery,
   onOpenDonate,
   hideLogo = false,
 }) => {
-  const cmsRevision = useCMSRevision();
+  useCMSRevision();
   /* The search control stays a single glass orb; scrolling no longer opens it.
      It expands only when there is a query to show, which comes back from the
      search modal the orb opens — so the field appears because the visitor
@@ -47,59 +48,6 @@ export const Header: React.FC<HeaderProps> = ({
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  /* Track line 2 out until it spans exactly the width of line 1.
-     Computed rather than hand-tuned: the tracking that matches depends on the
-     rendered font, and the display face loads asynchronously — a fixed value
-     would be wrong until it arrives, then wrong again at the lg size step.
-     letter-spacing adds a gap AFTER every character including the last, so the
-     divisor is (n - 1) and the trailing gap is pulled back with a negative
-     margin; otherwise the visible right edge overshoots line 1. */
-  const line1Ref = useRef<HTMLSpanElement | null>(null);
-  const line2Ref = useRef<HTMLSpanElement | null>(null);
-
-  useLayoutEffect(() => {
-    const l1 = line1Ref.current;
-    const l2 = line2Ref.current;
-    if (!l1 || !l2) return;
-
-    const fit = () => {
-      l2.style.letterSpacing = 'normal';
-      l2.style.marginRight = '0px';
-      const target = l1.offsetWidth;
-      const natural = l2.offsetWidth;
-      const n = (l2.textContent ?? '').length;
-      if (n < 2 || target <= natural) return;
-      const spacing = (target - natural) / (n - 1);
-      l2.style.letterSpacing = `${spacing}px`;
-      l2.style.marginRight = `${-spacing}px`;
-    };
-
-    fit();
-    // Re-fit once webfonts land, and whenever the lockup is re-laid out.
-    document.fonts?.ready.then(fit).catch(() => undefined);
-    const ro = new ResizeObserver(fit);
-    ro.observe(l1);
-    return () => ro.disconnect();
-  }, [cmsRevision]);
-
-  /* Reveal: each line slides out from behind the logo inside its own clipping
-     row. Pure transform, so it stays cheap, and it only runs once the splash
-     has handed off — hideLogo is still true while the flying logo is in the
-     air, so the wordmark cannot appear mid-flight. */
-  const revealRow = 'block overflow-hidden';
-  const revealInner = (delayMs: number): React.CSSProperties => ({
-    /* inline-block, NOT block: a block child fills its parent, so both lines
-       would measure as the container width and the tracking calculation would
-       compare a box against itself. Shrink-wrapping makes offsetWidth the real
-       text width. */
-    display: 'inline-block',
-    transform: hideLogo ? 'translateX(-102%)' : 'translateX(0)',
-    opacity: hideLogo ? 0 : 1,
-    transition: hideLogo
-      ? 'none'
-      : `transform 760ms cubic-bezier(0.22, 1, 0.3, 1) ${delayMs}ms, opacity 420ms ease-out ${delayMs}ms`,
-  });
 
   return (
     <header
@@ -120,10 +68,16 @@ export const Header: React.FC<HeaderProps> = ({
       />
       {/* LEFT: Logo + wordmark */}
       <div className="site-brand flex items-center gap-3 pointer-events-auto flex-none">
-        <button
+        <Link
           id="logo-badge-btn"
-          onClick={onOpenDetails}
-          className="group relative w-[52px] h-[52px] rounded-full bg-white overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer p-0 border-none"
+          to="/"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
+          className="group relative w-[52px] h-[52px] rounded-full overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer p-0 border-none"
+          /* White disc sized to the emblem's outer ring rather than the whole
+             badge: the logo image has transparent padding, so a full-size disc
+             left a white rim around the ring. The ring spans ~93.4% of the box,
+             slightly above and left of centre; the disc sits just inside it. */
+          style={{ background: 'radial-gradient(circle closest-side, #fff 99%, transparent 100%) 37.2% 38.6% / 92.8% 92.8% no-repeat' }}
           title={getCMSCopy("copy.Header.a01941bf3134", "Sant Nirankari Charitable Foundation")}
           aria-label={getCMSCopy("copy.Header.b79520f8055a", "Sant Nirankari Charitable Foundation logo")}
         >
@@ -136,41 +90,21 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
             referrerPolicy="no-referrer"
           />
-        </button>
+        </Link>
 
-        {/* Wordmark. Hidden below md, where the nav's hamburger and the right-hand
-            controls already claim the row — the logo alone carries the identity
-            there. It also fades out with the logo during the splash hand-off so
-            the two never separate. */}
-        <button
-          id="site-wordmark"
-          onClick={onOpenDetails}
-          title={getCMSCopy("copy.Header.a01941bf3134", "Sant Nirankari Charitable Foundation")}
-          className="hidden md:block text-left leading-[1.08] cursor-pointer bg-transparent border-none p-0"
-        >
-          <span className={revealRow}>
-            <span
-              ref={line1Ref}
-              style={revealInner(120)}
-              className="font-artistic-display text-white text-[19px] lg:text-[22px] font-extrabold tracking-[0.13em] uppercase drop-shadow-sm whitespace-nowrap"
-            >{siteOverride("branding", "name", getCMSCopy("copy.Header.3eeeb717e545", "Sant Nirankari"))}</span>
-          </span>
-          <span className={revealRow}>
-            <span
-              ref={line2Ref}
-              style={revealInner(240)}
-              className="font-artistic-display text-white/85 text-[11px] lg:text-[12.5px] font-semibold uppercase drop-shadow-sm whitespace-nowrap"
-            >{getCMSCopy("copy.Header.4b0937769465", "Charitable Foundation")}</span>
-          </span>
-        </button>
+        <AnimatedBrandWordmark
+          name={siteOverride("branding", "name", getCMSCopy("copy.Header.3eeeb717e545", "Sant Nirankari"))}
+          descriptor={getCMSCopy("copy.Header.4b0937769465", "Charitable Foundation")}
+          hidden={hideLogo}
+        />
       </div>
 
-      {/* CENTRE: main navigation (Gallery is the icon button on the right) */}
+      {/* CENTRE: main navigation */}
       <div className="site-navigation flex-1 flex justify-center min-w-0 px-2">
-        <MainNav />
+        <MainNav onOpenDonate={onOpenDonate} onSearchClick={onSearchClick} />
       </div>
 
-      {/* RIGHT: Anthem toggle + search + Gallery + Donate ribbon */}
+      {/* RIGHT: Anthem toggle + search + Donate ribbon */}
       <div className="site-actions flex items-center gap-2 md:gap-3 pointer-events-auto">
         <AnthemPlayer />
         {/* Futuristic morphing search — glass orb on the hero, full field on scroll */}
@@ -201,6 +135,7 @@ export const Header: React.FC<HeaderProps> = ({
             <input
               id="hero-search-input"
               type="text"
+              aria-label="Search the foundation"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               onClick={onSearchClick}
@@ -244,32 +179,6 @@ export const Header: React.FC<HeaderProps> = ({
               />
             )}
           </div>
-
-        {/* Gallery — icon only. It used to own the ribbon; the ribbon is now the
-            donation call to action, and the main nav deliberately has no Gallery
-            entry, so without this button the gallery would have no way in. */}
-        <button
-          id="gallery-icon-btn"
-          onClick={onOpenGallery}
-          title={getCMSCopy("copy.Header.c6580e851793", "Open the gallery")}
-          aria-label={getCMSCopy("copy.Header.c6580e851793", "Open the gallery")}
-          className="grid place-items-center w-11 h-11 rounded-full bg-white/10 border border-white/25 backdrop-blur-xl text-white/90 hover:bg-white/20 hover:text-white transition-all cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 flex-none"
-        >
-          <svg
-            className="w-[18px] h-[18px]"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <path d="M21 15l-5-5L5 21" />
-          </svg>
-        </button>
 
         {/* Donation ribbon — the header's one call to action.
 

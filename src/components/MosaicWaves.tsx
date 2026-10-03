@@ -7,12 +7,11 @@ import type { PillarState } from '../types';
 /**
  * THE WAVES — the artwork behind the Living Mosaic.
  *
- * One <canvas> painted at a third of its CSS size and scaled up by the
+ * One <canvas> painted at half of its CSS size and scaled up by the
  * browser: bilinear upscaling of anti-aliased flat fills is what gives the
  * matte, soft-edged ribbons of the reference, for free, and it means a
  * Retina display costs no more to paint than a laptop's. The buffer is
- * 480×300 at 1440×900 and every frame is five fills of it — under a
- * millisecond, on the house 30 fps clock, only while the section is active
+ * 720×450 at 1440×900, with shaded ribbons and fine crest lines, on the house 30 fps clock, only while the section is active
  * and nothing lies over it.
  *
  * What moves, and why nothing here reads the DOM per frame:
@@ -33,9 +32,9 @@ import type { PillarState } from '../types';
  * mask, so there is no full-resolution mask surface and nothing for Safari
  * to get wrong under a sticky ancestor.
  */
-const SCALE = 3;
+const SCALE = 2;
 const FPS = 30;
-const MORPH_SECONDS = 1;
+const MORPH_SECONDS = 1.6;
 
 /** Faint under the signature column, full behind the collage — over a wide,
     gentle ramp, so the column never reads as a seam in the picture. */
@@ -59,9 +58,9 @@ const seedMotes = (): Mote[] => Array.from({ length: MOTE_COUNT }, (_, i) => ({
 }));
 const driftMotes = (motes: Mote[], delta: number, time: number) => {
   motes.forEach((m, i) => {
-    m.y -= delta * (.012 + frac(i * .53) * .018);
+    m.y -= delta * (.006 + frac(i * .53) * .009);
     if (m.y < -.04) { m.y = 1.04; m.x = frac(m.x + .618034); }
-    m.x += Math.sin(time * .3 + i * .7) * .0003;
+    m.x += Math.sin(time * .3 + i * .7) * delta * .006;
     m.a = .14 + .18 * (.5 + .5 * Math.sin(time * .9 + i * 1.3));
   });
 };

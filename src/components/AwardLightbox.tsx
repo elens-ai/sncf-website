@@ -65,6 +65,9 @@ export const AwardLightbox: React.FC<AwardLightboxProps> = ({
     if (!isOpen) return;
 
     openerRef.current = document.activeElement;
+    const siblings = Array.from(document.body.children).filter((el): el is HTMLElement => el instanceof HTMLElement && !el.contains(cardRef.current));
+    const previousInert = siblings.map(el => [el, el.inert] as const);
+    siblings.forEach(el => { el.inert = true; });
 
     const handleKeyDown = (e: KeyboardEvent) => {
       const { onClose: close, goPrev: prev, goNext: next } = handlersRef.current;
@@ -113,12 +116,13 @@ export const AwardLightbox: React.FC<AwardLightboxProps> = ({
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', handleKeyDown, true);
 
-    cardRef.current?.focus();
+    cardRef.current?.focus({ preventScroll: true });
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown, true);
       document.body.style.overflow = previousOverflow;
-      if (openerRef.current instanceof HTMLElement) openerRef.current.focus();
+      previousInert.forEach(([el, inert]) => { el.inert = inert; });
+      if (openerRef.current instanceof HTMLElement) openerRef.current.focus({ preventScroll: true });
     };
   }, [isOpen]);
 
@@ -133,7 +137,7 @@ export const AwardLightbox: React.FC<AwardLightboxProps> = ({
      straight over the backdrop. The same trap the social sidebar hit. */
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-black/85 backdrop-blur-xl animate-fadeIn"
+      className="recognition-viewer fixed inset-0 flex items-center justify-center p-4 sm:p-8 bg-black/85 backdrop-blur-xl animate-fadeIn"
       onClick={onClose}
     >
       <div

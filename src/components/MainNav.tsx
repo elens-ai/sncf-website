@@ -1,25 +1,11 @@
 import { resolveCMSMedia } from '../cms/media';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Heart, Menu, Search, X } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { NAV_ITEMS, NavItem } from '../data/navigation';
 import { PILLARS } from '../data/pillars';
-
-/**
- * Main navigation for the hero.
- *
- * Two ideas make it feel of a piece with the wheel rather than bolted on:
- *
- *  - A spotlight pill slides between items instead of each item lighting up
- *    on its own. It is one element moved by transform, so the highlight reads
- *    as a single object travelling the bar.
- *  - Core Values opens a mega menu split by Heal / Enrich / Empower, each
- *    column carrying that pillar's own accent colour — the same three
- *    verticals the carousel is cycling, so the menu explains the hero.
- *
- * Gallery is not here on purpose: the header already has a Gallery ribbon.
- */
 
 /**
  * One link that knows where it goes. Internal destinations ('/core-values',
@@ -68,7 +54,7 @@ const accentOf = (pillarId: string) =>
 const deepOf = (pillarId: string) =>
   PILLARS.find((p) => p.id === pillarId)?.accentA ?? '#3a3f57';
 
-export const MainNav: React.FC = () => {
+export const MainNav: React.FC<{ onOpenDonate: () => void; onSearchClick: () => void }> = ({ onOpenDonate, onSearchClick }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSection, setMobileSection] = useState<number | null>(null);
@@ -78,11 +64,14 @@ export const MainNav: React.FC = () => {
     const trigger = document.activeElement as HTMLElement | null;
     const oldOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const root = document.getElementById('root');
+    const wasInert = root?.inert ?? false;
+    if (root) root.inert = true;
     mobilePanel.current?.focus();
     const trap = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
       const panel = mobilePanel.current;
-      const items = panel?.querySelectorAll<HTMLElement>('button, a[href]');
+      const items = Array.from<HTMLElement>(panel?.querySelectorAll<HTMLElement>('button, a[href]') ?? []).filter((item) => !item.closest('[hidden]'));
       if (!panel || !items?.length) return;
       const first = items[0], last = items[items.length - 1];
       if (!panel.contains(document.activeElement) || document.activeElement === panel || event.shiftKey && document.activeElement === first || !event.shiftKey && document.activeElement === last) {
@@ -94,6 +83,7 @@ export const MainNav: React.FC = () => {
     window.addEventListener('resize', resized);
     return () => {
       document.body.style.overflow = oldOverflow;
+      if (root) root.inert = wasInert;
       document.removeEventListener('keydown', trap);
       window.removeEventListener('resize', resized);
       if (trigger?.isConnected) trigger.focus({ preventScroll: true });
@@ -176,12 +166,12 @@ export const MainNav: React.FC = () => {
       >
         <div
           ref={barRef}
-          className="relative flex items-center gap-1 px-2 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl shadow-lg"
+          className="relative flex items-center gap-1 px-2 py-1.5 "
         >
           {/* Sliding spotlight — one element, moved by transform */}
           <span
             aria-hidden="true"
-            className="absolute top-1.5 bottom-1.5 left-0 rounded-full bg-white/20 pointer-events-none"
+            className="absolute top-1.5 bottom-1.5 left-0 pointer-events-none"
             style={{
               width: spotlight?.w ?? 0,
               transform: `translateX(${spotlight?.x ?? 0}px)`,
@@ -354,102 +344,48 @@ export const MainNav: React.FC = () => {
         type="button"
         onClick={() => setMobileOpen((v) => !v)}
         aria-expanded={mobileOpen}
+        aria-controls="mobile-site-navigation"
         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-        className="xl:hidden pointer-events-auto grid place-items-center w-11 h-11 rounded-full bg-white/10 border border-white/25 backdrop-blur-xl text-white/90 hover:bg-white/20 transition-all cursor-pointer active:scale-95 flex-none"
+        className="mobile-menu-trigger xl:hidden pointer-events-auto grid place-items-center w-11 h-11 bg-transparent border-0 text-white/90 hover:text-white transition-all cursor-pointer active:scale-95 flex-none"
       >
         {mobileOpen ? <X className="w-[18px] h-[18px]" /> : <Menu className="w-[18px] h-[18px]" />}
       </button>
 
-      {/* ---------- Mobile panel ---------- */}
-      {mobileOpen && (
-        <div ref={mobilePanel} role="dialog" aria-modal="true" aria-label={getCMSCopy("copy.MainNav.7b06d0dd6977", "Site navigation")} tabIndex={-1} className="site-mobile-menu xl:hidden pointer-events-auto fixed left-0 right-0 top-[72px] z-50 px-4 animate-fadeIn">
-          <div className="rounded-2xl bg-neutral-950/95 border border-white/15 backdrop-blur-xl shadow-2xl p-3 max-h-[70vh] overflow-y-auto">
-            <button type="button" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 ml-auto px-3 py-3 text-white" aria-label={getCMSCopy("copy.MainNav.99904db30de4", "Close navigation")}>{getCMSCopy("copy.MainNav.79c84b48c2f0", "Close ")}<X size={18} /></button>
-            {NAV_ITEMS.map((item, i) => {
-              const open = mobileSection === i;
-              if (!hasPanel(item)) {
-                return (
-                  <NavAnchor
-                    key={item.label}
-                    href={item.href}
-                    external={item.external}
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 px-3 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10 transition-colors"
-                  >
-                    {item.label}
-                    {item.badge && (
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-amber-300 italic">
-                        {item.badge}
-                      </span>
-                    )}
-                  </NavAnchor>
-                );
-              }
-              return (
-                <div key={item.label}>
-                  <button
-                    type="button"
-                    onClick={() => setMobileSection(open ? null : i)}
-                    aria-expanded={open}
-                    className="w-full flex items-center justify-between px-3 py-3 rounded-xl text-sm font-semibold text-white/90 hover:bg-white/10 transition-colors cursor-pointer"
-                  >
-                    {item.label}
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-300 ${
-                        open ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  {open && (
-                    <div className="pb-2">
-                      {item.href && !item.external && (
-                        <NavAnchor
-                          href={item.href}
-                          onClick={() => setMobileOpen(false)}
-                          className="block px-6 py-2 rounded-lg text-[13px] font-semibold text-white/90 hover:text-white hover:bg-white/10 transition-colors"
-                        >{getCMSCopy("copy.MainNav.b8039d1d54bf", "Open ")}{item.label}
-                        </NavAnchor>
-                      )}
-                      {item.groups
-                        ? item.groups.map((g) => (
-                            <div key={g.pillarId} className="mb-2">
-                              <div
-                                className="px-6 py-1 text-[10px] font-extrabold uppercase tracking-widest"
-                                style={{ color: accentOf(g.pillarId) }}
-                              >
-                                {g.title}
-                              </div>
-                              {g.links.map((l) => (
-                                <NavAnchor
-                                  key={l.label}
-                                  href={l.href}
-                                  external={l.external}
-                                  onClick={() => setMobileOpen(false)}
-                                  className="block px-6 py-2 rounded-lg text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-                                >
-                                  {l.label}
-                                </NavAnchor>
-                              ))}
-                            </div>
-                          ))
-                        : item.links?.map((l) => (
-                            <NavAnchor
-                              key={l.label}
-                              href={l.href}
-                              external={l.external}
-                              onClick={() => setMobileOpen(false)}
-                              className="block px-6 py-2 rounded-lg text-[13px] text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-                            >
-                              {l.label}
-                            </NavAnchor>
-                          ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+      {/* Portalled so the hero's entrance and transforms cannot clip the dialog. */}
+      {mobileOpen && createPortal(
+        <div className="mobile-menu-overlay" onClick={(event) => { if (event.target === event.currentTarget) setMobileOpen(false); }}>
+          <div id="mobile-site-navigation" ref={mobilePanel} role="dialog" aria-modal="true" aria-label={getCMSCopy("copy.MainNav.7b06d0dd6977", "Site navigation")} tabIndex={-1} className="site-mobile-menu">
+            <header className="mobile-menu-heading">
+              <div><span className="mobile-menu-eyebrow">Service with humility</span><p>Explore SNCF<span>.</span></p></div>
+              <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close navigation"><X size={24} /></button>
+            </header>
+            <button className="mobile-menu-search" type="button" onClick={() => { setMobileOpen(false); onSearchClick(); }}><Search size={18} /><span>Find a cause, camp or initiative</span><ArrowUpRight size={16} /></button>
+            <nav className="mobile-menu-links" aria-label="Mobile main">
+              {NAV_ITEMS.map((item, i) => {
+                const open = mobileSection === i;
+                return <div key={item.label} className="mobile-menu-item" style={{ '--item-index': i } as React.CSSProperties}>
+                  {hasPanel(item) ? <button type="button" className="mobile-menu-row" onClick={() => setMobileSection(open ? null : i)} aria-expanded={open} aria-controls={`mobile-section-${i}`}>
+                    <span className="mobile-menu-number" aria-hidden="true">0{i + 1}</span><span>{item.label}</span><ChevronDown size={20} className={open ? 'rotate-180' : ''} />
+                  </button> : <NavAnchor href={item.href} external={item.external} onClick={() => setMobileOpen(false)} className="mobile-menu-row">
+                    <span className="mobile-menu-number" aria-hidden="true">0{i + 1}</span><span>{item.label}</span><ArrowUpRight size={20} />
+                  </NavAnchor>}
+                  {hasPanel(item) && <div id={`mobile-section-${i}`} hidden={!open} className="mobile-menu-submenu">
+                    {item.href && <NavAnchor href={item.href} external={item.external} onClick={() => setMobileOpen(false)} className="mobile-menu-overview">Explore {item.label}<ArrowUpRight size={15} /></NavAnchor>}
+                    {item.groups ? item.groups.map((group) => <div className="mobile-menu-group" key={group.pillarId}>
+                      <p style={{ color: deepOf(group.pillarId) }}>{group.title}</p>
+                      {group.links.map((link) => <NavAnchor key={link.label} href={link.href} external={link.external} onClick={() => setMobileOpen(false)}>{link.label}</NavAnchor>)}
+                    </div>) : item.links?.map((link) => <NavAnchor key={link.label} href={link.href} external={link.external} onClick={() => setMobileOpen(false)}>{link.label}</NavAnchor>)}
+                  </div>}
+                </div>;
+              })}
+            </nav>
+            <footer className="mobile-menu-footer">
+              <p>A little kindness.<br /><strong>A lasting difference.</strong></p>
+              <button type="button" onClick={() => { setMobileOpen(false); onOpenDonate(); }}><Heart size={17} />Donate<ArrowUpRight size={18} /></button>
+              <span>Sant Nirankari Charitable Foundation</span>
+            </footer>
           </div>
-        </div>
+        </div>, document.body
       )}
     </>
   );

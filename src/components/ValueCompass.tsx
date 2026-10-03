@@ -11,8 +11,10 @@ const VALUES = ['heal', 'enrich', 'empower'] as const;
 type Value = typeof VALUES[number];
 const ICONS = [Heart, BookOpen, Sprout];
 
-export function ValueCompass({ choice, onChange, active }: {
+export function ValueCompass({ choice, onChange, active, held = false }: {
   choice: Value; onChange: (value: Value) => void; active: boolean;
+  /** Stops the turning while the visitor is choosing a value from outside it. */
+  held?: boolean;
 }) {
   useCMSRevision();
   const selected = VALUES.indexOf(choice);
@@ -43,7 +45,7 @@ export function ValueCompass({ choice, onChange, active }: {
   }, [selected]);
 
   useEffect(() => {
-    if (!active || reduced || dragging) return;
+    if (!active || reduced || dragging || held) return;
     const clock = createFrameClock(delta => {
       angle.current = (angle.current + delta * 20) % 360;
       if (orbit.current) orbit.current.style.transform = `rotate(${angle.current}deg)`;
@@ -55,7 +57,7 @@ export function ValueCompass({ choice, onChange, active }: {
     }, 60);
     clock.start();
     return () => clock.stop();
-  }, [active, reduced, dragging]);
+  }, [active, reduced, dragging, held]);
 
   const select = (index: number, focus = false) => {
     const next = (index + VALUES.length) % VALUES.length;

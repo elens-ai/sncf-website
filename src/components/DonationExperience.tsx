@@ -44,8 +44,24 @@ export function DonationExperience({ page = false, onClose }: { page?: boolean; 
   const emailHref = `mailto:${site.contact.email}?subject=${encodeURIComponent(c('emailSubject', 'An enquiry about contributing to SNCF'))}&body=${encodeURIComponent(emailBody)}`;
   const changeStep = (next: number) => { setStep(next); requestAnimationFrame(() => { stepTitle.current?.focus({ preventScroll: true }); stepTitle.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' }); }); };
   const Heading = page ? 'h1' : 'h2';
+  const guidance: { question: string; answer: React.ReactNode }[] = [
+    { question: c('onlineQuestion', 'How can I donate online?'), answer: <><p>{c('onlineAnswer', 'The foundation lists debit and credit cards, net banking, bank transfers, e-wallets and UPI, through Razorpay (powered by HDFC Bank) and PayUmoney.')}</p><a href={contributionURL} onClick={e => { e.preventDefault(); setFormOpen(true); }}>{c('contributeAction', 'Continue to contribute')}<ArrowUpRight size={14} /></a></> },
+    { question: c('taxQuestion', 'Are donations tax deductible?'), answer: <p>{c('taxAnswer', 'The foundation’s donation page states that contributions qualify for deduction under section 80G(5)(vi) of the Income Tax Act, 1961. Contact the accounts team for documentation.')}</p> },
+    { question: c('offlineQuestion', 'Can I contribute by cheque or in person?'), answer: <><p>{c('offlineAnswer', 'Make cheques or demand drafts payable to Sant Nirankari Charitable Foundation at Delhi. Post them to the office below or submit them at your nearest branch.')}</p><p><MapPin size={14} />{site.contact.address}</p><p>{c('counterAnswer', 'Card contributions are accepted at the Delhi office on working days, 9:30 AM–6:00 PM, and at the SNCF counter during Sunday Satsang in Delhi.')}</p></> },
+    { question: c('receiptQuestion', 'Who can help with receipts and documentation?'), answer: <><p>{c('receiptAnswer', 'Our accounts team can guide you on payment options, receipts and the documentation applicable to your contribution.')}</p><a href={`mailto:${site.contact.email}`}>{site.contact.email}<ArrowUpRight size={14} /></a></> },
+  ];
+  /* In the modal an answer opens as a card over the form (donation.css: MODAL
+     FIT), so one at a time; Escape or a click elsewhere puts it away first. */
+  const openAnswers = () => root.current?.querySelectorAll<HTMLDetailsElement>('.donation-faq details[open]') ?? [];
+  const oneAnswerAtATime = (event: React.SyntheticEvent<HTMLDetailsElement>) => {
+    const opened = event.currentTarget;
+    if (opened.open) openAnswers().forEach(other => { if (other !== opened) other.open = false; });
+  };
+  const closeAnswer = (details: HTMLDetailsElement | null) => { if (!details) return; details.open = false; details.querySelector('summary')?.focus(); };
 
-  return <div ref={root} data-active={active} className="donation-experience" style={{ '--give-ink': ink, '--give-light': light } as React.CSSProperties}>
+  return <div ref={root} data-active={active} data-kind={kind} data-step={step} className="donation-experience" style={{ '--give-ink': ink, '--give-light': light } as React.CSSProperties}
+    onKeyDown={page ? undefined : event => { const open = openAnswers()[0]; if (event.key === 'Escape' && open) { event.preventDefault(); closeAnswer(open); } }}
+    onPointerDown={page ? undefined : event => openAnswers().forEach(open => { if (!open.contains(event.target as Node)) open.open = false; })}>
     {formOpen && <ContributionDialog onClose={() => setFormOpen(false)} />}
     {onClose && <button type="button" className="donation-close" aria-label={c('close', 'Close contribution planner')} onClick={onClose}><X size={20} /></button>}
     <div className="donation-story">
@@ -83,13 +99,15 @@ export function DonationExperience({ page = false, onClose }: { page?: boolean; 
           <button type="button" className="donation-back" onClick={() => changeStep(1)}><ArrowLeft size={15} />{c('editPreferences', 'Edit my preferences')}</button>
         </div>}
       </div>
-      <div className="donation-practical"><p className="donation-eyebrow">{c('practicalTitle', 'A little guidance')}</p>
-        <details><summary>{c('onlineQuestion', 'How can I donate online?')}<ChevronDown size={16} /></summary><p>{c('onlineAnswer', 'The foundation lists debit and credit cards, net banking, bank transfers, e-wallets and UPI, through Razorpay (powered by HDFC Bank) and PayUmoney.')}</p><a href={contributionURL} onClick={e => { e.preventDefault(); setFormOpen(true); }}>{c('contributeAction', 'Continue to contribute')}<ArrowUpRight size={14} /></a></details>
-        <details><summary>{c('taxQuestion', 'Are donations tax deductible?')}<ChevronDown size={16} /></summary><p>{c('taxAnswer', 'The foundation’s donation page states that contributions qualify for deduction under section 80G(5)(vi) of the Income Tax Act, 1961. Contact the accounts team for documentation.')}</p></details>
-        <details><summary>{c('offlineQuestion', 'Can I contribute by cheque or in person?')}<ChevronDown size={16} /></summary><p>{c('offlineAnswer', 'Make cheques or demand drafts payable to Sant Nirankari Charitable Foundation at Delhi. Post them to the office below or submit them at your nearest branch.')}</p><p><MapPin size={14} />{site.contact.address}</p><p>{c('counterAnswer', 'Card contributions are accepted at the Delhi office on working days, 9:30 AM–6:00 PM, and at the SNCF counter during Sunday Satsang in Delhi.')}</p></details>
-        <details><summary>{c('receiptQuestion', 'Who can help with receipts and documentation?')}<ChevronDown size={16} /></summary><p>{c('receiptAnswer', 'Our accounts team can guide you on payment options, receipts and the documentation applicable to your contribution.')}</p><a href={`mailto:${site.contact.email}`}>{site.contact.email}<ArrowUpRight size={14} /></a></details>
+      <div className="donation-practical">
+        <div className="donation-practical-head"><p className="donation-eyebrow">{c('practicalTitle', 'A little guidance')}</p>
+          {!page && <Link className="donation-page-link" to="/donate" onClick={onClose}>{c('fullPage', 'Open the contribution page')}<ArrowUpRight size={13} /></Link>}</div>
+        <div className="donation-faq">{guidance.map((item, i) => <details key={i} onToggle={page ? undefined : oneAnswerAtATime}>
+          <summary>{item.question}<ChevronDown size={16} /></summary>
+          <div className="donation-answer"><p className="donation-answer-title" aria-hidden="true">{item.question}</p>{item.answer}
+            <button type="button" className="donation-answer-close" aria-label={c('closeAnswer', 'Close answer')} onClick={e => closeAnswer(e.currentTarget.closest('details'))}><X size={16} /></button></div>
+        </details>)}</div>
       </div>
-      {!page && <Link className="donation-page-link" to="/donate" onClick={onClose}>{c('fullPage', 'Open the contribution page')}<ArrowUpRight size={13} /></Link>}
     </div>
   </div>;
 }

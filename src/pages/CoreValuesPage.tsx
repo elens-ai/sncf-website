@@ -1,13 +1,16 @@
 import { getCMSCopy } from '../cms/runtime';
+import { resolveCMSMedia } from '../cms/media';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, Pause, Play, CalendarDays, Search } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, BookOpen, CalendarDays, Heart, Search, Sprout, type LucideIcon } from 'lucide-react';
 import { ValueCompass } from '../components/ValueCompass';
 import { ValueAnalytics } from '../components/ValueAnalytics';
+import { HealStory } from '../components/HealStory';
+import { EnrichScrapbook } from '../components/EnrichScrapbook';
+import { PillarPhotoMosaic } from '../components/PillarPhotoMosaic';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
-import { PillarModelCard } from '../components/PillarModelCard';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
@@ -16,9 +19,32 @@ import './core-values.css';
 const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
 type Cornerstone = typeof CORNERSTONES[number];
 
+
+/** A cornerstone's emblem filled with the foundation's photographs, as the
+    home page shows it (Empower's figure with raised arms; Heal has its
+    doorways, Enrich its scrapbook). */
+const ValueEmblem: React.FC<{ id: Cornerstone }> = ({ id }) => (
+  <div className="value-emblem">
+    <PillarPhotoMosaic pillar={id} caption={false} />
+    <p className="value-emblem-caption">{getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')}</p>
+  </div>
+);
+
+/* The three ways, one to each cornerstone, in the compass's order and icons. */
+const WAYS: { id: Cornerstone; icon: LucideIcon; text: () => string }[] = [
+  { id: 'heal', icon: Heart, text: () => getCMSCopy("copy.CoreValuesPage.way-heal", "Care that reaches further.") },
+  { id: 'enrich', icon: BookOpen, text: () => getCMSCopy("copy.CoreValuesPage.way-enrich", "Learning that opens doors.") },
+  { id: 'empower', icon: Sprout, text: () => getCMSCopy("copy.CoreValuesPage.way-empower", "Communities that grow stronger.") },
+];
+
+/** The cover: the three ways, set as a legend for the compass beside them.
+    Pointing at a way (or moving to it by keyboard) turns the compass to its
+    cornerstone and holds it there; choosing it goes to that chapter. */
 const ValueCover: React.FC = () => {
   useCMSRevision();
   const [choice, setChoice] = useState<Cornerstone>('heal');
+  const [pointing, setPointing] = useState(false);
+  const [focused, setFocused] = useState(false);
   const root = useRef<HTMLElement>(null);
   const active = useSectionActivity(root);
   const pillar = PILLARS.find(p => p.id === choice)!;
@@ -26,10 +52,30 @@ const ValueCover: React.FC = () => {
     <div className="values-cover-copy">
       <p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.bb5f4b8db550", "One purpose. Three ways to make a difference.")}</p>
       <h1 id="values-cover-title">{getCMSCopy("copy.CoreValuesPage.1872c282a338", "The three")}<br /><em>{getCMSCopy("copy.CoreValuesPage.19b476bc912f", "cornerstones.")}</em></h1>
-      <p>{getCMSCopy("copy.CoreValuesPage.eddff23d6323", "Care that reaches further. Learning that opens doors. Communities that grow stronger.")}</p>
-
+      <ul className="values-cover-ways"
+        onPointerEnter={() => setPointing(true)} onPointerLeave={() => setPointing(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
+        {WAYS.map(({ id, icon: Icon, text }) => {
+          const way = PILLARS.find(p => p.id === id)!;
+          return <li key={id}>
+            <a href={`#${id}`} data-active={choice === id}
+              style={{ '--way-ink': way.accentA, '--way-light': way.accentB } as React.CSSProperties}
+              onPointerEnter={() => setChoice(id)} onFocus={() => setChoice(id)}>
+              <span className="values-cover-way-icon" aria-hidden="true"><Icon size={17} strokeWidth={1.7} /></span>
+              <span className="values-cover-way-name">{way.label}</span>
+              <span className="values-cover-way-text">{text()}</span>
+              <ArrowDown className="values-cover-way-arrow" size={16} aria-hidden="true" />
+            </a>
+          </li>;
+        })}
+      </ul>
+      <div className="values-cover-actions">
+        <a className="values-cover-cta" href="#heal">{getCMSCopy("copy.CoreValuesPage.cover-explore", "Explore the cornerstones")}<ArrowDown size={16} aria-hidden="true" /></a>
+        <a className="values-cover-link" href="#heal-explorer">{getCMSCopy("copy.CoreValuesPage.cover-programmes", "Find a programme")}<ArrowUpRight size={15} aria-hidden="true" /></a>
+      </div>
     </div>
-    <ValueCompass choice={choice} onChange={setChoice} active={active} />
+    <ValueCompass choice={choice} onChange={setChoice} active={active} held={pointing || focused} />
     <div className="values-cover-footer"><span>{getCMSCopy("copy.CoreValuesPage.4109634bf723", "Compassion, made visible.")}</span><span>{getCMSCopy("copy.CoreValuesPage.1cd27a19c41a", "Explore the values · Meet the programmes · Discover the impact")}</span></div>
   </section>;
 };
@@ -40,146 +86,32 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   const [selectedId, setSelectedId] = useState(activities[0].id);
   const [query, setQuery] = useState('');
   const matching = activities.filter(a => `${a.title} ${a.blurb}`.toLowerCase().includes(query.trim().toLowerCase()));
-  const [reduced, setReduced] = useState(false);
-  const modelRef = useRef<HTMLDivElement>(null);
-  const showcaseRef = useRef<HTMLDivElement>(null);
-  const originRef = useRef<HTMLDivElement>(null);
-  const destinationRef = useRef<HTMLDivElement>(null);
-  const detailAnchorRef = useRef<HTMLDivElement>(null);
-  const explorerRef = useRef<HTMLDivElement>(null);
-  const transitionRotation = useRef(0);
-  const visible = useSectionActivity(modelRef);
   const selected = activities.find(a => a.id === selectedId) ?? activities[0];
   useEffect(() => {
     if (ACTIVITIES.some(a => a.id === linkedActivity && a.pillarId === id)) setSelectedId(linkedActivity);
   }, [linkedActivity, id]);
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => setReduced(query.matches);
-    sync(); query.addEventListener('change', sync);
-    return () => query.removeEventListener('change', sync);
-  }, []);
-  useEffect(() => {
-    const showcase = showcaseRef.current, origin = originRef.current, destination = destinationRef.current, model = modelRef.current;
-    if (!showcase || !origin || !destination || !model) return;
-    let frame = 0;
-    let x = 0, y = 0, dx = 0, dy = 0, travel = 1, finalScale = 1;
-    let modelWidth = 1, modelHeight = 1, objectWidth = 255, baseLeft = 0;
-    let dockX = 0, dockY = 0, dockScale = 1, dockStart = 0, dockEnd = 1;
-    const paint = () => {
-      frame = 0;
-      const top = showcase.getBoundingClientRect().top;
-      let t = Math.max(0, Math.min(1, (170 - top) / travel));
-      if (reduced) t = t < .5 ? 0 : 1;
-      const ease = t * t * (3 - 2 * t);
-      // Rotate the actual mesh so the extruded edges and back stay three-dimensional.
-      transitionRotation.current = !reduced ? ease * Math.PI * 2 : 0;
-      // A single scroll-scrubbed push-in: rest at both ends, full scale midway.
-      const zoom = !reduced ? Math.sin(Math.PI * t) ** 4 : 0;
-      const normalX = x + dx * ease, normalY = y + dy * ease;
-      const centreX = innerWidth / 2 - baseLeft - modelWidth / 2;
-      const centreY = (innerHeight + 125) / 2 - top - modelHeight / 2;
-      let dock = Math.max(0, Math.min(1, (-top - dockStart) / Math.max(1, dockEnd - dockStart)));
-      if (reduced) dock = dock < .5 ? 0 : 1;
-      const dockEase = dock * dock * dock * (dock * (dock * 6 - 15) + 10);
-      const movingX = normalX + (centreX - normalX) * zoom;
-      const movingY = normalY + (centreY - normalY) * zoom;
-      const restingScale = 1 + (finalScale - 1) * ease;
-      const fullScreenScale = Math.max(innerWidth, innerHeight) * 1.2 / (objectWidth * 1.44);
-      const zoomScale = restingScale + Math.max(0, fullScreenScale - restingScale) * zoom;
-      let positionX = movingX + (dockX - movingX) * dockEase;
-      let positionY = movingY + (dockY - movingY) * dockEase;
-      let scale = zoomScale + (dockScale - zoomScale) * dockEase;
-      if (!reduced && dock > 0) {
-        // A lifted Bezier arc, with a depth-like change of scale and a gentle
-        // mesh turn. Both ends settle at zero velocity; reverse scrolling retraces it.
-        const u = dockEase, v = 1 - u;
-        const lift = Math.min(150, innerHeight * .17);
-        const bend = Math.min(140, Math.abs(dockX - movingX) * .4);
-        positionX = v ** 3 * movingX + 3 * v * v * u * (movingX + bend)
-          + 3 * v * u * u * (dockX - bend * .35) + u ** 3 * dockX;
-        positionY = v ** 3 * movingY + 3 * v * v * u * (movingY - lift)
-          + 3 * v * u * u * (dockY - lift * .75) + u ** 3 * dockY;
-        scale = zoomScale * Math.pow(dockScale / zoomScale, u) * (1 + .08 * Math.sin(Math.PI * u));
-        transitionRotation.current += Math.PI * 2 * u;
-      }
-      model.style.transform = `translate3d(${positionX}px, ${positionY}px, 0)`;
-      // Reach zero before maximum enlargement and hold it while screen-filling.
-      // Reveal the content through the icon, then restore its
-      // solid appearance on the return journey (also reversible on scroll-up).
-      const fade = Math.max(0, Math.min(1, (zoom - .2) / .5));
-      const opacity = 1 - fade * fade * (3 - 2 * fade);
-      model.style.opacity = `${opacity}`;
-      model.inert = opacity < .05;
-      model.style.setProperty('--value-object-scale', `${scale}`);
-      model.dataset.zooming = zoom > .15 ? 'true' : 'false';
-      model.dataset.docking = dock > .02 ? 'true' : 'false';
-      model.style.setProperty('--value-control-shift', `${Math.max(0, finalScale - 1) * 160 * ease}px`);
-    };
-    const measure = () => {
-      const base = showcase.getBoundingClientRect(), start = origin.getBoundingClientRect(), end = destination.getBoundingClientRect();
-      x = start.left - base.left; y = start.top - base.top;
-      dx = end.left + end.width / 2 - (start.left + start.width / 2);
-      dy = end.top + end.height / 2 - (start.top + start.height / 2);
-      travel = Math.max(1, end.top - base.top - 30);
-      const object = model.querySelector<HTMLElement>('.value-model-object');
-      objectWidth = object?.offsetWidth || 255;
-      modelWidth = start.width; modelHeight = start.height; baseLeft = base.left;
-      finalScale = Math.min(1.3, end.width * .92 / (objectWidth * 1.44));
-      const anchor = detailAnchorRef.current?.getBoundingClientRect();
-      const explorer = explorerRef.current?.getBoundingClientRect();
-      if (anchor && explorer) {
-        dockX = anchor.left - base.left + anchor.width / 2 - modelWidth / 2;
-        dockY = anchor.top - base.top + anchor.height / 2 - modelHeight / 2;
-        dockScale = anchor.width / (objectWidth * 1.44);
-        dockStart = end.top - base.top - 60;
-        dockEnd = explorer.top - base.top - 150;
-      }
-      model.style.width = `${start.width}px`; model.style.height = `${start.height}px`;
-      paint();
-    };
-    const scroll = () => { if (!frame) frame = requestAnimationFrame(paint); };
-    const observer = new ResizeObserver(measure); observer.observe(showcase); observer.observe(origin); observer.observe(destination);
-    if (detailAnchorRef.current) observer.observe(detailAnchorRef.current);
-    if (explorerRef.current) observer.observe(explorerRef.current);
-    window.addEventListener('scroll', scroll, { passive: true }); measure();
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener('scroll', scroll); };
-  }, [reduced, id]);
   return (
     <section id={id} className="value-chapter" aria-labelledby={`${id}-title`} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties}>
-      <div className="value-showcase" ref={showcaseRef}>
-        <div className="value-model value-model-traveller" ref={modelRef}>
+      {id === 'heal' ? (
+        <HealStory titleId={`${id}-title`} activities={activities} explorerId={`${id}-explorer`} onSelect={setSelectedId} />
+      ) : (
+        <header className="value-hero">
+          <h2 id={`${id}-title`} className="value-hero-title">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</h2>
+          {id === 'enrich'
+            ? <EnrichScrapbook activities={activities} name={pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()} motto={pillar.headline} caption={getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')} />
+            : <ValueEmblem id={id} />}
+          {activities.slice(0, 5).map((activity, i) => (
+            <a key={activity.id} href={`#${id}-explorer`} className={`value-hero-stat value-hero-stat-${i + 1}`} onClick={() => setSelectedId(activity.id)}>
+              <span className="value-hero-stat-label">{activity.title}<ArrowUpRight size={16} aria-hidden="true" /></span>
+              <strong>{activity.headline.value}</strong>
+              <span className="value-hero-stat-unit">{activity.headline.label}</span>
+              <small>{activity.period}</small>
+            </a>
+          ))}
+        </header>
+      )}
 
-          <div className="value-model-object"><PillarModelCard id={id} label={pillar.label} active={visible} animate={visible && !reduced} rotationRef={transitionRotation} /></div>
-
-        </div>
-      <header className="value-intro">
-        <div className="value-model-origin" ref={originRef} aria-hidden="true" />
-        <div className="value-intro-copy">
-          <p className="value-kicker"><span>{getCMSCopy("copy.CoreValuesPage.5feceb66ffc8", "0")}{index + 1}{getCMSCopy("copy.CoreValuesPage.ebcd38e5576a", " / Our core values")}</span><span className="value-dot" />{getCMSCopy("copy.CoreValuesPage.09d7832f2393", " Service with humility")}</p>
-          <p className="value-name font-dancing-script">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</p>
-          <h2 id={`${id}-title`}>{pillar.headline}</h2>
-          <p className="value-description">{pillar.body}</p>
-          <a className="value-explore-link" href={`#${id}-explorer`}>{getCMSCopy("copy.CoreValuesPage.80cc8fe42e1e", "Explore the impact ")}<ArrowDown size={16} /></a>
-        </div>
-      </header>
-
-      <div className="value-stat-heading"><span>{getCMSCopy("copy.CoreValuesPage.0915ad644d68", "The impact at a glance")}</span><span>{activities.length}{getCMSCopy("copy.CoreValuesPage.43bef1db87f1", " programmes · Reporting dates below")}</span></div>
-      <div className="value-stats">
-        <div className="value-stat-center" ref={destinationRef} aria-hidden="true" />
-        {activities.slice(0, 4).map((activity, i) => (
-          <a key={activity.id} href={`#${id}-explorer`} className="value-stat" onClick={() => setSelectedId(activity.id)}>
-            <span className="value-stat-top">{getCMSCopy("copy.CoreValuesPage.5feceb66ffc8", "0")}{i + 1} <ArrowUpRight size={17} /></span>
-            <strong>{activity.headline.value}</strong>
-            <span className="value-stat-unit">{activity.headline.label}</span>
-            <span className="value-stat-caption">{activity.title}</span>
-            <small>{activity.period}</small>
-          </a>
-        ))}
-      </div>
-      </div>
-
-      <div className="value-explorer" id={`${id}-explorer`} ref={explorerRef}>
+      <div className="value-explorer" id={`${id}-explorer`}>
         <div className="value-explorer-heading"><div><p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.e7b186e662f2", "Behind the numbers")}</p><h3>{getCMSCopy("copy.CoreValuesPage.6ae8bf36f85f", "Small actions. Lasting change.")}</h3></div><p>{getCMSCopy("copy.CoreValuesPage.92fcbaad24fc", "Choose a programme to explore its reach.")}</p></div>
         <div className="value-explorer-grid">
           <div className="value-programmes" role="group" aria-label={`${pillar.label} programmes`}>
@@ -192,9 +124,9 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
             ))}
           </div>
           <article className="value-detail" id={`${id}-detail`} aria-live="polite" aria-atomic="true">
+            {selected.cardPhoto && <div className="value-detail-backdrop" key={`backdrop-${selected.id}`} style={{ backgroundImage: `url(${resolveCMSMedia(selected.cardPhoto.src)})` }} aria-hidden="true" />}
             <div className="value-detail-top"><span>{getCMSCopy("copy.CoreValuesPage.ad3a80a2651a", "Programme in focus")}</span><span><CalendarDays size={14} />{selected.period}</span></div>
-            <div className="value-detail-summary value-detail-summary-with-model">
-            <div ref={detailAnchorRef} className="value-detail-model-anchor" aria-hidden="true" />
+            <div className="value-detail-summary">
             <h4 className="value-content-enter" key={selected.id}>{selected.title}</h4>
             <p>{selected.blurb}</p>
             <div className="value-featured-number"><strong>{selected.headline.value}</strong><span>{selected.headline.label}</span></div>

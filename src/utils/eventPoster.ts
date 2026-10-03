@@ -57,7 +57,7 @@ const ready = async (item: ResolvedEvent, W: number, H: number) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('canvas unavailable');
   /* The artwork's faces are the site's; wait for them or the fallback prints. */
-  await Promise.all(['700 96px Outfit', '400 52px "Dancing Script"', '600 26px Inter'].map(f => document.fonts.load(f).catch(() => undefined)));
+  await Promise.all(['700 96px Outfit', '400 52px "Dancing Script"', '800 58px "SNCF Flared"'].map(f => document.fonts.load(f).catch(() => undefined)));
   const [qr, logo] = await Promise.all([
     loadImage(await eventQr(item.event.id)),
     loadImage('/images/sncf-logo.webp').catch(() => null),
@@ -84,10 +84,10 @@ async function renderPortrait(item: ResolvedEvent, W: number, H: number): Promis
 
   ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff';
   if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(W / 2, 150 * sy, 64, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.clip(); ctx.drawImage(logo, W / 2 - 60, 150 * sy - 60, 120, 120); ctx.restore(); }
-  ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = '700 22px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = '700 22px Outfit, sans-serif';
   ctx.fillText('S A N T   N I R A N K A R I   C H A R I T A B L E   F O U N D A T I O N', W / 2, 262 * sy);
   const pillar = PILLARS.find(p => p.id === event.pillarId);
-  ctx.font = '700 20px Inter, sans-serif';
+  ctx.font = '700 20px Outfit, sans-serif';
   const label = (pillar?.label ?? event.pillarId).toUpperCase().split('').join(' ');
   const lw = ctx.measureText(label).width + 56;
   rounded(ctx, W / 2 - lw / 2, 292 * sy, lw, 48, 24); ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fill();
@@ -96,19 +96,19 @@ async function renderPortrait(item: ResolvedEvent, W: number, H: number): Promis
   ctx.fillStyle = '#ffffff'; ctx.font = '400 60px "Dancing Script", cursive';
   ctx.fillText('You are warmly invited', W / 2, 430 * sy);
   if (date) {
-    ctx.font = '700 26px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.font = '700 26px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.85)';
     ctx.fillText(date.toLocaleDateString('en-GB', { weekday: 'long' }).toUpperCase().split('').join(' '), W / 2, 500 * sy);
-    ctx.font = '700 260px Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
+    ctx.font = '800 250px "SNCF Flared", Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
     ctx.fillText(String(date.getDate()), W / 2, 740 * sy);
-    ctx.font = '700 34px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.font = '700 34px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.9)';
     ctx.fillText(`${MONTHS_LONG[date.getMonth()].toUpperCase()}  ${date.getFullYear()}`, W / 2, 800 * sy);
   } else {
     ctx.font = '700 72px Outfit, sans-serif'; ctx.fillText('Year round', W / 2, 700 * sy);
   }
-  ctx.font = '600 58px Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
+  ctx.font = '800 54px "SNCF Flared", Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
   let y = 900 * sy;
   for (const line of wrap(ctx, event.title, 900)) { ctx.fillText(line, W / 2, y); y += 68; }
-  ctx.font = '400 28px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.88)';
+  ctx.font = '400 28px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.88)';
   y += 12;
   for (const line of wrap(ctx, event.blurb, 860).slice(0, 3)) { ctx.fillText(line, W / 2, y); y += 40; }
 
@@ -117,8 +117,8 @@ async function renderPortrait(item: ResolvedEvent, W: number, H: number): Promis
   rounded(ctx, qx - 16, qy - 16, qs + 32, qs + 32, 24); ctx.fillStyle = '#ffffff'; ctx.fill();
   ctx.drawImage(qr, qx, qy, qs, qs);
   ctx.textAlign = 'left'; ctx.fillStyle = '#ffffff';
-  ctx.font = '700 26px Inter, sans-serif'; ctx.fillText('Scan for your invitation', qx + qs + 56, qy + 70);
-  ctx.font = '400 22px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.8)';
+  ctx.font = '700 26px Outfit, sans-serif'; ctx.fillText('Scan for your invitation', qx + qs + 56, qy + 70);
+  ctx.font = '400 22px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.8)';
   ctx.fillText('Add the date to your calendar and', qx + qs + 56, qy + 112);
   ctx.fillText('find a venue near you: 011-47660380', qx + qs + 56, qy + 146);
   ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff'; ctx.font = '400 52px "Dancing Script", cursive';
@@ -141,10 +141,10 @@ async function renderBanner(item: ResolvedEvent): Promise<Blob> {
   const left = 110;
   ctx.textAlign = 'left';
   if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(left + 50, 130, 50, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.clip(); ctx.drawImage(logo, left + 4, 84, 92, 92); ctx.restore(); }
-  ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = '700 18px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.font = '700 18px Outfit, sans-serif';
   ctx.fillText('S A N T   N I R A N K A R I   C H A R I T A B L E   F O U N D A T I O N', left + 124, 122);
   const pillar = PILLARS.find(p => p.id === event.pillarId);
-  ctx.font = '700 18px Inter, sans-serif';
+  ctx.font = '700 18px Outfit, sans-serif';
   const label = (pillar?.label ?? event.pillarId).toUpperCase().split('').join(' ');
   const lw = ctx.measureText(label).width + 48;
   rounded(ctx, left + 124, 140, lw, 42, 21); ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fill();
@@ -153,11 +153,11 @@ async function renderBanner(item: ResolvedEvent): Promise<Blob> {
   ctx.fillStyle = '#ffffff'; ctx.font = '400 54px "Dancing Script", cursive';
   ctx.fillText('You are warmly invited', left, 300);
   if (date) {
-    ctx.font = '700 24px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.85)';
+    ctx.font = '700 24px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.85)';
     ctx.fillText(date.toLocaleDateString('en-GB', { weekday: 'long' }).toUpperCase().split('').join(' '), left, 360);
-    ctx.font = '700 300px Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
+    ctx.font = '800 290px "SNCF Flared", Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
     ctx.fillText(String(date.getDate()), left - 8, 640);
-    ctx.font = '700 32px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.font = '700 32px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.9)';
     ctx.fillText(`${MONTHS_LONG[date.getMonth()].toUpperCase()}  ${date.getFullYear()}`, left, 700);
   } else {
     ctx.font = '700 96px Outfit, sans-serif'; ctx.fillText('Year round', left, 560);
@@ -166,10 +166,10 @@ async function renderBanner(item: ResolvedEvent): Promise<Blob> {
   ctx.fillText('Service with Humility', left, H - 60);
 
   const right = 800, width = 700;
-  ctx.font = '600 56px Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
+  ctx.font = '800 52px "SNCF Flared", Outfit, sans-serif'; ctx.fillStyle = '#ffffff';
   let y = 330;
   for (const line of wrap(ctx, event.title, width)) { ctx.fillText(line, right, y); y += 66; }
-  ctx.font = '400 26px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.88)';
+  ctx.font = '400 26px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.88)';
   y += 10;
   for (const line of wrap(ctx, event.blurb, width).slice(0, 4)) { ctx.fillText(line, right, y); y += 38; }
 
@@ -177,8 +177,8 @@ async function renderBanner(item: ResolvedEvent): Promise<Blob> {
   rounded(ctx, qx - 14, qy - 14, qs + 28, qs + 28, 22); ctx.fillStyle = '#ffffff'; ctx.fill();
   ctx.drawImage(qr, qx, qy, qs, qs);
   ctx.textAlign = 'right'; ctx.fillStyle = '#ffffff';
-  ctx.font = '700 24px Inter, sans-serif'; ctx.fillText('Scan for your invitation', qx - 40, qy + 74);
-  ctx.font = '400 20px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.8)';
+  ctx.font = '700 24px Outfit, sans-serif'; ctx.fillText('Scan for your invitation', qx - 40, qy + 74);
+  ctx.font = '400 20px Outfit, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.8)';
   ctx.fillText('Add the date to your calendar and', qx - 40, qy + 112);
   ctx.fillText('find a venue near you: 011-47660380', qx - 40, qy + 142);
 

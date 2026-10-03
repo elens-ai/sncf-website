@@ -67,20 +67,20 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
-    media: Media;
     pillars: Pillar;
     activities: Activity;
     events: Event;
     partners: Partner;
     awards: Award;
-    'gallery-items': GalleryItem;
-    pages: Page;
     'content-slots': ContentSlot;
     'asset-slots': AssetSlot;
+    'gallery-items': GalleryItem;
+    pages: Page;
     'component-settings': ComponentSetting;
+    media: Media;
     'live-stats': LiveStat;
     'stat-audit': StatAudit;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,20 +88,20 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     pillars: PillarsSelect<false> | PillarsSelect<true>;
     activities: ActivitiesSelect<false> | ActivitiesSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     awards: AwardsSelect<false> | AwardsSelect<true>;
-    'gallery-items': GalleryItemsSelect<false> | GalleryItemsSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
     'content-slots': ContentSlotsSelect<false> | ContentSlotsSelect<true>;
     'asset-slots': AssetSlotsSelect<false> | AssetSlotsSelect<true>;
+    'gallery-items': GalleryItemsSelect<false> | GalleryItemsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'component-settings': ComponentSettingsSelect<false> | ComponentSettingsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     'live-stats': LiveStatsSelect<false> | LiveStatsSelect<true>;
     'stat-audit': StatAuditSelect<false> | StatAuditSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -148,39 +148,206 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * Heal, Enrich, Empower and Projects: the words, colours and summary figures used across the site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "pillars".
  */
-export interface User {
+export interface Pillar {
   id: number;
-  name: string;
   /**
-   * Only an admin can change this.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
-  role: 'contributor' | 'editor' | 'admin';
-  updatedAt: string;
-  createdAt: string;
-  enableAPIKey?: boolean | null;
-  apiKey?: string | null;
-  apiKeyIndex?: string | null;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
+  key: string;
+  /**
+   * Lower numbers come first.
+   */
+  order?: number | null;
+  label: string;
+  headline: string;
+  body?: string | null;
+  shortTagline?: string | null;
+  subText?: string | null;
+  /**
+   * Script line under the photo emblem, e.g. “Care, in every leaf.”
+   */
+  emblemCaption?: string | null;
+  cardImageAlt?: string | null;
+  stats?:
     | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
+        label: string;
+        /**
+         * Exactly as reported, e.g. 1,500,230.
+         */
+        value: string;
+        id?: string | null;
       }[]
     | null;
-  password?: string | null;
-  collection: 'users';
+  keyHighlights?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Hex colour such as #24785b. Pick it with the swatch.
+   */
+  accentA?: string | null;
+  /**
+   * Hex colour such as #24785b. Pick it with the swatch.
+   */
+  accentB?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
+ * Every programme and project: its reported figures, and how it looks on the website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities".
+ */
+export interface Activity {
+  id: number;
+  /**
+   * How the website finds this item. Set once; only an administrator can change it.
+   */
+  key: string;
+  /**
+   * Lower numbers come first.
+   */
+  order?: number | null;
+  pillarId: 'heal' | 'enrich' | 'empower' | 'projects';
+  title: string;
+  period: string;
+  blurb?: string | null;
+  headline: {
+    label: string;
+    /**
+     * Exactly as reported, e.g. 1,500,230.
+     */
+    value: string;
+    id?: string | null;
+  };
+  dataPoints?:
+    | {
+        label: string;
+        /**
+         * Exactly as reported, e.g. 1,500,230.
+         */
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown on the home page tile.
+   */
+  icon?:
+    | (
+        | 'droplets'
+        | 'droplet'
+        | 'stethoscope'
+        | 'eye'
+        | 'hospital'
+        | 'graduation-cap'
+        | 'award'
+        | 'book-open'
+        | 'laptop'
+        | 'scissors'
+        | 'trees'
+        | 'sparkles'
+        | 'package-check'
+        | 'heart'
+        | 'hand-coins'
+        | 'waves'
+        | 'sprout'
+        | 'mountain'
+        | 'house'
+        | 'heart-handshake'
+      )
+    | null;
+  /**
+   * Leave empty to use the title.
+   */
+  menuLabel?: string | null;
+  /**
+   * Up to 4 photos that blend in behind the section while a visitor points at this programme’s tile. Order sets the place: 1 top left, 2 bottom, 3 right, 4 left.
+   */
+  hoverPhotos?:
+    | {
+        /**
+         * Choose from the Media library, or upload a new file. This wins over a path.
+         */
+        media?: (number | null) | Media;
+        /**
+         * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
+         */
+        src?: string | null;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Optional: shows one area of a hover photo at full strength, e.g. the people at its centre. Positions are percentages of that photo’s area.
+   */
+  hoverFocus?: {
+    photo?: number | null;
+    x?: number | null;
+    y?: number | null;
+    width?: number | null;
+    height?: number | null;
+  };
+  /**
+   * Faint photo behind this programme’s card on the Core Values page.
+   */
+  cardPhoto?: {
+    /**
+     * Choose from the Media library, or upload a new file. This wins over a path.
+     */
+    media?: (number | null) | Media;
+    /**
+     * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
+     */
+    src?: string | null;
+    alt?: string | null;
+  };
+  images?:
+    | {
+        /**
+         * Choose from the Media library, or upload a new file. This wins over a path.
+         */
+        media?: (number | null) | Media;
+        /**
+         * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
+         */
+        src?: string | null;
+        /**
+         * What the picture shows, for visitors who cannot see it.
+         */
+        alt?: string | null;
+        caption?: string | null;
+        /**
+         * Filled in automatically for uploads.
+         */
+        width?: number | null;
+        /**
+         * Filled in automatically for uploads.
+         */
+        height?: number | null;
+        /**
+         * Keeps this spot in view when cropped, e.g. 50% 30%.
+         */
+        focal?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Every photo, film, sound and 3D model uploaded for the website. Upload here, then choose the file wherever an image is asked for.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -251,205 +418,100 @@ export interface Media {
   };
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pillars".
- */
-export interface Pillar {
-  id: number;
-  /**
-   * Stable website identifier. Keep this unchanged for existing content.
-   */
-  key: string;
-  order?: number | null;
-  label: string;
-  accentA?: string | null;
-  accentB?: string | null;
-  headline: string;
-  body?: string | null;
-  cardImageAlt?: string | null;
-  shortTagline?: string | null;
-  stats?:
-    | {
-        label: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  keyHighlights?:
-    | {
-        text: string;
-        id?: string | null;
-      }[]
-    | null;
-  subText?: string | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "activities".
- */
-export interface Activity {
-  id: number;
-  /**
-   * Stable website identifier. Keep this unchanged for existing content.
-   */
-  key: string;
-  order?: number | null;
-  pillarId: 'heal' | 'enrich' | 'empower' | 'projects';
-  title: string;
-  period: string;
-  blurb?: string | null;
-  headline: {
-    label: string;
-    value: string;
-    id?: string | null;
-  };
-  dataPoints?:
-    | {
-        label: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  images?:
-    | {
-        /**
-         * Upload in Media and choose it below, or use a /local/path or https:// URL.
-         */
-        src?: string | null;
-        media?: (number | null) | Media;
-        alt?: string | null;
-        caption?: string | null;
-        width?: number | null;
-        height?: number | null;
-        focal?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  sourceNote?: string | null;
-  /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
-   */
-  sourceURL?: string | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
+ * Annual observances and ongoing programmes shown in the events journal.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
   id: number;
   /**
-   * Stable website identifier. Keep this unchanged for existing content.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
   key: string;
+  /**
+   * Lower numbers come first.
+   */
   order?: number | null;
   title: string;
   kind: 'annual' | 'ongoing';
   month?: number | null;
   day?: number | null;
+  pillarId: 'heal' | 'enrich' | 'empower' | 'projects';
   tag?: string | null;
   blurb?: string | null;
-  pillarId: 'heal' | 'enrich' | 'empower' | 'projects';
   location?: string | null;
   time?: string | null;
   /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   * A page on this site such as /projects, or an https:// link.
    */
   href?: string | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Organisations the foundation works with: what they did together, and how their logo appears.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "partners".
  */
 export interface Partner {
   id: number;
   /**
-   * Stable website identifier. Keep this unchanged for existing content.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
   key: string;
+  /**
+   * Lower numbers come first.
+   */
   order?: number | null;
   name: string;
   contribution: string;
   note?: string | null;
   /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   * Choose from the Media library, or upload a new file. This wins over a path.
    */
-  logo?: string | null;
   logoMedia?: (number | null) | Media;
   /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
+   */
+  logo?: string | null;
+  /**
+   * For the partner wall, e.g. “Indian Red Cross”.
+   */
+  short?: string | null;
+  /**
+   * Shown when there is no logo.
+   */
+  initials?: string | null;
+  /**
+   * Hex colour such as #24785b. Pick it with the swatch.
+   */
+  color?: string | null;
+  /**
+   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
    */
   href?: string | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Verified honours only. Leave the year empty when the source does not give one.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "awards".
  */
 export interface Award {
   id: number;
   /**
-   * Stable website identifier. Keep this unchanged for existing content.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
   key: string;
+  /**
+   * Lower numbers come first.
+   */
   order?: number | null;
   title: string;
   awardedBy: string;
@@ -459,100 +521,201 @@ export interface Award {
   photos?:
     | {
         /**
-         * Upload in Media and choose it below, or use a /local/path or https:// URL.
+         * Choose from the Media library, or upload a new file. This wins over a path.
+         */
+        media?: (number | null) | Media;
+        /**
+         * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
          */
         src?: string | null;
-        media?: (number | null) | Media;
+        /**
+         * What the picture shows, for visitors who cannot see it.
+         */
         alt?: string | null;
         caption?: string | null;
+        /**
+         * Filled in automatically for uploads.
+         */
         width?: number | null;
+        /**
+         * Filled in automatically for uploads.
+         */
         height?: number | null;
+        /**
+         * Keeps this spot in view when cropped, e.g. 50% 30%.
+         */
         focal?: string | null;
         id?: string | null;
       }[]
-    | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
     | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Every heading, sentence, button and label on the site. Filter by Page, or search for the words you see on the website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-slots".
+ */
+export interface ContentSlot {
+  id: number;
+  /**
+   * How the website finds this item. Set once; only an administrator can change it.
+   */
+  key: string;
+  /**
+   * Lower numbers come first.
+   */
+  order?: number | null;
+  /**
+   * Shown on the website exactly as written. Links: a page such as /projects or an https:// address.
+   */
+  value: string;
+  /**
+   * Filter the list by this to find a page’s text.
+   */
+  page?:
+    | ('home' | 'core-values' | 'projects' | 'who-we-are' | 'guiding-force' | 'contribute' | 'everywhere' | 'other')
+    | null;
+  section?: string | null;
+  label: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Logos, portraits and artwork built into the page design. Programme, partner and gallery photos are edited on their own records.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asset-slots".
+ */
+export interface AssetSlot {
+  id: number;
+  /**
+   * How the website finds this item. Set once; only an administrator can change it.
+   */
+  key: string;
+  /**
+   * Lower numbers come first.
+   */
+  order?: number | null;
+  /**
+   * Choose from the Media library, or upload a new file. This wins over a path.
+   */
+  media?: (number | null) | Media;
+  /**
+   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
+   */
+  source?: string | null;
+  kind?: ('image' | 'video' | 'audio' | 'other') | null;
+  /**
+   * Filter the list by this to find a page’s text.
+   */
+  page?:
+    | ('home' | 'core-values' | 'projects' | 'who-we-are' | 'guiding-force' | 'contribute' | 'everywhere' | 'other')
+    | null;
+  section?: string | null;
+  label: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Photos and films for each gallery. Pillar photos are five per pillar, in order: they fill the home page tiles, the photo emblem and the Core Values collage.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "gallery-items".
  */
 export interface GalleryItem {
   id: number;
   /**
-   * Stable website identifier. Keep this unchanged for existing content.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
   key: string;
-  order?: number | null;
   /**
-   * For example pavilion:heal or media:who-we-are. Keep the group to retain its website placement.
+   * Lower numbers come first.
    */
-  group: string;
-  kind?: ('photo' | 'film' | 'model') | null;
+  order?: number | null;
+  group:
+    | 'pavilion:heal'
+    | 'pavilion:enrich'
+    | 'pavilion:empower'
+    | 'pavilion:projects'
+    | 'media:project-amrit'
+    | 'media:oneness-vann'
+    | 'media:watershed'
+    | 'media:adopted-villages'
+    | 'media:who-we-are'
+    | 'media:guiding-force';
+  kind?: ('photo' | 'film') | null;
   /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   * Choose from the Media library, or upload a new file. This wins over a path.
+   */
+  media?: (number | null) | Media;
+  /**
+   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
    */
   src?: string | null;
-  media?: (number | null) | Media;
+  /**
+   * What the picture shows, for visitors who cannot see it.
+   */
   alt?: string | null;
   caption?: string | null;
+  /**
+   * Filled in automatically for uploads.
+   */
   width?: number | null;
+  /**
+   * Filled in automatically for uploads.
+   */
   height?: number | null;
+  /**
+   * Keeps this spot in view when cropped, e.g. 50% 30%.
+   */
   focal?: string | null;
   /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   * Still shown before a film plays.
+   */
+  posterMedia?: (number | null) | Media;
+  /**
+   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
    */
   poster?: string | null;
-  posterMedia?: (number | null) | Media;
-  wide?: boolean | null;
   /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
    */
   source?: string | null;
+  wide?: boolean | null;
   illustrative?: boolean | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * The title and description search engines and link previews show for each page. Extra pages at /pages/<address> are built from sections.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
   id: number;
   /**
-   * Stable website identifier. Keep this unchanged for existing content.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
   key: string;
+  /**
+   * Lower numbers come first.
+   */
   order?: number | null;
-  slug?: string | null;
   title: string;
+  /**
+   * core-values for /core-values; empty for the home page.
+   */
+  slug?: string | null;
+  /**
+   * One or two sentences shown in search results.
+   */
   description?: string | null;
   sections?:
     | (
@@ -568,17 +731,32 @@ export interface Page {
         | {
             key: string;
             /**
-             * Upload in Media and choose it below, or use a /local/path or https:// URL.
+             * Choose from the Media library, or upload a new file. This wins over a path.
+             */
+            media?: (number | null) | Media;
+            /**
+             * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
              */
             src?: string | null;
-            media?: (number | null) | Media;
+            /**
+             * What the picture shows, for visitors who cannot see it.
+             */
             alt?: string | null;
             caption?: string | null;
+            /**
+             * Filled in automatically for uploads.
+             */
             width?: number | null;
+            /**
+             * Filled in automatically for uploads.
+             */
             height?: number | null;
+            /**
+             * Keeps this spot in view when cropped, e.g. 50% 30%.
+             */
             focal?: string | null;
             /**
-             * Upload in Media and choose it below, or use a /local/path or https:// URL.
+             * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
              */
             video?: string | null;
             heading?: string | null;
@@ -595,18 +773,33 @@ export interface Page {
                   title?: string | null;
                   body?: string | null;
                   /**
-                   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+                   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
                    */
                   href?: string | null;
                   /**
-                   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+                   * Choose from the Media library, or upload a new file. This wins over a path.
+                   */
+                  media?: (number | null) | Media;
+                  /**
+                   * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
                    */
                   src?: string | null;
-                  media?: (number | null) | Media;
+                  /**
+                   * What the picture shows, for visitors who cannot see it.
+                   */
                   alt?: string | null;
                   caption?: string | null;
+                  /**
+                   * Filled in automatically for uploads.
+                   */
                   width?: number | null;
+                  /**
+                   * Filled in automatically for uploads.
+                   */
                   height?: number | null;
+                  /**
+                   * Keeps this spot in view when cropped, e.g. 50% 30%.
+                   */
                   focal?: string | null;
                   id?: string | null;
                 }[]
@@ -617,183 +810,80 @@ export interface Page {
           }
         | {
             key: string;
-            component?: string | null;
+            component?: ('events' | 'awards') | null;
             enabled?: boolean | null;
-            options?:
-              | {
-                  [k: string]: unknown;
-                }
-              | unknown[]
-              | string
-              | number
-              | boolean
-              | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'custom';
           }
       )[]
     | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-slots".
- */
-export interface ContentSlot {
-  id: number;
-  /**
-   * Stable website identifier. Keep this unchanged for existing content.
-   */
-  key: string;
-  order?: number | null;
-  label: string;
-  value: string;
-  context?: string | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "asset-slots".
- */
-export interface AssetSlot {
-  id: number;
-  /**
-   * Stable website identifier. Keep this unchanged for existing content.
-   */
-  key: string;
-  order?: number | null;
-  label: string;
-  /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
-   */
-  source?: string | null;
-  media?: (number | null) | Media;
-  kind?: ('image' | 'video' | 'audio' | 'model' | 'other') | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
+ * Show or hide whole sections. For home page sections, Display order sets their position from the top.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "component-settings".
  */
 export interface ComponentSetting {
   id: number;
   /**
-   * Stable website identifier. Keep this unchanged for existing content.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
   key: string;
+  /**
+   * Lower numbers come first.
+   */
   order?: number | null;
   label?: string | null;
   enabled?: boolean | null;
-  /**
-   * Component-specific settings. Values are validated by the website before rendering.
-   */
-  options?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  /**
-   * Advanced extension data; standard fields above take precedence.
-   */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * The published figures behind every number on the site. Programme and pillar forms update these automatically; edit here for corrections and sources.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "live-stats".
  */
 export interface LiveStat {
   id: number;
   /**
-   * Stable website identifier. Keep this unchanged for existing content.
+   * How the website finds this item. Set once; only an administrator can change it.
    */
   key: string;
+  /**
+   * Lower numbers come first.
+   */
   order?: number | null;
   label: string;
+  /**
+   * Exactly as reported.
+   */
   value: string;
   period?: string | null;
   asOf?: string | null;
   source?: string | null;
   /**
-   * Upload in Media and choose it below, or use a /local/path or https:// URL.
+   * Report or page the figure comes from.
    */
   sourceURL?: string | null;
   verifiedAt?: string | null;
-  notes?: string | null;
   /**
-   * Advanced extension data; standard fields above take precedence.
+   * Not shown on the website.
    */
-  record?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  notes?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Every published change to a live figure: what it was, what it became, and who published it.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stat-audit".
  */
@@ -809,6 +899,41 @@ export interface StatAudit {
   actor?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * People who can sign in to the studio, and what each may do.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name: string;
+  /**
+   * Only an admin can change this.
+   */
+  role: 'contributor' | 'editor' | 'admin';
+  updatedAt: string;
+  createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -835,14 +960,6 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
         relationTo: 'pillars';
         value: number | Pillar;
       } | null)
@@ -863,14 +980,6 @@ export interface PayloadLockedDocument {
         value: number | Award;
       } | null)
     | ({
-        relationTo: 'gallery-items';
-        value: number | GalleryItem;
-      } | null)
-    | ({
-        relationTo: 'pages';
-        value: number | Page;
-      } | null)
-    | ({
         relationTo: 'content-slots';
         value: number | ContentSlot;
       } | null)
@@ -879,8 +988,20 @@ export interface PayloadLockedDocument {
         value: number | AssetSlot;
       } | null)
     | ({
+        relationTo: 'gallery-items';
+        value: number | GalleryItem;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
         relationTo: 'component-settings';
         value: number | ComponentSetting;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'live-stats';
@@ -889,6 +1010,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'stat-audit';
         value: number | StatAudit;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -934,30 +1059,319 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
+ * via the `definition` "pillars_select".
  */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  role?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  enableAPIKey?: T;
-  apiKey?: T;
-  apiKeyIndex?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
+export interface PillarsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  label?: T;
+  headline?: T;
+  body?: T;
+  shortTagline?: T;
+  subText?: T;
+  emblemCaption?: T;
+  cardImageAlt?: T;
+  stats?:
     | T
     | {
+        label?: T;
+        value?: T;
         id?: T;
-        createdAt?: T;
-        expiresAt?: T;
       };
+  keyHighlights?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  accentA?: T;
+  accentB?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "activities_select".
+ */
+export interface ActivitiesSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  pillarId?: T;
+  title?: T;
+  period?: T;
+  blurb?: T;
+  headline?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  dataPoints?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  icon?: T;
+  menuLabel?: T;
+  hoverPhotos?:
+    | T
+    | {
+        media?: T;
+        src?: T;
+        alt?: T;
+        id?: T;
+      };
+  hoverFocus?:
+    | T
+    | {
+        photo?: T;
+        x?: T;
+        y?: T;
+        width?: T;
+        height?: T;
+      };
+  cardPhoto?:
+    | T
+    | {
+        media?: T;
+        src?: T;
+        alt?: T;
+      };
+  images?:
+    | T
+    | {
+        media?: T;
+        src?: T;
+        alt?: T;
+        caption?: T;
+        width?: T;
+        height?: T;
+        focal?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  title?: T;
+  kind?: T;
+  month?: T;
+  day?: T;
+  pillarId?: T;
+  tag?: T;
+  blurb?: T;
+  location?: T;
+  time?: T;
+  href?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partners_select".
+ */
+export interface PartnersSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  name?: T;
+  contribution?: T;
+  note?: T;
+  logoMedia?: T;
+  logo?: T;
+  short?: T;
+  initials?: T;
+  color?: T;
+  href?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "awards_select".
+ */
+export interface AwardsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  title?: T;
+  awardedBy?: T;
+  year?: T;
+  note?: T;
+  featured?: T;
+  photos?:
+    | T
+    | {
+        media?: T;
+        src?: T;
+        alt?: T;
+        caption?: T;
+        width?: T;
+        height?: T;
+        focal?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-slots_select".
+ */
+export interface ContentSlotsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  value?: T;
+  page?: T;
+  section?: T;
+  label?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "asset-slots_select".
+ */
+export interface AssetSlotsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  media?: T;
+  source?: T;
+  kind?: T;
+  page?: T;
+  section?: T;
+  label?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery-items_select".
+ */
+export interface GalleryItemsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  group?: T;
+  kind?: T;
+  media?: T;
+  src?: T;
+  alt?: T;
+  caption?: T;
+  width?: T;
+  height?: T;
+  focal?: T;
+  posterMedia?: T;
+  poster?: T;
+  source?: T;
+  wide?: T;
+  illustrative?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  title?: T;
+  slug?: T;
+  description?: T;
+  sections?:
+    | T
+    | {
+        text?:
+          | T
+          | {
+              key?: T;
+              heading?: T;
+              body?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+        media?:
+          | T
+          | {
+              key?: T;
+              media?: T;
+              src?: T;
+              alt?: T;
+              caption?: T;
+              width?: T;
+              height?: T;
+              focal?: T;
+              video?: T;
+              heading?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cards?:
+          | T
+          | {
+              key?: T;
+              heading?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    href?: T;
+                    media?: T;
+                    src?: T;
+                    alt?: T;
+                    caption?: T;
+                    width?: T;
+                    height?: T;
+                    focal?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        custom?:
+          | T
+          | {
+              key?: T;
+              component?: T;
+              enabled?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "component-settings_select".
+ */
+export interface ComponentSettingsSelect<T extends boolean = true> {
+  key?: T;
+  order?: T;
+  label?: T;
+  enabled?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1026,303 +1440,6 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pillars_select".
- */
-export interface PillarsSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  label?: T;
-  accentA?: T;
-  accentB?: T;
-  headline?: T;
-  body?: T;
-  cardImageAlt?: T;
-  shortTagline?: T;
-  stats?:
-    | T
-    | {
-        label?: T;
-        value?: T;
-        id?: T;
-      };
-  keyHighlights?:
-    | T
-    | {
-        text?: T;
-        id?: T;
-      };
-  subText?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "activities_select".
- */
-export interface ActivitiesSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  pillarId?: T;
-  title?: T;
-  period?: T;
-  blurb?: T;
-  headline?:
-    | T
-    | {
-        label?: T;
-        value?: T;
-        id?: T;
-      };
-  dataPoints?:
-    | T
-    | {
-        label?: T;
-        value?: T;
-        id?: T;
-      };
-  images?:
-    | T
-    | {
-        src?: T;
-        media?: T;
-        alt?: T;
-        caption?: T;
-        width?: T;
-        height?: T;
-        focal?: T;
-        id?: T;
-      };
-  sourceNote?: T;
-  sourceURL?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events_select".
- */
-export interface EventsSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  title?: T;
-  kind?: T;
-  month?: T;
-  day?: T;
-  tag?: T;
-  blurb?: T;
-  pillarId?: T;
-  location?: T;
-  time?: T;
-  href?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "partners_select".
- */
-export interface PartnersSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  name?: T;
-  contribution?: T;
-  note?: T;
-  logo?: T;
-  logoMedia?: T;
-  href?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "awards_select".
- */
-export interface AwardsSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  title?: T;
-  awardedBy?: T;
-  year?: T;
-  note?: T;
-  featured?: T;
-  photos?:
-    | T
-    | {
-        src?: T;
-        media?: T;
-        alt?: T;
-        caption?: T;
-        width?: T;
-        height?: T;
-        focal?: T;
-        id?: T;
-      };
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "gallery-items_select".
- */
-export interface GalleryItemsSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  group?: T;
-  kind?: T;
-  src?: T;
-  media?: T;
-  alt?: T;
-  caption?: T;
-  width?: T;
-  height?: T;
-  focal?: T;
-  poster?: T;
-  posterMedia?: T;
-  wide?: T;
-  source?: T;
-  illustrative?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages_select".
- */
-export interface PagesSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  slug?: T;
-  title?: T;
-  description?: T;
-  sections?:
-    | T
-    | {
-        text?:
-          | T
-          | {
-              key?: T;
-              heading?: T;
-              body?: T;
-              enabled?: T;
-              id?: T;
-              blockName?: T;
-            };
-        media?:
-          | T
-          | {
-              key?: T;
-              src?: T;
-              media?: T;
-              alt?: T;
-              caption?: T;
-              width?: T;
-              height?: T;
-              focal?: T;
-              video?: T;
-              heading?: T;
-              body?: T;
-              id?: T;
-              blockName?: T;
-            };
-        cards?:
-          | T
-          | {
-              key?: T;
-              heading?: T;
-              cards?:
-                | T
-                | {
-                    title?: T;
-                    body?: T;
-                    href?: T;
-                    src?: T;
-                    media?: T;
-                    alt?: T;
-                    caption?: T;
-                    width?: T;
-                    height?: T;
-                    focal?: T;
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        custom?:
-          | T
-          | {
-              key?: T;
-              component?: T;
-              enabled?: T;
-              options?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-slots_select".
- */
-export interface ContentSlotsSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  label?: T;
-  value?: T;
-  context?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "asset-slots_select".
- */
-export interface AssetSlotsSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  label?: T;
-  source?: T;
-  media?: T;
-  kind?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "component-settings_select".
- */
-export interface ComponentSettingsSelect<T extends boolean = true> {
-  key?: T;
-  order?: T;
-  label?: T;
-  enabled?: T;
-  options?: T;
-  record?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "live-stats_select".
  */
 export interface LiveStatsSelect<T extends boolean = true> {
@@ -1336,7 +1453,6 @@ export interface LiveStatsSelect<T extends boolean = true> {
   sourceURL?: T;
   verifiedAt?: T;
   notes?: T;
-  record?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1356,6 +1472,33 @@ export interface StatAuditSelect<T extends boolean = true> {
   actor?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1398,6 +1541,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Name, logo, contact details, menu, footer, social links and search-engine text.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
@@ -1405,255 +1550,149 @@ export interface SiteSetting {
   id: number;
   branding?: {
     name?: string | null;
+    tagline?: string | null;
     /**
-     * Upload in Media and choose it below, or use a /local/path or https:// URL.
+     * Shown in the header and footer.
+     */
+    logoMedia?: (number | null) | Media;
+    /**
+     * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
      */
     logo?: string | null;
-    tagline?: string | null;
   };
   contact?: {
     email?: string | null;
     telephone?: string | null;
     address?: string | null;
   };
+  navigation?:
+    | {
+        label: string;
+        /**
+         * A page on this site such as /projects or /who-we-are#partners, or an https:// address.
+         */
+        href?: string | null;
+        /**
+         * “Programmes by pillar” lists every programme, grouped under Heal, Enrich and Empower.
+         */
+        menu?: ('none' | 'links' | 'programmes') | null;
+        external?: boolean | null;
+        links?:
+          | {
+              label: string;
+              /**
+               * A page on this site such as /projects or /who-we-are#partners, or an https:// address.
+               */
+              href?: string | null;
+              external?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerColumns?:
+    | {
+        title: string;
+        links?:
+          | {
+              label: string;
+              /**
+               * A page on this site such as /projects or /who-we-are#partners, or an https:// address.
+               */
+              href?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Icons down the left edge of the site, in this order. Leave a link empty to hide that icon.
+   */
+  social?:
+    | {
+        platform: 'instagram' | 'youtube' | 'spotify' | 'facebook' | 'x' | 'linkedin' | 'whatsapp';
+        /**
+         * The full https:// address of the profile or channel.
+         */
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   seo?: {
     title?: string | null;
     description?: string | null;
     /**
-     * Upload in Media and choose it below, or use a /local/path or https:// URL.
+     * Shown when the site is shared on social media.
+     */
+    imageMedia?: (number | null) | Media;
+    /**
+     * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
      */
     image?: string | null;
   };
-  /**
-   * Header navigation and nested menus, preserving the existing route structure.
-   */
-  navigation?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  coreValueGroups?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  partnerBrands?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  /**
-   * Additional existing-site settings.
-   */
-  options?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
+ * The 3D models shown in the pillar cards and on the Projects page. Upload a .glb file to the Media library and choose it here.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pavilion-settings".
  */
 export interface PavilionSetting {
   id: number;
   settings?: {
-    materials?: {
-      stone?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      trim?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      plaster?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      brass?: {
-        color?: string | null;
-        roughness?: number | null;
-        metalness?: number | null;
-        texture?: string | null;
-      };
-      wall?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      wood?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      displayBase?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      floor?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      carpet?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      queueMetal?: {
-        color?: string | null;
-        roughness?: number | null;
-        metalness?: number | null;
-        texture?: string | null;
-      };
-      queueBelt?: {
-        color?: string | null;
-        roughness?: number | null;
-        texture?: string | null;
-      };
-      /**
-       * Colours in the original planter order.
-       */
-      planterColors?:
-        | {
-            [k: string]: unknown;
-          }
-        | unknown[]
-        | string
-        | number
-        | boolean
-        | null;
-    };
-    /**
-     * Four chapter palettes in Heal, Enrich, Empower, Projects order.
-     */
-    chapters?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-    lighting?: {
-      exposure?: number | null;
-      background?: string | null;
-      fogNear?: number | null;
-      fogFar?: number | null;
-      pendantColor?: string | null;
-      pendantIntensity?: number | null;
-      edgeIntensity?: number | null;
-      pictureColor?: string | null;
-      pictureIntensity?: number | null;
-      exhibitColor?: string | null;
-      exhibitIntensity?: number | null;
-      frameGlow?: number | null;
-      beamOpacity?: number | null;
-    };
-    camera?: {
-      fieldOfView?: number | null;
-      positionSmoothing?: number | null;
-      turnSmoothing?: number | null;
-      scrollSmoothing?: number | null;
-      photoPause?: number | null;
-      modelFloat?: number | null;
-      modelSway?: number | null;
-    };
-    performance?: {
-      maxWidth?: number | null;
-      maxHeight?: number | null;
-      fps?: number | null;
-      adaptiveQuality?: boolean | null;
-      minScale?: number | null;
-      maxScale?: number | null;
-      photoLoadDistance?: number | null;
-    };
-    components?: {
-      planters?: boolean | null;
-      barriers?: boolean | null;
-      benches?: boolean | null;
-      pendants?: boolean | null;
-      photoLights?: boolean | null;
-      frameBacklights?: boolean | null;
-      edgeStrips?: boolean | null;
-      models?: boolean | null;
-      windows?: boolean | null;
-      carpet?: boolean | null;
-    };
-    finale?: {
-      logo?: string | null;
-      model?: string | null;
-      modelSize?: number | null;
-      modelHeight?: number | null;
-      modelLightIntensity?: number | null;
-      title?: string | null;
-      subtitle?: string | null;
-      background?: string | null;
-      textColor?: string | null;
-      mosaic?: boolean | null;
-      mosaicHue?: number | null;
-      mosaicSaturation?: number | null;
-      tileSize?: number | null;
-    };
-    windows?: {
-      amrit?: {
-        video?: string | null;
-        poster?: string | null;
-        woodColor?: string | null;
-        grainColor?: string | null;
-        woodRoughness?: number | null;
-        glassColor?: string | null;
-        glassOpacity?: number | null;
-        frost?: boolean | null;
-        frostOpacity?: number | null;
-        frostBlur?: number | null;
-        autoplay?: boolean | null;
-      };
-      oneness?: {
-        video?: string | null;
-        poster?: string | null;
-        woodColor?: string | null;
-        grainColor?: string | null;
-        woodRoughness?: number | null;
-        glassColor?: string | null;
-        glassOpacity?: number | null;
-        frost?: boolean | null;
-        frostOpacity?: number | null;
-        frostBlur?: number | null;
-        autoplay?: boolean | null;
-      };
-    };
     models?: {
+      /**
+       * A .glb upload. This wins over a path.
+       */
+      healMedia?: (number | null) | Media;
+      /**
+       * For example /models/heal.glb.
+       */
       heal?: string | null;
+      /**
+       * A .glb upload. This wins over a path.
+       */
+      enrichMedia?: (number | null) | Media;
+      /**
+       * For example /models/heal.glb.
+       */
       enrich?: string | null;
+      /**
+       * A .glb upload. This wins over a path.
+       */
+      empowerMedia?: (number | null) | Media;
+      /**
+       * For example /models/heal.glb.
+       */
       empower?: string | null;
+      /**
+       * A .glb upload. This wins over a path.
+       */
+      projectsMedia?: (number | null) | Media;
+      /**
+       * For example /models/heal.glb.
+       */
       projects?: string | null;
+      /**
+       * A .glb upload. This wins over a path.
+       */
+      amritMedia?: (number | null) | Media;
+      /**
+       * For example /models/heal.glb.
+       */
       amrit?: string | null;
+      /**
+       * A .glb upload. This wins over a path.
+       */
+      onenessMedia?: (number | null) | Media;
+      /**
+       * For example /models/heal.glb.
+       */
       oneness?: string | null;
     };
   };
@@ -1670,8 +1709,9 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | T
     | {
         name?: T;
-        logo?: T;
         tagline?: T;
+        logoMedia?: T;
+        logo?: T;
       };
   contact?:
     | T
@@ -1680,17 +1720,51 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         telephone?: T;
         address?: T;
       };
+  navigation?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        menu?: T;
+        external?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              external?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  footerColumns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  social?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
   seo?:
     | T
     | {
         title?: T;
         description?: T;
+        imageMedia?: T;
         image?: T;
       };
-  navigation?: T;
-  coreValueGroups?: T;
-  partnerBrands?: T;
-  options?: T;
   _status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1704,203 +1778,20 @@ export interface PavilionSettingsSelect<T extends boolean = true> {
   settings?:
     | T
     | {
-        materials?:
-          | T
-          | {
-              stone?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              trim?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              plaster?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              brass?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    metalness?: T;
-                    texture?: T;
-                  };
-              wall?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              wood?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              displayBase?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              floor?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              carpet?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              queueMetal?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    metalness?: T;
-                    texture?: T;
-                  };
-              queueBelt?:
-                | T
-                | {
-                    color?: T;
-                    roughness?: T;
-                    texture?: T;
-                  };
-              planterColors?: T;
-            };
-        chapters?: T;
-        lighting?:
-          | T
-          | {
-              exposure?: T;
-              background?: T;
-              fogNear?: T;
-              fogFar?: T;
-              pendantColor?: T;
-              pendantIntensity?: T;
-              edgeIntensity?: T;
-              pictureColor?: T;
-              pictureIntensity?: T;
-              exhibitColor?: T;
-              exhibitIntensity?: T;
-              frameGlow?: T;
-              beamOpacity?: T;
-            };
-        camera?:
-          | T
-          | {
-              fieldOfView?: T;
-              positionSmoothing?: T;
-              turnSmoothing?: T;
-              scrollSmoothing?: T;
-              photoPause?: T;
-              modelFloat?: T;
-              modelSway?: T;
-            };
-        performance?:
-          | T
-          | {
-              maxWidth?: T;
-              maxHeight?: T;
-              fps?: T;
-              adaptiveQuality?: T;
-              minScale?: T;
-              maxScale?: T;
-              photoLoadDistance?: T;
-            };
-        components?:
-          | T
-          | {
-              planters?: T;
-              barriers?: T;
-              benches?: T;
-              pendants?: T;
-              photoLights?: T;
-              frameBacklights?: T;
-              edgeStrips?: T;
-              models?: T;
-              windows?: T;
-              carpet?: T;
-            };
-        finale?:
-          | T
-          | {
-              logo?: T;
-              model?: T;
-              modelSize?: T;
-              modelHeight?: T;
-              modelLightIntensity?: T;
-              title?: T;
-              subtitle?: T;
-              background?: T;
-              textColor?: T;
-              mosaic?: T;
-              mosaicHue?: T;
-              mosaicSaturation?: T;
-              tileSize?: T;
-            };
-        windows?:
-          | T
-          | {
-              amrit?:
-                | T
-                | {
-                    video?: T;
-                    poster?: T;
-                    woodColor?: T;
-                    grainColor?: T;
-                    woodRoughness?: T;
-                    glassColor?: T;
-                    glassOpacity?: T;
-                    frost?: T;
-                    frostOpacity?: T;
-                    frostBlur?: T;
-                    autoplay?: T;
-                  };
-              oneness?:
-                | T
-                | {
-                    video?: T;
-                    poster?: T;
-                    woodColor?: T;
-                    grainColor?: T;
-                    woodRoughness?: T;
-                    glassColor?: T;
-                    glassOpacity?: T;
-                    frost?: T;
-                    frostOpacity?: T;
-                    frostBlur?: T;
-                    autoplay?: T;
-                  };
-            };
         models?:
           | T
           | {
+              healMedia?: T;
               heal?: T;
+              enrichMedia?: T;
               enrich?: T;
+              empowerMedia?: T;
               empower?: T;
+              projectsMedia?: T;
               projects?: T;
+              amritMedia?: T;
               amrit?: T;
+              onenessMedia?: T;
               oneness?: T;
             };
       };

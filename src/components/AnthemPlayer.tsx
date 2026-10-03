@@ -167,9 +167,7 @@ export const AnthemPlayer: React.FC = () => {
         }
         aria-label={blocked ? 'Play the anthem (autoplay was blocked)' : playing ? 'Mute the anthem' : 'Play the anthem'}
         aria-pressed={playing}
-        className={`relative grid place-items-center w-11 h-11 rounded-full bg-white/10 border backdrop-blur-xl text-white/90 hover:bg-white/20 hover:text-white transition-all cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 flex-none ${
-          blocked ? 'border-white/70 anthem-waiting' : 'border-white/25'
-        }`}
+        className="relative grid place-items-center w-11 h-11 bg-transparent border-0 text-white/90 hover:text-white transition-colors cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 flex-none"
       >
         {playing ? <Volume2 className="w-[18px] h-[18px]" /> : <VolumeX className="w-[18px] h-[18px]" />}
       </button>

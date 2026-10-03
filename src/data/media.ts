@@ -9,7 +9,8 @@ import { bindCMSData, resolveGalleryGroups, validMedia } from '../cms/data';
  * so a gallery reads as a gallery being hung rather than collapsing to a
  * different layout and back again once the real file lands.
  *
- * The foundation has not yet supplied its photo and film archive. Every
+ * Photographs from the foundation's 2026 exhibition archive hang where one
+ * fits the slot. The rest of the archive has not been supplied yet. Every
  * entry below whose `src` is null is a real, named piece of that archive
  * that we know exists in the world and are waiting on. Nothing here is
  * invented: no stock imagery, and — this matters — no fabricated video
@@ -53,201 +54,25 @@ export interface MediaItem {
 
 /** Galleries are keyed by page, then by the subsection they belong to. */
 export const DEFAULT_MEDIA: Record<string, MediaItem[]> = {
-  /* ---- CORE VALUES ---------------------------------------------------- */
-  heal: [
-    {
-      id: 'heal-camp',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A blood donation camp on Manav Ekta Diwas',
-    },
-    {
-      id: 'heal-donor',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A first-time donor at the chair',
-    },
-    {
-      id: 'heal-eye',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'Cataract surgery at a free eye camp',
-    },
-    {
-      id: 'heal-spectacles',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'Spectacles handed out after a sight test',
-    },
-    {
-      id: 'heal-dispensary',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A mobile dispensary reaching a village',
-    },
-    {
-      id: 'heal-bank',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'Inside the foundation’s own blood bank',
-    },
-    {
-      id: 'heal-checkup',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A general health checkup camp',
-    },
-    {
-      id: 'heal-film',
-      kind: 'film',
-      src: null,
-      alt: '',
-      caption: 'Film — a day inside a mobile dispensary',
-    },
-  ],
-  enrich: [
-    {
-      id: 'enrich-class',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A classroom at a foundation free school',
-    },
-    {
-      id: 'enrich-scholar',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A Rajmata scholar collecting her award',
-    },
-    {
-      id: 'enrich-lab',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A STEM lab in a rural school',
-    },
-    {
-      id: 'enrich-nima',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A NIMA skill centre in session',
-    },
-    {
-      id: 'enrich-sewing',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'The sewing and beautician trades class',
-    },
-    {
-      id: 'enrich-library',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A school library at reading hour',
-    },
-    {
-      id: 'enrich-college',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'NBGSM College, Sohna',
-    },
-    {
-      id: 'enrich-film',
-      kind: 'film',
-      src: null,
-      alt: '',
-      caption: 'Film — a Rajmata scholar’s first term',
-    },
-  ],
-  empower: [
-    {
-      id: 'empower-planting',
-      kind: 'photo',
-      src: '/images/mataji-rajpita-planting.webp',
-      alt: 'A sapling being planted at a plantation drive',
-      caption: 'A sapling goes in at a plantation drive',
-    },
-    {
-      id: 'empower-vann',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A micro-forest three years on',
-    },
-    {
-      id: 'empower-clean',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A cleanliness drive at a railway station',
-    },
-    {
-      id: 'empower-relief',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A relief team at work after a flood',
-    },
-    {
-      id: 'empower-covid',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'Food packets prepared during the pandemic',
-    },
-    {
-      id: 'empower-youth',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'The Nirankari Youth Symposium',
-    },
-    {
-      id: 'empower-shg',
-      kind: 'photo',
-      src: null,
-      alt: '',
-      caption: 'A women’s self-help group at work',
-    },
-    {
-      id: 'empower-film',
-      kind: 'film',
-      src: null,
-      alt: '',
-      caption: 'Film — the Nirankari Youth Symposium',
-    },
-  ],
-
-  /* ---- PROJECTS -------------------------------------------------------- */
+  /* ---- PROJECTS: keyed by the project's id, so renaming one keeps its gallery. */
   'project-amrit': [
-    { id: 'amrit-ghat', kind: 'photo', src: null, alt: '', caption: 'A ghat before and after a cleaning drive', wide: true },
+    { id: 'amrit-ghat', kind: 'photo', src: '/images/programmes/amrit-riverbank.webp', alt: 'Project Amrit volunteers clearing a riverbank in Mantova, Italy', caption: 'Clearing a riverbank in Mantova, Italy', wide: true },
     { id: 'amrit-volunteers', kind: 'photo', src: '/images/volunteers-planning.webp', alt: 'Volunteers planning a service drive', caption: 'Volunteers plan the day’s stretch of bank' },
     { id: 'amrit-film', kind: 'film', src: null, alt: '', caption: 'Film — one river, one morning' },
   ],
-  'project-oneness-vann': [
-    { id: 'vann-forest', kind: 'photo', src: null, alt: '', caption: 'A micro-forest three years on', wide: true },
+  'oneness-vann': [
+    { id: 'vann-forest', kind: 'photo', src: '/images/programmes/oneness-vann-group.webp', alt: 'Volunteers planting beneath the Oneness Vann banner in Solapur', caption: 'A new Oneness Vann in Solapur, August 2026', wide: true },
     { id: 'vann-planting', kind: 'photo', src: '/images/mataji-rajpita-planting.webp', alt: 'A sapling being planted', caption: 'The first sapling of a new vann' },
     { id: 'vann-film', kind: 'film', src: null, alt: '', caption: 'Film — how a vann is grown' },
   ],
-  'watershed-programme': [
+  watershed: [
     { id: 'ws-check', kind: 'photo', src: null, alt: '', caption: 'A check dam holding the monsoon', wide: true },
     { id: 'ws-field', kind: 'photo', src: null, alt: '', caption: 'A field under crop where the land was arid' },
     { id: 'ws-film', kind: 'film', src: null, alt: '', caption: 'Film — the water that stayed' },
   ],
   'adopted-villages': [
-    { id: 'av-school', kind: 'photo', src: null, alt: '', caption: 'A village school after adoption', wide: true },
-    { id: 'av-street', kind: 'photo', src: null, alt: '', caption: 'A paved lane in Patti Kalyana' },
+    { id: 'av-school', kind: 'photo', src: '/images/programmes/adopted-villages-health-camp.webp', alt: 'Villagers at a health screening camp in Mandaura, one of the adopted villages', caption: 'A health camp in Mandaura, March 2026', wide: true },
+    { id: 'av-street', kind: 'photo', src: '/images/programmes/adopted-villages-mandaura.webp', alt: 'A volunteer checks an elderly villager in Mandaura', caption: 'Care in Mandaura' },
     { id: 'av-film', kind: 'film', src: null, alt: '', caption: 'Film — four villages, eight years' },
   ],
 

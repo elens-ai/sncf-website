@@ -1,89 +1,26 @@
 import { resolveCMSMedia } from '../cms/media';
-import { bindCMSValue, resolveCMSAsset, getCMSCopy } from '../cms/runtime';
+import { bindCMSValue, getCMSCopy } from '../cms/runtime';
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { ArrowUpRight, ArrowRight, Plus, X, Handshake, Check } from 'lucide-react';
 import { PARTNERS } from '../data/partners';
 import { BRAND } from '../data/partnerBrand';
+import { useCMSRevision } from '../cms/CMSContentProvider';
+import { useSectionActivity } from '../hooks/useSectionActivity';
+import { onArrival } from '../utils/arrival';
+import './recognition-partners.css';
 
-/**
- * THE MEDIA WALL — the screen after awards, rebuilt as the backdrop of a
- * press conference: the foundation's own lockup headlining a white
- * step-and-repeat wall, the twelve companions' marks repeating across it
- * in offset rows, exactly the way launch events dress the stage their
- * announcements stand in front of.
- *
- * The step-and-repeat is not decoration — it is the interaction:
- *
- *   · POINT at any mark and every repetition of it lights up across the
- *     wall while the rest step back to grey — the wall answers the hand;
- *   · SELECT one and the CHYRON (the broadcast caption bar at the wall's
- *     foot) speaks its engraving: name, contribution, note;
- *   · the reserved "YOUR LOGO" tiles are woven into the pattern itself —
- *     selecting one turns the chyron into the ENDORSEMENT DESK: type a
- *     prospect's name (it appears on the wall's reserved tiles live),
- *     download the print brochure, or copy a personalised invite link;
- *   · a prospect opening that link lands here with the desk open and
- *     their name already on the wall.
- *
- * Idle, the chyron carries the proof figures — the wall never stops
- * saying what all this delivered.
- *
- * The section shares the page gradient, with no separate background wash.
- *
- * Partner data is verbatim from nirankarifoundation.org/our-partners/
- * (data/partners.ts). Marks are each organisation's own published icon,
- * used for factual attribution exactly as the foundation's own partners
- * page does; where no usable mark survives, a brand-ink monogram stands
- * in — and any mark that fails to load falls back to it live.
- */
+interface PartnersSectionProps { onOpenDonate?: () => void; escapeSuspended?: boolean; }
 
-interface PartnersSectionProps {
-  /** Opens the donate/contact modal — the desk's escalation path. */
-  onOpenDonate?: () => void;
-  /** True while any site overlay is open. Escape then belongs to the
-      overlay; the chyron must not collapse on the same keypress. */
-  escapeSuspended?: boolean;
+function PartnerMark({ id, name }: { id: string; name: string }) {
+  const brand = BRAND[id];
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [brand?.logo]);
+  return <span className="collaboration-mark" style={{ '--brand-ink': brand?.color ?? '#24545a' } as React.CSSProperties} aria-hidden="true">
+    {brand?.logo && !failed ? <img src={resolveCMSMedia(brand.logo)} alt="" loading="lazy" decoding="async" onError={() => setFailed(true)} /> : <span>{brand?.initials ?? name.slice(0, 2)}</span>}
+  </span>;
 }
 
-/** THE PATTERN. A fixed interleaving of the twelve marks plus the reserved
-    seat, stepped diagonally across offset rows the way a printed
-    step-and-repeat cycles its sponsors. Deterministic — the wall must not
-    reshuffle between visits. Stride 4 against a 13-long cycle guarantees
-    no tile ever neighbours its own repetition horizontally or vertically.
-    Every mark appears at least once; the reserved seat surfaces exactly
-    once — one space on the wall, and it is spoken for or it is yours. */
-const SEQ = [
-  'un',
-  'railways',
-  'red-cross',
-  'life-west',
-  'urban-development',
-  'ksct',
-  'seat',
-  'ndtv',
-  'toi',
-  'niit',
-  'singer',
-  'blind-relief',
-  'ebai',
-] as const;
-const COLS = 6;
-const ROWS = 4;
-const WALL_ROWS: string[][] = Array.from({ length: ROWS }, (_, r) =>
-  Array.from({ length: COLS }, (_, c) => SEQ[(r * 4 + c) % SEQ.length]),
-);
-
-/** Each brand's FIRST cell on the wall. Only that repetition joins the tab
-    order and speaks to assistive tech — 13 stops, not 24 identical ones;
-    the echoes stay clickable but silent. */
-const FIRST_AT: Record<string, string> = {};
-WALL_ROWS.forEach((row, r) =>
-  row.forEach((id, c) => {
-    if (!(id in FIRST_AT)) FIRST_AT[id] = `${r}-${c}`;
-  }),
-);
-
-/** Idle chyron: the proof line — what all of this delivered. */
 let PROOF = bindCMSValue(() => ([
   { value: '1.5M+', label: getCMSCopy("copy.PartnersSection.1eac70612fcd", "blood units") },
   { value: '2.6M+', label: getCMSCopy("copy.PartnersSection.5d8fee134d25", "trees planted") },
@@ -91,84 +28,48 @@ let PROOF = bindCMSValue(() => ([
   { value: '209K+', label: getCMSCopy("copy.PartnersSection.dac4970ce624", "students") },
 ]), value => { PROOF = value; });
 
-export const PartnersSection: React.FC<PartnersSectionProps> = ({
-  onOpenDonate,
-  escapeSuspended = false,
-}) => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  /** hovered brand — lights every repetition of one mark */
-  const [litId, setLitId] = useState<string | null>(null);
-  /** selected brand or 'seat' — owns the chyron */
+export const PartnersSection: React.FC<PartnersSectionProps> = ({ onOpenDonate, escapeSuspended = false }) => {
+  useCMSRevision();
+  const sectionRef = useRef<HTMLElement>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
+  const deskRef = useRef<HTMLDivElement>(null);
+  const joinRef = useRef<HTMLButtonElement>(null);
+  const inView = useSectionActivity(sectionRef);
+  const [shown, setShown] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [seatOpen, setSeatOpen] = useState(false);
   const [orgName, setOrgName] = useState('');
   const [copied, setCopied] = useState(false);
-
-  /* Entrance fires ONCE on a scroll-position check (the codebase's
-     dominant idiom — IO rides the rendering pipeline and a throttled tab
-     can hold it forever). Unbinds after firing. */
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    let fired = false;
-    const check = () => {
-      if (fired) return;
-      const r = el.getBoundingClientRect();
-      const vh = window.innerHeight || 1;
-      if (r.top < vh * 0.72 && r.bottom > vh * 0.28) {
-        fired = true;
-        el.dataset.entered = 'true';
-        window.removeEventListener('scroll', check);
-      }
-    };
-    check();
-    window.addEventListener('scroll', check, { passive: true });
-    return () => window.removeEventListener('scroll', check);
-  }, []);
-
-  /* The personalised invitation landing: ?partner-invite=1&org=<name>.
-     NOT ?invite-partner — App.tsx's tolerant event-invite regex
-     ([?&]invite[-=]id) would swallow that spelling as an event id.
-     Lands with the desk open and the name on the wall. */
-  useEffect(() => {
-    const q = new URLSearchParams(window.location.search);
-    if (!q.has('partner-invite')) return;
-    setSelectedId('seat');
-    const org = q.get('org');
-    if (org) setOrgName(org.slice(0, 60));
-    const t = window.setTimeout(() => {
-      sectionRef.current?.scrollIntoView({ block: 'start' });
-    }, 700);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  /* Releasing the chyron unmounts whatever held focus (the × button, the
-     desk's input) — hand focus back to the released brand's primary wall
-     tile so a keyboard user keeps their place instead of falling to body. */
-  const closeChyron = () => {
-    const id = selectedId;
-    setSelectedId(null);
-    if (!id) return;
-    window.setTimeout(() => {
-      sectionRef.current
-        ?.querySelector<HTMLButtonElement>(`[data-brand="${id}"]`)
-        ?.focus();
-    }, 0);
+  const selected = PARTNERS.find(p => p.id === selectedId) ?? PARTNERS[0];
+  useEffect(() => { if (sectionRef.current) return onArrival(sectionRef.current, () => setShown(true)); }, []);
+  const revealDesk = () => {
+    setSeatOpen(true);
+    requestAnimationFrame(() => {
+      deskRef.current?.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      deskRef.current?.querySelector('input')?.focus({ preventScroll: true });
+    });
   };
-  const closeRef = useRef(closeChyron);
-  closeRef.current = closeChyron;
-  const suspendedRef = useRef(escapeSuspended);
-  suspendedRef.current = escapeSuspended;
-
-  /* Escape releases the chyron — unless an overlay owns the key. */
+  const closeDesk = () => { setSeatOpen(false); requestAnimationFrame(() => joinRef.current?.focus({ preventScroll: true })); };
   useEffect(() => {
-    if (!selectedId) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !suspendedRef.current) closeRef.current();
-    };
+    if (!seatOpen || escapeSuspended) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeDesk(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [selectedId]);
-
+  }, [seatOpen, escapeSuspended]);
+  useEffect(() => {
+    const q = new URLSearchParams(location.search);
+    if (!q.has('partner-invite')) return;
+    setOrgName((q.get('org') ?? '').slice(0, 60)); setSeatOpen(true);
+    const timer = window.setTimeout(() => deskRef.current?.scrollIntoView({ block: 'center' }), 700);
+    return () => clearTimeout(timer);
+  }, []);
+  const choose = (id: string) => {
+    setSelectedId(id);
+    if (matchMedia('(max-width: 760px)').matches) requestAnimationFrame(() => {
+      detailRef.current?.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      detailRef.current?.querySelector<HTMLElement>('h3')?.focus({ preventScroll: true });
+    });
+  };
   const inviteLink = () => {
     const u = new URL(window.location.origin + window.location.pathname);
     u.searchParams.set('partner-invite', '1');
@@ -203,237 +104,48 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
   };
   const printBrochure = () => window.print();
 
-  const selected = PARTNERS.find((p) => p.id === selectedId) ?? null;
-  const seatOpen = selectedId === 'seat';
-  /* the wall lights the hovered brand, or holds the selected one */
-  const activeId = litId ?? selectedId;
 
-  return (
-    <section
-      ref={sectionRef}
-      id="partners-section"
-      aria-label={getCMSCopy("copy.PartnersSection.cdd9e6909c7f", "Partners and CSR collaboration")}
-      className="snap-screen relative z-10 w-full min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 pt-[84px] pb-6 overflow-hidden"
-    >
-      {/* the fixed slate ground the white wall stands against */}
-
-      <div className="relative z-10 w-full max-w-6xl mx-auto flex-1 flex flex-col justify-center min-h-0">
-        {/* the section's own eyebrow, above the wall */}
-        <p className="font-artistic-display text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.24em] text-white/60 mb-2 text-center">{getCMSCopy("copy.PartnersSection.2e9686b783ba", "Partnerships · CSR · Walking together")}</p>
-
-        {/* ==================== THE WALL ==================== */}
-        <div
-          className="media-wall"
-          data-active={activeId ? 'true' : 'false'}
-          role="group"
-          aria-label={getCMSCopy("copy.PartnersSection.0363d0e439f3", "Partner media wall — select any mark to read that collaboration")}
-        >
-          {/* the headline lockup — the wall belongs to the foundation */}
-          <header className="media-wall-head">
-            <div className="media-wall-inks" aria-hidden="true">
-              {['#f81170', '#b357ad', '#6663b5', '#09a6cf', '#69b947'].map((ink) => (
-                <span key={ink} style={{ background: ink }} />
-              ))}
-            </div>
-            <h2 className="media-wall-title">{getCMSCopy("copy.PartnersSection.a01941bf3134", "Sant Nirankari Charitable Foundation")}</h2>
-            <p className="media-wall-motto font-dancing-script">{getCMSCopy("copy.PartnersSection.56219e473693", "Service with Humility")}</p>
-          </header>
-
-          {/* the step-and-repeat field */}
-          <div className="media-wall-field">
-            {WALL_ROWS.map((row, r) => (
-              <div key={r} className="media-wall-row" data-offset={r % 2 === 1}>
-                {row.map((id, c) => {
-                  const isPrimary = FIRST_AT[id] === `${r}-${c}`;
-                  if (id === 'seat') {
-                    return (
-                      <button
-                        key={`${r}-${c}`}
-                        type="button"
-                        className="wall-tile wall-tile-seat"
-                        data-lit={activeId === 'seat'}
-                        data-dim={!!activeId && activeId !== 'seat'}
-                        data-brand={isPrimary ? 'seat' : undefined}
-                        tabIndex={isPrimary ? 0 : -1}
-                        aria-hidden={isPrimary ? undefined : true}
-                        aria-label={getCMSCopy("copy.PartnersSection.32cd5e384c6c", "Your organisation — reserve this space")}
-                        aria-pressed={seatOpen}
-                        onMouseEnter={() => setLitId('seat')}
-                        onMouseLeave={() => setLitId(null)}
-                        onFocus={() => setLitId('seat')}
-                        onBlur={() => setLitId(null)}
-                        onClick={() => setSelectedId((cur) => (cur === 'seat' ? null : 'seat'))}
-                      >
-                        <span className="wall-tile-mark wall-tile-mark-seat" aria-hidden="true">
-                          <span className="partner-seat-plus" />
-                        </span>
-                        <span className="wall-tile-name wall-tile-name-seat">
-                          {orgName.trim() || 'Your logo'}
-                        </span>
-                      </button>
-                    );
-                  }
-                  const partner = PARTNERS.find((p) => p.id === id);
-                  if(!partner)return null;
-                  const b = BRAND[id];
-                  return (
-                    <button
-                      key={`${r}-${c}`}
-                      type="button"
-                      className="wall-tile"
-                      data-lit={activeId === id}
-                      data-dim={!!activeId && activeId !== id}
-                      data-brand={isPrimary ? id : undefined}
-                      tabIndex={isPrimary ? 0 : -1}
-                      aria-hidden={isPrimary ? undefined : true}
-                      style={{ '--tile-ink': b?.color ?? '#333' } as React.CSSProperties}
-                      aria-label={`${partner.name} — read this collaboration`}
-                      aria-pressed={selectedId === id}
-                      onMouseEnter={() => setLitId(id)}
-                      onMouseLeave={() => setLitId(null)}
-                      onFocus={() => setLitId(id)}
-                      onBlur={() => setLitId(null)}
-                      onClick={() => setSelectedId((cur) => (cur === id ? null : id))}
-                    >
-                      <span className="wall-tile-mark" aria-hidden="true">
-                        <span className="wall-tile-initials font-artistic-display">
-                          {b?.initials ?? partner.name.slice(0, 2)}
-                        </span>
-                        {b?.logo && (
-                          <img
-                            src={resolveCMSMedia(b.logo)}
-                            alt=""
-                            decoding="async"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                        )}
-                      </span>
-                      <span className="wall-tile-name">{b?.short ?? partner.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-
-          {/* the sponsor line at the wall's hem — the credentials */}
-          <p className="media-wall-hem font-artistic-display">{getCMSCopy("copy.PartnersSection.e968b8fbdcaf", "UN special consultative status · Serving since 2010 · 250+ branches nationwide · 12 collaborations, one space reserved")}</p>
-        </div>
-
-        {/* What the chyron shows, spoken once for assistive tech. A separate
-            sr-only region rather than aria-live on the bar itself: the desk's
-            input re-renders the bar per keystroke, and a live bar would
-            narrate every letter. */}
-        <div role="status" aria-live="polite" className="sr-only">
-          {selected
-            ? `${selected.name}. ${selected.contribution}${selected.note ? ` — ${selected.note}` : ''}`
-            : seatOpen
-              ? 'Endorsement desk open. Type a prospect organisation, save the brochure as PDF, or copy a personalised invite link.'
-              : ''}
-        </div>
-
-        {/* ==================== THE CHYRON ==================== */}
-        {/* the broadcast caption bar at the wall's foot: idle it carries the
-            proof; selected it speaks the engraving; the seat turns it into
-            the endorsement desk. Fixed height — the screen never grows. */}
-        <div className="media-chyron" data-mode={selected ? 'partner' : seatOpen ? 'seat' : 'idle'}>
-          {selected ? (
-            <div key={selected.id} className="media-chyron-inner">
-              <span
-                className="wall-tile-mark media-chyron-mark"
-                style={{ '--tile-ink': BRAND[selected.id]?.color ?? '#333' } as React.CSSProperties}
-                aria-hidden="true"
-              >
-                <span className="wall-tile-initials font-artistic-display">
-                  {BRAND[selected.id]?.initials ?? selected.name.slice(0, 2)}
-                </span>
-                {BRAND[selected.id]?.logo && (
-                  <img
-                    src={resolveCMSMedia(BRAND[selected.id].logo)}
-                    alt=""
-                    decoding="async"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                )}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="media-chyron-name font-artistic-heading">{selected.name}</p>
-                <p className="media-chyron-line font-artistic-serif">
-                  {selected.contribution}
-                  {selected.note ? ` — ${selected.note}` : ''}
-                </p>
-              </div>
-              <button
-                type="button"
-                className="media-chyron-close"
-                aria-label={getCMSCopy("copy.PartnersSection.7d9eb7acb13e", "Close")}
-                onClick={closeChyron}
-              >
-                ×
-              </button>
-            </div>
-          ) : seatOpen ? (
-            <div key="seat" className="media-chyron-inner">
-              <div className="min-w-0 flex-1">
-                <p className="media-chyron-name font-artistic-heading">
-                  {orgName.trim() ? `Reserved for ${orgName.trim()}` : 'Your logo on this wall'}
-                </p>
-                <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                  <input
-                    type="text"
-                    value={orgName}
-                    maxLength={60}
-                    onChange={(e) => setOrgName(e.target.value)}
-                    placeholder={getCMSCopy("copy.PartnersSection.a818e27e9d52", "Prospect organisation's name…")}
-                    aria-label={getCMSCopy("copy.PartnersSection.1cd7b9621ccb", "Prospect organisation's name")}
-                    className="media-chyron-input"
-                  />
-                  {/* honest label: this opens the print dialog, and
-                      Save-as-PDF there is the download */}
-                  <button type="button" onClick={printBrochure} className="partner-cta">{getCMSCopy("copy.PartnersSection.33bb9c6ad169", "Save brochure (PDF)")}</button>
-                  <button type="button" onClick={copyInvite} className="partner-cta partner-cta-ghost">
-                    {copied ? 'Link copied ✓' : 'Copy invite link'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onOpenDonate}
-                    className="font-artistic-display text-[9.5px] tracking-[0.16em] uppercase text-white/65 hover:text-white underline decoration-white/30 underline-offset-4 cursor-pointer"
-                  >{getCMSCopy("copy.PartnersSection.258150cb3ee4", "Start a conversation")}</button>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="media-chyron-close"
-                aria-label={getCMSCopy("copy.PartnersSection.7d9eb7acb13e", "Close")}
-                onClick={closeChyron}
-              >
-                ×
-              </button>
-            </div>
-          ) : (
-            <div key="idle" className="media-chyron-inner">
-              <p className="media-chyron-live font-artistic-display" aria-hidden="true">
-                <span />{getCMSCopy("copy.PartnersSection.906115657390", "Delivered")}</p>
-              <ul className="media-chyron-proof" aria-label={getCMSCopy("copy.PartnersSection.14ac8db7b70d", "Delivered outcomes")}>
-                {PROOF.map((p) => (
-                  <li key={p.label}>
-                    <strong className="font-artistic-heading">{p.value}</strong>
-                    <span className="font-artistic-serif">{p.label}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="media-chyron-hint font-artistic-serif">{getCMSCopy("copy.PartnersSection.9e9379dff36e", "Point at a mark — its every appearance lights. Select the dashed space to reserve yours.")}</p>
-            </div>
-          )}
-        </div>
+  return <section ref={sectionRef} id="partners-section" className="collaboration-section" data-arrived={shown} data-active={inView} aria-label="Partners and CSR collaboration">
+    <div className="continuity-art" aria-hidden="true"><i /><i /><span /></div>
+    <div className="collaboration-heading">
+      <div><p className="continuity-eyebrow"><span />{getCMSCopy('copy.PartnersSection.2e9686b783ba', 'Partnerships · CSR · Walking together')}</p>
+        <h2>Together, <em>we make more possible.</em></h2>
       </div>
-
-      {/* THE BROCHURE — print-only A4 via a body portal; "Download
-          brochure" is window.print() and the browser's own Save-as-PDF. */}
+      <p className="collaboration-count"><strong>{String(PARTNERS.length).padStart(2, '0')}</strong><span>collaborations.{' '}<br />One shared purpose.</span></p>
+    </div>
+    <div className="collaboration-layout">
+      <div className="collaboration-editorial">
+        <p className="collaboration-intro">{getCMSCopy('copy.PartnersSection.intro', 'Working alongside organisations that share our commitment to people, communities and the planet.')}</p>
+        {selected && <div ref={detailRef} className="collaboration-story">
+          <div className="collaboration-story-heading"><PartnerMark id={selected.id} name={selected.name} /><span>A shared commitment</span></div>
+          <div key={selected.id} className="collaboration-story-copy">
+            <h3 tabIndex={-1}>{selected.name}</h3><p>{selected.contribution}</p>{selected.note && <p className="collaboration-note">{selected.note}</p>}
+          </div>
+          <span className="collaboration-story-index">{String(PARTNERS.indexOf(selected) + 1).padStart(2, '0')} / {String(PARTNERS.length).padStart(2, '0')}<span>Our partners in service</span></span>
+        </div>}
+        <button ref={joinRef} type="button" className="collaboration-join" onClick={revealDesk} aria-expanded={seatOpen} aria-controls="collaboration-desk"><Handshake size={18} />Become a partner<ArrowUpRight size={17} /></button>
+        <p className="collaboration-join-note">There is a place for your organisation here.</p>
+      </div>
+      <div className="collaboration-directory">
+        <p className="collaboration-directory-label">Walking with us<span>Select a logo to explore</span></p>
+        <div className="collaboration-grid" role="group" aria-label="Choose a partner">
+          {PARTNERS.map((partner, i) => <button key={partner.id} type="button" aria-label={`${partner.name} — read this collaboration`} aria-pressed={selected?.id === partner.id} onClick={() => choose(partner.id)} style={{ '--partner-order': i } as React.CSSProperties}>
+            <PartnerMark id={partner.id} name={partner.name} /><span className="collaboration-name">{BRAND[partner.id]?.short ?? partner.name}</span><ArrowUpRight size={12} className="collaboration-tile-arrow" aria-hidden="true" />
+          </button>)}
+        </div>
+        <p className="collaboration-directory-note"><span aria-hidden="true" />Many organisations. A common spirit of service.</p>
+      </div>
+    </div>
+    {seatOpen && <div id="collaboration-desk" ref={deskRef} className="collaboration-desk">
+      <button type="button" className="collaboration-close" aria-label="Close partnership invitation" onClick={closeDesk}><X size={18} /></button>
+      <div><p className="continuity-eyebrow">The next chapter</p><h3>{orgName.trim() ? `An invitation to ${orgName.trim()}` : 'Let’s create something meaningful.'}</h3><p>Personalise a partnership invitation to share with your organisation.</p></div>
+      <div className="collaboration-desk-form"><label htmlFor="partner-organisation">Organisation name</label><input id="partner-organisation" type="text" value={orgName} maxLength={60} onChange={e => setOrgName(e.target.value)} placeholder="Your organisation" />
+        <div><button type="button" onClick={printBrochure}>Save brochure (PDF)<ArrowUpRight size={14} /></button><button type="button" onClick={copyInvite}>{copied ? <><Check size={14} />Link copied</> : <>Copy invite link<Plus size={14} /></>}</button></div>
+        {onOpenDonate && <button type="button" className="continuity-text-link" onClick={onOpenDonate}>Start a conversation<ArrowRight size={16} /></button>}
+      </div>
+    </div>}
+    <div className="collaboration-outcomes"><p>Our collective impact<span>Service that reaches further.</span></p><ul aria-label="Delivered outcomes">{PROOF.map((p, i) => <li key={p.label} data-pillar={['heal','empower','projects','enrich'][i]}><strong>{p.value}</strong><span>{p.label}</span></li>)}</ul></div>
+    <p className="sr-only" role="status">{selectedId && selected ? `${selected.name}. ${selected.contribution}` : ''}{copied ? ' Partnership invitation link copied.' : ''}</p>
       {createPortal(
         <div id="partner-brochure" aria-hidden="true">
           <div className="pb-inkline">
@@ -476,6 +188,5 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({
         </div>,
         document.body,
       )}
-    </section>
-  );
+  </section>;
 };

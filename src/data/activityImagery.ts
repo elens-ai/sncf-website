@@ -5,10 +5,11 @@ import { slug } from '../utils/slug';
 /**
  * WHICH PHOTOGRAPH EACH PROGRAMME TILE SHOWS.
  *
- * activities.ts is the content of record, and an activity's `images` stay
- * empty until the foundation supplies photographs of that programme. Until
- * then the tiles borrow from the pavilion's set — user-approved illustrative
- * stock, not pictures of SNCF programmes — and say so on the tile.
+ * activities.ts is the content of record, and an activity's `images` are
+ * its own photographs. A programme with none yet (COVID-19 relief, the
+ * watershed) borrows one of its pillar's photographs instead — the
+ * foundation's, but of another programme — and the tile says it is
+ * illustrative.
  *
  * The pairing lives HERE, not in activities.ts, for two reasons: an
  * illustrative image must never be mistaken for the activity's own record
@@ -28,34 +29,38 @@ export interface ActivityImage {
   caption?: string;
 }
 
-/** activity id → pavilion photograph id. Each comment is that photo's caption. */
+/** activity id → the pillar photograph it borrows when it has none of its own.
+    Each comment is that photo's caption. */
 export const DEFAULT_ACTIVITY_IMAGERY: Record<string, string> = {
   /* heal */
-  'blood-donation': 'heal-gallery-5',      // Ready to serve — a healthcare professional wearing a mask
-  'health-checkup': 'heal-gallery-4',      // The person at the heart of care — a doctor speaking with a patient
-  'eye-checkup': 'heal-gallery-3',         // Knowledge that supports care — an anatomical teaching model
-  'health-centre': 'heal-gallery-2',       // Working together for better health — a surgical team
-  'blood-bank': 'heal-gallery-1',          // Care begins with a connection — a professional holding a phone
+  'blood-donation': 'heal-gallery-1',      // Manav Ekta Diwas blood drive
+  'health-checkup': 'heal-gallery-4',      // A health screening camp
+  'eye-checkup': 'heal-gallery-2',         // A free eye checkup camp
+  'health-centre': 'heal-gallery-3',       // Health checkup at a school
+  'blood-bank': 'heal-gallery-5',          // International Yoga Day
   /* enrich */
-  'schools-colleges': 'enrich-gallery-2',  // Learning, together — students in a classroom
-  'scholarships': 'enrich-gallery-4',      // Ideas grow when we share them — an educational gathering
-  'free-schools': 'enrich-gallery-1',      // Every beginning deserves a chance — books on a desk
-  'skill-nima': 'enrich-gallery-3',        // Skills for a changing world — a learner with a laptop
-  'skill-trades': 'enrich-gallery-5',      // Opening doors through education — open books and notes
+  'schools-colleges': 'enrich-gallery-1',  // In the classroom
+  'scholarships': 'enrich-gallery-4',      // Sant Nirankari Public School
+  'free-schools': 'enrich-gallery-2',      // The computer lab
+  'skill-nima': 'enrich-gallery-3',        // Music at NIMA
+  'skill-trades': 'enrich-gallery-5',      // A sewing centre
   /* empower */
-  'tree-plantation': 'empower-gallery-4',  // A shared responsibility — hands holding a small plant
-  'cleanliness': 'empower-gallery-2',      // Change starts in our hands — gardening tools and soil
-  'covid-relief': 'empower-gallery-1',     // Growing a more sustainable future — a harvest of vegetables
-  'mass-marriages': 'empower-gallery-5',   // Protecting what sustains us — sunlight on a forest floor
-  'financial-support': 'empower-gallery-3',// Small beginnings. Lasting growth. — seedlings in pots
+  'tree-plantation': 'empower-gallery-2',  // A sapling in Mussoorie
+  'cleanliness': 'empower-gallery-5',      // Reduce, reuse, recycle
+  'covid-relief': 'empower-gallery-1',     // World Environment Day, Tehri
+  'mass-marriages': 'empower-gallery-4',   // Mass marriages
+  'financial-support': 'empower-gallery-3',// Youth athletics
   /* projects — projects-gallery-5 stays free: four projects, five photographs */
-  'project-amrit': 'projects-gallery-1',   // Project Amrit — Clean Water, Pure Mind — a forest river
-  'oneness-vann': 'projects-gallery-2',    // Oneness Vann — a living forest — a waterfall
-  'watershed': 'projects-gallery-4',       // Resilient land. Stronger communities. — farmland at sunset
-  'adopted-villages': 'projects-gallery-3',// Making room for nature — a walkway through a forest
+  'project-amrit': 'projects-gallery-1',   // Project Amrit, Mantova
+  'oneness-vann': 'projects-gallery-2',    // Oneness Vann, Solapur
+  'watershed': 'projects-gallery-4',       // Planting a Oneness Vann
+  'adopted-villages': 'projects-gallery-3',// Project Amrit volunteers
 };
 
 const PHOTO_ID = /^(heal|enrich|empower|projects)-gallery-([1-5])$/;
+/* A borrowed photograph is real but shows another programme: say so to a
+   screen reader as well as on the tile. */
+const borrowedAlt = (alt: string) => (/^Illustrative photograph:/i.test(alt) ? alt : `Illustrative photograph: ${alt}`);
 
 export function activityImage(activity: Activity): ActivityImage | null {
   const own = activity.images[0];
@@ -67,7 +72,7 @@ export function activityImage(activity: Activity): ActivityImage | null {
      binding, reassigned on publish — read it here, never at module scope. */
   const room = PAVILION_IDS.indexOf(match[1] as (typeof PAVILION_IDS)[number]);
   const photo = PAVILION_GALLERY[room]?.[Number(match[2]) - 1];
-  return photo ? { src: photo.src, alt: photo.alt, illustrative: true } : null;
+  return photo ? { src: photo.src, alt: borrowedAlt(photo.alt), illustrative: true } : null;
 }
 
 /**
@@ -85,7 +90,7 @@ export function activityImageAt(activity: Activity, step: number): ActivityImage
   const base = set.findIndex(photo => photo.src === start.src);
   if (base < 0 || set.length < 2) return start;
   const photo = set[(base + step) % set.length];
-  return { src: photo.src, alt: photo.alt, illustrative: true };
+  return { src: photo.src, alt: borrowedAlt(photo.alt), illustrative: true };
 }
 
 /** Where "Explore" leads: the Projects page for flagship projects, Core Values otherwise. */
@@ -94,7 +99,7 @@ export const exploreHref = (activity: Activity) =>
 
 /**
  * THE PHOTOGRAPHS A PROGRAMME OPENS ONTO — the tile's picture first, then the
- * activity's own photographs, then the rest of its pillar's illustrative set,
+ * activity's own photographs, then the rest of its pillar's photographs,
  * each labelled for what it is. This is what the spotlight browses. As the
  * foundation supplies real photographs (in the data or from the CMS) they
  * take their place ahead of the borrowed ones without any change here.
@@ -103,7 +108,7 @@ export function activityGallery(activity: Activity): ActivityImage[] {
   const lead = activityImage(activity);
   const own = activity.images.map(image => ({ src: image.src, alt: image.alt, illustrative: false }));
   const room = PAVILION_IDS.indexOf(activity.pillarId);
-  const borrowed = (PAVILION_GALLERY[room] ?? []).map(photo => ({ src: photo.src, alt: photo.alt, illustrative: true, caption: photo.caption }));
+  const borrowed = (PAVILION_GALLERY[room] ?? []).map(photo => ({ src: photo.src, alt: borrowedAlt(photo.alt), illustrative: true, caption: photo.caption }));
   const seen = new Set<string>();
   const gallery: ActivityImage[] = [];
   for (const image of [lead, ...own, ...borrowed]) {

@@ -4,7 +4,7 @@ import { applyCMSPublication, bindCMSValue, bootstrapCMS, getCMSCopy, getCMSRevi
 import { ACTIVITIES, DEFAULT_ACTIVITIES } from '../data/activities';
 import { DEFAULT_EVENTS } from '../data/events';
 import { DEFAULT_PILLARS, PILLARS } from '../data/pillars';
-import { resolveActivities, resolveAwards, resolveEvents, resolveGalleryGroups, resolvePavilionGallery, validMedia, validPlate } from './data';
+import { resolveActivities, resolveAwards, resolveEvents, resolveGalleryGroups, resolvePavilionGallery, validMedia } from './data';
 import { DEFAULT_PAVILION_GALLERY } from '../data/pavilionGallery';
 
 let sequence = 0;
@@ -85,13 +85,20 @@ test('published media supports additions and removals without replacing locked p
   assert.equal(groups.heal[0].src, '/video/new.mp4');
 });
 
-test('gallery source edits reach legacy photo plates even when the API omits optional null fields', () => {
-  const defaults = { heal: [{ title: 'Original', alt: 'Original', image: '/original.webp', highlight: null }] };
-  const published = { id: 'plate', group: 'plates:heal', src: '/replacement.webp', alt: 'Replacement photo', caption: 'New caption' };
-  const groups = resolveGalleryGroups({ version: 'plate-update', gallery: [published] }, defaults, 'plates', validPlate);
-  assert.equal(groups.heal[0].image, '/replacement.webp');
-  assert.equal(groups.heal[0].title, 'New caption');
-  assert.equal(groups.heal[0].highlight, null);
+test('programme presentation extras are dropped one by one, never the programme', () => {
+  const defaults = [{ id: 'blood', pillarId: 'heal', title: 'Blood', period: 'Now', blurb: 'B', headline: { label: 'Units', value: '1' }, dataPoints: [], images: [],
+    icon: 'droplets', hoverPhotos: [{ src: '/a.jpg' }], hoverFocus: { photo: 1, x: 50, y: 50, width: 10, height: 10 } }] as any;
+  const [kept] = resolveActivities({ version: 'p1', activities: [{ id: 'blood', icon: 'not-an-icon', menuLabel: ' ',
+    hoverPhotos: [{ src: '/b.jpg' }, { src: 'javascript:alert(1)' }], hoverFocus: { photo: 3, x: 50, y: 50, width: 10, height: 10 }, cardPhoto: { src: '//evil' } }] }, defaults);
+  assert.equal(kept.title, 'Blood');
+  assert.equal(kept.icon, undefined);
+  assert.equal(kept.menuLabel, undefined);
+  assert.deepEqual(kept.hoverPhotos, [{ src: '/b.jpg' }]);
+  assert.equal(kept.hoverFocus, undefined, 'focus pointing past the photos is dropped');
+  assert.equal(kept.cardPhoto, undefined);
+  const [defaulted] = resolveActivities({ version: 'p2', activities: [{ id: 'blood' }] }, defaults);
+  assert.equal(defaulted.icon, 'droplets');
+  assert.equal(defaulted.hoverFocus?.photo, 1);
 });
 
 test('offline or HTML fallback responses do not blank previously published content', async () => {

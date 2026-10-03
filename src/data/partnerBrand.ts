@@ -41,16 +41,16 @@ export const DEFAULT_BRAND: Record<string, PartnerBrand> = {
 
 export let BRAND: Record<string, PartnerBrand> = bindCMSData(DEFAULT_BRAND, (publication, fallback) => {
   const result = { ...fallback };
-  const incoming = publication.site?.partnerBrands;
-  if (isRecord(incoming)) for (const [id, brand] of Object.entries(incoming)) {
-    if (!isRecord(brand) || !['short', 'initials', 'color'].every(key => typeof brand[key] === 'string') ||
-        !/^#[0-9a-f]{6}$/i.test(String(brand.color)) || (brand.logo !== undefined && !safeCMSURL(brand.logo))) continue;
-    result[id] = brand as unknown as PartnerBrand;
-  }
   for (const partner of publication.partners ?? []) {
     if (!isRecord(partner) || typeof partner.id !== 'string' || typeof partner.name !== 'string') continue;
     result[partner.id] ??= { short: partner.name, color: '#287c6a', initials: partner.name.split(/\s+/).map(word => word[0]).slice(0, 3).join('') };
-    if (safeCMSURL(partner.logo)) result[partner.id] = { ...result[partner.id], logo: partner.logo };
+    /* Branding authored on the partner's own CMS record wins. */
+    const own = { ...result[partner.id] };
+    if (typeof partner.short === 'string' && partner.short.trim()) own.short = partner.short;
+    if (typeof partner.initials === 'string' && partner.initials.trim()) own.initials = partner.initials;
+    if (typeof partner.color === 'string' && /^#[0-9a-f]{6}$/i.test(partner.color)) own.color = partner.color;
+    if (safeCMSURL(partner.logo)) own.logo = partner.logo;
+    result[partner.id] = own;
   }
   return result;
 }, value => { BRAND = value; });
