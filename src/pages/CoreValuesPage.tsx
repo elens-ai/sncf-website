@@ -7,41 +7,27 @@ import { ValueCompass } from '../components/ValueCompass';
 import { ValueAnalytics } from '../components/ValueAnalytics';
 import { HealStory } from '../components/HealStory';
 import { EnrichScrapbook } from '../components/EnrichScrapbook';
+import { PillarPhotoMosaic } from '../components/PillarPhotoMosaic';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
-import { roomPhoto } from '../data/pavilionGallery';
 import './core-values.css';
 
 const CORNERSTONES = ['heal', 'enrich', 'empower'] as const;
 type Cornerstone = typeof CORNERSTONES[number];
 
 
-/** A responsive photo composition for a cornerstone (Empower; Heal has its
+/** A cornerstone's emblem filled with the foundation's photographs, as the
+    home page shows it (Empower's figure with raised arms; Heal has its
     doorways, Enrich its scrapbook). */
-const ValuePhotoCollage: React.FC<{ id: Cornerstone; label: string }> = ({ id, label }) => (
-  <figure className="value-photo-story" aria-label={`${label}: compassion in action`}>
-    <div className="value-photo-collage">
-      <span className="value-paper-shape value-paper-shape-top" aria-hidden="true" />
-      <span className="value-paper-shape value-paper-shape-bottom" aria-hidden="true" />
-      {[1, 2, 3, 4, 5].map((photo) => (
-        <div key={photo} className={`value-photo-frame value-photo-frame-${photo}`}>
-          <img
-            src={resolveCMSMedia(roomPhoto(id, photo))}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            width={640}
-            height={640}
-          />
-        </div>
-      ))}
-    </div>
-    <figcaption><span>{getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')}</span></figcaption>
-  </figure>
+const ValueEmblem: React.FC<{ id: Cornerstone }> = ({ id }) => (
+  <div className="value-emblem">
+    <PillarPhotoMosaic pillar={id} caption={false} />
+    <p className="value-emblem-caption">{getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')}</p>
+  </div>
 );
 
 /* The three ways, one to each cornerstone, in the compass's order and icons. */
@@ -113,7 +99,7 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
           <h2 id={`${id}-title`} className="value-hero-title">{pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()}</h2>
           {id === 'enrich'
             ? <EnrichScrapbook activities={activities} name={pillar.label.charAt(0) + pillar.label.slice(1).toLowerCase()} motto={pillar.headline} caption={getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')} />
-            : <ValuePhotoCollage id={id} label={pillar.label} />}
+            : <ValueEmblem id={id} />}
           {activities.slice(0, 5).map((activity, i) => (
             <a key={activity.id} href={`#${id}-explorer`} className={`value-hero-stat value-hero-stat-${i + 1}`} onClick={() => setSelectedId(activity.id)}>
               <span className="value-hero-stat-label">{activity.title}<ArrowUpRight size={16} aria-hidden="true" /></span>

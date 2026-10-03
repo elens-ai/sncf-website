@@ -12,6 +12,10 @@ export default defineConfig(() => {
       },
     },
     server: {
+      // 3000 unless PORT names another (a second dev server beside the first);
+      // a named port is kept to exactly, so nothing waits on the wrong one.
+      port: Number(process.env.PORT) || 3000,
+      strictPort: Boolean(process.env.PORT),
       // The public CMS feed and uploads share the frontend origin during development.
       proxy: { '/api': { target: process.env.CMS_PROXY_TARGET || 'http://127.0.0.1:3001', changeOrigin: true } },
       // HMR is disabled in AI Studio via DISABLE_HMR env var.

@@ -190,48 +190,15 @@
   .values-cover h1 { font-size: clamp(34px, min(4.4vw, 7.6svh), 66px); }
 }
 
-/* Paper-cut photo stories: white mounts, coloured rings and a torn centre print. */
-.value-photo-story { margin: 8px auto 64px; max-width: 820px; }
-.value-photo-collage { position: relative; isolation: isolate; width: 100%; aspect-ratio: 1.08; }
-.value-photo-frame { position: absolute; overflow: hidden; background: #fff; box-shadow: -9px 12px 14px #20342a26, -2px 3px 3px #20342a18; }
-.value-photo-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.value-photo-frame-1, .value-photo-frame-5 { z-index: 3; width: 49%; height: 48%; border: clamp(5px, .85vw, 10px) solid #fff; border-radius: 20%; }
-.value-photo-frame-1 { top: 3%; left: 3%; transform: rotate(-3deg); }
-.value-photo-frame-5 { bottom: 2%; right: 3%; transform: rotate(3deg); }
-.value-photo-frame-2, .value-photo-frame-4 { z-index: 2; width: 25%; height: 27%; border: clamp(5px, .9vw, 11px) solid var(--value-light); border-radius: 50% 50% 48% 12%; }
-.value-photo-frame-2 { top: 10%; right: 6%; transform: rotate(-14deg); }
-.value-photo-frame-2 img { transform: rotate(14deg) scale(1.2); }
-.value-photo-frame-4 { bottom: 12%; left: 5%; transform: rotate(16deg); border-radius: 50% 12% 50% 50%; }
-.value-photo-frame-4 img { transform: rotate(-16deg) scale(1.2); }
-.value-photo-frame-3 { z-index: 1; top: 32%; left: 24%; width: 55%; height: 40%; overflow: visible; background: transparent; box-shadow: none; filter: drop-shadow(-5px 9px 2px #20342a30); transform: rotate(-7deg); }
-.value-photo-frame-3 img { clip-path: polygon(3% 0, 96% 2%, 94% 7%, 100% 9%, 95% 14%, 98% 20%, 92% 24%, 99% 29%, 96% 35%, 100% 40%, 94% 44%, 98% 51%, 95% 57%, 100% 62%, 94% 67%, 98% 74%, 92% 80%, 96% 87%, 91% 92%, 94% 98%, 6% 100%, 9% 94%, 2% 89%, 7% 83%, 0 77%, 5% 72%, 2% 65%, 8% 59%, 1% 53%, 6% 47%, 2% 40%, 7% 35%, 0 29%, 5% 23%, 2% 16%, 7% 10%); }
-.value-paper-shape { position: absolute; z-index: 0; width: 30%; height: 26%; background: var(--value-light); border-radius: 37% 63% 26% 74% / 55% 24% 76% 45%; box-shadow: -8px 12px 17px #20342a20; }
-.value-paper-shape::after { content: ''; position: absolute; inset: 15% 0 0 12%; border-radius: inherit; background: var(--value-color); opacity: .65; }
-.value-paper-shape-top { top: 0; right: 1%; transform: rotate(24deg); }
-.value-paper-shape-bottom { bottom: 0; left: 0; transform: rotate(-28deg); }
-.value-photo-story figcaption { display: flex; justify-content: space-between; gap: 16px; margin: 28px 3% 0; font-size: 10px; line-height: 1.6; letter-spacing: .08em; text-transform: uppercase; color: #63766f; }
-.value-photo-story figcaption span:first-child { color: var(--value-color); font-weight: 600; }
-@media (max-width: 640px) {
-  .value-photo-story { margin: 4px auto 42px; }
-  .value-photo-collage { aspect-ratio: .78; }
-  .value-photo-frame-1, .value-photo-frame-5 { width: 57%; height: 39%; }
-  .value-photo-frame-1 { left: 1%; }
-  .value-photo-frame-5 { right: 1%; }
-  .value-photo-frame-2, .value-photo-frame-4 { width: 29%; height: 23%; }
-  .value-photo-frame-2 { top: 15%; right: 2%; }
-  .value-photo-frame-4 { bottom: 16%; left: 2%; }
-  .value-photo-frame-3 { top: 33%; left: 19%; width: 66%; height: 34%; }
-  .value-photo-story figcaption { flex-direction: column; gap: 4px; font-size: 9px; margin-top: 22px; }
-}
-
 /* A single hero composition: the value, its people, and the reach around them. */
 .value-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr) minmax(0, 1fr); grid-template-rows: auto 1fr 1fr; column-gap: clamp(18px, 3vw, 48px); position: relative; isolation: isolate; padding: 0 12px 40px; }
 .value-hero::before { content: ''; position: absolute; z-index: -1; inset: 8% -4% 0; pointer-events: none; background: radial-gradient(ellipse at center, color-mix(in srgb, var(--value-light) 17%, transparent), transparent 68%); }
 .value-hero-title { grid-column: 1 / -1; grid-row: 1; text-align: center; color: var(--value-color); font-family: var(--font-heading); font-size: clamp(54px, 7vw, 96px); font-weight: 800; line-height: 1.05; margin: 0 0 18px; letter-spacing: 0; text-wrap: balance; }
-.value-hero .value-photo-story { grid-column: 2; grid-row: 2 / 4; align-self: center; width: 100%; margin: 0; }
-.value-hero .value-photo-collage { aspect-ratio: .95; }
-.value-hero .value-photo-story figcaption { justify-content: center; margin-top: 18px; font-size: 8px; }
-.value-hero .value-photo-story figcaption span { color: #63766f; font-weight: 400; }
+/* Empower's emblem, filled with photographs as on the home page; its shadow
+   softened for the paper ground. */
+.value-hero .value-emblem { grid-column: 2; grid-row: 2 / 4; align-self: center; justify-self: center; width: 100%; max-width: 560px; }
+.value-emblem .heal-photo-mosaic > svg { filter: drop-shadow(-8px 16px 14px #20342a33) drop-shadow(0 3px 3px #20342a1f); }
+.value-emblem-caption { margin: 16px 0 0; text-align: center; font-size: 8px; line-height: 1.6; letter-spacing: .08em; text-transform: uppercase; color: #63766f; }
 .value-hero-stat { align-self: center; display: flex; flex-direction: column; padding: 24px 0; border-top: 1px solid color-mix(in srgb, var(--value-color) 28%, transparent); transition: transform .2s; }
 .value-hero-stat:hover { transform: translateY(-4px); }
 .value-hero-stat-1 { grid-column: 1; grid-row: 2; }
@@ -253,8 +220,7 @@
 @media (max-width: 640px) {
   .value-hero { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto auto auto auto; gap: 0 24px; padding-bottom: 12px; }
   .value-hero-title { font-size: clamp(42px, 12vw, 64px); margin-bottom: 14px; }
-  .value-hero .value-photo-story { grid-column: 1 / -1; grid-row: 2; max-width: 440px; justify-self: center; margin-bottom: 32px; }
-  .value-hero .value-photo-collage { aspect-ratio: 1; }
+  .value-hero .value-emblem { grid-column: 1 / -1; grid-row: 2; max-width: 440px; margin-bottom: 32px; }
   .value-hero-stat { align-self: stretch; padding: 18px 0 24px; }
   .value-hero-stat-1 { grid-column: 1; grid-row: 3; }
   .value-hero-stat-2 { grid-column: 2; grid-row: 3; }
@@ -266,5 +232,4 @@
 @media (min-width: 641px) {
   .value-chapter { padding-top: 32px; }
   .value-hero-title { font-size: clamp(54px, 5.6vw, 84px); }
-  .value-hero .value-photo-story { max-width: 440px; justify-self: center; }
 }
