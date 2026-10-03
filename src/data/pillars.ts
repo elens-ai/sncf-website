@@ -93,8 +93,8 @@ export const DEFAULT_PILLARS: PillarState[] = [
        under the 4.5 AA floor; on this it scores 6.07. */
     accentA: '#0d6a8c',
     accentB: '#6ac8ed',
-    headline: 'Our flagship projects',
-    body: 'Sant Nirankari Health City · Oneness Vann · Watershed Program · Project Amrit — large-scale initiatives turning these three pillars into permanent infrastructure.',
+    headline: 'Transforming Vision into Lasting Impact',
+    body: 'Our flagship projects embody the vision of health, harmony, and sustainability. From Sant Nirankari Health City to Oneness Vann, the Watershed Program, and Project Amrit, each initiative transforms compassion into lasting infrastructure, creating stronger communities and a better future.',
     cardImageAlt: 'Sant Nirankari Health City campus',
     shortTagline: 'Come for an evening of purpose — see how PROJECTS comes to life.',
     emblemCaption: 'One purpose. Lasting impact.',
