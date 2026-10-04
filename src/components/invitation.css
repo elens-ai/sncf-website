@@ -86,3 +86,7 @@
 @media (prefers-reduced-motion: reduce) {
   .invite-stage *, .invite-stage { animation: none !important; transition: none !important; }
 }
+
+/* passing the invitation on (EventShare): beneath its actions, set apart by a hairline */
+.invite-share { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgb(255 255 255 / .12); }
+@media (max-width: 760px) { .invite-share .event-share-row { justify-content: center; } .invite-share .event-share-label { flex-basis: 100%; text-align: center; } }

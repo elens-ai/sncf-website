@@ -167,22 +167,6 @@
     "source": "/images/petals/petal-projects.webp",
     "label": "petal-projects.webp"
   },
-  "asset.HealStory.doorH": {
-    "source": "/images/programmes/health-checkup-snhc-team.jpg",
-    "label": "HealStory · health-checkup-snhc-team.jpg"
-  },
-  "asset.HealStory.doorE": {
-    "source": "/images/programmes/eye-checkup-examination.jpg",
-    "label": "HealStory · eye-checkup-examination.jpg"
-  },
-  "asset.HealStory.doorA": {
-    "source": "/images/programmes/blood-bank-processing.jpg",
-    "label": "HealStory · blood-bank-processing.jpg"
-  },
-  "asset.HealStory.doorL": {
-    "source": "/images/programmes/blood-donation.jpg",
-    "label": "HealStory · blood-donation.jpg"
-  },
   "asset.WelcomeSplashScreen.welcome-photo": {
     "source": "/images/welcome-volunteers.jpg",
     "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
@@ -210,5 +194,45 @@
   "asset.PillarPhotoMosaic.heal-leaf-bottom-left": {
     "source": "/images/heal-emblem/leaf-bottom-left.webp",
     "label": "PillarPhotoMosaic · leaf-bottom-left.webp"
+  },
+  "asset.Reports.heal": {
+    "source": "",
+    "label": "Reports · heal (PDF, empty until uploaded)"
+  },
+  "asset.Reports.enrich": {
+    "source": "",
+    "label": "Reports · enrich (PDF, empty until uploaded)"
+  },
+  "asset.Reports.empower": {
+    "source": "",
+    "label": "Reports · empower (PDF, empty until uploaded)"
+  },
+  "asset.Reports.project-amrit": {
+    "source": "",
+    "label": "Reports · project-amrit (PDF, empty until uploaded)"
+  },
+  "asset.Reports.oneness-vann": {
+    "source": "",
+    "label": "Reports · oneness-vann (PDF, empty until uploaded)"
+  },
+  "asset.Reports.watershed": {
+    "source": "",
+    "label": "Reports · watershed (PDF, empty until uploaded)"
+  },
+  "asset.Reports.adopted-villages": {
+    "source": "",
+    "label": "Reports · adopted-villages (PDF, empty until uploaded)"
+  },
+  "asset.UnSeal.undp-logo": {
+    "source": "",
+    "label": "UnSeal · UNDP logo (only with UNDP’s written permission)"
+  },
+  "asset.PartnerCircle.hub": {
+    "source": "/images/sncf-logo.webp",
+    "label": "PartnerCircle · sncf-logo.webp"
+  },
+  "asset.SiteFooter.lotus": {
+    "source": "/images/lotus-watermark.png",
+    "label": "SiteFooter · lotus-watermark.png"
   }
 }

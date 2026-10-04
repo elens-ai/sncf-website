@@ -1,11 +1,11 @@
-import { resolveCMSMedia } from '../cms/media';
-import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
+import { getCMSCopy } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, ChevronDown, Heart, Menu, Search, X } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NAV_ITEMS, NavItem } from '../data/navigation';
 import { PILLARS } from '../data/pillars';
+import { LinksPanel, ProjectsPanel, ValuesPanel } from './NavPanels';
 
 /**
  * One link that knows where it goes. Internal destinations ('/core-values',
@@ -20,11 +20,14 @@ const NavAnchor: React.FC<{
   onFocus?: () => void;
   ariaExpanded?: boolean;
   ariaHasPopup?: boolean;
+  /** The page being read: marked for the eye and for assistive tech. */
+  current?: boolean;
   children: React.ReactNode;
-}> = ({ href, external, className, onClick, onFocus, ariaExpanded, ariaHasPopup, children }) => {
+}> = ({ href, external, className, onClick, onFocus, ariaExpanded, ariaHasPopup, current, children }) => {
   const aria = {
     ...(ariaExpanded === undefined ? {} : { 'aria-expanded': ariaExpanded }),
     ...(ariaHasPopup ? { 'aria-haspopup': true as const } : {}),
+    ...(current ? { 'aria-current': 'page' as const } : {}),
   };
   const internal = !!href && href.startsWith('/') && !external;
   if (internal) {
@@ -48,9 +51,7 @@ const NavAnchor: React.FC<{
   );
 };
 
-const accentOf = (pillarId: string) =>
-  PILLARS.find((p) => p.id === pillarId)?.accentB ?? '#ffffff';
-/* the deep half of the pair — the readable one on a light ground */
+/* the deep half of a pillar's pair — the readable one on a light ground */
 const deepOf = (pillarId: string) =>
   PILLARS.find((p) => p.id === pillarId)?.accentA ?? '#3a3f57';
 
@@ -155,6 +156,10 @@ export const MainNav: React.FC<{ onOpenDonate: () => void; onSearchClick: () => 
   }, []);
 
   const hasPanel = (item: NavItem) => Boolean(item.links || item.groups);
+  /* the page being read: Home only on the home page, any other item on its own pages */
+  const { pathname } = useLocation();
+  const isCurrent = (item: NavItem) => !!item.href && !item.external && item.href.startsWith('/')
+    && (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
 
   return (
     <>
@@ -171,7 +176,7 @@ export const MainNav: React.FC<{ onOpenDonate: () => void; onSearchClick: () => 
           {/* Sliding spotlight — one element, moved by transform */}
           <span
             aria-hidden="true"
-            className="absolute top-1.5 bottom-1.5 left-0 pointer-events-none"
+            className="nav-spotlight absolute top-1.5 bottom-1.5 left-0 pointer-events-none"
             style={{
               width: spotlight?.w ?? 0,
               transform: `translateX(${spotlight?.x ?? 0}px)`,
@@ -184,7 +189,8 @@ export const MainNav: React.FC<{ onOpenDonate: () => void; onSearchClick: () => 
           {NAV_ITEMS.map((item, i) => {
             const expanded = openIndex === i;
             const shared =
-              'relative z-10 flex items-center gap-1 px-3.5 py-1.5 rounded-full text-[13px] font-semibold tracking-wide text-white/90 hover:text-white transition-colors cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
+              'nav-link relative z-10 flex items-center gap-1 px-3.5 py-1.5 rounded-full text-[13px] font-semibold tracking-wide text-white/90 hover:text-white transition-colors cursor-pointer whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
+            const current = isCurrent(item);
 
             return (
               <div
@@ -205,6 +211,7 @@ export const MainNav: React.FC<{ onOpenDonate: () => void; onSearchClick: () => 
                     href={item.href}
                     external={item.external}
                     className={shared}
+                    current={current}
                     /* These were a <button> before they became links, and the
                        conversion silently dropped both attributes — assistive
                        tech was no longer told the panel existed. */
@@ -239,7 +246,7 @@ export const MainNav: React.FC<{ onOpenDonate: () => void; onSearchClick: () => 
                     />
                   </button>
                 ) : (
-                  <NavAnchor href={item.href} external={item.external} className={shared}>
+                  <NavAnchor href={item.href} external={item.external} className={shared} current={current}>
                     {item.label}
                     {item.badge && (
                       <span className="ml-1 text-[9px] font-bold uppercase tracking-wider text-amber-300 italic">
@@ -257,82 +264,19 @@ export const MainNav: React.FC<{ onOpenDonate: () => void; onSearchClick: () => 
         {NAV_ITEMS.map((item, i) => {
           if (!hasPanel(item) || openIndex !== i) return null;
 
+          /* Core Values is built from the programmes; a menu of project links
+             gets the project cards; any other menu, its links described */
+          const kind = item.groups ? 'values' : item.links?.some(l => l.href.startsWith('/projects#')) ? 'projects' : 'links';
           return (
             <div
               key={`panel-${item.label}`}
               onMouseEnter={() => openMenu(i)}
-              className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50 animate-fadeIn"
+              className="nvpanel-anchor absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50"
             >
-              <div className="nvpanel">
-                {item.groups ? (
-                  /* Core Values — one leaf per room, each a miniature of that
-                     room's page: the tinted door it opens with on top, its
-                     index of activities on white beneath. */
-                  <div className="nvrooms">
-                    {item.groups.map((g, gi) => {
-                      const deep = deepOf(g.pillarId);
-                      const bright = accentOf(g.pillarId);
-                      const all = g.links.find((l) => l.label.startsWith('All of'));
-                      const rows = g.links.filter((l) => !l.label.startsWith('All of'));
-                      return (
-                        <div
-                          key={g.pillarId}
-                          className="nvroom"
-                          style={
-                            { '--ink-a': deep, '--ink-b': bright } as React.CSSProperties
-                          }
-                        >
-                          <NavAnchor
-                            href={all?.href ?? `/core-values#${g.pillarId}`}
-                            className="nvroom-door"
-                            onClick={closeMenu}
-                          >
-                            <img
-                              className="nvroom-emblem"
-                              src={resolveCMSMedia(`/images/vertical-${g.pillarId}.webp`)}
-                              alt=""
-                              aria-hidden="true"
-                            />
-                            <span className="nvroom-folio" aria-hidden="true">
-                              {String(gi + 1).padStart(2, '0')}
-                            </span>
-                            <span className="nvroom-name font-artistic-display">{g.title}</span>
-                            <span className="nvroom-blurb">{g.blurb}</span>
-                          </NavAnchor>
-                          <ul className="nvroom-index">
-                            {rows.map((l) => (
-                              <li key={l.label}>
-                                <NavAnchor
-                                  href={l.href}
-                                  external={l.external}
-                                  className="nvroom-row"
-                                  onClick={closeMenu}
-                                >
-                                  {l.label}
-                                </NavAnchor>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      );
-                    })}
-                  </div>
-                                ) : (
-                  <ul className="nvlist">
-                    {item.links?.map((l) => (
-                      <li key={l.label}>
-                        <NavAnchor
-                          href={l.href}
-                          external={l.external}
-                          className="nvroom-row"
-                          onClick={closeMenu}
-                        >
-                          {l.label}
-                        </NavAnchor>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+              <div className="nvpanel" data-kind={kind}>
+                {kind === 'values' ? <ValuesPanel groups={item.groups!} onNavigate={closeMenu} />
+                  : kind === 'projects' ? <ProjectsPanel links={item.links!} onNavigate={closeMenu} />
+                  : <LinksPanel links={item.links ?? []} onNavigate={closeMenu} />}
               </div>
             </div>
           );

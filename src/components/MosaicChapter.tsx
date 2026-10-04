@@ -1,14 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowUpRight, Award, BookOpen, Droplet, Droplets, Eye, GraduationCap,
-  HandCoins, Heart, HeartHandshake, Hospital, House, Laptop, Mountain,
-  PackageCheck, Scissors, Sparkles, Sprout, Stethoscope, Trees, Waves,
-  type LucideIcon,
-} from 'lucide-react';
+import { ArrowUpRight, HeartHandshake } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import type { Activity } from '../data/activities';
-import type { ActivityIcon } from '../data/activityIcons';
+import { ACTIVITY_SYMBOLS } from './activitySymbols';
 import { resolveCMSMedia } from '../cms/media';
 import type { PillarState } from '../types';
 import { PillarArtwork } from './PillarArtwork';
@@ -18,13 +13,6 @@ import { HeroHealWordmark } from './HealWordmark';
 import { MosaicWavesStatic } from './MosaicWaves';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import './mosaic-chapter.css';
-
-const ACTIVITY_SYMBOLS: Record<ActivityIcon, LucideIcon> = {
-  droplets: Droplets, droplet: Droplet, stethoscope: Stethoscope, eye: Eye, hospital: Hospital,
-  'graduation-cap': GraduationCap, award: Award, 'book-open': BookOpen, laptop: Laptop, scissors: Scissors,
-  trees: Trees, sparkles: Sparkles, 'package-check': PackageCheck, heart: Heart, 'hand-coins': HandCoins,
-  waves: Waves, sprout: Sprout, mountain: Mountain, house: House, 'heart-handshake': HeartHandshake,
-};
 
 type BackdropFocus = NonNullable<Activity['hoverFocus']>;
 
@@ -117,9 +105,19 @@ export const MosaicChapter = React.memo(function MosaicChapter({
           </h3>
           <p>{pillar.headline}</p>
         </div>
-        <Link className="activity-chapter-explore" to={id === 'projects' ? '/projects' : `/core-values#${id}`}>
-          {getCMSCopy('copy.ImpactMosaic.3b73900b8d29', 'Explore')} {name}<ArrowUpRight size={17} aria-hidden="true" />
-        </Link>
+        <div className="activity-chapter-actions">
+          <Link className="activity-chapter-explore" to={id === 'projects' ? '/projects' : `/core-values#${id}`}>
+            {getCMSCopy('copy.ImpactMosaic.3b73900b8d29', 'Explore')} {name}<ArrowUpRight size={17} aria-hidden="true" />
+          </Link>
+          {/* straight into the cornerstone's report, gallery or stats on Core Values */}
+          {id !== 'projects' && (
+            <nav className="activity-chapter-quick" aria-label={`${name}: ${getCMSCopy('copy.ImpactMosaic.quick-label', 'reports, gallery and stats')}`}>
+              <Link to={`/core-values#${id}-reports`}>{getCMSCopy('copy.ImpactMosaic.quick-reports', 'Reports')}</Link>
+              <Link to={`/core-values#${id}-gallery`}>{getCMSCopy('copy.ImpactMosaic.quick-gallery', 'Gallery')}</Link>
+              <Link to={`/core-values#${id}-stats`}>{getCMSCopy('copy.ImpactMosaic.quick-stats', 'Stats')}</Link>
+            </nav>
+          )}
+        </div>
       </header>
 
       <div className="activity-constellation" data-reveal style={{ '--activity-rows': rows } as React.CSSProperties}>

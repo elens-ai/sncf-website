@@ -8,6 +8,7 @@ import { onArrival } from '../utils/arrival';
 import './recognition-partners.css';
 import { AWARDS, Award, AwardPhoto } from '../data/awards';
 import { AwardLightbox, LightboxTarget } from './AwardLightbox';
+import { AwardsTree, type TreeOrnament } from './AwardsTree';
 
 interface Item {
   key: string;
@@ -63,6 +64,8 @@ export const AwardsSection: React.FC = () => {
   const rootRef = useRef<HTMLElement>(null);
   const inView = useSectionActivity(rootRef);
   const [active, setActive] = useState(0);
+  /* which of the honour's photographs is in view */
+  const [photo, setPhoto] = useState(0);
   const [calm, setCalm] = useState(false);
   const [shown, setShown] = useState(false);
   const [target, setTarget] = useState<LightboxTarget | null>(null);
@@ -77,6 +80,13 @@ export const AwardsSection: React.FC = () => {
   }, [revision]);
   const index = items.length ? active % items.length : 0;
   const current = items[index];
+  const shot = current ? current.photos[Math.min(photo, current.photos.length - 1)] : null;
+  /* The tree hangs every photograph by its honour's year: the undated lowest,
+     then the oldest, each year a branch higher, the newest crowning it. */
+  const ornaments: TreeOrnament[] = useMemo(() => items
+    .map((item, i) => ({ item, i, year: parseInt(item.award.year, 10) || 0 }))
+    .sort((a, b) => a.year - b.year)
+    .flatMap(({ item, i }) => item.photos.map((p, k) => ({ key: `${item.key}-${k}`, award: i, photo: k, src: p.src, focal: p.focal, year: item.award.year, title: item.award.title }))), [items]);
   useEffect(() => { if (rootRef.current) return onArrival(rootRef.current, () => setShown(true)); }, []);
   useEffect(() => {
     const mq = matchMedia('(prefers-reduced-motion: reduce)');
@@ -86,10 +96,10 @@ export const AwardsSection: React.FC = () => {
   }, []);
   useEffect(() => {
     if (!inView || calm || target || held || !playing || items.length < 2) return;
-    const timer = window.setInterval(() => setActive(i => (i + 1) % items.length), 8000);
+    const timer = window.setInterval(() => { setActive(i => (i + 1) % items.length); setPhoto(0); }, 8000);
     return () => clearInterval(timer);
   }, [inView, calm, target, held, playing, items.length]);
-  const choose = (i: number) => { setActive(i); setPlaying(false); };
+  const choose = (i: number, p = 0) => { setActive(i); setPhoto(p); setPlaying(false); };
   const step = (direction: number) => { if (items.length) choose((index + direction + items.length) % items.length); };
   const close = useCallback(() => setTarget(null), []);
 
@@ -104,38 +114,31 @@ export const AwardsSection: React.FC = () => {
       <div className="recognition-seal" aria-hidden="true"><AwardIcon size={25} strokeWidth={1} /><span>Service, recognised.</span></div>
     </header>
     {current ? <>
-      <div className="recognition-feature" onFocusCapture={() => setHeld(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setHeld(false); }}>
-        <div className="recognition-photo-wrap" onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)}>
-          <span className="recognition-photo-back recognition-photo-back-one" aria-hidden="true" /><span className="recognition-photo-back recognition-photo-back-two" aria-hidden="true" />
-          <button type="button" className="recognition-photo" aria-label={`${current.award.title} — view photograph`}
-            onClick={() => setTarget({ award: current.award, photos: current.photos, index: 0 })}>
-            <img key={current.key} src={resolveCMSMedia(current.src)} alt={current.alt} decoding="async" loading="lazy" />
-            <span className="recognition-photo-open"><Maximize2 size={15} />View photograph</span>
-          </button>
-          <span className="recognition-archive-label">From the foundation’s archive</span>
+      <div className="recognition-feature recognition-feature-tree" onFocusCapture={() => setHeld(true)} onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setHeld(false); }}>
+        <div className="recognition-tree" onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)}>
+          <AwardsTree ornaments={ornaments} award={index} photo={photo} onChoose={choose} label={getCMSCopy('copy.AwardsTree.label', 'The tree of honours: choose one to read it')} />
+          <p className="awards-tree-caption">{getCMSCopy('copy.AwardsTree.caption', 'Every honour, a shared achievement.')}<span>{getCMSCopy('copy.AwardsTree.hint', 'The oldest on the lowest branches, the newest at the crown')}</span></p>
         </div>
         <div className="recognition-story">
+          {shot && <button type="button" className="recognition-detail-photo" aria-label={`${current.award.title} — view photograph`}
+            onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)}
+            onClick={() => setTarget({ award: current.award, photos: current.photos, index: Math.min(photo, current.photos.length - 1) })}>
+            <img key={shot.src} src={resolveCMSMedia(shot.src)} alt={shot.alt} decoding="async" />
+            <span className="recognition-photo-open"><Maximize2 size={14} />View photograph</span>
+          </button>}
           <div key={current.key} className="recognition-citation">
             <p className="recognition-year"><AwardIcon size={17} strokeWidth={1.4} />{current.award.year || 'Recognition'}<span>Honour {String(index + 1).padStart(2, '0')}</span></p>
             <h3>{current.award.title}</h3>
             <p className="recognition-issuer">{current.award.awardedBy}</p>
             {current.award.note && <p className="recognition-note">{current.award.note}</p>}
           </div>
-          <button type="button" className="continuity-text-link" onClick={() => setTarget({ award: current.award, photos: current.photos, index: 0 })}>Explore this recognition<ArrowUpRight size={17} /></button>
+          <button type="button" className="continuity-text-link" onClick={() => setTarget({ award: current.award, photos: current.photos, index: Math.min(photo, current.photos.length - 1) })}>Explore this recognition<ArrowUpRight size={17} /></button>
           <div className="recognition-navigation">
             <span>{String(index + 1).padStart(2, '0')} <i>/ {String(items.length).padStart(2, '0')}</i></span>
             <button type="button" aria-label="Previous honour" onClick={() => step(-1)} disabled={items.length < 2}><ArrowLeft size={18} /></button>
             <button type="button" aria-label="Next honour" onClick={() => step(1)} disabled={items.length < 2}><ArrowRight size={18} /></button>
             {!calm && items.length > 1 && <button type="button" aria-label={playing ? 'Pause awards rotation' : 'Play awards rotation'} onClick={() => setPlaying(p => !p)}>{playing ? <Pause size={15} /> : <Play size={15} />}</button>}
           </div>
-        </div>
-      </div>
-      <div className="recognition-collection">
-        <p>Every honour, a shared achievement.<span>Select a moment from our archive</span></p>
-        <div className="recognition-thumbnails" role="group" aria-label="Choose a recognition">
-          {items.map((item, i) => <button type="button" key={item.key} aria-label={`${item.award.title}${item.award.year ? `, ${item.award.year}` : ''}`} aria-pressed={index === i} onClick={() => choose(i)}>
-            <img src={resolveCMSMedia(item.src)} alt="" loading="lazy" decoding="async" /><span>{item.award.year || 'Honour'}</span>
-          </button>)}
         </div>
       </div>
       <p className="sr-only" role="status">{!playing ? current.award.title : ''}</p>

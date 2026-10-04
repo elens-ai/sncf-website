@@ -15,13 +15,14 @@ export const siteDefaults = {
     description: 'Service with humility — Heal, Enrich, Empower.',
     image: '/images/sncf-logo.webp',
   },
-  /** Icons down the left edge; a platform without a URL is not shown. */
+  /** Icons down the left edge and in the footer; a platform without a URL is not shown.
+      The foundation's own profiles, as the footer of nirankarifoundation.org lists
+      them (checked October 2026): Facebook, X, YouTube and Instagram. */
   social: [
-    { platform: 'instagram', url: 'https://instagram.com' },
-    { platform: 'youtube', url: 'https://youtube.com' },
-    { platform: 'spotify', url: 'https://spotify.com' },
-    { platform: 'facebook', url: 'https://facebook.com' },
-    { platform: 'x', url: 'https://x.com' },
+    { platform: 'instagram', url: 'https://www.instagram.com/nirankaricharitablefoundation/' },
+    { platform: 'youtube', url: 'https://www.youtube.com/channel/UCdAj1x5SmFLzQEJNvu5jezw' },
+    { platform: 'facebook', url: 'https://www.facebook.com/santnirankaricharitablefoundation' },
+    { platform: 'x', url: 'https://x.com/santnirankari' },
   ] as SocialLink[],
   /* Nothing here points at nirankarifoundation.org: that domain is being
      decommissioned, so its material links to the pages here instead. Privacy
@@ -35,7 +36,7 @@ export const siteDefaults = {
       { label: 'Our Guiding Force', href: '/our-guiding-force' },
     ] },
     { title: 'Useful links', links: [
-      { label: 'Awards and Honours', href: '/#awards' },
+      { label: 'Awards and Honours', href: '/#awards-section' },
       { label: 'Our Partners', href: '/who-we-are#partners' },
       { label: 'Contact', href: '/who-we-are#contact' },
     ] },

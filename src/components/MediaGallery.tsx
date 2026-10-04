@@ -3,6 +3,7 @@ import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MEDIA, MediaItem } from '../data/media';
+import { PhotoCarousel } from './PhotoCarousel';
 
 /**
  * THE GALLERY — photographs and films for one subsection.
@@ -27,9 +28,12 @@ import { MEDIA, MediaItem } from '../data/media';
  */
 
 interface MediaGalleryProps {
-  layout?: 'carousel' | 'editorial';
+  /** carousel: a drifting band; editorial: a grid of what has arrived; slides: a carousel of what has arrived */
+  layout?: 'carousel' | 'editorial' | 'slides';
   /** Key into MEDIA. */
   section: string;
+  /** Plates to show instead of the library's, e.g. a cornerstone's programme photographs. */
+  items?: MediaItem[];
   /** Small caps line above the gallery. */
   title?: string;
   /**
@@ -54,12 +58,13 @@ const FILTERS: [Filter, string][] = [
 
 export const MediaGallery: React.FC<MediaGalleryProps> = ({
   section,
+  items: given,
   title = 'Photographs & films',
   headingLevel = 3,
   layout = 'carousel',
 }) => {
   const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
-  const items = MEDIA[section] ?? [];
+  const items = given ?? MEDIA[section] ?? [];
   const [filter, setFilterState] = useState<Filter>('all');
   /* Changing the filter re-derives `openable`, so a viewer left open would
      be indexing a list it no longer belongs to. Closing it HERE rather than
@@ -90,7 +95,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
      awaiting plate opens too and says plainly that its photograph has not
      been added, which makes the viewer a way to read the catalogue rather
      than a dead end, and lets the arrows walk the whole set. */
-  const openable = layout === 'editorial' ? shown.filter(m => m.src) : shown;
+  const openable = layout === 'carousel' ? shown : shown.filter(m => m.src);
 
   const close = useCallback(() => {
     setViewing(null);
@@ -123,7 +128,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
      It stops when a pointer is over it, when focus is inside it, when the
      gallery is off screen, and entirely under prefers-reduced-motion. */
   useEffect(() => {
-    if (layout === 'editorial') return;
+    if (layout !== 'carousel') return;
     const el = stripRef.current;
     if (!el) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -194,7 +199,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
      passive listener, and React's onWheel is passive by default — the whole
      thing would silently do nothing if this were a JSX prop. */
   useEffect(() => {
-    if (layout === 'editorial') return;
+    if (layout !== 'carousel') return;
     const el = stripRef.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
@@ -343,7 +348,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
         )}
       </header>
 
-      <ul
+      {layout === 'slides' ? <PhotoCarousel items={openable} label={title} onOpen={openPlate} /> : <ul
         className="mgal-strip"
         ref={stripRef}
         onPointerEnter={() => { heldRef.current = true; }}
@@ -413,7 +418,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
             </li>
           );
         })}
-      </ul>
+      </ul>}
 
       <p className="mgal-note">
         {ready}{getCMSCopy("copy.MediaGallery.a4282e4b2298", " of ")}{shown.length}{getCMSCopy("copy.MediaGallery.db810ff10618", " available · the rest arrive as the foundation’s archive is catalogued")}</p>

@@ -68,3 +68,111 @@
 @media (max-width: 767px) {
   .home-page #site-header[data-compact='false'] { background: linear-gradient(180deg, color-mix(in srgb, var(--pillar-ui-ink) 45%, transparent), transparent); }
 }
+
+/* ==========================================================================
+   THE NAVIGATION (MainNav.tsx, NavPanels.tsx). The bar's items share one
+   pill that slides beneath the one under the pointer; the page being read
+   is marked by a short rule in the three cornerstones' colours. Each menu
+   opens on a sheet of paper, a hairline of the five petals' colours along
+   its top, laid out as a small map of its page.
+   ========================================================================== */
+.nav-spotlight { border-radius: 999px; background: rgb(255 255 255 / 0.12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); }
+.nav-link[aria-current='page'] { color: #fff; }
+.nav-link[aria-current='page']::after { content: ''; position: absolute; left: 50%; bottom: -1px; width: 22px; height: 3px; translate: -50% 0; border-radius: 3px; background: linear-gradient(90deg, #6fd19a, #8dd4df 50%, #f48fb1); box-shadow: 0 0 10px rgb(141 212 223 / 0.55); }
+
+.nvpanel { position: relative; padding: 12px; border-radius: 22px; background: rgb(251 250 248 / 0.97); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); border: 1px solid rgb(22 24 43 / 0.08); box-shadow: 0 1px 2px rgb(22 24 43 / 0.06), 0 30px 70px -30px rgb(22 24 43 / 0.55); transform-origin: top center; animation: nv-panel-in 0.34s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.nvpanel::before { content: ''; position: absolute; top: -1px; left: 26px; right: 26px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #f81170, #b357ad, #6663b5, #09a6cf, #69b947); opacity: 0.6; }
+@keyframes nv-panel-in { from { opacity: 0; transform: translateY(-6px) scale(0.985); } }
+@keyframes nv-card-in { from { opacity: 0; translate: 0 8px; } }
+.nvpanel :is(a, button):focus-visible { outline: 2px solid #4c4a9e; outline-offset: 2px; }
+
+/* CORE VALUES: a card for each cornerstone, its door tinted in its colours */
+.nvrooms { display: flex; gap: 10px; }
+.nvroom { display: flex; flex-direction: column; width: 238px; border-radius: 15px; overflow: hidden; background: #fff; border: 1px solid rgb(22 24 43 / 0.08); animation: nv-card-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(60ms + var(--i, 0) * 50ms); transition: box-shadow 0.25s; }
+.nvroom:hover { box-shadow: 0 16px 30px -22px color-mix(in srgb, var(--ink-a) 70%, transparent); }
+.nvroom-door { position: relative; display: block; padding: 13px 14px 12px; overflow: hidden; text-decoration: none; border-bottom: 1px solid rgb(22 24 43 / 0.07); background: linear-gradient(160deg, color-mix(in srgb, var(--ink-b) 34%, #fbfaf8), color-mix(in srgb, var(--ink-b) 12%, #fbfaf8)); transition: filter 0.2s; }
+.nvroom-door::before { content: ''; position: absolute; inset: 0 0 auto; height: 3px; background: var(--ink-a); }
+.nvroom-door:hover { filter: brightness(0.98); }
+/* the emblem, bled off the corner and multiplied so its disc disappears */
+.nvroom-emblem { position: absolute; right: -14px; top: 38%; translate: 0 -50%; width: 84px; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply; opacity: 0.38; -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 82%); mask-image: radial-gradient(closest-side, #000 58%, transparent 82%); pointer-events: none; }
+.nvroom-folio { display: block; font: 800 19px/1 var(--font-sans); letter-spacing: -0.03em; color: color-mix(in srgb, var(--ink-a) 32%, transparent); }
+.nvroom-name { display: block; margin-top: 3px; font-size: 12px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--ink-a) 58%, #16182b); }
+.nvroom-blurb { display: block; margin-top: 2px; font-size: 11px; color: rgb(22 24 43 / 0.6); }
+.nvroom-figure { display: block; margin-top: 10px; font-size: 11px; line-height: 1.3; color: rgb(22 24 43 / 0.62); }
+.nvroom-figure strong { margin-right: 3px; font: 700 15px/1 var(--font-sans); letter-spacing: -0.01em; color: color-mix(in srgb, var(--ink-a) 80%, #16182b); }
+.nvroom-goals { display: flex; margin-top: 8px; }
+.nvroom-goals i { width: 10px; height: 10px; margin-left: -3px; border-radius: 50%; border: 2px solid #fff; }
+.nvroom-goals i:first-child { margin-left: 0; }
+.nvroom-index,
+.nvlist { list-style: none; margin: 0; }
+.nvroom-index { flex: 1; padding: 6px; }
+.nvroom-row { display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 9px; font-size: 12.5px; line-height: 1.35; color: #3a3f57; text-decoration: none; white-space: normal; transition: background-color 0.18s, color 0.18s; }
+.nvroom-row > svg:first-child { flex: none; color: color-mix(in srgb, var(--ink-a) 75%, #16182b); }
+.nvroom-row-dot { flex: none; width: 6px; height: 6px; margin-inline: 4px 5px; border-radius: 50%; background: var(--ink-b); }
+.nvroom-row > span:not(.nvroom-row-dot) { flex: 1; }
+.nvroom-row-arrow { flex: none; color: var(--ink-a); opacity: 0; translate: -4px 0; transition: opacity 0.18s, translate 0.18s; }
+.nvroom-row:hover { background: color-mix(in srgb, var(--ink-b) 16%, transparent); color: #16182b; }
+.nvroom-row:is(:hover, :focus-visible) .nvroom-row-arrow { opacity: 1; translate: 0 0; }
+.nvroom-tabs { display: flex; gap: 4px; padding: 8px; border-top: 1px dashed rgb(22 24 43 / 0.1); background: color-mix(in srgb, var(--ink-b) 7%, #fff); }
+.nvroom-tabs a { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 4px; border-radius: 9px; font: 600 11px/1 var(--font-sans); color: color-mix(in srgb, var(--ink-a) 78%, #16182b); background: #fff; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink-a) 18%, transparent); transition: background-color 0.18s, color 0.18s; }
+.nvroom-tabs a:hover { background: color-mix(in srgb, var(--ink-a) 86%, #16182b); color: #fff; }
+.nvpanel-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 10px; padding: 10px 6px 0; border-top: 1px solid rgb(22 24 43 / 0.07); }
+.nvpanel-explore { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 3px; border-bottom: 1px solid rgb(32 60 56 / 0.3); font: 600 13px/1 var(--font-sans); color: #203c38; transition: border-color 0.2s; }
+.nvpanel-explore:hover { border-bottom-color: currentColor; }
+
+/* PROJECTS: a card for each project, the Health City beside them */
+.nvprojects { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 12px; width: min(780px, calc(100vw - 48px)); }
+.nvproject-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.nvproject-cards li { animation: nv-card-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(60ms + var(--i, 0) * 45ms); }
+.nvproject { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; align-items: center; height: 100%; padding: 8px; border-radius: 14px; background: #fff; border: 1px solid rgb(22 24 43 / 0.08); transition: translate 0.25s, box-shadow 0.25s; }
+.nvproject:hover { translate: 0 -2px; box-shadow: 0 14px 26px -20px rgb(22 24 43 / 0.5); }
+.nvproject-photo { position: relative; display: block; width: 76px; height: 64px; overflow: hidden; border-radius: 10px; background: linear-gradient(135deg, #bce7e5, #d2e8b7); }
+.nvproject-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.nvproject:hover .nvproject-photo img { transform: scale(1.06); }
+/* a project with no photograph yet: its symbol on faint contour lines */
+.nvproject-photo[data-empty='true'] { background: radial-gradient(circle at 28% 22%, rgb(255 255 255 / 0.75), transparent 46%), repeating-radial-gradient(ellipse at 50% 115%, rgb(8 125 139 / 0.16) 0 1px, transparent 1.5px 8px), linear-gradient(135deg, #bce7e5, #d2e8b7); }
+.nvproject-photo[data-empty='true'] .nvproject-symbol { left: 50%; top: 50%; bottom: auto; width: 32px; height: 32px; translate: -50% -50%; }
+.nvproject-symbol { position: absolute; left: 6px; bottom: 6px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: rgb(255 255 255 / 0.92); color: #087d8b; box-shadow: 0 4px 10px -4px rgb(0 0 0 / 0.3); }
+.nvproject-words { display: grid; gap: 4px; min-width: 0; }
+.nvproject-name { font: 700 13.5px/1.25 var(--font-sans); color: #16182b; }
+.nvproject-figure { font-size: 11px; line-height: 1.35; color: rgb(22 24 43 / 0.6); }
+.nvproject-figure strong { font-weight: 700; color: #087d8b; }
+.nvprojects-side { display: flex; flex-direction: column; gap: 10px; }
+.nvfeature { display: grid; gap: 4px; padding: 14px; border-radius: 14px; color: #fff; background: radial-gradient(circle at 85% 15%, #2a8fb5, transparent 55%), linear-gradient(140deg, #0e4f6a, #123a5a); box-shadow: 0 16px 30px -20px #0e4f6a; animation: nv-card-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both; transition: translate 0.25s; }
+.nvfeature:hover { translate: 0 -2px; }
+.nvfeature-icon { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 6px; border-radius: 11px; background: rgb(255 255 255 / 0.14); }
+.nvfeature-kicker { font: 600 9.5px/1.3 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: rgb(255 255 255 / 0.7); }
+.nvfeature-name { font: 700 15px/1.25 var(--font-sans); }
+.nvfeature-go { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font: 600 12px/1 var(--font-sans); color: #9fe1ff; }
+/* the Health City: its building fills the card, the words on a deepening wash below it */
+.nvfeature-city { position: relative; isolation: isolate; overflow: hidden; min-height: 150px; align-content: end; background: #0e4f6a; }
+.nvfeature-city::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(10 40 60 / 0) 18%, rgb(10 46 70 / 0.62) 52%, rgb(9 40 62 / 0.94) 100%); }
+.nvfeature-photo { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 38% 22%; transition: transform 0.6s; }
+.nvfeature-city:hover .nvfeature-photo { transform: scale(1.05); }
+.nvfeature-city .nvfeature-icon { position: absolute; top: 10px; left: 10px; width: 32px; height: 32px; margin: 0; border-radius: 10px; background: rgb(255 255 255 / 0.2); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3); }
+.nvfeature-city .nvfeature-icon svg { width: 17px; height: 17px; }
+.nvfeature-city .nvfeature-name { text-shadow: 0 1px 8px rgb(0 0 0 / 0.35); }
+.nvprojects-side .nvpanel-explore { align-self: flex-start; margin: 6px 4px 0; }
+
+/* ANY OTHER MENU (Who we are): its links described, beside the foundation's motto */
+.nvlinks { display: grid; grid-template-columns: minmax(0, 1fr) 214px; gap: 12px; width: min(640px, calc(100vw - 48px)); }
+.nvlist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; }
+.nvlist li { animation: nv-card-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(40ms + var(--i, 0) * 35ms); }
+.nvlink { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: center; padding: 9px 10px; border-radius: 12px; text-decoration: none; transition: background-color 0.18s; }
+.nvlink:hover { background: rgb(102 99 181 / 0.08); }
+.nvlink-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgb(102 99 181 / 0.1); color: #4c4a9e; transition: background-color 0.18s, color 0.18s; }
+.nvlink:hover .nvlink-icon { background: #4c4a9e; color: #fff; }
+.nvlink-name { display: block; font: 600 13px/1.3 var(--font-sans); color: #16182b; }
+.nvlink-line { display: block; font: 400 11.5px/1.35 var(--font-sans); color: rgb(22 24 43 / 0.58); }
+.nvlinks-side { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 16px; border-radius: 14px; background: linear-gradient(150deg, #fff, #f3f1fb); border: 1px solid rgb(22 24 43 / 0.07); animation: nv-card-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
+.nvlinks-motto { margin: 0; font-size: 28px; line-height: 1.1; color: #4c4a9e; }
+.nvlinks-facts { margin: 0 0 6px; font: 400 11.5px/1.5 var(--font-sans); color: rgb(22 24 43 / 0.6); }
+/* the UN seal, narrowed to its column */
+.nvlinks-side .un-seal,
+.nvpanel-foot .un-seal { white-space: normal; }
+.nvlinks-side .un-seal-words { flex-wrap: wrap; row-gap: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nvpanel, .nvroom, .nvproject-cards li, .nvfeature, .nvlist li, .nvlinks-side { animation: none; }
+  .nvroom-door, .nvroom-row, .nvroom-row-arrow, .nvproject, .nvproject-photo img, .nvfeature, .nvfeature-photo, .nvlink, .nvlink-icon { transition: none; }
+}

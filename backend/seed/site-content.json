@@ -2278,7 +2278,6 @@
     "copy.CoreValuesPage.d677190e0a99": "Service",
     "copy.CoreValuesPage.bb8643e88aae": "with humility",
     "copy.CoreValuesPage.4109634bf723": "Compassion, made visible.",
-    "copy.CoreValuesPage.1cd27a19c41a": "Explore the values · Meet the programmes · Discover the impact",
     "copy.CoreValuesPage.5feceb66ffc8": "0",
     "copy.CoreValuesPage.e7b186e662f2": "Behind the numbers",
     "copy.CoreValuesPage.6ae8bf36f85f": "Small actions. Lasting change.",
@@ -2329,10 +2328,6 @@
     "copy.ProjectsPage.27f463b7e8ab": "Rooted in purpose.",
     "copy.ProjectsPage.d90ca7d5eb20": "From reviving water bodies to growing forests and supporting villages, discover how our values become lasting projects.",
     "copy.ProjectsPage.1102171bd1b3": "Explore our projects ",
-    "copy.ProjectsPage.6cd5b6e51936": "04",
-    "copy.ProjectsPage.ba61ddf6e8f7": " Named campaigns",
-    "copy.ProjectsPage.938db8c9f82c": "01",
-    "copy.ProjectsPage.c0c0d22814e2": " Healthcare campus · OPD services started",
     "copy.ProjectsPage.04e2a9728af7": "Projects",
     "copy.ProjectsPage.5feceb66ffc8": "0",
     "copy.ProjectsPage.9970f438a483": "Illustrative photography",
@@ -2578,8 +2573,6 @@
     "copy.MosaicTile.f6bd5e33b6e7": "Illustrative photograph",
     "copy.MosaicTile.3b73900b8d29": "Explore",
     "copy.EventsJournal.passOpen": "Open the invitation",
-    "copy.EventsJournal.passBusy": "Preparing…",
-    "copy.EventsJournal.poster": "Download poster",
     "copy.EventsJournal.invite": "View invitation",
     "copy.ValueAnalytics.programme": "See the programme",
     "copy.ValueAnalytics.of": "of",
@@ -2663,7 +2656,6 @@
     "copy.EventsJournal.joinAnytime": "Join anytime",
     "copy.EventsJournal.takeMoment": "Take this moment with you.",
     "copy.EventsJournal.scanHint": "Scan for your invitation, or share the poster.",
-    "copy.EventsJournal.posterError": "The poster could not be prepared. Please try again.",
     "copy.EventsJournal.emptyHint": "There are more ways to take part across our other pillars.",
     "copy.EventsJournal.showAll": "Explore all moments",
     "copy.EventsJournal.emptyAgenda": "New dates will appear here as they are announced.",
@@ -2677,26 +2669,6 @@
     "copy.ImpactMosaic.c18aacd51665": "Every figure below is as the foundation reports it.",
     "copy.PartnersSection.intro": "Working alongside organisations that share our commitment to people, communities and the planet.",
     "copy.ValueAnalytics.camps": "camps",
-    "copy.HealStory.hPhrase": "Health, brought home.",
-    "copy.HealStory.hText": "Checkup camps travel to communities without a clinic nearby, while health centres — allopathy and homeopathy, physiotherapy, labs and pharmacy — stay open every day.",
-    "copy.HealStory.hAlt": "Nurses in green uniforms take a blood sample from a young man inside a camp tent.",
-    "copy.HealStory.ePhrase": "Eyes, given back their light.",
-    "copy.HealStory.eText": "Eye camps test vision, fit free spectacles and arrange cataract surgery — bringing reading, work and familiar faces back into focus.",
-    "copy.HealStory.eAlt": "A doctor examines an elderly woman’s eye at a free eye checkup camp.",
-    "copy.HealStory.aPhrase": "Always ready.",
-    "copy.HealStory.aText": "The blood bank processes, separates and stores every donated unit, so that blood is already waiting when a patient needs it.",
-    "copy.HealStory.aAlt": "Blood bank staff in lab coats sort and label bags of donated blood.",
-    "copy.HealStory.lPhrase": "Lifeblood, freely given.",
-    "copy.HealStory.lText": "On Manav Ekta Diwas and all through the year, volunteers roll up their sleeves at donation camps across the country — one stranger’s gift to another.",
-    "copy.HealStory.lAlt": "A volunteer at a blood donation camp holds a sign: “This isn’t a band aid. It’s a badge of honor.”",
-    "copy.HealStory.quote": "मानव को हो मानव प्यारा, एक दूजे का बने सहारा।",
-    "copy.HealStory.kicker": "Cornerstone · I",
-    "copy.HealStory.tagline": "Service with Humility",
-    "copy.HealStory.lede": "Healthcare for every",
-    "copy.HealStory.ledeAccent": "doorstep.",
-    "copy.HealStory.doorsLabel": "Every letter, a doorway.",
-    "copy.HealStory.quoteTranslation": "May every human hold the other dear; may we become each other’s support.",
-    "copy.HealStory.quoteSource": "From the banner above a health checkup camp",
     "copy.WelcomeSplashScreen.welcome-short-name": "SNCF",
     "copy.WelcomeSplashScreen.welcome-full-name": "Sant Nirankari Charitable Foundation",
     "copy.WelcomeSplashScreen.welcome-text": "Established in 2010, the Sant Nirankari Charitable Foundation was created to give organized direction to diverse social initiatives. Guided by the principle of oneness, we bring compassion, care, and kindness to communities worldwide. Our mission extends beyond charity. We tackle social and environmental challenges, empower the underprivileged, and safeguard our planet to build a better world for all. Staying true to our motto ‘Service with Humility,’ we strive to uplift lives with dignity and selflessness.",
@@ -2753,7 +2725,6 @@
     "copy.EnrichScrapbook.play": "Play",
     "copy.EnrichScrapbook.pause": "Pause",
     "copy.EnrichScrapbook.next": "Next page",
-    "copy.HealStory.title": "Healing Mankind",
     "copy.HealStory.introLead": "For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.",
     "copy.WelcomeSplashScreen.mission-vision-label": "Mission & Vision",
     "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility",
@@ -2761,7 +2732,198 @@
     "copy.CoreValuesPage.way-enrich": "Learning that opens doors.",
     "copy.CoreValuesPage.way-empower": "Communities that grow stronger.",
     "copy.CoreValuesPage.cover-explore": "Explore the cornerstones",
-    "copy.CoreValuesPage.cover-programmes": "Find a programme"
+    "copy.CoreValuesPage.cover-programmes": "Find a programme",
+    "copy.EmblemShowcase.previous": "Previous photograph",
+    "copy.EmblemShowcase.play": "Play",
+    "copy.EmblemShowcase.pause": "Pause",
+    "copy.EmblemShowcase.next": "Next photograph",
+    "copy.ExploreTabs.reports": "Reports",
+    "copy.ExploreTabs.gallery": "Gallery",
+    "copy.ExploreTabs.stats": "Stats",
+    "copy.ExploreTabs.label": "reports, gallery and stats",
+    "copy.ImpactMosaic.quick-label": "reports, gallery and stats",
+    "copy.ImpactMosaic.quick-reports": "Reports",
+    "copy.ImpactMosaic.quick-gallery": "Gallery",
+    "copy.ImpactMosaic.quick-stats": "Stats",
+    "copy.ReportActions.periods": "Each programme’s own reporting period",
+    "copy.ReportActions.source": "Source: the foundation’s activity report · figures shown as reported",
+    "copy.ReportActions.report": "Activity report",
+    "copy.ReportActions.foundation": "Sant Nirankari Charitable Foundation",
+    "copy.ReportActions.published": "The published report (PDF)",
+    "copy.ReportActions.save-hint": "Opens a printable copy: choose “Save as PDF”",
+    "copy.ReportActions.save": "Save as PDF",
+    "copy.UnAffiliation.undp-alt": "UNDP",
+    "copy.UnAffiliation.title": "Special consultative status with the United Nations Economic and Social Council (ECOSOC)",
+    "copy.UnAffiliation.short": "UN ECOSOC",
+    "copy.UnAffiliation.status": "Special consultative status",
+    "copy.UnAffiliation.panel-label": "Our United Nations standing",
+    "copy.UnAffiliation.kicker": "United Nations",
+    "copy.UnAffiliation.panel-title": "Special consultative status with ECOSOC",
+    "copy.UnAffiliation.panel-text": "The foundation holds special consultative status with the United Nations Economic and Social Council (ECOSOC), which lets it take part in the UN’s work and contribute to the Sustainable Development Goals.",
+    "copy.UnAffiliation.panel-link": "What consultative status means",
+    "copy.UnAffiliation.observance": "UN observance",
+    "copy.UnAffiliation.sdg-label": "Advancing the UN Sustainable Development Goals",
+    "copy.UnAffiliation.sdg-title": "UN Sustainable Development Goal",
+    "copy.CoreValuesPage.tab-programmes": "programmes, every reported figure",
+    "copy.CoreValuesPage.tab-photographs": "photographs from the field",
+    "copy.CoreValuesPage.tab-stats": "The figures, charted",
+    "copy.CoreValuesPage.programme-sdgs": "UN goals it advances",
+    "copy.CoreValuesPage.gallery-band": "every photograph",
+    "copy.ProjectsPage.tab-measures": "reported measures",
+    "copy.ProjectsPage.tab-gallery": "photographs, and films to come",
+    "copy.ProjectsPage.tab-gallery-awaited": "Photographs on their way",
+    "copy.ProjectsPage.tab-stats": "The figures, charted",
+    "copy.ProjectsPage.gallery-label": "photographs of the project, opening on the petals of the Projects emblem",
+    "copy.ProjectsPage.foundationPhotos": "From the foundation’s work, 2026",
+    "copy.ProjectsPage.illustrative": "Illustrative photographs from the foundation’s other projects",
+    "copy.ProjectsPage.gallery-band": "photographs & films",
+    "copy.PillarGallery.all": "Every programme",
+    "copy.PillarGallery.filter": "Show the photographs of",
+    "copy.CoreValuesPage.hero-heal": "Heal: photographs of the foundation’s healthcare, opening across the leaves of its emblem",
+    "copy.CoreValuesPage.hero-empower": "Empower: photographs of the foundation’s community work, opening across the rising figure of its emblem",
+    "copy.Sayings.heal-hindi": "रक्त नालियों में नहीं, नाड़ियों में बहे।",
+    "copy.Sayings.heal-english": "Blood should flow in veins, not in drains.",
+    "copy.Sayings.heal-by": "Nirankari Baba Hardev Singh Ji Maharaj",
+    "copy.Sayings.enrich-english": "We need to inspire everyone to take action, not just with words, but with deeds.",
+    "copy.Sayings.enrich-by": "Satguru Mata Sudiksha Ji Maharaj",
+    "copy.Sayings.empower-hindi": "वृद्ध का साया, वृक्ष की छाया।",
+    "copy.Sayings.empower-english": "The blessing of our elders is like the shade of a tree.",
+    "copy.Sayings.empower-by": "Satguru Mata Sudiksha Ji Maharaj",
+    "copy.Sayings.amrit-hindi": "स्वच्छ जल, स्वच्छ मन।",
+    "copy.Sayings.amrit-english": "Clean water, clean mind.",
+    "copy.Sayings.amrit-by": "Project Amrit, Sant Nirankari Charitable Foundation",
+    "copy.Sayings.vann-english": "Just as the Oneness Vann embodies the vision of unity in diversity, humanity too must forget all differences and embrace the spirit of peaceful coexistence to enhance the world.",
+    "copy.Sayings.vann-by": "Satguru Mata Sudiksha Ji Maharaj",
+    "copy.Sayings.watershed-english": "Pollution, whether internal or external, is harmful.",
+    "copy.Sayings.watershed-by": "Nirankari Baba Hardev Singh Ji Maharaj",
+    "copy.Sayings.villages-hindi": "मानव को हो मानव प्यारा, एक दूजे का बने सहारा।",
+    "copy.Sayings.villages-english": "May every person hold every other dear, and each become the other’s support.",
+    "copy.Sayings.villages-by": "Sant Nirankari Mission",
+    "copy.Sayings.contribute-english": "Life gets a meaning, if it is lived for others.",
+    "copy.Sayings.contribute-by": "Nirankari Baba Hardev Singh Ji Maharaj",
+    "copy.CoreValuesPage.cover-goals": "Advancing",
+    "copy.CoreValuesPage.cover-goals-of": "UN Sustainable Development Goals",
+    "copy.NavPanels.reports": "Reports",
+    "copy.NavPanels.gallery": "Gallery",
+    "copy.NavPanels.stats": "Stats",
+    "copy.NavPanels.tabs": "reports, gallery and stats",
+    "copy.NavPanels.explore-values": "Explore the three cornerstones",
+    "copy.NavPanels.feature-kicker": "Also from the Mission",
+    "copy.NavPanels.feature-go": "Visit its site",
+    "copy.NavPanels.who-account": "Our story since 2010",
+    "copy.NavPanels.who-mission": "What drives the work",
+    "copy.NavPanels.who-road": "Milestones along the way",
+    "copy.NavPanels.who-partners": "Organisations beside us",
+    "copy.NavPanels.who-contact": "Write, call or visit",
+    "copy.NavPanels.who-awards": "Honours for the service",
+    "copy.NavPanels.motto": "Service with Humility",
+    "copy.NavPanels.facts": "Since 2010 · 250+ branches nationwide",
+    "copy.EventShare.email": "Email",
+    "copy.EventShare.poster": "Poster",
+    "copy.EventShare.story": "Story",
+    "copy.EventShare.banner": "Banner",
+    "copy.EventShare.shareLabel": "Share this moment",
+    "copy.EventShare.share": "Share",
+    "copy.EventShare.native": "Share from this device",
+    "copy.EventShare.on": "Share on",
+    "copy.EventShare.copy": "Copy the invitation link",
+    "copy.EventShare.copied": "Link copied",
+    "copy.EventShare.calendarLabel": "Add the date to a calendar",
+    "copy.EventShare.calendar": "Calendar",
+    "copy.EventShare.ics": "Apple · ICS",
+    "copy.EventShare.artworkLabel": "Artwork to share or print",
+    "copy.EventShare.artwork": "Artwork",
+    "copy.EventShare.preparing": "Preparing…",
+    "copy.EventShare.failed": "The artwork could not be prepared. Please try again.",
+    "copy.EventsJournal.days": "d",
+    "copy.EventsJournal.hours": "h",
+    "copy.EventsJournal.minutes": "m",
+    "copy.EventsJournal.noDates": "No dates announced yet",
+    "copy.EventsJournal.year": "The year at a glance",
+    "copy.EventsJournal.today": "Today",
+    "copy.EventsJournal.venue": "Find a venue near you",
+    "copy.MosaicOverture.count-projects": "projects",
+    "copy.MosaicOverture.count-programmes": "programmes",
+    "copy.PhotoCarousel.carousel": "carousel",
+    "copy.PhotoCarousel.slide": "slide",
+    "copy.PhotoCarousel.of": "of",
+    "copy.PhotoCarousel.open": "Open",
+    "copy.PhotoCarousel.previous": "Previous photograph",
+    "copy.PhotoCarousel.next": "Next photograph",
+    "copy.PhotoCarousel.pause": "Pause the slideshow",
+    "copy.PhotoCarousel.play": "Play the slideshow",
+    "copy.PhotoCarousel.choose": "Choose a photograph",
+    "copy.ProjectOrbit.signature": "One purpose.",
+    "copy.ProjectOrbit.signature-script": "lasting impact",
+    "copy.ProjectOrbit.label": "The projects",
+    "copy.ProjectsPage.cover-hc-line": "A charitable hospital, its OPD now open.",
+    "copy.ProjectsPage.cover-reports": "Read the reports",
+    "copy.ProjectsPage.cover-goals": "Advancing",
+    "copy.ProjectsPage.cover-goals-of": "UN Global Goals",
+    "copy.ProjectsPage.cover-impact": "Each project’s reported reach",
+    "copy.ProjectsPage.directory-goals": "UN goals",
+    "copy.ProjectsPage.directory-tabs": "reports, gallery and stats",
+    "copy.ProjectsPage.directory-reports": "Reports",
+    "copy.ProjectsPage.directory-gallery": "Gallery",
+    "copy.ProjectsPage.directory-stats": "Stats",
+    "copy.AwardsTree.label": "The tree of honours: choose one to read it",
+    "copy.AwardsTree.caption": "Every honour, a shared achievement.",
+    "copy.AwardsTree.hint": "The oldest on the lowest branches, the newest at the crown",
+    "copy.AwardsTree.undated": "Honour",
+    "copy.PartnerCircle.sector-global": "Global",
+    "copy.PartnerCircle.sector-government": "Government",
+    "copy.PartnerCircle.sector-health": "Health & care",
+    "copy.PartnerCircle.sector-children": "Children",
+    "copy.PartnerCircle.sector-skills": "Skills & learning",
+    "copy.PartnerCircle.sector-media": "Media",
+    "copy.PartnerCircle.sector-together": "Walking with us",
+    "copy.PartnerCircle.seat-field": "Your place",
+    "copy.PartnerCircle.label": "Our partners, around the foundation",
+    "copy.PartnerCircle.read": "read this collaboration",
+    "copy.PartnerCircle.seat": "A place for your organisation — become a partner",
+    "copy.PartnerCircle.seat-name": "Become a partner",
+    "copy.PartnerCircle.legend": "Fields of work",
+    "copy.SiteFooter.invite-title": "There is a place for you in this service.",
+    "copy.SiteFooter.invite-lead": "Give, partner with us, or simply turn up. Every hand that joins makes the circle stronger.",
+    "copy.SiteFooter.way-give": "Give to the work that moves you",
+    "copy.SiteFooter.way-partner": "Become a partner",
+    "copy.SiteFooter.way-partner-line": "Bring your organisation’s CSR to the work",
+    "copy.SiteFooter.way-moment": "Join a moment",
+    "copy.SiteFooter.way-moment-line": "Camps, drives and observances near you",
+    "copy.SiteFooter.social": "Follow the foundation",
+    "copy.SiteFooter.top": "Back to top",
+    "copy.ProgrammeDossier.photos": "Photographs of the programme",
+    "copy.ProgrammeDossier.photo": "Photograph",
+    "copy.ProgrammeDossier.of": "of",
+    "copy.ProgrammeDossier.insights": "What the figures say, read together",
+    "copy.ProgrammeDossier.insights-source": "The insights are worked out from those figures; nothing is estimated.",
+    "copy.ValueAnalytics.ofEvery": "of",
+    "copy.ValueAnalytics.opdIn": "OPD visits, in",
+    "copy.ValueAnalytics.eyeSpectacles": "received free spectacles",
+    "copy.ValueAnalytics.opdVisits": "OPD visits",
+    "copy.ValueAnalytics.eyeCataract": "led to cataract surgery",
+    "copy.ValueAnalytics.insights": "Read together · worked out from the reported figures, nothing estimated",
+    "copy.Insights.blood-per-camp": "units collected per camp",
+    "copy.Insights.blood-lives": "lives potentially saved by each unit",
+    "copy.Insights.checkup-per-camp": "patients treated per camp",
+    "copy.Insights.eye-spectacles": "of OPD visits received free spectacles",
+    "copy.Insights.eye-cataract": "of OPD visits led to cataract surgery",
+    "copy.Insights.eye-per-camp": "OPD visits per camp",
+    "copy.Insights.centre-network": "facilities in the network, of {kinds} kinds",
+    "copy.Insights.bank-per-camp": "units collected per camp",
+    "copy.Insights.college-share": "of the students are in college",
+    "copy.Insights.scholar-average": "disbursed per scholarship student, on average",
+    "copy.Insights.free-per-school": "students per free school, on average",
+    "copy.Insights.nima-per-centre": "youth trained per NIMA centre",
+    "copy.Insights.trades-sewing": "of the youth trained in sewing",
+    "copy.Insights.trades-per-centre": "youth per sewing centre",
+    "copy.Insights.trees-per-drive": "trees planted per drive",
+    "copy.Insights.trees-vann": "of them in Oneness Vann forests",
+    "copy.Insights.clean-hours": "hours given by each volunteer",
+    "copy.Insights.clean-per-drive": "manhours per drive",
+    "copy.Insights.covid-icu": "of the care-centre beds were ICU beds",
+    "copy.Insights.marriages-per-event": "couples married per event",
+    "copy.Insights.support-total": "given in financial help and disaster relief together"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -2932,22 +3094,6 @@
       "source": "/images/petals/petal-projects.webp",
       "label": "petal-projects.webp"
     },
-    "asset.HealStory.doorH": {
-      "source": "/images/programmes/health-checkup-snhc-team.jpg",
-      "label": "HealStory · health-checkup-snhc-team.jpg"
-    },
-    "asset.HealStory.doorE": {
-      "source": "/images/programmes/eye-checkup-examination.jpg",
-      "label": "HealStory · eye-checkup-examination.jpg"
-    },
-    "asset.HealStory.doorA": {
-      "source": "/images/programmes/blood-bank-processing.jpg",
-      "label": "HealStory · blood-bank-processing.jpg"
-    },
-    "asset.HealStory.doorL": {
-      "source": "/images/programmes/blood-donation.jpg",
-      "label": "HealStory · blood-donation.jpg"
-    },
     "asset.WelcomeSplashScreen.welcome-photo": {
       "source": "/images/welcome-volunteers.jpg",
       "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
@@ -2975,6 +3121,46 @@
     "asset.PillarPhotoMosaic.heal-leaf-bottom-left": {
       "source": "/images/heal-emblem/leaf-bottom-left.webp",
       "label": "PillarPhotoMosaic · leaf-bottom-left.webp"
+    },
+    "asset.Reports.heal": {
+      "source": "",
+      "label": "Reports · heal (PDF, empty until uploaded)"
+    },
+    "asset.Reports.enrich": {
+      "source": "",
+      "label": "Reports · enrich (PDF, empty until uploaded)"
+    },
+    "asset.Reports.empower": {
+      "source": "",
+      "label": "Reports · empower (PDF, empty until uploaded)"
+    },
+    "asset.Reports.project-amrit": {
+      "source": "",
+      "label": "Reports · project-amrit (PDF, empty until uploaded)"
+    },
+    "asset.Reports.oneness-vann": {
+      "source": "",
+      "label": "Reports · oneness-vann (PDF, empty until uploaded)"
+    },
+    "asset.Reports.watershed": {
+      "source": "",
+      "label": "Reports · watershed (PDF, empty until uploaded)"
+    },
+    "asset.Reports.adopted-villages": {
+      "source": "",
+      "label": "Reports · adopted-villages (PDF, empty until uploaded)"
+    },
+    "asset.UnSeal.undp-logo": {
+      "source": "",
+      "label": "UnSeal · UNDP logo (only with UNDP’s written permission)"
+    },
+    "asset.PartnerCircle.hub": {
+      "source": "/images/sncf-logo.webp",
+      "label": "PartnerCircle · sncf-logo.webp"
+    },
+    "asset.SiteFooter.lotus": {
+      "source": "/images/lotus-watermark.png",
+      "label": "SiteFooter · lotus-watermark.png"
     }
   },
   "slots": {
@@ -3634,11 +3820,6 @@
         "section": "Page",
         "label": "Page · Compassion, made visible."
       },
-      "copy.CoreValuesPage.1cd27a19c41a": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Explore the values · Meet the programmes · Discover the impact"
-      },
       "copy.CoreValuesPage.5feceb66ffc8": {
         "page": "core-values",
         "section": "Page",
@@ -3888,26 +4069,6 @@
         "page": "projects",
         "section": "Page",
         "label": "Page · Explore our projects"
-      },
-      "copy.ProjectsPage.6cd5b6e51936": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · 04"
-      },
-      "copy.ProjectsPage.ba61ddf6e8f7": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Named campaigns"
-      },
-      "copy.ProjectsPage.938db8c9f82c": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · 01"
-      },
-      "copy.ProjectsPage.c0c0d22814e2": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Healthcare campus · OPD services started"
       },
       "copy.ProjectsPage.04e2a9728af7": {
         "page": "projects",
@@ -5134,16 +5295,6 @@
         "section": "Events",
         "label": "Events · Open the invitation"
       },
-      "copy.EventsJournal.passBusy": {
-        "page": "home",
-        "section": "Events",
-        "label": "Events · Preparing…"
-      },
-      "copy.EventsJournal.poster": {
-        "page": "home",
-        "section": "Events",
-        "label": "Events · Download poster"
-      },
       "copy.EventsJournal.invite": {
         "page": "home",
         "section": "Events",
@@ -5559,11 +5710,6 @@
         "section": "Events",
         "label": "Events · Scan for your invitation, or share the poster."
       },
-      "copy.EventsJournal.posterError": {
-        "page": "home",
-        "section": "Events",
-        "label": "Events · The poster could not be prepared. Please try again."
-      },
       "copy.EventsJournal.emptyHint": {
         "page": "home",
         "section": "Events",
@@ -5628,106 +5774,6 @@
         "page": "core-values",
         "section": "Charts",
         "label": "Charts · camps"
-      },
-      "copy.HealStory.hPhrase": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Health, brought home."
-      },
-      "copy.HealStory.hText": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Checkup camps travel to communities without a clinic nearby, while he…"
-      },
-      "copy.HealStory.hAlt": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Nurses in green uniforms take a blood sample from a young man inside …"
-      },
-      "copy.HealStory.ePhrase": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Eyes, given back their light."
-      },
-      "copy.HealStory.eText": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Eye camps test vision, fit free spectacles and arrange cataract surge…"
-      },
-      "copy.HealStory.eAlt": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · A doctor examines an elderly woman’s eye at a free eye checkup camp."
-      },
-      "copy.HealStory.aPhrase": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Always ready."
-      },
-      "copy.HealStory.aText": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · The blood bank processes, separates and stores every donated unit, so…"
-      },
-      "copy.HealStory.aAlt": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Blood bank staff in lab coats sort and label bags of donated blood."
-      },
-      "copy.HealStory.lPhrase": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Lifeblood, freely given."
-      },
-      "copy.HealStory.lText": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · On Manav Ekta Diwas and all through the year, volunteers roll up thei…"
-      },
-      "copy.HealStory.lAlt": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · A volunteer at a blood donation camp holds a sign: “This isn’t a band…"
-      },
-      "copy.HealStory.quote": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · मानव को हो मानव प्यारा, एक दूजे का बने सहारा।"
-      },
-      "copy.HealStory.kicker": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Cornerstone · I"
-      },
-      "copy.HealStory.tagline": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Service with Humility"
-      },
-      "copy.HealStory.lede": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Healthcare for every"
-      },
-      "copy.HealStory.ledeAccent": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · doorstep."
-      },
-      "copy.HealStory.doorsLabel": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Every letter, a doorway."
-      },
-      "copy.HealStory.quoteTranslation": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · May every human hold the other dear; may we become each other’s suppo…"
-      },
-      "copy.HealStory.quoteSource": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · From the banner above a health checkup camp"
       },
       "copy.WelcomeSplashScreen.welcome-short-name": {
         "page": "home",
@@ -6009,11 +6055,6 @@
         "section": "Enrich scrapbook",
         "label": "Enrich scrapbook · Next page"
       },
-      "copy.HealStory.title": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · Healing Mankind"
-      },
       "copy.HealStory.introLead": {
         "page": "other",
         "section": "Heal Story",
@@ -6053,6 +6094,961 @@
         "page": "core-values",
         "section": "Page",
         "label": "Page · Find a programme"
+      },
+      "copy.EmblemShowcase.previous": {
+        "page": "core-values",
+        "section": "Animated emblems",
+        "label": "Animated emblems · Previous photograph"
+      },
+      "copy.EmblemShowcase.play": {
+        "page": "core-values",
+        "section": "Animated emblems",
+        "label": "Animated emblems · Play"
+      },
+      "copy.EmblemShowcase.pause": {
+        "page": "core-values",
+        "section": "Animated emblems",
+        "label": "Animated emblems · Pause"
+      },
+      "copy.EmblemShowcase.next": {
+        "page": "core-values",
+        "section": "Animated emblems",
+        "label": "Animated emblems · Next photograph"
+      },
+      "copy.ExploreTabs.reports": {
+        "page": "core-values",
+        "section": "Reports · Gallery · Stats tabs",
+        "label": "Reports · Gallery · Stats tabs · Reports"
+      },
+      "copy.ExploreTabs.gallery": {
+        "page": "core-values",
+        "section": "Reports · Gallery · Stats tabs",
+        "label": "Reports · Gallery · Stats tabs · Gallery"
+      },
+      "copy.ExploreTabs.stats": {
+        "page": "core-values",
+        "section": "Reports · Gallery · Stats tabs",
+        "label": "Reports · Gallery · Stats tabs · Stats"
+      },
+      "copy.ExploreTabs.label": {
+        "page": "core-values",
+        "section": "Reports · Gallery · Stats tabs",
+        "label": "Reports · Gallery · Stats tabs · reports, gallery and stats"
+      },
+      "copy.ImpactMosaic.quick-label": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · reports, gallery and stats"
+      },
+      "copy.ImpactMosaic.quick-reports": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Reports"
+      },
+      "copy.ImpactMosaic.quick-gallery": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Gallery"
+      },
+      "copy.ImpactMosaic.quick-stats": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · Stats"
+      },
+      "copy.ReportActions.periods": {
+        "page": "core-values",
+        "section": "Reports",
+        "label": "Reports · Each programme’s own reporting period"
+      },
+      "copy.ReportActions.source": {
+        "page": "core-values",
+        "section": "Reports",
+        "label": "Reports · Source: the foundation’s activity report · figures shown as reported"
+      },
+      "copy.ReportActions.report": {
+        "page": "core-values",
+        "section": "Reports",
+        "label": "Reports · Activity report"
+      },
+      "copy.ReportActions.foundation": {
+        "page": "core-values",
+        "section": "Reports",
+        "label": "Reports · Sant Nirankari Charitable Foundation"
+      },
+      "copy.ReportActions.published": {
+        "page": "core-values",
+        "section": "Reports",
+        "label": "Reports · The published report (PDF)"
+      },
+      "copy.ReportActions.save-hint": {
+        "page": "core-values",
+        "section": "Reports",
+        "label": "Reports · Opens a printable copy: choose “Save as PDF”"
+      },
+      "copy.ReportActions.save": {
+        "page": "core-values",
+        "section": "Reports",
+        "label": "Reports · Save as PDF"
+      },
+      "copy.UnAffiliation.undp-alt": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · UNDP"
+      },
+      "copy.UnAffiliation.title": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · Special consultative status with the United Nations Economic and Soci…"
+      },
+      "copy.UnAffiliation.short": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · UN ECOSOC"
+      },
+      "copy.UnAffiliation.status": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · Special consultative status"
+      },
+      "copy.UnAffiliation.panel-label": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · Our United Nations standing"
+      },
+      "copy.UnAffiliation.kicker": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · United Nations"
+      },
+      "copy.UnAffiliation.panel-title": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · Special consultative status with ECOSOC"
+      },
+      "copy.UnAffiliation.panel-text": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · The foundation holds special consultative status with the United Nati…"
+      },
+      "copy.UnAffiliation.panel-link": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · What consultative status means"
+      },
+      "copy.UnAffiliation.observance": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · UN observance"
+      },
+      "copy.UnAffiliation.sdg-label": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · Advancing the UN Sustainable Development Goals"
+      },
+      "copy.UnAffiliation.sdg-title": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · UN Sustainable Development Goal"
+      },
+      "copy.CoreValuesPage.tab-programmes": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · programmes, every reported figure"
+      },
+      "copy.CoreValuesPage.tab-photographs": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · photographs from the field"
+      },
+      "copy.CoreValuesPage.tab-stats": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · The figures, charted"
+      },
+      "copy.CoreValuesPage.programme-sdgs": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · UN goals it advances"
+      },
+      "copy.CoreValuesPage.gallery-band": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · every photograph"
+      },
+      "copy.ProjectsPage.tab-measures": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · reported measures"
+      },
+      "copy.ProjectsPage.tab-gallery": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · photographs, and films to come"
+      },
+      "copy.ProjectsPage.tab-gallery-awaited": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Photographs on their way"
+      },
+      "copy.ProjectsPage.tab-stats": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · The figures, charted"
+      },
+      "copy.ProjectsPage.gallery-label": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · photographs of the project, opening on the petals of the Projects emb…"
+      },
+      "copy.ProjectsPage.foundationPhotos": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · From the foundation’s work, 2026"
+      },
+      "copy.ProjectsPage.illustrative": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Illustrative photographs from the foundation’s other projects"
+      },
+      "copy.ProjectsPage.gallery-band": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · photographs & films"
+      },
+      "copy.PillarGallery.all": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Every programme"
+      },
+      "copy.PillarGallery.filter": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Show the photographs of"
+      },
+      "copy.CoreValuesPage.hero-heal": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Heal: photographs of the foundation’s healthcare, opening across the …"
+      },
+      "copy.CoreValuesPage.hero-empower": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Empower: photographs of the foundation’s community work, opening acro…"
+      },
+      "copy.Sayings.heal-hindi": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · रक्त नालियों में नहीं, नाड़ियों में बहे।"
+      },
+      "copy.Sayings.heal-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Blood should flow in veins, not in drains."
+      },
+      "copy.Sayings.heal-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Nirankari Baba Hardev Singh Ji Maharaj"
+      },
+      "copy.Sayings.enrich-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · We need to inspire everyone to take action, not just with words, but …"
+      },
+      "copy.Sayings.enrich-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Satguru Mata Sudiksha Ji Maharaj"
+      },
+      "copy.Sayings.empower-hindi": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · वृद्ध का साया, वृक्ष की छाया।"
+      },
+      "copy.Sayings.empower-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · The blessing of our elders is like the shade of a tree."
+      },
+      "copy.Sayings.empower-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Satguru Mata Sudiksha Ji Maharaj"
+      },
+      "copy.Sayings.amrit-hindi": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · स्वच्छ जल, स्वच्छ मन।"
+      },
+      "copy.Sayings.amrit-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Clean water, clean mind."
+      },
+      "copy.Sayings.amrit-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Project Amrit, Sant Nirankari Charitable Foundation"
+      },
+      "copy.Sayings.vann-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Just as the Oneness Vann embodies the vision of unity in diversity, h…"
+      },
+      "copy.Sayings.vann-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Satguru Mata Sudiksha Ji Maharaj"
+      },
+      "copy.Sayings.watershed-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Pollution, whether internal or external, is harmful."
+      },
+      "copy.Sayings.watershed-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Nirankari Baba Hardev Singh Ji Maharaj"
+      },
+      "copy.Sayings.villages-hindi": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · मानव को हो मानव प्यारा, एक दूजे का बने सहारा।"
+      },
+      "copy.Sayings.villages-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · May every person hold every other dear, and each become the other’s s…"
+      },
+      "copy.Sayings.villages-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Sant Nirankari Mission"
+      },
+      "copy.Sayings.contribute-english": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Life gets a meaning, if it is lived for others."
+      },
+      "copy.Sayings.contribute-by": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Nirankari Baba Hardev Singh Ji Maharaj"
+      },
+      "copy.CoreValuesPage.cover-goals": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Advancing"
+      },
+      "copy.CoreValuesPage.cover-goals-of": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · UN Sustainable Development Goals"
+      },
+      "copy.NavPanels.reports": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Reports"
+      },
+      "copy.NavPanels.gallery": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Gallery"
+      },
+      "copy.NavPanels.stats": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Stats"
+      },
+      "copy.NavPanels.tabs": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · reports, gallery and stats"
+      },
+      "copy.NavPanels.explore-values": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Explore the three cornerstones"
+      },
+      "copy.NavPanels.feature-kicker": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Also from the Mission"
+      },
+      "copy.NavPanels.feature-go": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Visit its site"
+      },
+      "copy.NavPanels.who-account": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Our story since 2010"
+      },
+      "copy.NavPanels.who-mission": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · What drives the work"
+      },
+      "copy.NavPanels.who-road": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Milestones along the way"
+      },
+      "copy.NavPanels.who-partners": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Organisations beside us"
+      },
+      "copy.NavPanels.who-contact": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Write, call or visit"
+      },
+      "copy.NavPanels.who-awards": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Honours for the service"
+      },
+      "copy.NavPanels.motto": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Service with Humility"
+      },
+      "copy.NavPanels.facts": {
+        "page": "everywhere",
+        "section": "Menu",
+        "label": "Menu · Since 2010 · 250+ branches nationwide"
+      },
+      "copy.EventShare.email": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Email"
+      },
+      "copy.EventShare.poster": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Poster"
+      },
+      "copy.EventShare.story": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Story"
+      },
+      "copy.EventShare.banner": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Banner"
+      },
+      "copy.EventShare.shareLabel": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Share this moment"
+      },
+      "copy.EventShare.share": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Share"
+      },
+      "copy.EventShare.native": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Share from this device"
+      },
+      "copy.EventShare.on": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Share on"
+      },
+      "copy.EventShare.copy": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Copy the invitation link"
+      },
+      "copy.EventShare.copied": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Link copied"
+      },
+      "copy.EventShare.calendarLabel": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Add the date to a calendar"
+      },
+      "copy.EventShare.calendar": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Calendar"
+      },
+      "copy.EventShare.ics": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Apple · ICS"
+      },
+      "copy.EventShare.artworkLabel": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Artwork to share or print"
+      },
+      "copy.EventShare.artwork": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Artwork"
+      },
+      "copy.EventShare.preparing": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Preparing…"
+      },
+      "copy.EventShare.failed": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · The artwork could not be prepared. Please try again."
+      },
+      "copy.EventsJournal.days": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · d"
+      },
+      "copy.EventsJournal.hours": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · h"
+      },
+      "copy.EventsJournal.minutes": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · m"
+      },
+      "copy.EventsJournal.noDates": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · No dates announced yet"
+      },
+      "copy.EventsJournal.year": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · The year at a glance"
+      },
+      "copy.EventsJournal.today": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Today"
+      },
+      "copy.EventsJournal.venue": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Find a venue near you"
+      },
+      "copy.MosaicOverture.count-projects": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · projects"
+      },
+      "copy.MosaicOverture.count-programmes": {
+        "page": "home",
+        "section": "Our work",
+        "label": "Our work · programmes"
+      },
+      "copy.PhotoCarousel.carousel": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · carousel"
+      },
+      "copy.PhotoCarousel.slide": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · slide"
+      },
+      "copy.PhotoCarousel.of": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · of"
+      },
+      "copy.PhotoCarousel.open": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Open"
+      },
+      "copy.PhotoCarousel.previous": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Previous photograph"
+      },
+      "copy.PhotoCarousel.next": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Next photograph"
+      },
+      "copy.PhotoCarousel.pause": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Pause the slideshow"
+      },
+      "copy.PhotoCarousel.play": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Play the slideshow"
+      },
+      "copy.PhotoCarousel.choose": {
+        "page": "core-values",
+        "section": "Galleries",
+        "label": "Galleries · Choose a photograph"
+      },
+      "copy.ProjectOrbit.signature": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · One purpose."
+      },
+      "copy.ProjectOrbit.signature-script": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · lasting impact"
+      },
+      "copy.ProjectOrbit.label": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · The projects"
+      },
+      "copy.ProjectsPage.cover-hc-line": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · A charitable hospital, its OPD now open."
+      },
+      "copy.ProjectsPage.cover-reports": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Read the reports"
+      },
+      "copy.ProjectsPage.cover-goals": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Advancing"
+      },
+      "copy.ProjectsPage.cover-goals-of": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · UN Global Goals"
+      },
+      "copy.ProjectsPage.cover-impact": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Each project’s reported reach"
+      },
+      "copy.ProjectsPage.directory-goals": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · UN goals"
+      },
+      "copy.ProjectsPage.directory-tabs": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · reports, gallery and stats"
+      },
+      "copy.ProjectsPage.directory-reports": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Reports"
+      },
+      "copy.ProjectsPage.directory-gallery": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Gallery"
+      },
+      "copy.ProjectsPage.directory-stats": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Stats"
+      },
+      "copy.AwardsTree.label": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · The tree of honours: choose one to read it"
+      },
+      "copy.AwardsTree.caption": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Every honour, a shared achievement."
+      },
+      "copy.AwardsTree.hint": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · The oldest on the lowest branches, the newest at the crown"
+      },
+      "copy.AwardsTree.undated": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Honour"
+      },
+      "copy.PartnerCircle.sector-global": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Global"
+      },
+      "copy.PartnerCircle.sector-government": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Government"
+      },
+      "copy.PartnerCircle.sector-health": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Health & care"
+      },
+      "copy.PartnerCircle.sector-children": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Children"
+      },
+      "copy.PartnerCircle.sector-skills": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Skills & learning"
+      },
+      "copy.PartnerCircle.sector-media": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Media"
+      },
+      "copy.PartnerCircle.sector-together": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Walking with us"
+      },
+      "copy.PartnerCircle.seat-field": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Your place"
+      },
+      "copy.PartnerCircle.label": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Our partners, around the foundation"
+      },
+      "copy.PartnerCircle.read": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · read this collaboration"
+      },
+      "copy.PartnerCircle.seat": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · A place for your organisation — become a partner"
+      },
+      "copy.PartnerCircle.seat-name": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Become a partner"
+      },
+      "copy.PartnerCircle.legend": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · Fields of work"
+      },
+      "copy.SiteFooter.invite-title": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · There is a place for you in this service."
+      },
+      "copy.SiteFooter.invite-lead": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Give, partner with us, or simply turn up. Every hand that joins makes…"
+      },
+      "copy.SiteFooter.way-give": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Give to the work that moves you"
+      },
+      "copy.SiteFooter.way-partner": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Become a partner"
+      },
+      "copy.SiteFooter.way-partner-line": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Bring your organisation’s CSR to the work"
+      },
+      "copy.SiteFooter.way-moment": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Join a moment"
+      },
+      "copy.SiteFooter.way-moment-line": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Camps, drives and observances near you"
+      },
+      "copy.SiteFooter.social": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Follow the foundation"
+      },
+      "copy.SiteFooter.top": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · Back to top"
+      },
+      "copy.ProgrammeDossier.photos": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Photographs of the programme"
+      },
+      "copy.ProgrammeDossier.photo": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Photograph"
+      },
+      "copy.ProgrammeDossier.of": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · of"
+      },
+      "copy.ProgrammeDossier.insights": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · What the figures say, read together"
+      },
+      "copy.ProgrammeDossier.insights-source": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · The insights are worked out from those figures; nothing is estimated."
+      },
+      "copy.ValueAnalytics.ofEvery": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of"
+      },
+      "copy.ValueAnalytics.opdIn": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · OPD visits, in"
+      },
+      "copy.ValueAnalytics.eyeSpectacles": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · received free spectacles"
+      },
+      "copy.ValueAnalytics.opdVisits": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · OPD visits"
+      },
+      "copy.ValueAnalytics.eyeCataract": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · led to cataract surgery"
+      },
+      "copy.ValueAnalytics.insights": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Read together · worked out from the reported figures, nothing estimat…"
+      },
+      "copy.Insights.blood-per-camp": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · units collected per camp"
+      },
+      "copy.Insights.blood-lives": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · lives potentially saved by each unit"
+      },
+      "copy.Insights.checkup-per-camp": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · patients treated per camp"
+      },
+      "copy.Insights.eye-spectacles": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of OPD visits received free spectacles"
+      },
+      "copy.Insights.eye-cataract": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of OPD visits led to cataract surgery"
+      },
+      "copy.Insights.eye-per-camp": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · OPD visits per camp"
+      },
+      "copy.Insights.centre-network": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · facilities in the network, of {kinds} kinds"
+      },
+      "copy.Insights.bank-per-camp": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · units collected per camp"
+      },
+      "copy.Insights.college-share": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of the students are in college"
+      },
+      "copy.Insights.scholar-average": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · disbursed per scholarship student, on average"
+      },
+      "copy.Insights.free-per-school": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · students per free school, on average"
+      },
+      "copy.Insights.nima-per-centre": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · youth trained per NIMA centre"
+      },
+      "copy.Insights.trades-sewing": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of the youth trained in sewing"
+      },
+      "copy.Insights.trades-per-centre": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · youth per sewing centre"
+      },
+      "copy.Insights.trees-per-drive": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · trees planted per drive"
+      },
+      "copy.Insights.trees-vann": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of them in Oneness Vann forests"
+      },
+      "copy.Insights.clean-hours": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · hours given by each volunteer"
+      },
+      "copy.Insights.clean-per-drive": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · manhours per drive"
+      },
+      "copy.Insights.covid-icu": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · of the care-centre beds were ICU beds"
+      },
+      "copy.Insights.marriages-per-event": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · couples married per event"
+      },
+      "copy.Insights.support-total": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · given in financial help and disaster relief together"
       }
     },
     "assets": {
@@ -6266,26 +7262,6 @@
         "section": "Our work petals",
         "label": "Our work petals · petal-projects.webp"
       },
-      "asset.HealStory.doorH": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · health-checkup-snhc-team.jpg"
-      },
-      "asset.HealStory.doorE": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · eye-checkup-examination.jpg"
-      },
-      "asset.HealStory.doorA": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · blood-bank-processing.jpg"
-      },
-      "asset.HealStory.doorL": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · blood-donation.jpg"
-      },
       "asset.WelcomeSplashScreen.welcome-photo": {
         "page": "home",
         "section": "Intro · Welcome page",
@@ -6320,6 +7296,56 @@
         "page": "home",
         "section": "Hero · Heal emblem photos",
         "label": "Hero · Heal emblem photos · leaf-bottom-left.webp"
+      },
+      "asset.Reports.heal": {
+        "page": "core-values",
+        "section": "Reports · published PDFs",
+        "label": "Reports · published PDFs · heal"
+      },
+      "asset.Reports.enrich": {
+        "page": "core-values",
+        "section": "Reports · published PDFs",
+        "label": "Reports · published PDFs · enrich"
+      },
+      "asset.Reports.empower": {
+        "page": "core-values",
+        "section": "Reports · published PDFs",
+        "label": "Reports · published PDFs · empower"
+      },
+      "asset.Reports.project-amrit": {
+        "page": "core-values",
+        "section": "Reports · published PDFs",
+        "label": "Reports · published PDFs · project-amrit"
+      },
+      "asset.Reports.oneness-vann": {
+        "page": "core-values",
+        "section": "Reports · published PDFs",
+        "label": "Reports · published PDFs · oneness-vann"
+      },
+      "asset.Reports.watershed": {
+        "page": "core-values",
+        "section": "Reports · published PDFs",
+        "label": "Reports · published PDFs · watershed"
+      },
+      "asset.Reports.adopted-villages": {
+        "page": "core-values",
+        "section": "Reports · published PDFs",
+        "label": "Reports · published PDFs · adopted-villages"
+      },
+      "asset.UnSeal.undp-logo": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · undp-logo"
+      },
+      "asset.PartnerCircle.hub": {
+        "page": "home",
+        "section": "Partners",
+        "label": "Partners · sncf-logo.webp"
+      },
+      "asset.SiteFooter.lotus": {
+        "page": "everywhere",
+        "section": "Footer",
+        "label": "Footer · lotus-watermark.png"
       }
     }
   },
@@ -7174,23 +8200,19 @@
     "social": [
       {
         "platform": "instagram",
-        "url": "https://instagram.com"
+        "url": "https://www.instagram.com/nirankaricharitablefoundation/"
       },
       {
         "platform": "youtube",
-        "url": "https://youtube.com"
-      },
-      {
-        "platform": "spotify",
-        "url": "https://spotify.com"
+        "url": "https://www.youtube.com/channel/UCdAj1x5SmFLzQEJNvu5jezw"
       },
       {
         "platform": "facebook",
-        "url": "https://facebook.com"
+        "url": "https://www.facebook.com/santnirankaricharitablefoundation"
       },
       {
         "platform": "x",
-        "url": "https://x.com"
+        "url": "https://x.com/santnirankari"
       }
     ],
     "footerColumns": [
@@ -7220,7 +8242,7 @@
         "links": [
           {
             "label": "Awards and Honours",
-            "href": "/#awards"
+            "href": "/#awards-section"
           },
           {
             "label": "Our Partners",

@@ -10,7 +10,7 @@ import type { MosaicPillar } from './pillarLogoArt';
 const SETTLE = [0.22, 1, 0.36, 1] as const;
 const LIFT = [0.4, 0, 0.9, 0.6] as const;
 
-export const PillarHeroVisual: React.FC<{ pillar: MosaicPillar; active: boolean }> = ({ pillar, active }) => {
+export const PillarHeroVisual: React.FC<{ pillar: MosaicPillar; active: boolean; caption?: boolean }> = ({ pillar, active, caption = true }) => {
   const calm = useReducedMotion();
   return (
     <div className="hero-heal-art" data-ready={active}>
@@ -25,7 +25,7 @@ export const PillarHeroVisual: React.FC<{ pillar: MosaicPillar; active: boolean 
             exit={calm ? { opacity: 0, transition: { duration: 0.2 } } : { opacity: 0, y: -18, scale: 1.05, rotate: 1.5, transition: { duration: 0.55, ease: LIFT } }}
             transition={{ duration: calm ? 0.2 : 1.05, ease: SETTLE }}
           >
-            <PillarPhotoMosaic pillar={pillar} heroArt />
+            <PillarPhotoMosaic pillar={pillar} heroArt caption={caption} />
           </motion.div>
         </AnimatePresence>
       </div>

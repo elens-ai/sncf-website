@@ -18,6 +18,7 @@ import './who-we-are.css';
 import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion';
 import './who-editorial.css';
 import { ServiceStory } from '../components/ServiceStory';
+import { UnSeal } from '../components/UnAffiliation';
 
 /**
  * WHO WE ARE — the foundation's own account of itself.
@@ -162,6 +163,8 @@ export const WhoWeArePage: React.FC = () => {
             </li>
           ))}
         </ul>
+        {/* the standing above, and what it means */}
+        <UnSeal variant="panel" className="ww-un" />
 
         {/* WHAT THE THREE CORNERSTONES COME TO. The paragraph above names
             them; this counts them, in the same marks Core Values uses and at

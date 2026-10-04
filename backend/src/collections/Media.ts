@@ -36,7 +36,7 @@ export const Media: CollectionConfig = {
   },
   upload: {
     staticDir: 'media',
-    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'video/mp4', 'video/webm', 'audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/wav', 'model/gltf-binary', 'model/gltf+json', 'application/octet-stream'],
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif', 'application/pdf', 'video/mp4', 'video/webm', 'audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/wav', 'model/gltf-binary', 'model/gltf+json', 'application/octet-stream'],
     imageSizes: [
       { name: 'thumb', width: 400, height: 300, position: 'centre' },
       { name: 'card', width: 900 },

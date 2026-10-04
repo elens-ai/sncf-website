@@ -3,7 +3,7 @@ import { BookOpen, Heart, Sprout } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PILLARS } from '../data/pillars';
-import { PillarModelCard } from './PillarModelCard';
+import { PillarHeroVisual } from './PillarHeroVisual';
 import { createFrameClock } from '../utils/frameClock';
 import './value-compass.css';
 
@@ -27,6 +27,10 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
   const change = useRef(onChange);
   change.current = onChange;
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  /* The emblem enters the first time the compass is in view, then stays, even
+     while a dialog covers the page. */
+  const [shown, setShown] = useState(active);
+  useEffect(() => { if (active) setShown(true); }, [active]);
 
   useEffect(() => {
     const query = matchMedia('(prefers-reduced-motion: reduce)');
@@ -100,8 +104,9 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
         <span className="service-compass-etch service-compass-etch-three" />
       </div>
       <div className="service-compass-sculpture" aria-hidden="true">
-        <div className="service-compass-model" key={choice}>
-          <PillarModelCard id={choice} label={PILLARS.find(p => p.id === choice)!.label} active={active} animate={active && !reduced} />
+        {/* the home page hero's photographic emblem, dissolving from one value to the next as it does there */}
+        <div className="service-compass-model">
+          <PillarHeroVisual pillar={choice} active={shown} caption={false} />
         </div>
         <div className="service-compass-shadow" />
         <div className="service-compass-signature">{getCMSCopy('copy.CoreValuesPage.d677190e0a99', 'Service')}<br /><em>{getCMSCopy('copy.CoreValuesPage.bb8643e88aae', 'with humility')}</em></div>

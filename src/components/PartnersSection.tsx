@@ -8,6 +8,8 @@ import { BRAND } from '../data/partnerBrand';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { onArrival } from '../utils/arrival';
+import { UnSeal } from './UnAffiliation';
+import { PartnerCircle } from './PartnerCircle';
 import './recognition-partners.css';
 
 interface PartnersSectionProps { onOpenDonate?: () => void; escapeSuspended?: boolean; }
@@ -116,6 +118,8 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({ onOpenDonate, 
     <div className="collaboration-layout">
       <div className="collaboration-editorial">
         <p className="collaboration-intro">{getCMSCopy('copy.PartnersSection.intro', 'Working alongside organisations that share our commitment to people, communities and the planet.')}</p>
+        {/* the foundation's UN standing, first among its partnerships */}
+        <UnSeal variant="panel" className="collaboration-un" />
         {selected && <div ref={detailRef} className="collaboration-story">
           <div className="collaboration-story-heading"><PartnerMark id={selected.id} name={selected.name} /><span>A shared commitment</span></div>
           <div key={selected.id} className="collaboration-story-copy">
@@ -128,11 +132,8 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({ onOpenDonate, 
       </div>
       <div className="collaboration-directory">
         <p className="collaboration-directory-label">Walking with us<span>Select a logo to explore</span></p>
-        <div className="collaboration-grid" role="group" aria-label="Choose a partner">
-          {PARTNERS.map((partner, i) => <button key={partner.id} type="button" aria-label={`${partner.name} — read this collaboration`} aria-pressed={selected?.id === partner.id} onClick={() => choose(partner.id)} style={{ '--partner-order': i } as React.CSSProperties}>
-            <PartnerMark id={partner.id} name={partner.name} /><span className="collaboration-name">{BRAND[partner.id]?.short ?? partner.name}</span><ArrowUpRight size={12} className="collaboration-tile-arrow" aria-hidden="true" />
-          </button>)}
-        </div>
+        {/* the partners around the foundation, by the field they worked in; its empty seat is the invitation */}
+        <PartnerCircle partners={PARTNERS} selected={selected?.id} onChoose={choose} onJoin={revealDesk} />
         <p className="collaboration-directory-note"><span aria-hidden="true" />Many organisations. A common spirit of service.</p>
       </div>
     </div>

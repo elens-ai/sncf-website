@@ -51,10 +51,14 @@ const COMPONENT_AREAS: Record<string, [string, string]> = {
   PillarPhotoMosaic: [PAGE.home, 'Hero · Heal emblem photos'], PillarHeroBackdrop: [PAGE.home, 'Hero · Heal background'],
   ImpactMosaic: [PAGE.home, 'Our work'], MosaicOverture: [PAGE.home, 'Our work'], MosaicChapter: [PAGE.home, 'Our work'], MosaicTile: [PAGE.home, 'Our work'],
   PillarModal: [PAGE.home, 'Pillar details pop-up'],
-  EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
-  AwardsSection: [PAGE.home, 'Awards'], AwardLightbox: [PAGE.home, 'Awards'], PartnersSection: [PAGE.home, 'Partners'],
-  CoreValuesPage: [PAGE.core, 'Page'], ValueAnalytics: [PAGE.core, 'Charts'], EnrichScrapbook: [PAGE.core, 'Enrich scrapbook'],
-  ProjectsPage: [PAGE.projects, 'Page'], ProjectAnalytics: [PAGE.projects, 'Charts'],
+  EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventShare: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
+  AwardsSection: [PAGE.home, 'Awards'], AwardsTree: [PAGE.home, 'Awards'], AwardLightbox: [PAGE.home, 'Awards'], PartnersSection: [PAGE.home, 'Partners'], PartnerCircle: [PAGE.home, 'Partners'],
+  CoreValuesPage: [PAGE.core, 'Page'], ProgrammeDossier: [PAGE.core, 'Page'], ValueAnalytics: [PAGE.core, 'Charts'], Insights: [PAGE.core, 'Charts'], EnrichScrapbook: [PAGE.core, 'Enrich scrapbook'],
+  ExploreTabs: [PAGE.core, 'Reports · Gallery · Stats tabs'], ReportActions: [PAGE.core, 'Reports'], Reports: [PAGE.core, 'Reports · published PDFs'],
+  EmblemShowcase: [PAGE.core, 'Animated emblems'],
+  UnAffiliation: [PAGE.everywhere, 'UN standing & SDGs'], UnSeal: [PAGE.everywhere, 'UN standing & SDGs'],
+  Sayings: [PAGE.everywhere, 'Sayings & slogans'], PillarGallery: [PAGE.core, 'Galleries'], PhotoCarousel: [PAGE.core, 'Galleries'], NavPanels: [PAGE.everywhere, 'Menu'],
+  ProjectsPage: [PAGE.projects, 'Page'], ProjectOrbit: [PAGE.projects, 'Page'], ProjectAnalytics: [PAGE.projects, 'Charts'],
   WhoWeArePage: [PAGE.who, 'Page'], MissionVision: [PAGE.who, 'Mission & vision'], ServiceStory: [PAGE.who, 'Service story'], EditorialContent: [PAGE.who, 'Timeline & partners'],
   GuidingForcePage: [PAGE.guiding, 'Page'],
   ContributionPage: [PAGE.contribute, 'Contribute page'], DonationExperience: [PAGE.contribute, 'Donation form'], DonateModal: [PAGE.contribute, 'Donate pop-up'],
@@ -93,7 +97,8 @@ const slots = {
   })),
   assets: Object.fromEntries(Object.entries(assets as Record<string, { source: string }>).map(([key, entry]) => {
     const where = area(key);
-    return [key, { page: where.page, section: where.section, label: `${where.section} · ${entry.source.split('/').pop()}` }];
+    /* a slot that starts empty (a file the foundation will upload) is named by its key */
+    return [key, { page: where.page, section: where.section, label: `${where.section} · ${entry.source.split('/').pop() || key.split('.').pop()}` }];
   })),
 };
 

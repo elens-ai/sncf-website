@@ -10,6 +10,8 @@ import {
   Download,
   Infinity as InfinityIcon,
 } from 'lucide-react';
+import { UnDayMark, isUnObservance } from './UnAffiliation';
+import { EventShare } from './EventShare';
 import {
   ResolvedEvent,
   MONTHS_SHORT,
@@ -391,7 +393,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                 </svg>
 
                 <div className="relative z-10 flex flex-col h-full">
-                  <span
+                  {isUnObservance(selected.event.tag) ? <span className="self-start mb-3"><UnDayMark compact /></span> : <span
                     className="self-start text-[9px] font-extrabold uppercase tracking-[0.16em] px-2 py-0.5 rounded-full border mb-3"
                     style={{
                       color: selected.accentB,
@@ -400,7 +402,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                     }}
                   >
                     {selected.event.tag}
-                  </span>
+                  </span>}
 
                   <h3 className="font-artistic-heading text-white font-bold text-[22px] leading-tight mb-1">
                     {selected.event.title}
@@ -450,6 +452,8 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                       </a>
                     )}
                   </div>
+                  {/* send the moment on, beside its date */}
+                  <EventShare item={selected} when={selected.date.toLocaleDateString('en-GB', { dateStyle: 'full' })} calendar={false} className="mt-4 pt-4 border-t border-white/10" />
                 </div>
               </div>
             ) : (

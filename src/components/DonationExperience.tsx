@@ -10,6 +10,7 @@ import { ACTIVITIES } from '../data/activities';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import './donation.css';
 import { ContributionDialog } from './ContributionDialog';
+import { Saying } from './Saying';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.DonationExperience.${key}`, fallback);
 const CAUSES = ['all', 'heal', 'enrich', 'empower'] as const;
@@ -68,6 +69,8 @@ export function DonationExperience({ page = false, onClose }: { page?: boolean; 
       <p className="donation-eyebrow"><span />{c('eyebrow', 'Generosity, made personal')}</p>
       <Heading>{c('headline', 'A little care.')}<br /><em>{c('headlineScript', 'A lasting difference.')}</em></Heading>
       <p className="donation-intro">{c('intro', 'There is more than one way to give. Help care reach a doorstep, open a classroom, or bring a community together.')}</p>
+      {/* on the page, the line the foundation was founded to act on */}
+      {page && <Saying id="contribute" className="donation-saying" />}
       <div className="donation-bloom" aria-hidden="true">
         <div className="donation-bloom-orbit" /><span className="donation-petal donation-petal-heal" data-selected={cause === 'heal' || cause === 'all'} /><span className="donation-petal donation-petal-enrich" data-selected={cause === 'enrich' || cause === 'all'} /><span className="donation-petal donation-petal-empower" data-selected={cause === 'empower' || cause === 'all'} />
         <div className="donation-bloom-heart"><HeartHandshake size={36} strokeWidth={1.2} /></div>

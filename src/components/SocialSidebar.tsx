@@ -21,14 +21,17 @@ const XIcon: React.FC<{ className?: string }> = ({ className = 'w-3.5 h-3.5' }) 
 /* How each platform is drawn; which platforms show, and where they link, is
    Site settings → Social links in the CMS. */
 const PLATFORM: Record<SocialLink['platform'], { name: string; ariaLabel: string; icon: React.ReactNode; colorHover: string }> = {
-  instagram: { name: 'Instagram', ariaLabel: 'Follow Sant Nirankari Mission on Instagram', icon: <Instagram className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-pink-400 hover:border-pink-400/60 hover:shadow-[0_0_15px_rgba(244,114,182,0.35)]' },
-  youtube: { name: 'YouTube', ariaLabel: 'Watch Sant Nirankari Mission on YouTube', icon: <Youtube className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-red-400 hover:border-red-400/60 hover:shadow-[0_0_15px_rgba(248,113,113,0.35)]' },
+  instagram: { name: 'Instagram', ariaLabel: 'Follow Sant Nirankari Charitable Foundation on Instagram', icon: <Instagram className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-pink-400 hover:border-pink-400/60 hover:shadow-[0_0_15px_rgba(244,114,182,0.35)]' },
+  youtube: { name: 'YouTube', ariaLabel: 'Watch Sant Nirankari Charitable Foundation on YouTube', icon: <Youtube className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-red-400 hover:border-red-400/60 hover:shadow-[0_0_15px_rgba(248,113,113,0.35)]' },
   spotify: { name: 'Spotify', ariaLabel: 'Listen to Nirankari Spiritual Discourses & Bhajans on Spotify', icon: <SpotifyIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-[0_0_15px_rgba(52,211,153,0.35)]' },
-  facebook: { name: 'Facebook', ariaLabel: 'Connect with Sant Nirankari Mission on Facebook', icon: <Facebook className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-blue-400 hover:border-blue-400/60 hover:shadow-[0_0_15px_rgba(96,165,250,0.35)]' },
-  x: { name: 'X (Twitter)', ariaLabel: 'Follow Sant Nirankari Mission on X', icon: <XIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />, colorHover: 'hover:text-white hover:border-white/80 hover:shadow-[0_0_15px_rgba(255,255,255,0.35)]' },
+  facebook: { name: 'Facebook', ariaLabel: 'Connect with Sant Nirankari Charitable Foundation on Facebook', icon: <Facebook className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-blue-400 hover:border-blue-400/60 hover:shadow-[0_0_15px_rgba(96,165,250,0.35)]' },
+  x: { name: 'X (Twitter)', ariaLabel: 'Follow @santnirankari on X', icon: <XIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />, colorHover: 'hover:text-white hover:border-white/80 hover:shadow-[0_0_15px_rgba(255,255,255,0.35)]' },
   linkedin: { name: 'LinkedIn', ariaLabel: 'Follow Sant Nirankari Charitable Foundation on LinkedIn', icon: <Linkedin className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-sky-400 hover:border-sky-400/60 hover:shadow-[0_0_15px_rgba(56,189,248,0.35)]' },
   whatsapp: { name: 'WhatsApp', ariaLabel: 'Message Sant Nirankari Charitable Foundation on WhatsApp', icon: <MessageCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5" />, colorHover: 'hover:text-green-400 hover:border-green-400/60 hover:shadow-[0_0_15px_rgba(74,222,128,0.35)]' },
 };
+
+/** How each platform is drawn, for anywhere else the social links appear (the footer). */
+export const SOCIAL_ART = PLATFORM;
 
 export const SocialSidebar: React.FC = () => {
   useCMSRevision();

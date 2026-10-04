@@ -12,7 +12,8 @@
     "test": "node --import tsx --test src/utils/*.test.ts src/data/*.test.ts src/cms/*.test.ts",
     "cms:seed": "node --import tsx scripts/generate-cms-seed.ts",
     "cms:registry": "node --import tsx scripts/cms-registry.ts",
-    "font:headings": "node --import tsx scripts/build-heading-font.ts"
+    "font:headings": "node --import tsx scripts/build-heading-font.ts",
+    "images:wall": "node --import tsx scripts/build-mosaic-wall.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

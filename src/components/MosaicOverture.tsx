@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import { PETAL_ART, PALM_ART } from './petalArt';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
+import { ACTIVITIES } from '../data/activities';
+import { PILLARS } from '../data/pillars';
+import { MOSAIC_WALL } from './mosaicWallTiles';
 import './mosaic-overture.css';
 
 // Keep every piece in the foundation artwork's original proportions.
@@ -22,11 +25,40 @@ const paths = (): { id: MosaicPillar; detail: string }[] => [
   { id: 'projects', detail: getCMSCopy('copy.MosaicOverture.projects', 'Lasting change') },
 ];
 
+/* THE WALL: the foundation's own photographs, dense behind the overture in
+   the section's green and drifting slowly in columns, the even ones against
+   the odd; pointing at a path lights that pillar's photographs in its colour.
+   Each column holds its tiles twice so its drift loops without a seam. The
+   tiles come from one sprite (scripts/build-mosaic-wall.ts). */
+const WALL_COLUMNS = 10;
+const WALL_DEPTH = 12;
+const wallColumns = Array.from({ length: WALL_COLUMNS }, (_, c) =>
+  Array.from({ length: WALL_DEPTH }, (_, k) => (c * 5 + k * 7) % MOSAIC_WALL.tiles.length));
+const tileAt = (t: number) => `${(t % MOSAIC_WALL.cols) / (MOSAIC_WALL.cols - 1) * 100}% ${Math.floor(t / MOSAIC_WALL.cols) / Math.max(1, MOSAIC_WALL.rows - 1) * 100}%`;
+
+function MosaicWall({ lit }: { lit: MosaicPillar | null }) {
+  return (
+    <div className="mosaic-wall" data-lit={lit ?? undefined} aria-hidden="true"
+      style={{ '--wall-sprite': `url(${resolveCMSMedia(MOSAIC_WALL.src)})`, '--sprite-cols': MOSAIC_WALL.cols, '--sprite-rows': MOSAIC_WALL.rows } as React.CSSProperties}>
+      {wallColumns.map((column, c) => (
+        <div key={c} className="mosaic-wall-col" style={{ '--wall-time': `${84 + (c % 4) * 17}s`, '--wall-delay': `${-c * 13}s` } as React.CSSProperties}>
+          {[...column, ...column].map((t, k) => {
+            const pillar = MOSAIC_WALL.tiles[t];
+            return <i key={k} data-pillar={pillar} style={{ backgroundPosition: tileAt(t), '--tile-light': PILLARS.find(item => item.id === pillar)?.accentB } as React.CSSProperties} />;
+          })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) => void }) {
+  const [lit, setLit] = useState<MosaicPillar | null>(null);
   const title = getCMSCopy('copy.ImpactMosaic.eee670c33892', 'Four paths. One purpose.');
   const lines = title.match(/^(.+?[.!?])\s+(.+)$/);
   return (
     <header className="mosaic-overture" data-state="active">
+      <MosaicWall lit={lit} />
       <div className="mosaic-overture-composition">
         <div className="mosaic-emblem" aria-hidden="true">
           <svg className="mosaic-emblem-orbits" viewBox="0 0 560 480" fill="none">
@@ -61,8 +93,10 @@ export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) 
       <nav className="mosaic-paths" aria-label="Explore our four pillars">
         {paths().map(({ id, detail }, index) => (
           <button type="button" key={id} className="mosaic-path" onClick={() => onChoose(id)} aria-label={`View ${PILLAR_LOGOS[id].label} programmes`}
+            onPointerEnter={() => setLit(id)} onPointerLeave={() => setLit(null)} onFocus={() => setLit(id)} onBlur={() => setLit(null)}
             style={{ '--path-ink': PILLAR_LOGOS[id].tint, '--path-order': index } as React.CSSProperties}>
             <span className="mosaic-path-number" aria-hidden="true">0{index + 1}</span>
+            <span className="mosaic-path-reach" aria-hidden="true">{ACTIVITIES.filter(activity => activity.pillarId === id).length} {id === 'projects' ? getCMSCopy('copy.MosaicOverture.count-projects', 'projects') : getCMSCopy('copy.MosaicOverture.count-programmes', 'programmes')}</span>
             <svg viewBox="0 0 146 120" className="mosaic-path-icon" aria-hidden="true">{PILLAR_LOGOS[id].paths.map(d => <path key={d} d={d} />)}</svg>
             <span className="mosaic-path-copy"><strong>{PILLAR_LOGOS[id].label}</strong><span>{detail}</span></span>
             <ArrowUpRight className="mosaic-path-arrow" size={18} aria-hidden="true" />

@@ -190,3 +190,10 @@
   .activity-node-button, .activity-node-arrow, .activity-chapter-explore, .activity-chapter-explore svg, .activity-node-symbol { transition: none; }
   .activity-node-button:hover, .activity-node-button:focus-visible { transform: none; }
 }
+
+/* beside "Explore", the way straight into a cornerstone's report, gallery or stats on Core Values */
+.activity-chapter-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; }
+.activity-chapter-quick { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.activity-chapter-quick a { padding: 7px 13px; border-radius: 999px; border: 1px solid #ffffff3d; color: #ffffffd6; text-decoration: none; font: 500 11.5px/1 var(--font-sans); letter-spacing: .02em; transition: background-color .25s, border-color .25s, color .25s; }
+.activity-chapter-quick a:hover { color: #fff; border-color: var(--chapter-edge); background: #ffffff14; }
+.activity-chapter-quick a:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
