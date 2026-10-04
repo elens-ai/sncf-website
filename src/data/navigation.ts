@@ -103,7 +103,7 @@ export const DEFAULT_NAV_ITEMS: NavItem[] = [
       { label: 'The road so far', href: '/who-we-are#road' },
       { label: 'Our Partners', href: '/who-we-are#partners' },
       { label: 'Contact', href: '/who-we-are#contact' },
-      { label: 'Honors & Recognitions', href: '/#awards' },
+      { label: 'Honors & Recognitions', href: '/#awards-section' },
     ],
   },
   { label: 'Our Guiding Force', href: '/our-guiding-force' },

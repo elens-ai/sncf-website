@@ -24,7 +24,7 @@ const Rolling: React.FC<{ value: string; duration?: number }> = ({ value, durati
     (each insight worked out from the reported figures, and saying so), and
     every figure it reports, each with its symbol. Choosing another
     programme rolls the figures in again. */
-export const ProgrammeDossier: React.FC<{ id: string; activity: Activity; onNext: () => void }> = ({ id, activity, onNext }) => {
+export const ProgrammeDossier: React.FC<{ id: string; activity: Activity; kicker?: string; onNext?: () => void }> = ({ id, activity, kicker, onNext }) => {
   const photos = activity.images ?? [];
   const [shot, setShot] = useState(0);
   useEffect(() => setShot(0), [activity.id]);
@@ -40,7 +40,7 @@ export const ProgrammeDossier: React.FC<{ id: string; activity: Activity; onNext
           : <span className="dossier-symbol" aria-hidden="true">{Symbol && <Symbol size={72} strokeWidth={1.1} />}</span>}
         <span className="dossier-shade" aria-hidden="true" />
         <div className="dossier-media-top">
-          <span>{getCMSCopy("copy.CoreValuesPage.ad3a80a2651a", "Programme in focus")}</span>
+          <span>{kicker ?? getCMSCopy("copy.CoreValuesPage.ad3a80a2651a", "Programme in focus")}</span>
           <span><CalendarDays size={13} aria-hidden="true" />{activity.period}</span>
         </div>
         <div className="dossier-media-foot">
@@ -83,7 +83,7 @@ export const ProgrammeDossier: React.FC<{ id: string; activity: Activity; onNext
         </dl>
         <SdgTags goals={PROGRAMME_SDGS[activity.id] ?? []} label={getCMSCopy("copy.CoreValuesPage.programme-sdgs", "UN goals it advances")} className="value-detail-sdgs" />
         <p className="value-source">{getCMSCopy("copy.CoreValuesPage.91c1f9479c9a", "Source: foundation activity report · Figures shown as reported.")}{insights.length > 0 && ` ${c('insights-source', 'The insights are worked out from those figures; nothing is estimated.')}`}</p>
-        <button className="value-next-programme" onClick={onNext}>{getCMSCopy("copy.CoreValuesPage.cd9fb71ad9c3", "Discover the next programme ")}<ArrowUpRight size={16} /></button>
+        {onNext && <button className="value-next-programme" onClick={onNext}>{getCMSCopy("copy.CoreValuesPage.cd9fb71ad9c3", "Discover the next programme ")}<ArrowUpRight size={16} /></button>}
       </div>
     </article>
   );

@@ -3,7 +3,8 @@
    photographs large on one side, its name on them; its figures on the
    other, rolling in, read together in the cornerstone's colour.
    ========================================================================== */
-.value-detail.value-dossier { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); padding: 0; overflow: hidden; }
+/* the card itself, here so the dossier is the same on any page */
+.value-detail.value-dossier { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); padding: 0; overflow: hidden; border: 1px solid color-mix(in srgb, var(--value-color) 20%, #e1e7e3); border-radius: 20px; background: linear-gradient(125deg, #fff 25%, color-mix(in srgb, var(--value-light) 18%, #fff)); box-shadow: 0 12px 40px #27473407; }
 .dossier-media { position: relative; min-height: 520px; overflow: hidden; isolation: isolate; background: color-mix(in srgb, var(--value-light) 28%, #eaf1ec); }
 .dossier-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: dossier-photo-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .dossier-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(8 24 20 / 0.5) 0%, transparent 26%, transparent 44%, rgb(8 24 20 / 0.86) 100%); pointer-events: none; }
@@ -13,7 +14,7 @@
 .dossier-media-top { position: absolute; top: 16px; left: 18px; right: 18px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
 .dossier-media-top > span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: rgb(255 255 255 / 0.16); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25); color: #fff; font: 700 9.5px/1.2 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; }
 .dossier-media-foot { position: absolute; left: 22px; right: 22px; bottom: 20px; color: #fff; }
-.value-dossier .dossier-media-foot h4 { margin: 0; font: 800 clamp(21px, 2.1vw, 28px)/1.15 var(--font-heading); text-shadow: 0 2px 14px rgb(0 0 0 / 0.35); animation: values-reveal 0.45s both; }
+.value-dossier .dossier-media-foot h4 { margin: 0; font: 800 clamp(21px, 2.1vw, 28px)/1.15 var(--font-heading); text-shadow: 0 2px 14px rgb(0 0 0 / 0.35); animation: dossier-reveal 0.45s both; }
 .dossier-caption { margin: 8px 0 0; max-width: 42ch; font: 400 12px/1.5 var(--font-sans); color: rgb(255 255 255 / 0.85); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .dossier-strip { display: flex; gap: 6px; margin-top: 14px; }
 .dossier-strip button { width: 52px; height: 38px; padding: 0; overflow: hidden; border: 0; border-radius: 8px; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.4); opacity: 0.7; cursor: pointer; transition: opacity 0.25s, box-shadow 0.25s, translate 0.25s; }
@@ -30,7 +31,7 @@
 /* the odometer was drawn for the dark hero, in white: here it takes the ink around it */
 .dossier-roll * { color: inherit; font-family: inherit; }
 
-.dossier-insights { margin: 0 0 14px; padding: 12px 14px 14px; border-radius: 16px; background: linear-gradient(135deg, color-mix(in srgb, var(--value-light) 22%, #fff), #fff); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--value-color) 18%, transparent); animation: values-reveal 0.5s 0.15s both; }
+.dossier-insights { margin: 0 0 14px; padding: 12px 14px 14px; border-radius: 16px; background: linear-gradient(135deg, color-mix(in srgb, var(--value-light) 22%, #fff), #fff); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--value-color) 18%, transparent); animation: dossier-reveal 0.5s 0.15s both; }
 .dossier-insights-note { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; font: 700 9.5px/1.2 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--value-color) 82%, #0d2421); }
 .dossier-insights ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
 .dossier-insights li { display: grid; grid-template-columns: 30px auto minmax(0, 1fr); align-items: center; gap: 10px; }
@@ -46,9 +47,10 @@
 .dossier-figures dd { margin: 0; font: 600 19px/1.2 var(--font-sans); color: #22392f; overflow-wrap: anywhere; }
 .value-dossier .value-detail-sdgs { margin-top: 16px; }
 .value-dossier .value-source { margin-top: 14px; font-size: 10px; color: #6b7d76; }
-.value-dossier .value-next-programme { align-self: flex-start; margin-top: 14px; }
+.value-dossier .value-next-programme { display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; margin-top: 14px; padding: 0; border: 0; background: none; color: var(--value-color); font: 500 12px/1.4 var(--font-sans); cursor: pointer; }
 
 @keyframes dossier-photo-in { from { opacity: 0; scale: 1.04; } }
+@keyframes dossier-reveal { from { opacity: 0; translate: 0 8px; } }
 @keyframes dossier-tile-in { from { opacity: 0; translate: 0 8px; } }
 
 /* the programmes: a photograph and a headline figure each */

@@ -59,7 +59,7 @@ const COMPONENT_AREAS: Record<string, [string, string]> = {
   UnAffiliation: [PAGE.everywhere, 'UN standing & SDGs'], UnSeal: [PAGE.everywhere, 'UN standing & SDGs'],
   Sayings: [PAGE.everywhere, 'Sayings & slogans'], PillarGallery: [PAGE.core, 'Galleries'], PhotoCarousel: [PAGE.core, 'Galleries'], NavPanels: [PAGE.everywhere, 'Menu'],
   ProjectsPage: [PAGE.projects, 'Page'], ProjectOrbit: [PAGE.projects, 'Page'], ProjectAnalytics: [PAGE.projects, 'Charts'],
-  WhoWeArePage: [PAGE.who, 'Page'], MissionVision: [PAGE.who, 'Mission & vision'], ServiceStory: [PAGE.who, 'Service story'], EditorialContent: [PAGE.who, 'Timeline & partners'],
+  WhoWeArePage: [PAGE.who, 'Page'], MissionVision: [PAGE.who, 'Mission & vision'], ServiceStory: [PAGE.who, 'Service story'], EditorialContent: [PAGE.who, 'Timeline & partners'], WorkingHands: [PAGE.who, 'Cover · working hands'], GrowthRings: [PAGE.who, 'The road so far'],
   GuidingForcePage: [PAGE.guiding, 'Page'],
   ContributionPage: [PAGE.contribute, 'Contribute page'], DonationExperience: [PAGE.contribute, 'Donation form'], DonateModal: [PAGE.contribute, 'Donate pop-up'],
   Header: [PAGE.everywhere, 'Header'], MainNav: [PAGE.everywhere, 'Menu'], SiteFooter: [PAGE.everywhere, 'Footer'], SocialSidebar: [PAGE.everywhere, 'Social links'],

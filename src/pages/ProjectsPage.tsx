@@ -10,6 +10,7 @@ import { SubsectionNav } from '../components/SubsectionNav';
 import { PillarModelCard } from '../components/PillarModelCard';
 import { ProjectAnalytics } from '../components/ProjectAnalytics';
 import { ProjectOrbit } from '../components/ProjectOrbit';
+import { ProgrammeDossier } from '../components/ProgrammeDossier';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { HealthCityFeature } from '../components/HealthCityFeature';
 import { ExploreTabs, type ExploreTab } from '../components/ExploreTabs';
@@ -136,9 +137,7 @@ const ProjectEmblem = ({ id, label }: { id: string; label: string }) => {
     advances, then its Reports, Gallery and Stats as tabs. */
 const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ project, index }) => {
   const face = FACES[index % FACES.length], Icon = face.icon;
-  const [metric, setMetric] = useState(project.dataPoints.findIndex(d => d.label === project.headline.label));
   const [tab, setTab] = useState<ExploreTab>('reports');
-  const selected = project.dataPoints[metric] ?? project.headline;
   const id = slug(project.title);
   const modelId = project.id === 'oneness-vann' ? 'oneness' : index === 0 ? 'amrit' : null;
   /* A project without photographs of its own blooms with the foundation's
@@ -173,10 +172,8 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
         reports: () => (
           <div className="project-reports">
             <ReportActions id={project.id} title={project.title} ink={face.ink} programmes={[project]} />
-            <div className="project-selected-metric" key={selected.label} aria-live="polite" aria-atomic="true"><strong>{selected.value}</strong><span>{selected.label}</span></div>
-            <p className="project-metric-hint">{getCMSCopy("copy.ProjectsPage.3bf1f1dbe9e6", "Choose a measure to bring it into focus")}</p>
-            <div className="project-metric-options" role="group" aria-label={`${project.title} reported measures`}>{project.dataPoints.map((point, i) => <button key={point.label} onClick={() => setMetric(i)} aria-pressed={i === metric}><span>{point.label}</span><strong>{point.value}</strong></button>)}</div>
-            <p className="project-source">{getCMSCopy("copy.ProjectsPage.7f9ff188f627", "Foundation activity report · Figures shown as reported.")}</p>
+            {/* the project as a dossier: its photographs, every figure it reports, and what they say read together */}
+            <ProgrammeDossier id={`${id}-detail`} activity={project} kicker={getCMSCopy("copy.ProjectsPage.dossier-kicker", "Project in focus")} />
           </div>
         ),
         gallery: () => (

@@ -30,6 +30,10 @@ const sectors = (): { id: SectorId; name: string; color: string }[] => [
   { id: 'media', name: c('sector-media', 'Media'), color: '#b357ad' },
   { id: 'together', name: c('sector-together', 'Walking with us'), color: '#8dd4df' },
 ];
+/** The fields of work, in their inks, and the one a partner is placed in — shared with the
+    Who We Are register, so the circle and the register always group alike. */
+export const partnerSectors = sectors;
+export const sectorOf = (id: string): SectorId => SECTOR_OF[id] ?? 'together';
 
 /* The circle is drawn in a 640 × 640 box: the foundation at its centre, its
    partners on a ring, each field of work an arc of colour beyond them. */

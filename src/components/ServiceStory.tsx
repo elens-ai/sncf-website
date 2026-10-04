@@ -3,7 +3,10 @@ import { Ear, Users, HeartHandshake, ArrowUpRight } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import './service-story.css';
 const c = (key:string, fallback:string) => getCMSCopy(`copy.ServiceStory.${key}`,fallback);
-export function ServiceStory() {
+/** Listen, come together, serve: the three moments of service, a step at a time. `headingLevel`
+    is the level of each moment's title, under whatever heading the story sits beneath. */
+export function ServiceStory({ headingLevel = 2 }: { headingLevel?: 2 | 3 | 4 }) {
+  const Title = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
   const [step,setStep] = useState(0);
   const moments = [
     { label:c('listen','Listen'), title:c('listenTitle','Start with a person.'), body:c('listenBody','A need is more than a number. Care begins with listening, understanding and seeing each other as one.'), icon:Ear, color:'#208765', tint:'#cde7d7' },
@@ -14,6 +17,6 @@ export function ServiceStory() {
   return <div className="service-story" style={{'--story-color':current.color,'--story-tint':current.tint} as React.CSSProperties}>
     <div className="service-story-sculpture" aria-hidden="true"><div className="service-story-light"/><div className="service-story-petals">{[0,1,2].map(i=><i key={i} data-selected={step===i} style={{'--leaf-angle':`${i*120}deg`} as React.CSSProperties}/>)}</div><div className="service-story-medallion" key={step}><Icon strokeWidth={1.1}/></div><span className="service-story-motto">{c('motto','Service with humility')}</span></div>
     <div className="service-story-steps" aria-label={c('choose','Explore how service takes shape')}>{moments.map((moment,i)=><button key={i} aria-pressed={step===i} onClick={()=>setStep(i)}><span>0{i+1}</span>{moment.label}</button>)}</div>
-    <div className="service-story-copy" key={`copy-${step}`} aria-live="polite"><h2>{current.title}</h2><p>{current.body}</p><button onClick={()=>setStep((step+1)%3)} aria-label={c('next','Explore the next moment')}><ArrowUpRight size={20}/></button></div>
+    <div className="service-story-copy" key={`copy-${step}`} aria-live="polite"><Title className="service-story-title">{current.title}</Title><p>{current.body}</p><button onClick={()=>setStep((step+1)%3)} aria-label={c('next','Explore the next moment')}><ArrowUpRight size={20}/></button></div>
   </div>;
 }

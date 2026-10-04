@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Clock, Droplet, Eye, Glasses, GraduationCap, HandCoins, HandHeart, Heart, HeartPulse, Hospital, IndianRupee, Laptop, Scissors, School, Stethoscope, TreePine, Trees, BedDouble } from 'lucide-react';
+import { Clock, Droplet, Eye, Glasses, GraduationCap, HandCoins, HandHeart, Heart, HeartPulse, Home, Hospital, IndianRupee, Landmark, Laptop, MapPin, Scissors, School, Sprout, Stethoscope, TreePine, Trees, BedDouble, Users, Waves } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import type { Activity } from './activities';
 
@@ -78,6 +78,24 @@ const RULES: Record<string, (a: Activity) => (Insight | null)[]> = {
   ],
   'mass-marriages': a => [
     per(n(a, 'Couples married'), n(a, 'Events held'), c('marriages-per-event', 'couples married per event'), Heart),
+  ],
+  /* the flagship projects */
+  'project-amrit': a => [
+    per(n(a, 'Volunteers participated'), n(a, 'Water bodies'), c('amrit-volunteers', 'volunteers per water body'), Waves),
+    per(n(a, 'Manhours'), n(a, 'Volunteers participated'), c('amrit-hours', 'hours given by each volunteer'), HandHeart),
+  ],
+  'oneness-vann': a => [
+    per(n(a, 'Plants'), n(a, 'Sites'), c('vann-per-site', 'plants per Oneness Vann site'), Trees),
+    per(n(a, 'Plants'), n(a, 'Acres'), c('vann-per-acre', 'plants to an acre of forest'), Sprout),
+  ],
+  watershed: a => [
+    per(n(a, 'People benefitted'), n(a, 'Hamlets'), c('watershed-per-hamlet', 'people benefitted per hamlet'), Users),
+    per(n(a, 'Hamlets'), n(a, 'Gram panchayats'), c('watershed-hamlets', 'hamlets in each gram panchayat'), Landmark),
+  ],
+  'adopted-villages': a => [
+    share(n(a, 'Direct beneficiaries'), n(a, 'Total village population'), c('villages-direct', 'of the villages’ people benefit directly'), Home),
+    per(n(a, 'Patients treated'), n(a, 'Health & eye camps'), c('villages-per-camp', 'patients treated per health & eye camp'), Stethoscope),
+    per(n(a, 'Saplings planted'), n(a, 'Villages'), c('villages-saplings', 'saplings planted in each village'), MapPin),
   ],
   'financial-support': a => [
     n(a, 'Financial help') && n(a, 'Disaster relief & fund') ? { value: rupees(n(a, 'Financial help') + n(a, 'Disaster relief & fund')), label: c('support-total', 'given in financial help and disaster relief together'), icon: HandCoins } : null,

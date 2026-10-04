@@ -21,7 +21,14 @@ test('a sum names how many kinds it adds up, and a programme without a rule has 
   const [network] = insightsFor(DEFAULT_ACTIVITIES.find(activity => activity.id === 'health-centre')!);
   assert.equal(network.value, '107');
   assert.match(network.label, /9 kinds/);
-  assert.deepEqual(values('watershed'), []);
+  assert.deepEqual(insightsFor({ ...DEFAULT_ACTIVITIES[0], id: 'no-such-programme' }), []);
+});
+
+test('the flagship projects read their own figures together', () => {
+  assert.deepEqual(values('project-amrit'), ['≈ 659', '6']);
+  assert.deepEqual(values('oneness-vann'), ['≈ 858', '≈ 1,337']);
+  assert.deepEqual(values('watershed'), ['≈ 208', '16']);
+  assert.deepEqual(values('adopted-villages'), ['84%', '180', '22,875']);
 });
 
 test('a share is never more than the whole it belongs to', () => {

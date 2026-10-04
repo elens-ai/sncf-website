@@ -1,7 +1,111 @@
 .who-cover{background:radial-gradient(ellipse at 85% 25%,#dceef8,transparent 65%),#f6f9fb;border-bottom:1px solid #dce8ef;padding-top:140px;gap:65px}.who-cover .who-eyebrow{color:#527d98}.who-cover h1{font:800 clamp(40px,4.8vw,72px)/1.06 var(--font-heading);letter-spacing:0;text-wrap:balance;margin:20px 0 26px}.who-cover-copy>p:not(.who-eyebrow){color:#526678;line-height:1.9}.who-cover-signature{color:#486f89}.who-cover-photo{border-radius:160px 160px 18px 18px;transform:none;box-shadow:0 20px 55px #294e6c15;background:#d9e9f0;border:12px solid #fff;overflow:visible}.who-cover-photo img{border-radius:148px 148px 10px 10px;object-fit:cover}.who-cover-photo figcaption{background:#284b60c9;max-width:80%;font-size:10px;line-height:1.5}.who-cover-note{animation:none;background:#fbfcff;border-color:#d2e3f0;color:#406985;bottom:45px}.who-cover .who-photo-orbit{display:none}
 .who-editorial{--ed-ink:#426b89;--ed-tint:#e6f0f7}.who-editorial .who-story{padding-top:55px}.reading-room .who-editorial .who-chapter-heading{background:none!important;border:0!important;box-shadow:none;padding:20px 0 30px;margin:0;position:relative;min-height:0}.who-editorial .who-chapter-heading>span{position:absolute;right:0;top:20px;color:#dae5ed;font-family:var(--font-heading);font-weight:800;font-size:70px}.who-editorial .who-chapter-heading h2{font:800 clamp(24px,2.6vw,34px)/1.15 var(--font-heading);letter-spacing:0;text-wrap:balance;max-width:80%}.who-editorial .who-chapter-heading p{color:#5a7185}.who-editorial .who-story .cv-margin-print{display:none}.who-editorial .who-story .cv-room{margin-bottom:70px}.who-editorial .who-story .ww-prose{grid-template-columns:1fr 1fr;gap:30px}.who-editorial .who-story .ww-prose p{font:400 15px/1.9 var(--font-sans);color:#566778}.who-editorial .who-story .ww-prose p:first-child{font:400 23px/1.6 var(--font-sans);color:#355872;grid-row:span 2}.who-editorial .who-story .ww-facts{gap:0;background:#edf4f8;border:1px solid #d8e5ec;border-radius:16px;overflow:hidden}.who-editorial .who-story .ww-facts li{border:0;border-right:1px solid #d8e5ec;background:none;padding:25px}.who-editorial .who-story .ww-facts li:last-child{border-right:0}.who-editorial .who-story .cv-tally-row{border-radius:20px}.who-editorial .who-story .cv-tally-head{justify-content:start}.who-editorial .who-story .cv-tally-name{min-height:3em}.who-editorial .who-story .cv-tally-key{min-height:2.8em}
 .purpose-pair{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin:75px 0}.purpose-panel{padding:35px;position:relative;border:1px solid #d9e5ee;background:linear-gradient(150deg,#fff,#eaf2f8);border-radius:26px;display:flex;flex-direction:column;overflow:hidden}.purpose-panel:nth-child(2){background:linear-gradient(150deg,#fff,#f3eaf1);border-color:#eadde6}.purpose-panel h2{font:800 15px var(--font-heading);letter-spacing:.02em;color:#527187;margin:15px 0}.purpose-panel h3{font:800 clamp(24px,2.5vw,33px)/1.15 var(--font-heading);letter-spacing:0;max-width:370px;color:#2b4052;margin-bottom:25px}.purpose-panel h3 em{font-family:var(--font-script);font-weight:400;color:#708aa2}.purpose-body{font:400 14px/1.95 var(--font-sans);color:#5b6876;margin-bottom:24px}.purpose-panel .ed-link{margin-top:auto;align-self:start}.purpose-art{height:135px;position:relative;display:grid;place-items:center;align-self:end;width:150px;color:#6e8faa;margin:0 0 10px}.purpose-art span{position:absolute;width:125px;height:125px;border:1px solid #a9c2d177;border-radius:50%}.purpose-art span:nth-child(2){width:95px;height:95px;transform:translateX(-20px)}.purpose-panel:nth-child(2) .purpose-art{color:#b5839d}.purpose-panel:hover .purpose-art svg{transform:translateY(-4px) rotate(-4deg)}.purpose-art svg{transition:transform .22s}
-.ed-timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:25px;padding:0;list-style:none}.ed-timeline::before{content:'';position:absolute;left:0;right:0;top:8px;height:1px;background:#a7c5d9;transform-origin:left}.ed-timeline[data-arrived=true]::before{animation:timeline-draw .7s ease-out}.ed-timeline li{position:relative;padding:42px 0 5px;display:flex;flex-direction:column;align-items:start}.ed-timeline-dot{position:absolute;top:0;width:17px;height:17px;background:#f7fafc;border:4px solid #779eb8;border-radius:50%}.ed-timeline h3{font:800 42px/1.1 var(--font-heading);color:#557b97;margin:18px 0}.ed-timeline li>p:not(.ed-eyebrow){font:400 14px/1.9 var(--font-sans);color:#62717e;margin-bottom:20px}.ed-timeline li .ed-eyebrow{font-size:9px;min-height:3em}.ed-timeline .ed-link{margin-top:auto;font-size:11px;gap:12px}.ed-timeline[data-arrived=true] li{animation:ed-arrive .65s both}.ed-timeline li:nth-child(2){animation-delay:70ms}.ed-timeline li:nth-child(3){animation-delay:140ms}.ed-timeline li:nth-child(4){animation-delay:210ms}@keyframes timeline-draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
 .who-editorial .who-story .ww-register{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.who-editorial .who-story .ww-register li{margin:0;padding:22px;display:flex;flex-direction:column;align-items:start;border:1px solid #dbe6ed;background:#fff;border-radius:17px;gap:12px;min-width:0}.who-editorial .who-story .ww-register-mark{height:65px;width:90px;background:#f6f9fb}.who-editorial .who-partner-story{width:100%}.who-editorial .who-partner-story summary{font-size:14px;min-height:62px}.who-editorial .who-partner-story summary strong{font-size:14px}.who-editorial .who-partner-story>div{font-size:12px;color:#596e7e}.who-editorial .who-story .ww-register li:has(details[open]){background:#edf5fa;border-color:#a8c9df}.who-editorial .who-story .who-partner-toolbar label{background:#fff;border-color:#cbdfe9}.who-editorial .mgal{margin-top:60px}.who-contact-editorial{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;padding:35px;border-radius:24px;background:linear-gradient(120deg,#e9f3f9,#f6f9fb);border:1px solid #d7e6ef}.who-contact-editorial h3{font:800 27px/1.2 var(--font-heading);margin:20px 0}.who-contact-editorial h3 em{font:400 37px var(--font-script);color:#557f98}.who-contact-editorial address{font:400 14px/1.9 var(--font-sans);color:#546c7f}.who-contact-editorial a{display:block;font-size:14px;color:#396887;margin:8px 0;text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere}.who-contact-editorial>div:nth-child(2) .ed-eyebrow:not(:first-child){margin-top:30px}.who-contact-tax{grid-column:1/-1;font:400 12px/1.9 var(--font-sans);border-top:1px solid #cadce7;padding-top:20px;color:#526a7d}.who-contact-tax strong{display:block;margin-bottom:7px}.who-editorial .who-closing{background:radial-gradient(ellipse,#e6f1f8,transparent 70%);color:#507791}
-@media(max-width:900px){.who-editorial .who-story .ww-register{grid-template-columns:1fr 1fr}.who-editorial .who-story .cv-tally-list{grid-template-columns:1fr}.ed-timeline{grid-template-columns:1fr 1fr}.ed-timeline::before{display:none}.ed-timeline li{border-top:1px solid #bcd1df}.ed-timeline-dot{top:-9px}}
-@media(max-width:650px){.who-cover{padding-top:115px;gap:40px}.who-cover-note{right:-10px}.who-cover-photo{height:320px}.who-editorial .who-story .ww-prose,.purpose-pair,.who-contact-editorial{grid-template-columns:1fr}.who-editorial .who-story .ww-facts{grid-template-columns:1fr}.who-editorial .who-story .ww-facts li{border-right:0;border-bottom:1px solid #d8e5ec}.who-editorial .who-story .ww-register{grid-template-columns:1fr}.purpose-panel{padding:25px}.purpose-art{height:100px;transform:scale(.8);transform-origin:right center}.who-contact-editorial{padding:24px;gap:25px}.ed-timeline{grid-template-columns:1fr;gap:0;border-left:1px solid #a7c5d9;margin-left:8px;padding-left:28px}.ed-timeline li{border:0;padding:0 0 35px}.ed-timeline-dot{left:-37px;top:4px}.ed-timeline li .ed-eyebrow{min-height:0}.ed-timeline h3{margin:8px 0}.ed-timeline li>p:not(.ed-eyebrow){margin-bottom:0}.ed-timeline .ed-link{margin-top:8px}.who-editorial .who-chapter-heading>span{font-size:55px}.who-editorial .who-story .ww-prose p:first-child{font-size:21px}}
+@media(max-width:900px){.who-editorial .who-story .ww-register{grid-template-columns:1fr 1fr}.who-editorial .who-story .cv-tally-list{grid-template-columns:1fr}}
+@media(max-width:650px){.who-cover{padding-top:115px;gap:40px}.who-cover-note{right:-10px}.who-cover-photo{height:320px}.who-editorial .who-story .ww-prose,.purpose-pair,.who-contact-editorial{grid-template-columns:1fr}.who-editorial .who-story .ww-facts{grid-template-columns:1fr}.who-editorial .who-story .ww-facts li{border-right:0;border-bottom:1px solid #d8e5ec}.who-editorial .who-story .ww-register{grid-template-columns:1fr}.purpose-panel{padding:25px}.purpose-art{height:100px;transform:scale(.8);transform-origin:right center}.who-contact-editorial{padding:24px;gap:25px}.who-editorial .who-chapter-heading>span{font-size:55px}.who-editorial .who-story .ww-prose p:first-child{font-size:21px}}
+
+/* ==========================================================================
+   WHO WE ARE, REDRAWN: the creed's phrases in their inks, the standing as a
+   strip of facts, the three moments of service as a band, the three values
+   as doors, the register grouped by field, and the office as a postcard.
+   ========================================================================== */
+.who-cover .who-cover-lede { margin: 0; max-width: 480px; font: 400 15.5px/1.9 var(--font-sans); color: #526678; }
+.who-cover .hands-reading { animation: who-reveal 0.85s 0.12s both; }
+
+/* the creed */
+.who-story .who-mark { padding: 0 0.08em; border-radius: 0.2em; color: color-mix(in srgb, var(--mark) 80%, #1d2a24); background: linear-gradient(transparent 58%, color-mix(in srgb, var(--mark) 20%, transparent) 58%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.who-editorial .who-story .ww-prose em { font: 400 1.45em/1 var(--font-script); color: #a75e48; }
+
+/* the standing, as a strip of facts */
+.who-editorial .who-story .who-facts { background: linear-gradient(120deg, #f2f7fb, #fff 62%); box-shadow: 0 16px 36px -30px #26506b; }
+.who-editorial .who-story .who-facts li { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-content: start; column-gap: 14px; padding: 24px 24px 22px; }
+.who-editorial .who-story .who-facts li::before { content: ''; position: absolute; top: 0; left: 24px; right: 24px; height: 3px; border-radius: 0 0 3px 3px; background: var(--fact); }
+.who-fact-icon { grid-row: 1 / span 3; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; color: #fff; background: var(--fact); box-shadow: 0 10px 18px -10px var(--fact); }
+.who-editorial .who-story .who-facts .ww-fact-k { font: 700 9.5px/1.4 var(--font-sans); letter-spacing: 0.16em; text-transform: uppercase; color: color-mix(in srgb, var(--fact) 72%, #22323d); }
+.who-editorial .who-story .who-facts .ww-fact-v { margin-top: 4px; font: 600 20px/1.3 var(--font-sans); color: #20374a; }
+.who-fact-more { margin-top: 5px; font: 500 11.5px/1.4 var(--font-sans); color: #5f778a; }
+
+/* how service takes shape: the three moments, beside their heading */
+.who-approach { display: grid; grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr); align-items: center; gap: clamp(20px, 4vw, 56px); margin: 46px 0 6px; padding: clamp(24px, 3.4vw, 42px); overflow: hidden; border-radius: 28px; background: radial-gradient(ellipse at 8% 10%, #e3f2ea, transparent 60%), linear-gradient(130deg, #f4f8f5, #fff 55%, #f8f1f5); box-shadow: inset 0 0 0 1px #e1ebe5; }
+.who-approach-head h3 { margin: 14px 0 0; font: 800 clamp(24px, 2.7vw, 36px)/1.14 var(--font-heading); letter-spacing: 0; text-wrap: balance; color: #24443a; }
+.who-approach-head h3 em { font: 400 1.3em/1 var(--font-script); color: #cd1760; }
+.who-approach .service-story { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); grid-template-areas: 'sculpture steps' 'sculpture copy'; align-items: center; column-gap: 26px; max-width: none; }
+.who-approach .service-story-sculpture { grid-area: sculpture; height: 300px; }
+.who-approach .service-story-steps { grid-area: steps; align-self: end; margin-top: 0; }
+.who-approach .service-story-copy { grid-area: copy; align-self: start; }
+
+/* the three values, each a door with its own photograph */
+.who-editorial .who-story .who-door { padding: 12px 12px 22px; overflow: hidden; transition: translate 0.35s, box-shadow 0.35s; }
+.who-editorial .who-story .who-door:hover { translate: 0 -4px; box-shadow: 0 22px 40px -30px var(--value-ink); }
+.who-door-photo { position: relative; display: block; height: 190px; margin-bottom: 18px; overflow: hidden; border-radius: 50% 50% 14px 14px / 46% 46% 14px 14px; background: color-mix(in srgb, var(--value-tint) 35%, #eef3f0); }
+.who-door-photo img { width: 100%; height: 100%; object-fit: cover; transition: scale 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.who-door:hover .who-door-photo img { scale: 1.06; }
+.who-door-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, color-mix(in srgb, var(--value-ink) 55%, transparent)); }
+.who-door-pillar { position: absolute; left: 50%; bottom: 12px; z-index: 1; translate: -50% 0; padding: 5px 13px; border-radius: 999px; background: rgb(255 255 255 / 0.9); color: var(--value-ink); font: 800 10px/1.2 var(--font-heading); letter-spacing: 0.18em; }
+.who-editorial .who-story .who-door :is(.cv-tally-head, .cv-tally-key, .who-value-link) { padding-inline: 12px; }
+
+/* the register, by field of work */
+.who-sectors { margin: 0 0 22px; }
+.who-sector-bar { display: flex; gap: 3px; height: 12px; margin-bottom: 14px; overflow: hidden; border-radius: 999px; }
+.who-sector-bar span { min-width: 6px; transition: opacity 0.35s, filter 0.35s; }
+.who-sector-bar span[data-off='true'] { opacity: 0.2; filter: grayscale(0.6); }
+.who-sector-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.who-sector-chips button { display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border: 0; border-radius: 999px; background: #fff; box-shadow: inset 0 0 0 1px #ddd5e6; color: #4d4458; font: 600 11.5px/1.2 var(--font-sans); cursor: pointer; transition: background 0.25s, box-shadow 0.25s, color 0.25s; }
+.who-sector-chips button i { width: 9px; height: 9px; border-radius: 50%; background: var(--sector); }
+.who-sector-chips button b { font-size: 10.5px; font-weight: 700; opacity: 0.6; }
+.who-sector-chips button:hover { box-shadow: inset 0 0 0 1.5px var(--sector, #766295); }
+.who-sector-chips button[aria-pressed='true'] { background: var(--sector, #766295); box-shadow: none; color: #fff; }
+.who-sector-chips button[aria-pressed='true'] i { background: #fff; }
+.who-editorial .who-story .ww-register li { position: relative; box-shadow: inset 0 3px 0 var(--sector, transparent); }
+.ww-register-sector { position: absolute; top: 18px; right: 18px; display: inline-flex; align-items: center; gap: 6px; font: 700 9px/1.2 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--sector) 72%, #333); }
+.ww-register-sector i { width: 7px; height: 7px; border-radius: 50%; background: var(--sector); }
+
+/* the registered office, as a postcard: an airmail edge, a stamp and its postmark, lines to write on */
+.who-contact-editorial.who-postcard { position: relative; gap: 0; padding: 0; overflow: hidden; border: 0; border-radius: 22px; background: #fffdf8; box-shadow: 0 0 0 1px #e8dfcd, 0 28px 50px -36px #23455a; }
+.who-postcard::before { content: ''; position: absolute; inset: 0; z-index: 0; padding: 9px; border-radius: inherit; background: repeating-linear-gradient(135deg, #f81170 0 16px, transparent 16px 26px, #09a6cf 26px 42px, transparent 42px 52px); opacity: 0.85; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.who-postcard > * { position: relative; z-index: 1; }
+.who-postcard-note { padding: 44px 36px 34px 46px; }
+/* the mission's bridge closes its room: no extra air beneath it */
+.who-editorial .who-story .purpose-pair { margin-bottom: 10px; }
+.who-contact-editorial .who-postcard-map { display: inline-flex; align-items: center; gap: 8px; margin: 20px 0 0; padding: 10px 16px; border-radius: 999px; background: #347d87; color: #fff; font: 600 12px/1 var(--font-sans); text-decoration: none; box-shadow: 0 10px 20px -12px #347d87; transition: background 0.25s, translate 0.25s; }
+.who-contact-editorial .who-postcard-map:hover { translate: 0 -2px; background: #286870; }
+.who-postcard-lines { padding: 150px 46px 30px 40px; margin: 26px 0; border-left: 1px dashed #d8cdb8; }
+.who-postcard-lines .ed-eyebrow { display: flex; align-items: center; gap: 8px; color: #347d87; }
+.who-contact-editorial .who-postcard-lines > a { padding: 6px 0 7px; border-bottom: 1px dotted #cfc2a8; text-decoration: none; }
+.who-contact-editorial .who-postcard-lines > a:hover { color: #1f5961; border-bottom-style: solid; }
+.who-postcard-stamp { position: absolute; top: 0; right: 40px; display: grid; justify-items: center; gap: 4px; width: 96px; padding: 9px; rotate: 4deg; background: #fff;
+  -webkit-mask: radial-gradient(4px at 4px 4px, #0000 97%, #000) -4px -4px / 10px 10px round, linear-gradient(#000 0 0) content-box;
+  mask: radial-gradient(4px at 4px 4px, #0000 97%, #000) -4px -4px / 10px 10px round, linear-gradient(#000 0 0) content-box; }
+.who-postcard-stamp img { width: 64px; height: auto; margin-top: 6px; }
+.who-postcard-stamp small { margin-bottom: 6px; font: 800 8.5px/1.2 var(--font-heading); letter-spacing: 0.16em; text-transform: uppercase; color: #8b4f74; }
+.who-postcard-stamp::after { content: ''; position: absolute; inset: 9px; z-index: -1; background: linear-gradient(160deg, #fdeef5, #e9f6fa); }
+.who-postcard-postmark { position: absolute; top: 38px; right: 118px; display: grid; place-items: center; width: 86px; height: 86px; padding: 12px; rotate: -14deg; border: 2px solid rgb(52 92 120 / 0.42); border-radius: 50%; text-align: center; font: 700 8.5px/1.3 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: rgb(52 92 120 / 0.6); pointer-events: none; }
+.who-postcard-postmark::after { content: ''; position: absolute; left: 76%; top: 26%; width: 110px; height: 36px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='36'%3E%3Cpath d='M0 6q9-6 18 0t18 0 18 0 18 0 18 0 18 0M0 18q9-6 18 0t18 0 18 0 18 0 18 0 18 0M0 30q9-6 18 0t18 0 18 0 18 0 18 0 18 0' fill='none' stroke='%23345c78' stroke-opacity='.42' stroke-width='2'/%3E%3C/svg%3E") no-repeat; }
+.who-postcard .who-contact-tax { display: flex; align-items: flex-start; gap: 12px; margin: 0 9px 9px; padding: 18px 37px 18px; border-radius: 0 0 14px 14px; border-top: 1px dashed #d8cdb8; background: linear-gradient(90deg, #f7f2e6, #fffdf8 70%); color: #55665f; }
+.who-postcard .who-contact-tax svg { flex: none; margin-top: 3px; color: #2f8a5f; }
+.who-postcard .who-contact-tax strong { display: inline; margin: 0 6px 0 0; color: #2d4a40; }
+
+@media (max-width: 900px) {
+  .who-approach { grid-template-columns: minmax(0, 1fr); }
+  .who-editorial .who-story .who-door { display: grid; grid-template-columns: 170px minmax(0, 1fr); grid-template-rows: auto auto 1fr; column-gap: 18px; }
+  .who-editorial .who-story .who-door .who-door-photo { grid-row: 1 / span 3; height: 100%; min-height: 170px; margin: 0; }
+  .who-editorial .who-story .who-door :is(.cv-tally-head, .cv-tally-key, .who-value-link) { padding-inline: 0; }
+}
+@media (max-width: 650px) {
+  .who-approach .service-story { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'sculpture' 'steps' 'copy'; }
+  .who-approach .service-story-sculpture { height: 260px; }
+  .who-editorial .who-story .who-door { display: block; }
+  .who-editorial .who-story .who-door .who-door-photo { height: 170px; margin-bottom: 16px; }
+  .who-postcard-note { padding: 34px 24px 26px; }
+  .who-postcard-lines { margin: 0 18px; padding: 140px 6px 24px; border-left: 0; border-top: 1px dashed #d8cdb8; }
+  .who-postcard-stamp { top: 22px; right: 10px; }
+  .who-postcard-postmark { top: 40px; right: 92px; }
+  .who-postcard .who-contact-tax { padding: 16px 16px 18px; }
+  .ww-register-sector { position: static; margin-bottom: -4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .who-door-photo img, .who-editorial .who-story .who-door { transition: none; }
+}

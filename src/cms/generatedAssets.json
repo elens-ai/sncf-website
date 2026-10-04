@@ -234,5 +234,45 @@
   "asset.SiteFooter.lotus": {
     "source": "/images/lotus-watermark.png",
     "label": "SiteFooter · lotus-watermark.png"
+  },
+  "asset.WorkingHands.hands": {
+    "source": "/images/welcome-volunteers.jpg",
+    "label": "WorkingHands · welcome-volunteers.jpg"
+  },
+  "asset.WorkingHands.hospitals": {
+    "source": "/images/projects/health-city.webp",
+    "label": "WorkingHands · health-city.webp"
+  },
+  "asset.WorkingHands.classrooms": {
+    "source": "/images/programmes/schools-classroom.webp",
+    "label": "WorkingHands · schools-classroom.webp"
+  },
+  "asset.WorkingHands.forests": {
+    "source": "/images/programmes/oneness-vann-planting.webp",
+    "label": "WorkingHands · oneness-vann-planting.webp"
+  },
+  "asset.WorkingHands.palm": {
+    "source": "/images/petals/palm.webp",
+    "label": "WorkingHands · palm.webp"
+  },
+  "asset.GuidingForcePage.work-hc": {
+    "source": "/images/programmes/health-centre-inauguration.jpg",
+    "label": "GuidingForcePage · health-centre-inauguration.jpg"
+  },
+  "asset.GuidingForcePage.work-amrit": {
+    "source": "/images/programmes/amrit-riverbank.webp",
+    "label": "GuidingForcePage · amrit-riverbank.webp"
+  },
+  "asset.GuidingForcePage.work-nima": {
+    "source": "/images/programmes/nima-tabla.webp",
+    "label": "GuidingForcePage · nima-tabla.webp"
+  },
+  "asset.GuidingForcePage.closing-lotus": {
+    "source": "/images/lotus-watermark.png",
+    "label": "GuidingForcePage · lotus-watermark.png"
+  },
+  "asset.WhoWeArePage.stamp": {
+    "source": "/images/sncf-logo.webp",
+    "label": "WhoWeArePage · sncf-logo.webp"
   }
 }

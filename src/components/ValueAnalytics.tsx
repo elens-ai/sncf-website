@@ -1,6 +1,6 @@
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
-import { insightsFor } from '../data/insights';
+import { insightsFor, type Insight } from '../data/insights';
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Droplet, Heart, TreePine, Users, Building2, Scissors, Laptop, School, GraduationCap, Sparkles, Ambulance, Package, ShieldCheck, Wind, Syringe, Landmark, HeartHandshake, type LucideIcon } from 'lucide-react';
 import type { Activity } from '../data/activities';
@@ -143,7 +143,7 @@ export const Waffle: React.FC<{ part: { value: string; label: string }; whole: {
   return (
     <div className="va-waffle" data-tone={tone}>
       <div className="va-waffle-grid" aria-hidden="true">{Array.from({ length: 100 }, (_, i) => <i key={i} data-on={i < on} style={{ '--i': i } as React.CSSProperties} />)}</div>
-      <p className="va-waffle-caption"><strong>{share}%</strong> <span>{part.label}</span><small><Figure value={part.value} size="sm" /> {getCMSCopy("copy.ValueAnalytics.ofEvery", "of")} {wholeValue} {whole.label}</small></p>
+      <div className="va-waffle-caption"><strong>{share}%</strong> <span>{part.label}</span><small><Figure value={part.value} size="sm" /> {getCMSCopy("copy.ValueAnalytics.ofEvery", "of")} {wholeValue} {whole.label}</small></div>
     </div>
   );
 };
@@ -305,27 +305,24 @@ export const ChartBand: React.FC<{ id: string; className?: string; lead?: React.
   );
 };
 
-/** The cornerstone's figures read together: the first insight of each programme (worked out
-    from its own reported figures, see data/insights), each opening its programme. */
-const InsightRibbon: React.FC<BandProps> = ({ activities, explorerId, onSelect }) => {
-  const items = activities.flatMap(activity => insightsFor(activity).slice(0, 1).map(insight => ({ activity, insight })));
-  if (!items.length) return null;
+/** Figures read together (worked out from reported figures, see data/insights): each with its
+    icon, its value rolling in and what it divides; a caption names whose figures they are, and an
+    entry with somewhere to go opens it. */
+export const InsightRibbon: React.FC<{ entries: { key: string; insight: Insight; caption?: string; href?: string; onPick?: () => void }[] }> = ({ entries }) => {
+  if (!entries.length) return null;
   return (
     <div className="va-insights">
       <p className="va-insights-note"><Sparkles size={12} aria-hidden="true" />{getCMSCopy("copy.ValueAnalytics.insights", "Read together · worked out from the reported figures, nothing estimated")}</p>
       <ul>
-        {items.map(({ activity, insight }, i) => {
+        {entries.map(({ key, insight, caption, href, onPick }, i) => {
           const Icon = insight.icon;
-          return (
-            <li key={activity.id} style={{ '--d': `${i * 90}ms` } as React.CSSProperties}>
-              <a href={`#${explorerId}`} onClick={() => onSelect(activity.id)}>
-                <span className="va-insight-icon" aria-hidden="true"><Icon size={17} strokeWidth={1.8} /></span>
-                <Figure value={insight.value} size="md" />
-                <span className="va-insight-label">{insight.label}</span>
-                <small>{activity.title}</small>
-              </a>
-            </li>
-          );
+          const body = <>
+            <span className="va-insight-icon" aria-hidden="true"><Icon size={17} strokeWidth={1.8} /></span>
+            <Figure value={insight.value} size="md" />
+            <span className="va-insight-label">{insight.label}</span>
+            {caption && <small>{caption}</small>}
+          </>;
+          return <li key={key} style={{ '--d': `${i * 90}ms` } as React.CSSProperties}>{href ? <a href={href} onClick={onPick}>{body}</a> : <div className="va-insight">{body}</div>}</li>;
         })}
       </ul>
     </div>
@@ -334,5 +331,7 @@ const InsightRibbon: React.FC<BandProps> = ({ activities, explorerId, onSelect }
 
 export const ValueAnalytics: React.FC<{ pillarId: Cornerstone; activities: Activity[]; explorerId: string; onSelect: (id: string) => void }> = ({ pillarId, activities, explorerId, onSelect }) => {
   const Band = BANDS[pillarId];
-  return <ChartBand id={`${pillarId}-analytics`} lead={<InsightRibbon activities={activities} explorerId={explorerId} onSelect={onSelect} />}><Band activities={activities} explorerId={explorerId} onSelect={onSelect} /></ChartBand>;
+  /* the first insight of each programme, each opening that programme */
+  const entries = activities.flatMap(activity => insightsFor(activity).slice(0, 1).map(insight => ({ key: activity.id, insight, caption: activity.title, href: `#${explorerId}`, onPick: () => onSelect(activity.id) })));
+  return <ChartBand id={`${pillarId}-analytics`} lead={<InsightRibbon entries={entries} />}><Band activities={activities} explorerId={explorerId} onSelect={onSelect} /></ChartBand>;
 };
