@@ -13,7 +13,8 @@
     "cms:seed": "node --import tsx scripts/generate-cms-seed.ts",
     "cms:registry": "node --import tsx scripts/cms-registry.ts",
     "font:headings": "node --import tsx scripts/build-heading-font.ts",
-    "images:wall": "node --import tsx scripts/build-mosaic-wall.ts"
+    "images:wall": "node --import tsx scripts/build-mosaic-wall.ts",
+    "images:logo-ink": "node --import tsx scripts/build-logo-ink-art.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
-import { PETAL_ART, PALM_ART } from './petalArt';
+import { PETAL_ART, PALM_ART, LOGO_COLOURS, logoInkSrc } from './petalArt';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import { ACTIVITIES } from '../data/activities';
 import { PILLARS } from '../data/pillars';
@@ -74,6 +74,9 @@ function useAssembly(root: React.RefObject<HTMLElement | null>, play: boolean) {
         const bloom = t * t * t * (t * (t * 6 - 15) + 10);
         petal.style.setProperty('--bloom', String(bloom));
         petal.style.setProperty('--arc', String(Math.sin(Math.PI * bloom)));
+        /* each piece opens white and its colour floods in over the rest of its unfolding */
+        const ink = clamp01((bloom - .3) / .7);
+        petal.style.setProperty('--veil', String(1 - ink * ink * (3 - 2 * ink)));
       });
       el.style.setProperty('--w', String(easeOut(clamp01((o - .2) / .65))));
       el.style.setProperty('--links', String(clamp01((o - .55) / .45)));
@@ -128,10 +131,11 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
           </svg>
           <div className="mosaic-lotus" style={{ '--lotus-aspect': width / height } as React.CSSProperties}>
             {pieces.map((piece, index) => (
-              <img key={piece.id} className="mosaic-petal" data-piece={piece.id} src={resolveCMSMedia(piece.src)} alt="" draggable={false}
+              <img key={piece.id} className="mosaic-petal" data-piece={piece.id} src={resolveCMSMedia(logoInkSrc(piece.id))} alt="" draggable={false}
                 style={{
                   left: `${(piece.x - box.x) / width * 100}%`, top: `${(piece.y - box.y) / height * 100}%`, width: `${piece.w / width * 100}%`,
                   '--fan-x': (index - 2) * 24, '--fan-turn': (index - 2) * 18,
+                  '--ink': piece.id === 'palm' ? LOGO_COLOURS.hand[1] : LOGO_COLOURS.petals[index],
                 } as React.CSSProperties} />
             ))}
           </div>

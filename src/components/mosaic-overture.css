@@ -40,8 +40,16 @@
     rotateY(calc((1 - var(--bloom, 0)) * var(--fan-turn) * -1deg))
     rotate(calc((1 - var(--bloom, 0)) * var(--fan-turn) * 1deg))
     scale(calc(.68 + var(--bloom, 0) * .32));
-  opacity: calc(var(--bloom, 0) * .94);
-  filter: brightness(0) invert(1) drop-shadow(0 2px 1px #ffffff24) drop-shadow(0 12px 10px #06292d30);
+  opacity: var(--bloom, 0);
+  /* THE OFFICIAL LOGO'S COLOURS (petalArt.ts LOGO_COLOURS: the five petals and
+     their heads, the hand's rose with its thin white keyline). A
+     piece opens white, as light, and its colour floods in as it unfolds (--veil,
+     1 to 0: blending towards white is invert, darken, invert), the hand first,
+     then the flower from its centre out; each keeps a soft glow of its own
+     colour to hold it against the dark wall of photographs. */
+  filter: invert(1) brightness(calc(1 - var(--veil, 0))) invert(1)
+    drop-shadow(0 0 14px color-mix(in srgb, var(--ink, #fff) calc((1 - var(--veil, 0)) * 34%), transparent))
+    drop-shadow(0 2px 1px #ffffff24) drop-shadow(0 12px 10px #06292d30);
   will-change: transform, opacity;
 }
 .mosaic-petal[data-piece='palm'] {
@@ -129,7 +137,7 @@
 @media (prefers-reduced-motion: reduce) {
   .mosaic-overture { --a: 1; --w: 1; --links: 1; transition: none; }
   .mosaic-overture *, .mosaic-overture *::before { animation: none !important; transition: none !important; }
-  .mosaic-petal, .mosaic-petal[data-piece='palm'] { transform: none; opacity: .94; will-change: auto; }
+  .mosaic-petal, .mosaic-petal[data-piece='palm'] { transform: none; opacity: 1; will-change: auto; }
 }
 @media (forced-colors: active) {
   .mosaic-emblem, .mosaic-overture::before { display: none; }

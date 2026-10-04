@@ -58,6 +58,20 @@ export const LOGO_INK = [
   '#69b947', // green — the rightmost
 ];
 
+/** THE OFFICIAL LOGO'S COLOURS, read off the foundation's round seal itself
+    (the lotus, the two hands): softer than the commissioned
+    artwork's inks above, and the ones the logo is printed in. The home page's
+    landing wears its emblem in these (scripts/build-logo-ink-art.ts paints the
+    pieces, logoInkSrc). Petals in LOGO_INK's order; each head takes its petal's
+    colour, as in the seal. */
+export const LOGO_COLOURS = {
+  petals: ['#eb69a6', '#c398c7', '#89a9d8', '#69cbd2', '#9dce6a'],
+  /** the hand's rose, from its deep end to its lightest */
+  hand: ['#ce8aad', '#d599b9', '#dba9c4', '#e1b6cd', '#e7c6d9', '#f0d5e5'],
+};
+/** A piece of the emblem (a petal's id, or 'palm') painted in the logo's colours. */
+export const logoInkSrc = (id: string) => (id === 'palm' ? '/images/petals/ink/palm.webp' : `/images/petals/ink/petal-${id}.webp`);
+
 export interface PetalArt {
   /** Matches LOGO_PETALS' own id — welcome, heal, enrich, empower, projects. */
   id: string;
