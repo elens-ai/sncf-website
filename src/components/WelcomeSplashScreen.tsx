@@ -8,6 +8,8 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 interface WelcomeSplashScreenProps {
   /** Fired when the logo starts flying to the header. */
   onExitStart: () => void;
+  /** Fired as the welcome starts to dissolve into the page beneath it. */
+  onLeaveStart?: () => void;
   onComplete: () => void;
 }
 
@@ -80,6 +82,7 @@ const BRAND_SCALE_MAX = 0.5;
 
 export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   onExitStart,
+  onLeaveStart,
   onComplete,
 }) => {
   const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
@@ -107,9 +110,11 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
      Holding them in refs keeps the timer effect's deps stable — otherwise each
      re-render would tear down and reschedule the timers. */
   const onExitStartRef = useRef(onExitStart);
+  const onLeaveStartRef = useRef(onLeaveStart);
   const onCompleteRef = useRef(onComplete);
   useEffect(() => {
     onExitStartRef.current = onExitStart;
+    onLeaveStartRef.current = onLeaveStart;
     onCompleteRef.current = onComplete;
   });
 
@@ -230,6 +235,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     const alreadyLanded = flightRef.current === 'header';
     flyLogoToHeader();
     setStage('leaving');
+    onLeaveStartRef.current?.();
     window.setTimeout(() => {
       const headerLogo = document.getElementById('header-sncf-logo');
       if (headerLogo) headerLogo.style.opacity = '1';
@@ -383,7 +389,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                 />
               </div>
               <figcaption>
-                <blockquote>{c("satguru-quote", "“Become One with the Formless One, so that we can become One with Everyone.”")}</blockquote>
+                <blockquote>{c("satguru-quote", "“A life lived for others is a life worth living.”")}</blockquote>
                 <cite>— {c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite>
               </figcaption>
             </figure>

@@ -1430,7 +1430,13 @@
   to { transform: scaleX(1); }
 }
 
-.splash-welcome-photo { overflow: hidden; background: #0d2f2b; }
+/* THE WELCOME SCREEN'S GROUND is the site's own: built like .accent-canvas (the
+   same two-stop ramp of the page's ink, at the same angle, from the same
+   --accent-a / --accent-b the page underneath paints with), so the mission page
+   reads as part of the site and leaving it uncovers the same ground beneath.
+   It sat on a flat near-black green before, a colour nothing else on the site
+   uses. Keep this in step with .accent-canvas if that changes. */
+.splash-welcome-photo { overflow: hidden; background: linear-gradient(var(--stage-angle, 135deg), var(--accent-a), var(--accent-b)); }
 
 .splash-welcome-photo-image {
   /* Satguru Mata Ji and Rajpita Ji stand at about 47% across, 46% down: with
@@ -1455,7 +1461,10 @@
   background:
     radial-gradient(ellipse min(40vw, 520px) min(28vh, 300px) at var(--focus-x, 47%) var(--focus-y, 46%), rgb(6 32 29 / 0) 0%, rgb(6 32 29 / 0.32) 62%, rgb(6 32 29 / 0.7) 100%),
     linear-gradient(rgb(10 48 43 / 0.2), rgb(10 48 43 / 0.2));
+  transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* the photograph's tint goes with the photograph: the mission page is on the site's ground alone */
+.splash-welcome-photo.is-mission::after { opacity: 0; }
 
 /* Set like a book's title page: the seal and motto (carried over from the
    first screen), the SNCF wordmark in the house's flared lettering, the full
@@ -1635,8 +1644,12 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  /* darker on the copy side, lighter towards the portrait */
-  background: linear-gradient(90deg, rgb(4 22 20 / 0.72), rgb(4 22 20 / 0.46) 45%, rgb(4 22 20 / 0.32));
+  /* the left-to-right darkening of .accent-canvas, held a little deeper as far
+     as the copy column reaches (--shade-copy follows --mp-copy below), so the
+     long body copy stays easy to read on the site's ramp: darker on the copy
+     side, lighter round the portrait, darker again at the far edge */
+  --shade-copy: max(40%, 33rem);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0.5) var(--shade-copy), rgba(0, 0, 0, 0.2) calc(var(--shade-copy) + 22%), rgba(0, 0, 0, 0.45) 100%);
   opacity: 0;
   transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
@@ -2062,12 +2075,15 @@
    and a touch tighter leading. */
 @media (min-width: 1024px) and (max-height: 860px) {
   .splash-mission-page { --mp-copy: max(44%, 33rem); --mp-lh: 1.66; }
+  .splash-mission-shade { --shade-copy: max(44%, 33rem); }
 }
 @media (min-width: 1024px) and (max-height: 720px) {
   .splash-mission-page { --mp-copy: max(50%, 34rem); --mp-lh: 1.6; }
+  .splash-mission-shade { --shade-copy: max(50%, 34rem); }
 }
 @media (min-width: 1024px) and (max-height: 600px) {
   .splash-mission-page { --mp-copy: max(56%, 36rem); --mp-lh: 1.56; }
+  .splash-mission-shade { --shade-copy: max(56%, 36rem); }
 }
 
 /* Below desktop: one scrolling column. The copy runs full width, and the
@@ -2080,6 +2096,8 @@
     --mp-pad-bottom: 112px;
   }
   .splash-mission-copy { max-width: none; padding-inline: clamp(20px, 5vw, 40px); }
+  /* the copy runs the full width here, so the ground is darkened evenly under it */
+  .splash-mission-shade { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)); }
   /* the page scrolls here, so each chapter starts just under the name */
   .mission-chapter-stage { align-items: start; }
   /* sized by its content here: it follows the copy rather than sharing its row */

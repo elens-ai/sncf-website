@@ -10,9 +10,6 @@ import { onArrival } from '../utils/arrival';
 import { MosaicSpotlight } from './MosaicTile';
 import { MosaicChapter } from './MosaicChapter';
 import { MosaicWaves, type WaveInput } from './MosaicWaves';
-import { MosaicOverture } from './MosaicOverture';
-import type { MosaicPillar } from './pillarLogoArt';
-import { easeOut } from '../utils/waves';
 import { subjectFor } from '../utils/waves';
 import './impact-mosaic.css';
 
@@ -57,7 +54,6 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
   /* The stage's progress, 0..1 across all four chapters, handed to the waves
      without a DOM read: the reader writes it, the wave clock reads it. */
   const waveInput = useRef<WaveInput>({ travel: 0 });
-  const pendingFocus = useRef<string | null>(null);
   const chapters = useMemo(() => PILLARS.map(pillar => ({ pillar, activities: activitiesFor(pillar.id) })), [revision]);
   // Extra CMS programmes should flow naturally instead of being clipped in a pinned screen.
   const staged = roomy && !reduced && chapters.every(chapter => chapter.activities.length <= 6);
@@ -71,20 +67,6 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
     });
   }, []);
 
-  const chooseChapter = useCallback((id: MosaicPillar) => {
-    const section = ref.current;
-    const chapter = section?.querySelector<HTMLElement>(`[data-stage="${id}"]`);
-    if (!section || !chapter) return;
-    const index = PILLARS.findIndex(p => p.id === id);
-    const rect = section.getBoundingClientRect();
-    const segment = (rect.height - window.innerHeight) / (PILLARS.length + 1);
-    const header = document.getElementById('site-header')?.offsetHeight ?? 72;
-    const top = staged
-      ? window.scrollY + rect.top + segment * (index + 1) + 2
-      : window.scrollY + chapter.getBoundingClientRect().top - header - 24;
-    pendingFocus.current = id;
-    window.scrollTo({ top, behavior: reduced ? 'instant' : 'smooth' });
-  }, [staged, reduced]);
 
   /* Stacked: each [data-reveal] block flags itself the first time it scrolls
      into view. On the stage the reader replays arrivals itself. */
@@ -104,29 +86,20 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
     if (!section) return;
     const page = section.closest<HTMLElement>('.home-page');
     const stages = section.querySelectorAll<HTMLElement>('[data-stage]');
-    const overture = section.querySelector<HTMLElement>('.mosaic-overture');
-    const petals = section.querySelectorAll<HTMLElement>('.mosaic-petal');
     const written = new Map<string, number>();
     let raf = 0;
-    let assemblyFrame = 0, assemblyStarted = 0, assemblyProgress = 0;
-    let lastWheel = 0, touchY = 0, completedAtY = 0;
-    let advancing = false;
     let applied: string | null | undefined;
     let shown = -2;
     /* One CSS variable per element, written in 1/200 steps so a still page costs nothing. */
     const write = (el: HTMLElement, name: string, value: number) => {
       const step = Math.round(value * 200) / 200;
-      const key = `${name}@${el.dataset.piece ?? el.dataset.stage ?? el.className}`;
+      const key = `${name}@${el.dataset.stage ?? el.className}`;
       if (written.get(key) === step) return;
       written.set(key, step);
       el.style.setProperty(name, String(step));
     };
     const paint = (stage: HTMLElement, p: number) => write(stage, '--p', p);
     const settle = (next: string | null) => {
-      if (next && pendingFocus.current === next) {
-        pendingFocus.current = null;
-        requestAnimationFrame(() => document.getElementById(`mosaic-${next}-title`)?.focus({ preventScroll: true }));
-      }
       if (next === applied) return;
       applied = next;
       setAttended(null);
@@ -151,7 +124,6 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
       const vh = window.innerHeight;
       const line = vh * READING_LINE;
       const inside = section.getBoundingClientRect().top <= line;
-      updateAssembly(section.getBoundingClientRect().top, vh * .65, false);
       let next: string | null = null;
       stages.forEach(stage => {
         const rect = stage.getBoundingClientRect();
@@ -162,80 +134,21 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
       });
       settle(next);
     };
-    const paintAssembly = (o: number) => {
-      if (!overture) return;
-      write(overture, '--a', easeOut(Math.min(1, o / .8)));
-      // A cupped hand, then the center petal, then mirrored pairs unfolding.
-      petals.forEach((petal, index) => {
-        const palm = petal.dataset.piece === 'palm';
-        const start = palm ? 0 : .13 + Math.abs(index - 2) * .085;
-        const t = Math.max(0, Math.min(1, (o - start) / (palm ? .38 : .48)));
-        const bloom = t * t * t * (t * (t * 6 - 15) + 10);
-        write(petal, '--bloom', bloom);
-        write(petal, '--arc', Math.sin(Math.PI * bloom));
-      });
-      write(overture, '--w', easeOut(Math.max(0, Math.min(1, (o - .2) / .65))));
-      write(overture, '--links', Math.max(0, Math.min(1, (o - .55) / .45)));
-    };
-    const animateAssembly = (now: number) => {
-      assemblyProgress = Math.min(1, (now - assemblyStarted) / 2000);
-      paintAssembly(assemblyProgress);
-      if (assemblyProgress === 1) completedAtY = window.scrollY;
-      assemblyFrame = assemblyProgress < 1 ? requestAnimationFrame(animateAssembly) : 0;
-    };
-    const updateAssembly = (top: number, threshold: number, finished: boolean) => {
-      if (top > window.innerHeight && assemblyStarted) {
-        cancelAnimationFrame(assemblyFrame);
-        assemblyFrame = 0; assemblyStarted = 0; assemblyProgress = 0; advancing = false;
-        paintAssembly(0);
-      } else if (!assemblyStarted && top <= threshold) {
-        assemblyStarted = performance.now();
-        if (finished || reduced) { assemblyProgress = 1; paintAssembly(1); }
-        else assemblyFrame = requestAnimationFrame(animateAssembly);
-      }
-    };
-    const advanceToHeal = () => {
-      if (pendingFocus.current || advancing || !staged || !assemblyStarted || shown !== -1 || performance.now() - assemblyStarted < 450) return;
-      const rect = section.getBoundingClientRect();
-      if (rect.top > window.innerHeight * .2) return;
-      advancing = true;
-      cancelAnimationFrame(assemblyFrame);
-      assemblyProgress = 1; paintAssembly(1);
-      const segment = (rect.height - window.innerHeight) / (stages.length + 1);
-      window.scrollTo({ top: window.scrollY + rect.top + segment + 2, behavior: reduced ? 'instant' : 'smooth' });
-    };
-    const wheel = (event: WheelEvent) => {
-      const now = performance.now();
-      const freshGesture = now - lastWheel > 220;
-      lastWheel = now;
-      if (!event.ctrlKey && event.deltaY > 0 && freshGesture) advanceToHeal();
-    };
-    const touchStart = (event: TouchEvent) => { touchY = event.touches[0]?.clientY ?? 0; };
-    const touchEnd = (event: TouchEvent) => {
-      if (touchY - (event.changedTouches[0]?.clientY ?? touchY) > 40) advanceToHeal();
-    };
-    const keyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (target?.closest('button, a, input, textarea, select, [contenteditable="true"]')) return;
-      if (['ArrowDown', 'PageDown', ' '].includes(event.key) && !event.shiftKey) advanceToHeal();
-    };
     const readStaged = () => {
+      const count = stages.length;
+      if (!count) return;
       const rect = section.getBoundingClientRect();
       const vh = window.innerHeight;
-      const count = stages.length;
       /* The track is one screen taller than the scroll it grants, so this runs
-         0 → 1 exactly while the screen is pinned. The first segment is the
-         overture — the petals assembling and "Our work" arriving — and the
-         chapters take the rest, one segment each. */
+         0 → 1 exactly while the screen is pinned, one segment per chapter. (The
+         overture that used to open the stage now opens the page.) */
       const t = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height - vh)));
-      const u = t * (count + 1);
-      const index = u < 1 ? -1 : Math.min(count - 1, Math.floor(u) - 1);
+      const u = t * count;
+      const index = Math.min(count - 1, Math.floor(u));
       waveInput.current.travel = t;
-      updateAssembly(rect.top, vh * .2, index >= 0);
-      if (index >= 0) paint(stages[index], u - Math.floor(u));
+      paint(stages[index], u - index);
       if (index !== shown) {
         shown = index;
-        if (overture) overture.dataset.state = index < 0 ? 'active' : 'before';
         stages.forEach((stage: HTMLElement, i: number) => {
           stage.dataset.state = i < index ? 'before' : i > index ? 'after' : 'active';
           if (i !== index) return;
@@ -248,29 +161,17 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
         });
         setSpotlight(null);
       }
-      settle(index >= 0 && rect.top <= vh * READING_LINE ? stages[index].dataset.stage ?? null : null);
+      settle(rect.top <= vh * READING_LINE ? stages[index].dataset.stage ?? null : null);
     };
     const read = () => { raf = 0; (staged ? readStaged : readStacked)(); };
-    const onScroll = () => {
-      if (assemblyProgress === 1 && window.scrollY > completedAtY + 12) advanceToHeal();
-      if (!raf) raf = requestAnimationFrame(read);
-    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
     if (!staged) { stages.forEach(stage => { delete stage.dataset.state; }); }
     read();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    window.addEventListener('wheel', wheel, { passive: true });
-    window.addEventListener('touchstart', touchStart, { passive: true });
-    window.addEventListener('touchend', touchEnd, { passive: true });
-    window.addEventListener('keydown', keyDown);
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
-      window.removeEventListener('wheel', wheel);
-      window.removeEventListener('touchstart', touchStart);
-      window.removeEventListener('touchend', touchEnd);
-      window.removeEventListener('keydown', keyDown);
-      cancelAnimationFrame(assemblyFrame);
       if (raf) cancelAnimationFrame(raf);
       page?.style.removeProperty('--accent-a');
       page?.style.removeProperty('--accent-b');
@@ -306,15 +207,11 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
       {staged ? (
         <div className="mosaic-stage">
           <MosaicWaves subject={subjectFor(chapters.find(({ pillar }) => pillar.id === current)?.pillar ?? heroPillar, current ? spotlight ?? attended : null)} active={active && !spotlight} input={waveInput} />
-          <MosaicOverture onChoose={chooseChapter} />
           <p className="mosaic-stage-label" data-show={current !== null}><span aria-hidden="true" />{getCMSCopy("copy.ImpactMosaic.fc967e87a6e8", "Our work")}<span className="mosaic-stage-count">{`${String(position + 1).padStart(2, '0')} / ${String(chapters.length).padStart(2, '0')}`}</span></p>
           {body}
         </div>
       ) : (
-        <>
-          <MosaicOverture onChoose={chooseChapter} />
-          {body}
-        </>
+        body
       )}
     </section>
   );

@@ -2,12 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import { CMSSection, useCMSRevision } from '../cms/CMSContentProvider';
 import { getCMSSnapshot } from '../cms/runtime';
 import { CMSLayout } from '../components/CMSLayout';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { usePageMotion } from '../hooks/useSectionActivity';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
+import { HomeLanding } from '../components/HomeLanding';
 import { ImpactMosaic } from '../components/ImpactMosaic';
 import { EventsSection } from '../components/EventsSection';
 import { AwardsSection } from '../components/AwardsSection';
@@ -35,6 +36,17 @@ const parseInviteParam = (): string | null => {
   const m = window.location.search.match(/[?&]invite[-=]([a-z0-9-]+)/i);
   return m ? m[1] : null;
 };
+
+/* The sections that do not change with the hall's path, kept from re-rendering
+   each time it turns (the turn has the main thread to itself). */
+const ImpactMosaicMemo = React.memo(ImpactMosaic);
+const EventsSectionMemo = React.memo(EventsSection);
+const AwardsSectionMemo = React.memo(AwardsSection);
+const PartnersSectionMemo = React.memo(PartnersSection);
+const SiteFooterMemo = React.memo(SiteFooter);
+const HomeLandingMemo = React.memo(HomeLanding);
+/* the header is painted from the page's CSS colours and never reads the hall's path it is handed */
+const HeaderMemo = React.memo(Header, (previous, next) => (Object.keys(next) as (keyof typeof next)[]).every(key => key === 'currentPillar' || previous[key] === next[key]));
 
 const WELCOME_SESSION_KEY = 'sncf.welcome.shown';
 /* Editors can switch the whole welcome intro off under "Sections on/off". */
@@ -71,6 +83,8 @@ export default function HomePage() {
     try { sessionStorage.setItem(WELCOME_SESSION_KEY, '1'); } catch { /* In-memory fallback when storage is unavailable. */ }
   }, [splashPhase]);
   const isSplashUp = splashPhase !== 'done';
+  /* the landing's emblem assembles as the welcome dissolves (or at once, without a welcome) */
+  const [welcomeLeaving, setWelcomeLeaving] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -105,7 +119,175 @@ export default function HomePage() {
   const activePillarsList = PILLARS;
   const currentPillar = activePillarsList[activeIndex] || activePillarsList[0];
 
-  /* --accent-a/--accent-b are written on :root in exactly one place: the hero
+  /* THE LANDING COMES FIRST and the hall second. The hall's entrance (its
+     words rising, its emblem settling, its pillars starting to turn) waits
+     until the visitor reaches it: once its top has crossed the middle of the
+     screen, or a landing door has led there. */
+  const [heroArrived, setHeroArrived] = useState(false);
+  useEffect(() => {
+    if (heroArrived) return;
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const hero = document.getElementById('hero-clone-stage');
+      if (hero && hero.getBoundingClientRect().top <= window.innerHeight * 0.5) setHeroArrived(true);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
+    read();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [heroArrived, cmsRevision]);
+  /* THE HALL IS A TRACK, one screen of scroll per path (homepage.css): the
+     hall is pinned while the page scrolls Heal, Enrich, Empower, Projects, and
+     the page's position chooses the path. Path i sits at the track's top plus,
+     past the first, whatever a hall taller than the screen needs to reach its
+     foot, plus i screens. */
+  const heroTrack = () => {
+    const track = document.getElementById('hero-track');
+    const hero = document.getElementById('hero-clone-stage');
+    if (!track || !hero) return null;
+    const vh = window.innerHeight;
+    return { track, vh, extra: Math.max(0, hero.offsetHeight - vh) };
+  };
+  /* While a chosen path's scroll is under way, the reader keeps out of it, or it
+     would narrate every path the page passes on the way. */
+  const heroClaim = useRef<number | null>(null);
+  const heroClaimTimer = useRef(0);
+  const activeIndexRef = useRef(activeIndex);
+  activeIndexRef.current = activeIndex;
+  useEffect(() => {
+    let raf = 0;
+    /* THE TURNING RULE. A page turns 30% of the way into a scroll in the
+       direction of travel (at is measured in screens along the track, 0 at
+       Heal), so it answers the scroll at once. It is undone only by a clear
+       reversal: going back 15% from the furthest point reached since that turn.
+       A quick fling lands on the page it reaches. */
+    const EARLY = 0.3, MARGIN = 0.15;
+    let held = -1, observed = -1, direction = 1, furthest = 0;
+    const read = () => {
+      raf = 0;
+      const geometry = heroTrack();
+      if (!geometry || heroClaim.current !== null) return;
+      const r = geometry.track.getBoundingClientRect();
+      if (r.top >= geometry.vh || r.bottom <= 0) return;
+      const at = (-r.top - geometry.extra) / geometry.vh;
+      const last = activePillarsList.length - 1;
+      /* chosen elsewhere (a door, a button, a key) or just arrived: start from here;
+         a change this reader made itself is only waiting for React to catch up */
+      const current = activeIndexRef.current;
+      if (current !== observed) {
+        observed = current;
+        if (current !== held) { held = current; direction = at >= held ? 1 : -1; furthest = at; }
+      }
+      furthest = direction > 0 ? Math.max(furthest, at) : Math.min(furthest, at);
+      const forwardAt = direction < 0 ? Math.max(held + EARLY, furthest + MARGIN) : held + EARLY;
+      const backAt = direction > 0 ? Math.min(held - EARLY, furthest - MARGIN) : held - EARLY;
+      let next = held;
+      if (at >= forwardAt) { next = Math.min(last, Math.floor(at + 1 - EARLY)); direction = 1; furthest = at; }
+      else if (at <= backAt) { next = Math.max(0, Math.ceil(at - 1 + EARLY)); direction = -1; furthest = at; }
+      if (next === held) return;
+      held = next;
+      setActiveIndex(next);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
+    read();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [activePillarsList.length, cmsRevision]);
+  /* FAR SECTIONS HOLD THEIR COLOURS. The page's accent (--accent-a/-b)
+     changes with each turn of the hall and each explore chapter; every element
+     of the page inherits it, so each change restyled all ~3,600 of them, a
+     frame or more of work. A section more than half a screen off the screen
+     keeps the colours it last had, written on it, so a change stops there; it
+     takes the page's own again on its way back, before it is seen. Nothing on
+     the screen looks different. (Only registered properties stop there, which
+     is why the ink and tint mixed from the accent are worked out where they are
+     used, homepage.css, rather than held.) */
+  const pageRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const page = pageRef.current;
+    if (!page) return;
+    const HELD = ['--accent-a', '--accent-b'];
+    const holding = new Set<HTMLElement>();
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      for (const section of Array.from(page.children) as HTMLElement[]) {
+        const r = section.getBoundingClientRect();
+        const far = r.bottom < -vh * 0.5 || r.top > vh * 1.5;
+        if (far === holding.has(section)) continue;
+        if (far) {
+          const now = getComputedStyle(section);
+          for (const name of HELD) section.style.setProperty(name, now.getPropertyValue(name));
+          holding.add(section);
+        } else {
+          for (const name of HELD) section.style.removeProperty(name);
+          holding.delete(section);
+        }
+      }
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
+    read();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      for (const section of holding) for (const name of HELD) section.style.removeProperty(name);
+    };
+  }, [cmsRevision]);
+  /* Go to path i: the hall turns to it at once and the page scrolls there
+     (smoothly; at once under reduced motion). From the landing, focus goes too. */
+  const goToPillar = useCallback((index: number, takeFocus = false) => {
+    const geometry = heroTrack();
+    if (!geometry) return;
+    const offset = index === 0 ? 0 : geometry.extra + index * geometry.vh;
+    heroClaim.current = index;
+    setActiveIndex(index);
+    setHeroArrived(true);
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: window.scrollY + geometry.track.getBoundingClientRect().top + offset, behavior: calm ? 'instant' : 'smooth' });
+    if (takeFocus) document.getElementById('hero-clone-stage')?.focus({ preventScroll: true });
+    const settle = () => {
+      window.clearTimeout(heroClaimTimer.current);
+      heroClaimTimer.current = window.setTimeout(() => { heroClaim.current = null; window.removeEventListener('scroll', settle); }, 180);
+    };
+    window.addEventListener('scroll', settle, { passive: true });
+    settle();
+  }, []);
+  /* A landing door leads to its own path in the hall; the landing's cue, to the first. */
+  const enterPath = useCallback((id: string) => {
+    goToPillar(Math.max(0, activePillarsList.findIndex(p => p.id === id)), true);
+  }, [activePillarsList, goToPillar]);
+  const toFirstPath = useCallback(() => goToPillar(0, true), [goToPillar]);
+  const openDonate = useCallback(() => setIsDonateOpen(true), []);
+  const openSearch = useCallback(() => setIsSearchOpen(true), []);
+  const openGallery = useCallback(() => setIsGalleryOpen(true), []);
+  const searchChange = useCallback((q: string) => {
+    setSearchQuery(q);
+    if (q.trim()) setIsSearchOpen(true);
+  }, []);
+  /* the details panel opens on whichever path the hall is on when it is asked for */
+  const currentPillarRef = useRef(currentPillar);
+  currentPillarRef.current = currentPillar;
+  const openDetails = useCallback(() => {
+    setSelectedPillarForModal(currentPillarRef.current);
+    setIsModalOpen(true);
+  }, []);
+
+  /* --accent-a/--accent-b are written on <body> in exactly one place: the hero
      section, which is the only thing that knows whether a pillar or the
      devotional portrait is fronting. App used to write them too and, because
      child effects run before parent effects, always won — painting the header
@@ -138,19 +320,21 @@ export default function HomePage() {
         return;
       }
 
-      if (e.key === 'ArrowRight') {
-        setActiveIndex((prev) => (prev + 1) % activePillarsList.length);
-      } else if (e.key === 'ArrowLeft') {
-        setActiveIndex((prev) => (prev - 1 + activePillarsList.length) % activePillarsList.length);
-      } else if (e.key === ' ') {
+      /* Left and right step through the paths while the hall holds the screen;
+         elsewhere they are left to the page. */
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        const geometry = heroTrack();
+        const r = geometry?.track.getBoundingClientRect();
+        if (!geometry || !r || r.top > geometry.vh * 0.5 || r.bottom < geometry.vh * 0.5) return;
         e.preventDefault();
-        setIsPaused((prev) => !prev);
+        const step = e.key === 'ArrowRight' ? 1 : -1;
+        goToPillar(Math.max(0, Math.min(activePillarsList.length - 1, activeIndexRef.current + step)));
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isModalOpen, isSearchOpen, isGalleryOpen, isDonateOpen, isSplashUp, activePillarsList.length]);
+  }, [isModalOpen, isSearchOpen, isGalleryOpen, isDonateOpen, isSplashUp, activePillarsList.length, goToPillar]);
 
   const handleActiveIndexChange = useCallback((newIndex: number) => {
     setActiveIndex(newIndex);
@@ -170,7 +354,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="home-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none" data-hero-theme={currentPillar.id}>
+    <div ref={pageRef} className="home-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none" data-hero-theme={currentPillar.id}>
       {/* One fixed color surface beneath the hero and every following section.
           The active chapter takes over the palette as it enters view. */}
       <div className="accent-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
@@ -180,22 +364,20 @@ export default function HomePage() {
       {isSplashUp && (
         <WelcomeSplashScreen
           onExitStart={() => setSplashPhase('exiting')}
+          onLeaveStart={() => setWelcomeLeaving(true)}
           onComplete={() => setSplashPhase('done')}
         />
       )}
 
       {/* 1. TOP HEADER NAVIGATION */}
-      <CMSSection id="shared.Header"><Header
+      <CMSSection id="shared.Header"><HeaderMemo
         currentPillar={currentPillar}
-        onSearchClick={() => setIsSearchOpen(true)}
+        onSearchClick={openSearch}
         searchQuery={searchQuery}
-        onSearchChange={(q) => {
-          setSearchQuery(q);
-          if (q.trim()) setIsSearchOpen(true);
-        }}
-        onOpenDetails={() => handleOpenDetails(currentPillar)}
-        onOpenGallery={() => setIsGalleryOpen(true)}
-        onOpenDonate={() => setIsDonateOpen(true)}
+        onSearchChange={searchChange}
+        onOpenDetails={openDetails}
+        onOpenGallery={openGallery}
+        onOpenDonate={openDonate}
         hideLogo={isSplashUp}
       /></CMSSection>
 
@@ -209,30 +391,35 @@ export default function HomePage() {
           (z-50). */}
       <CMSSection id="shared.SocialSidebar"><SocialSidebar /></CMSSection>
 
-      {/* 2. HERO — the site's single hero. */}
+      {/* 2. LANDING — "Four paths. One purpose.", the first screen; its doors lead into the hall.
+          3. HERO — the site's single hero, the hall, second. */}
       <CMSLayout sections={[
-        {id:'home.intro',node:(<HeroSection
+        {id:'home.landing',node:(<HomeLandingMemo play={welcomeLeaving || !isSplashUp} onEnter={enterPath} onScrollOn={toFirstPath} />)},
+        {id:'home.intro',node:(<div id="hero-track" className="hero-track" style={{ '--hero-count': activePillarsList.length } as React.CSSProperties}>
+        <HeroSection
         activeIndex={activeIndex}
         onActiveIndexChange={handleActiveIndexChange}
         isPaused={isPaused || isSplashUp}
         onTogglePause={() => setIsPaused((prev) => !prev)}
         onOpenDetails={pillar => navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`)}
-        introActive={!isSplashUp}
-      />)},
-        /* 3. OUR WORK — the Living Mosaic. An ordinary scrolling section that
-              steers the page accent for the chapter in view (see ImpactMosaic). */
-        {id:'home.mosaic',node:<ImpactMosaic heroPillar={currentPillar} />},
-        {id:'home.events',node:<EventsSection />},
-        {id:'home.awards',node:<AwardsSection />},
-        {id:'home.partners',node:(<PartnersSection
-        onOpenDonate={() => setIsDonateOpen(true)}
+        introActive={!isSplashUp && heroArrived}
+        scrollDriven
+        onChoosePillar={goToPillar}
+      /></div>)},
+        /* 4. OUR WORK — the Living Mosaic, its four chapters. It steers the page
+              accent for the chapter in view (see ImpactMosaic). */
+        {id:'home.mosaic',node:<ImpactMosaicMemo heroPillar={currentPillar} />},
+        {id:'home.events',node:<EventsSectionMemo />},
+        {id:'home.awards',node:<AwardsSectionMemo />},
+        {id:'home.partners',node:(<PartnersSectionMemo
+        onOpenDonate={openDonate}
         escapeSuspended={
           /* while any overlay is up, Escape belongs to the overlay — the
              desk beneath it must not collapse on the same keypress */
           isModalOpen || isSearchOpen || isGalleryOpen || isDonateOpen || galleryLeader !== null
         }
       />)},
-        {id:'home.footer',node:<SiteFooter onOpenDonate={() => setIsDonateOpen(true)} />},
+        {id:'home.footer',node:<SiteFooterMemo onOpenDonate={openDonate} />},
       ]} />
 
       {/* Detail Modal for in-depth pillar exploration */}

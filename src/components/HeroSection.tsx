@@ -3,10 +3,10 @@ import { HeroHealWordmark } from './HealWordmark';
 import { PillarHeroBackdrop } from './PillarHeroBackdrop';
 import { getCMSCopy } from '../cms/runtime';
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { PillarHeroVisual } from './PillarHeroVisual';
-import { AnimatePresence } from 'motion/react';
 import { PillarArtwork } from './PillarArtwork';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { Pause, Play } from 'lucide-react';
@@ -20,7 +20,20 @@ interface HeroSectionProps {
   /** False while the welcome splash is still up; flips true when the hand-off
       lands on the header logo, which is when the content plays its entrance. */
   introActive: boolean;
+  /** The page's scroll chooses the path (the hall is pinned in a track, see
+      HomePage): no timer, no pause control, and the track holds the snap points. */
+  scrollDriven?: boolean;
+  /** A path chosen from the hall's own buttons; with a track, it scrolls there. */
+  onChoosePillar?: (index: number) => void;
 }
+
+/* Browsers that can draw two states of the page at once (the View Transitions
+   API) turn the hall's pages the way the explore pages turn; the others keep
+   the in-place shuttle. */
+type TurningDocument = Document & { startViewTransition?: (update: () => void) => { finished: Promise<unknown> } };
+const canTurnPages = () => typeof document !== 'undefined' && typeof (document as TurningDocument).startViewTransition === 'function';
+
+const BACKDROP_PATHS = ['heal', 'enrich', 'empower', 'projects'] as const;
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   activeIndex,
@@ -29,6 +42,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onTogglePause,
   onOpenDetails,
   introActive,
+  scrollDriven = false,
+  onChoosePillar,
 }) => {
   // Exactly 4 real pillar content items
   const pillars = PILLARS;
@@ -40,6 +55,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const showMetrics = true;
 
   const currentPillar = pillars[activeIndex] || pillars[0];
+  /* The backdrops stack in the order their paths were last chosen, the newest
+     on top, as they did when each was mounted fresh for its turn. */
+  const backdropStack = useRef<string[]>([]);
+  if (backdropStack.current[backdropStack.current.length - 1] !== currentPillar.id) {
+    backdropStack.current = [...backdropStack.current.filter(id => id !== currentPillar.id), currentPillar.id];
+  }
   const [heroVisible, setHeroVisible] = useState(true);
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
   // Keep the original carousel mounted while the curtain carries it away.
@@ -86,33 +107,49 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     mq.addEventListener('change', onMotionChange);
 
     const stage = document.getElementById('hero-clone-stage');
-    const page = stage?.closest<HTMLElement>('.home-page');
-    let raf = 0, measurementFrame = 0, extra = 0, viewport = window.innerHeight;
-    let previousHeight = -1, previousExtra = -1, wasFinished: boolean | undefined, lastExit = -1;
+    /* the page's shade is written on the canvas that draws it: on the page,
+       every element inherited each step of it and was restyled */
+    const canvas = stage?.closest<HTMLElement>('.home-page')?.querySelector<HTMLElement>(':scope > .accent-canvas');
+    /* On the home page the hall is pinned in a track, one screen of scroll per
+       path (HomePage): it leaves, and is finished, as the track's end passes.
+       Anywhere else it is measured from where it sits on the page (top). */
+    const track = stage?.parentElement?.classList.contains('hero-track') ? stage.parentElement : null;
+    let raf = 0, measurementFrame = 0, extra = 0, top = 0, viewport = window.innerHeight;
+    let previousHeight = -1, previousExtra = -1, wasVisible: boolean | undefined, lastExit = -1;
     const read = () => {
       raf = 0;
-      /* On tall mobile layouts, let the user reach the artwork before fading
-         the hero into the next section. */
-      const exit = Math.round(Math.min(1, Math.max(0, (window.scrollY - extra) / (viewport * .6))) * 100) / 100;
+      let leave: number, finished: boolean, visible: boolean;
+      if (track) {
+        const r = track.getBoundingClientRect();
+        leave = (viewport - r.bottom) / (viewport * .6);
+        finished = r.bottom <= 0;
+        visible = r.top < viewport && r.bottom > 0;
+      } else {
+        /* On tall mobile layouts, let the user reach the artwork before fading
+           the hero into the next section. Finished = scrolled fully out of view;
+           not yet reached = whatever is above it still fills the screen. */
+        leave = (window.scrollY - top - extra) / (viewport * .6);
+        finished = window.scrollY > top + extra + viewport;
+        visible = !finished && window.scrollY + viewport > top;
+      }
+      const exit = Math.round(Math.min(1, Math.max(0, leave)) * 100) / 100;
       if (exit !== lastExit) {
         lastExit = exit;
         stage?.style.setProperty('--hero-exit', String(exit));
         // Deepen the same page surface as the hero leaves, keeping white
         // chapter copy legible without introducing another section background.
-        page?.style.setProperty('--page-depth', String(exit));
+        canvas?.style.setProperty('--page-depth', String(exit));
       }
-      /* Finished = the hero has scrolled fully out of view. It used to fire at
-         .53 of a viewport, once the copy had faded behind the curtain. */
-      const finished = window.scrollY > extra + viewport;
-      if (finished === wasFinished) return;
-      wasFinished = finished;
-      setHeroVisible(!finished);
+      if (visible === wasVisible) return;
+      wasVisible = visible;
+      setHeroVisible(visible);
       if (contentGridRef.current) contentGridRef.current.style.pointerEvents = finished ? 'none' : '';
     };
     const measure = () => {
       measurementFrame = 0;
       if (!stage) return;
       viewport = window.innerHeight;
+      top = stage.getBoundingClientRect().top + window.scrollY;
       const h = stage.offsetHeight || viewport;
       extra = Math.max(0, h - viewport);
       // Sticky geometry only changes with layout, never with scroll. Rewriting
@@ -142,7 +179,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       geometry.disconnect();
       if (raf) cancelAnimationFrame(raf);
       if (measurementFrame) cancelAnimationFrame(measurementFrame);
-      page?.style.removeProperty('--page-depth');
+      canvas?.style.removeProperty('--page-depth');
     };
   }, []);
 
@@ -156,12 +193,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         ? 'opacity-0 translate-y-4 !transition-none'
         : 'opacity-100 translate-y-0';
   useEffect(() => {
-    if (isPaused || !introActive || !heroVisible) return;
+    if (scrollDriven || isPaused || !introActive || !heroVisible) return;
     const timer = window.setInterval(() => {
       if (!document.hidden && !reducedMotionRef.current) onActiveIndexChange((activeIndex + 1) % pillars.length);
     }, 8000);
     return () => window.clearInterval(timer);
-  }, [activeIndex, isPaused, introActive, heroVisible, onActiveIndexChange, pillars.length]);
+  }, [scrollDriven, activeIndex, isPaused, introActive, heroVisible, onActiveIndexChange, pillars.length]);
 
   const [displayPillar, setDisplayPillar] = useState<PillarState>(currentPillar);
   const stageAccentA = displayPillar.accentA;
@@ -170,12 +207,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   /* The single source for the page's colour. The .accent-canvas backdrop, the
      header ribbon and the donate panel all read these, so publishing them here
      is what keeps every surface on the same mood. The wipe angle rides along
-     so the design studio's slider still steers the shared gradient. */
+     so the design studio's slider still steers the shared gradient. They are
+     published on <body>, not on the root element: a custom property changed on
+     the root restyles every element of the document, whatever holds it lower
+     down (HomePage), which stalled each turn of the hall's pages for a frame or
+     more; changed on <body>, it stops at the sections holding their colours.
+     The other pages keep theirs on the root (PageShell), so the hall takes its
+     own away with it. */
   useEffect(() => {
-    const root = document.documentElement.style;
-    root.setProperty('--accent-a', stageAccentA);
-    root.setProperty('--accent-b', stageAccentB);
+    const page = document.body.style;
+    page.setProperty('--accent-a', stageAccentA);
+    page.setProperty('--accent-b', stageAccentB);
   }, [stageAccentA, stageAccentB]);
+  useEffect(() => () => {
+    document.body.style.removeProperty('--accent-a');
+    document.body.style.removeProperty('--accent-b');
+  }, []);
+
+  /* On the home page's track the hall's pages turn the way the explore pages
+     below them do (homepage.css, after impact-mosaic.css .mosaic-chapter): the
+     page in view leaves upwards, fading and settling back a little, while the
+     next rises from below into its place, both drawn at once by a view
+     transition; the new page's lines then rise in, as an explore page's do. */
+  const pageTurns = scrollDriven && canTurnPages();
+  const latestTurn = useRef<unknown>(null);
 
   // Cancel pending changes on every new selection, including returning to the
   // displayed pillar during an exit. This prevents a stale timer showing the wrong icon.
@@ -187,6 +242,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     if (reducedMotionRef.current) {
       setDisplayPillar(currentPillar);
       setPhase('idle');
+      return;
+    }
+    if (pageTurns) {
+      const root = document.documentElement;
+      const next = currentPillar;
+      /* back up the page, the pages move the other way, as the explore pages do */
+      root.classList.toggle('hero-turning-back', pillars.indexOf(next) < pillars.indexOf(displayPillar));
+      root.classList.add('hero-turning');
+      const turn = (document as TurningDocument).startViewTransition!(() => {
+        flushSync(() => {
+          setDisplayPillar(next);
+          setPhase('entering');
+        });
+      });
+      latestTurn.current = turn;
+      /* a turn cut short by the next one leaves the class to that one */
+      turn.finished.catch(() => undefined).finally(() => { if (latestTurn.current === turn) root.classList.remove('hero-turning', 'hero-turning-back'); });
       return;
     }
     setPhase('exiting');
@@ -227,16 +299,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <main
       id="hero-clone-stage"
+      /* a door on the landing brings focus here as it leads into the hall */
+      tabIndex={-1}
       data-pillar={displayPillar.id}
       /* The shared page canvas owns the color; only photography and the two
          decorative curves live here and dissolve before the section ends. */
-      className="snap-screen relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none"
+      className={`${scrollDriven ? '' : 'snap-screen '}relative z-10 w-full min-h-[100vh] flex flex-col justify-between pt-[76px] pb-12 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden select-none`}
       data-hero-theme={displayPillar.id}
       style={{ willChange: 'transform, opacity', transformOrigin: '50% 42%' }}
     >
-      <AnimatePresence initial={false}>
-        {(currentPillar.id === 'heal' || currentPillar.id === 'enrich' || currentPillar.id === 'empower' || currentPillar.id === 'projects') && <PillarHeroBackdrop key={currentPillar.id} pillar={currentPillar.id} />}
-      </AnimatePresence>
+      {/* Every path's backdrop stays mounted and drawn, the one on the current
+          path opaque: a change of path only crossfades them, rather than
+          mounting a new one (its photograph decoded, its masks, filter and
+          blend painted) in the middle of a turn of the hall's pages. */}
+      <div className="hero-backdrops">
+        {BACKDROP_PATHS.map(id => <PillarHeroBackdrop key={id} pillar={id} shown={currentPillar.id === id} layer={backdropStack.current.indexOf(id) + 1} />)}
+      </div>
       {/* A quiet studio backdrop: a broad light pool frames the white cards,
           with every overlay fading before the hero hands off to Our Work. */}
       <div
@@ -283,14 +361,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {(displayPillar.id === 'heal' || displayPillar.id === 'enrich' || displayPillar.id === 'empower' || displayPillar.id === 'projects') ? <><span className="sr-only">{displayPillar.label}</span>{displayPillar.id === 'heal' ? <HeroHealWordmark /> : <HeroPillarWordmark key={displayPillar.id} pillar={displayPillar.id} />}</> : getPillarScriptTitle(displayPillar)}
             </h2>
 
-            {/* 2. Main Headline (Delay: 50ms) */}
-            <h1
+            {/* 2. Main Headline (Delay: 50ms) — under the pillar's name; the landing above carries the page's h1 */}
+            <h3
               id="hero-headline"
               style={{ transitionDelay: phase === 'exiting' ? '70ms' : '60ms' }}
               className={`${getHeadingFontClass()} text-white text-[27px] sm:text-[32px] md:text-[40px] md:leading-[47px] mb-3.5 min-h-[2.4em] drop-shadow-md transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
             >
               {displayPillar.headline}
-            </h1>
+            </h3>
 
           </div>
           <div className="hero-details w-full flex flex-col">
@@ -355,11 +433,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
           <div className="hero-pillar-controls" role="group" aria-label="Choose a home theme">
-            {pillars.map((pillar, i) => <button key={pillar.id} type="button" aria-pressed={activeIndex === i} data-index={i + 1} onClick={() => onActiveIndexChange(i)}>{getPillarScriptTitle(pillar)}</button>)}
-            <button type="button" onClick={onTogglePause} aria-label={isPaused ? 'Resume theme rotation' : 'Pause theme rotation'}>{isPaused ? <Play size={14} /> : <Pause size={14} />}</button>
+            {pillars.map((pillar, i) => <button key={pillar.id} type="button" aria-pressed={activeIndex === i} data-index={i + 1} onClick={() => (onChoosePillar ?? onActiveIndexChange)(i)}>{getPillarScriptTitle(pillar)}</button>)}
+            {!scrollDriven && <button type="button" onClick={onTogglePause} aria-label={isPaused ? 'Resume theme rotation' : 'Pause theme rotation'}>{isPaused ? <Play size={14} /> : <Pause size={14} />}</button>}
           </div>
         </div>
-        {(currentPillar.id === 'heal' || currentPillar.id === 'enrich' || currentPillar.id === 'empower' || currentPillar.id === 'projects') && <PillarHeroVisual pillar={currentPillar.id} active={introActive} />}
+        {/* turning pages, the emblem belongs to the page it is on: it changes with the page, inside the turn */}
+        {(() => {
+          const emblem = pageTurns ? displayPillar : currentPillar;
+          return (emblem.id === 'heal' || emblem.id === 'enrich' || emblem.id === 'empower' || emblem.id === 'projects') && <PillarHeroVisual pillar={emblem.id} active={introActive} leavesWithPage={pageTurns} />;
+        })()}
       </div>
     </main>
 

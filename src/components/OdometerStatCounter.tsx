@@ -141,7 +141,8 @@ const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
   );
 };
 
-export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
+/* memoised below: a counter whose value has not changed has nothing to redo */
+const OdometerStat: React.FC<RollingOdometerProps> = ({
   value,
   duration = 1100,
   className = '',
@@ -225,5 +226,6 @@ export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
   );
 };
 
+export const OdometerStatCounter = React.memo(OdometerStat);
 export const FlipClockStatCounter = OdometerStatCounter;
 export const RollingOdometerStatCounter = OdometerStatCounter;

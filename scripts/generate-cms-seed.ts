@@ -49,7 +49,7 @@ const PAGE = { home: 'home', core: 'core-values', projects: 'projects', who: 'wh
 const COMPONENT_AREAS: Record<string, [string, string]> = {
   HeroSection: [PAGE.home, 'Hero'], WelcomeSplashScreen: [PAGE.home, 'Welcome screen'],
   PillarPhotoMosaic: [PAGE.home, 'Hero · Heal emblem photos'], PillarHeroBackdrop: [PAGE.home, 'Hero · Heal background'],
-  ImpactMosaic: [PAGE.home, 'Our work'], MosaicOverture: [PAGE.home, 'Our work'], MosaicChapter: [PAGE.home, 'Our work'], MosaicTile: [PAGE.home, 'Our work'],
+  ImpactMosaic: [PAGE.home, 'Our work'], MosaicOverture: [PAGE.home, 'Landing (Four paths. One purpose.)'], HomeLanding: [PAGE.home, 'Landing (Four paths. One purpose.)'], MosaicChapter: [PAGE.home, 'Our work'], MosaicTile: [PAGE.home, 'Our work'],
   PillarModal: [PAGE.home, 'Pillar details pop-up'],
   EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventShare: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
   AwardsSection: [PAGE.home, 'Awards'], AwardsTree: [PAGE.home, 'Awards'], AwardLightbox: [PAGE.home, 'Awards'], PartnersSection: [PAGE.home, 'Partners'], PartnerCircle: [PAGE.home, 'Partners'],

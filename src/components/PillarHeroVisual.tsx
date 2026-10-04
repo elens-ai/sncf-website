@@ -10,7 +10,10 @@ import type { MosaicPillar } from './pillarLogoArt';
 const SETTLE = [0.22, 1, 0.36, 1] as const;
 const LIFT = [0.4, 0, 0.9, 0.6] as const;
 
-export const PillarHeroVisual: React.FC<{ pillar: MosaicPillar; active: boolean; caption?: boolean }> = ({ pillar, active, caption = true }) => {
+/** leavesWithPage: the emblem sits on a page that turns as a whole (the home
+    page's hall, HeroSection), which carries the outgoing emblem away itself; so
+    it leaves at once here, and only the incoming one settles in. */
+export const PillarHeroVisual = React.memo(function PillarHeroVisual({ pillar, active, caption = true, leavesWithPage = false }: { pillar: MosaicPillar; active: boolean; caption?: boolean; leavesWithPage?: boolean }) {
   const calm = useReducedMotion();
   return (
     <div className="hero-heal-art" data-ready={active}>
@@ -20,9 +23,10 @@ export const PillarHeroVisual: React.FC<{ pillar: MosaicPillar; active: boolean;
           <motion.div
             key={pillar}
             className="pillar-art-face"
-            initial={calm ? { opacity: 0 } : { opacity: 0, y: 26, scale: 0.93, rotate: -2.5 }}
+            /* on a turning page the incoming emblem rides in with the page rather than settling on its own */
+            initial={leavesWithPage ? false : calm ? { opacity: 0 } : { opacity: 0, y: 26, scale: 0.93, rotate: -2.5 }}
             animate={calm ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, rotate: 0 }}
-            exit={calm ? { opacity: 0, transition: { duration: 0.2 } } : { opacity: 0, y: -18, scale: 1.05, rotate: 1.5, transition: { duration: 0.55, ease: LIFT } }}
+            exit={leavesWithPage ? { opacity: 0, transition: { duration: 0 } } : calm ? { opacity: 0, transition: { duration: 0.2 } } : { opacity: 0, y: -18, scale: 1.05, rotate: 1.5, transition: { duration: 0.55, ease: LIFT } }}
             transition={{ duration: calm ? 0.2 : 1.05, ease: SETTLE }}
           >
             <PillarPhotoMosaic pillar={pillar} heroArt caption={caption} />
@@ -31,4 +35,4 @@ export const PillarHeroVisual: React.FC<{ pillar: MosaicPillar; active: boolean;
       </div>
     </div>
   );
-};
+});

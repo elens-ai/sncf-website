@@ -1,0 +1,14 @@
+/* ==========================================================================
+   THE LANDING (HomeLanding.tsx): the overture as the home page's first
+   screen, on the page's own ground.
+   ========================================================================== */
+.home-landing { position: relative; z-index: 10; }
+/* the overture was drawn to fill a pinned stage; here it is a screen of its own */
+.home-landing > .mosaic-overture { position: relative; inset: auto; min-height: 100svh; }
+.home-landing[data-active='false'] .mosaic-overture * { animation-play-state: paused; }
+/* the wall's photographs take the ground's own colour, whichever path the page is on */
+.home-landing .mosaic-wall-col > i { background-color: var(--backdrop-mid, #3e8b75); }
+/* the cue at its foot is a way on */
+.home-landing button.mosaic-scroll-cue { padding: 6px 2px; border: 0; background: none; cursor: pointer; }
+.home-landing button.mosaic-scroll-cue:hover { color: #fff; }
+.home-landing button.mosaic-scroll-cue:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 4px; }

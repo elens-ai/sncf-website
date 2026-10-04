@@ -13,8 +13,13 @@
   --backdrop-shadow: #0b573033;
   --backdrop-edge: #e5ffeb44;
 }
-.home-page:not([data-chapter-theme])[data-hero-theme='enrich'],
-.home-page[data-chapter-theme='enrich'],
+/* The ground follows the hall's path (data-hero-theme) and, among the explore
+   chapters, the chapter in view (data-chapter-theme). The colours are set on
+   the few things that paint them (the canvas, the journal's dots and rules,
+   the landing's wall) rather than on the page: set on .home-page, every element
+   of the page inherited them and was restyled on each turn, a frame or more of
+   work. Heal's are the page's own, above. */
+:is(.home-page:not([data-chapter-theme])[data-hero-theme='enrich'], .home-page[data-chapter-theme='enrich']) :is(.accent-canvas, .journal-atmosphere, .journal-eyebrow, .mosaic-wall-col),
 .heal-layered-backdrop[data-theme='enrich'] {
   --backdrop-dark: #164b60;
   --backdrop-mid: #408ca8;
@@ -23,8 +28,7 @@
   --backdrop-shadow: #0c517e36;
   --backdrop-edge: #eafaff55;
 }
-.home-page:not([data-chapter-theme])[data-hero-theme='empower'],
-.home-page[data-chapter-theme='empower'],
+:is(.home-page:not([data-chapter-theme])[data-hero-theme='empower'], .home-page[data-chapter-theme='empower']) :is(.accent-canvas, .journal-atmosphere, .journal-eyebrow, .mosaic-wall-col),
 .heal-layered-backdrop[data-theme='empower'] {
   --backdrop-dark: #682e48;
   --backdrop-mid: #ad6088;
@@ -33,8 +37,7 @@
   --backdrop-shadow: #8f28533b;
   --backdrop-edge: #fff0f855;
 }
-.home-page:not([data-chapter-theme])[data-hero-theme='projects'],
-.home-page[data-chapter-theme='projects'],
+:is(.home-page:not([data-chapter-theme])[data-hero-theme='projects'], .home-page[data-chapter-theme='projects']) :is(.accent-canvas, .journal-atmosphere, .journal-eyebrow, .mosaic-wall-col),
 .heal-layered-backdrop[data-theme='projects'] {
   --backdrop-dark: #20494d;
   --backdrop-mid: #4b9094;
@@ -43,13 +46,13 @@
   --backdrop-shadow: #1c696333;
   --backdrop-edge: #effff455;
 }
-.home-page {
-  transition: --backdrop-dark 850ms ease-in-out, --backdrop-mid 850ms ease-in-out,
-    --backdrop-light 850ms ease-in-out, --backdrop-pale 850ms ease-in-out;
-}
+/* The blend between paths runs on the canvas alone. Run on .home-page, every
+   element on the page inherited the moving colours and had its style worked
+   out again on every frame of the blend; the canvas is the one that paints them. */
 .home-page > .accent-canvas {
   background: linear-gradient(calc(var(--stage-angle, 135deg) - 35deg), var(--backdrop-dark), var(--backdrop-mid) 43%, var(--backdrop-light) 77%, var(--backdrop-pale));
-  transition: none;
+  transition: --backdrop-dark 850ms ease-in-out, --backdrop-mid 850ms ease-in-out,
+    --backdrop-light 850ms ease-in-out, --backdrop-pale 850ms ease-in-out;
 }
 .home-page > .accent-canvas::after {
   content: '';
@@ -60,7 +63,8 @@
 }
 /* Feather every hero-only layer, including the photo and both curved sheets,
    so their lower edge reveals the very same surface as Our Work. */
-.home-page #hero-clone-stage > :is(.heal-layered-backdrop, .hero-studio-light, .hero-studio-ground) {
+.home-page #hero-clone-stage > :is(.hero-studio-light, .hero-studio-ground),
+.home-page #hero-clone-stage > .hero-backdrops > .heal-layered-backdrop {
   mask-image: linear-gradient(180deg, #000 45%, #000d 65%, #0005 85%, transparent 100%);
 }
 @media (max-width: 899px) {
@@ -69,5 +73,5 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-page { transition: none; }
+  .home-page > .accent-canvas { transition: none; }
 }

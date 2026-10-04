@@ -1,15 +1,18 @@
 import React, { useId } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'motion/react';
 import { resolveCMSMedia } from '../cms/media';
 import { resolveCMSAsset } from '../cms/runtime';
 import { roomPhoto } from '../data/pavilionGallery';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 
-export const PillarHeroBackdrop: React.FC<{ pillar: MosaicPillar }> = ({ pillar }) => {
+/** shown: this path's backdrop is the one in view; the others stay mounted
+    and drawn, transparent, so a change of path only fades between them (the
+    hero mounts all four, HeroSection). layer: its place in the stack. */
+export const PillarHeroBackdrop = React.memo(function PillarHeroBackdrop({ pillar, shown, layer }: { pillar: MosaicPillar; shown: boolean; layer: number }) {
   const calm = useReducedMotion();
   const id = useId().replace(/:/g, '');
   const logo = PILLAR_LOGOS[pillar];
-  return <motion.div className="heal-layered-backdrop" data-theme={pillar} aria-hidden="true" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: calm ? .12 : .85, ease: 'easeInOut' }}>
+  return <div className="heal-layered-backdrop" data-theme={pillar} aria-hidden="true" style={{ opacity: shown ? 1 : 0, zIndex: layer, transition: `opacity ${calm ? 120 : 850}ms ease-in-out` }}>
     {/* Heal's background echoes its emblem: the foundation's own photographs,
         faint and tinted (CMS-editable); the other pillars use a room photo. */}
     <div className="heal-background-photo" style={{ backgroundImage: `url("${pillar === 'heal' ? resolveCMSAsset("asset.PillarHeroBackdrop.heal-background", "/images/heal-emblem/background.webp") : resolveCMSMedia(roomPhoto(pillar, 2))}")` }} />
@@ -24,5 +27,5 @@ export const PillarHeroBackdrop: React.FC<{ pillar: MosaicPillar }> = ({ pillar 
       </svg>
     </>}
     <div className="pillar-backdrop-dots" />
-  </motion.div>;
-};
+  </div>;
+});

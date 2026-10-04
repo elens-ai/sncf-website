@@ -15,11 +15,17 @@
 .home-page > .accent-canvas { position: fixed; inset: 0; }
 .home-page {
   --home-paper: #f4f1e9;
+  --home-line: rgb(255 255 255 / .16);
+  --home-ease: cubic-bezier(.22, 1, .36, 1);
+}
+/* The ink and tint mixed from the page's accent, worked out on the things that
+   use them (the header, the social rail, the hall, a focused control) rather
+   than on the page: there, every turn of the hall changed them for every
+   element of the page and restyled it all. */
+.home-page :is(#site-header, #hero-social-sidebar, #hero-clone-stage, :is(button, a, input):focus-visible) {
   --pillar-ui-ink: color-mix(in srgb, var(--accent-a) 42%, #103932);
   --pillar-ui-tint: color-mix(in srgb, var(--accent-b) 55%, #fff);
   --pillar-ui-shadow: color-mix(in srgb, var(--pillar-ui-ink) 35%, transparent);
-  --home-line: rgb(255 255 255 / .16);
-  --home-ease: cubic-bezier(.22, 1, .36, 1);
 }
 .home-page :is(h1, h2, h3) { text-wrap: balance; }
 .home-page :is(button, a, input):focus-visible {
@@ -39,6 +45,41 @@
 #hero-social-sidebar { opacity: .7; transition: opacity 300ms ease; }
 #hero-social-sidebar:hover, #hero-social-sidebar:focus-within { opacity: 1; }
 #hero-clone-stage { padding-top: 112px; padding-bottom: 28px; min-height: 100svh; }
+/* it takes focus only when a landing door leads into it, never by tabbing */
+#hero-clone-stage:focus { outline: none; }
+/* THE HALL'S TRACK (HomePage): the hero pinned while the page scrolls one
+   screen per path, Heal, then Enrich, then Empower, then Projects. A hero
+   taller than the screen first scrolls to its foot and then holds there
+   (--hero-sticky-top, --hero-height: HeroSection measures both). No snap
+   points: the hall is pinned, so they changed nothing on screen and only
+   pulled the scroll back mid-way, turning the page back and forth. */
+.hero-track { position: relative; z-index: 10; flex: none; height: calc(var(--hero-height, 100vh) + (var(--hero-count, 4) - 1) * 100vh); }
+.hero-track > #hero-clone-stage { position: sticky; top: var(--hero-sticky-top, 0px); }
+/* THE HALL'S PAGES TURN LIKE THE EXPLORE PAGES (HeroSection): the page in view
+   leaves upwards, fading and settling back a little, while the next rises from
+   below into its place: the motion, timing and ease of .mosaic-chapter's states
+   (impact-mosaic.css). A view transition draws the two pages at once; it is
+   named only while turning, and nothing else on the page is animated by it. */
+html.hero-turning .hero-track #hero-foreground-content { view-transition-name: hero-page; }
+/* behind the turning hall the page is just the live page: the page itself is
+   not captured (a snapshot of the whole screen, taken twice and drawn through
+   a copy every frame of the turn), only the hall's page is. The page stays put
+   in the hall, so its frame does not move or resize: only the two pages do,
+   in opacity and transform, which the compositor draws on its own. */
+html.hero-turning { view-transition-name: none; }
+html.hero-turning::view-transition-group(hero-page) { animation: none; }
+html.hero-turning::view-transition-old(hero-page), html.hero-turning::view-transition-new(hero-page) { mix-blend-mode: normal; }
+html.hero-turning::view-transition-old(hero-page) { animation: hero-page-fade-out 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-leave 850ms cubic-bezier(.22, 1, .36, 1) both; }
+html.hero-turning::view-transition-new(hero-page) { animation: hero-page-fade-in 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-arrive 850ms cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes hero-page-fade-out { to { opacity: 0; } }
+@keyframes hero-page-leave { to { transform: translateY(-6vh) scale(.985); } }
+@keyframes hero-page-fade-in { from { opacity: 0; } }
+@keyframes hero-page-arrive { from { transform: translateY(6vh); } }
+/* scrolling back up: the page in view sinks back below, and the one before it returns from above */
+html.hero-turning.hero-turning-back::view-transition-old(hero-page) { animation: hero-page-fade-out 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-sink 850ms cubic-bezier(.22, 1, .36, 1) both; }
+html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation: hero-page-fade-in 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-return 850ms cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes hero-page-sink { to { transform: translateY(6vh); } }
+@keyframes hero-page-return { from { transform: translateY(-6vh) scale(.985); } }
 #hero-foreground-content { max-width: 1440px; margin-inline: auto; gap: 36px; }
 /* Starts on the same line as the HEAL letters, which sit a few pixels inside their box. */
 .hero-eyebrow { display: flex; align-items: center; margin-bottom: 24px; padding-left: 3px; font-size: 12px; color: rgb(255 255 255 / .86); }

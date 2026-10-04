@@ -209,7 +209,7 @@
    THE STAGE — desktop with motion allowed. One sticky screen inside a
    track four viewports long; the reader scrolls, the chapters turn.
    ==================================================================== */
-.impact-mosaic[data-mode='stage'] { height: calc(100svh * 6); padding: 0; } /* one screen of overture, four of chapters */
+.impact-mosaic[data-mode='stage'] { height: calc(100svh * 5); padding: 0; } /* four screens of chapters, and the one it is pinned for */
 .impact-mosaic[data-mode='stage'] > * { max-width: none; margin: 0; }
 .mosaic-stage { position: sticky; top: 0; height: 100svh; overflow: clip; }
 .mosaic-stage-label {

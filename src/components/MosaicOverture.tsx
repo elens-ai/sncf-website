@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
@@ -7,6 +7,7 @@ import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import { ACTIVITIES } from '../data/activities';
 import { PILLARS } from '../data/pillars';
 import { MOSAIC_WALL } from './mosaicWallTiles';
+import { easeOut } from '../utils/waves';
 import './mosaic-overture.css';
 
 // Keep every piece in the foundation artwork's original proportions.
@@ -52,12 +53,67 @@ function MosaicWall({ lit }: { lit: MosaicPillar | null }) {
   );
 }
 
-export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) => void }) {
+/* THE ASSEMBLY, over a little more than two seconds once it is told to play:
+   a cupped hand, then the centre petal, then the mirrored pairs unfolding, the
+   light and orbits rising with them, then the words, then the doors. Written
+   as CSS variables on the overture and each petal, which its stylesheet reads;
+   under reduced motion everything is simply there. */
+const ASSEMBLY_MS = 2200;
+const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
+function useAssembly(root: React.RefObject<HTMLElement | null>, play: boolean) {
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const petals = [...el.querySelectorAll<HTMLElement>('.mosaic-petal')];
+    const paint = (o: number) => {
+      el.style.setProperty('--a', String(easeOut(clamp01(o / .8))));
+      petals.forEach((petal, index) => {
+        const palm = petal.dataset.piece === 'palm';
+        const start = palm ? 0 : .13 + Math.abs(index - 2) * .085;
+        const t = clamp01((o - start) / (palm ? .38 : .48));
+        const bloom = t * t * t * (t * (t * 6 - 15) + 10);
+        petal.style.setProperty('--bloom', String(bloom));
+        petal.style.setProperty('--arc', String(Math.sin(Math.PI * bloom)));
+      });
+      el.style.setProperty('--w', String(easeOut(clamp01((o - .2) / .65))));
+      el.style.setProperty('--links', String(clamp01((o - .55) / .45)));
+    };
+    if (!play) { paint(0); return; }
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { paint(1); return; }
+    const start = performance.now();
+    let frame = 0;
+    const step = (now: number) => {
+      const o = Math.min(1, (now - start) / ASSEMBLY_MS);
+      paint(o);
+      if (o < 1) frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [root, play]);
+}
+
+/** "FOUR PATHS. ONE PURPOSE." — the foundation's emblem assembling over a wall
+    of its own photographs, and four doors, one for each path. It opens the
+    home page: choosing a door walks the visitor into that path (onChoose is
+    handed the door it was chosen from), and the cue at its foot carries on
+    down the page. */
+export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScrollOn }: {
+  onChoose: (pillar: MosaicPillar, from: HTMLElement) => void;
+  /** Starts the emblem assembling and the words and doors arriving. */
+  play?: boolean;
+  /** h1 where the overture opens the page. */
+  heading?: 'h1' | 'h2';
+  /** Where "Scroll to explore" goes when it is pressed. */
+  onScrollOn?: () => void;
+}) {
+  const root = useRef<HTMLElement>(null);
+  useAssembly(root, play);
   const [lit, setLit] = useState<MosaicPillar | null>(null);
+  const Title = heading;
   const title = getCMSCopy('copy.ImpactMosaic.eee670c33892', 'Four paths. One purpose.');
   const lines = title.match(/^(.+?[.!?])\s+(.+)$/);
   return (
-    <header className="mosaic-overture" data-state="active">
+    <header ref={root} className="mosaic-overture" data-state="active">
       <MosaicWall lit={lit} />
       <div className="mosaic-overture-composition">
         <div className="mosaic-emblem" aria-hidden="true">
@@ -83,16 +139,16 @@ export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) 
         </div>
         <div className="mosaic-overture-copy">
           <p className="mosaic-overture-eyebrow"><span aria-hidden="true" />{getCMSCopy('copy.ImpactMosaic.fc967e87a6e8', 'Our work')}</p>
-          <h2 className="mosaic-overture-title">
+          <Title className="mosaic-overture-title">
             <span>{lines ? lines[1] : title}</span>
             {lines && <span className="font-dancing-script">{lines[2]}</span>}
-          </h2>
+          </Title>
           <p className="mosaic-overture-lead">{getCMSCopy('copy.MosaicOverture.purpose', 'A helping hand. An open door. A greener tomorrow. Together, we make a difference.')}</p>
         </div>
       </div>
       <nav className="mosaic-paths" aria-label="Explore our four pillars">
         {paths().map(({ id, detail }, index) => (
-          <button type="button" key={id} className="mosaic-path" onClick={() => onChoose(id)} aria-label={`View ${PILLAR_LOGOS[id].label} programmes`}
+          <button type="button" key={id} className="mosaic-path" onClick={event => onChoose(id, event.currentTarget)} aria-label={`${getCMSCopy('copy.MosaicOverture.enter', 'Enter')} ${PILLAR_LOGOS[id].label}: ${detail}`}
             onPointerEnter={() => setLit(id)} onPointerLeave={() => setLit(null)} onFocus={() => setLit(id)} onBlur={() => setLit(null)}
             style={{ '--path-ink': PILLAR_LOGOS[id].tint, '--path-order': index } as React.CSSProperties}>
             <span className="mosaic-path-number" aria-hidden="true">0{index + 1}</span>
@@ -105,7 +161,9 @@ export function MosaicOverture({ onChoose }: { onChoose: (pillar: MosaicPillar) 
       </nav>
       <div className="mosaic-overture-foot">
         <p>{getCMSCopy('copy.ImpactMosaic.c18aacd51665', 'Every figure below is as the foundation reports it.')}</p>
-        <span className="mosaic-scroll-cue">Scroll to explore <ArrowDown size={14} aria-hidden="true" /></span>
+        {onScrollOn
+          ? <button type="button" className="mosaic-scroll-cue" onClick={onScrollOn}>{getCMSCopy('copy.MosaicOverture.scroll', 'Scroll to explore')} <ArrowDown size={14} aria-hidden="true" /></button>
+          : <span className="mosaic-scroll-cue">{getCMSCopy('copy.MosaicOverture.scroll', 'Scroll to explore')} <ArrowDown size={14} aria-hidden="true" /></span>}
       </div>
     </header>
   );
