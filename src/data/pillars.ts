@@ -60,7 +60,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     accentA: '#c2185b',
     accentB: '#f48fb1',
     headline: 'Empowering Lives, Strengthening Society',
-    body: 'Empowerment brings sustainable, social and economic development for the society. SNCF has initiated numerous skill development programs and career opportunities along with working for a clean and green environment.',
+    body: 'Driving sustainable social and economic development. Creating skills and career opportunities while working for a clean and green environment.',
     cardImageAlt: 'Youth volunteers planting trees',
     shortTagline: 'Come for an evening of purpose — see how EMPOWER comes to life.',
     emblemCaption: 'Together, we rise.',
