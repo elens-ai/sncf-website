@@ -78,7 +78,7 @@ function stackedMask(ctx: CanvasRenderingContext2D, height: number) {
   return mask;
 }
 
-const size = (host: HTMLElement) => ({ w: Math.max(1, Math.ceil(host.clientWidth / SCALE)), h: Math.max(1, Math.ceil(host.clientHeight / SCALE)) });
+const size = (host: HTMLElement, scale = SCALE) => ({ w: Math.max(1, Math.ceil(host.clientWidth / scale)), h: Math.max(1, Math.ceil(host.clientHeight / scale)) });
 
 export interface WaveInput { travel: number; /** set by the album when it turns: one breath ripples through */ nudge?: boolean }
 
@@ -89,9 +89,12 @@ interface MosaicWavesProps {
   active: boolean;
   /** Written by the stage's reader every frame it scrolls; read by the clock. */
   input: RefObject<WaveInput>;
+  /** A cheaper pass for a busy screen: CSS pixels per painted pixel, and frames a second. */
+  scale?: number;
+  fps?: number;
 }
 
-export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input }) => {
+export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input, scale = SCALE, fps = FPS }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const state = useRef({
     from: null as Genome | null, to: null as Genome | null, shown: null as Genome | null, u: 1,
@@ -118,7 +121,7 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
       if (canvas.dataset.ready !== 'true') canvas.dataset.ready = 'true';
     };
     const resize = () => {
-      const { w, h } = size(host);
+      const { w, h } = size(host, scale);
       if (w !== s.w || h !== s.h) {
         s.w = w; s.h = h;
         canvas.width = w; canvas.height = h;
@@ -148,7 +151,7 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
         s.shown = lerpGenome(s.from, s.to, easeOut(s.u));
       }
       s.paint();
-    }, FPS);
+    }, fps);
 
     /* Only where a cursor exists: a touch is not a hover. */
     const fine = matchMedia('(hover: hover) and (pointer: fine)');

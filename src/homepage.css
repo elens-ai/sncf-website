@@ -301,3 +301,13 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 #site-header .search-morph:focus-within { background: transparent; border-color: transparent; box-shadow: none; backdrop-filter: none; }
 #site-header .search-morph::after,
 #site-header .search-sheen { display: none; }
+
+/* ----- the water under the hall (HeroSection → MosaicWaves) ----------------
+   The chapters' layered-wave artwork, laid beneath each path's page in that
+   path's colours and kept quiet: faint under the words on the left, fuller
+   behind the photographs on the right (the artwork's own mask), and at just
+   over half strength overall so the page's canvas still reads through. */
+#hero-clone-stage .hero-waves { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .58; }
+#hero-clone-stage .hero-waves .mosaic-waves { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 900ms ease; }
+#hero-clone-stage .hero-waves .mosaic-waves[data-ready='true'] { opacity: 1; }
+@media (forced-colors: active), (prefers-contrast: more) { #hero-clone-stage .hero-waves { display: none; } }
