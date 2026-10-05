@@ -67,6 +67,20 @@
 .home-page #hero-clone-stage > .hero-backdrops > .heal-layered-backdrop {
   mask-image: linear-gradient(180deg, #000 45%, #000d 65%, #0005 85%, transparent 100%);
 }
+/* On the home page the hall comes up under the landing, so its layers start
+   soft at the top as well: the dots, the sweeping sheets, the photograph, the
+   light, the arcs and the faint artwork fade in over a thin edge, well above
+   the hall's words. Once the hall is in place that edge lies under the
+   header, so the hall looks the same at rest, and as it scrolls up it never
+   begins with a cut. */
+.home-page .hero-track > #hero-clone-stage { --top-soft: clamp(32px, 5vh, 48px); }
+.home-page .hero-track > #hero-clone-stage > :is(.hero-studio-light, .hero-studio-ground),
+.home-page .hero-track > #hero-clone-stage > .hero-backdrops > .heal-layered-backdrop {
+  mask-image: linear-gradient(180deg, transparent 0, #000 var(--top-soft), #000 45%, #000d 65%, #0005 85%, transparent 100%);
+}
+.home-page .hero-track > #hero-clone-stage > :is(.hero-studio-arc, .hero-activity-art) {
+  mask-image: linear-gradient(180deg, transparent 0, #000 var(--top-soft));
+}
 @media (max-width: 899px) {
   .home-page > .accent-canvas {
     background: linear-gradient(calc(var(--stage-angle, 135deg) + 25deg), var(--backdrop-dark), var(--backdrop-mid) 52%, var(--backdrop-light));

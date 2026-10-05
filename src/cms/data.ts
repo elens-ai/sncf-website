@@ -128,7 +128,8 @@ export function resolveEvents(publication: CMSPublication, defaults: SNCFEvent[]
 
 export function resolvePartners(publication: CMSPublication, defaults: Partner[]) {
   return collection(publication.partners, defaults, (item): item is Partner =>
-    isRecord(item) && recordID(item.id) && fields(item, ['name', 'contribution']) && optionalFields(item, ['note']));
+    isRecord(item) && recordID(item.id) && fields(item, ['name', 'contribution']) && optionalFields(item, ['note']) &&
+    (item.href === undefined || item.href === null || item.href === '' || safeCMSURL(item.href)));
 }
 export function resolveAwards(publication: CMSPublication, defaults: Award[]) {
   /* An honour the source lists without a year keeps an empty one — never a plausible one — so `year` is optional here and in the CMS. */

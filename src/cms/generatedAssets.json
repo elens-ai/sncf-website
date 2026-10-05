@@ -274,5 +274,9 @@
   "asset.WhoWeArePage.stamp": {
     "source": "/images/sncf-logo.webp",
     "label": "WhoWeArePage · sncf-logo.webp"
+  },
+  "asset.WelcomeSplashScreen.message-photo": {
+    "source": "/images/satguru-mata-sudiksha-ji-message.webp",
+    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-message.webp"
   }
 }

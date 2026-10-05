@@ -195,6 +195,22 @@ const PETAL_LIFT = Math.max(
 
 export const PETAL_ART: PetalArt[] = RAW_PETALS.map((p) => ({ ...p, y: p.y - PETAL_LIFT }));
 
+/** THE HAND ABOVE, as the seal has it: the same hand turned half about the
+    flower's centre, so it reaches over from the other side, its fingertips
+    a little clear of the flower's heads (TOP_GAP). Drawn turned (the page
+    rotates the palm artwork); this is the box it is drawn in. */
+const TOP_GAP = 8;
+const FLOWER_LEFT = Math.min(...PETAL_ART.map((p) => p.x));
+const FLOWER_RIGHT = Math.max(...PETAL_ART.map((p) => p.x + p.w));
+const FLOWER_TOP = Math.min(...PETAL_ART.map((p) => p.y));
+export const PALM_TOP_ART = {
+  src: PALM_ART.src,
+  x: FLOWER_LEFT + FLOWER_RIGHT - (PALM_ART.x + PALM_ART.w),
+  y: FLOWER_TOP - TOP_GAP - PALM_ART.h,
+  w: PALM_ART.w,
+  h: PALM_ART.h,
+};
+
 /** THE DOT-FINDER. Each vector petal's shapes include its accent dot — the
     "head" above the figure — as its own small subpath. This walks a path's
     control points for a bounding box (the data is absolute M/C/z only, so

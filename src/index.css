@@ -1356,7 +1356,10 @@
   }
 }
 
-.hero-intro-rise {
+/* The path's name and headline are not part of it: they are in place as the
+   hall scrolls up, so they are never seen half-faded. The story below them
+   rises in. */
+.hero-intro-rise > .hero-details {
   animation: heroIntroRise 640ms cubic-bezier(0.22, 0.9, 0.3, 1) 60ms both;
 }
 
@@ -1364,13 +1367,13 @@
   animation: heroIntroBloom 760ms cubic-bezier(0.22, 0.9, 0.3, 1) 220ms both;
 }
 
-/* Pre-intro: content held invisible while the splash is still up */
-.hero-intro-waiting {
+/* Pre-intro: the story held invisible until the visitor arrives */
+.hero-intro-waiting > .hero-details {
   opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-intro-rise,
+  .hero-intro-rise > .hero-details,
   .hero-intro-bloom {
     animation: none;
     opacity: 1;
@@ -1737,6 +1740,59 @@
 .splash-intro-wordmark svg { display: block; height: var(--name-line); width: auto; max-width: 100%; }
 
 /* --------------------------------------------------------------------------
+   The message page shares this frame (WelcomeSplashScreen 'message'): beneath
+   the name, the Satguru's message, set large as a chapter is, her name under
+   it. Moving on, it lifts away while the first chapter waits to come in, in
+   the same place (one grid cell holds both), so only the copy changes: the
+   name, the logo and the portrait stay where they are.
+   -------------------------------------------------------------------------- */
+@keyframes messageIn { from { opacity: 0; transform: translate3d(0, 14px, 0); filter: blur(8px); } }
+.splash-copy-body { flex: 1 1 auto; display: grid; min-height: 0; }
+.splash-copy-body > * { grid-area: 1 / 1; }
+.splash-message {
+  --msg: clamp(15px, calc(var(--u) * 1.42), 24px);
+  align-self: center;
+  min-width: 0;
+  margin: calc(var(--mp-s) * 3.6) 0;
+  padding-right: var(--mp-gutter);
+  font-size: var(--msg);
+}
+.splash-message[data-gone='true'] { pointer-events: none; animation: chapterOut 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+.splash-message blockquote {
+  margin: 0;
+  font: 400 1em / 1.72 var(--font-sans);
+  color: var(--mp-ink);
+  text-wrap: pretty;
+  text-shadow: 0 2px 14px rgb(0 0 0 / 0.35);
+  animation: messageIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1.5s both;
+}
+/* an opening mark in mint over the first line, in the name's heavy face */
+.splash-message blockquote::before {
+  content: '\201C' / '';
+  display: block;
+  height: 0.5em;
+  margin-bottom: 0.12em;
+  font: 800 4em / 1 var(--font-heading);
+  color: var(--mp-mint);
+}
+.splash-message figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.9em;
+  margin-top: 1.5em;
+  animation: welcomeRise 1s cubic-bezier(0.16, 1, 0.3, 1) 2.4s both;
+}
+.splash-message figcaption::before { content: ''; width: 2.6em; height: 1px; background: var(--mp-mint); opacity: 0.8; }
+.splash-message cite {
+  font: 500 0.66em / 1.4 var(--font-sans);
+  font-style: normal;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mp-mint);
+}
+
+/* --------------------------------------------------------------------------
    The chapters. One plays at a time on a stage as tall as the longest, so
    nothing beneath it moves as they change; each is set larger than a column
    of copy could be, since it has the stage to itself. A chapter enters in
@@ -2046,6 +2102,12 @@
   mask-image: linear-gradient(#000 70%, transparent 98%), linear-gradient(90deg, transparent 0%, #000 18%);
   mask-composite: intersect;
 }
+/* the message page's own portrait, over the mission page's in the same frame;
+   one gives way to the other as the mission page begins */
+.splash-satguru-frame > img { transition: opacity 1.2s ease; }
+.splash-satguru-frame > .splash-satguru-message-photo { position: absolute; inset: 0; }
+.splash-satguru-frame[data-page='message'] > img:not(.splash-satguru-message-photo),
+.splash-satguru-frame[data-page='mission'] > .splash-satguru-message-photo { opacity: 0; }
 .splash-satguru figcaption {
   position: relative;
   z-index: 1;
@@ -2054,6 +2116,31 @@
   margin-top: calc(var(--mp-s) * 2.4);
   animation: welcomeRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.6s both;
 }
+/* on the message page her message stands beside the portrait, so its own
+   quotation waits, its place kept, for the mission page */
+.splash-satguru figcaption[data-shown='false'] { visibility: hidden; animation: none; }
+/* The message page's Hindi couplet, in that same place under the portrait:
+   set over the quotation's (hidden) lines, its last line on the attribution's,
+   so the caption keeps the quotation's size and the portrait never moves. */
+.splash-couplet {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+  margin: 0;
+  visibility: visible;
+  white-space: nowrap;
+  font: 600 calc(var(--mp-quote) * 1.8) / 1.5 var(--font-hindi);
+  color: var(--mp-quote-ink);
+  text-shadow: 0 2px 14px rgb(0 0 0 / 0.45);
+  animation: welcomeRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.6s both;
+}
+.splash-couplet span { display: block; }
+/* in quotation marks, as the mission page's quotation is, and in its script;
+   the marks are the page's, so the CMS holds just the words */
+.splash-couplet span:first-child::before { content: '\201C'; font-family: var(--font-script); }
+.splash-couplet span:last-child::after { content: '\201D'; font-family: var(--font-script); }
+.splash-couplet[data-gone='true'] { pointer-events: none; animation: chapterOut 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
 .splash-satguru blockquote {
   margin: 0;
   font: 600 calc(var(--mp-quote) * 1.12) / 1.38 var(--font-script);
@@ -2115,6 +2202,9 @@
     mask-image: linear-gradient(#000 62%, transparent 98%);
   }
   .splash-satguru figcaption { margin-top: calc(var(--mp-s) * 1.6); }
+  /* centred on the screen here, the couplet keeps clear of the arrow at the
+     bottom right: its lines are about ten times its size across */
+  .splash-couplet { font-size: min(calc(var(--mp-quote) * 1.8), calc((100vw - 2 * clamp(16px, 2.5vw, 36px) - 132px) / 10.05)); }
 }
 /* A narrow copy column puts the logo above the name, so the name can use the
    full width, and keeps the rail to the chapters' names. */
@@ -4338,146 +4428,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .partner-aurora { animation: none; }
-}
-
-/* THE BROCHURE: exists only on paper. Hidden on screen; under print the
-   whole app steps aside and this one A4 page speaks. */
-#partner-brochure {
-  display: none;
-}
-@media print {
-  @page {
-    size: A4;
-    margin: 14mm;
-  }
-  body > #root {
-    display: none !important;
-  }
-  body {
-    background: #fff !important;
-  }
-  #partner-brochure {
-    display: block;
-    color: #1c2333;
-    font-family: var(--font-sans);
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .pb-inkline {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 18px;
-  }
-  .pb-inkline span {
-    display: block;
-    height: 5px;
-    flex: 1;
-    border-radius: 999px;
-  }
-  .pb-eyebrow {
-    font-size: 9.5px;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: #5a647e;
-    margin: 0 0 6px;
-  }
-  .pb-title {
-    font-family: var(--font-heading);
-    font-size: 32px;
-    font-weight: 800;
-    margin: 0 0 2px;
-    color: #141a2a;
-  }
-  .pb-invite {
-    font-size: 15px;
-    margin: 0 0 12px;
-    color: #2a3350;
-  }
-  .pb-invite strong {
-    color: #f81170;
-  }
-  .pb-lede {
-    font-size: 11.5px;
-    line-height: 1.6;
-    color: #333c55;
-    margin: 0 0 14px;
-    max-width: 62ch;
-  }
-  .pb-proof {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .pb-proof > div {
-    flex: 1;
-    border: 1px solid #d5dbeb;
-    border-left: 4px solid #09a6cf;
-    border-radius: 8px;
-    padding: 9px 11px;
-  }
-  .pb-proof-value {
-    display: block;
-    font-size: 19px;
-    font-weight: 800;
-    color: #141a2a;
-  }
-  .pb-proof-label {
-    display: block;
-    font-size: 9.5px;
-    color: #5a647e;
-    margin-top: 2px;
-  }
-  .pb-section {
-    font-size: 9.5px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #5a647e;
-    margin: 0 0 8px;
-  }
-  .pb-register {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 14px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px 12px;
-  }
-  .pb-register li {
-    border-left: 3px solid #b0b9d4;
-    padding: 2px 0 2px 9px;
-    break-inside: avoid;
-  }
-  .pb-register strong {
-    display: block;
-    font-size: 10.5px;
-    color: #141a2a;
-  }
-  .pb-register span {
-    display: block;
-    font-size: 9px;
-    color: #5a647e;
-    line-height: 1.4;
-  }
-  .pb-seat {
-    border-left-style: dashed !important;
-    border-left-color: #f81170 !important;
-  }
-  .pb-seat strong {
-    color: #f81170;
-  }
-  .pb-creds {
-    font-size: 9px;
-    color: #5a647e;
-    border-top: 1px solid #d5dbeb;
-    padding-top: 8px;
-    margin: 0 0 4px;
-  }
-  .pb-contact {
-    font-size: 10px;
-    font-weight: 700;
-    color: #141a2a;
-    margin: 0;
-  }
 }
 
 /* ---- PILLAR-PETAL CARDS & FULL-SCREEN COMPOSITION -------------------- */
@@ -7922,6 +7872,8 @@ button.mgal-plate-awaiting:hover {
   width: calc(100% - 12px);
   height: calc(100% - 12px);
   object-fit: contain;
+  /* white like the tile, so a logo drawn on transparency hides the monogram under it */
+  background: #fff;
 }
 /* NEVER THE BRAND INK RAW. Four of the twelve miss 4.5:1 on white as
    published — KSCF's #ee7623 measures 2.90:1, the UN's #009edb 3.04:1, Red

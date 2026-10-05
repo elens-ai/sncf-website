@@ -41,7 +41,6 @@
 .footer-social svg { width: 16px; height: 16px; }
 
 /* the link columns, each headed with a petal colour */
-.footer-group-dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; vertical-align: 1px; background: currentColor; box-shadow: 0 0 8px currentColor; }
 .footer-link-away { display: inline-block; margin-left: 4px; vertical-align: -1px; opacity: 0.45; transition: opacity 0.25s, translate 0.25s; }
 .footer-link:hover .footer-link-away { opacity: 1; translate: 2px -2px; }
 

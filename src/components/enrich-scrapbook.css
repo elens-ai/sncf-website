@@ -11,7 +11,6 @@
   --sb-paper-alt: #f0f9fa;
   margin: 0;
 }
-.value-hero .enrich-scrapbook { grid-column: 2; grid-row: 2 / 4; align-self: center; justify-self: center; width: 100%; max-width: 600px; }
 
 .scrapbook-book { position: relative; container-type: inline-size; aspect-ratio: 142 / 108; user-select: none; -webkit-user-select: none; }
 .scrapbook-binding { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -236,6 +235,3 @@
   .scrapbook-closing { font-size: 3.6cqw; }
 }
 
-@media (max-width: 640px) {
-  .value-hero .enrich-scrapbook { grid-column: 1 / -1; grid-row: 2; max-width: 480px; margin-bottom: 32px; }
-}

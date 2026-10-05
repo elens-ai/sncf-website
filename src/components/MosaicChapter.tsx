@@ -63,11 +63,19 @@ interface MosaicChapterProps {
   attendedId: string | null;
   onOpen: (activity: Activity) => void;
   onAttend: (activity: Activity | null) => void;
+  /** In place of the photographic emblem (Core Values gives Enrich its scrapbook). */
+  emblem?: React.ReactNode;
+  /** On the cornerstone's own page (Core Values): Explore leads down to its
+      story and Reports, Gallery and Stats to its tabs there, and a programme
+      opens in its report rather than in a spotlight. */
+  inPage?: boolean;
+  /** The name's heading level: h2 where the chapter is a section of its page. */
+  heading?: 'h2' | 'h3';
 }
 
 /** The same photographic emblem as the hero, surrounded by the actual programmes. */
 export const MosaicChapter = React.memo(function MosaicChapter({
-  pillar, index, activities, live, stacked, openId, attendedId, onOpen, onAttend,
+  pillar, index, activities, live, stacked, openId, attendedId, onOpen, onAttend, emblem, inPage = false, heading: Name = 'h3',
 }: MosaicChapterProps) {
   const id = pillar.id as MosaicPillar;
   const logo = PILLAR_LOGOS[id];
@@ -75,9 +83,6 @@ export const MosaicChapter = React.memo(function MosaicChapter({
   const leftCount = Math.max(1, Math.ceil(activities.length / 2));
   const rightCount = Math.max(1, Math.floor(activities.length / 2));
   const rows = leftCount * rightCount;
-  /* How many programmes show their own photograph; the rest borrow one of the
-     pillar's, marked illustrative on the tile. */
-  const own = activities.filter(activity => activity.images.length > 0).length;
 
   return (
     <article className="mosaic-chapter activity-chapter" data-stage={id} data-current={live}
@@ -100,21 +105,27 @@ export const MosaicChapter = React.memo(function MosaicChapter({
       <header className="activity-chapter-heading" data-reveal>
         <div className="activity-chapter-identity">
           <span className="activity-chapter-number" aria-hidden="true">0{index + 1}</span>
-          <h3 id={`mosaic-${id}-title`} tabIndex={-1}>
+          <Name id={`mosaic-${id}-title`} tabIndex={-1}>
             <span className="sr-only">{name}</span>{id === 'heal' ? <HeroHealWordmark /> : <HeroPillarWordmark pillar={id} />}
-          </h3>
+          </Name>
           <p>{pillar.headline}</p>
         </div>
         <div className="activity-chapter-actions">
-          <Link className="activity-chapter-explore" to={id === 'projects' ? '/projects' : `/core-values#${id}`}>
-            {getCMSCopy('copy.ImpactMosaic.3b73900b8d29', 'Explore')} {name}<ArrowUpRight size={17} aria-hidden="true" />
-          </Link>
-          {/* straight into the cornerstone's report, gallery or stats on Core Values */}
+          {inPage ? (
+            <a className="activity-chapter-explore" href={`#${id}-story`}>
+              {getCMSCopy('copy.ImpactMosaic.3b73900b8d29', 'Explore')} {name}<ArrowUpRight size={17} aria-hidden="true" />
+            </a>
+          ) : (
+            <Link className="activity-chapter-explore" to={id === 'projects' ? '/projects' : `/core-values#${id}`}>
+              {getCMSCopy('copy.ImpactMosaic.3b73900b8d29', 'Explore')} {name}<ArrowUpRight size={17} aria-hidden="true" />
+            </Link>
+          )}
+          {/* straight into the cornerstone's report, gallery or stats: its tabs on Core Values (on that page, just below) */}
           {id !== 'projects' && (
             <nav className="activity-chapter-quick" aria-label={`${name}: ${getCMSCopy('copy.ImpactMosaic.quick-label', 'reports, gallery and stats')}`}>
-              <Link to={`/core-values#${id}-reports`}>{getCMSCopy('copy.ImpactMosaic.quick-reports', 'Reports')}</Link>
-              <Link to={`/core-values#${id}-gallery`}>{getCMSCopy('copy.ImpactMosaic.quick-gallery', 'Gallery')}</Link>
-              <Link to={`/core-values#${id}-stats`}>{getCMSCopy('copy.ImpactMosaic.quick-stats', 'Stats')}</Link>
+              {([['reports', getCMSCopy('copy.ImpactMosaic.quick-reports', 'Reports')], ['gallery', getCMSCopy('copy.ImpactMosaic.quick-gallery', 'Gallery')], ['stats', getCMSCopy('copy.ImpactMosaic.quick-stats', 'Stats')]] as const).map(([tab, label]) => inPage
+                ? <a key={tab} href={`#${id}-${tab}`}>{label}</a>
+                : <Link key={tab} to={`/core-values#${id}-${tab}`}>{label}</Link>)}
             </nav>
           )}
         </div>
@@ -137,7 +148,7 @@ export const MosaicChapter = React.memo(function MosaicChapter({
           })}
         </svg>
         <div className="activity-emblem">
-          <div className="activity-emblem-art"><PillarPhotoMosaic pillar={id} caption={false} /></div>
+          <div className="activity-emblem-art">{emblem ?? <PillarPhotoMosaic pillar={id} caption={false} />}</div>
           <p className="activity-emblem-caption font-dancing-script">{pillar.emblemCaption ?? logo.caption}</p>
         </div>
         <ul className="activity-nodes" aria-label={`${name} programmes`}>
@@ -148,7 +159,7 @@ export const MosaicChapter = React.memo(function MosaicChapter({
               <li key={activity.id} className="activity-node" data-side={i % 2 ? 'right' : 'left'}
                 style={{ '--node-column': i % 2 ? 3 : 1, '--node-row': Math.floor(i / 2) * span + 1, '--node-span': span, '--node-order': i } as React.CSSProperties}>
                 <button id={`mosaic-tile-${activity.id}`} className="activity-node-button" type="button"
-                  aria-expanded={openId === activity.id} aria-controls={openId === activity.id ? 'mosaic-spotlight' : undefined}
+                  aria-expanded={inPage ? undefined : openId === activity.id} aria-controls={!inPage && openId === activity.id ? 'mosaic-spotlight' : undefined}
                   onClick={() => onOpen(activity)} onPointerEnter={() => onAttend(activity)} onPointerLeave={() => onAttend(null)}
                   onFocus={() => onAttend(activity)} onBlur={() => onAttend(null)}>
                   <span className="activity-node-heading">
@@ -167,7 +178,6 @@ export const MosaicChapter = React.memo(function MosaicChapter({
 
       <footer className="activity-chapter-footer">
         <span><span className="activity-live-dot" aria-hidden="true" />{getCMSCopy('copy.MosaicChapter.discover', 'Every activity, a story. Select one to discover more.')}<ArrowUpRight size={13} aria-hidden="true" /></span>
-        <small>{own === activities.length ? getCMSCopy('copy.MosaicChapter.ownPhotos', 'Photographs from the foundation’s own work.') : own > 0 ? getCMSCopy('copy.MosaicChapter.mostlyOwnPhotos', 'Photographs from the foundation’s work; a tile marked illustrative shows another programme.') : getCMSCopy('copy.ImpactMosaic.a216e016d42c', 'Photography is illustrative.')}</small>
       </footer>
     </article>
   );

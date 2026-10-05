@@ -17,7 +17,8 @@
 .partner-circle-field[data-on='true'] .partner-circle-band { opacity: 0.62; stroke-width: 22; }
 .partner-circle-field-name { fill: #fffdf4; font: 700 10.5px/1 var(--font-sans); letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.78; pointer-events: none; transition: opacity 0.4s; }
 .partner-circle-field[data-on='true'] .partner-circle-field-name { opacity: 1; }
-.partner-circle-field-seat .partner-circle-band { stroke: #f3eed6; stroke-dasharray: 2 6; stroke-linecap: butt; stroke-width: 2; opacity: 0.5; }
+/* over each arc, a wide band that is not drawn but can be pointed at */
+.partner-circle-reach { fill: none; stroke: transparent; stroke-width: 56; pointer-events: stroke; }
 
 /* the threads: flowing from the foundation outward, lit for the partner or field in view */
 .partner-circle-thread { stroke: var(--sector); stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 4 6; opacity: 0.62; animation: partner-flow 2.6s linear infinite; transition: opacity 0.35s, stroke-width 0.35s; }
@@ -29,29 +30,24 @@
 .partner-circle-hub img { width: 92%; height: 92%; object-fit: contain; -webkit-user-drag: none; }
 
 /* the partners: white badges ringed in their field's colour */
-.partner-circle-nodes { position: absolute; inset: 0; }
-.partner-circle-node { position: absolute; z-index: 2; display: grid; justify-items: center; width: 10.6cqw; aspect-ratio: 1; padding: 0; translate: -50% -50%; border: 0; background: none; cursor: pointer; }
-.partner-circle-badge { display: grid; place-items: center; width: 100%; height: 100%; padding: 1.7cqw; overflow: hidden; border-radius: 50%; background: #fff; box-shadow: 0 0 0 0.5cqw color-mix(in srgb, var(--sector, #f3eed6) 70%, transparent), 0 1.2cqw 2.2cqw -1cqw rgb(1 23 21 / 0.7); transition: scale 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s, filter 0.35s; }
+.partner-circle-nodes { position: absolute; inset: 0; pointer-events: none; }
+.partner-circle-node { position: absolute; z-index: 2; pointer-events: auto; display: grid; justify-items: center; width: var(--node, 10.6cqw); aspect-ratio: 1; padding: 0; translate: -50% -50%; border: 0; background: none; cursor: pointer; }
+.partner-circle-badge { display: grid; place-items: center; width: 100%; height: 100%; padding: calc(var(--node, 10.6cqw) * 0.16); overflow: hidden; border-radius: 50%; background: #fff; box-shadow: 0 0 0 0.5cqw color-mix(in srgb, var(--sector, #f3eed6) 70%, transparent), 0 1.2cqw 2.2cqw -1cqw rgb(1 23 21 / 0.7); transition: scale 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s, filter 0.35s; }
 .partner-circle-badge img { display: block; width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; }
-.partner-circle-badge > span { font: 700 3.2cqw/1 var(--font-sans); letter-spacing: -0.02em; }
+.partner-circle-badge img[data-wide] { width: 126%; max-width: none; height: 126%; }
+.partner-circle-badge > span { font: 700 calc(var(--node, 10.6cqw) * 0.3)/1 var(--font-sans); letter-spacing: -0.02em; }
+.partner-circle-badge > span[data-long] { font-size: calc(var(--node, 10.6cqw) * 0.2); letter-spacing: 0; }
 .partner-circle-node[data-on='true'] .partner-circle-badge { scale: 1.14; box-shadow: 0 0 0 0.6cqw var(--sector), 0 0 2.6cqw 0.6cqw color-mix(in srgb, var(--sector) 55%, transparent), 0 1.4cqw 2.4cqw -1cqw rgb(1 23 21 / 0.75); }
 .partner-circle[data-lens] .partner-circle-node:not([data-on='true']) .partner-circle-badge { filter: saturate(0.5) opacity(0.6); }
 .partner-circle-node:focus-visible { outline: none; }
 .partner-circle-node:focus-visible .partner-circle-badge { outline: 2px solid #eff6dc; outline-offset: 0.9cqw; }
 /* its name, set on its thread */
-.partner-circle-name { position: absolute; z-index: 3; translate: -50% -50%; padding: 0.7cqw 1.6cqw; border-radius: 999px; background: color-mix(in srgb, var(--sector) 82%, #0d2421); box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 1cqw 2cqw -0.8cqw rgb(1 23 21 / 0.8); color: #fff; font: 700 max(10px, 1.75cqw)/1.2 var(--font-sans); letter-spacing: 0.02em; white-space: nowrap; pointer-events: none; animation: partner-name-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.partner-circle-name { position: absolute; z-index: 3; translate: -50% -50%; padding: 0.7cqw 1.6cqw; border-radius: 999px; background: color-mix(in srgb, var(--sector-deep, var(--sector)) 82%, #0d2421); box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 1cqw 2cqw -0.8cqw rgb(1 23 21 / 0.8); color: #fff; font: 700 max(10px, 1.75cqw)/1.2 var(--font-sans); letter-spacing: 0.02em; white-space: nowrap; pointer-events: none; animation: partner-name-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 /* the seat kept for the next partner */
 .partner-circle-seat .partner-circle-badge { padding: 0; background: rgb(255 255 255 / 0.06); box-shadow: inset 0 0 0 1.5px rgb(243 238 214 / 0.7); color: #f3eed6; transition: background-color 0.3s, color 0.3s, scale 0.3s; }
 .partner-circle-seat:is(:hover, :focus-visible) .partner-circle-badge { scale: 1.1; background: #f3eed6; color: #16403f; }
 .partner-circle-name-seat { background: #f3eed6; color: #16403f; }
 .partner-circle-thread-seat { stroke-dasharray: 2 6; }
-
-/* the legend */
-.partner-circle-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.partner-circle-legend li { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; background: rgb(255 255 255 / 0.06); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14); font: 500 11px/1 var(--font-sans); color: #ffffffd0; cursor: default; transition: background-color 0.3s, box-shadow 0.3s; }
-.partner-circle-legend li[data-on='true'] { background: color-mix(in srgb, var(--sector) 30%, transparent); box-shadow: inset 0 0 0 1px var(--sector); }
-.partner-circle-legend i { width: 9px; height: 9px; border-radius: 50%; background: var(--sector); box-shadow: 0 0 6px var(--sector); }
-.partner-circle-legend small { font-size: 10px; color: #ffffff8c; }
 
 /* arriving: the badges take their seats one after another */
 .collaboration-section[data-arrived='true'] .partner-circle-node { animation: partner-seat-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--order, 0) * 60ms) both; }
@@ -60,6 +56,6 @@
 @keyframes partner-flow { to { stroke-dashoffset: -20; } }
 @keyframes partner-name-in { from { opacity: 0; scale: 0.85; } }
 .collaboration-section[data-active='false'] .partner-circle * { animation-play-state: paused; }
-/* a small circle keeps its fields in the legend */
-@media (max-width: 560px) { .partner-circle-field-name { display: none; } .partner-circle-band { stroke-width: 12; } }
+/* a small circle sets the cornerstones' names larger in its own measure, so they stay readable */
+@media (max-width: 560px) { .partner-circle-field-name { font-size: 17px; letter-spacing: 0.14em; } .partner-circle-band { stroke-width: 24; } .partner-circle-field[data-on='true'] .partner-circle-band { stroke-width: 26; } }
 @media (prefers-reduced-motion: reduce) { .partner-circle *, .collaboration-section[data-arrived='true'] .partner-circle-node { animation: none !important; transition: none !important; } }

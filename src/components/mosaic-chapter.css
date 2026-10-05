@@ -102,7 +102,6 @@
 .activity-chapter-footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 16px; border-top: 1px solid #ffffff24; }
 .activity-chapter-footer > span { display: flex; align-items: center; gap: 10px; color: #ffffffd4; font: 400 11px/1.6 var(--font-sans); }
 .activity-live-dot { flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--chapter-edge); box-shadow: 0 0 0 4px color-mix(in srgb, var(--chapter-b) 15%, transparent); }
-.activity-chapter-footer small { max-width: 32ch; font: 400 8px/1.6 var(--font-sans); letter-spacing: .15em; text-transform: uppercase; color: #ffffff8f; text-align: right; }
 
 .impact-mosaic[data-mode='stage'] .mosaic-chapter.activity-chapter { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; gap: clamp(12px, 2.5vh, 28px); padding: calc(var(--site-header-height, 72px) + 58px) clamp(32px, 5vw, 100px) 28px max(88px, 6vw); }
 .impact-mosaic[data-mode='stage'] .activity-nodes { min-height: 0; }
@@ -150,7 +149,6 @@
   .activity-chapter-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
   .activity-chapter-footer > span { font-size: 10px; }
   .activity-chapter-footer > span > svg { display: none; }
-  .activity-chapter-footer small { max-width: none; text-align: left; font-size: 7px; }
 }
 @media (max-width: 420px) {
   .activity-chapter-identity .heal-wordmark { height: 32px; max-width: 230px; }

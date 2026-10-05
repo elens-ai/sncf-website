@@ -9,7 +9,7 @@ import { PillarState } from '../types';
 import { PillarHeroVisual } from './PillarHeroVisual';
 import { PillarArtwork } from './PillarArtwork';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
-import { Pause, Play } from 'lucide-react';
+import { ArrowUpRight, Pause, Play } from 'lucide-react';
 
 interface HeroSectionProps {
   activeIndex: number;
@@ -231,15 +231,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
      transition; the new page's lines then rise in, as an explore page's do. */
   const pageTurns = scrollDriven && canTurnPages();
   const latestTurn = useRef<unknown>(null);
+  /* the page the hall will show once any turn under way has landed: a turn
+     sets it at once, though its page only comes when the turn's capture is
+     done, so a choice made in between (back to the page still on show) is
+     measured against where the hall is going, not where it is */
+  const turningTo = useRef<PillarState>(displayPillar);
 
   // Cancel pending changes on every new selection, including returning to the
   // displayed pillar during an exit. This prevents a stale timer showing the wrong icon.
   useEffect(() => {
-    if (currentPillar.id === displayPillar.id) {
+    const shown = pageTurns ? turningTo.current : displayPillar;
+    if (currentPillar.id === shown.id) {
       setPhase('idle');
       return;
     }
     if (reducedMotionRef.current) {
+      turningTo.current = currentPillar;
       setDisplayPillar(currentPillar);
       setPhase('idle');
       return;
@@ -247,8 +254,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     if (pageTurns) {
       const root = document.documentElement;
       const next = currentPillar;
+      turningTo.current = next;
       /* back up the page, the pages move the other way, as the explore pages do */
-      root.classList.toggle('hero-turning-back', pillars.indexOf(next) < pillars.indexOf(displayPillar));
+      root.classList.toggle('hero-turning-back', pillars.indexOf(next) < pillars.indexOf(shown));
       root.classList.add('hero-turning');
       const turn = (document as TurningDocument).startViewTransition!(() => {
         flushSync(() => {
@@ -295,6 +303,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   };
 
   const getHeadingFontClass = () => 'font-artistic-heading font-normal tracking-wide';
+
+  /* The path tabs: a click chooses a path; on a focused tab the arrows, Home
+     and End move along them, choosing as they go. */
+  const choosePath = (index: number) => (onChoosePillar ?? onActiveIndexChange)(index);
+  const onTabKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const last = pillars.length - 1;
+    const next = event.key === 'ArrowRight' ? Math.min(last, activeIndex + 1)
+      : event.key === 'ArrowLeft' ? Math.max(0, activeIndex - 1)
+      : event.key === 'Home' ? 0 : event.key === 'End' ? last : -1;
+    if (next < 0) return;
+    event.preventDefault();
+    choosePath(next);
+    (event.currentTarget.children[next] as HTMLElement | undefined)?.focus({ preventScroll: true });
+  };
 
   return (
     <main
@@ -382,10 +404,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {displayPillar.body}
             </p>
 
-            {/* 4. Impact Metrics Strip (Delay: 160ms) */}
+            {/* 4. Action Button, under the story (Delay: 180ms, with 1000ms color transition) */}
+            <div
+              style={{ transitionDelay: phase === 'exiting' ? '20ms' : '180ms' }}
+              className={`hero-explore flex flex-wrap items-center gap-3 mb-5 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+            >
+              {/* a line of text on a hairline, with its arrow: each chapter's own Explore, below */}
+              <button
+                id={`hero-learn-more-${displayPillar.id}-btn`}
+                type="button"
+                onClick={() => onOpenDetails(displayPillar)}
+                className="hero-explore-link"
+              >
+                <span>{getCMSCopy("copy.HeroSection.2e1ac6e9292a", "Explore ")}{getPillarScriptTitle(displayPillar)}</span>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </button>
+            </div>
+
+            {/* 5. Impact Metrics Strip, at the foot (Delay: 240ms) */}
             {showMetrics && (
               <div
-                style={{ transitionDelay: phase === 'exiting' ? '20ms' : '180ms' }}
+                style={{ transitionDelay: phase === 'exiting' ? '0ms' : '240ms' }}
                 className={`hero-impact grid grid-cols-2 gap-2.5 mb-5 px-3 py-2.5 rounded-xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[360px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
               >
                 {displayPillar.stats.slice(0, 2).map((stat, i) => (
@@ -404,37 +443,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 ))}
               </div>
             )}
-
-            {/* 5. Action Button (Delay: 220ms, with 1000ms color transition) */}
-            <div
-              style={{ transitionDelay: phase === 'exiting' ? '0ms' : '240ms' }}
-              className={`flex flex-wrap items-center gap-3 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
-            >
-              <button
-                id={`hero-learn-more-${displayPillar.id}-btn`}
-                onClick={() => onOpenDetails(displayPillar)}
-                className="font-artistic-modern group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-full text-white font-bold text-[13px] sm:text-[15px] shadow-xl hover:scale-[1.03] active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-4 focus:ring-white/40 overflow-hidden uppercase tracking-wider"
-                style={{
-                  backgroundColor: displayPillar.accentA,
-                  boxShadow: `0 10px 25px -5px ${displayPillar.accentA}88`,
-                  transition: 'background-color 1000ms cubic-bezier(0.45, 0.05, 0.25, 1), box-shadow 1000ms cubic-bezier(0.45, 0.05, 0.25, 1), transform 200ms ease',
-                }}
-              >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 pointer-events-none" />
-                <span>{getCMSCopy("copy.HeroSection.2e1ac6e9292a", "Explore ")}{getPillarScriptTitle(displayPillar)}</span>
-                <svg
-                  className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200 fill-none stroke-current stroke-2"
-                  viewBox="0 0 24 24"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className="hero-pillar-controls" role="group" aria-label="Choose a home theme">
-            {pillars.map((pillar, i) => <button key={pillar.id} type="button" aria-pressed={activeIndex === i} data-index={i + 1} onClick={() => (onChoosePillar ?? onActiveIndexChange)(i)}>{getPillarScriptTitle(pillar)}</button>)}
-            {!scrollDriven && <button type="button" onClick={onTogglePause} aria-label={isPaused ? 'Resume theme rotation' : 'Pause theme rotation'}>{isPaused ? <Play size={14} /> : <Pause size={14} />}</button>}
           </div>
         </div>
         {/* turning pages, the emblem belongs to the page it is on: it changes with the page, inside the turn */}
@@ -442,6 +450,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           const emblem = pageTurns ? displayPillar : currentPillar;
           return (emblem.id === 'heal' || emblem.id === 'enrich' || emblem.id === 'empower' || emblem.id === 'projects') && <PillarHeroVisual pillar={emblem.id} active={introActive} leavesWithPage={pageTurns} />;
         })()}
+      </div>
+
+      {/* The paths as tabs, centred at the hall's foot: each leads the page to its
+          own screen of the track. They stand outside the turning page, so they
+          hold still while the pages turn. */}
+      <div className="hero-path-tabs">
+        <div role="tablist" aria-label="Choose a path" onKeyDown={onTabKey}>
+          {pillars.map((pillar, i) => (
+            <button key={pillar.id} id={`hero-tab-${pillar.id}`} type="button" role="tab" aria-selected={activeIndex === i} aria-controls="hero-foreground-content"
+              tabIndex={activeIndex === i ? 0 : -1} onClick={() => choosePath(i)}>
+              {getPillarScriptTitle(pillar)}
+            </button>
+          ))}
+        </div>
+        {!scrollDriven && <button type="button" className="hero-path-pause" onClick={onTogglePause} aria-label={isPaused ? 'Resume theme rotation' : 'Pause theme rotation'}>{isPaused ? <Play size={14} /> : <Pause size={14} />}</button>}
       </div>
     </main>
 

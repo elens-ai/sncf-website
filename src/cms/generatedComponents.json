@@ -27,7 +27,7 @@
     "enabled": true,
     "order": 3,
     "options": {},
-    "label": "Home · Upcoming events"
+    "label": "Events page (/events) · The service journal"
   },
   "home.awards": {
     "enabled": true,

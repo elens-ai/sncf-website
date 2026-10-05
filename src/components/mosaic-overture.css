@@ -18,19 +18,15 @@
   display: grid; grid-template-columns: 1fr 1.05fr; align-items: center;
   gap: clamp(36px, 6vw, 96px); width: 100%; max-width: 1200px; margin-inline: auto;
 }
-.mosaic-emblem { position: relative; display: grid; place-items: center; min-width: 0; aspect-ratio: 1.16; }
+.mosaic-emblem { --emblem-aspect: 1.16; position: relative; display: grid; place-items: center; min-width: 0; aspect-ratio: var(--emblem-aspect); }
 .mosaic-emblem::before {
   content: ''; position: absolute; inset: 8% -6%; border-radius: 50%; pointer-events: none;
   background: radial-gradient(ellipse, #f4fff52e, #e9fff911 44%, transparent 72%);
   opacity: var(--a, 0); transform: scale(calc(.8 + var(--a, 0) * .2));
 }
-.mosaic-emblem-orbits { position: absolute; width: 118%; height: 118%; overflow: visible; pointer-events: none; }
-.mosaic-orbit-outer, .mosaic-orbit-inner { stroke: #effffb21; stroke-width: .7; opacity: var(--a, 0); }
-.mosaic-orbit-inner { stroke: #effffb13; }
-.mosaic-orbit-trace { stroke: #f3fff58c; stroke-width: 1; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--a, 0)); opacity: calc(var(--a, 0) * .65); }
-.mosaic-orbit-sparks { fill: #f0fff5; opacity: calc(var(--a, 0) * .65); animation: mosaic-spark-breathe 6s ease-in-out infinite; }
+/* as wide as the emblem allows, or as tall: the flower between two hands stands taller than wide */
 .mosaic-lotus {
-  position: relative; width: 92%; aspect-ratio: var(--lotus-aspect, 1.3);
+  position: relative; width: min(92%, calc(92% / var(--emblem-aspect) * var(--lotus-aspect, 1.3))); aspect-ratio: var(--lotus-aspect, 1.3);
   animation: mosaic-emblem-float 9s ease-in-out infinite;
 }
 .mosaic-petal {
@@ -55,6 +51,11 @@
 .mosaic-petal[data-piece='palm'] {
   transform-origin: 50% 50%;
   transform: translateY(calc((1 - var(--bloom, 0)) * 36%)) rotate(calc((1 - var(--bloom, 0)) * -7deg)) scale(calc(.92 + var(--bloom, 0) * .08));
+}
+/* the hand above: the palm turned over, coming down to close over the flower */
+.mosaic-petal[data-piece='palm-top'] {
+  transform-origin: 50% 50%;
+  transform: translateY(calc((1 - var(--bloom, 0)) * -36%)) rotate(calc(180deg + (1 - var(--bloom, 0)) * -7deg)) scale(calc(.92 + var(--bloom, 0) * .08));
 }
 .mosaic-emblem-light {
   position: absolute; left: 22%; right: 22%; bottom: 3%; height: 2px; border-radius: 50%;
@@ -93,12 +94,10 @@
 .mosaic-path-copy > span { font: 400 11px/1.5 var(--font-sans); color: #ffffffb8; }
 .mosaic-path-arrow { opacity: .5; transition: opacity .25s, transform .25s; }
 .mosaic-path:is(:hover, :focus-visible) .mosaic-path-arrow { opacity: 1; transform: translate(2px, -2px); }
-.mosaic-overture-foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: 100%; max-width: 1200px; margin-inline: auto; opacity: var(--links, 0); }
-.mosaic-overture-foot p { margin: 0; font: 400 10px/1.7 var(--font-sans); letter-spacing: .04em; color: #ffffffad; }
+.mosaic-overture-foot { display: flex; align-items: center; justify-content: flex-end; gap: 24px; width: 100%; max-width: 1200px; margin-inline: auto; opacity: var(--links, 0); }
 .mosaic-scroll-cue { display: flex; align-items: center; gap: 10px; white-space: nowrap; font: 500 9px/1.5 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: #ffffffc7; }
 .mosaic-scroll-cue svg { animation: mosaic-cue-drift 2.8s ease-in-out infinite; }
 @keyframes mosaic-emblem-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
-@keyframes mosaic-spark-breathe { 0%, 100% { fill-opacity: .35; } 50% { fill-opacity: 1; } }
 @keyframes mosaic-cue-drift { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 .impact-mosaic[data-active='false'] .mosaic-overture *, .mosaic-overture[data-state='before'] * { animation-play-state: paused; }
 
@@ -138,6 +137,7 @@
   .mosaic-overture { --a: 1; --w: 1; --links: 1; transition: none; }
   .mosaic-overture *, .mosaic-overture *::before { animation: none !important; transition: none !important; }
   .mosaic-petal, .mosaic-petal[data-piece='palm'] { transform: none; opacity: 1; will-change: auto; }
+  .mosaic-petal[data-piece='palm-top'] { transform: rotate(180deg); }
 }
 @media (forced-colors: active) {
   .mosaic-emblem, .mosaic-overture::before { display: none; }

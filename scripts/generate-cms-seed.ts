@@ -73,10 +73,12 @@ const excerpt = (value: string) => { const text = value.replace(/\s+/g, ' ').tri
    an editor knows what a value means (the label then quotes the value). */
 const INTRO_SECTIONS: [RegExp, string][] = [
   [/\.welcome-seconds$/, 'Intro · Welcome page time (seconds)'],
+  [/\.message-seconds$/, 'Intro · Message page time (seconds)'],
   [/\.mission-seconds$/, 'Intro · Mission page time (seconds)'],
   [/\.welcome-photo-focus$/, 'Intro · Welcome photo focus (across% down%)'],
   [/\.satguru-photo-focus$/, 'Intro · Satguru portrait focus (across% down%)'],
   [/\.(welcome-|next-label)/, 'Intro · Welcome page'],
+  [/\.message-/, 'Intro · Message page'],
   [/\.(mission-|vision-|satguru-)/, 'Intro · Mission & vision page'],
 ];
 const area = (key: string) => {

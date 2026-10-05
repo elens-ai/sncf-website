@@ -10,7 +10,6 @@ import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
 import { HomeLanding } from '../components/HomeLanding';
 import { ImpactMosaic } from '../components/ImpactMosaic';
-import { EventsSection } from '../components/EventsSection';
 import { AwardsSection } from '../components/AwardsSection';
 import { PartnersSection } from '../components/PartnersSection';
 import { SiteFooter } from '../components/SiteFooter';
@@ -40,7 +39,6 @@ const parseInviteParam = (): string | null => {
 /* The sections that do not change with the hall's path, kept from re-rendering
    each time it turns (the turn has the main thread to itself). */
 const ImpactMosaicMemo = React.memo(ImpactMosaic);
-const EventsSectionMemo = React.memo(EventsSection);
 const AwardsSectionMemo = React.memo(AwardsSection);
 const PartnersSectionMemo = React.memo(PartnersSection);
 const SiteFooterMemo = React.memo(SiteFooter);
@@ -158,6 +156,7 @@ export default function HomePage() {
      would narrate every path the page passes on the way. */
   const heroClaim = useRef<number | null>(null);
   const heroClaimTimer = useRef(0);
+  const heroClaimSettle = useRef<(() => void) | null>(null);
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
   useEffect(() => {
@@ -248,25 +247,104 @@ export default function HomePage() {
       for (const section of holding) for (const name of HELD) section.style.removeProperty(name);
     };
   }, [cmsRevision]);
-  /* Go to path i: the hall turns to it at once and the page scrolls there
-     (smoothly; at once under reduced motion). From the landing, focus goes too. */
+  /* THE HEADER OVER THE LANDING. The landing stands on a light ground
+     (home-landing.css), where the header's and the social rail's white would
+     vanish: while it is under them, each is marked data-light and takes dark
+     ink on frosted white. Marked on them, not on the page, so the change
+     restyles them alone. */
+  useEffect(() => {
+    const page = pageRef.current;
+    if (!page) return;
+    let raf = 0;
+    const mark = (id: string, on: boolean) => {
+      const el = document.getElementById(id);
+      if (el && (el.dataset.light === 'true') !== on) el.dataset.light = String(on);
+    };
+    const read = () => {
+      raf = 0;
+      /* the grey screen, and half the band below it where the grey flows into the green */
+      const ground = page.querySelector<HTMLElement>('.home-landing > .mosaic-overture');
+      const bottom = ground ? ground.getBoundingClientRect().bottom + Math.min(40, Math.max(20, window.innerHeight * 0.035)) : -Infinity;
+      mark('site-header', bottom > (document.getElementById('site-header')?.offsetHeight ?? 72));
+      mark('hero-social-sidebar', bottom > window.innerHeight * 0.72);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
+    read();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      for (const id of ['site-header', 'hero-social-sidebar']) delete document.getElementById(id)?.dataset.light;
+    };
+  }, [cmsRevision, isSplashUp]);
+  /* Scroll the page to top (smoothly; at once under reduced motion) with the
+     hall held on path index all the way, then call landed, if given. The hold
+     ends once the scroll has stopped where it was going; a smooth scroll can
+     stall for a moment (while a turn of the hall's pages is captured), and a
+     hold let go then would hand the reader a page half-way, which it would
+     turn back. Stopped short of it for longer (the visitor took the wheel),
+     the hold ends all the same. */
+  const scrollHolding = useCallback((top: number, index: number, landed?: () => void) => {
+    /* a scroll still under way for an earlier choice gives way to this one */
+    if (heroClaimSettle.current) window.removeEventListener('scroll', heroClaimSettle.current);
+    heroClaim.current = index;
+    const goal = Math.max(0, Math.min(top, document.documentElement.scrollHeight - window.innerHeight));
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top, behavior: calm ? 'instant' : 'smooth' });
+    let moved = performance.now();
+    const release = () => {
+      if (Math.abs(window.scrollY - goal) > 2 && performance.now() - moved < 700) {
+        heroClaimTimer.current = window.setTimeout(release, 120);
+        return;
+      }
+      heroClaim.current = null;
+      window.removeEventListener('scroll', settle);
+      heroClaimSettle.current = null;
+      landed?.();
+    };
+    const settle = () => {
+      moved = performance.now();
+      window.clearTimeout(heroClaimTimer.current);
+      heroClaimTimer.current = window.setTimeout(release, 180);
+    };
+    heroClaimSettle.current = settle;
+    window.addEventListener('scroll', settle, { passive: true });
+    settle();
+  }, []);
+  /* Go to path i: the hall turns to it at once and the page scrolls there.
+     From the landing, focus goes too. */
   const goToPillar = useCallback((index: number, takeFocus = false) => {
     const geometry = heroTrack();
     if (!geometry) return;
     const offset = index === 0 ? 0 : geometry.extra + index * geometry.vh;
-    heroClaim.current = index;
     setActiveIndex(index);
     setHeroArrived(true);
-    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: window.scrollY + geometry.track.getBoundingClientRect().top + offset, behavior: calm ? 'instant' : 'smooth' });
+    scrollHolding(window.scrollY + geometry.track.getBoundingClientRect().top + offset, index);
     if (takeFocus) document.getElementById('hero-clone-stage')?.focus({ preventScroll: true });
-    const settle = () => {
-      window.clearTimeout(heroClaimTimer.current);
-      heroClaimTimer.current = window.setTimeout(() => { heroClaim.current = null; window.removeEventListener('scroll', settle); }, 180);
-    };
-    window.addEventListener('scroll', settle, { passive: true });
-    settle();
-  }, []);
+  }, [scrollHolding]);
+  /* Explore on a path leads to that path's own chapter. Heal's, Enrich's and
+     Empower's open their sections on Core Values (ImpactMosaic keeps only the
+     rest here), so for those it opens that page at the path. A chapter still
+     on this page is slid down to, the hall staying on its path as the page
+     passes: on the pinned stage (ImpactMosaic) a chapter is a screen of the
+     stage's scroll, so the page goes just past the start of that screen; laid
+     out one after another, it goes to the chapter's top, under the header.
+     Focus follows, for the keyboard. */
+  const explorePath = useCallback((pillar: PillarState) => {
+    const section = document.getElementById('pillars-section');
+    const chapters = section ? Array.from(section.querySelectorAll<HTMLElement>('[data-stage]')) : [];
+    const chapter = chapters.find(stage => stage.dataset.stage === pillar.id);
+    if (!section || !chapter) {
+      navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`);
+      return;
+    }
+    const top = section.dataset.mode === 'stage'
+      ? window.scrollY + section.getBoundingClientRect().top + (section.offsetHeight - window.innerHeight) * (chapters.indexOf(chapter) + 0.08) / chapters.length
+      : window.scrollY + chapter.getBoundingClientRect().top - (document.getElementById('site-header')?.offsetHeight ?? 72);
+    scrollHolding(top, activeIndexRef.current, () => document.getElementById(`mosaic-${pillar.id}-title`)?.focus({ preventScroll: true }));
+  }, [navigate, scrollHolding]);
   /* A landing door leads to its own path in the hall; the landing's cue, to the first. */
   const enterPath = useCallback((id: string) => {
     goToPillar(Math.max(0, activePillarsList.findIndex(p => p.id === id)), true);
@@ -401,7 +479,7 @@ export default function HomePage() {
         onActiveIndexChange={handleActiveIndexChange}
         isPaused={isPaused || isSplashUp}
         onTogglePause={() => setIsPaused((prev) => !prev)}
-        onOpenDetails={pillar => navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`)}
+        onOpenDetails={explorePath}
         introActive={!isSplashUp && heroArrived}
         scrollDriven
         onChoosePillar={goToPillar}
@@ -409,10 +487,8 @@ export default function HomePage() {
         /* 4. OUR WORK — the Living Mosaic, its four chapters. It steers the page
               accent for the chapter in view (see ImpactMosaic). */
         {id:'home.mosaic',node:<ImpactMosaicMemo heroPillar={currentPillar} />},
-        {id:'home.events',node:<EventsSectionMemo />},
         {id:'home.awards',node:<AwardsSectionMemo />},
         {id:'home.partners',node:(<PartnersSectionMemo
-        onOpenDonate={openDonate}
         escapeSuspended={
           /* while any overlay is up, Escape belongs to the overlay — the
              desk beneath it must not collapse on the same keypress */

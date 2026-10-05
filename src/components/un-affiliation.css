@@ -28,13 +28,6 @@
 /* Who we are: under the facts row that names the standing */
 .ww-un { margin: 26px 0 8px; }
 
-/* on the home page's dark Partners ground, the panel is glass */
-.collaboration-un { margin: 4px 0 26px; max-width: 46ch; }
-.collaboration-section .un-seal[data-variant='panel'] { --un-blue: #7cc4ff; padding: 18px 20px; background: linear-gradient(130deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); backdrop-filter: blur(8px); }
-.collaboration-section .un-seal[data-variant='panel'] .un-seal-globe { width: 44px; height: 44px; color: #0b2f4f; background: radial-gradient(circle at 30% 25%, #e6f4ff, #7cc4ff 75%); }
-.collaboration-section .un-seal-title { color: #f9fbf3; font-size: 17px; }
-.collaboration-section .un-seal-text { color: rgb(255 255 255 / 0.74); font-size: 12.5px; }
-
 /* a UN international day, marked as such wherever the events are listed */
 .un-day { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px 3px 7px; border-radius: 999px; background: #0a6fb8; color: #fff; font: 700 10px/1.25 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
 .un-day[data-compact] { padding: 2px 7px 2px 5px; font-size: 8.5px; letter-spacing: .08em; }

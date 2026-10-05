@@ -117,13 +117,19 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 .hero-impact > div + div { border-left: 1px solid var(--home-line); padding-left: 24px; }
 .hero-impact > div > span:first-child { font-family: var(--font-sans); font-weight: 400; font-size: 29px; }
 .hero-impact > div > span:last-child { margin-top: 6px; font-family: var(--font-sans); font-size: 11px; color: rgb(255 255 255 / .62); }
-[id^='hero-learn-more-'] {
-  background: var(--home-paper) !important;
-  color: var(--pillar-ui-ink, #163a33);
-  box-shadow: 0 8px 28px rgb(0 0 0 / .12) !important;
-  padding: 15px 24px;
-  font-family: var(--font-sans);
-  font-size: 12px; font-weight: 600; text-transform: none; letter-spacing: .025em;
+/* Explore, under the story: words on a hairline with their arrow, no button
+   face, as each chapter's own Explore below (mosaic-chapter.css,
+   .activity-chapter-explore), whose measures these are. */
+#hero-clone-stage .hero-explore-link { display: inline-flex; align-items: center; justify-content: center; gap: 18px; min-height: 46px; padding: 12px 0; border: 0; border-bottom: 1px solid #ffffff68; border-radius: 0; background: none; color: #fff; font: 500 12px/1.4 var(--font-sans); cursor: pointer; transition: color .25s, border-color .25s; }
+#hero-clone-stage .hero-explore-link svg { transition: transform .3s ease; }
+#hero-clone-stage .hero-explore-link:hover { border-color: #fff; }
+#hero-clone-stage .hero-explore-link:hover svg { transform: translate(3px, -3px); }
+#hero-clone-stage .hero-explore-link:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
+@media (max-width: 767px) {
+  #hero-clone-stage .hero-explore-link { min-height: 44px; padding: 8px 0; gap: 14px; font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hero-clone-stage .hero-explore-link, #hero-clone-stage .hero-explore-link svg { transition: none; }
 }
 .hero-bottom-line { position: relative; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 20px auto 0; width: 100%; max-width: 1280px; padding: 20px 0 0; border-top: 1px solid var(--home-line); color: rgb(255 255 255 / .5); font: 11px var(--font-sans); }
 .hero-playback { display: flex; align-items: center; gap: 20px; padding-right: 180px; }
@@ -286,10 +292,6 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 .home-page #hero-clone-stage .hero-activity-art { opacity: calc(1 - var(--hero-exit, 0)); }
 
 /* The hero uses contextual line art in place of the former 3D carousel. */
-.hero-pillar-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 30px; }
-.hero-pillar-controls button { padding: 9px 14px; border: 1px solid #ffffff35; border-radius: 999px; font-size: 11px; color: #fff; cursor: pointer; background: #ffffff08; }
-.hero-pillar-controls button[aria-pressed='true'] { background: #f4f1e9; border-color: #f4f1e9; color: #163a33; }
-.hero-pillar-controls button:hover { border-color: #ffffffa0; }
 @media (min-width: 1024px) { #hero-clone-stage .hero-activity-art .pillar-artwork svg { right: -5%; width: 65%; } }
 @media (max-width: 1023px) { #hero-clone-stage .hero-activity-art .pillar-art-lines { opacity: .2; } }
 

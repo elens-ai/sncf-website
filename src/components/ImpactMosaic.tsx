@@ -20,6 +20,10 @@ import './impact-mosaic.css';
  * page palette and animation arrivals without rendering on every scroll.
  */
 
+/** Heal, Enrich and Empower have their chapters on Core Values (CoreValuesPage),
+    each opening its own section there; the home page keeps the rest. */
+const ON_CORE_VALUES = ['heal', 'enrich', 'empower'];
+
 /** A chapter is current once its top has crossed this fraction of the viewport. */
 const READING_LINE = .45;
 
@@ -54,7 +58,7 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
   /* The stage's progress, 0..1 across all four chapters, handed to the waves
      without a DOM read: the reader writes it, the wave clock reads it. */
   const waveInput = useRef<WaveInput>({ travel: 0 });
-  const chapters = useMemo(() => PILLARS.map(pillar => ({ pillar, activities: activitiesFor(pillar.id) })), [revision]);
+  const chapters = useMemo(() => PILLARS.filter(pillar => !ON_CORE_VALUES.includes(pillar.id)).map(pillar => ({ pillar, activities: activitiesFor(pillar.id) })), [revision]);
   // Extra CMS programmes should flow naturally instead of being clipped in a pinned screen.
   const staged = roomy && !reduced && chapters.every(chapter => chapter.activities.length <= 6);
   const spotlightPillar = spotlight ? PILLARS.find(p => p.id === spotlight.pillarId) : undefined;
@@ -203,11 +207,12 @@ export const ImpactMosaic: React.FC<{ heroPillar: PillarState }> = ({ heroPillar
   );
 
   return (
-    <section id="pillars-section" ref={ref} className="impact-mosaic" data-mode={staged ? 'stage' : 'stacked'} data-active={active} aria-label={getCMSCopy("copy.ImpactMosaic.fc967e87a6e8", "Our work")}>
+    <section id="pillars-section" ref={ref} className="impact-mosaic" data-mode={staged ? 'stage' : 'stacked'} data-active={active} aria-label={getCMSCopy("copy.ImpactMosaic.fc967e87a6e8", "Our work")}
+      style={{ '--chapters': chapters.length } as React.CSSProperties}>
       {staged ? (
         <div className="mosaic-stage">
           <MosaicWaves subject={subjectFor(chapters.find(({ pillar }) => pillar.id === current)?.pillar ?? heroPillar, current ? spotlight ?? attended : null)} active={active && !spotlight} input={waveInput} />
-          <p className="mosaic-stage-label" data-show={current !== null}><span aria-hidden="true" />{getCMSCopy("copy.ImpactMosaic.fc967e87a6e8", "Our work")}<span className="mosaic-stage-count">{`${String(position + 1).padStart(2, '0')} / ${String(chapters.length).padStart(2, '0')}`}</span></p>
+          {chapters.length > 1 && <p className="mosaic-stage-label" data-show={current !== null}><span aria-hidden="true" /><span className="mosaic-stage-count">{`${String(position + 1).padStart(2, '0')} / ${String(chapters.length).padStart(2, '0')}`}</span></p>}
           {body}
         </div>
       ) : (

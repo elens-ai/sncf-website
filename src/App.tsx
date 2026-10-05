@@ -11,6 +11,7 @@ const CoreValuesPage = lazy(() => import('./pages/CoreValuesPage').then(m => ({ 
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then(m => ({ default: m.ProjectsPage })));
 const WhoWeArePage = lazy(() => import('./pages/WhoWeArePage').then(m => ({ default: m.WhoWeArePage })));
 const GuidingForcePage = lazy(() => import('./pages/GuidingForcePage').then(m => ({ default: m.GuidingForcePage })));
+const EventsPage = lazy(() => import('./pages/EventsPage').then(m => ({ default: m.EventsPage })));
 
 /**
  * THE SITE'S ROUTES.
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/who-we-are" element={<WhoWeArePage />} />
         <Route path="/our-guiding-force" element={<GuidingForcePage />} />
+        <Route path="/events" element={<EventsPage />} />
         <Route path="/pages/:slug" element={<CMSPage />} />
         {/* An unknown address lands on the hall rather than a dead end. */}
         <Route path="*" element={<HomePage />} />

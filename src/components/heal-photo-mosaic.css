@@ -54,17 +54,13 @@
   #hero-foreground-content:has(.hero-heal-art) .heal-wordmark { max-width: clamp(220px, calc(var(--hero-u) * 25.3), 420px); margin: 0; }
   #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: clamp(22px, calc(var(--hero-u) * 2.85), 46px); line-height: 1.18; min-height: 2.36em; margin-bottom: clamp(4px, calc(var(--hero-u) * .6), 10px); }
   #hero-foreground-content:has(.hero-heal-art) #hero-body-text { max-width: 340px; font-size: clamp(12.5px, calc(var(--hero-u) * 1.09), 17px); line-height: 1.62; color: rgb(255 255 255 / .84); min-height: 4.9em; margin-bottom: clamp(6px, calc(var(--hero-u) * .8), 14px); }
-  #hero-foreground-content:has(.hero-heal-art) .hero-impact { max-width: 345px; padding: clamp(6px, calc(var(--hero-u) * .95), 16px) 0 clamp(6px, calc(var(--hero-u) * .95), 16px) 12px; margin-bottom: clamp(10px, calc(var(--hero-u) * 1.65), 28px); gap: 16px; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-impact { max-width: 345px; padding: clamp(6px, calc(var(--hero-u) * .95), 16px) 0 clamp(6px, calc(var(--hero-u) * .95), 16px) 12px; margin-bottom: 0; gap: 16px; }
+  #hero-foreground-content:has(.hero-heal-art) .hero-explore { margin-bottom: clamp(10px, calc(var(--hero-u) * 1.65), 28px); }
+  /* on a short screen the Explore line takes a little less height, as the rest of the column does */
+  #hero-foreground-content:has(.hero-heal-art) .hero-explore-link { min-height: clamp(34px, calc(var(--hero-u) * 3.4), 46px); padding-block: clamp(6px, calc(var(--hero-u) * .9), 12px); }
   #hero-foreground-content:has(.hero-heal-art) .hero-impact > div + div { border-left: 0; padding-left: 0; }
   #hero-foreground-content:has(.hero-heal-art) .hero-impact > div > span:first-child { font-size: clamp(16px, calc(var(--hero-u) * 1.65), 26px); font-weight: 600; }
   #hero-foreground-content:has(.hero-heal-art) .hero-impact > div > span:last-child { margin-top: 2px; font-size: clamp(10px, calc(var(--hero-u) * .83), 13px); font-weight: 600; color: rgb(255 255 255 / .82); }
-  #hero-foreground-content:has(.hero-heal-art) [id^='hero-learn-more-'] { padding: clamp(5px, calc(var(--hero-u) * .55), 9px) clamp(11px, calc(var(--hero-u) * 1.05), 18px); border-radius: 10px; font-size: clamp(11.5px, calc(var(--hero-u) * 1.05), 16px); font-weight: 700; letter-spacing: 0; box-shadow: 0 6px 18px rgb(0 0 0 / .1) !important; }
-  #hero-foreground-content:has(.hero-heal-art) [id^='hero-learn-more-'] > svg { display: none; }
-  #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls { margin-top: clamp(8px, calc(var(--hero-u) * 1.2), 20px); gap: 8px; }
-  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button { min-height: 0; padding: clamp(2px, calc(var(--hero-u) * .25), 4px) clamp(8px, calc(var(--hero-u) * .75), 12px); border-radius: 7px; border-color: #ffffff59; background: #ffffff1f; color: #fff; font-size: clamp(9.5px, calc(var(--hero-u) * .75), 12px); font-weight: 700; box-shadow: none; }
-  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button[aria-pressed="true"] { background: #ffffff47; border-color: #ffffffa6; color: #fff; }
-  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button:last-child { flex: 0 0 auto; display: grid; place-items: center; padding: clamp(2px, calc(var(--hero-u) * .25), 4px) clamp(5px, calc(var(--hero-u) * .45), 8px); }
-  #hero-clone-stage #hero-foreground-content:has(.hero-heal-art) .hero-pillar-controls button:last-child svg { width: clamp(10px, calc(var(--hero-u) * .8), 13px); height: clamp(10px, calc(var(--hero-u) * .8), 13px); }
   /* The emblem sits high and slightly past the right gutter; its caption tucks under the leaves. */
   #hero-foreground-content:has(.hero-heal-art) .hero-heal-art { align-self: start; width: 103.5%; margin-top: calc(var(--hero-u) * -3.9); translate: 4.2vw 0; }
   #hero-foreground-content:has(.hero-heal-art) .hero-heal-art figcaption { margin-top: calc(var(--hero-u) * -4.5); padding-right: 18%; font-size: clamp(18px, calc(var(--hero-u) * 2.1), 32px); line-height: 1.2; }
@@ -110,13 +106,27 @@
 .heal-wordmark { display: block; width: 100%; max-width: 430px; height: auto; margin: 4px 0; color: white; filter: drop-shadow(0 6px 12px #11332f30); }
 #hero-clone-stage .hero-impact > div > span:last-child { color: #ffffffbf; font-size: 12px; line-height: 1.4; }
 #hero-clone-stage .hero-impact { max-width: 410px; }
-#hero-clone-stage .hero-pillar-controls { flex-wrap: nowrap; gap: 6px; margin-top: 25px; }
-#hero-clone-stage .hero-pillar-controls button { min-height: 42px; padding: 10px 12px; border-color: #ffffff26; background: color-mix(in srgb, var(--pillar-ui-ink, #072c30) 18%, transparent); color: #ffffffcf; transition: color .25s ease, background .25s ease, box-shadow .25s ease, transform .25s ease; }
-#hero-clone-stage .hero-pillar-controls button[aria-pressed="true"] { background: #fffdf7; border-color: #fffdf7; color: var(--pillar-ui-ink, #194441); box-shadow: 0 4px 12px var(--pillar-ui-shadow, #09282f24); }
-#hero-clone-stage .hero-pillar-controls button:hover { transform: translateY(-2px); color: #fff; background: #ffffff20; }
-#hero-clone-stage .hero-pillar-controls button[aria-pressed="true"]:hover { color: var(--pillar-ui-ink, #194441); background: #fff; }
-#hero-clone-stage .hero-pillar-controls button:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
-#hero-clone-stage .hero-pillar-controls button:last-child { flex: 0 0 42px; display: grid; place-items: center; padding: 0; }
+/* The paths as tabs, centred at the hall's foot (HeroSection): words on a
+   hairline, the chosen one lit and underlined, so they read as places to go
+   rather than buttons to press. They lie over the hall's own bottom margin
+   rather than adding to its height: the hall is a screen tall on every path,
+   so a turn never changes the track's length under a scroll. */
+#hero-clone-stage .hero-path-tabs { position: absolute; z-index: 20; left: 0; right: 0; bottom: clamp(6px, 1.4vh, 18px); display: flex; justify-content: center; align-items: center; gap: 10px; pointer-events: none; }
+#hero-clone-stage .hero-path-tabs > * { pointer-events: auto; }
+#hero-clone-stage .hero-path-tabs [role='tablist'] { display: flex; gap: clamp(4px, 1vw, 28px); border-bottom: 1px solid rgb(255 255 255 / .24); }
+#hero-clone-stage .hero-path-tabs [role='tab'] { --tab-pad: clamp(8px, .85vw, 16px); position: relative; padding: 10px var(--tab-pad) 12px; border: 0; background: none; color: rgb(255 255 255 / .68); font: 600 clamp(12.5px, 1vw, 15px)/1.2 var(--font-sans); letter-spacing: .04em; text-shadow: 0 1px 12px rgb(0 0 0 / .28); cursor: pointer; transition: color .25s ease; }
+#hero-clone-stage .hero-path-tabs [role='tab']::after { content: ''; position: absolute; left: var(--tab-pad); right: var(--tab-pad); bottom: -1px; height: 2px; border-radius: 2px; background: #fff; opacity: 0; transform: scaleX(.4); transition: opacity .3s ease, transform .35s cubic-bezier(.22, 1, .36, 1); }
+#hero-clone-stage .hero-path-tabs [role='tab']:hover { color: #fff; }
+#hero-clone-stage .hero-path-tabs [role='tab']:hover::after { opacity: .45; }
+#hero-clone-stage .hero-path-tabs [role='tab'][aria-selected='true'] { color: #fff; }
+#hero-clone-stage .hero-path-tabs [role='tab'][aria-selected='true']::after { opacity: 1; transform: none; }
+#hero-clone-stage .hero-path-tabs [role='tab']:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 6px; }
+#hero-clone-stage .hero-path-pause { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #ffffff40; border-radius: 50%; background: none; color: #fff; cursor: pointer; }
+/* Where the hall's content sets its height (phones, tablets upright, a phone
+   held sideways), the hall keeps room at its foot for the tabs, below the figures. */
+@media (max-width: 639px), (max-width: 1023px) and (orientation: portrait), (orientation: landscape) and (max-height: 480px) {
+  #hero-clone-stage:has(> .hero-path-tabs) { padding-bottom: 76px; }
+}
 
 @media (max-width: 899px) {
   .heal-wordmark { max-width: 320px; }
@@ -130,12 +140,12 @@
 @media (max-width: 639px) {
   #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: 31px; margin-bottom: 16px; }
   #hero-foreground-content:has(.hero-heal-art) #hero-body-text { line-height: 1.75; margin-bottom: 20px; }
-  #hero-clone-stage .hero-pillar-controls { gap: 5px; width: 100%; }
-  #hero-clone-stage .hero-pillar-controls button { padding-inline: 10px; font-size: 10px; flex: 1 1 auto; }
+  #hero-clone-stage .hero-path-tabs [role='tablist'] { width: 100%; gap: 0; }
+  #hero-clone-stage .hero-path-tabs [role='tab'] { --tab-pad: 6px; flex: 1 1 0; min-height: 44px; font-size: 13px; }
   .heal-photo-mosaic figcaption { font-size: 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #hero-clone-stage .hero-pillar-controls button { transition: none; }
+  #hero-clone-stage .hero-path-tabs [role='tab'], #hero-clone-stage .hero-path-tabs [role='tab']::after { transition: none; }
 }
 
 /* On a phone the sculpture follows the headline, before the supporting story. */
@@ -145,15 +155,12 @@
   #hero-foreground-content .hero-intro-title { order: 0; }
   #hero-foreground-content .hero-heal-art { order: 1; width: min(100%, 370px); margin: 8px auto 26px; }
   #hero-foreground-content .hero-details { order: 2; }
-  #hero-foreground-content .hero-pillar-controls { order: 3; }
-  #hero-foreground-content .hero-intro-waiting > :is(.hero-intro-title, .hero-details, .hero-pillar-controls) { opacity: 0; }
+  #hero-foreground-content .hero-intro-waiting > .hero-details { opacity: 0; }
   #hero-foreground-content .hero-eyebrow { margin-bottom: 12px; }
   #hero-foreground-content .heal-wordmark { max-width: 260px; }
   #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: 28px; line-height: 1.18; min-height: 2.36em; margin-bottom: 4px; max-width: 320px; }
   #hero-foreground-content .heal-photo-mosaic figcaption { font-size: 20px; margin-top: 4px; }
   #hero-foreground-content:has(.hero-heal-art) #hero-body-text { font-size: 14px; line-height: 1.65; margin-bottom: 18px; }
-  #hero-clone-stage .hero-pillar-controls button { min-height: 44px; }
-  #hero-clone-stage .hero-pillar-controls { margin-top: 20px; }
 }
 @media (max-width: 639px) {
   #hero-foreground-content #hero-script-pillar-name { display: flex; align-items: center; height: 76px; min-height: 76px; margin-bottom: 8px; }
@@ -174,31 +181,31 @@
 @media (min-width: 640px) and (max-width: 1023px) and (orientation: portrait) {
   #hero-foreground-content:has(.hero-heal-art) { display: flex; flex-direction: column; align-items: center; gap: 0; padding-left: 0; }
   #hero-foreground-content:has(.hero-heal-art) .hero-editorial { display: contents; }
-  #hero-foreground-content :is(.hero-intro-title, .hero-details, .hero-pillar-controls) { width: min(100%, 600px); }
+  #hero-foreground-content :is(.hero-intro-title, .hero-details) { width: min(100%, 600px); }
   #hero-foreground-content .hero-intro-title { order: 0; }
   #hero-foreground-content .hero-heal-art { order: 1; width: min(100%, 520px, 48svh); margin: 6px auto 22px; }
   #hero-foreground-content .hero-details { order: 2; }
-  #hero-foreground-content .hero-pillar-controls { order: 3; }
-  #hero-foreground-content .hero-intro-waiting > :is(.hero-intro-title, .hero-details, .hero-pillar-controls) { opacity: 0; }
+  #hero-foreground-content .hero-intro-waiting > .hero-details { opacity: 0; }
   #hero-foreground-content:has(.hero-heal-art) #hero-body-text { max-width: none; }
   #hero-foreground-content #hero-script-pillar-name .heal-wordmark { height: min(calc(100cqw * 112 / 789), 96px); }
 }
 /* Stacked layouts give each block its own rise, in reading order. */
 @media (max-width: 639px), (max-width: 1023px) and (orientation: portrait) {
   @media (prefers-reduced-motion: no-preference) {
-    #hero-foreground-content .hero-intro-rise > :is(.hero-intro-title, .hero-details, .hero-pillar-controls) { animation: heroIntroRise 700ms cubic-bezier(.22, .9, .3, 1) 60ms both; }
+    #hero-foreground-content .hero-intro-rise > .hero-details { animation: heroIntroRise 700ms cubic-bezier(.22, .9, .3, 1) 60ms both; }
     #hero-foreground-content .hero-intro-rise > .hero-details { animation-delay: 180ms; }
-    #hero-foreground-content .hero-intro-rise > .hero-pillar-controls { animation-delay: 280ms; }
   }
 }
 
 /* Each pillar's name writes itself in: its letters rise into place one after
-   another. The wordmark is remounted per pillar, so this plays on every change. */
+   another. The wordmark is remounted per pillar, so this plays on every change;
+   the first path's plays as the page opens, while the hall is still below
+   the landing, so its name is whole by the time it comes up. */
 @keyframes hero-letter-in { from { opacity: 0; transform: translateY(42%) scale(.94); } }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-intro-rise #hero-script-pillar-name .heal-wordmark path { transform-box: fill-box; transform-origin: 50% 100%; animation: hero-letter-in .85s cubic-bezier(.2, .8, .2, 1) calc(var(--i, 0) * 65ms + 140ms) both; }
-  .hero-intro-rise #hero-script-pillar-name .heal-wordmark:not(.hero-pillar-wordmark) > g > path:nth-child(2) { --i: 1; }
-  .hero-intro-rise #hero-script-pillar-name .heal-wordmark:not(.hero-pillar-wordmark) > g > path:nth-child(3) { --i: 2; }
-  .hero-intro-rise #hero-script-pillar-name .heal-wordmark:not(.hero-pillar-wordmark) > g > path:nth-child(4) { --i: 3; }
+  #hero-script-pillar-name .heal-wordmark path { transform-box: fill-box; transform-origin: 50% 100%; animation: hero-letter-in .85s cubic-bezier(.2, .8, .2, 1) calc(var(--i, 0) * 65ms + 140ms) both; }
+  #hero-script-pillar-name .heal-wordmark:not(.hero-pillar-wordmark) > g > path:nth-child(2) { --i: 1; }
+  #hero-script-pillar-name .heal-wordmark:not(.hero-pillar-wordmark) > g > path:nth-child(3) { --i: 2; }
+  #hero-script-pillar-name .heal-wordmark:not(.hero-pillar-wordmark) > g > path:nth-child(4) { --i: 3; }
 }
 

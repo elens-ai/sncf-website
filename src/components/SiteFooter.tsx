@@ -85,7 +85,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
             </Link>
           </li>
           <li>
-            <Link className="footer-way" style={{ '--way': PETALS[4] } as React.CSSProperties} to="/#events-section">
+            <Link className="footer-way" style={{ '--way': PETALS[4] } as React.CSSProperties} to="/events">
               <span className="footer-way-icon" aria-hidden="true"><CalendarHeart size={18} /></span>
               <strong>{c('way-moment', 'Join a moment')}</strong>
               <span>{c('way-moment-line', 'Camps, drives and observances near you')}</span>
@@ -148,10 +148,10 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
 
         {/* Link groups */}
         <nav aria-label={getCMSCopy("copy.SiteFooter.26c87bb51e69", "Footer")} className="grid gap-8 sm:grid-cols-3">
-          {GROUPS.map((group, gi) => (
+          {GROUPS.map((group) => (
             <div key={group.title}>
               <h2 className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-white/55 mb-3">
-                <i className="footer-group-dot" style={{ color: PETALS[gi % PETALS.length] }} aria-hidden="true" />{group.title}
+                {group.title}
               </h2>
               <ul className="space-y-2">
                 {group.links.map((link) => {
