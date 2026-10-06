@@ -1,0 +1,163 @@
+/* ==========================================================================
+   WHO WALKS WITH US (PartnerMarquee.tsx): the search, the organisations'
+   marks drifting past in two rows (one leftwards, one rightwards) the width
+   of the screen, and the panel a mark's plus opens beneath them.
+   Every mark sits on true white, which every one of the files was drawn
+   against (a few are opaque brand cards), on a tile with a hairline edge.
+   ========================================================================== */
+.who-partners {
+  --tile-w: clamp(150px, 14.5vw, 216px);
+  --tile-h: calc(var(--tile-w) * 0.58);
+  --tile-gap: clamp(10px, 1.1vw, 16px);
+  --tile-line: rgb(22 24 43 / 0.08);
+}
+
+/* beside the search, where the count was: one button that stops the wall and sets it going again */
+.who-partner-pause {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #d6cce2;
+  border-radius: 50%;
+  background: #fff;
+  color: #7c6596;
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s, color 0.25s;
+}
+.who-partner-pause:hover { border-color: #b9a6cd; color: #5c4878; }
+.who-partner-pause[aria-pressed='true'] { border-color: #7c6596; background: #7c6596; color: #fff; }
+.who-partner-pause:focus-visible { outline: 3px solid #877099; outline-offset: 3px; }
+
+/* THE ROWS run the screen's width, fading in and out at its edges; each has room above and below for a lifted tile */
+.who-partner-rows { display: grid; gap: 2px; margin-inline: calc(50% - 50vw); }
+.who-marquee {
+  overflow: hidden;
+  padding-block: 6px 16px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+/* two identical runs side by side: moving one run's width brings the second exactly where the first began */
+.who-marquee-track { display: flex; width: max-content; animation: who-marquee calc(var(--group) * 4s) linear infinite; }
+.who-marquee[data-direction='right'] .who-marquee-track { animation-direction: reverse; }
+@keyframes who-marquee { to { transform: translate3d(-50%, 0, 0); } }
+.who-marquee-group { display: flex; flex: none; gap: var(--tile-gap); margin: 0; padding: 0 var(--tile-gap) 0 0; list-style: none; }
+/* a row holds still under the pointer and while the keyboard is in it; both do when stopped, while a panel is open, and out of view */
+.who-marquee:hover .who-marquee-track,
+.who-marquee:focus-within .who-marquee-track,
+.who-partners[data-still] .who-marquee-track,
+.who-partners[data-active='false'] .who-marquee-track { animation-play-state: paused; }
+
+/* A TILE: the mark centred, its short name beneath, the plus in the corner */
+.who-partner-tile { flex: none; margin: 0; list-style: none; }
+.who-partner-tile > button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: var(--tile-w);
+  height: var(--tile-h);
+  padding: 14px 18px 11px;
+  border: 1px solid var(--tile-line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.04);
+  cursor: pointer;
+  transition: translate 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.who-partner-tile > button:hover { translate: 0 -3px; border-color: rgb(22 24 43 / 0.12); box-shadow: 0 16px 30px -20px rgb(22 24 43 / 0.45); }
+.who-partner-tile > button:focus-visible { outline: 3px solid var(--sector); outline-offset: 3px; }
+.who-partner-tile[data-on] > button {
+  border-color: var(--sector);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sector) 35%, transparent), 0 16px 30px -20px color-mix(in srgb, var(--sector) 70%, transparent);
+}
+/* the monogram is always drawn, the logo laid over it on white, so a missing file still leaves a mark */
+.who-partner-mark { position: relative; display: grid; place-items: center; width: 100%; flex: 1; min-height: 0; }
+.who-partner-mark img { position: absolute; left: 6%; top: 0; width: 88%; height: 100%; object-fit: contain; background: #fff; }
+/* the brand's own ink cut toward the page's, so every monogram reads (several inks miss 3:1 on white as published) */
+.who-partner-initials { font: 800 clamp(17px, 1.5vw, 22px) / 1 var(--font-heading); letter-spacing: 0.03em; color: color-mix(in srgb, var(--tile-ink) 55%, #16182b); }
+.who-partner-name { max-width: 100%; overflow: hidden; font: 600 10.5px / 1.2 var(--font-sans); letter-spacing: 0.04em; white-space: nowrap; text-overflow: ellipsis; color: #5a6676; }
+.who-partner-plus {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f3eef8;
+  color: #7c6596;
+  transition: rotate 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s, color 0.3s;
+}
+.who-partner-tile > button:hover .who-partner-plus { background: #e9e0f3; }
+.who-partner-tile[data-on] .who-partner-plus { rotate: 45deg; background: var(--sector); color: #fff; }
+
+/* A SEARCH lays out only what matches, still */
+.who-partner-results { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--tile-gap); margin: 0; padding: 6px 0 16px; list-style: none; }
+
+/* THE PANEL a plus opens: the mark, the field it is grouped under, the
+   organisation's name, what the collaboration was, and its website */
+.who-partner-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease, margin-top 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.who-partner-panel[data-shown='true'] { grid-template-rows: 1fr; opacity: 1; margin-top: 10px; }
+.who-partner-panel > div { min-height: 0; overflow: hidden; }
+.who-partner-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(110px, 14vw, 170px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(18px, 2.4vw, 32px);
+  margin: 2px 2px 20px;
+  padding: clamp(18px, 2.2vw, 26px) clamp(52px, 5vw, 66px) clamp(18px, 2.2vw, 26px) clamp(18px, 2.2vw, 26px);
+  border: 1px solid var(--tile-line);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: inset 0 3px 0 var(--sector), 0 18px 40px -30px rgb(22 24 43 / 0.5);
+}
+.who-partner-card-mark { flex: none; aspect-ratio: 1.6; border: 1px solid var(--tile-line); border-radius: 14px; background: #fff; }
+.who-partner-card-mark img { left: 10%; top: 10%; width: 80%; height: 80%; }
+.who-partner-card-copy { min-width: 0; }
+.who-partner-field { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 6px; font: 700 9.5px / 1.2 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--sector) 72%, #333); }
+.who-partner-field i { width: 8px; height: 8px; border-radius: 50%; background: var(--sector); }
+.who-partner-card h3 { margin: 0 0 8px; font: 800 clamp(17px, 1.5vw, 20px) / 1.25 var(--font-heading); letter-spacing: 0; color: #1d2a3a; }
+.who-partner-card-copy > p.font-artistic-serif { margin: 0; font-size: 15px; line-height: 1.6; color: #44525f; }
+.who-partner-note { margin: 8px 0 0; font-size: 12.5px; font-style: italic; line-height: 1.6; color: #5d6b78; }
+.who-partner-card-copy a { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding-bottom: 4px; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); font: 600 13px / 1 var(--font-sans); color: #5c4878; }
+.who-partner-card-copy a:hover { border-bottom-color: currentColor; }
+.who-partner-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--tile-line);
+  border-radius: 50%;
+  background: #fff;
+  color: #5c4878;
+  cursor: pointer;
+}
+.who-partner-close:hover { background: #f3eef8; }
+:is(.who-partner-close, .who-partner-card-copy a):focus-visible { outline: 3px solid var(--sector); outline-offset: 3px; }
+
+@media (max-width: 640px) {
+  .who-partners { --tile-w: 148px; }
+  .who-partner-card { grid-template-columns: 1fr; padding-right: clamp(18px, 2.2vw, 26px); }
+  .who-partner-card-mark { width: 140px; }
+}
+/* With reduced motion the rows stand still, one run each, and scroll by hand */
+@media (prefers-reduced-motion: reduce) {
+  .who-marquee { overflow-x: auto; padding-inline: clamp(16px, 5vw, 64px); -webkit-mask-image: none; mask-image: none; }
+  .who-marquee-track { animation: none; }
+  .who-marquee-group[aria-hidden='true'], .who-partner-tile[aria-hidden='true'] { display: none; }
+  .who-partner-pause { display: none; }
+  .who-partner-panel, .who-partner-tile > button, .who-partner-plus { transition: none; }
+}

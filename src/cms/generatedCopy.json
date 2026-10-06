@@ -201,7 +201,6 @@
   "copy.WhoWeArePage.b66e8cc28209": "Who walks with us",
   "copy.WhoWeArePage.447786a75a38": "Search foundation partners",
   "copy.WhoWeArePage.f3bd895aae45": "Find an organisation or a cause…",
-  "copy.WhoWeArePage.26f9857f2b6f": " collaborations",
   "copy.WhoWeArePage.7d25129d73f9": "No collaborations match that search. Try another name or cause.",
   "copy.WhoWeArePage.630add5617cc": "The registered office",
   "copy.WhoWeArePage.d06af8e88b68": "Where to find us",
@@ -783,8 +782,6 @@
   "copy.WhoWeArePage.approach-eyebrow": "How service takes shape",
   "copy.WhoWeArePage.approach-title": "Listen. Come together.",
   "copy.WhoWeArePage.approach-title-em": "Serve.",
-  "copy.WhoWeArePage.sectors": "Show partners by field of work",
-  "copy.WhoWeArePage.sectors-all": "All fields",
   "copy.Link.WhoWeArePage.maps": "https://www.google.com/maps/search/?api=1&query=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009",
   "copy.WhoWeArePage.maps": "Open in Maps",
   "copy.WhoWeArePage.stamp": "Since 2010",
@@ -830,5 +827,11 @@
   "copy.CoreValuesPage.cover-headline-script": "with a purpose of giving",
   "copy.CoreValuesPage.cover-explore-link": "Explore",
   "copy.UnAffiliation.unep-short": "UNEP",
-  "copy.UnAffiliation.unep-name": "United Nations Environment Programme"
+  "copy.UnAffiliation.unep-name": "United Nations Environment Programme",
+  "copy.WhoWeArePage.partner-more": "More about",
+  "copy.WhoWeArePage.partners-play": "Set the logos moving",
+  "copy.WhoWeArePage.partners-pause": "Stop the moving logos",
+  "copy.WhoWeArePage.partners-rows": "The organisations that walk with us",
+  "copy.WhoWeArePage.partner-visit": "Visit their website",
+  "copy.WhoWeArePage.partner-close": "Close"
 }

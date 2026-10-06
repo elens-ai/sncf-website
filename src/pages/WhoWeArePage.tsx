@@ -4,14 +4,13 @@ import { getCMSLink } from '../cms/links';
 import { resolveCMSMedia } from '../cms/media';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, Search, HeartHandshake, CalendarHeart, Globe, MapPinned, MapPin, Phone, Mail, BadgeCheck } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, HeartHandshake, CalendarHeart, Globe, MapPinned, MapPin, Phone, Mail, BadgeCheck } from 'lucide-react';
 import { PageShell } from '../components/PageShell';
 import { MediaGallery } from '../components/MediaGallery';
 import { Tally } from '../components/Tally';
 import { MissionVision } from '../components/MissionVision';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PARTNERS } from '../data/partners';
-import { PartnerItem } from '../components/EditorialContent';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
 import { toNumber, isTallyable } from '../utils/figures';
@@ -23,7 +22,8 @@ import { UnSeal } from '../components/UnAffiliation';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { HandsBloom, HandsLede, HandsProof, handWays } from '../components/WorkingHands';
 import { GrowthRings } from '../components/GrowthRings';
-import { partnerSectors, sectorOf } from '../components/PartnerCircle';
+/* after the page's own stylesheets, so the wall's styles come after theirs */
+import { PartnerMarquee } from '../components/PartnerMarquee';
 
 /**
  * WHO WE ARE — the foundation's own account of itself.
@@ -147,8 +147,6 @@ const WhoCover: React.FC = () => {
   const way = ways[current] ?? ways[0];
   return <section ref={ref} className="who-cover" data-active={active} aria-labelledby="who-title">
     <div className="who-cover-copy" data-reveal>
-      <p className="who-eyebrow">{getCMSCopy("copy.WhoWeArePage.a01941bf3134", "Sant Nirankari Charitable Foundation")}</p>
-      <div className="ed-dots" aria-hidden="true">{[0,1,2,3,4].map(i => <i key={i} />)}</div>
       <h1 id="who-title">{getCMSCopy("copy.WhoWeArePage.696ab4d5bfb5", "Who we are")}</h1>
       <div className="hands-reading" {...hold}>
         <HandsLede text={getCMSCopy("copy.WhoWeArePage.5f1d766bc647", "The Sant Nirankari Charitable Foundation is the Mission’s working hands — the part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.")} ways={ways} current={current} onPick={pick} />
@@ -162,8 +160,6 @@ const WhoCover: React.FC = () => {
 };
 
 export const WhoWeArePage: React.FC = () => {
-  const [partnerQuery, setPartnerQuery] = useState('');
-  const [sector, setSector] = useState<string | null>(null);
   const storyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const elements = storyRef.current?.querySelectorAll('.who-chapter-heading, .ww-facts, .cv-tally-row, .ww-card, .who-closing');
@@ -175,11 +171,6 @@ export const WhoWeArePage: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   const { hash } = useLocation();
-  /* the partners by the field they worked in, in the same groups as the home page's circle */
-  const sectors = partnerSectors().map(s => ({ ...s, count: PARTNERS.filter(p => sectorOf(p.id) === s.id).length })).filter(s => s.count);
-  const sectorById = Object.fromEntries(sectors.map(s => [s.id, s]));
-  const query = partnerQuery.trim().toLowerCase();
-  const matchingPartners = PARTNERS.filter(p => (!sector || sectorOf(p.id) === sector) && `${p.name} ${p.contribution} ${p.note ?? ''}`.toLowerCase().includes(query));
   const founded = Number.parseInt(FACTS[0]?.v ?? '', 10) || 2010;
   const years = new Date().getFullYear() - founded;
   const pillarInk = (id: string) => PILLARS.find(p => p.id === id)?.accentA ?? '#426b89';
@@ -322,26 +313,8 @@ export const WhoWeArePage: React.FC = () => {
         body={`${PARTNERS.length} organisations have put their name beside the foundation’s — United Nations bodies, government departments, newsrooms, hospitals and institutes.`}
       />
       <div className="cv-chapter">
-        {/* THE FIELDS OF WORK, drawn to scale: each band as wide as the
-            number of partners in it, and each one a filter for the register */}
-        <div className="who-sectors">
-          <div className="who-sector-bar" aria-hidden="true">
-            {sectors.map(s => <span key={s.id} data-off={!!sector && sector !== s.id} style={{ flexGrow: s.count, background: s.color }} />)}
-          </div>
-          <div className="who-sector-chips" role="group" aria-label={getCMSCopy("copy.WhoWeArePage.sectors", "Show partners by field of work")}>
-            <button type="button" aria-pressed={!sector} onClick={() => setSector(null)}>{getCMSCopy("copy.WhoWeArePage.sectors-all", "All fields")} <b>{PARTNERS.length}</b></button>
-            {sectors.map(s => (
-              <button key={s.id} type="button" aria-pressed={sector === s.id} style={{ '--sector': s.color } as React.CSSProperties} onClick={() => setSector(sector === s.id ? null : s.id)}>
-                <i aria-hidden="true" />{s.name} <b>{s.count}</b>
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="who-partner-toolbar"><label><Search size={17} /><input value={partnerQuery} onChange={e => setPartnerQuery(e.target.value)} aria-label={getCMSCopy("copy.WhoWeArePage.447786a75a38", "Search foundation partners")} placeholder={getCMSCopy("copy.WhoWeArePage.f3bd895aae45", "Find an organisation or a cause…")} /></label><span>{matchingPartners.length}{getCMSCopy("copy.WhoWeArePage.26f9857f2b6f", " collaborations")}</span></div>
-        {matchingPartners.length === 0 && <p className="who-empty">{getCMSCopy("copy.WhoWeArePage.7d25129d73f9", "No collaborations match that search. Try another name or cause.")}</p>}
-        <ul className="ww-register">
-          {matchingPartners.map(partner => <PartnerItem key={partner.id} partner={partner} sector={sectorById[sectorOf(partner.id)]} />)}
-        </ul>
+        {/* the search, then every organisation's mark drifting past in two rows, each opening what it did with us */}
+        <PartnerMarquee partners={PARTNERS} />
 
         <div id="wwa-media">
           <MediaGallery section="who-we-are" headingLevel={3} layout="slides" />
