@@ -2873,9 +2873,6 @@
     "copy.WelcomeSplashScreen.da87301fca5f": "Sant Nirankari Charitable Foundation — Service with Humility",
     "copy.WelcomeSplashScreen.44e3df1518ac": "Sant Nirankari Charitable Foundation Logo",
     "copy.WelcomeSplashScreen.56219e473693": "Service with Humility",
-    "copy.CoreValuesPage.bb5f4b8db550": "One purpose. Three ways to make a difference.",
-    "copy.CoreValuesPage.1872c282a338": "The three",
-    "copy.CoreValuesPage.19b476bc912f": "cornerstones.",
     "copy.CoreValuesPage.c7a3284847f9": "Preview a core value",
     "copy.CoreValuesPage.d677190e0a99": "Service",
     "copy.CoreValuesPage.bb8643e88aae": "with humility",
@@ -2896,7 +2893,6 @@
     "copy.CoreValuesPage.97ff86ab30e2": "The three cornerstones",
     "copy.CoreValuesPage.1d90a9e6fdbc": "Compassion in action. Discover the programmes, people and reported progress behind Heal, Enrich and Empower.",
     "copy.CoreValuesPage.64263b3319f0": "Explore our impact",
-    "copy.CoreValuesPage.9fd0ca7a7af7": "Figures reflect each programme’s stated reporting period. Different measures and periods are presented separately; they are not combined into a total.",
     "copy.GuidingForcePage.3c66946f7a8a": "Sant Nirankari Health City",
     "copy.GuidingForcePage.b98c09f4d313": "Oneness Vann",
     "copy.GuidingForcePage.a81619ca1e37": "Project Amrit",
@@ -2938,11 +2934,7 @@
     "copy.ProjectsPage.995f1e05cac7": "Service with a lasting footprint.",
     "copy.ProjectsPage.69c5a4506f97": "Explore projects",
     "copy.ProjectsPage.7560b5b78854": "Health City",
-    "copy.ProjectsPage.bacc0f922481": "Find your connection",
-    "copy.ProjectsPage.7fad847159d2": "Different paths. Shared purpose.",
-    "copy.ProjectsPage.f4f7c6cc0c7e": "Choose a project and explore its reported reach.",
     "copy.ProjectsPage.3532c25e1c80": "Now open / OPD services started",
-    "copy.ProjectsPage.3eeeb717e545": "Sant Nirankari",
     "copy.ProjectsPage.d39d7428ab57": "A multi-specialty charitable hospital campus in North Delhi, intended to make advanced treatment more accessible.",
     "copy.ProjectsPage.25984a49f9a1": "OPD services have started. Activity figures will be added as the campus begins reporting.",
     "copy.ProjectsPage.5e3c06e2cdd5": "Visit Health City ",
@@ -3029,7 +3021,7 @@
     "copy.CMSPage.bbcc935e4263": "Return home",
     "copy.CMSPage.a01941bf3134": "Sant Nirankari Charitable Foundation",
     "copy.Link.GuidingForcePage.7783614ae9f5": "#satguru",
-    "copy.Link.ProjectsPage.6a68430d8c61": "#projects-directory",
+    "copy.Link.ProjectsPage.6a68430d8c61": "#project-amrit",
     "copy.Link.ProjectsPage.b03f7697e124": "https://www.nirankarihealthcity.org/",
     "copy.Link.WhoWeArePage.f24daa84860f": "#account",
     "copy.Link.WhoWeArePage.e3dc1a537132": "tel:+911147660380",
@@ -3197,12 +3189,7 @@
     "copy.ValueAnalytics.kicker": "Analytics",
     "copy.ValueAnalytics.title": "The figures, drawn out",
     "copy.ValueAnalytics.lead": "Every chart is drawn from the figures the foundation reports, each to its own date. Nothing here is estimated.",
-    "copy.ProjectsPage.hcChipsSource": "As the foundation reports it",
-    "copy.ProjectsPage.hcChip1": "1,000+ beds",
-    "copy.ProjectsPage.hcChip2": "Multispecialty super-hospital",
     "copy.ProjectsPage.hcChip3": "North Delhi",
-    "copy.ProjectsPage.hcAlt": "Architectural rendering of Sant Nirankari Health City, its name across the top of the main block",
-    "copy.ProjectsPage.hcCaption": "Sant Nirankari Health City · North Delhi",
     "copy.ProjectsPage.hcBadge": "OPD services started",
     "copy.ProjectAnalytics.amrit1": "Amrit across the country",
     "copy.ProjectAnalytics.amrit2": "Hands in the water",
@@ -3316,11 +3303,6 @@
     "copy.HealStory.introLead": "For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.",
     "copy.WelcomeSplashScreen.mission-vision-label": "Mission & Vision",
     "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility",
-    "copy.CoreValuesPage.way-heal": "Care that reaches further.",
-    "copy.CoreValuesPage.way-enrich": "Learning that opens doors.",
-    "copy.CoreValuesPage.way-empower": "Communities that grow stronger.",
-    "copy.CoreValuesPage.cover-explore": "Explore the cornerstones",
-    "copy.CoreValuesPage.cover-programmes": "Find a programme",
     "copy.EmblemShowcase.previous": "Previous photograph",
     "copy.EmblemShowcase.play": "Play",
     "copy.EmblemShowcase.pause": "Pause",
@@ -3387,8 +3369,6 @@
     "copy.Sayings.villages-by": "Sant Nirankari Mission",
     "copy.Sayings.contribute-english": "Life gets a meaning, if it is lived for others.",
     "copy.Sayings.contribute-by": "Nirankari Baba Hardev Singh Ji Maharaj",
-    "copy.CoreValuesPage.cover-goals": "Advancing",
-    "copy.CoreValuesPage.cover-goals-of": "UN Sustainable Development Goals",
     "copy.NavPanels.reports": "Reports",
     "copy.NavPanels.gallery": "Gallery",
     "copy.NavPanels.stats": "Stats",
@@ -3442,14 +3422,7 @@
     "copy.ProjectOrbit.signature": "One purpose.",
     "copy.ProjectOrbit.signature-script": "lasting impact",
     "copy.ProjectOrbit.label": "The projects",
-    "copy.ProjectsPage.cover-goals": "Advancing",
-    "copy.ProjectsPage.cover-goals-of": "UN Global Goals",
     "copy.ProjectsPage.cover-impact": "Each project’s reported reach",
-    "copy.ProjectsPage.directory-goals": "UN goals",
-    "copy.ProjectsPage.directory-tabs": "reports, gallery and stats",
-    "copy.ProjectsPage.directory-reports": "Reports",
-    "copy.ProjectsPage.directory-gallery": "Gallery",
-    "copy.ProjectsPage.directory-stats": "Stats",
     "copy.PartnerCircle.sector-together": "Walking with us",
     "copy.PartnerCircle.label": "Our partners, around the foundation",
     "copy.PartnerCircle.read": "read this collaboration",
@@ -3601,7 +3574,26 @@
     "copy.WelcomeSplashScreen.message-label": "Satguru's Message",
     "copy.WelcomeSplashScreen.message-rail-label": "Message progress",
     "copy.Sayings.vann-cover": "We Live, if Nature Lives",
-    "copy.Sayings.watershed-cover-hindi": "प्रदूषण अंदर हो या बाहर, दोनों ही हानिकारक हैं"
+    "copy.Sayings.watershed-cover-hindi": "प्रदूषण अंदर हो या बाहर, दोनों ही हानिकारक हैं",
+    "copy.ProjectsPage.hcStat1Value": "1,200+",
+    "copy.ProjectsPage.hcStat1Label": "Bedded Health City",
+    "copy.ProjectsPage.hcStat2Value": "500+",
+    "copy.ProjectsPage.hcStat2Label": "Beds in Phase 1",
+    "copy.ProjectsPage.hcStat3Value": "1,500+",
+    "copy.ProjectsPage.hcStat3Label": "Staff",
+    "copy.ProjectsPage.hcStat4Value": "40+",
+    "copy.ProjectsPage.hcStat4Label": "Specialties",
+    "copy.ProjectsPage.hcLogoAlt": "Sant Nirankari Health City",
+    "copy.ProjectsPage.hcStatsSource": "As Sant Nirankari Health City states them",
+    "copy.ProjectsPage.hcTeamAlt": "The Health City's team gathered in the hospital's atrium",
+    "copy.ProjectsPage.hcPlaqueAlt": "The plaque recording that Satguru Mata Sudiksha Ji Maharaj dedicated the premises of Sant Nirankari Health City to the service of humanity on 23 February 2026",
+    "copy.ProjectsPage.hcDedicationAlt": "The ceremony dedicating Sant Nirankari Health City to the service of humanity",
+    "copy.ProjectsPage.hcCollageCaption": "Dedicated to the service of humanity · 23 February 2026",
+    "copy.CoreValuesPage.cover-headline": "Love, peace, kindness",
+    "copy.CoreValuesPage.cover-headline-script": "with a purpose of giving",
+    "copy.CoreValuesPage.cover-explore-link": "Explore",
+    "copy.UnAffiliation.unep-short": "UNEP",
+    "copy.UnAffiliation.unep-name": "United Nations Environment Programme"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -3776,10 +3768,6 @@
       "source": "/images/welcome-volunteers.jpg",
       "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
     },
-    "asset.WelcomeSplashScreen.satguru-photo": {
-      "source": "/images/satguru-mata-sudiksha-ji-cutout.webp",
-      "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-cutout.webp"
-    },
     "asset.PillarHeroBackdrop.heal-background": {
       "source": "/images/heal-emblem/background.webp",
       "label": "PillarHeroBackdrop · background.webp"
@@ -3883,6 +3871,26 @@
     "asset.WelcomeSplashScreen.message-photo": {
       "source": "/images/satguru-mata-sudiksha-ji-message.webp",
       "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-message.webp"
+    },
+    "asset.ProjectsPage.hcLogo": {
+      "source": "/images/projects/health-city/logo.webp",
+      "label": "ProjectsPage · logo.webp"
+    },
+    "asset.ProjectsPage.hcTeam": {
+      "source": "/images/projects/health-city/team.webp",
+      "label": "ProjectsPage · team.webp"
+    },
+    "asset.ProjectsPage.hcPlaque": {
+      "source": "/images/projects/health-city/plaque.webp",
+      "label": "ProjectsPage · plaque.webp"
+    },
+    "asset.ProjectsPage.hcDedication": {
+      "source": "/images/projects/health-city/dedication.webp",
+      "label": "ProjectsPage · dedication.webp"
+    },
+    "asset.UnepSeal.logo": {
+      "source": "/images/partners/unep.png",
+      "label": "UnepSeal · unep.png"
     }
   },
   "slots": {
@@ -4442,21 +4450,6 @@
         "section": "Intro · First screen",
         "label": "Intro · First screen · Service with Humility"
       },
-      "copy.CoreValuesPage.bb5f4b8db550": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · One purpose. Three ways to make a difference."
-      },
-      "copy.CoreValuesPage.1872c282a338": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · The three"
-      },
-      "copy.CoreValuesPage.19b476bc912f": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · cornerstones."
-      },
       "copy.CoreValuesPage.c7a3284847f9": {
         "page": "core-values",
         "section": "Page",
@@ -4556,11 +4549,6 @@
         "page": "core-values",
         "section": "Page",
         "label": "Page · Explore our impact"
-      },
-      "copy.CoreValuesPage.9fd0ca7a7af7": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Figures reflect each programme’s stated reporting period. Different m…"
       },
       "copy.GuidingForcePage.3c66946f7a8a": {
         "page": "guiding-force",
@@ -4767,30 +4755,10 @@
         "section": "Page",
         "label": "Page · Health City"
       },
-      "copy.ProjectsPage.bacc0f922481": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Find your connection"
-      },
-      "copy.ProjectsPage.7fad847159d2": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Different paths. Shared purpose."
-      },
-      "copy.ProjectsPage.f4f7c6cc0c7e": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Choose a project and explore its reported reach."
-      },
       "copy.ProjectsPage.3532c25e1c80": {
         "page": "projects",
         "section": "Page",
         "label": "Page · Now open / OPD services started"
-      },
-      "copy.ProjectsPage.3eeeb717e545": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Sant Nirankari"
       },
       "copy.ProjectsPage.d39d7428ab57": {
         "page": "projects",
@@ -5225,7 +5193,7 @@
       "copy.Link.ProjectsPage.6a68430d8c61": {
         "page": "projects",
         "section": "Page",
-        "label": "Page · Link: #projects-directory"
+        "label": "Page · Link: #project-amrit"
       },
       "copy.Link.ProjectsPage.b03f7697e124": {
         "page": "projects",
@@ -6062,35 +6030,10 @@
         "section": "Charts",
         "label": "Charts · Every chart is drawn from the figures the foundation reports, each to…"
       },
-      "copy.ProjectsPage.hcChipsSource": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · As the foundation reports it"
-      },
-      "copy.ProjectsPage.hcChip1": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · 1,000+ beds"
-      },
-      "copy.ProjectsPage.hcChip2": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Multispecialty super-hospital"
-      },
       "copy.ProjectsPage.hcChip3": {
         "page": "projects",
         "section": "Page",
         "label": "Page · North Delhi"
-      },
-      "copy.ProjectsPage.hcAlt": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Architectural rendering of Sant Nirankari Health City, its name acros…"
-      },
-      "copy.ProjectsPage.hcCaption": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Sant Nirankari Health City · North Delhi"
       },
       "copy.ProjectsPage.hcBadge": {
         "page": "projects",
@@ -6657,31 +6600,6 @@
         "section": "Intro · Mission & vision page",
         "label": "Intro · Mission & vision page · Service with Humility"
       },
-      "copy.CoreValuesPage.way-heal": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Care that reaches further."
-      },
-      "copy.CoreValuesPage.way-enrich": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Learning that opens doors."
-      },
-      "copy.CoreValuesPage.way-empower": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Communities that grow stronger."
-      },
-      "copy.CoreValuesPage.cover-explore": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Explore the cornerstones"
-      },
-      "copy.CoreValuesPage.cover-programmes": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Find a programme"
-      },
       "copy.EmblemShowcase.previous": {
         "page": "core-values",
         "section": "Animated emblems",
@@ -7012,16 +6930,6 @@
         "section": "Sayings & slogans",
         "label": "Sayings & slogans · Nirankari Baba Hardev Singh Ji Maharaj"
       },
-      "copy.CoreValuesPage.cover-goals": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Advancing"
-      },
-      "copy.CoreValuesPage.cover-goals-of": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · UN Sustainable Development Goals"
-      },
       "copy.NavPanels.reports": {
         "page": "everywhere",
         "section": "Menu",
@@ -7287,45 +7195,10 @@
         "section": "Page",
         "label": "Page · The projects"
       },
-      "copy.ProjectsPage.cover-goals": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Advancing"
-      },
-      "copy.ProjectsPage.cover-goals-of": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · UN Global Goals"
-      },
       "copy.ProjectsPage.cover-impact": {
         "page": "projects",
         "section": "Page",
         "label": "Page · Each project’s reported reach"
-      },
-      "copy.ProjectsPage.directory-goals": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · UN goals"
-      },
-      "copy.ProjectsPage.directory-tabs": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · reports, gallery and stats"
-      },
-      "copy.ProjectsPage.directory-reports": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Reports"
-      },
-      "copy.ProjectsPage.directory-gallery": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Gallery"
-      },
-      "copy.ProjectsPage.directory-stats": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Stats"
       },
       "copy.PartnerCircle.sector-together": {
         "page": "home",
@@ -8086,6 +7959,101 @@
         "page": "everywhere",
         "section": "Sayings & slogans",
         "label": "Sayings & slogans · प्रदूषण अंदर हो या बाहर, दोनों ही हानिकारक हैं"
+      },
+      "copy.ProjectsPage.hcStat1Value": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 1,200+"
+      },
+      "copy.ProjectsPage.hcStat1Label": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Bedded Health City"
+      },
+      "copy.ProjectsPage.hcStat2Value": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 500+"
+      },
+      "copy.ProjectsPage.hcStat2Label": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Beds in Phase 1"
+      },
+      "copy.ProjectsPage.hcStat3Value": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 1,500+"
+      },
+      "copy.ProjectsPage.hcStat3Label": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Staff"
+      },
+      "copy.ProjectsPage.hcStat4Value": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · 40+"
+      },
+      "copy.ProjectsPage.hcStat4Label": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Specialties"
+      },
+      "copy.ProjectsPage.hcLogoAlt": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Sant Nirankari Health City"
+      },
+      "copy.ProjectsPage.hcStatsSource": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · As Sant Nirankari Health City states them"
+      },
+      "copy.ProjectsPage.hcTeamAlt": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · The Health City's team gathered in the hospital's atrium"
+      },
+      "copy.ProjectsPage.hcPlaqueAlt": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · The plaque recording that Satguru Mata Sudiksha Ji Maharaj dedicated …"
+      },
+      "copy.ProjectsPage.hcDedicationAlt": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · The ceremony dedicating Sant Nirankari Health City to the service of …"
+      },
+      "copy.ProjectsPage.hcCollageCaption": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Dedicated to the service of humanity · 23 February 2026"
+      },
+      "copy.CoreValuesPage.cover-headline": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Love, peace, kindness"
+      },
+      "copy.CoreValuesPage.cover-headline-script": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · with a purpose of giving"
+      },
+      "copy.CoreValuesPage.cover-explore-link": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Explore"
+      },
+      "copy.UnAffiliation.unep-short": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · UNEP"
+      },
+      "copy.UnAffiliation.unep-name": {
+        "page": "everywhere",
+        "section": "UN standing & SDGs",
+        "label": "UN standing & SDGs · United Nations Environment Programme"
       }
     },
     "assets": {
@@ -8304,11 +8272,6 @@
         "section": "Intro · Welcome page",
         "label": "Intro · Welcome page · welcome-volunteers.jpg"
       },
-      "asset.WelcomeSplashScreen.satguru-photo": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · satguru-mata-sudiksha-ji-cutout.webp"
-      },
       "asset.PillarHeroBackdrop.heal-background": {
         "page": "home",
         "section": "Hero · Heal background",
@@ -8436,8 +8399,33 @@
       },
       "asset.WelcomeSplashScreen.message-photo": {
         "page": "home",
-        "section": "Intro · Message page",
-        "label": "Intro · Message page · satguru-mata-sudiksha-ji-message.webp"
+        "section": "Intro · Satguru portrait (message and mission pages)",
+        "label": "Intro · Satguru portrait (message and mission pages) · satguru-mata-sudiksha-ji-message.webp"
+      },
+      "asset.ProjectsPage.hcLogo": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · logo.webp"
+      },
+      "asset.ProjectsPage.hcTeam": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · team.webp"
+      },
+      "asset.ProjectsPage.hcPlaque": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · plaque.webp"
+      },
+      "asset.ProjectsPage.hcDedication": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · dedication.webp"
+      },
+      "asset.UnepSeal.logo": {
+        "page": "other",
+        "section": "Unep Seal",
+        "label": "Unep Seal · unep.png"
       }
     }
   },
@@ -8549,12 +8537,6 @@
       "order": 0,
       "options": {},
       "label": "GuidingForcePage · gf-media"
-    },
-    "ProjectsPage.projects-directory": {
-      "enabled": true,
-      "order": 0,
-      "options": {},
-      "label": "ProjectsPage · projects-directory"
     },
     "ProjectsPage.health-city": {
       "enabled": true,
@@ -9305,6 +9287,10 @@
       {
         "platform": "x",
         "url": "https://x.com/santnirankari"
+      },
+      {
+        "platform": "linkedin",
+        "url": "https://www.linkedin.com/company/sant-nirankari-charitable-foundation-sncf/"
       }
     ],
     "footerColumns": [

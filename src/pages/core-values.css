@@ -3,51 +3,47 @@
    from one to the next as the compass turns rather than jumping. */
 @property --value-color { syntax: '<color>'; inherits: true; initial-value: #1f8a5c; }
 @property --value-light { syntax: '<color>'; inherits: true; initial-value: #6fd19a; }
-/* a wash behind the compass, its echo behind the copy, so neither side is bare */
-.values-cover { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); gap: 32px; padding: 145px max(7%, 28px) 0; overflow: hidden; background: radial-gradient(ellipse 48% 62% at 67% 47%, color-mix(in srgb, var(--value-light) 26%, #f8f6ef), transparent 72%), radial-gradient(ellipse 42% 56% at 27% 54%, color-mix(in srgb, var(--value-light) 9%, #f8f6ef), transparent 70%), #f8f6ef; color: #203c38; transition: --value-color .8s ease, --value-light .8s ease; }
+.values-cover { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); gap: 32px; padding: 145px max(7%, 28px) 0; overflow: hidden; color: #fff; transition: --value-color .8s ease, --value-light .8s ease; }
+/* THE GROUND: the cornerstone in view's own, as the home page's hall paints it (its two colours
+   under a deep wash, its waves, its line drawings), following the compass round: the registered
+   colours blend, the waves morph to the next palette, the drawings cross-fade. */
+.values-cover-ground {
+  position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  background: linear-gradient(90deg, #071e2938, transparent 38%, transparent 62%, #071e2938), linear-gradient(90deg, #031b1840, #03151f99), linear-gradient(135deg, var(--value-color), var(--value-light));
+}
+.values-cover-ground > .mosaic-waves { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 900ms ease; }
+.values-cover-ground > .mosaic-waves[data-ready='true'] { opacity: 1; }
+.values-cover-ground > .pillar-artwork { opacity: 0; transition: opacity .9s ease; }
+.values-cover-ground > .pillar-artwork[data-visible='true'] { opacity: .3; }
+@media (forced-colors: active), (prefers-contrast: more) { .values-cover-ground > .mosaic-waves { display: none; } }
 .values-cover-copy { padding: 28px 0 50px; align-self: center; }
-.values-cover h1 { font: 800 clamp(36px, 4.4vw, 66px)/1.06 var(--font-heading); letter-spacing: 0; margin: 24px 0; text-wrap: balance; }
-.values-cover h1 em { font-family: var(--font-script); font-weight: 700; font-size: 1.3em; color: var(--value-color); letter-spacing: -.025em; }
-/* The three ways, a legend for the compass: icon, name and line in each
-   cornerstone's ink (deepened for small type), the one in view lifted. */
-.values-cover-ways { display: grid; gap: 4px; max-width: 480px; margin: 0 0 0 -12px; padding: 0; list-style: none; }
-.values-cover-ways a { --way-type: color-mix(in srgb, var(--way-ink) 74%, #0d2421); display: grid; grid-template-columns: 36px 78px minmax(0, 1fr) 16px; grid-template-areas: 'icon name text arrow'; align-items: center; column-gap: 12px; padding: 8px 14px 8px 12px; border-radius: 16px; color: #2b4540; transition: background-color .4s, box-shadow .4s, color .4s; }
-.values-cover-way-icon { grid-area: icon; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; color: var(--way-type); background: color-mix(in srgb, var(--way-light) 26%, #fff); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--way-ink) 18%, transparent); transition: background-color .4s, color .4s; }
-.values-cover-way-name { grid-area: name; font: 700 11px/1 var(--font-sans); letter-spacing: .16em; color: var(--way-type); }
-.values-cover-way-text { grid-area: text; font: 400 16px/1.45 var(--font-sans); }
-.values-cover-way-arrow { grid-area: arrow; color: var(--way-type); opacity: 0; translate: 0 -4px; transition: opacity .3s, translate .3s; }
-.values-cover-ways a[data-active='true'] { color: #17302b; background: color-mix(in srgb, var(--way-light) 16%, #fffdf9); box-shadow: 0 12px 24px -18px color-mix(in srgb, var(--way-ink) 60%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--way-ink) 14%, transparent); }
-.values-cover-ways a[data-active='true'] .values-cover-way-icon { background: var(--way-ink); color: #fff; }
-.values-cover-ways a:is(:hover, :focus-visible) .values-cover-way-arrow { opacity: 1; translate: 0 0; }
-@media (hover: none) { .values-cover-way-arrow { opacity: .6; translate: 0 0; } }
-/* the way on: down to the cornerstones, or straight to a programme */
+.values-cover h1 { font: 800 clamp(36px, 4.4vw, 66px)/1.06 var(--font-heading); letter-spacing: 0; margin: 24px 0; text-wrap: balance; text-shadow: 0 1px 24px rgb(0 0 0 / .25); }
+.values-cover h1 em { display: inline-block; font-family: var(--font-script); font-weight: 700; font-size: 1.3em; color: color-mix(in srgb, var(--value-light) 70%, #fff); letter-spacing: -.025em; text-wrap: balance; }
+/* the headline's words, one to each cornerstone: the one in view rises a little larger, in the same
+   white, with a soft shadow beneath it, springing up as the compass reaches it */
+.values-cover-word { display: inline-block; cursor: pointer; transform-origin: 0 85%; transition: transform .55s cubic-bezier(.34,1.56,.64,1), text-shadow .55s ease; }
+/* growing from its left edge keeps the column's line; the room after each word is what it grows into */
+.values-cover-word:not(:last-of-type) { margin-right: .2em; }
+.values-cover-word[data-on='true'] { transform: scale(1.08); text-shadow: 0 10px 26px rgb(0 0 0 / .32); }
+/* the way on: down to the cornerstones */
 .values-cover-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 28px; }
-.values-cover-cta { display: inline-flex; align-items: center; gap: 12px; padding: 15px 22px 15px 24px; border-radius: 999px; background: #203c38; color: #fff; font: 600 14px/1 var(--font-sans); letter-spacing: .01em; box-shadow: 0 14px 26px -16px #203c38; transition: background-color .3s, translate .3s, box-shadow .3s; }
-.values-cover-cta svg { transition: translate .3s; }
-.values-cover-cta:hover { background: #17302b; translate: 0 -2px; box-shadow: 0 18px 30px -16px #203c38; }
-.values-cover-cta:hover svg { translate: 0 2px; }
-.values-cover-link { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); color: #2b4540; font: 500 14px/1 var(--font-sans); transition: color .3s, border-color .3s; }
-.values-cover-link:hover { color: color-mix(in srgb, var(--value-color) 80%, #0d2421); border-bottom-color: currentColor; }
-.values-cover-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; border-top: 1px solid #ccd9ce; padding: 14px 0; font-size: 10px; letter-spacing: .06em; color: #63766f; }
-/* the foundation's UN standing, and the UN goals the cornerstones advance */
+.values-cover-link { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); color: #fff; font: 500 14px/1 var(--font-sans); transition: color .3s, border-color .3s; }
+.values-cover-link:hover { color: color-mix(in srgb, var(--value-light) 70%, #fff); border-bottom-color: currentColor; }
+.values-cover-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; border-top: 1px solid rgb(255 255 255 / .22); padding: 14px 0; font-size: 10px; letter-spacing: .06em; color: rgb(255 255 255 / .72); }
+/* the foundation's work with UNEP */
 .values-cover-standing { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
-.values-cover-goals { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .02em; color: #4e625c; }
-.values-cover-goals strong { color: #0a6fb8; }
-.values-cover-goal-dots { display: inline-flex; }
-.values-cover-goal-dots i { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #f8f6ef; margin-left: -4px; }
-.values-cover-goal-dots i:first-child { margin-left: 0; }
 /* each cornerstone's headline figure, opening its Stats */
 .values-cover-impact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; }
-.values-cover-impact a { display: grid; padding: 2px 0 1px 11px; border-left: 3px solid var(--way-ink); color: #203c38; transition: translate .25s; }
+.values-cover-impact a { display: grid; padding: 2px 0 1px 11px; border-left: 3px solid color-mix(in srgb, var(--way-ink) 45%, #fff); color: #fff; transition: translate .25s; }
 .values-cover-impact a:hover { translate: 0 -2px; }
-.values-cover-impact-figure { font: 700 18px/1.15 var(--font-sans); letter-spacing: -.02em; color: color-mix(in srgb, var(--way-ink) 82%, #0d2421); }
-/* the rolling counter was drawn for the dark hero, in white: here it takes the cornerstone's ink */
+.values-cover-impact-figure { font: 700 18px/1.15 var(--font-sans); letter-spacing: -.02em; color: #fff; }
+/* the rolling counter keeps the figure's own colour and face */
 .values-cover-impact-figure [aria-hidden] * { color: inherit; font-family: inherit; }
-.values-cover-impact-unit { display: flex; gap: 6px; font-size: 10.5px; letter-spacing: .02em; color: #4e625c; }
-.values-cover-impact em { font-style: normal; font-weight: 700; letter-spacing: .12em; color: color-mix(in srgb, var(--way-ink) 78%, #0d2421); }
+.values-cover-impact-unit { display: flex; gap: 6px; font-size: 10.5px; letter-spacing: .02em; color: rgb(255 255 255 / .74); }
+.values-cover-impact em { font-style: normal; font-weight: 700; letter-spacing: .12em; color: color-mix(in srgb, var(--way-ink) 32%, #fff); }
 /* the compass, and the saying of the cornerstone it points to beneath it */
 .values-cover-stage { display: flex; flex-direction: column; align-items: center; align-self: center; min-width: 0; }
-.saying.values-cover-saying { margin: 0 auto; padding: 4px 12px 0; max-width: 500px; min-height: 104px; animation: values-reveal .7s cubic-bezier(.2,.7,.2,1) both; }
+.saying.values-cover-saying { --saying-ink: var(--value-light); margin: 0 auto; padding: 4px 12px 0; max-width: 500px; min-height: 104px; animation: values-reveal .7s cubic-bezier(.2,.7,.2,1) both; }
 .saying.values-cover-saying::before,
 .saying.values-cover-saying::after,
 .values-cover-saying .saying-mark { display: none; }
@@ -56,11 +52,15 @@
 .values-cover-saying[data-script='english'] blockquote { font-size: 15px; font-weight: 500; line-height: 1.5; }
 .values-cover-saying .saying-meaning { margin-top: 2px; font-size: 12.5px; }
 .values-cover-saying figcaption { margin-top: 6px; font-size: 9.5px; }
+/* on the dark ground: the saying in a light tint of the cornerstone's colour, its meaning and source in white */
+.values-cover-saying blockquote { color: color-mix(in srgb, var(--value-light) 66%, #fff); }
+.values-cover-saying[data-script='hindi'] blockquote { background: none; -webkit-text-fill-color: currentColor; }
+.values-cover-saying .saying-meaning { color: rgb(255 255 255 / .8); }
+.values-cover-saying figcaption { color: rgb(255 255 255 / .66); }
 /* a short screen keeps the compass whole rather than the saying */
 @media (min-width: 801px) and (max-height: 759px) { .values-cover-saying { display: none; } }
-/* a narrower foot keeps one row: the goals as dots, their words for screen readers */
+/* a narrower foot keeps one row */
 @media (min-width: 801px) and (max-width: 1280px) {
-  .values-cover-goals-words { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .values-cover-impact { gap: 8px 18px; }
 }
 @media (min-width: 801px) and (max-width: 1100px) {
@@ -69,7 +69,7 @@
   .values-cover-impact-unit { font-size: 10px; }
 }
 .values-cover[data-active='false'] * { animation-play-state: paused !important; }
-.values-cover :is(a,button):focus-visible { outline: 3px solid var(--value-color); outline-offset: 4px; }
+.values-cover :is(a,button):focus-visible { outline: 3px solid color-mix(in srgb, var(--value-light) 60%, #fff); outline-offset: 4px; }
 @keyframes values-reveal { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
 .value-chapter { padding: 64px 0 24px; scroll-margin-top: 155px; border-bottom: 1px solid #dce4df; }
 .value-intro { display: grid; grid-template-columns: .8fr 1.2fr; gap: 52px; align-items: center; padding: 20px 0 58px; }
@@ -151,7 +151,6 @@
 .value-purpose ul { display: grid; gap: 16px; }
 .value-purpose li { display: flex; gap: 16px; font-size: 12px; line-height: 1.7; color: #50675c; }
 .value-purpose li span { color: var(--value-color); font-size: 10px; padding-top: 3px; }
-.value-footnote { padding: 28px 0; font-size: 11px; line-height: 1.8; color: #63766f; max-width: 740px; }
 .values-dashboard :is(a,button):focus-visible { outline: 3px solid var(--value-color); outline-offset: 4px; }
 @media (max-width: 900px) { .value-intro { gap: 24px; } .value-model-object { width: 205px; height: 205px; } .value-stats { grid-template-columns: repeat(2,minmax(0,1fr)); } .value-explorer-grid { grid-template-columns: 235px minmax(0,1fr); } .value-purpose { gap: 24px; } }
 @media (max-width: 640px) { .value-chapter { padding-top: 32px; } .value-intro { grid-template-columns: 1fr; padding-bottom: 32px; gap: 30px; } .value-model { min-height: 250px; } .value-model-orbit { width: 260px; } .value-model-object { width: 200px; height: 200px; } .value-kicker { font-size: 9px; gap: 8px; } .value-name { font-size: 58px; } .value-stat-heading { flex-direction: column; } .value-stat { padding: 16px; } .value-stat strong { font-size: 25px; } .value-explorer-heading { flex-direction: column; align-items: start; } .value-explorer-grid, .value-purpose { grid-template-columns: 1fr; } .value-programmes button { padding: 14px; } .value-detail { padding: 22px; } .value-purpose { padding: 24px; } .value-explorer { margin-top: 40px; } }
@@ -190,51 +189,35 @@
 @media (max-width: 800px) {
   .values-cover { grid-template-columns: 1fr; padding: 110px 28px 0; gap: 10px; }
   .values-cover-copy { display: contents; }
-  .values-cover-copy > .value-kicker { grid-row: 1; }
-  .values-cover-copy > h1 { grid-row: 2; }
-  .values-cover-copy > .values-cover-ways { grid-row: 3; margin-top: 4px; }
-  .values-cover-copy > .values-cover-actions { grid-row: 4; margin-top: 18px; }
-  .values-cover > .values-cover-stage { grid-row: 5; }
-  .values-cover h1 { font-size: clamp(36px, 7vw, 54px); }
+  .values-cover-copy > h1 { grid-row: 1; }
+  .values-cover-copy > .values-cover-actions { grid-row: 2; margin-top: 8px; }
+  .values-cover > .values-cover-stage { grid-row: 3; }
+  .values-cover h1 { font-size: clamp(32px, 6.4vw, 48px); }
   .values-cover-footer { flex-direction: column; gap: 7px; margin-top: 24px; }
   .value-next-chapter { gap: 10px; }
   .value-next-chapter strong { font-size: 20px; }
-}
-/* a narrower copy column: the ways and the actions draw in to keep one line each */
-@media (min-width: 801px) and (max-width: 1100px) {
-  .values-cover-ways a { grid-template-columns: 32px 70px minmax(0, 1fr) 14px; column-gap: 10px; }
-  .values-cover-way-icon { width: 32px; height: 32px; }
-  .values-cover-way-text { font-size: 15px; }
-  .values-cover-actions { column-gap: 20px; }
-  .values-cover-cta { padding: 14px 18px 14px 20px; }
-}
-/* a narrow column sets each way's name above its line */
-@media (max-width: 520px) {
-  .values-cover-ways a { grid-template-columns: 36px minmax(0, 1fr) 16px; grid-template-areas: 'icon name arrow' 'icon text arrow'; row-gap: 4px; }
-  .values-cover-way-text { font-size: 15px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .values-cover, .values-cover *, .values-dashboard * { animation: none !important; transition: none !important; }
 }
 
-/* Copy and compass as one composition, centred and at most 1240px across, so
-   wide screens do not pull them to opposite edges. */
+/* Copy and compass as one composition, centred and at most 1360px across, the
+   compass given the larger part. The compass is as large as its column allows
+   and as the screen's height allows beneath the header's room (its saying
+   beneath it, on the first screen too); the cover and the sticky subnav (54px)
+   fill at least the first screen, and on a shorter screen the foot and the
+   subnav follow just below it. */
 @media (min-width: 801px) {
-  .values-cover { grid-template-columns: minmax(0,1fr) minmax(0,1.04fr); gap: 24px clamp(32px, 5vw, 96px); padding-top: 115px; padding-inline: max(7%, 28px, calc((100% - 1240px) / 2)); }
-  .values-cover-stage > .service-compass { margin-block: 0 4px; }
-  /* the copy's spacing gives way on short screens, so the cover still fits */
-  .values-cover-copy { padding-block: clamp(8px, 2svh, 28px); }
-  .values-cover h1 { margin-block: clamp(12px, 2.4svh, 24px); }
-  .values-cover-ways a { padding-block: clamp(4px, .9svh, 8px); }
+  .values-cover { min-height: calc(100svh - 54px); grid-template-columns: minmax(0,1fr) minmax(0,1.3fr); grid-template-rows: 1fr auto; gap: 24px clamp(32px, 5vw, 96px); padding-top: clamp(96px, 13svh, 130px); padding-inline: max(7%, 28px, calc((100% - 1360px) / 2)); }
+  .values-cover-stage > .service-compass { max-width: clamp(260px, calc((100svh - clamp(96px, 13svh, 130px) - 24px) * 1.08), 680px); margin-block: 0 4px; }
+  .values-cover-copy { align-self: start; padding-block: var(--visual-top, clamp(8px, 2svh, 28px)) 0; }
+  .values-cover h1 { margin-block: 0 clamp(12px, 2.4svh, 24px); font-size: clamp(30px, min(3.4vw, 6.4svh), 52px); }
+  .values-cover h1 em { font-size: 1.15em; }
   .values-cover-actions { margin-top: clamp(16px, 3svh, 28px); }
-  /* The cover and the sticky subnav (54px) fill exactly the first screen: the
-     compass scales with the viewport height so nothing is cropped on short
-     screens and there is no half-visible next section on tall ones. */
-  .values-cover { min-height: calc(100svh - 54px); grid-template-rows: 1fr auto; padding-top: clamp(96px, 13svh, 130px); }
-  .values-cover-stage > .service-compass { max-width: clamp(260px, calc((100svh - 250px) * 1.08), 560px); }
-  /* on a screen tall enough for the saying beneath it, the compass makes room */
-  @media (min-height: 760px) { .values-cover-stage > .service-compass { max-width: clamp(260px, calc((100svh - 360px) * 1.08), 560px); } }
-  .values-cover h1 { font-size: clamp(34px, min(4.4vw, 7.6svh), 66px); }
+  /* where the saying shows beneath the compass, the compass leaves it its room */
+  @media (min-height: 760px) {
+    .values-cover-stage > .service-compass { max-width: clamp(260px, calc((100svh - clamp(96px, 13svh, 130px) - 132px) * 1.08), 680px); }
+  }
 }
 
 
@@ -244,7 +227,8 @@
    path's own ground: the ramp and the darkening of the home page's canvas
    (pillar-background.css), laid edge to edge. Its story follows on a sheet of
    the page's paper over the same ground, so its saying, its goals, its
-   Reports, Gallery and Stats and its purpose read just as they did.
+   Reports, Gallery and Stats and its purpose read just as they did. The
+   page's rail takes the same colours for the cornerstone in view (index.css).
    ==================================================================== */
 .value-chapter[data-cornerstone] {
   position: relative; isolation: isolate;
@@ -253,9 +237,9 @@
     linear-gradient(90deg, #031b1840, #03151f99),
     linear-gradient(90deg, var(--backdrop-dark), var(--backdrop-mid) 43%, var(--backdrop-light) 77%, var(--backdrop-pale));
 }
-.value-chapter[data-cornerstone='heal'] { --backdrop-dark: #174c3e; --backdrop-mid: #397f62; --backdrop-light: #90cfae; --backdrop-pale: #cde9d9; }
-.value-chapter[data-cornerstone='enrich'] { --backdrop-dark: #164b60; --backdrop-mid: #408ca8; --backdrop-light: #9bd8eb; --backdrop-pale: #e0f4fb; }
-.value-chapter[data-cornerstone='empower'] { --backdrop-dark: #682e48; --backdrop-mid: #ad6088; --backdrop-light: #eeb5d2; --backdrop-pale: #fbe5f0; }
+.value-chapter[data-cornerstone='heal'], .subnav[data-ground='heal'], .values-cover-ground::before, .values-cover-ground::after { --backdrop-dark: #174c3e; --backdrop-mid: #397f62; --backdrop-light: #90cfae; --backdrop-pale: #cde9d9; }
+.value-chapter[data-cornerstone='enrich'], .subnav[data-ground='enrich'], .value-chapter[data-cornerstone='heal']::before, .value-chapter[data-cornerstone='heal']::after { --backdrop-dark: #164b60; --backdrop-mid: #408ca8; --backdrop-light: #9bd8eb; --backdrop-pale: #e0f4fb; }
+.value-chapter[data-cornerstone='empower'], .subnav[data-ground='empower'], .value-chapter[data-cornerstone='enrich']::before, .value-chapter[data-cornerstone='enrich']::after { --backdrop-dark: #682e48; --backdrop-mid: #ad6088; --backdrop-light: #eeb5d2; --backdrop-pale: #fbe5f0; }
 
 /* An address naming a cornerstone (#heal, from the home page's Explore or the
    rail) lands on its opening screen flush with the top: the screen keeps its
@@ -322,3 +306,48 @@
 }
 /* Heal's own line on its work, at the head of its story */
 .value-standfirst { max-width: 640px; margin: 4px auto 18px; text-align: center; text-wrap: balance; font: 400 15.5px/1.85 var(--font-sans); color: #4e625c; }
+
+/* ====================================================================
+   THE SHORES. Where one ground meets the next, the next laps up over the
+   first one's foot as two waves of water, as the home page's hall laps up
+   over its landing (home-landing.css): a translucent wave behind, higher and
+   drifting, and a solid one in front, which carries on unbroken into the
+   ground below. The cover's foot takes Heal's water (the rail beneath it
+   rests on Heal), Heal's foot Enrich's, Enrich's Empower's: each wave
+   is dressed in its palette by that palette's own rule (above). Each
+   cornerstone's photographs then fade in below its top, so the water runs
+   on into its ground without a line.
+   ==================================================================== */
+.values-cover, .value-chapter[data-cornerstone] { --shore-h: clamp(36px, 5vw, 72px); }
+.values-cover { padding-bottom: var(--shore-h); }
+.value-chapter[data-cornerstone='heal'], .value-chapter[data-cornerstone='enrich'] { padding-bottom: calc(clamp(40px, 6vw, 80px) + var(--shore-h)); }
+/* the last ground runs on over the page's own foot (PageShell's main, 4rem), so the footer's wave laps over Empower's ground rather than over a strip of paper */
+.value-chapter[data-cornerstone='empower'] { margin-bottom: -4rem; padding-bottom: calc(clamp(40px, 6vw, 80px) + 4rem); }
+.values-cover-ground::before, .values-cover-ground::after,
+.value-chapter[data-cornerstone='heal']::before, .value-chapter[data-cornerstone='heal']::after,
+.value-chapter[data-cornerstone='enrich']::before, .value-chapter[data-cornerstone='enrich']::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; height: var(--shore-h); pointer-events: none;
+  background: linear-gradient(90deg, #031b1840, #03151f99), linear-gradient(90deg, var(--backdrop-dark), var(--backdrop-mid) 43%, var(--backdrop-light) 77%, var(--backdrop-pale));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2070C170%2042%20330%2096%20520%2078C700%2060%20820%2030%201000%2052C1180%2074%201300%20104%201440%2078V120H0Z%22%2F%3E%3C%2Fsvg%3E") 0 0 / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2070C170%2042%20330%2096%20520%2078C700%2060%20820%2030%201000%2052C1180%2074%201300%20104%201440%2078V120H0Z%22%2F%3E%3C%2Fsvg%3E") 0 0 / 100% 100% no-repeat;
+}
+/* the wave behind: higher, half clear, a little wider than the screen, drifting and rising as water does */
+.values-cover-ground::before, .value-chapter[data-cornerstone='heal']::before, .value-chapter[data-cornerstone='enrich']::before {
+  left: -4%; right: -4%; opacity: .5;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2044C210%2014%20360%2076%20560%2056C760%2036%20880%206%201060%2030C1240%2054%201330%2080%201440%2050V120H0Z%22%2F%3E%3C%2Fsvg%3E"); mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2044C210%2014%20360%2076%20560%2056C760%2036%20880%206%201060%2030C1240%2054%201330%2080%201440%2050V120H0Z%22%2F%3E%3C%2Fsvg%3E");
+  animation: values-shore-sway 14s ease-in-out infinite alternate, values-shore-rise 8s ease-in-out infinite alternate;
+}
+/* over the cover's own waves and drawings */
+.values-cover-ground::before, .values-cover-ground::after { z-index: 1; }
+@keyframes values-shore-sway { from { transform: translate3d(-2%, 0, 0); } to { transform: translate3d(2%, 0, 0); } }
+@keyframes values-shore-rise { from { translate: 0 4px; } to { translate: 0 -4px; } }
+.values-cover[data-active='false'] .values-cover-ground::before { animation-play-state: paused; }
+/* each cornerstone's photographs fade in below its top: its ground, laid over them there, clears downwards */
+.value-screen > .mosaic-chapter.activity-chapter::after {
+  content: ''; position: absolute; left: 0; right: 0; top: 0; z-index: -1; height: clamp(160px, 26vh, 280px); pointer-events: none;
+  background: linear-gradient(90deg, #031b1840, #03151f99), linear-gradient(90deg, var(--backdrop-dark), var(--backdrop-mid) 43%, var(--backdrop-light) 77%, var(--backdrop-pale));
+  -webkit-mask-image: linear-gradient(#000 20%, transparent); mask-image: linear-gradient(#000 20%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .values-cover-ground::before, .value-chapter[data-cornerstone='heal']::before, .value-chapter[data-cornerstone='enrich']::before { animation: none; }
+}

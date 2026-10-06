@@ -77,6 +77,7 @@ const INTRO_SECTIONS: [RegExp, string][] = [
   [/\.mission-seconds$/, 'Intro · Mission page time (seconds)'],
   [/\.welcome-photo-focus$/, 'Intro · Welcome photo focus (across% down%)'],
   [/\.satguru-photo-focus$/, 'Intro · Satguru portrait focus (across% down%)'],
+  [/\.message-photo$/, 'Intro · Satguru portrait (message and mission pages)'],
   [/\.(welcome-|next-label)/, 'Intro · Welcome page'],
   [/\.message-/, 'Intro · Message page'],
   [/\.(mission-|vision-|satguru-)/, 'Intro · Mission & vision page'],

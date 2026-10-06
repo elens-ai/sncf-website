@@ -358,9 +358,9 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     >
       {/* Welcome page: one full-screen photo under the white first screen,
           uncovered as the white fades. It dissolves away as the message page
-          arrives on the logo's navy, which gives way in turn to the site's
-          ground for the mission page (index.css: HAND-OFF); on leaving, the
-          whole layer fades to reveal the hero. Opacity fades are
+          arrives on the logo's navy, which the mission page keeps (index.css:
+          HAND-OFF); on leaving, the whole layer fades to reveal the hero.
+          Opacity fades are
           GPU-composited, so they cost the same at any screen size. */}
       <div
         id="splash-welcome-photo"
@@ -379,8 +379,8 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         />
         </div>
         <div className="splash-mission-shade" aria-hidden="true" />
-        {/* the message page's ground, the logo's navy, over the site's */}
-        <div className="splash-message-ground" data-shown={stage === 'message'} aria-hidden="true" />
+        {/* the message and mission pages' ground, the logo's navy, over the site's */}
+        <div className="splash-message-ground" data-shown={stage === 'message' || onMission} aria-hidden="true" />
         {revealed && (
           <div className="splash-welcome-content" data-gone={offPhoto}>
             {/* Room for the logo + tagline, which glide in from the first screen. */}
@@ -399,8 +399,8 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
             away) who we are, Our Mission and Our Vision played one at a time
             as a title sequence, each with its rail at the foot
             (MissionChapters). The portrait column spans the page's height,
-            standing on its quotation, whose last line meets the rail. The
-            message page takes its colours from the logo (index.css). */}
+            standing on its quotation, whose last line meets the rail. Both
+            pages take their colours from the logo (index.css). */}
         {offPhoto && (
           <div className="splash-mission-page" data-page={onMission ? 'mission' : 'message'}>
             <div className="splash-mission-copy">
@@ -434,20 +434,12 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
               </div>
             </div>
             <figure className="splash-satguru" style={{ '--portrait-focus': `${portraitFocus.x} ${portraitFocus.y}` } as React.CSSProperties}>
-              {/* The message page has a portrait of its own, laid over the mission
-                  page's in the same frame; as the mission page begins it gives way
-                  to that one, so the portrait changes without moving. */}
-              <div className="splash-satguru-frame" data-page={onMission ? 'mission' : 'message'}>
+              {/* One portrait for the message and mission pages, in the same
+                  frame, so it stays just as it is when the mission page begins. */}
+              <div className="splash-satguru-frame">
                 <img
-                  src={resolveCMSAsset("asset.WelcomeSplashScreen.satguru-photo", "/images/satguru-mata-sudiksha-ji-cutout.webp")}
-                  alt={onMission ? c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj") : ''}
-                  aria-hidden={!onMission || undefined}
-                />
-                <img
-                  className="splash-satguru-message-photo"
                   src={resolveCMSAsset("asset.WelcomeSplashScreen.message-photo", "/images/satguru-mata-sudiksha-ji-message.webp")}
-                  alt={onMission ? '' : c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}
-                  aria-hidden={onMission || undefined}
+                  alt={c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}
                 />
               </div>
               {/* kept in place on the message page, so the portrait does not move

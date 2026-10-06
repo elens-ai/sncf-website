@@ -50,6 +50,25 @@ export const UnSeal: React.FC<{ variant?: 'seal' | 'panel'; className?: string }
   );
 };
 
+/** UNEP's logo, as the foundation's own partners panel shows it (Partners);
+    a sharper copy can be uploaded to its slot in the CMS (Website images →
+    "UnepSeal · logo"). */
+const unepLogo = () => resolveCMSAsset("asset.UnepSeal.logo", "/images/partners/unep.png");
+
+/** The UN Environment Programme, as a seal in the seal's style: the Core
+    Values and Projects covers carry it in place of the ECOSOC standing,
+    UNEP's logo and, beside it, its name in full. */
+export const UnepSeal: React.FC<{ className?: string }> = ({ className }) => {
+  useCMSRevision();
+  const name = c('unep-name', 'United Nations Environment Programme');
+  return (
+    <span className={`un-seal un-seal--unep${className ? ` ${className}` : ''}`} data-variant="seal" title={name}>
+      <img className="un-seal-logo" src={unepLogo()} alt={c('unep-short', 'UNEP')} decoding="async" />
+      <span className="un-seal-words"><span>{name}</span></span>
+    </span>
+  );
+};
+
 /** Whether an event marks a UN international day (its tag names the UN). */
 export const isUnObservance = (tag?: string) => /united nations|\bUN\b/i.test(tag ?? '');
 

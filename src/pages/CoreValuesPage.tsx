@@ -2,8 +2,12 @@ import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, BookOpen, Heart, Search, Sprout, type LucideIcon } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Search } from 'lucide-react';
+import { useReducedMotion } from 'motion/react';
 import { ValueCompass } from '../components/ValueCompass';
+import { MosaicWaves, type WaveInput } from '../components/MosaicWaves';
+import { PillarArtwork } from '../components/PillarArtwork';
+import { subjectFor } from '../utils/waves';
 import { ValueAnalytics } from '../components/ValueAnalytics';
 import { EnrichScrapbook } from '../components/EnrichScrapbook';
 import { MosaicChapter } from '../components/MosaicChapter';
@@ -12,7 +16,7 @@ import { ProgrammeDossier } from '../components/ProgrammeDossier';
 import { ACTIVITY_SYMBOLS } from '../components/activitySymbols';
 import { ReportActions } from '../components/ReportActions';
 import { PillarGallery } from '../components/PillarGallery';
-import { SdgTags, UnSeal } from '../components/UnAffiliation';
+import { SdgTags, UnepSeal } from '../components/UnAffiliation';
 import { Saying } from '../components/Saying';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { useCMSRevision } from '../cms/CMSContentProvider';
@@ -22,7 +26,7 @@ import { useSectionActivity } from '../hooks/useSectionActivity';
 import { onArrival } from '../utils/arrival';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES, type Activity } from '../data/activities';
-import { SDGS, goalsOf } from '../data/sdgs';
+import { goalsOf } from '../data/sdgs';
 /* the chapters' own stage (the counter, the waves, the arrivals), which the home page loads with its section */
 import '../components/impact-mosaic.css';
 import './core-values.css';
@@ -61,27 +65,6 @@ const CornerstoneScreen: React.FC<{ id: Cornerstone; index: number; name: string
   );
 };
 
-/* The three ways, one to each cornerstone, in the compass's order and icons. */
-const WAYS: { id: Cornerstone; icon: LucideIcon; text: () => string }[] = [
-  { id: 'heal', icon: Heart, text: () => getCMSCopy("copy.CoreValuesPage.way-heal", "Care that reaches further.") },
-  { id: 'enrich', icon: BookOpen, text: () => getCMSCopy("copy.CoreValuesPage.way-enrich", "Learning that opens doors.") },
-  { id: 'empower', icon: Sprout, text: () => getCMSCopy("copy.CoreValuesPage.way-empower", "Communities that grow stronger.") },
-];
-
-/** At the foot of the cover, beside the UN standing: the UN goals the three
-    cornerstones advance, a dot in each goal's own colour. */
-const CoverGoals: React.FC = () => {
-  const goals = goalsOf(ACTIVITIES.filter(a => (CORNERSTONES as readonly string[]).includes(a.pillarId)).map(a => a.id));
-  return (
-    <span className="values-cover-goals">
-      <span className="values-cover-goal-dots" aria-hidden="true">
-        {goals.map(goal => <i key={goal} title={`SDG ${goal}: ${SDGS[goal].name}`} style={{ background: SDGS[goal].color }} />)}
-      </span>
-      <span className="values-cover-goals-words">{getCMSCopy("copy.CoreValuesPage.cover-goals", "Advancing")} <strong>{goals.length}</strong> {getCMSCopy("copy.CoreValuesPage.cover-goals-of", "UN Global Goals")}</span>
-    </span>
-  );
-};
-
 /** At the foot of the cover: each cornerstone's first programme's headline
     figure, rolling up into place as the cover comes into view, each opening
     that cornerstone's Stats. */
@@ -101,53 +84,74 @@ const CoverImpact: React.FC = () => (
   </nav>
 );
 
-/** The cover: the three ways, set as a legend for the compass beside them.
-    Pointing at a way (or moving to it by keyboard) turns the compass to its
-    cornerstone and holds it there; choosing it goes to that chapter. Beneath
-    the compass, the saying of the cornerstone it points to; at the foot, the
-    foundation's UN standing and goals, and a headline figure for each. */
+/** The cover, on the ground of the cornerstone the compass points to, as the
+    home page's hall paints it (its colours in a deep wash, its waves, its
+    drawings), which follows the compass round. The headline's three words
+    are the cornerstones' in the compass's order — Love, Heal; Peace, Enrich;
+    Kindness, Empower — the one in view risen a little larger; pointing at a word
+    turns the compass to it and holds it there. Beneath the compass, the
+    saying of the cornerstone it points to; at the foot, the foundation's work
+    with UNEP, and a headline figure for each. */
 const ValueCover: React.FC = () => {
   useCMSRevision();
   const [choice, setChoice] = useState<Cornerstone>('heal');
   const [pointing, setPointing] = useState(false);
-  const [focused, setFocused] = useState(false);
   const root = useRef<HTMLElement>(null);
   const active = useSectionActivity(root);
+  const calm = useReducedMotion() ?? false;
+  const waveInput = useRef<WaveInput>({ travel: 0.5 });
   const pillar = PILLARS.find(p => p.id === choice)!;
+  /* a headline written otherwise than as three comma-separated words is set as written */
+  const headline = getCMSCopy("copy.CoreValuesPage.cover-headline", "Love, peace, kindness");
+  const words = headline.split(',').map(word => word.trim());
+  /* The copy starts a third of the way down the compass's ring, wherever the compass's size and
+     centring put it, so it keeps its place against the ring on every screen: measured
+     from the boxes (the ring's place in its stage by layout, so no entrance or turn can move the
+     reading), on resize, and once the fonts are in. */
+  const copy = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const cover = root.current;
+    if (!cover) return;
+    const place = () => {
+      const stage = cover.querySelector<HTMLElement>('.service-compass-stage');
+      const ring = stage?.querySelector<HTMLElement>('.service-compass-face');
+      if (!stage || !ring || !copy.current) return;
+      const top = stage.getBoundingClientRect().top + ring.offsetTop + ring.offsetHeight * 0.32 - copy.current.getBoundingClientRect().top;
+      cover.style.setProperty('--visual-top', `${Math.max(0, Math.round(top))}px`);
+    };
+    place();
+    let live = true;
+    document.fonts?.ready.then(() => { if (live) place(); });
+    window.addEventListener('resize', place, { passive: true });
+    return () => { live = false; window.removeEventListener('resize', place); };
+  }, []);
   return <section ref={root} className="values-cover" data-active={active} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties} aria-labelledby="values-cover-title">
-    <div className="values-cover-copy">
-      <p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.bb5f4b8db550", "One purpose. Three ways to make a difference.")}</p>
-      <h1 id="values-cover-title">{getCMSCopy("copy.CoreValuesPage.1872c282a338", "The three")}<br /><em>{getCMSCopy("copy.CoreValuesPage.19b476bc912f", "cornerstones.")}</em></h1>
-      <ul className="values-cover-ways"
-        onPointerEnter={() => setPointing(true)} onPointerLeave={() => setPointing(false)}
-        onFocus={() => setFocused(true)}
-        onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
-        {WAYS.map(({ id, icon: Icon, text }) => {
-          const way = PILLARS.find(p => p.id === id)!;
-          return <li key={id}>
-            <a href={`#${id}`} data-active={choice === id}
-              style={{ '--way-ink': way.accentA, '--way-light': way.accentB } as React.CSSProperties}
-              onPointerEnter={() => setChoice(id)} onFocus={() => setChoice(id)}>
-              <span className="values-cover-way-icon" aria-hidden="true"><Icon size={17} strokeWidth={1.7} /></span>
-              <span className="values-cover-way-name">{way.label}</span>
-              <span className="values-cover-way-text">{text()}</span>
-              <ArrowDown className="values-cover-way-arrow" size={16} aria-hidden="true" />
-            </a>
-          </li>;
-        })}
-      </ul>
+    <div className="values-cover-ground" aria-hidden="true">
+      <MosaicWaves subject={subjectFor(pillar)} active={active && !calm} input={waveInput} scale={3} fps={24} />
+      {CORNERSTONES.map(id => <PillarArtwork key={id} pillarId={id} visible={id === choice} />)}
+    </div>
+    <div ref={copy} className="values-cover-copy">
+      <h1 id="values-cover-title" onPointerLeave={() => setPointing(false)}>
+        {words.length === CORNERSTONES.length && words.every(Boolean) ? words.map((word, i) => {
+          const id = CORNERSTONES[i];
+          const last = i === words.length - 1;
+          /* each word carries its comma, so a word that pops up does not grow over it */
+          return <React.Fragment key={id}><span className="values-cover-word" data-on={choice === id}
+            onPointerEnter={() => { setPointing(true); setChoice(id); }} onClick={() => setChoice(id)}>{word}{!last && ','}</span>{!last && ' '}</React.Fragment>;
+        }) : headline}
+        <br /><em>{getCMSCopy("copy.CoreValuesPage.cover-headline-script", "with a purpose of giving")}</em>
+      </h1>
       <div className="values-cover-actions">
-        <a className="values-cover-cta" href="#heal">{getCMSCopy("copy.CoreValuesPage.cover-explore", "Explore the cornerstones")}<ArrowDown size={16} aria-hidden="true" /></a>
-        <a className="values-cover-link" href="#heal-reports">{getCMSCopy("copy.CoreValuesPage.cover-programmes", "Find a programme")}<ArrowUpRight size={15} aria-hidden="true" /></a>
+        <a className="values-cover-link" href="#heal">{getCMSCopy("copy.CoreValuesPage.cover-explore-link", "Explore")}<ArrowDown size={15} aria-hidden="true" /></a>
       </div>
     </div>
     {/* the compass, and beneath it the saying of the cornerstone it points to */}
     <div className="values-cover-stage">
-      <ValueCompass choice={choice} onChange={setChoice} active={active} held={pointing || focused} />
+      <ValueCompass choice={choice} onChange={setChoice} active={active} held={pointing} />
       <Saying key={choice} id={choice} className="values-cover-saying" />
     </div>
     <div className="values-cover-footer">
-      <span className="values-cover-standing"><UnSeal /><CoverGoals /></span>
+      <span className="values-cover-standing"><UnepSeal /></span>
       <CoverImpact />
     </div>
   </section>;
@@ -238,7 +242,7 @@ export const CoreValuesPage: React.FC = () => {
     const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' }), 100);
     return () => window.clearTimeout(timer);
   }, [hash]);
-  return <PageShell cover={<ValueCover />} accentPillarId="heal" eyebrow={getCMSCopy("copy.CoreValuesPage.c83be5fde065", "Core Values · Heal · Enrich · Empower")} title={getCMSCopy("copy.CoreValuesPage.97ff86ab30e2", "The three cornerstones")} standfirst={getCMSCopy("copy.CoreValuesPage.1d90a9e6fdbc", "Compassion in action. Discover the programmes, people and reported progress behind Heal, Enrich and Empower.")} rail={<SubsectionNav label={getCMSCopy("copy.CoreValuesPage.64263b3319f0", "Explore our impact")} links={CORNERSTONES.map(id => ({ id, label: PILLARS.find(p => p.id === id)!.label, ink: PILLARS.find(p => p.id === id)!.accentB }))} />}>
-    <div className="values-dashboard">{CORNERSTONES.map((id, index) => <ValueChapter key={id} id={id} index={index} linkedActivity={hash.slice(1)} />)}<p className="value-footnote">{getCMSCopy("copy.CoreValuesPage.9fd0ca7a7af7", "Figures reflect each programme’s stated reporting period. Different measures and periods are presented separately; they are not combined into a total.")}</p></div>
+  return <PageShell cover={<ValueCover />} accentPillarId="heal" eyebrow={getCMSCopy("copy.CoreValuesPage.c83be5fde065", "Core Values · Heal · Enrich · Empower")} title={getCMSCopy("copy.CoreValuesPage.97ff86ab30e2", "The three cornerstones")} standfirst={getCMSCopy("copy.CoreValuesPage.1d90a9e6fdbc", "Compassion in action. Discover the programmes, people and reported progress behind Heal, Enrich and Empower.")} rail={<SubsectionNav variant="tabs" tinted label={getCMSCopy("copy.CoreValuesPage.64263b3319f0", "Explore our impact")} links={CORNERSTONES.map(id => ({ id, label: PILLARS.find(p => p.id === id)!.label, ink: PILLARS.find(p => p.id === id)!.accentA }))} />}>
+    <div className="values-dashboard">{CORNERSTONES.map((id, index) => <ValueChapter key={id} id={id} index={index} linkedActivity={hash.slice(1)} />)}</div>
   </PageShell>;
 };

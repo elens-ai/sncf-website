@@ -107,12 +107,6 @@
     "options": {},
     "label": "GuidingForcePage · gf-media"
   },
-  "ProjectsPage.projects-directory": {
-    "enabled": true,
-    "order": 0,
-    "options": {},
-    "label": "ProjectsPage · projects-directory"
-  },
   "ProjectsPage.health-city": {
     "enabled": true,
     "order": 0,

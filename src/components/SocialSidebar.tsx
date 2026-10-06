@@ -32,10 +32,13 @@ const PLATFORM: Record<SocialLink['platform'], { name: string; ariaLabel: string
 
 /** How each platform is drawn, for anywhere else the social links appear (the footer). */
 export const SOCIAL_ART = PLATFORM;
+/** Platforms the footer shows but the rail down the left edge does not. */
+const FOOTER_ONLY: string[] = ['linkedin'];
 
 export const SocialSidebar: React.FC = () => {
   useCMSRevision();
-  const socialLinks = getSiteSettings().social.map(link => ({ ...PLATFORM[link.platform], url: link.url }));
+  /* LinkedIn is the footer's alone: the rail down the left edge keeps to the others */
+  const socialLinks = getSiteSettings().social.filter(link => !FOOTER_ONLY.includes(link.platform)).map(link => ({ ...PLATFORM[link.platform], url: link.url }));
 
   return (
     <aside

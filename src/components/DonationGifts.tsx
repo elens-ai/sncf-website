@@ -4,15 +4,16 @@ import React, { useId } from 'react';
 export type GiftWay = 'money' | 'volunteer' | 'talent' | 'resources';
 
 /* A GIFT, PICTURED in the planner's own manner: a glass jar for a financial
-   gift, ₹ coins and notes going into it; for any other, an open box, what
-   that way gives going into it (things for resources or equipment: clothes, a
-   toy, food, a phone, books; time and care for volunteering; art and music
-   for talent). The gifts wait round it and, one after another, swoop in and
-   drop inside, and each fills it a step: the jar a layer of coins (and the
-   note, when it was one), the box the heart on its front. Full, it shines,
-   lets go, and the round begins again. Its inks are the logo's petals' (pink,
-   lavender, periwinkle, teal, green) and the honours' gold; the heart (on the
-   box, or hanging from the jar's ribbon) is in the cause's own ink. It is
+   gift, shagun envelopes (the envelope a gift of money is given in, sealed
+   with a heart) going into it, with no money drawn; for any other, an open
+   box, what that way gives going into it (things for resources or
+   equipment: clothes, a toy, food, a phone, books; time and care for
+   volunteering; art and music for talent). The gifts wait round it and, one
+   after another, swoop in and drop inside, and each fills its heart a step:
+   the heart in the middle of the jar, or the heart on the box's front. Full,
+   it shines, lets go, and the round begins again. Its inks are the logo's
+   petals' (pink, lavender, periwinkle, teal, green) and the honours' gold;
+   the heart (and the envelopes' seals) is in the cause's own ink. It is
    drawn in a 320 × 320 box and leaves the caption's line free at its foot.
    Decorative: the planner says in words what is chosen. */
 
@@ -20,11 +21,11 @@ export type GiftWay = 'money' | 'volunteer' | 'talent' | 'resources';
 type Gift = { item: string; x: number; y: number; turn: number; size: number };
 const GIFTS: Record<GiftWay, Gift[]> = {
   money: [
-    { item: 'coin', x: 64, y: 112, turn: -8, size: 1 },
-    { item: 'cash', x: 256, y: 112, turn: 10, size: 1 },
-    { item: 'coin', x: 106, y: 58, turn: 0, size: 0.85 },
-    { item: 'cashBlue', x: 214, y: 58, turn: -12, size: 0.85 },
-    { item: 'coin', x: 160, y: 34, turn: 0, size: 0.8 },
+    { item: 'envelopePink', x: 64, y: 112, turn: -8, size: 1 },
+    { item: 'envelopePeriwinkle', x: 256, y: 112, turn: 10, size: 1 },
+    { item: 'envelopeGreen', x: 106, y: 58, turn: 6, size: 0.88 },
+    { item: 'envelopeLavender', x: 214, y: 58, turn: -12, size: 0.88 },
+    { item: 'envelopeTeal', x: 160, y: 34, turn: -4, size: 0.82 },
   ],
   resources: [
     { item: 'shirt', x: 64, y: 112, turn: -10, size: 1 },
@@ -47,16 +48,19 @@ const GIFTS: Record<GiftWay, Gift[]> = {
   ],
 };
 /* One gift goes in every BEAT, and a round is a beat for each gift and one
-   more, so the full vessel has its moment before it lets go. The box's
-   medallion beats with them (donation.css: gift-heart). */
+   more, so the full vessel has its moment before it lets go. The heart
+   beats with them (donation.css: gift-heart). */
 const BEAT = 1.1;
 const MOUTH_X = 160;
 
 /* The heart, drawn round its own centre: 28 wide, its lobes' tops at -11.55
-   and its point at 12. It sits in its medallion (centred on 160, 222) a touch
-   below the exact middle, where it looks centred: its lobes carry its weight. */
+   and its point at 12. It sits in the box's medallion (centred on 160, 222) a
+   touch below the exact middle, where it looks centred: its lobes carry its
+   weight. In the jar it is drawn larger about the same point, in the middle
+   of the glass, clear of its walls and of the light on them. */
 const HEART = 'M0 12 C-5 8 -14 3 -14 -4 C-14 -9 -10 -12 -6 -11.5 C-3.4 -11 -1.6 -9.4 0 -7.4 C1.6 -9.4 3.4 -11 6 -11.5 C10 -12 14 -9 14 -4 C14 3 5 8 0 12 Z';
 const HEART_AT = 'translate(160 222.4)';
+const JAR_HEART_AT = 'translate(160 222.4) scale(2.3)';
 /* Where the heart's level stands once each tenth of it is filled, point to
    lobes (measured from its outline), so every gift fills an equal share of
    it; and the level wholly below it and wholly above it, surface and all. */
@@ -72,33 +76,18 @@ const levelFor = (share: number) => {
 /* the level's surface: a wave 14 long, run three hearts wide so it can drift a wavelength and repeat */
 const WAVE = `M-42 0 Q-38.5 -1.3 -35 0 ${Array.from({ length: 11 }, (_, i) => `T${-28 + i * 7} 0`).join(' ')} V30 H-42 Z`;
 
-/* The jar fills a layer with each gift: two staggered rows of coins, the back
-   row a touch higher in the middle, as a heap is, and standing up out of
-   them what the gift was, a ₹ coin on its edge or the note. The first layer
-   rests on the coins already in the jar; the last reaches its shoulder. */
-const LAYER_STEP = 14;
-const layerFront = (k: number) => 247 - LAYER_STEP * k;
-const FRONT_ROW = [122, 141, 160, 179, 198];
-const BACK_ROW = [131.5, 150.5, 169.5, 188.5];
-/* each coin a little out of line, tilted and sized its own way, so the heap looks tipped in rather than stacked */
-const nudge = (k: number, j: number) => (((k * 7 + j * 3) % 5) - 2) * 0.8;
-const tilt = (k: number, j: number) => ((k * 5 + j * 7) % 13) - 6;
-const coinSize = (k: number, j: number) => 0.92 + ((k + j) % 3) * 0.05;
-const heap = (x: number) => 2 * (1 - ((x - 160) / 42) ** 2);
-/* where each layer's gift stands up out of it: across, and its lean */
-const STANDING = [[138, -16], [174, 13], [184, 15], [143, -13], [152, -7]];
 /* where the gifts go: into the vessel's mouth (at MOUTH_X), then down out of
-   sight behind the box's front, or down through the jar onto its coins, the
-   k-th onto the layer it makes */
-const intoY = (vessel: 'box' | 'jar', k: number) => (vessel === 'box' ? 228 : layerFront(k) - 7);
+   sight behind the box's front, or down through the jar's neck into its
+   heart, fading as they reach it */
+const intoY = (vessel: 'box' | 'jar') => (vessel === 'box' ? 228 : 214);
 
 /* One round, as keyframes timed to the gifts' flight. Each gift's landing
-   (one every BEAT, the first as the round begins) fills the vessel a step:
-   the box's heart rises a level, with a little slosh; the jar takes a layer
-   of coins, which drops into place. Full, it shines (the heart's medallion
-   glows, a gleam crosses the jar's glass) and holds a moment, then lets go,
-   and is empty again before the next round's first gift. They are written
-   here, not in donation.css, because the steps follow the number of gifts. */
+   (one every BEAT, the first as the round begins) fills the heart a step: its
+   level rises, with a little slosh. Full, it shines (a glow spreads from the
+   heart, and a gleam crosses the jar's glass) and holds a moment, then lets
+   go, and is empty again before the next round's first gift. They are
+   written here, not in donation.css, because the steps follow the number of
+   gifts. */
 const RISE = 0.4;
 const HOLD = 0.9;
 const LET_GO = 0.5;
@@ -108,26 +97,22 @@ function roundKeyframes(name: string, gifts: number, vessel: 'box' | 'jar') {
   const at = (seconds: number) => `${+(100 * seconds / round).toFixed(3)}%`;
   const full = (gifts - 1) * BEAT + RISE;
   const shine = full - RISE / 2;
-  if (vessel === 'jar') {
-    const layers = Array.from({ length: gifts }, (_, k) => `@keyframes ${name}-layer-${k} { 0%${k ? `, ${at(k * BEAT)}` : ''} { opacity: 0; transform: translateY(-10px); animation-timing-function: ${SETTLE}; } ${at(k * BEAT + RISE)}, ${at(full + HOLD)} { opacity: 1; transform: none; } ${at(full + HOLD + LET_GO)} { opacity: 0; transform: none; animation-timing-function: step-end; } 100% { opacity: 0; transform: translateY(-10px); } }`);
-    return [...layers, `@keyframes ${name}-gleam { 0%, ${at(shine)} { transform: translateX(-130px); animation-timing-function: cubic-bezier(.45, 0, .25, 1); } ${at(shine + 0.9)}, 100% { transform: translateX(130px); } }`].join('\n');
-  }
   const level = (filled: number) => `transform: translateY(${+levelFor(filled / gifts).toFixed(2)}px)`;
   const rises = Array.from({ length: gifts }, (_, k) => `${at(k * BEAT)} { ${level(k)};${k === 0 ? ' opacity: 1;' : ''} animation-timing-function: ${SETTLE}; } ${at(k * BEAT + RISE)} { ${level(k + 1)}; }`);
-  return `@keyframes ${name}-fill { ${rises.join(' ')} ${at(full + HOLD)} { ${level(gifts)}; opacity: 1; } ${at(full + HOLD + LET_GO)} { ${level(gifts)}; opacity: 0; animation-timing-function: step-end; } 100% { ${level(0)}; opacity: 0; } }
-@keyframes ${name}-glow { 0%, ${at(shine)} { opacity: 0; transform: scale(1); } ${at(shine + 0.05)} { opacity: .5; transform: scale(1); animation-timing-function: cubic-bezier(.2, .7, .3, 1); } ${at(full + 0.9)}, 100% { opacity: 0; transform: scale(1.45); } }`;
+  const frames = [
+    `@keyframes ${name}-fill { ${rises.join(' ')} ${at(full + HOLD)} { ${level(gifts)}; opacity: 1; } ${at(full + HOLD + LET_GO)} { ${level(gifts)}; opacity: 0; animation-timing-function: step-end; } 100% { ${level(0)}; opacity: 0; } }`,
+    `@keyframes ${name}-glow { 0%, ${at(shine)} { opacity: 0; transform: scale(1); } ${at(shine + 0.05)} { opacity: .5; transform: scale(1); animation-timing-function: cubic-bezier(.2, .7, .3, 1); } ${at(full + 0.9)}, 100% { opacity: 0; transform: scale(1.45); } }`,
+  ];
+  if (vessel === 'jar') frames.push(`@keyframes ${name}-gleam { 0%, ${at(shine)} { transform: translateX(-130px); animation-timing-function: cubic-bezier(.45, 0, .25, 1); } ${at(shine + 0.9)}, 100% { transform: translateX(130px); } }`);
+  return frames.join('\n');
 }
 
-/* the ₹ sign, drawn round its own centre, 11 tall */
-const RUPEE = 'M-4.2 -5.6 H4.4 M-4.2 -2.4 H4.4 M-1.2 -5.6 C2 -5.6 3.4 -4.2 3.4 -2.4 C3.4 -0.4 1.6 0.8 -1.2 0.8 H-4.2 L3.6 6.4';
 /* the jar: its whole outline, lip to foot; the part in front of what is
    inside it (all but the lip's top); and the lip's front. Its neck is tall
    enough to tie a ribbon round. */
 const JAR = 'M119 140 V146 Q119 150 123 151 V162 C123 172 108 172 108 184 V248 Q108 264 124 264 H196 Q212 264 212 248 V184 C212 172 197 172 197 162 V151 Q201 150 201 146 V140 A41 7 0 0 0 119 140 Z';
 const JAR_FRONT = 'M119 140 A41 7 0 0 0 201 140 V146 Q201 150 197 151 V162 C197 172 212 172 212 184 V248 Q212 264 196 264 H124 Q108 264 108 248 V184 C108 172 123 172 123 162 V151 Q119 150 119 146 Z';
 const LIP = 'M119 140 A41 7 0 0 0 201 140 V146 A41 7 0 0 1 119 146 Z';
-/* the coins already given, lying at the foot of the jar: two small stacks and a few loose */
-const PILE = [[128, 256], [128, 252.6], [128.6, 249.2], [191, 256.6], [190.4, 253.2], [147, 257.6], [171, 257.2], [159, 255.2]];
 
 export function DonationGifts({ way }: { way: GiftWay }) {
   const id = useId().replace(/:/g, '');
@@ -139,6 +124,17 @@ export function DonationGifts({ way }: { way: GiftWay }) {
     <linearGradient id={`${id}-${part}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor={from} /><stop offset="1" stopColor={to} /></linearGradient>
   );
   const keyline = { stroke: '#fff', strokeWidth: 1.3, strokeLinejoin: 'round' as const };
+  /* a shagun envelope in one of the petals' inks (envelopePink, and so on): its flap folded down to a point, sealed
+     there with a heart in the cause's ink, a fine border round it */
+  const envelope = (petal: string) => (
+    <g id={`${id}-envelope${petal[0].toUpperCase()}${petal.slice(1)}`}>
+      <rect x="-19" y="-12" width="38" height="24" rx="2.5" fill={url(petal)} {...keyline} />
+      <rect x="-16" y="-9" width="32" height="18" rx="1.4" fill="none" stroke="#fff" strokeWidth={0.7} opacity=".5" />
+      <path d="M-19 -9.6 L0 2.6 L19 -9.6 V-12 H-19 Z" fill="#fff" opacity=".22" />
+      <path d="M-18 -9.6 L0 2.6 L18 -9.6" fill="none" stroke="#fff" strokeWidth={1.2} strokeLinejoin="round" opacity=".9" />
+      <g transform="translate(0 3.2) scale(.36)"><path d={HEART} fill="currentColor" stroke="#fff" strokeWidth={2.8} strokeLinejoin="round" /></g>
+    </g>
+  );
   const vessel = way === 'money' ? 'jar' : 'box';
   const gifts = GIFTS[way];
   const round = (gifts.length + 1) * BEAT;
@@ -165,6 +161,31 @@ export function DonationGifts({ way }: { way: GiftWay }) {
       </g>
     </g>
   );
+  /* the jar's heart, in the middle of its glass: the glow it gives when full (kept within the glass), its hollow (a
+     pale glass of its own, so it reads empty), the level rising in it, and its outline; keyed by the way, like the
+     gifts, so its round starts afresh with theirs */
+  const jarHeart = (
+    <g key={`heart-${way}`} className="gift-heart">
+      <g clipPath={url('glassShape')}>
+        <g className="gift-glow" style={{ opacity: 0, ...playRound(`${name}-glow`) }}>
+          <path d={HEART} transform={JAR_HEART_AT} fill="none" stroke="currentColor" strokeWidth={0.7} strokeLinejoin="round" />
+        </g>
+      </g>
+      <g transform={JAR_HEART_AT}>
+        <path d={HEART} fill="#fff" fillOpacity=".55" />
+        <g clipPath={url('heartShape')}>
+          {/* set full, as reduced motion leaves it */}
+          {/* in full ink: the glass in front of it already softens it */}
+          <g className="gift-fill" style={{ transform: `translateY(${FULL}px)`, ...playRound(`${name}-fill`) }}>
+            <path className="gift-wave gift-wave-back" d={WAVE} fill="currentColor" opacity=".3" />
+            <path className="gift-wave" d={WAVE} fill="currentColor" />
+          </g>
+        </g>
+        <ellipse cx="-7.5" cy="-5" rx="3.2" ry="2" fill="#fff" opacity=".45" transform="rotate(-35 -7.5 -5)" />
+        <path d={HEART} fill="none" stroke="currentColor" strokeWidth={0.8} strokeLinejoin="round" />
+      </g>
+    </g>
+  );
 
   return (
     <svg className="donation-gifts" data-vessel={vessel} viewBox="0 0 320 320" aria-hidden="true" focusable="false">
@@ -183,7 +204,6 @@ export function DonationGifts({ way }: { way: GiftWay }) {
         <linearGradient id={`${id}-mouth`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#b3d1c9" /><stop offset="1" stopColor="#e3f0ec" /></linearGradient>
         <linearGradient id={`${id}-gleam`} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#fff" stopOpacity="0" /><stop offset=".5" stopColor="#fff" stopOpacity=".6" /><stop offset="1" stopColor="#fff" stopOpacity="0" /></linearGradient>
         <clipPath id={`${id}-glassShape`}><path d={JAR_FRONT} /></clipPath>
-        {ink('coinInk', '#fff4d2', '#d8b261')}
         {ink('teal', '#f0fbfd', '#69cbd2')}
         {ink('lavender', '#f6eef8', '#c398c7')}
         {ink('green', '#f1fae6', '#9dce6a')}
@@ -196,10 +216,7 @@ export function DonationGifts({ way }: { way: GiftWay }) {
         <clipPath id={`${id}-heartShape`}><path d={HEART} /></clipPath>
 
         {/* the gifts, each drawn round its own centre */}
-        <g id={`${id}-coin`}><circle r="13" fill={url('coinInk')} {...keyline} /><circle r="9.6" fill="none" stroke="#c49a4c" strokeWidth={1} opacity=".45" /><path d={RUPEE} fill="none" stroke="#a57c34" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" /><path d="M-8.5 -5 A10 10 0 0 1 -3 -9.6" fill="none" stroke="#fff" strokeWidth={1.6} strokeLinecap="round" opacity=".75" /></g>
-        <g id={`${id}-cash`}><rect x="-19" y="-11" width="38" height="22" rx="3" fill={url('lavender')} {...keyline} /><rect x="-15.5" y="-7.5" width="31" height="15" rx="1.6" fill="none" stroke="#fff" strokeWidth={0.9} opacity=".7" /><circle cx="-6" cy="0" r="4.5" fill="#fff" opacity=".55" /><path d="M1 -7.5 V7.5" stroke="#fff" strokeWidth={0.8} opacity=".55" /><path d={RUPEE} transform="translate(8 0) scale(.62)" fill="none" stroke="#6f4f7c" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" /></g>
-        <g id={`${id}-cashBlue`}><rect x="-19" y="-11" width="38" height="22" rx="3" fill={url('periwinkle')} {...keyline} /><rect x="-15.5" y="-7.5" width="31" height="15" rx="1.6" fill="none" stroke="#fff" strokeWidth={0.9} opacity=".7" /><circle cx="-6" cy="0" r="4.5" fill="#fff" opacity=".55" /><path d="M1 -7.5 V7.5" stroke="#fff" strokeWidth={0.8} opacity=".55" /><path d={RUPEE} transform="translate(8 0) scale(.62)" fill="none" stroke="#4a6a9e" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" /></g>
-        <g id={`${id}-coinFlat`}><ellipse cy="2.2" rx="10" ry="3.6" fill="#c49a4c" /><rect x="-10" y="0" width="20" height="2.2" fill="#c49a4c" /><ellipse rx="10" ry="3.6" fill={url('coinInk')} stroke="#fff" strokeWidth={0.6} /><ellipse rx="6.6" ry="2.2" fill="none" stroke="#fff" strokeWidth={0.7} opacity=".6" /></g>
+        {envelope('pink')}{envelope('periwinkle')}{envelope('lavender')}{envelope('teal')}{envelope('green')}
         <g id={`${id}-shirt`}><path d="M-7 -15 Q0 -9 7 -15 L17 -11 L24 -1 L16 4 L15 2 V18 Q15 20 13 20 H-13 Q-15 20 -15 18 V2 L-16 4 L-24 -1 L-17 -11 Z" fill={url('teal')} {...keyline} strokeWidth={1.4} /><path d="M-7 -15 Q0 -6 7 -15" fill="none" stroke="#fff" strokeWidth={1.6} /></g>
         <g id={`${id}-teddy`}>
           <circle cx="-10" cy="-14" r="6.5" fill={url('lavender')} {...keyline} strokeWidth={1.2} /><circle cx="10" cy="-14" r="6.5" fill={url('lavender')} {...keyline} strokeWidth={1.2} />
@@ -221,7 +238,7 @@ export function DonationGifts({ way }: { way: GiftWay }) {
         <g key={i} className="gift-spark" style={{ '--i': i } as React.CSSProperties}><use href={at('spark')} transform={`translate(${x} ${y}) scale(${size})`} /></g>
       ))}
 
-      {/* the vessel's back (the box's back flap and open mouth; the jar's glass, its lip's top and mouth, and the coins
+      {/* the vessel's back (the box's back flap and open mouth; the jar's glass, its lip's top and mouth, and the heart
           in it), then the gifts going into it, then its front: the box's with the heart on it, the jar's glass with a
           ribbon round its neck */}
       <ellipse cx="160" cy="272" rx="72" ry="8" fill="#244f35" opacity=".13" filter={url('blur')} />
@@ -232,29 +249,13 @@ export function DonationGifts({ way }: { way: GiftWay }) {
         <path d={JAR} fill={url('glass')} filter={url('soft')} />
         <ellipse cx="160" cy="140" rx="41" ry="7" fill={url('lip')} />
         <ellipse cx="160" cy="140.6" rx="35.5" ry="5" fill={url('mouth')} />
-        {/* the coins in it, held inside its glass: those already given, then a layer for each gift, keyed by the way
-            like the gifts (set, as reduced motion leaves them, the jar is full) */}
-        <g clipPath={url('glassShape')}>
-          {PILE.map(([x, y], i) => <use key={i} href={at('coinFlat')} x={x} y={y} />)}
-          {gifts.map((gift, k) => (
-            <g key={`layer-${way}-${k}`} style={playRound(`${name}-layer-${k}`)}>
-              {BACK_ROW.map((x, j) => <use key={j} href={at('coinFlat')} transform={`translate(${x + nudge(k, j)} ${layerFront(k) - 5 - heap(x)}) rotate(${tilt(k, j)}) scale(${coinSize(k, j)})`} />)}
-              {gift.item.startsWith('cash')
-                ? <use href={at(gift.item)} transform={`translate(${STANDING[k % 5][0]} ${layerFront(k) - 9}) rotate(${STANDING[k % 5][1]}) scale(.8 .58)`} />
-                : <use href={at(gift.item)} transform={`translate(${STANDING[k % 5][0]} ${layerFront(k) - 9}) rotate(${STANDING[k % 5][1]}) scale(.6)`} />}
-              {FRONT_ROW.map((x, j) => <use key={`front-${j}`} href={at('coinFlat')} transform={`translate(${x + nudge(k, j + 4)} ${layerFront(k) + nudge(k + 1, j) * 0.4}) rotate(${tilt(k, j + 4)}) scale(${coinSize(k, j + 1)})`} />)}
-            </g>
-          ))}
-        </g>
+        {jarHeart}
       </>}
       {/* keyed by the way, so a new way starts its round afresh, what it fills with it */}
       <g key={`gifts-${way}`}>
         {gifts.map(({ item, x, y, turn, size }, i) => (
-          <g key={i} className="gift-flow" style={{ '--dur': `${round}s`, '--delay': `${+(i * BEAT - round).toFixed(2)}s`, '--dx': `${MOUTH_X + (i % 2 ? 8 : -8) - x}px`, '--dy': `${intoY(vessel, i) - y}px`, '--spin': `${(i % 2 ? 1 : -1) * 18 - turn}deg` } as React.CSSProperties}>
-            <g>
-              {/* a coin turns over as it flies */}
-              <g className={item === 'coin' ? 'gift-flip' : undefined}><use href={at(item)} transform={`translate(${x} ${y}) rotate(${turn}) scale(${size})`} /></g>
-            </g>
+          <g key={i} className="gift-flow" style={{ '--dur': `${round}s`, '--delay': `${+(i * BEAT - round).toFixed(2)}s`, '--dx': `${MOUTH_X + (i % 2 ? 8 : -8) - x}px`, '--dy': `${intoY(vessel) - y}px`, '--spin': `${(i % 2 ? 1 : -1) * 18 - turn}deg` } as React.CSSProperties}>
+            <g><use href={at(item)} transform={`translate(${x} ${y}) rotate(${turn}) scale(${size})`} /></g>
           </g>
         ))}
       </g>
@@ -271,17 +272,9 @@ export function DonationGifts({ way }: { way: GiftWay }) {
         <g clipPath={url('glassShape')}>
           <path key={`gleam-${way}`} d="M140 120 L164 120 L134 280 L110 280 Z" fill={url('gleam')} style={{ transform: 'translateX(-130px)', ...playRound(`${name}-gleam`) }} />
         </g>
-        {/* a ribbon in the cause's ink round its neck, and a heart hanging from it, swaying */}
+        {/* a ribbon in the cause's ink round its neck */}
         <path d="M123 153 Q160 158 197 153 V157.6 Q160 162.6 123 157.6 Z" fill="currentColor" />
         <path d="M124.5 153.7 Q160 158.4 195.5 153.7" fill="none" stroke="#fff" strokeWidth={0.8} opacity=".45" />
-        <g className="gift-charm">
-          <path d="M160 160 V168" stroke="currentColor" strokeWidth={1.1} strokeLinecap="round" />
-          <g transform="translate(160 173.2) scale(.44)">
-            <path d={HEART} fill="currentColor" stroke="#fff" strokeWidth={2.6} strokeLinejoin="round" />
-            <ellipse cx="-6.5" cy="-4.5" rx="3.4" ry="2.2" fill="#fff" opacity=".5" transform="rotate(-35 -6.5 -4.5)" />
-          </g>
-          <circle cx="160" cy="159.6" r="1.9" fill="currentColor" stroke="#fff" strokeWidth={0.7} />
-        </g>
       </> : <>
         <g filter={url('soft')}>
           <path d="M106 184 L114 168 L82 156 L72 174 Z" fill={url('flap')} {...keyline} strokeWidth={1.2} />

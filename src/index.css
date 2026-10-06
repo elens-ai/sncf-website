@@ -1466,7 +1466,7 @@
     linear-gradient(rgb(10 48 43 / 0.2), rgb(10 48 43 / 0.2));
   transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* the photograph's tint goes with the photograph: the mission page is on the site's ground alone */
+/* the photograph's tint goes with the photograph: the message and mission pages are on the logo's navy alone */
 .splash-welcome-photo.is-mission::after { opacity: 0; }
 
 /* Set like a book's title page: the seal and motto (carried over from the
@@ -1516,13 +1516,13 @@
   margin: auto 0 0;
 }
 
-/* SNCF in the flared lettering, mint like the name on the mission page; the
-   letters rise one after another. */
+/* SNCF in the flared lettering, in the logo's light blue like the name on the
+   message and mission pages; the letters rise one after another. */
 @keyframes flaredLetterIn {
   from { opacity: 0; transform: translateY(14%) scale(0.94); }
   to { opacity: 1; transform: none; }
 }
-.splash-welcome-sncf { display: block; color: #a9ecc9; filter: drop-shadow(0 6px 26px rgb(0 0 0 / 0.42)); }
+.splash-welcome-sncf { display: block; color: #95d9f1; filter: drop-shadow(0 6px 26px rgb(0 0 0 / 0.42)); }
 .splash-welcome-sncf svg { display: block; height: var(--wp-sncf); width: auto; max-width: 100%; overflow: visible; }
 .splash-welcome-sncf path {
   transform-box: fill-box;
@@ -1598,10 +1598,9 @@
 @keyframes welcomeTextOut { to { opacity: 0; transform: translateY(-18px); filter: blur(8px); } }
 @keyframes softFadeOut { to { opacity: 0; } }
 
-/* The photograph dissolves away as the camera moves, so the message page sits
-   on the logo's navy over it (and the mission page on the site's ground). The
-   fade is a transition, not part of the camera move, so it still happens
-   (gently) with reduced motion. */
+/* The photograph dissolves away as the camera moves, so the message and
+   mission pages sit on the logo's navy over it. The fade is a transition, not
+   part of the camera move, so it still happens (gently) with reduced motion. */
 .splash-camera { transform-origin: 62% 45%; transition: opacity 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s; }
 .splash-welcome-photo.is-mission .splash-camera { animation: cameraPushPan 1.8s cubic-bezier(0.6, 0, 0.2, 1) both; opacity: 0; }
 
@@ -1650,9 +1649,10 @@
   inset: 0;
   z-index: 1;
   /* the left-to-right darkening of .accent-canvas, held a little deeper as far
-     as the copy column reaches (--shade-copy follows --mp-copy below), so the
-     long body copy stays easy to read on the site's ramp: darker on the copy
-     side, lighter round the portrait, darker again at the far edge */
+     as the copy column reaches (--shade-copy follows --mp-copy below): darker
+     on the copy side, lighter round the portrait, darker again at the far
+     edge. The logo's navy now lies over it on the message and mission pages,
+     so it only deepens the photograph as it dissolves into the navy. */
   --shade-copy: max(40%, 33rem);
   background: linear-gradient(to right, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0.5) var(--shade-copy), rgba(0, 0, 0, 0.2) calc(var(--shade-copy) + 22%), rgba(0, 0, 0, 0.45) 100%);
   opacity: 0;
@@ -1661,11 +1661,11 @@
 }
 .splash-welcome-photo.is-mission .splash-mission-shade { opacity: 1; }
 
-/* THE MESSAGE PAGE'S GROUND is the logo's own navy (the seal's outer ring and
-   lettering, #063782), deeper on the copy side and lit a little with the
-   logo's blue behind the portrait, laid over the site's: it comes in over the
-   photograph as the welcome page leaves, and gives way to the site's ground as
-   the mission page begins. */
+/* THE MESSAGE AND MISSION PAGES' GROUND is the logo's own navy (the seal's
+   outer ring and lettering, #063782), deeper on the copy side and lit a little
+   with the logo's blue behind the portrait, laid over the site's: it comes in
+   over the photograph as the welcome page leaves, and stays through the
+   mission page, until the whole intro fades to reveal the hero. */
 .splash-message-ground {
   position: absolute;
   inset: 0;
@@ -1680,13 +1680,8 @@
 }
 .splash-message-ground[data-shown='true'] { opacity: 1; }
 
-/* The page's accent and quotation ink: on the message page the logo's own
-   light blue (the seal's ring) on its navy, on the mission page mint on the
-   site's ground. Registered as colours, so the one turns into the other as
-   the pages change. */
-@property --mp-accent { syntax: '<color>'; inherits: true; initial-value: #a9ecc9; }
-@property --mp-quote-ink { syntax: '<color>'; inherits: true; initial-value: #d8f3e6; }
-
+/* The page's accent and quotation ink: the logo's own light blue (the seal's
+   ring) on its navy, on the message page and the mission page alike. */
 .splash-mission-page {
   --u: min(1vw, 1.62vh);
   --mp-pad: clamp(24px, 3.5vw, 56px);
@@ -1701,8 +1696,8 @@
   --name-line: min(clamp(22px, calc(var(--u) * 2.4), 40px), calc(100cqw / 20.2));
   --mp-rule: rgb(255 255 255 / 0.2);
   --mp-ink: rgb(255 255 255 / 0.84);
-  --mp-accent: #a9ecc9;
-  --mp-quote-ink: #d8f3e6;
+  --mp-accent: #95d9f1;
+  --mp-quote-ink: #d3eefa;
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -1725,9 +1720,7 @@
   padding: var(--mp-pad-top) 0 var(--mp-pad-bottom);
   overflow: hidden auto;
   color: #fff;
-  transition: --mp-accent 0.8s ease, --mp-quote-ink 0.8s ease;
 }
-.splash-mission-page[data-page='message'] { --mp-accent: #95d9f1; --mp-quote-ink: #d3eefa; }
 
 /* The copy column is a size container, so its contents follow its own width
    rather than the window's. Intro at the top, Mission and Vision at the foot. */
@@ -2141,12 +2134,6 @@
   mask-image: linear-gradient(#000 70%, transparent 98%), linear-gradient(90deg, transparent 0%, #000 18%);
   mask-composite: intersect;
 }
-/* the message page's own portrait, over the mission page's in the same frame;
-   one gives way to the other as the mission page begins */
-.splash-satguru-frame > img { transition: opacity 0.8s ease; }
-.splash-satguru-frame > .splash-satguru-message-photo { position: absolute; inset: 0; }
-.splash-satguru-frame[data-page='message'] > img:not(.splash-satguru-message-photo),
-.splash-satguru-frame[data-page='mission'] > .splash-satguru-message-photo { opacity: 0; }
 .splash-satguru figcaption {
   position: relative;
   z-index: 1;
@@ -6320,6 +6307,106 @@
 .subnav-chip:focus-visible {
   outline: 2px solid var(--chip-ink);
   outline-offset: 2px;
+}
+/* THE RAIL AS TABS (variant 'tabs', the Projects page): the chips alone,
+   centred as one segmented control on a soft track, each marked with a dot
+   in its own ink; the section in view sits on a white pill that slides from
+   chip to chip. The auto margins centre the track while it fits and let the
+   rail scroll from its first chip when it does not. Same height as the rail
+   (54px), so the anchored sections' clearances hold. */
+.subnav[data-variant='tabs'] { min-height: 54px; padding-block: 0; }
+.subnav-track {
+  position: relative;
+  flex: none;
+  display: flex;
+  margin-inline: auto;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgb(22 24 43 / 0.045);
+  box-shadow: inset 0 0 0 1px rgb(22 24 43 / 0.06);
+}
+.subnav-track .subnav-list { position: relative; z-index: 1; gap: 2px; }
+.subnav-lit {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  width: var(--lit-w, 0px);
+  transform: translateX(var(--lit-x, 0px));
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.08), 0 6px 16px -8px rgb(22 24 43 / 0.3);
+  opacity: 0;
+}
+.subnav-track[data-lit='true'] .subnav-lit {
+  opacity: 1;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1), width 450ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+}
+.subnav[data-variant='tabs'] .subnav-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+  padding: 9px 16px;
+  border: 0;
+  font-size: 12.5px;
+  line-height: 1;
+}
+.subnav[data-variant='tabs'] .subnav-chip::before {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--chip-ink);
+  opacity: 0.5;
+  transition: opacity 300ms ease, scale 300ms ease;
+}
+.subnav[data-variant='tabs'] .subnav-chip:hover { color: var(--ink-900); background: transparent; }
+.subnav[data-variant='tabs'] .subnav-chip:hover::before { opacity: 0.85; }
+.reading-room .subnav[data-variant='tabs'] .subnav-chip[data-on='true'] {
+  background: transparent;
+  color: color-mix(in srgb, var(--chip-ink) 72%, #16182b);
+}
+.subnav[data-variant='tabs'] .subnav-chip[data-on='true']::before { opacity: 1; scale: 1.15; }
+/* THE RAIL ON ITS SECTION'S GROUND (tinted; Core Values): the rail is laid in
+   the ground of the section in view, the page's own ramp of that section's
+   colours under the same deep wash, so it reads as that section's top edge;
+   it fades from one section's colours to the next (registered, so they blend).
+   The page gives each section's colours (--backdrop-*) on [data-ground]. */
+@property --rail-dark { syntax: '<color>'; inherits: true; initial-value: #174c3e; }
+@property --rail-mid { syntax: '<color>'; inherits: true; initial-value: #397f62; }
+@property --rail-light { syntax: '<color>'; inherits: true; initial-value: #90cfae; }
+@property --rail-pale { syntax: '<color>'; inherits: true; initial-value: #cde9d9; }
+.subnav[data-tinted] {
+  --rail-dark: var(--backdrop-dark, #174c3e);
+  --rail-mid: var(--backdrop-mid, #397f62);
+  --rail-light: var(--backdrop-light, #90cfae);
+  --rail-pale: var(--backdrop-pale, #cde9d9);
+  background:
+    linear-gradient(90deg, #031b1840, #03151f99),
+    linear-gradient(90deg, var(--rail-dark), var(--rail-mid) 43%, var(--rail-light) 77%, var(--rail-pale));
+  backdrop-filter: none;
+  border-bottom-color: rgb(255 255 255 / 0.06);
+  transition: --rail-dark 700ms ease, --rail-mid 700ms ease, --rail-light 700ms ease, --rail-pale 700ms ease;
+}
+.subnav[data-tinted] .subnav-track { background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); }
+.subnav[data-tinted] .subnav-lit { box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 8px 18px -8px rgb(0 0 0 / 0.45); }
+.subnav[data-tinted] .subnav-chip { color: rgb(255 255 255 / 0.84); }
+.subnav[data-tinted] .subnav-chip:not([data-on='true']):hover { color: #fff; }
+.subnav[data-variant='tabs'][data-tinted] .subnav-chip::before { background: color-mix(in srgb, var(--chip-ink) 45%, #fff); opacity: 0.9; }
+.subnav[data-variant='tabs'][data-tinted] .subnav-chip[data-on='true']::before { background: var(--chip-ink); opacity: 1; }
+.reading-room[data-surface='light'] .subnav[data-tinted] .subnav-chip:focus-visible { outline-color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  .subnav[data-tinted] { transition: none; }
+}
+/* on a phone each tab keeps the rail's 44px touch target, the rail its room around them */
+@media (max-width: 767px) {
+  .subnav[data-variant='tabs'] { min-height: 62px; }
+  .subnav[data-variant='tabs'] .subnav-chip { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .subnav-track[data-lit='true'] .subnav-lit { transition: none; }
 }
 /* the rail is sticky, so anchored sections must clear it AND the header */
 .reading-room[data-surface='light'] main section[id],

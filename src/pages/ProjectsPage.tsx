@@ -19,7 +19,7 @@ import { HealthCityFeature } from '../components/HealthCityFeature';
 import { ExploreTabs, type ExploreTab } from '../components/ExploreTabs';
 import { ReportActions } from '../components/ReportActions';
 import { PillarGallery } from '../components/PillarGallery';
-import { SdgTags, UnSeal } from '../components/UnAffiliation';
+import { SdgTags, UnepSeal } from '../components/UnAffiliation';
 import { Saying, hasSaying, type SayingId } from '../components/Saying';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ACTIVITIES, type Activity } from '../data/activities';
@@ -27,7 +27,7 @@ import { PILLARS } from '../data/pillars';
 import { subjectFor } from '../utils/waves';
 import { MEDIA } from '../data/media';
 import { PAVILION_GALLERY, roomPhotoFor } from '../data/pavilionGallery';
-import { PROGRAMME_SDGS, SDGS, goalsOf } from '../data/sdgs';
+import { PROGRAMME_SDGS } from '../data/sdgs';
 import { slug } from '../utils/slug';
 import './projects.css';
 
@@ -58,8 +58,8 @@ const COVER_SAYINGS: Record<string, { id: SayingId; meaning?: boolean; byline?: 
     and the projects' drawings): the words and the way on to the projects,
     beside the orbit, where every project is a moon and choosing one goes to
     its chapter. Beneath the orbit, the voice of the project in view; at the
-    foot, the foundation's UN standing, the UN goals the projects advance, and
-    each project's headline figure, opening its Stats. */
+    foot, the foundation's work with UNEP and each project's headline figure,
+    opening its Stats. */
 const ProjectsCover: React.FC = () => {
   useCMSRevision();
   const root = useRef<HTMLElement>(null);
@@ -79,7 +79,6 @@ const ProjectsCover: React.FC = () => {
       photo: resolveCMSAsset("asset.ProjectsPage.healthCity", "/images/projects/health-city.webp") },
   ];
   const current = ways[choice] ?? ways[0];
-  const goals = goalsOf(projects.map(project => project.id));
   return <section ref={root} className="projects-cover" data-active={active} style={{ '--cover-ink': current.ink, '--cover-light': current.light, '--ground-a': ground?.accentA, '--ground-b': ground?.accentB } as React.CSSProperties} aria-labelledby="projects-heading">
     <div className="projects-cover-ground" aria-hidden="true">
       {ground && <MosaicWaves subject={subjectFor(ground)} active={active && !calm} input={waveInput} scale={3} fps={24} />}
@@ -90,7 +89,7 @@ const ProjectsCover: React.FC = () => {
       <h1 id="projects-heading">{getCMSCopy("copy.ProjectsPage.988b94ac8a81", "Built for people,")}<br /><em>{getCMSCopy("copy.ProjectsPage.27f463b7e8ab", "Rooted in purpose.")}</em></h1>
       <p className="projects-cover-lede">{getCMSCopy("copy.ProjectsPage.d90ca7d5eb20", "From reviving water bodies to growing forests and supporting villages, discover how our values become lasting projects.")}</p>
       <div className="projects-cover-actions">
-        <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#projects-directory")} className="projects-cover-cta">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={15} aria-hidden="true" /></a>
+        <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#project-amrit")} className="projects-cover-cta">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={15} aria-hidden="true" /></a>
       </div>
     </div>
     {/* the orbit, and beneath it the voice of the project in view */}
@@ -102,12 +101,7 @@ const ProjectsCover: React.FC = () => {
       </div>
     </div>
     <div className="projects-cover-footer">
-      <span className="projects-cover-standing"><UnSeal />
-        <span className="projects-cover-goals">
-          <span className="projects-cover-goal-dots" aria-hidden="true">{goals.map(goal => <i key={goal} title={`SDG ${goal}: ${SDGS[goal].name}`} style={{ background: SDGS[goal].color }} />)}</span>
-          <span className="projects-cover-goals-words">{getCMSCopy("copy.ProjectsPage.cover-goals", "Advancing")} <strong>{goals.length}</strong> {getCMSCopy("copy.ProjectsPage.cover-goals-of", "UN Global Goals")}</span>
-        </span>
-      </span>
+      <span className="projects-cover-standing"><UnepSeal /></span>
       <nav className="projects-cover-impact" aria-label={getCMSCopy("copy.ProjectsPage.cover-impact", "Each project’s reported reach")}>
         {projects.map((project, i) => (
           <a key={project.id} href={`#${slug(project.title)}-stats`} data-active={choice === i} style={{ '--way-ink': FACES[i % FACES.length].ink } as React.CSSProperties}>
@@ -202,29 +196,8 @@ export const ProjectsPage: React.FC = () => {
     const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' }), 100);
     return () => clearTimeout(timer);
   }, [hash]);
-  return <PageShell accentPillarId="projects" eyebrow={getCMSCopy("copy.ProjectsPage.04e2a9728af7", "Projects")} title={getCMSCopy("copy.ProjectsPage.36fc0059896e", "Our projects")} standfirst={getCMSCopy("copy.ProjectsPage.995f1e05cac7", "Service with a lasting footprint.")} cover={<ProjectsCover />} rail={<SubsectionNav label={getCMSCopy("copy.ProjectsPage.69c5a4506f97", "Explore projects")} links={[...getProjects().map((p, i) => ({ id: slug(p.title), label: p.title.replace(/^Project /, ''), ink: FACES[i % FACES.length].light })), { id: 'health-city', label: getCMSCopy("copy.ProjectsPage.7560b5b78854", "Health City"), ink: '#b8daed' }]} />}>
+  return <PageShell accentPillarId="projects" eyebrow={getCMSCopy("copy.ProjectsPage.04e2a9728af7", "Projects")} title={getCMSCopy("copy.ProjectsPage.36fc0059896e", "Our projects")} standfirst={getCMSCopy("copy.ProjectsPage.995f1e05cac7", "Service with a lasting footprint.")} cover={<ProjectsCover />} rail={<SubsectionNav variant="tabs" label={getCMSCopy("copy.ProjectsPage.69c5a4506f97", "Explore projects")} links={[...getProjects().map((p, i) => ({ id: slug(p.title), label: p.title.replace(/^Project /, ''), ink: FACES[i % FACES.length].ink })), { id: 'health-city', label: getCMSCopy("copy.ProjectsPage.7560b5b78854", "Health City"), ink: '#0d6a8c' }]} />}>
     <div className="projects-editorial">
-      <CMSSection id="ProjectsPage.projects-directory"><section className="projects-directory" id="projects-directory" aria-labelledby="projects-directory-title"><div className="projects-directory-heading"><p className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.bacc0f922481", "Find your connection")}</p><h2 id="projects-directory-title">{getCMSCopy("copy.ProjectsPage.7fad847159d2", "Different paths. Shared purpose.")}</h2><p>{getCMSCopy("copy.ProjectsPage.f4f7c6cc0c7e", "Choose a project and explore its reported reach.")}</p></div><div className="projects-directory-grid">{getProjects().map((p, i) => {
-        const face = FACES[i % FACES.length], Icon = face.icon, id = slug(p.title), photo = p.images?.[0]?.src ?? p.cardPhoto?.src;
-        const goals = PROGRAMME_SDGS[p.id] ?? [];
-        /* the card opens its chapter; its Reports, Gallery and Stats open straight into that tab */
-        return <article key={p.id} className="projects-directory-card" style={inkStyle(i)}>
-          <span className="projects-directory-photo" data-empty={!photo} aria-hidden="true">
-            {photo && <img src={resolveCMSMedia(photo)} alt="" loading="lazy" decoding="async" />}
-            <span className="projects-directory-icon"><Icon size={19} strokeWidth={1.6} /></span>
-            <small>{getCMSCopy("copy.ProjectsPage.5feceb66ffc8", "0")}{i + 1}</small>
-          </span>
-          <p className="projects-directory-kicker">{face.label}</p>
-          <h3><a href={`#${id}`}>{p.title.replace(/^Project /, '')}</a></h3>
-          <p className="projects-directory-figure"><strong>{p.headline.value}</strong> {p.headline.label}</p>
-          {goals.length > 0 && <span className="projects-directory-goals" title={goals.map(goal => `SDG ${goal}: ${SDGS[goal].name}`).join(' · ')}>{goals.map(goal => <i key={goal} style={{ background: SDGS[goal].color }} />)}<span>{getCMSCopy("copy.ProjectsPage.directory-goals", "UN goals")} {goals.join(', ')}</span></span>}
-          <nav className="projects-directory-tabs" aria-label={`${p.title}: ${getCMSCopy("copy.ProjectsPage.directory-tabs", "reports, gallery and stats")}`}>
-            <a href={`#${id}-reports`}>{getCMSCopy("copy.ProjectsPage.directory-reports", "Reports")}</a>
-            <a href={`#${id}-gallery`}>{getCMSCopy("copy.ProjectsPage.directory-gallery", "Gallery")}</a>
-            <a href={`#${id}-stats`}>{getCMSCopy("copy.ProjectsPage.directory-stats", "Stats")}</a>
-          </nav>
-        </article>;
-      })}</div></section></CMSSection>
       {getProjects().map((project,index) => <ProjectChapter key={project.id} project={project} index={index} />)}
       <CMSSection id="ProjectsPage.health-city"><HealthCityFeature /></CMSSection>
       <p className="projects-report-note">{getCMSCopy("copy.ProjectsPage.4a4eb64be162", "Each project’s figures retain their own reporting period and units. Different measures are not combined into a single total.")}</p>

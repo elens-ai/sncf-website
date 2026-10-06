@@ -53,7 +53,7 @@ export const SiteSettings = settingsGlobal('site-settings', 'Site settings', 'Na
   ] },
   { label: 'Social links', fields: [
     { name: 'social', label: 'Social links', type: 'array', labels: { singular: 'Platform', plural: 'Platforms' },
-      admin: { description: 'Icons down the left edge of the site, in this order. Leave a link empty to hide that icon.' },
+      admin: { description: 'Icons down the left edge of the site and in the footer, in this order (LinkedIn appears in the footer only). Leave a link empty to hide that icon.' },
       fields: [{ type: 'row', fields: [
         { name: 'platform', label: 'Platform', type: 'select', required: true, options: SOCIAL_PLATFORMS },
         sourceField('url', { label: 'Profile link', description: 'The full https:// address of the profile or channel.' }),

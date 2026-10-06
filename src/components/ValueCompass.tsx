@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BookOpen, Heart, Sprout } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
+import { resolveCMSMedia } from '../cms/media';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PILLARS } from '../data/pillars';
 import { PillarHeroVisual } from './PillarHeroVisual';
@@ -9,11 +9,13 @@ import './value-compass.css';
 
 const VALUES = ['heal', 'enrich', 'empower'] as const;
 type Value = typeof VALUES[number];
-const ICONS = [Heart, BookOpen, Sprout];
+/* Each value's own emblem, as the menu shows it (the leaves, the open book, the figure with arms
+   raised), cut out on transparency so its disc can paint it in the value's colour or in white. */
+const mark = (id: Value) => resolveCMSMedia(`/images/emblem-marks/${id}.webp`);
 
 export function ValueCompass({ choice, onChange, active, held = false }: {
   choice: Value; onChange: (value: Value) => void; active: boolean;
-  /** Stops the turning while the visitor is choosing a value from outside it. */
+  /** Stops the turning while the visitor is choosing a value from outside it (the cover's headline words). */
   held?: boolean;
 }) {
   useCMSRevision();
@@ -114,13 +116,12 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
       <div className="service-compass-values" role="radiogroup" aria-label={getCMSCopy('copy.CoreValuesPage.c7a3284847f9', 'Preview a core value')}>
         {VALUES.map((id, index) => {
           const pillar = PILLARS.find(p => p.id === id)!;
-          const Icon = ICONS[index];
           return <button key={id} ref={node => { buttons.current[index] = node; }}
             className={`service-compass-value service-compass-value-${id}`} role="radio" aria-checked={choice === id}
             tabIndex={choice === id ? 0 : -1}
             onKeyDown={keys} onClick={() => onChange(id)}
             style={{ '--node-ink': pillar.accentA, '--node-light': pillar.accentB } as React.CSSProperties}>
-            <span className="service-compass-value-symbol"><Icon size={23} strokeWidth={1.5} /></span>
+            <span className="service-compass-value-symbol"><i className="service-compass-value-mark" style={{ '--mark': `url("${mark(id)}")` } as React.CSSProperties} /></span>
             <span className="service-compass-value-name">{pillar.label}</span>
           </button>;
         })}

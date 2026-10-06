@@ -246,9 +246,10 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
       >
         <svg className="scrapbook-binding" viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`} aria-hidden="true" focusable="false">
           <defs>
+            {/* the cloth in the home page's Enrich book's teal (PillarPhotoMosaic): its tint washed over a photograph, as it renders */}
             <linearGradient id={`${ids}-cloth`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#38b8cb" />
-              <stop offset="1" stopColor="#17808f" />
+              <stop offset="0" stopColor="#4d969a" />
+              <stop offset="1" stopColor="#2e7378" />
             </linearGradient>
             <filter id={`${ids}-soft`} x="-10%" y="-200%" width="120%" height="500%"><feGaussianBlur stdDeviation="1.4" /></filter>
           </defs>

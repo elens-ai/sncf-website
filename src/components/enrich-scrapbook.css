@@ -15,7 +15,7 @@
 .scrapbook-book { position: relative; container-type: inline-size; aspect-ratio: 142 / 108; user-select: none; -webkit-user-select: none; }
 .scrapbook-binding { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .scrapbook-ground { fill: rgb(16 58 66 / 0.24); }
-.scrapbook-cover { stroke: #12707e; stroke-width: 0.45; stroke-linejoin: round; }
+.scrapbook-cover { stroke: #23575a; stroke-width: 0.45; stroke-linejoin: round; }
 /* the edges of the leaves beneath the top page */
 .scrapbook-stack { fill: #f6f2e8; stroke: rgb(23 112 127 / 0.5); stroke-width: 0.28; stroke-linejoin: round; }
 
@@ -187,7 +187,7 @@
   background:
     radial-gradient(circle at 25% 25%, rgb(255 255 255 / 0.16) 0.45cqw, transparent 0.55cqw) 0 0 / 4cqw 4cqw,
     radial-gradient(circle at 75% 75%, rgb(255 255 255 / 0.1) 0.3cqw, transparent 0.4cqw) 0 0 / 4cqw 4cqw,
-    linear-gradient(160deg, #3bb8cb, #1d8fa3);
+    linear-gradient(160deg, #4d969a, #2e7378);
 }
 .scrapbook-bookplate {
   position: absolute;

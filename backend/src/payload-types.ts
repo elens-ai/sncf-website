@@ -1608,7 +1608,7 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * Icons down the left edge of the site, in this order. Leave a link empty to hide that icon.
+   * Icons down the left edge of the site and in the footer, in this order (LinkedIn appears in the footer only). Leave a link empty to hide that icon.
    */
   social?:
     | {

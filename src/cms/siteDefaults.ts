@@ -17,12 +17,15 @@ export const siteDefaults = {
   },
   /** Icons down the left edge and in the footer; a platform without a URL is not shown.
       The foundation's own profiles, as the footer of nirankarifoundation.org lists
-      them (checked October 2026): Facebook, X, YouTube and Instagram. */
+      them (checked October 2026): Facebook, X, YouTube and Instagram; and its
+      LinkedIn company page (Sant Nirankari Charitable Foundation (SNCF)), which
+      is shown in the footer only (SocialSidebar). */
   social: [
     { platform: 'instagram', url: 'https://www.instagram.com/nirankaricharitablefoundation/' },
     { platform: 'youtube', url: 'https://www.youtube.com/channel/UCdAj1x5SmFLzQEJNvu5jezw' },
     { platform: 'facebook', url: 'https://www.facebook.com/santnirankaricharitablefoundation' },
     { platform: 'x', url: 'https://x.com/santnirankari' },
+    { platform: 'linkedin', url: 'https://www.linkedin.com/company/sant-nirankari-charitable-foundation-sncf/' },
   ] as SocialLink[],
   /* Nothing here points at nirankarifoundation.org: that domain is being
      decommissioned, so its material links to the pages here instead. Privacy

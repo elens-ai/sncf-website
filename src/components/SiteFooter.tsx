@@ -5,7 +5,7 @@ import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { MapPin, Phone, Mail, Heart, Handshake, CalendarHeart, ArrowUpRight, ArrowUp } from 'lucide-react';
-import { UnSeal } from './UnAffiliation';
+import { UnepSeal } from './UnAffiliation';
 import { SOCIAL_ART } from './SocialSidebar';
 import './site-footer.css';
 
@@ -129,7 +129,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
               <Mail className="w-4 h-4 flex-none text-white/45" />{siteOverride("contact", "email", getCMSCopy("copy.SiteFooter.bee1eacddce6", "accounts@nirankarifoundation.org"))}</a>
           </address>
 
-          {/* the same social links as the left-hand rail (Site settings → Social links) */}
+          {/* the social links (Site settings → Social links): the left-hand rail's, and LinkedIn, which is shown here only */}
           {site.social.length > 0 && (
             <ul className="footer-socials" aria-label={c('social', 'Follow the foundation')}>
               {site.social.map(link => {
@@ -142,8 +142,8 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
               })}
             </ul>
           )}
-          {/* the foundation's UN standing, on every page */}
-          <div className="mt-5"><UnSeal /></div>
+          {/* the UN Environment Programme, as the Core Values and Projects covers carry it, on every page */}
+          <div className="mt-5"><UnepSeal /></div>
         </div>
 
         {/* Link groups */}

@@ -171,10 +171,6 @@
     "source": "/images/welcome-volunteers.jpg",
     "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
   },
-  "asset.WelcomeSplashScreen.satguru-photo": {
-    "source": "/images/satguru-mata-sudiksha-ji-cutout.webp",
-    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-cutout.webp"
-  },
   "asset.PillarHeroBackdrop.heal-background": {
     "source": "/images/heal-emblem/background.webp",
     "label": "PillarHeroBackdrop · background.webp"
@@ -278,5 +274,25 @@
   "asset.WelcomeSplashScreen.message-photo": {
     "source": "/images/satguru-mata-sudiksha-ji-message.webp",
     "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-message.webp"
+  },
+  "asset.ProjectsPage.hcLogo": {
+    "source": "/images/projects/health-city/logo.webp",
+    "label": "ProjectsPage · logo.webp"
+  },
+  "asset.ProjectsPage.hcTeam": {
+    "source": "/images/projects/health-city/team.webp",
+    "label": "ProjectsPage · team.webp"
+  },
+  "asset.ProjectsPage.hcPlaque": {
+    "source": "/images/projects/health-city/plaque.webp",
+    "label": "ProjectsPage · plaque.webp"
+  },
+  "asset.ProjectsPage.hcDedication": {
+    "source": "/images/projects/health-city/dedication.webp",
+    "label": "ProjectsPage · dedication.webp"
+  },
+  "asset.UnepSeal.logo": {
+    "source": "/images/partners/unep.png",
+    "label": "UnepSeal · unep.png"
   }
 }
