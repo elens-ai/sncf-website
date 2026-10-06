@@ -4,7 +4,7 @@
    so a typo in the CMS can never stall or break the intro. */
 
 /** Milliseconds for a page hold given in seconds (decimals allowed). */
-export function introSeconds(value: string, fallbackSeconds: number, min = 3, max = 120): number {
+export function introSeconds(value: string, fallbackSeconds: number, min = 2, max = 120): number {
   const seconds = Number.parseFloat(String(value).trim().replace(',', '.'));
   return (Number.isFinite(seconds) && seconds >= min && seconds <= max ? seconds : fallbackSeconds) * 1000;
 }

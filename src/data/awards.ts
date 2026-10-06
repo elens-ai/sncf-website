@@ -271,18 +271,6 @@ export const DEFAULT_AWARDS: Award[] = [
     }],
   },
   {
-    id: 'news24-covid-care-burari-2021',
-    title: '1,000-bed corona care centre at Burari — in the news',
-    awardedBy: 'News24',
-    year: '2021',
-    note: 'News24 reported on 23 April 2021, in Hindi, that a corona care facility with 1,000 beds had opened that day at the Sant Nirankari Ground in Burari, Delhi.',
-    photos: [{
-      src: '/images/awards/news24-covid-care-burari-2021.webp',
-      alt: 'News24’s post, with a video of a man speaking beside a framed portrait',
-      width: 1200, height: 967, focal: '50% 50%',
-    }],
-  },
-  {
     id: 'zee-news-covid-centre-2021',
     title: 'Delhi’s temporary COVID-19 centre — in the news',
     awardedBy: 'Zee News English',

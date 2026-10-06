@@ -30,7 +30,9 @@
 .collaboration-heading { align-items: flex-end; }
 .collaboration-heading h2 { max-width: 780px; }
 .collaboration-heading h2 em { display: block; margin-top: 3px; }
-.collaboration-layout { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.55fr); align-items: center; gap: clamp(38px, 5vw, 80px); margin-top: 40px; }
+.collaboration-layout { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.55fr); align-items: center; gap: clamp(38px, 5vw, 80px); }
+/* the heading opens the left column */
+.collaboration-editorial > .collaboration-heading { display: block; margin-bottom: clamp(18px, 2.6vh, 28px); }
 .collaboration-editorial { min-width: 0; }
 .collaboration-intro { font: 400 13px/1.85 var(--font-sans); color: #ffffffb8; margin: 0 0 25px; max-width: 42ch; }
 /* the partner chosen on the circle: glass on the section's teal, its cornerstone in that arc's ink, and its website */
@@ -54,8 +56,6 @@
 .collaboration-join:hover { translate: 0 -2px; background: white; }
 .collaboration-join-note { margin: 10px 0 0; font: 400 10px/1.6 var(--font-sans); color: #ffffff94; }
 .collaboration-directory { min-width: 0; }
-.collaboration-directory-label { display: flex; justify-content: flex-end; gap: 16px; margin: 0 0 18px; color: #ffffffc3; font: 500 10px/1.5 var(--font-sans); text-transform: uppercase; letter-spacing: .13em; }
-.collaboration-directory-label > span { text-transform: none; letter-spacing: 0; font-size: 10px; color: #ffffff88; }
 .collaboration-outcomes { display: flex; align-items: center; gap: 40px; margin-top: 38px; padding-top: 26px; border-top: 1px solid #ffffff30; }
 .collaboration-outcomes > p { margin: 0; flex: 0 0 190px; color: #e6ead2; font: 400 24px/1.2 var(--font-script); }
 .collaboration-outcomes > p span { display: block; font: 400 9px/1.6 var(--font-sans); color: #ffffff85; margin-top: 7px; }
@@ -78,7 +78,6 @@
 @media (min-width: 1051px) and (max-height: 800px) {
   #awards-section.recognition-section, #partners-section.collaboration-section { padding-top: 96px; padding-bottom: 42px; }
   #partners-section.collaboration-section { padding-bottom: 104px; }
-  .collaboration-layout { margin-top: 30px; }
 }
 @media (max-width: 1050px) {
   .collaboration-layout { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 32px; }
@@ -94,7 +93,7 @@
   .honour-heading-columns { grid-template-columns: minmax(0, 1fr); }
   .honour-meta { display: flex; gap: 28px; padding: 0; border-left: 0; }
   .collaboration-heading { display: block; }
-  .collaboration-layout { grid-template-columns: minmax(0, 1fr); gap: 34px; margin-top: 24px; }
+  .collaboration-layout { grid-template-columns: minmax(0, 1fr); gap: 34px; }
   .collaboration-intro { max-width: none; }
   .collaboration-partner { max-width: none; }
   .collaboration-mark { width: 51px; height: 51px; padding: 9px; }
@@ -109,7 +108,6 @@
 @media (max-width: 379px) {
   #awards-section.recognition-section, #partners-section.collaboration-section { padding-inline: 18px; }
   .continuity-eyebrow { font-size: 8px; letter-spacing: .14em; }
-  .collaboration-directory-label { font-size: 9px; letter-spacing: .07em; }.collaboration-directory-label > span { font-size: 9px; }
 }
 @media (prefers-reduced-motion: no-preference) {
   [data-arrived='true'] > :is(.recognition-heading, .collaboration-heading) { animation: archive-rise .85s both; }

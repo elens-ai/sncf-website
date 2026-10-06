@@ -276,7 +276,7 @@
   .value-screen > .mosaic-stage-label { left: clamp(32px, 5vw, 100px); }
 }
 @media (min-width: 1024px) {
-  .value-screen > .mosaic-chapter.activity-chapter { min-height: 100svh; grid-template-rows: auto minmax(0, 1fr) auto; gap: clamp(12px, 2.5vh, 28px); padding: calc(var(--site-header-height, 72px) + var(--rail-h) + 52px) clamp(32px, 5vw, 100px) 28px max(88px, 6vw); }
+  .value-screen > .mosaic-chapter.activity-chapter { min-height: 100svh; grid-template-rows: auto minmax(0, 1fr); gap: clamp(12px, 2.5vh, 28px); padding: calc(var(--site-header-height, 72px) + var(--rail-h) + 52px) clamp(32px, 5vw, 100px) 28px max(88px, 6vw); }
   .value-screen > .mosaic-stage-label { left: max(88px, 6vw); }
   .value-screen .activity-nodes { min-height: 0; }
   .value-screen .activity-emblem { width: min(46%, calc((100svh - var(--site-header-height, 72px) - var(--rail-h) - 205px) * 1.05)); }
@@ -302,7 +302,6 @@
   .value-screen .activity-node-value { font-size: 29px; margin-top: 7px; }
   .value-screen .activity-node-value[data-long='true'] { font-size: 25px; }
   .value-screen .activity-node-label { font-size: 9px; margin-top: 3px; }
-  .value-screen .activity-chapter-footer { padding-top: 10px; }
 }
 /* Enrich's scrapbook turns at a click. It is held a little smaller than the
    other emblems, so the book, its credit and controls, and the line beneath

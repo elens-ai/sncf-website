@@ -1925,22 +1925,6 @@
       ]
     },
     {
-      "id": "news24-covid-care-burari-2021",
-      "title": "1,000-bed corona care centre at Burari — in the news",
-      "awardedBy": "News24",
-      "year": "2021",
-      "note": "News24 reported on 23 April 2021, in Hindi, that a corona care facility with 1,000 beds had opened that day at the Sant Nirankari Ground in Burari, Delhi.",
-      "photos": [
-        {
-          "src": "/images/awards/news24-covid-care-burari-2021.webp",
-          "alt": "News24’s post, with a video of a man speaking beside a framed portrait",
-          "width": 1200,
-          "height": 967,
-          "focal": "50% 50%"
-        }
-      ]
-    },
-    {
       "id": "zee-news-covid-centre-2021",
       "title": "Delhi’s temporary COVID-19 centre — in the news",
       "awardedBy": "Zee News English",
@@ -3106,7 +3090,6 @@
     "copy.DonationExperience.offlineQuestion": "Can I contribute by cheque or in person?",
     "copy.DonationExperience.receiptQuestion": "Who can help with receipts and documentation?",
     "copy.DonationExperience.receiptAnswer": "Our accounts team can guide you on payment options, receipts and the documentation applicable to your contribution.",
-    "copy.DonationExperience.fullPage": "Open the contribution page",
     "copy.GuidingForcePage.rajpitaName": "Nirankari Rajpita Ramit Ji",
     "copy.GuidingForcePage.rajpitaEyebrow": "A shared spirit of service",
     "copy.GuidingForcePage.rajpitaBody": "At the heart of the Nirankari spirit is a simple invitation: to see humanity as one family and to meet one another with love, respect and understanding.",
@@ -3273,7 +3256,6 @@
     "copy.EventsJournal.emptyHint": "There are more ways to take part across our other pillars.",
     "copy.EventsJournal.showAll": "Explore all moments",
     "copy.EventsJournal.emptyAgenda": "New dates will appear here as they are announced.",
-    "copy.MosaicChapter.discover": "Every activity, a story. Select one to discover more.",
     "copy.MosaicOverture.heal": "Care & wellbeing",
     "copy.MosaicOverture.enrich": "Learning & skills",
     "copy.MosaicOverture.empower": "Community & planet",
@@ -3300,8 +3282,8 @@
     "copy.WelcomeSplashScreen.mission-intro-3": "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation.",
     "copy.WelcomeSplashScreen.mission-intro-4": "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society.",
     "copy.WelcomeSplashScreen.mission-intro-name": "Sant Nirankari Charitable Foundation",
-    "copy.WelcomeSplashScreen.welcome-seconds": "11",
-    "copy.WelcomeSplashScreen.mission-seconds": "34",
+    "copy.WelcomeSplashScreen.welcome-seconds": "3",
+    "copy.WelcomeSplashScreen.mission-seconds": "6",
     "copy.WelcomeSplashScreen.welcome-photo-focus": "47% 46%",
     "copy.WelcomeSplashScreen.satguru-photo-focus": "50% 20%",
     "copy.DonationExperience.closeAnswer": "Close answer",
@@ -3606,7 +3588,7 @@
     "copy.WhoWeArePage.postmark": "Delhi · 110009",
     "copy.MosaicOverture.enter": "Enter",
     "copy.MosaicOverture.scroll": "Scroll to explore",
-    "copy.WelcomeSplashScreen.message-seconds": "24",
+    "copy.WelcomeSplashScreen.message-seconds": "3",
     "copy.WelcomeSplashScreen.message-text": "We are all part of one human family, children of the same formless Creator (Nirankar). This shared connection inspires compassion and selfless service, guiding us to stand by one another. At the heart of our Mission lies the spirit of healing, enrichment and empowerment – believing that nurturing one life uplifts the whole community. May we all be granted with the wisdom and strength to live in peace, to serve with humility and to care for our Earth and each other with a shared sense of responsibility.",
     "copy.WelcomeSplashScreen.message-couplet-1": "मानव को हो मानव प्यारा",
     "copy.WelcomeSplashScreen.message-couplet-2": "इक दूजे का बने सहारा",
@@ -3621,7 +3603,10 @@
     "copy.PartnerCircle.sector-enrich": "Enrich",
     "copy.PartnerCircle.sector-empower": "Empower",
     "copy.PartnersSection.visit": "Visit their website",
-    "copy.PartnersSection.partner-email": "sncf@nirankarifoundation.org"
+    "copy.PartnersSection.partner-email": "sncf@nirankarifoundation.org",
+    "copy.DonationExperience.giftsCaption": "Every gift finds a home.",
+    "copy.WelcomeSplashScreen.message-label": "Satguru's Message",
+    "copy.WelcomeSplashScreen.message-rail-label": "Message progress"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -5547,11 +5532,6 @@
         "section": "Donation form",
         "label": "Donation form · Our accounts team can guide you on payment options, receipts and the …"
       },
-      "copy.DonationExperience.fullPage": {
-        "page": "contribute",
-        "section": "Donation form",
-        "label": "Donation form · Open the contribution page"
-      },
       "copy.GuidingForcePage.rajpitaName": {
         "page": "guiding-force",
         "section": "Page",
@@ -6382,11 +6362,6 @@
         "section": "Events",
         "label": "Events · New dates will appear here as they are announced."
       },
-      "copy.MosaicChapter.discover": {
-        "page": "home",
-        "section": "Our work",
-        "label": "Our work · Every activity, a story. Select one to discover more."
-      },
       "copy.MosaicOverture.heal": {
         "page": "home",
         "section": "Landing (Four paths. One purpose.)",
@@ -6520,12 +6495,12 @@
       "copy.WelcomeSplashScreen.welcome-seconds": {
         "page": "home",
         "section": "Intro · Welcome page time (seconds)",
-        "label": "Intro · Welcome page time (seconds) · 11"
+        "label": "Intro · Welcome page time (seconds) · 3"
       },
       "copy.WelcomeSplashScreen.mission-seconds": {
         "page": "home",
         "section": "Intro · Mission page time (seconds)",
-        "label": "Intro · Mission page time (seconds) · 34"
+        "label": "Intro · Mission page time (seconds) · 6"
       },
       "copy.WelcomeSplashScreen.welcome-photo-focus": {
         "page": "home",
@@ -8050,7 +8025,7 @@
       "copy.WelcomeSplashScreen.message-seconds": {
         "page": "home",
         "section": "Intro · Message page time (seconds)",
-        "label": "Intro · Message page time (seconds) · 24"
+        "label": "Intro · Message page time (seconds) · 3"
       },
       "copy.WelcomeSplashScreen.message-text": {
         "page": "home",
@@ -8126,6 +8101,21 @@
         "page": "home",
         "section": "Partners",
         "label": "Partners · sncf@nirankarifoundation.org"
+      },
+      "copy.DonationExperience.giftsCaption": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Every gift finds a home."
+      },
+      "copy.WelcomeSplashScreen.message-label": {
+        "page": "home",
+        "section": "Intro · Message page",
+        "label": "Intro · Message page · Satguru's Message"
+      },
+      "copy.WelcomeSplashScreen.message-rail-label": {
+        "page": "home",
+        "section": "Intro · Message page",
+        "label": "Intro · Message page · Message progress"
       }
     },
     "assets": {

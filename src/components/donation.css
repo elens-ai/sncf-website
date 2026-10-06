@@ -1,9 +1,6 @@
 dialog#donate-modal-backdrop { padding: 0; margin: auto; width: min(1120px,calc(100% - 40px)); max-width: none; max-height: calc(100dvh - 40px); border: 1px solid #e4e7da; border-radius: 28px; overflow-y: auto; background: #fbfaf5; color: #244035; box-shadow: 0 35px 120px #00180e66; overscroll-behavior: contain; }
 dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter: blur(7px); }
 #donate-modal-panel { position: relative; width: 100%; }
-.donation-page { padding: 130px max(4%,24px) 56px; position: relative; z-index: 1; background: #f3f4ec; }
-.donation-page > .donation-experience { max-width: 1240px; margin: auto; border: 1px solid #e2e7dd; border-radius: 30px; overflow: hidden; box-shadow: 0 24px 75px #1d45320a; }
-.reading-room:has(.donation-page) > main { display: none; }
 .donation-experience { position: relative; display: grid; grid-template-columns: .9fr 1.1fr; color: #244035; font-family: var(--font-sans); background: #fdfcf8; }
 .donation-experience button, .donation-experience a, .donation-experience summary { -webkit-tap-highlight-color: transparent; }
 .donation-experience :is(button,a,input,textarea,summary):focus-visible { outline: 3px solid var(--give-ink); outline-offset: 4px; }
@@ -21,12 +18,6 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-bloom-orbit { position: absolute; inset: 5%; border-radius: 50%; border: 1px solid #6c92752b; transform: rotate(-25deg) scaleY(.86); }
 .donation-bloom-orbit::before,.donation-bloom-orbit::after { content:''; position:absolute; inset: 6%; border-radius:50%; border:1px dashed #6c927529; }
 .donation-bloom-orbit::after { inset:15%; }
-.donation-petal { position: absolute; width: 42%; height: 51%; border-radius: 90% 10% 80% 18%; left: 29%; top: 4%; transform-origin: 50% 87%; border:1px solid #ffffffe0; box-shadow: inset 5px 4px 11px #ffffffa6,inset -3px -5px 15px #2a5d3310,7px 12px 20px #325c3514; transition: opacity .65s,filter .65s; opacity:.38; }
-.donation-petal[data-selected='true'] { opacity:1; }
-.donation-petal-heal { background:linear-gradient(120deg,#f5ffef,#b0d6b8); transform:rotate(-35deg); }
-.donation-petal-enrich { background:linear-gradient(120deg,#f4fcfd,#2dacc3); transform:rotate(85deg); }
-.donation-petal-empower { background:linear-gradient(120deg,#fff3f4,#e9b5c8); transform:rotate(205deg); }
-.donation-bloom-heart { position:absolute; left:37%; top:37%; width:26%; height:26%; display:grid; place-items:center; border-radius:50%; color:var(--give-ink); background:#fcfcf4; border:1px solid white; box-shadow:0 8px 20px #244f3514; animation:donation-heart-float 5s ease-in-out infinite; }
 .donation-bloom-caption { position:absolute; bottom:0; left:0; right:0; text-align:center; color:#678170; font:400 17px/1.3 var(--font-script); }
 .donation-impact { border-top: 1px solid #759b802f; padding: 23px 0 20px; margin-top:22px; min-height:151px; }
 .donation-impact > div { animation:donation-reveal .45s ease both; }
@@ -98,17 +89,11 @@ dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter:
 .donation-review-offer { font-size:12px; line-height:1.8; color:#536e58; white-space:pre-wrap; overflow-wrap:anywhere; margin-top:12px; }
 .donation-call { display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; min-height:44px; margin-top:18px; font-size:11px; color:var(--give-ink); }
 .donation-back { display:flex; align-items:center; gap:8px; min-height:44px; margin:8px auto 0; font-size:11px; color:#6a7f6d; cursor:pointer; }
-.donation-page-link { display:flex; gap:6px; align-items:center; justify-content:center; min-height:44px; font-size:9px; color:#6b7e6e; margin-top:9px; }
-@keyframes donation-heart-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-5px); } }
 @keyframes donation-reveal { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 @media (max-width:950px) { .donation-story { padding:38px 26px 25px; } .donation-planner { padding:38px 26px 25px; } .donation-stepper { margin-right:26px; gap:6px; font-size:9px; } .donation-story :is(h1,h2) { font-size:40px; } }
-@media (max-width:700px) { dialog#donate-modal-backdrop { width:calc(100% - 20px); max-height:calc(100dvh - 20px); padding:0; border-radius:20px; } .donation-experience { grid-template-columns:1fr; } .donation-story { padding:32px 24px 24px; border-right:0; border-bottom:1px solid #dce5d7; } .donation-story :is(h1,h2) { font-size:42px; max-width:380px; margin:20px 0 16px; } .donation-intro { max-width:400px; font-size:12px; } .donation-bloom { position:absolute; width:190px; right:-45px; top:28px; opacity:.24; pointer-events:none; } .donation-story > :is(h1,h2,p) { z-index:1; } .donation-bloom-caption { display:none; } .donation-impact { min-height:0; margin-top:22px; padding:17px 0 0; } .donation-impact strong { font-size:30px; } .donation-impact strong.donation-impact-purpose { font-size:25px; } .donation-story-foot { display:none; } .donation-planner { padding:26px 24px; } .donation-stepper { margin:0 0 25px; } .donation-planner-title { font-size:23px; } .donation-close { background:#ffffffc9; } .donation-page { padding:100px 12px 30px; } .donation-page > .donation-experience { border-radius:21px; } }
+@media (max-width:700px) { dialog#donate-modal-backdrop { width:calc(100% - 20px); max-height:calc(100dvh - 20px); padding:0; border-radius:20px; } .donation-experience { grid-template-columns:1fr; } .donation-story { padding:32px 24px 24px; border-right:0; border-bottom:1px solid #dce5d7; } .donation-story :is(h1,h2) { font-size:42px; max-width:380px; margin:20px 0 16px; } .donation-intro { max-width:400px; font-size:12px; } .donation-bloom { position:absolute; width:190px; right:-45px; top:28px; opacity:.24; pointer-events:none; } .donation-story > :is(h1,h2,p) { z-index:1; } .donation-bloom-caption { display:none; } .donation-impact { min-height:0; margin-top:22px; padding:17px 0 0; } .donation-impact strong { font-size:30px; } .donation-impact strong.donation-impact-purpose { font-size:25px; } .donation-story-foot { display:none; } .donation-planner { padding:26px 24px; } .donation-stepper { margin:0 0 25px; } .donation-planner-title { font-size:23px; } .donation-close { background:#ffffffc9; } }
 @media (max-width:380px) { .donation-story,.donation-planner { padding-inline:19px; } .donation-field legend small { float:none; display:block; margin:6px 0 0; } .donation-causes { gap:6px; } .donation-causes label > span { padding:10px 8px; gap:7px; font-size:10px; } .donation-amounts { gap:5px; } .donation-amounts button { font-size:10px; } }
 @media (prefers-reduced-motion:reduce) { .donation-experience * { animation:none!important; transition:none!important; } }
-html[data-background-paused='true'] .donation-page .donation-bloom-heart { animation-play-state:paused; }
-.donation-page[data-motion='paused'] .donation-bloom-heart { animation-play-state:paused; }
-
-.donation-experience[data-active="false"] .donation-bloom-heart { animation-play-state: paused; }
 
 /* ==========================================================================
    MODAL FIT — the contribution planner fits the screen without scrolling
@@ -146,7 +131,6 @@ html[data-background-paused='true'] .donation-page .donation-bloom-heart { anima
 
 #donate-modal-panel .donation-practical { position: relative; margin-top: calc(24 * var(--k)); padding-top: calc(14 * var(--k)); }
 #donate-modal-panel .donation-practical-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; column-gap: 12px; margin-bottom: calc(2 * var(--k)); }
-#donate-modal-panel .donation-practical-head .donation-page-link { margin: 0 0 0 auto; min-height: 32px; }
 #donate-modal-panel .donation-faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
 #donate-modal-panel .donation-practical summary { min-height: max(38px, calc(46 * var(--k))); padding-block: calc(8 * var(--k)); }
 #donate-modal-panel .donation-practical details[open] summary { color: var(--give-ink); font-weight: 600; }
@@ -185,7 +169,6 @@ html[data-background-paused='true'] .donation-page .donation-bloom-heart { anima
   #donate-modal-panel .donation-offer textarea { min-height: 0; height: 56px; }
   #donate-modal-panel .donation-primary { min-height: 42px; }
   #donate-modal-panel .donation-practical { margin-top: calc(18 * var(--k)); padding-top: calc(10 * var(--k)); }
-  #donate-modal-panel .donation-practical-head .donation-page-link { min-height: 24px; }
   #donate-modal-panel .donation-practical summary { min-height: 32px; padding-block: 5px; }
   #donate-modal-panel [data-kind='time'] .donation-practical { display: none; }
 }
@@ -239,7 +222,6 @@ html[data-background-paused='true'] .donation-page .donation-bloom-heart { anima
   #donate-modal-panel .donation-kind label > span { min-height: 36px; }
   #donate-modal-panel .donation-offer textarea { min-height: 0; height: 52px; padding-block: 8px; }
   #donate-modal-panel .donation-practical { margin-top: max(8px, calc(12 * var(--k))); padding-top: max(6px, calc(8 * var(--k))); }
-  #donate-modal-panel .donation-practical-head .donation-page-link { min-height: 26px; }
   #donate-modal-panel .donation-faq { column-gap: 14px; }
   #donate-modal-panel .donation-practical summary { min-height: 40px; padding-block: 4px; font-size: 10.5px; line-height: 1.35; }
   #donate-modal-panel [data-kind='time'] .donation-practical { display: none; }
@@ -265,3 +247,44 @@ html[data-background-paused='true'] .donation-page .donation-bloom-heart { anima
   #donate-modal-panel [data-kind='time'] :is(.donation-donors, .donation-causes) label > span { min-height: 40px; }
 }
 @media (prefers-reduced-motion: reduce) { #donate-modal-panel .donation-experience { transition: none; } }
+
+/* THE GIFT, PICTURED (DonationGifts.tsx): a glass jar for a financial gift,
+   an open box for any other way to give, what is given gathered round it and
+   going into it one after another, and the heart on its front filling a step
+   with each. The one chosen rises in as the other sinks away; each is held
+   still while it is away, and both while the planner is out of view. */
+.donation-gifts { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; color: var(--give-ink); opacity: 0; translate: 0 12px; scale: .94; pointer-events: none; transition: opacity .5s ease, translate .7s cubic-bezier(.2,.7,.2,1), scale .7s cubic-bezier(.2,.7,.2,1); }
+.donation-experience[data-kind='gift'] .donation-gifts[data-vessel='jar'],
+.donation-experience[data-kind='time'] .donation-gifts[data-vessel='box'] { opacity: 1; translate: 0 0; scale: 1; transition-delay: .15s; }
+/* each gift fades in where it waits, hovers a moment, then swoops to the vessel (sideways quickly, falling ever faster,
+   so it travels on a curve) and drops in out of sight; one goes in every 1.1s, each its turn, then a beat's rest */
+.donation-gifts .gift-flow { animation: gift-flow-x var(--dur) linear var(--delay) infinite; }
+.donation-gifts .gift-flow > g { transform-box: fill-box; transform-origin: center; animation: gift-flow-y var(--dur) linear var(--delay) infinite; }
+@keyframes gift-flow-x { 0%, 52% { transform: translateX(0); animation-timing-function: cubic-bezier(.2,.6,.3,1); } 100% { transform: translateX(var(--dx)); } }
+@keyframes gift-flow-y {
+  0% { transform: translateY(-8px) rotate(0deg); opacity: 0; animation-timing-function: ease-out; }
+  10% { transform: translateY(0) rotate(0deg); opacity: 1; animation-timing-function: ease-in-out; }
+  31% { transform: translateY(-4px) rotate(0deg); animation-timing-function: ease-in-out; }
+  52% { transform: translateY(0) rotate(0deg); animation-timing-function: cubic-bezier(.55,0,.85,.4); }
+  92% { opacity: 1; }
+  100% { transform: translateY(var(--dy)) rotate(var(--spin)); opacity: 0; }
+}
+/* the heart hanging from the jar's ribbon sways from its knot */
+.donation-gifts .gift-charm { transform-box: view-box; transform-origin: 160px 159.6px; animation: gift-charm 2.4s ease-in-out infinite alternate; }
+@keyframes gift-charm { from { rotate: -6deg; } to { rotate: 6deg; } }
+/* a coin turns over twice on its way in (timed to its flight) */
+.donation-gifts .gift-flip { transform-box: fill-box; transform-origin: center; animation: gift-flip var(--dur) linear var(--delay) infinite; }
+@keyframes gift-flip { 0%, 56% { transform: scaleX(1); } 66% { transform: scaleX(.12); } 76% { transform: scaleX(1); } 86% { transform: scaleX(.12); } 96%, 100% { transform: scaleX(1); } }
+/* the heart's medallion (centred on 160, 222) beats as each gift goes in, and its level rises a step with each (the
+   round's keyframes are drawn with the picture), its surface rocking as it does; the sparkles turn up and fade */
+.donation-gifts :is(.gift-heart, .gift-glow) { transform-box: view-box; transform-origin: 160px 222px; }
+.donation-gifts .gift-heart { animation: gift-heart 1.1s ease-in-out infinite; }
+@keyframes gift-heart { 0%, 100% { scale: 1; } 40% { scale: 1.07; } }
+.donation-gifts .gift-wave { animation: gift-wave 1.8s linear infinite; }
+.donation-gifts .gift-wave-back { animation-duration: 2.8s; animation-direction: reverse; }
+@keyframes gift-wave { to { transform: translateX(-14px); } }
+.donation-gifts .gift-spark { transform-box: fill-box; transform-origin: center; animation: gift-twinkle 2.6s ease-in-out calc(var(--i) * -.65s) infinite; }
+@keyframes gift-twinkle { 0%, 100% { opacity: .35; scale: .7; } 50% { opacity: 1; scale: 1.1; } }
+.donation-experience:not([data-kind='gift']) .donation-gifts[data-vessel='jar'] *,
+.donation-experience:not([data-kind='time']) .donation-gifts[data-vessel='box'] *,
+.donation-experience[data-active='false'] .donation-gifts * { animation-play-state: paused; }

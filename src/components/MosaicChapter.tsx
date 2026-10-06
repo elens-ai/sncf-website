@@ -176,9 +176,6 @@ export const MosaicChapter = React.memo(function MosaicChapter({
         </ul>
       </div>
 
-      <footer className="activity-chapter-footer">
-        <span><span className="activity-live-dot" aria-hidden="true" />{getCMSCopy('copy.MosaicChapter.discover', 'Every activity, a story. Select one to discover more.')}<ArrowUpRight size={13} aria-hidden="true" /></span>
-      </footer>
     </article>
   );
 });

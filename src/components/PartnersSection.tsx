@@ -106,13 +106,13 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({ escapeSuspende
 
   return <section ref={sectionRef} id="partners-section" className="collaboration-section" data-arrived={shown} data-active={inView} aria-label="Partners and CSR collaboration">
     <div className="continuity-art" aria-hidden="true"><i /><i /><span /></div>
-    <div className="collaboration-heading">
-      <div><p className="continuity-eyebrow"><span />{getCMSCopy('copy.PartnersSection.2e9686b783ba', 'Partnerships · CSR · Walking together')}</p>
-        <h2>Together, <em>we make more possible.</em></h2>
-      </div>
-    </div>
     <div className="collaboration-layout">
+      {/* the heading, the introduction, the partner being told and the invitation: one block beside the circle */}
       <div className="collaboration-editorial">
+        <div className="collaboration-heading">
+          <p className="continuity-eyebrow"><span />{getCMSCopy('copy.PartnersSection.2e9686b783ba', 'Partnerships · CSR · Walking together')}</p>
+          <h2>Together, <em>we make more possible.</em></h2>
+        </div>
         <p className="collaboration-intro">{getCMSCopy('copy.PartnersSection.intro', 'Working alongside organisations that share our commitment to people, communities and the planet.')}</p>
         {/* the partner being told: its cornerstone, what was done together, and its website. Every partner's words lie
             in the same place, unseen but the one being told, so the card is as tall as the longest and nothing around
@@ -141,7 +141,6 @@ export const PartnersSection: React.FC<PartnersSectionProps> = ({ escapeSuspende
         <p className="collaboration-join-note">There is a place for your organisation here.</p>
       </div>
       <div className="collaboration-directory">
-        <p className="collaboration-directory-label"><span>Select a logo to explore</span></p>
         {/* the partners around the foundation, by the cornerstone they served; its empty seat is the invitation */}
         <PartnerCircle partners={PARTNERS} shown={selected?.id} pinned={pinned} onChoose={choose} onHover={hover} onJoin={revealDesk} />
       </div>
