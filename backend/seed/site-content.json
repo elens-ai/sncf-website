@@ -2925,7 +2925,7 @@
     "copy.ProjectsPage.b6baff9358dd": "Land",
     "copy.ProjectsPage.c864f329f5dd": "Communities",
     "copy.ProjectsPage.982a72dda0d4": "Service that takes shape",
-    "copy.ProjectsPage.988b94ac8a81": "Built for people.",
+    "copy.ProjectsPage.988b94ac8a81": "Built for people,",
     "copy.ProjectsPage.27f463b7e8ab": "Rooted in purpose.",
     "copy.ProjectsPage.d90ca7d5eb20": "From reviving water bodies to growing forests and supporting villages, discover how our values become lasting projects.",
     "copy.ProjectsPage.1102171bd1b3": "Explore our projects ",
@@ -3164,11 +3164,6 @@
     "copy.EventsJournal.previous": "Previous event",
     "copy.EventsJournal.next": "Next event",
     "copy.ImpactMosaic.3b73900b8d29": "Explore",
-    "copy.ImpactMosaic.fc967e87a6e8": "Our work",
-    "copy.MosaicTile.6e941a57fcb6": "Photograph to follow",
-    "copy.MosaicTile.5e18f08027f3": "Foundation photograph",
-    "copy.MosaicTile.f6bd5e33b6e7": "Illustrative photograph",
-    "copy.MosaicTile.3b73900b8d29": "Explore",
     "copy.EventsJournal.passOpen": "Open the invitation",
     "copy.EventsJournal.invite": "View invitation",
     "copy.ValueAnalytics.programme": "See the programme",
@@ -3447,8 +3442,6 @@
     "copy.ProjectOrbit.signature": "One purpose.",
     "copy.ProjectOrbit.signature-script": "lasting impact",
     "copy.ProjectOrbit.label": "The projects",
-    "copy.ProjectsPage.cover-hc-line": "A charitable hospital, its OPD now open.",
-    "copy.ProjectsPage.cover-reports": "Read the reports",
     "copy.ProjectsPage.cover-goals": "Advancing",
     "copy.ProjectsPage.cover-goals-of": "UN Global Goals",
     "copy.ProjectsPage.cover-impact": "Each project’s reported reach",
@@ -3606,7 +3599,9 @@
     "copy.PartnersSection.partner-email": "sncf@nirankarifoundation.org",
     "copy.DonationExperience.giftsCaption": "Every gift finds a home.",
     "copy.WelcomeSplashScreen.message-label": "Satguru's Message",
-    "copy.WelcomeSplashScreen.message-rail-label": "Message progress"
+    "copy.WelcomeSplashScreen.message-rail-label": "Message progress",
+    "copy.Sayings.vann-cover": "We Live, if Nature Lives",
+    "copy.Sayings.watershed-cover-hindi": "प्रदूषण अंदर हो या बाहर, दोनों ही हानिकारक हैं"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -4710,7 +4705,7 @@
       "copy.ProjectsPage.988b94ac8a81": {
         "page": "projects",
         "section": "Page",
-        "label": "Page · Built for people."
+        "label": "Page · Built for people,"
       },
       "copy.ProjectsPage.27f463b7e8ab": {
         "page": "projects",
@@ -5898,31 +5893,6 @@
         "label": "Events · Next event"
       },
       "copy.ImpactMosaic.3b73900b8d29": {
-        "page": "home",
-        "section": "Our work",
-        "label": "Our work · Explore"
-      },
-      "copy.ImpactMosaic.fc967e87a6e8": {
-        "page": "home",
-        "section": "Our work",
-        "label": "Our work · Our work"
-      },
-      "copy.MosaicTile.6e941a57fcb6": {
-        "page": "home",
-        "section": "Our work",
-        "label": "Our work · Photograph to follow"
-      },
-      "copy.MosaicTile.5e18f08027f3": {
-        "page": "home",
-        "section": "Our work",
-        "label": "Our work · Foundation photograph"
-      },
-      "copy.MosaicTile.f6bd5e33b6e7": {
-        "page": "home",
-        "section": "Our work",
-        "label": "Our work · Illustrative photograph"
-      },
-      "copy.MosaicTile.3b73900b8d29": {
         "page": "home",
         "section": "Our work",
         "label": "Our work · Explore"
@@ -7317,16 +7287,6 @@
         "section": "Page",
         "label": "Page · The projects"
       },
-      "copy.ProjectsPage.cover-hc-line": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · A charitable hospital, its OPD now open."
-      },
-      "copy.ProjectsPage.cover-reports": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Read the reports"
-      },
       "copy.ProjectsPage.cover-goals": {
         "page": "projects",
         "section": "Page",
@@ -8116,6 +8076,16 @@
         "page": "home",
         "section": "Intro · Message page",
         "label": "Intro · Message page · Message progress"
+      },
+      "copy.Sayings.vann-cover": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · We Live, if Nature Lives"
+      },
+      "copy.Sayings.watershed-cover-hindi": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · प्रदूषण अंदर हो या बाहर, दोनों ही हानिकारक हैं"
       }
     },
     "assets": {
@@ -8489,12 +8459,6 @@
       "order": 1,
       "options": {},
       "label": "Home · Hero"
-    },
-    "home.mosaic": {
-      "enabled": true,
-      "order": 2,
-      "options": {},
-      "label": "Home · Our work (Living Mosaic)"
     },
     "home.events": {
       "enabled": true,

@@ -4,8 +4,11 @@ import { CMSSection, useCMSRevision } from '../cms/CMSContentProvider';
 import { getCMSLink } from '../cms/links';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, CalendarDays, Droplets, Trees, Mountain, House, Hospital } from 'lucide-react';
+import { ArrowDown, CalendarDays, Droplets, Trees, Mountain, House, Hospital } from 'lucide-react';
+import { useReducedMotion } from 'motion/react';
 import { PageShell } from '../components/PageShell';
+import { MosaicWaves, type WaveInput } from '../components/MosaicWaves';
+import { PillarArtwork } from '../components/PillarArtwork';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { PillarModelCard } from '../components/PillarModelCard';
 import { ProjectAnalytics } from '../components/ProjectAnalytics';
@@ -17,9 +20,11 @@ import { ExploreTabs, type ExploreTab } from '../components/ExploreTabs';
 import { ReportActions } from '../components/ReportActions';
 import { PillarGallery } from '../components/PillarGallery';
 import { SdgTags, UnSeal } from '../components/UnAffiliation';
-import { Saying, hasSaying } from '../components/Saying';
+import { Saying, hasSaying, type SayingId } from '../components/Saying';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ACTIVITIES, type Activity } from '../data/activities';
+import { PILLARS } from '../data/pillars';
+import { subjectFor } from '../utils/waves';
 import { MEDIA } from '../data/media';
 import { PAVILION_GALLERY, roomPhotoFor } from '../data/pavilionGallery';
 import { PROGRAMME_SDGS, SDGS, goalsOf } from '../data/sdgs';
@@ -38,61 +43,61 @@ const inkStyle = (i: number) => ({ '--project-ink': FACES[i % FACES.length].ink,
 /* a project's name on the cover: Amrit, Oneness Vann, Watershed, Adopted Villages */
 const shortName = (project: Activity) => project.title.replace(/^Project /, '').replace(/ Programme$/, '');
 
-/** The cover: every project as a legend beside the orbit, where pointing at
-    one (or reaching it by keyboard) turns the orbit to it and holds it there,
-    and choosing it goes to its chapter. Beneath the orbit, the voice of the
-    project in view; at the foot, the foundation's UN standing, the UN goals
-    the projects advance, and each project's headline figure, opening its Stats. */
+/* beneath the orbit the projects speak in short lines (their chapters below give the sayings in
+   full): Project Amrit's slogan without its source, Oneness Vann's own line, the watershed's
+   saying in Hindi, and the villages' line without its meaning or source */
+const COVER_SAYINGS: Record<string, { id: SayingId; meaning?: boolean; byline?: boolean }> = {
+  'project-amrit': { id: 'project-amrit', byline: false },
+  'oneness-vann': { id: 'oneness-vann-cover', byline: false },
+  watershed: { id: 'watershed-cover', meaning: false },
+  'adopted-villages': { id: 'adopted-villages', meaning: false, byline: false },
+};
+
+/** The cover, on the projects' own ground as the home page showed it (the
+    projects' teal under the page's deep wash, the waves the chapters swim in,
+    and the projects' drawings): the words and the way on to the projects,
+    beside the orbit, where every project is a moon and choosing one goes to
+    its chapter. Beneath the orbit, the voice of the project in view; at the
+    foot, the foundation's UN standing, the UN goals the projects advance, and
+    each project's headline figure, opening its Stats. */
 const ProjectsCover: React.FC = () => {
   useCMSRevision();
   const root = useRef<HTMLElement>(null);
   const active = useSectionActivity(root);
+  const calm = useReducedMotion() ?? false;
+  const waveInput = useRef<WaveInput>({ travel: 0.5 });
   const [choice, setChoice] = useState(0);
-  const [pointing, setPointing] = useState(false);
-  const [focused, setFocused] = useState(false);
   const projects = getProjects();
+  const ground = PILLARS.find(pillar => pillar.id === 'projects');
   const ways = [
     ...projects.map((project, i) => {
       const face = FACES[i % FACES.length];
-      return { id: project.id, name: shortName(project), href: `#${slug(project.title)}`, ink: face.ink, light: face.light, icon: face.icon, photo: project.images?.[0]?.src ?? project.cardPhoto?.src, line: face.line };
+      /* on its moon Amrit goes by its full name, Project Amrit */
+      return { id: project.id, name: project.id === 'project-amrit' ? project.title : shortName(project), href: `#${slug(project.title)}`, ink: face.ink, light: face.light, icon: face.icon, photo: project.images?.[0]?.src ?? project.cardPhoto?.src };
     }),
     { id: 'health-city', name: getCMSCopy("copy.ProjectsPage.7560b5b78854", "Health City"), href: '#health-city', ink: '#0d6a8c', light: '#b8daed', icon: Hospital,
-      photo: resolveCMSAsset("asset.ProjectsPage.healthCity", "/images/projects/health-city.webp"), line: getCMSCopy("copy.ProjectsPage.cover-hc-line", "A charitable hospital, its OPD now open.") },
+      photo: resolveCMSAsset("asset.ProjectsPage.healthCity", "/images/projects/health-city.webp") },
   ];
   const current = ways[choice] ?? ways[0];
   const goals = goalsOf(projects.map(project => project.id));
-  return <section ref={root} className="projects-cover" data-active={active} style={{ '--cover-ink': current.ink, '--cover-light': current.light } as React.CSSProperties} aria-labelledby="projects-heading">
+  return <section ref={root} className="projects-cover" data-active={active} style={{ '--cover-ink': current.ink, '--cover-light': current.light, '--ground-a': ground?.accentA, '--ground-b': ground?.accentB } as React.CSSProperties} aria-labelledby="projects-heading">
+    <div className="projects-cover-ground" aria-hidden="true">
+      {ground && <MosaicWaves subject={subjectFor(ground)} active={active && !calm} input={waveInput} scale={3} fps={24} />}
+      <PillarArtwork pillarId="projects" />
+    </div>
     <div className="projects-cover-copy">
       <p className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.982a72dda0d4", "Service that takes shape")}</p>
-      <h1 id="projects-heading">{getCMSCopy("copy.ProjectsPage.988b94ac8a81", "Built for people.")}<br /><em>{getCMSCopy("copy.ProjectsPage.27f463b7e8ab", "Rooted in purpose.")}</em></h1>
+      <h1 id="projects-heading">{getCMSCopy("copy.ProjectsPage.988b94ac8a81", "Built for people,")}<br /><em>{getCMSCopy("copy.ProjectsPage.27f463b7e8ab", "Rooted in purpose.")}</em></h1>
       <p className="projects-cover-lede">{getCMSCopy("copy.ProjectsPage.d90ca7d5eb20", "From reviving water bodies to growing forests and supporting villages, discover how our values become lasting projects.")}</p>
-      <ul className="projects-cover-ways"
-        onPointerEnter={() => setPointing(true)} onPointerLeave={() => setPointing(false)}
-        onFocus={() => setFocused(true)}
-        onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}>
-        {ways.map((way, i) => {
-          const Icon = way.icon;
-          return <li key={way.id}>
-            <a href={way.href} data-active={choice === i} style={{ '--way-ink': way.ink, '--way-light': way.light } as React.CSSProperties}
-              onPointerEnter={() => setChoice(i)} onFocus={() => setChoice(i)}>
-              <span className="projects-cover-way-icon" aria-hidden="true"><Icon size={17} strokeWidth={1.7} /></span>
-              <span className="projects-cover-way-name">{way.name}</span>
-              <span className="projects-cover-way-text">{way.line}</span>
-              <ArrowDown className="projects-cover-way-arrow" size={16} aria-hidden="true" />
-            </a>
-          </li>;
-        })}
-      </ul>
       <div className="projects-cover-actions">
-        <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#projects-directory")} className="projects-cover-cta">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={16} aria-hidden="true" /></a>
-        <a className="projects-cover-link" href={`#${slug(projects[0]?.title ?? '')}-reports`}>{getCMSCopy("copy.ProjectsPage.cover-reports", "Read the reports")}<ArrowUpRight size={15} aria-hidden="true" /></a>
+        <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#projects-directory")} className="projects-cover-cta">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={15} aria-hidden="true" /></a>
       </div>
     </div>
     {/* the orbit, and beneath it the voice of the project in view */}
     <div className="projects-cover-stage">
-      <ProjectOrbit projects={ways} choice={choice} onChange={setChoice} active={active} held={pointing || focused} />
+      <ProjectOrbit projects={ways} choice={choice} onChange={setChoice} active={active} />
       <div className="projects-cover-voice">
-        {hasSaying(current.id) ? <Saying key={current.id} id={current.id} className="projects-cover-saying" />
+        {hasSaying(current.id) ? <Saying key={current.id} id={current.id} className="projects-cover-saying" {...COVER_SAYINGS[current.id]} />
           : <p key={current.id} className="projects-cover-status"><i aria-hidden="true" />{getCMSCopy("copy.ProjectsPage.hcBadge", "OPD services started")} · {getCMSCopy("copy.ProjectsPage.hcChip3", "North Delhi")}</p>}
       </div>
     </div>

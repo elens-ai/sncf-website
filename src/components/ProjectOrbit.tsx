@@ -27,10 +27,8 @@ export interface OrbitProject {
     the orbit is in view; pointing at a project (or reaching it by keyboard)
     brings it into view and holds it there, and choosing it goes to its
     chapter. */
-export function ProjectOrbit({ projects, choice, onChange, active, held = false }: {
+export function ProjectOrbit({ projects, choice, onChange, active }: {
   projects: OrbitProject[]; choice: number; onChange: (index: number) => void; active: boolean;
-  /** Stops the turning while the visitor is choosing a project from outside it. */
-  held?: boolean;
 }) {
   const n = projects.length;
   const [reduced, setReduced] = useState(false);
@@ -45,10 +43,10 @@ export function ProjectOrbit({ projects, choice, onChange, active, held = false 
     return () => query.removeEventListener('change', sync);
   }, []);
   useEffect(() => {
-    if (!active || reduced || held || over || n < 2) return;
+    if (!active || reduced || over || n < 2) return;
     const timer = window.setTimeout(() => onChange((choice + 1) % n), 4800);
     return () => clearTimeout(timer);
-  }, [active, reduced, held, over, choice, n, onChange]);
+  }, [active, reduced, over, choice, n, onChange]);
   /* the needle turns the short way round to the project in view */
   const turn = useRef(choice * 360 / n);
   turn.current += ((choice * 360 / n - turn.current) % 360 + 540) % 360 - 180;
@@ -75,11 +73,11 @@ export function ProjectOrbit({ projects, choice, onChange, active, held = false 
         onPointerEnter={() => setOver(true)} onPointerLeave={() => setOver(false)}
         onFocus={() => setOver(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOver(false); }}>
         {projects.map((project, i) => {
-          /* evenly round the face, the first at the top */
+          /* evenly round the face, the first at the top, a little out beyond its rim so the large moons keep clear of the centre */
           const angle = (i / n) * Math.PI * 2;
           const Icon = project.icon;
           return <li key={project.id} style={{
-            '--x': `${50 + 39 * Math.sin(angle)}%`, '--y': `${52.5 - 40.5 * Math.cos(angle)}%`,
+            '--x': `${50 + 41 * Math.sin(angle)}%`, '--y': `${52.5 - 42.5 * Math.cos(angle)}%`,
             '--node-ink': project.ink, '--node-light': project.light,
           } as React.CSSProperties}>
             <a className="project-orbit-node" href={project.href} data-active={i === choice} aria-current={i === choice || undefined}

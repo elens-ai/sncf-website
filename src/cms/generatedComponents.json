@@ -17,12 +17,6 @@
     "options": {},
     "label": "Home · Hero"
   },
-  "home.mosaic": {
-    "enabled": true,
-    "order": 2,
-    "options": {},
-    "label": "Home · Our work (Living Mosaic)"
-  },
   "home.events": {
     "enabled": true,
     "order": 3,

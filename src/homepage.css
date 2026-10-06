@@ -17,6 +17,10 @@
   --home-paper: #f4f1e9;
   --home-line: rgb(255 255 255 / .16);
   --home-ease: cubic-bezier(.22, 1, .36, 1);
+  /* the shore: the band under the landing where its ground meets the water,
+     which the hall's backdrops reach up beneath (home-landing.css,
+     pillar-background.css) */
+  --shore-band: clamp(120px, 18vh, 220px);
 }
 /* The ink and tint mixed from the page's accent, worked out on the things that
    use them (the header, the social rail, the hall, a focused control) rather
@@ -55,11 +59,10 @@
    pulled the scroll back mid-way, turning the page back and forth. */
 .hero-track { position: relative; z-index: 10; flex: none; height: calc(var(--hero-height, 100vh) + (var(--hero-count, 4) - 1) * 100vh); }
 .hero-track > #hero-clone-stage { position: sticky; top: var(--hero-sticky-top, 0px); }
-/* THE HALL'S PAGES TURN LIKE THE EXPLORE PAGES (HeroSection): the page in view
-   leaves upwards, fading and settling back a little, while the next rises from
-   below into its place: the motion, timing and ease of .mosaic-chapter's states
-   (impact-mosaic.css). A view transition draws the two pages at once; it is
-   named only while turning, and nothing else on the page is animated by it. */
+/* THE HALL'S PAGES TURN (HeroSection): the page in view leaves upwards, fading
+   and settling back a little, while the next rises from below into its place.
+   A view transition draws the two pages at once; it is named only while
+   turning, and nothing else on the page is animated by it. */
 html.hero-turning .hero-track #hero-foreground-content { view-transition-name: hero-page; }
 /* behind the turning hall the page is just the live page: the page itself is
    not captured (a snapshot of the whole screen, taken twice and drawn through

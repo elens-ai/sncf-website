@@ -81,6 +81,28 @@
 .home-page .hero-track > #hero-clone-stage > :is(.hero-studio-arc, .hero-activity-art) {
   mask-image: linear-gradient(180deg, transparent 0, #000 var(--top-soft));
 }
+/* THE HALL REACHES UP UNDER THE SHORE (the wide layout; on phones and tall
+   screens its photograph sits well down the page). The landing is drawn over
+   the hall (home-landing.css), so the hall's backdrops, its photograph and
+   sweeping sheets, run on up beneath the landing's shore band: above the
+   sand's wavy edge the ground covers them, below it they show under the
+   water, so the picture begins at the waves and follows their line. The hall
+   still clips everything else at its top edge, and on every other side. The
+   backdrops' box grows upward by the band; the sheets, the echo, the dots and
+   the feathering at the foot are moved back by as much, so the hall itself
+   looks just as it did (only the photograph, covering a taller box, is drawn
+   a little larger). */
+@media (min-width: 640px) and (orientation: landscape) and (min-height: 481px), (min-width: 1024px) and (orientation: portrait) {
+  .home-page .hero-track > #hero-clone-stage { overflow: visible; clip-path: inset(calc(-1 * var(--shore-band)) 0 0 0); }
+  .home-page .hero-track > #hero-clone-stage > .hero-backdrops { top: calc(-1 * var(--shore-band)); }
+  .home-page .hero-track > #hero-clone-stage > .hero-backdrops > .heal-layered-backdrop {
+    mask-image: linear-gradient(180deg, transparent 0, #000 var(--top-soft), #000 calc(var(--shore-band) + (100% - var(--shore-band)) * 0.45), #000d calc(var(--shore-band) + (100% - var(--shore-band)) * 0.65), #0005 calc(var(--shore-band) + (100% - var(--shore-band)) * 0.85), transparent 100%);
+  }
+  .home-page .hero-track > #hero-clone-stage .heal-layered-backdrop > i { top: calc(-37vw + var(--shore-band)); }
+  .home-page .hero-track > #hero-clone-stage .heal-layered-backdrop > i:nth-of-type(2) { top: calc(-32vw + var(--shore-band)); }
+  .home-page .hero-track > #hero-clone-stage .pillar-backdrop-echo { top: calc(var(--shore-band) + (100% - var(--shore-band)) * -0.09); }
+  .home-page .hero-track > #hero-clone-stage .pillar-backdrop-dots { top: var(--shore-band); }
+}
 @media (max-width: 899px) {
   .home-page > .accent-canvas {
     background: linear-gradient(calc(var(--stage-angle, 135deg) + 25deg), var(--backdrop-dark), var(--backdrop-mid) 52%, var(--backdrop-light));

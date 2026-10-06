@@ -57,40 +57,45 @@
 /* a project's Reports: the dossier (programme-dossier.css) in the project's own colours */
 .project-reports{--value-color:var(--project-ink);--value-light:var(--project-light);display:grid;gap:18px}.project-sdgs{margin-top:20px}
 
-/* ----- The cover (ProjectsCover): the projects as a legend beside the orbit
-   (ProjectOrbit), the voice of the project in view beneath it, and at the
-   foot the UN standing and each project's reported reach. Its tint follows
-   the project in view; registered, so it blends rather than jumps. ----- */
+/* ----- The cover (ProjectsCover): on the projects' own ground, the words and
+   the way on beside the orbit (ProjectOrbit), the voice of the project in
+   view beneath it, and at the foot the UN standing and each project's
+   reported reach. Its tint follows the project in view; registered, so it
+   blends rather than jumps. ----- */
 @property --cover-ink { syntax: '<color>'; inherits: true; initial-value: #087d8b; }
 @property --cover-light { syntax: '<color>'; inherits: true; initial-value: #bce7e5; }
-.projects-cover { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: 24px clamp(32px, 5vw, 96px); padding: 145px max(7%, 28px) 0; overflow: hidden; color: #203c38; background: radial-gradient(ellipse 48% 62% at 70% 46%, color-mix(in srgb, var(--cover-light) 34%, #f8f6ef), transparent 72%), radial-gradient(ellipse 42% 56% at 24% 56%, color-mix(in srgb, var(--cover-light) 12%, #f8f6ef), transparent 70%), #f8f6ef; transition: --cover-ink 0.8s ease, --cover-light 0.8s ease; }
+.projects-cover { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: 24px clamp(32px, 5vw, 96px); padding: 145px max(7%, 28px) 0; overflow: hidden; color: #fff; transition: --cover-ink 0.8s ease, --cover-light 0.8s ease; }
+/* THE GROUND, as the home page showed the projects: their pillar's teal
+   (--ground-a/-b) under the page's deep wash, a little shade at either side,
+   the waves the chapters swim in over it, and the projects' drawings, faint */
+.projects-cover-ground {
+  position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  background: linear-gradient(90deg, #071e2938, transparent 38%, transparent 62%, #071e2938), linear-gradient(90deg, #031b1840, #03151f99), linear-gradient(135deg, var(--ground-a, #0d6a8c), var(--ground-b, #6ac8ed));
+}
+.projects-cover-ground > .mosaic-waves { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 900ms ease; }
+.projects-cover-ground > .mosaic-waves[data-ready='true'] { opacity: 1; }
+.projects-cover-ground > .pillar-artwork { opacity: 0.3; }
+@media (forced-colors: active), (prefers-contrast: more) { .projects-cover-ground > .mosaic-waves { display: none; } }
 .projects-cover-copy { min-width: 0; align-self: center; padding: 28px 0 50px; }
-.projects-cover h1 { margin: 22px 0 16px; font: 800 clamp(36px, 4.4vw, 66px)/1.06 var(--font-heading); letter-spacing: 0; text-wrap: balance; }
-.projects-cover h1 em { font-weight: 700; font-size: 1.2em; letter-spacing: -0.02em; color: color-mix(in srgb, var(--cover-ink) 86%, #0d2421); }
-.projects-cover-lede { max-width: 500px; margin: 0 0 16px; font-size: 15px; line-height: 1.75; color: #567076; }
-/* the projects, a legend for the orbit: icon, name and line in each project's ink, the one in view lifted */
-.projects-cover-ways { display: grid; gap: 3px; max-width: 520px; margin: 0 0 0 -12px; padding: 0; list-style: none; }
-.projects-cover-ways a { --way-type: color-mix(in srgb, var(--way-ink) 76%, #0d2421); display: grid; grid-template-columns: 34px 136px minmax(0, 1fr) 16px; grid-template-areas: 'icon name text arrow'; align-items: center; column-gap: 12px; padding: 6px 14px 6px 12px; border-radius: 16px; color: #2b4540; transition: background-color 0.4s, box-shadow 0.4s, color 0.4s; }
-.projects-cover-way-icon { grid-area: icon; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--way-type); background: color-mix(in srgb, var(--way-light) 30%, #fff); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--way-ink) 18%, transparent); transition: background-color 0.4s, color 0.4s; }
-.projects-cover-way-name { grid-area: name; font: 700 10.5px/1.25 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--way-type); }
-.projects-cover-way-text { grid-area: text; font: 400 15px/1.45 var(--font-sans); }
-.projects-cover-way-arrow { grid-area: arrow; color: var(--way-type); opacity: 0; translate: 0 -4px; transition: opacity 0.3s, translate 0.3s; }
-.projects-cover-ways a[data-active='true'] { color: #17302b; background: color-mix(in srgb, var(--way-light) 22%, #fffdf9); box-shadow: 0 12px 24px -18px color-mix(in srgb, var(--way-ink) 60%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--way-ink) 14%, transparent); }
-.projects-cover-ways a[data-active='true'] .projects-cover-way-icon { background: var(--way-ink); color: #fff; }
-.projects-cover-ways a:is(:hover, :focus-visible) .projects-cover-way-arrow { opacity: 1; translate: 0 0; }
-@media (hover: none) { .projects-cover-way-arrow { opacity: 0.6; translate: 0 0; } }
-/* the way on: down to the projects, or straight to a report */
+.projects-cover .project-eyebrow { color: rgb(255 255 255 / 0.74); }
+.projects-cover h1 { margin: 22px 0 16px; font: 800 clamp(36px, 4.4vw, 66px)/1.06 var(--font-heading); letter-spacing: 0; text-wrap: balance; text-shadow: 0 1px 24px rgb(0 0 0 / 0.25); }
+.projects-cover h1 em { font-weight: 700; font-size: 1.2em; letter-spacing: -0.02em; color: color-mix(in srgb, var(--cover-light) 70%, #fff); }
+.projects-cover-lede { max-width: 500px; margin: 0 0 16px; font-size: 15px; line-height: 1.75; color: rgb(255 255 255 / 0.82); }
+/* the way on: down to the projects */
 .projects-cover-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 24px; }
-.projects-cover-cta { display: inline-flex; align-items: center; gap: 12px; padding: 15px 22px 15px 24px; border-radius: 999px; background: #203c38; color: #fff; font: 600 14px/1 var(--font-sans); letter-spacing: 0.01em; box-shadow: 0 14px 26px -16px #203c38; transition: background-color 0.3s, translate 0.3s, box-shadow 0.3s; }
+.projects-cover-cta { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, currentColor 40%, transparent); color: #fff; font: 500 14px/1 var(--font-sans); transition: color 0.3s, border-color 0.3s; }
 .projects-cover-cta svg { transition: translate 0.3s; }
-.projects-cover-cta:hover { background: #17302b; translate: 0 -2px; box-shadow: 0 18px 30px -16px #203c38; }
+.projects-cover-cta:hover { color: color-mix(in srgb, var(--cover-light) 70%, #fff); border-bottom-color: currentColor; }
 .projects-cover-cta:hover svg { translate: 0 2px; }
-.projects-cover-link { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, currentColor 35%, transparent); color: #2b4540; font: 500 14px/1 var(--font-sans); transition: color 0.3s, border-color 0.3s; }
-.projects-cover-link:hover { color: color-mix(in srgb, var(--cover-ink) 80%, #0d2421); border-bottom-color: currentColor; }
 /* the orbit, and the voice of the project in view beneath it (its saying, or the Health City's news) */
 .projects-cover-stage { display: flex; flex-direction: column; align-items: center; align-self: center; min-width: 0; }
 .projects-cover-voice { display: grid; justify-items: center; width: 100%; min-height: 104px; }
-.saying.projects-cover-saying { --saying-ink: var(--cover-ink); margin: 0 auto; padding: 4px 12px 0; max-width: 500px; animation: projects-cover-reveal 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.saying.projects-cover-saying { --saying-ink: var(--cover-light); margin: 0 auto; padding: 4px 12px 0; max-width: 500px; animation: projects-cover-reveal 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* on the dark ground: the saying in a light tint of the project's colour, its meaning and source in white */
+.projects-cover-saying blockquote { color: color-mix(in srgb, var(--cover-light) 66%, #fff); }
+.projects-cover-saying[data-script='hindi'] blockquote { background: none; -webkit-text-fill-color: currentColor; }
+.projects-cover-saying .saying-meaning { color: rgb(255 255 255 / 0.8); }
+.projects-cover-saying figcaption { color: rgb(255 255 255 / 0.66); }
 .saying.projects-cover-saying::before, .saying.projects-cover-saying::after, .projects-cover-saying .saying-mark { display: none; }
 .projects-cover-saying[data-script='hindi'] blockquote { font-size: clamp(19px, 1.6vw, 23px); line-height: 1.4; }
 .projects-cover-saying[data-script='hindi'] blockquote::after { display: none; }
@@ -101,52 +106,52 @@
 .projects-cover-status i { width: 8px; height: 8px; border-radius: 50%; background: #2fbf86; box-shadow: 0 0 0 0 rgb(47 191 134 / 0.55); animation: hc-pulse 2s ease-out infinite; }
 @keyframes projects-cover-reveal { from { opacity: 0; transform: translateY(8px); } }
 /* at the foot: the UN standing and goals, and each project's headline figure */
-.projects-cover-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 14px 0; border-top: 1px solid #ccd9ce; font-size: 10px; letter-spacing: 0.06em; color: #63766f; }
+.projects-cover-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 14px 0; border-top: 1px solid rgb(255 255 255 / 0.22); font-size: 10px; letter-spacing: 0.06em; color: rgb(255 255 255 / 0.72); }
 .projects-cover-standing { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
-.projects-cover-goals { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 0.02em; color: #4e625c; }
-.projects-cover-goals strong { color: #0a6fb8; }
+.projects-cover-goals { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; letter-spacing: 0.02em; color: rgb(255 255 255 / 0.82); }
+.projects-cover-goals strong { color: #fff; }
 .projects-cover-goal-dots { display: inline-flex; }
-.projects-cover-goal-dots i { width: 13px; height: 13px; margin-left: -4px; border: 2px solid #f8f6ef; border-radius: 50%; }
+.projects-cover-goal-dots i { width: 13px; height: 13px; margin-left: -4px; border: 2px solid rgb(255 255 255 / 0.85); border-radius: 50%; }
 .projects-cover-goal-dots i:first-child { margin-left: 0; }
 .projects-cover-impact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; }
-.projects-cover-impact a { display: grid; padding: 3px 10px 2px 11px; border-left: 3px solid var(--way-ink); border-radius: 0 10px 10px 0; color: #203c38; transition: translate 0.25s, background-color 0.4s; }
+.projects-cover-impact a { display: grid; padding: 3px 10px 2px 11px; border-left: 3px solid color-mix(in srgb, var(--way-ink) 45%, #fff); border-radius: 0 10px 10px 0; color: #fff; transition: translate 0.25s, background-color 0.4s; }
 .projects-cover-impact a:hover { translate: 0 -2px; }
-.projects-cover-impact a[data-active='true'] { background: color-mix(in srgb, var(--way-ink) 9%, transparent); }
-.projects-cover-impact-figure { font: 700 18px/1.15 var(--font-sans); letter-spacing: -0.02em; color: color-mix(in srgb, var(--way-ink) 82%, #0d2421); }
-/* the rolling counter was drawn for the dark hero, in white: here it takes the project's ink */
+.projects-cover-impact a[data-active='true'] { background: rgb(255 255 255 / 0.1); }
+.projects-cover-impact-figure { font: 700 18px/1.15 var(--font-sans); letter-spacing: -0.02em; color: #fff; }
+/* the rolling counter keeps the figure's own colour and face */
 .projects-cover-impact-figure [aria-hidden] * { color: inherit; font-family: inherit; }
-.projects-cover-impact-unit { font-size: 10.5px; letter-spacing: 0.02em; color: #4e625c; }
-.projects-cover-impact em { font-style: normal; font-size: 9px; font-weight: 700; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--way-ink) 78%, #0d2421); }
+.projects-cover-impact-unit { font-size: 10.5px; letter-spacing: 0.02em; color: rgb(255 255 255 / 0.74); }
+.projects-cover-impact em { font-style: normal; font-size: 9px; font-weight: 700; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--way-ink) 32%, #fff); }
 .projects-cover[data-active='false'] * { animation-play-state: paused !important; }
 .projects-cover :is(a, button):focus-visible { outline-color: var(--cover-ink); }
 
-/* Copy and orbit as one composition, centred and at most 1240px across; the
-   cover and the sticky subnav (54px) fill exactly the first screen, the orbit
-   scaling with the viewport height so nothing is cropped on short screens. */
+/* Copy and orbit as one composition, centred and at most 1360px across. The
+   orbit is as large as its column allows and as the screen's height allows
+   beneath the header's room (its voice beneath it, on the first screen too);
+   the cover and the sticky subnav (54px) fill at least the first screen, and
+   on a shorter screen the foot and the subnav follow just below it. */
 @media (min-width: 801px) {
-  .projects-cover { min-height: calc(100svh - 54px); grid-template-rows: 1fr auto; padding-top: clamp(96px, 13svh, 130px); padding-inline: max(7%, 28px, calc((100% - 1240px) / 2)); }
+  .projects-cover { min-height: calc(100svh - 54px); grid-template-rows: 1fr auto; padding-top: clamp(96px, 13svh, 130px); padding-inline: max(7%, 28px, calc((100% - 1360px) / 2)); }
   .projects-cover-copy { padding-block: clamp(8px, 2svh, 28px); }
   .projects-cover h1 { margin-block: clamp(12px, 2.2svh, 22px) clamp(10px, 1.8svh, 16px); font-size: clamp(30px, min(3.1vw, 6svh), 50px); }
-  .projects-cover-ways a { padding-block: clamp(3px, 0.7svh, 6px); }
   .projects-cover-actions { margin-top: clamp(14px, 2.6svh, 24px); }
-  .projects-cover-stage > .project-orbit { max-width: clamp(260px, calc((100svh - 250px) * 1.08), 560px); margin-block: 0 4px; }
-  @media (min-height: 760px) { .projects-cover-stage > .project-orbit { max-width: clamp(260px, calc((100svh - 360px) * 1.08), 560px); } }
-  /* on a short screen the orbit's voice and the lede give way, and the legend tightens */
+  .projects-cover-stage > .project-orbit { max-width: clamp(260px, calc((100svh - clamp(96px, 13svh, 130px) - 24px) * 1.08), 680px); margin-block: 0 4px; }
+  /* where the voice shows, it stands clear of the lowest moons' names, and the orbit leaves it its room */
+  @media (min-height: 760px) {
+    .projects-cover-stage > .project-orbit { max-width: clamp(260px, calc((100svh - clamp(96px, 13svh, 130px) - 144px) * 1.08), 680px); }
+    .projects-cover-voice { min-height: 116px; padding-top: 20px; }
+    /* the copy is centred on the orbit itself, not on the orbit and its voice together (4px + 116px beneath it) */
+    .projects-cover-copy { padding-bottom: calc(clamp(8px, 2svh, 28px) + 120px); }
+  }
+  /* on a short screen the orbit's voice gives way */
   @media (max-height: 759px) {
     .projects-cover { row-gap: 8px; }
     .projects-cover-footer { padding-block: 9px; }
-    .projects-cover-voice, .projects-cover-lede { display: none; }
-    .projects-cover-ways a { padding-block: 2px; }
-    .projects-cover-way-icon { width: 30px; height: 30px; }
+    .projects-cover-voice { display: none; }
   }
 }
-/* a narrower copy column: the legend and the actions draw in */
+/* a narrower cover: the figures draw in */
 @media (min-width: 801px) and (max-width: 1100px) {
-  .projects-cover-ways a { grid-template-columns: 30px 120px minmax(0, 1fr) 14px; column-gap: 10px; }
-  .projects-cover-way-icon { width: 30px; height: 30px; }
-  .projects-cover-way-name { font-size: 10px; letter-spacing: 0.1em; }
-  .projects-cover-way-text { font-size: 14px; }
-  .projects-cover-cta { padding: 14px 18px 14px 20px; }
   .projects-cover-impact { gap: 8px 12px; }
   .projects-cover-impact-figure { font-size: 16px; }
 }
@@ -161,12 +166,8 @@
   .projects-cover-stage > .project-orbit { max-width: 480px; margin-top: 8px; }
   .projects-cover-footer { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 18px; }
 }
-/* a narrow column sets each project's name above its line */
 @media (max-width: 520px) {
   .projects-cover { padding-inline: 20px; }
-  .projects-cover-ways { margin-left: -8px; }
-  .projects-cover-ways a { grid-template-columns: 34px minmax(0, 1fr) 16px; grid-template-areas: 'icon name arrow' 'icon text arrow'; row-gap: 3px; padding-inline: 8px 10px; }
-  .projects-cover-way-text { font-size: 14px; }
 }
 
 /* ----- The directory: a card for each project, its photograph (or, until it

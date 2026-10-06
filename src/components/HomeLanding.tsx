@@ -24,12 +24,14 @@ export function HomeLanding({ play, onEnter, onScrollOn }: {
 }) {
   const root = useRef<HTMLElement>(null);
   const ground = useRef<HTMLDivElement>(null);
+  const shore = useRef<HTMLDivElement>(null);
   const active = useSectionActivity(root);
   /* Each second the ground moves on to its next colour (home-landing.css): the
      upper of its two layers either takes that colour while hidden and fades in
      over the lower, or fades out to show the lower, which took it while
      covered. So a colour is only ever painted out of sight, and only the upper
-     layer's opacity moves. It moves on only while the landing is on the
+     layer's opacity moves; the water at the shore turns to the same colour
+     at its crests as it goes. It moves on only while the landing is on the
      screen, and stays on the peach for those who ask for less motion. */
   const step = useRef(0);
   useEffect(() => {
@@ -39,6 +41,7 @@ export function HomeLanding({ play, onEnter, onScrollOn }: {
     const timer = window.setInterval(() => {
       step.current = (step.current + 1) % GROUND_COLOURS.length;
       const colour = GROUND_COLOURS[step.current];
+      shore.current?.style.setProperty('--shore-ground', colour);
       if (layers.dataset.upper === 'shown') {
         lower.style.setProperty('--ground', colour);
         delete layers.dataset.upper;
@@ -53,6 +56,8 @@ export function HomeLanding({ play, onEnter, onScrollOn }: {
     <section ref={root} id="home-landing" className="home-landing snap-screen" data-active={active}>
       <div ref={ground} className="landing-ground" aria-hidden="true"><i /><i /></div>
       <MosaicOverture onChoose={id => onEnter(id)} play={play} heading="h1" onScrollOn={onScrollOn} />
+      {/* the water at the foot of the ground, over the photographs running down into it */}
+      <div ref={shore} className="landing-shore" aria-hidden="true"><i /><i /></div>
     </section>
   );
 }

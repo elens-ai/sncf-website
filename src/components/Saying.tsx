@@ -56,6 +56,18 @@ export const SAYINGS = () => ({
     english: c('contribute-english', 'Life gets a meaning, if it is lived for others.'),
     by: c('contribute-by', 'Nirankari Baba Hardev Singh Ji Maharaj'),
   },
+  /* the Projects cover's own lines beneath its orbit, where it gives a project
+     in other words than its chapter does (ProjectsPage): Oneness Vann's line,
+     and the watershed's saying in Hindi */
+  'oneness-vann-cover': {
+    english: c('vann-cover', 'We Live, if Nature Lives'),
+    by: '',
+  },
+  'watershed-cover': {
+    hindi: c('watershed-cover-hindi', 'प्रदूषण अंदर हो या बाहर, दोनों ही हानिकारक हैं'),
+    english: c('watershed-english', 'Pollution, whether internal or external, is harmful.'),
+    by: c('watershed-by', 'Nirankari Baba Hardev Singh Ji Maharaj'),
+  },
 });
 export type SayingId = keyof ReturnType<typeof SAYINGS>;
 /** Whether a section (a cornerstone, a project's id) has a saying of its own. */
@@ -63,16 +75,16 @@ export const hasSaying = (id: string): id is SayingId => id in SAYINGS();
 
 /** A saying set beside the work it speaks to: the words large (in Hindi where
     they were said in Hindi, set in Devanagari), their meaning beneath, and
-    who said them. */
-export const Saying: React.FC<{ id: SayingId; className?: string }> = ({ id, className }) => {
+    who said them. A place may leave out the meaning or who said it. */
+export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: boolean; byline?: boolean }> = ({ id, className, meaning = true, byline = true }) => {
   useCMSRevision();
   const saying: { hindi?: string; english: string; by: string } = SAYINGS()[id];
   return (
     <figure className={`saying${className ? ` ${className}` : ''}`} data-script={saying.hindi ? 'hindi' : 'english'}>
       <span className="saying-mark" aria-hidden="true">“</span>
       <blockquote lang={saying.hindi ? 'hi' : 'en'}>{saying.hindi ?? saying.english}</blockquote>
-      {saying.hindi && <p className="saying-meaning">{saying.english}</p>}
-      <figcaption>{saying.by}</figcaption>
+      {saying.hindi && meaning && <p className="saying-meaning">{saying.english}</p>}
+      {byline && <figcaption>{saying.by}</figcaption>}
     </figure>
   );
 };

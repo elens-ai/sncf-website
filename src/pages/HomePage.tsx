@@ -9,7 +9,6 @@ import { PillarState } from '../types';
 import { Header } from '../components/Header';
 import { HeroSection } from '../components/HeroSection';
 import { HomeLanding } from '../components/HomeLanding';
-import { ImpactMosaic } from '../components/ImpactMosaic';
 import { AwardsSection } from '../components/AwardsSection';
 import { PartnersSection } from '../components/PartnersSection';
 import { SiteFooter } from '../components/SiteFooter';
@@ -38,7 +37,6 @@ const parseInviteParam = (): string | null => {
 
 /* The sections that do not change with the hall's path, kept from re-rendering
    each time it turns (the turn has the main thread to itself). */
-const ImpactMosaicMemo = React.memo(ImpactMosaic);
 const AwardsSectionMemo = React.memo(AwardsSection);
 const PartnersSectionMemo = React.memo(PartnersSection);
 const SiteFooterMemo = React.memo(SiteFooter);
@@ -324,27 +322,12 @@ export default function HomePage() {
     scrollHolding(window.scrollY + geometry.track.getBoundingClientRect().top + offset, index);
     if (takeFocus) document.getElementById('hero-clone-stage')?.focus({ preventScroll: true });
   }, [scrollHolding]);
-  /* Explore on a path leads to that path's own chapter. Heal's, Enrich's and
-     Empower's open their sections on Core Values (ImpactMosaic keeps only the
-     rest here), so for those it opens that page at the path. A chapter still
-     on this page is slid down to, the hall staying on its path as the page
-     passes: on the pinned stage (ImpactMosaic) a chapter is a screen of the
-     stage's scroll, so the page goes just past the start of that screen; laid
-     out one after another, it goes to the chapter's top, under the header.
-     Focus follows, for the keyboard. */
+  /* Explore on a path opens that path's own page: Heal's, Enrich's and
+     Empower's sections on Core Values, and the Projects page for the projects
+     (each of which has its section there). */
   const explorePath = useCallback((pillar: PillarState) => {
-    const section = document.getElementById('pillars-section');
-    const chapters = section ? Array.from(section.querySelectorAll<HTMLElement>('[data-stage]')) : [];
-    const chapter = chapters.find(stage => stage.dataset.stage === pillar.id);
-    if (!section || !chapter) {
-      navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`);
-      return;
-    }
-    const top = section.dataset.mode === 'stage'
-      ? window.scrollY + section.getBoundingClientRect().top + (section.offsetHeight - window.innerHeight) * (chapters.indexOf(chapter) + 0.08) / chapters.length
-      : window.scrollY + chapter.getBoundingClientRect().top - (document.getElementById('site-header')?.offsetHeight ?? 72);
-    scrollHolding(top, activeIndexRef.current, () => document.getElementById(`mosaic-${pillar.id}-title`)?.focus({ preventScroll: true }));
-  }, [navigate, scrollHolding]);
+    navigate(pillar.id === 'projects' ? '/projects' : pillar.id === 'amrit' ? '/projects#project-amrit' : pillar.id === 'oneness' ? '/projects#oneness-vann' : `/core-values#${pillar.id}`);
+  }, [navigate]);
   /* A landing door leads to its own path in the hall; the landing's cue, to the first. */
   const enterPath = useCallback((id: string) => {
     goToPillar(Math.max(0, activePillarsList.findIndex(p => p.id === id)), true);
@@ -369,10 +352,7 @@ export default function HomePage() {
      section, which is the only thing that knows whether a pillar or the
      devotional portrait is fronting. App used to write them too and, because
      child effects run before parent effects, always won — painting the header
-     chrome in the pillar's colour while the stage was devotional rose. Below
-     the hero, ImpactMosaic overrides the pair INLINE on .home-page (a closer
-     ancestor of the canvas) for the chapter in view and lifts the override
-     above its first chapter — the hero's writer is never touched. */
+     chrome in the pillar's colour while the stage was devotional rose. */
 
   // Keyboard navigation
   useEffect(() => {
@@ -484,9 +464,7 @@ export default function HomePage() {
         scrollDriven
         onChoosePillar={goToPillar}
       /></div>)},
-        /* 4. OUR WORK — the Living Mosaic, its four chapters. It steers the page
-              accent for the chapter in view (see ImpactMosaic). */
-        {id:'home.mosaic',node:<ImpactMosaicMemo heroPillar={currentPillar} />},
+        /* the projects' chapter, which followed here, is now the Projects page's cover (ProjectsPage) */
         {id:'home.awards',node:<AwardsSectionMemo />},
         {id:'home.partners',node:(<PartnersSectionMemo
         escapeSuspended={

@@ -239,11 +239,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     document.body.style.removeProperty('--accent-b');
   }, []);
 
-  /* On the home page's track the hall's pages turn the way the explore pages
-     below them do (homepage.css, after impact-mosaic.css .mosaic-chapter): the
-     page in view leaves upwards, fading and settling back a little, while the
-     next rises from below into its place, both drawn at once by a view
-     transition; the new page's lines then rise in, as an explore page's do. */
+  /* On the home page's track the hall's pages turn (homepage.css): the page in
+     view leaves upwards, fading and settling back a little, while the next
+     rises from below into its place, both drawn at once by a view transition;
+     the new page's lines then rise in. */
   const pageTurns = scrollDriven && canTurnPages();
   const latestTurn = useRef<unknown>(null);
   /* the page the hall will show once any turn under way has landed: a turn
