@@ -2959,7 +2959,6 @@
     "copy.WhoWeArePage.daa59bc900b6": "One figure per cornerstone — the largest plain count each of them reports. They are counted in different units and stopped at different dates, so nothing here is ranked against anything else. The full record is on the Core Values page.",
     "copy.WhoWeArePage.1d3009abb21e": "Since 2010",
     "copy.WhoWeArePage.77d72aaa5ec2": "The road so far",
-    "copy.WhoWeArePage.d018d79f674c": "Four dates the foundation marks its own history by.",
     "copy.WhoWeArePage.b68d1e8eda83": "Supports & collaborations",
     "copy.WhoWeArePage.b66e8cc28209": "Who walks with us",
     "copy.WhoWeArePage.447786a75a38": "Search foundation partners",
@@ -2998,13 +2997,6 @@
     "copy.ProjectsPage.904eb1d10ff3": "Since 2017 · Haryana",
     "copy.ProjectsPage.c2eb86f270ec": "Growing stronger, together.",
     "copy.WhoWeArePage.7d12ba56e9f8": "2010",
-    "copy.WhoWeArePage.86c8252ee47f": "The foundation is established as the Mission’s charitable arm.",
-    "copy.WhoWeArePage.96da37e95d5c": "2014",
-    "copy.WhoWeArePage.2be360738982": "The Rajmata scholarship scheme begins supporting students on merit and means.",
-    "copy.WhoWeArePage.1bea20e1df19": "2021",
-    "copy.WhoWeArePage.e12b02013977": "Oneness Vann starts planting indigenous micro-forests across the country.",
-    "copy.WhoWeArePage.d398b29d3dbb": "2023",
-    "copy.WhoWeArePage.aa6779f55c5f": "Project Amrit launches with the Government of India to revive water bodies.",
     "copy.WhoWeArePage.6520e4488973": "Founded",
     "copy.WhoWeArePage.e4b35726fbaf": "Standing",
     "copy.WhoWeArePage.d5af85a6a90e": "UN special consultative status",
@@ -3468,10 +3460,6 @@
     "copy.Insights.covid-icu": "of the care-centre beds were ICU beds",
     "copy.Insights.marriages-per-event": "couples married per event",
     "copy.Insights.support-total": "given in financial help and disaster relief together",
-    "copy.GrowthRings.today": "today",
-    "copy.GrowthRings.caption": "One ring for every year of service since",
-    "copy.GrowthRings.year": "year",
-    "copy.GrowthRings.explore": "Explore this chapter",
     "copy.MissionVision.word-heal": "Heal",
     "copy.MissionVision.word-enrich": "Enrich",
     "copy.MissionVision.word-empower": "Empower",
@@ -3527,10 +3515,6 @@
     "copy.GuidingForcePage.teachings": "The subject of Her teaching",
     "copy.GuidingForcePage.directions": "The three directions Her guidance has pushed hardest",
     "copy.ProjectsPage.dossier-kicker": "Project in focus",
-    "copy.WhoWeArePage.road-label-1": "Our beginning",
-    "copy.WhoWeArePage.road-label-2": "Learning opens doors",
-    "copy.WhoWeArePage.road-label-3": "Growing together",
-    "copy.WhoWeArePage.road-label-4": "Reviving our water",
     "copy.WhoWeArePage.rail": "On this page",
     "copy.WhoWeArePage.rail-account": "About us",
     "copy.WhoWeArePage.rail-mission": "Mission & vision",
@@ -3545,8 +3529,6 @@
     "copy.WhoWeArePage.approach-eyebrow": "How service takes shape",
     "copy.WhoWeArePage.approach-title": "Listen. Come together.",
     "copy.WhoWeArePage.approach-title-em": "Serve.",
-    "copy.Link.WhoWeArePage.maps": "https://www.google.com/maps/search/?api=1&query=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009",
-    "copy.WhoWeArePage.maps": "Open in Maps",
     "copy.WhoWeArePage.stamp": "Since 2010",
     "copy.WhoWeArePage.postmark": "Delhi · 110009",
     "copy.MosaicOverture.enter": "Enter",
@@ -3596,7 +3578,17 @@
     "copy.WhoWeArePage.partners-pause": "Stop the moving logos",
     "copy.WhoWeArePage.partners-rows": "The organisations that walk with us",
     "copy.WhoWeArePage.partner-visit": "Visit their website",
-    "copy.WhoWeArePage.partner-close": "Close"
+    "copy.WhoWeArePage.partner-close": "Close",
+    "copy.WhoWeArePage.road-body": "From a seed in 2010 to the tree it is today: every branch a moment the foundation marks its history by.",
+    "copy.WhoWeArePage.road-aria": "The foundation’s history as a growing tree",
+    "copy.WhoWeArePage.road-seed": "The seed",
+    "copy.WhoWeArePage.road-year": "Year",
+    "copy.WhoWeArePage.road-moments": "moments",
+    "copy.WhoWeArePage.road-explore": "Explore this chapter",
+    "copy.WhoWeArePage.road-today": "Today",
+    "copy.WhoWeArePage.road-hint": "Scroll to watch it grow",
+    "copy.Link.WhoWeArePage.map": "https://maps.google.com/maps?q=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009&z=16&hl=en&output=embed",
+    "copy.WhoWeArePage.map-title": "Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari Colony, Delhi"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -4883,11 +4875,6 @@
         "section": "Page",
         "label": "Page · The road so far"
       },
-      "copy.WhoWeArePage.d018d79f674c": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Four dates the foundation marks its own history by."
-      },
       "copy.WhoWeArePage.b68d1e8eda83": {
         "page": "who-we-are",
         "section": "Page",
@@ -5077,41 +5064,6 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · 2010"
-      },
-      "copy.WhoWeArePage.86c8252ee47f": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The foundation is established as the Mission’s charitable arm."
-      },
-      "copy.WhoWeArePage.96da37e95d5c": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · 2014"
-      },
-      "copy.WhoWeArePage.2be360738982": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The Rajmata scholarship scheme begins supporting students on merit an…"
-      },
-      "copy.WhoWeArePage.1bea20e1df19": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · 2021"
-      },
-      "copy.WhoWeArePage.e12b02013977": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Oneness Vann starts planting indigenous micro-forests across the coun…"
-      },
-      "copy.WhoWeArePage.d398b29d3dbb": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · 2023"
-      },
-      "copy.WhoWeArePage.aa6779f55c5f": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Project Amrit launches with the Government of India to revive water b…"
       },
       "copy.WhoWeArePage.6520e4488973": {
         "page": "who-we-are",
@@ -7428,26 +7380,6 @@
         "section": "Charts",
         "label": "Charts · given in financial help and disaster relief together"
       },
-      "copy.GrowthRings.today": {
-        "page": "who-we-are",
-        "section": "The road so far",
-        "label": "The road so far · today"
-      },
-      "copy.GrowthRings.caption": {
-        "page": "who-we-are",
-        "section": "The road so far",
-        "label": "The road so far · One ring for every year of service since"
-      },
-      "copy.GrowthRings.year": {
-        "page": "who-we-are",
-        "section": "The road so far",
-        "label": "The road so far · year"
-      },
-      "copy.GrowthRings.explore": {
-        "page": "who-we-are",
-        "section": "The road so far",
-        "label": "The road so far · Explore this chapter"
-      },
       "copy.MissionVision.word-heal": {
         "page": "who-we-are",
         "section": "Mission & vision",
@@ -7723,26 +7655,6 @@
         "section": "Page",
         "label": "Page · Project in focus"
       },
-      "copy.WhoWeArePage.road-label-1": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Our beginning"
-      },
-      "copy.WhoWeArePage.road-label-2": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Learning opens doors"
-      },
-      "copy.WhoWeArePage.road-label-3": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Growing together"
-      },
-      "copy.WhoWeArePage.road-label-4": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Reviving our water"
-      },
       "copy.WhoWeArePage.rail": {
         "page": "who-we-are",
         "section": "Page",
@@ -7812,16 +7724,6 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Serve."
-      },
-      "copy.Link.WhoWeArePage.maps": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Link: https://www.google.com/maps/search/?api=1&query=Sant%20Nirankari%20Ch…"
-      },
-      "copy.WhoWeArePage.maps": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Open in Maps"
       },
       "copy.WhoWeArePage.stamp": {
         "page": "who-we-are",
@@ -8072,6 +7974,56 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Close"
+      },
+      "copy.WhoWeArePage.road-body": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · From a seed in 2010 to the tree it is today: every branch a moment th…"
+      },
+      "copy.WhoWeArePage.road-aria": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The foundation’s history as a growing tree"
+      },
+      "copy.WhoWeArePage.road-seed": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The seed"
+      },
+      "copy.WhoWeArePage.road-year": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Year"
+      },
+      "copy.WhoWeArePage.road-moments": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · moments"
+      },
+      "copy.WhoWeArePage.road-explore": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Explore this chapter"
+      },
+      "copy.WhoWeArePage.road-today": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Today"
+      },
+      "copy.WhoWeArePage.road-hint": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Scroll to watch it grow"
+      },
+      "copy.Link.WhoWeArePage.map": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Link: https://maps.google.com/maps?q=Sant%20Nirankari%20Charitable%20Founda…"
+      },
+      "copy.WhoWeArePage.map-title": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari…"
       }
     },
     "assets": {

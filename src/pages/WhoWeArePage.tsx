@@ -4,7 +4,7 @@ import { getCMSLink } from '../cms/links';
 import { resolveCMSMedia } from '../cms/media';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, HeartHandshake, CalendarHeart, Globe, MapPinned, MapPin, Phone, Mail, BadgeCheck } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, HeartHandshake, CalendarHeart, Globe, MapPinned, Phone, Mail, BadgeCheck } from 'lucide-react';
 import { PageShell } from '../components/PageShell';
 import { MediaGallery } from '../components/MediaGallery';
 import { Tally } from '../components/Tally';
@@ -21,7 +21,8 @@ import { ServiceStory } from '../components/ServiceStory';
 import { UnSeal } from '../components/UnAffiliation';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { HandsBloom, HandsLede, HandsProof, handWays } from '../components/WorkingHands';
-import { GrowthRings } from '../components/GrowthRings';
+import { RoadTree } from '../components/RoadTree';
+import { ROAD_EVENTS } from '../data/roadEvents';
 /* after the page's own stylesheets, so the wall's styles come after theirs */
 import { PartnerMarquee } from '../components/PartnerMarquee';
 
@@ -38,27 +39,10 @@ import { PartnerMarquee } from '../components/PartnerMarquee';
  * IT IS BUILT AS ROOMS, like Core Values and Projects, and it has their
  * rail. The cover is the logo's own emblem come alive: the lotus held in two
  * hands, each petal a photograph of what the lede says those hands do, and
- * the figure the record gives for it. The road so far is a trunk's cross-
- * section, a ring for every year; the register groups its partners by the
- * field they worked in, as the home page's circle does.
+ * the figure the record gives for it. The road so far is a tree growing
+ * from a seed in 2010, a branch for every moment the foundation marks; the
+ * organisations beside it pass by as a wall of their marks.
  */
-
-/* the photographs the trunk's milestones are told with */
-const MILESTONE_PHOTOS = [
-  { asset: 'asset.WhoWeArePage.road-2010', src: '/images/sncf-logo.webp', logo: true },
-  { asset: 'asset.WhoWeArePage.road-2014', src: '/images/programmes/scholarships-graduation.webp' },
-  { asset: 'asset.WhoWeArePage.road-2021', src: '/images/programmes/oneness-vann-planting.webp' },
-  { asset: 'asset.WhoWeArePage.road-2023', src: '/images/programmes/amrit-riverbank.webp' },
-];
-/* the logo's petal inks, one for each milestone and each fact */
-const PETAL_INKS = ['#b357ad', '#6663b5', '#69b947', '#09a6cf', '#f81170'];
-
-let MILESTONES = bindCMSValue(() => ([
-  { year: getCMSCopy("copy.WhoWeArePage.7d12ba56e9f8", "2010"), label: getCMSCopy("copy.WhoWeArePage.road-label-1", "Our beginning"), text: getCMSCopy("copy.WhoWeArePage.86c8252ee47f", "The foundation is established as the Mission’s charitable arm."), href: '#account' },
-  { year: getCMSCopy("copy.WhoWeArePage.96da37e95d5c", "2014"), label: getCMSCopy("copy.WhoWeArePage.road-label-2", "Learning opens doors"), text: getCMSCopy("copy.WhoWeArePage.2be360738982", "The Rajmata scholarship scheme begins supporting students on merit and means."), href: '/core-values#scholarships' },
-  { year: getCMSCopy("copy.WhoWeArePage.1bea20e1df19", "2021"), label: getCMSCopy("copy.WhoWeArePage.road-label-3", "Growing together"), text: getCMSCopy("copy.WhoWeArePage.e12b02013977", "Oneness Vann starts planting indigenous micro-forests across the country."), href: '/projects#project-oneness-vann' },
-  { year: getCMSCopy("copy.WhoWeArePage.d398b29d3dbb", "2023"), label: getCMSCopy("copy.WhoWeArePage.road-label-4", "Reviving our water"), text: getCMSCopy("copy.WhoWeArePage.aa6779f55c5f", "Project Amrit launches with the Government of India to revive water bodies."), href: '/projects#project-amrit' },
-]), value => { MILESTONES = value; });
 
 let FACTS = bindCMSValue(() => ([
   { k: getCMSCopy("copy.WhoWeArePage.6520e4488973", "Founded"), v: getCMSCopy("copy.WhoWeArePage.7d12ba56e9f8", "2010") },
@@ -66,6 +50,8 @@ let FACTS = bindCMSValue(() => ([
   { k: getCMSCopy("copy.WhoWeArePage.2068b81b75d4", "Reach"), v: getCMSCopy("copy.WhoWeArePage.9d3f458ea970", "250+ branches nationwide") },
 ]), value => { FACTS = value; });
 const FACT_ICONS = [CalendarHeart, Globe, MapPinned];
+/* the contact postcard's map is Google's only: the CMS may move its pin, but cannot embed another site */
+const onGoogleMaps = (url: string) => /^https:\/\/(?:www\.google\.com|maps\.google\.com)\/maps[/?]/.test(url);
 const FACT_INKS = ['#f81170', '#09a6cf', '#69b947'];
 
 /**
@@ -180,6 +166,7 @@ export const WhoWeArePage: React.FC = () => {
     return () => clearTimeout(timer);
   }, [hash]);
   const office = [getCMSCopy("copy.WhoWeArePage.a01941bf3134", "Sant Nirankari Charitable Foundation"), getCMSCopy("copy.WhoWeArePage.e1df9065fffb", "80-A, Avtar Marg, Nirankari Colony"), getCMSCopy("copy.WhoWeArePage.f59cf0b8fe44", "Delhi 110009, India")];
+  const officeMap = getCMSLink("copy.Link.WhoWeArePage.map", "https://maps.google.com/maps?q=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009&z=16&hl=en&output=embed");
   return (
   <PageShell
     cover={<EditorialMotion><WhoCover /></EditorialMotion>}
@@ -292,13 +279,18 @@ export const WhoWeArePage: React.FC = () => {
         mark
         label={getCMSCopy("copy.WhoWeArePage.1d3009abb21e", "Since 2010")}
         title={getCMSCopy("copy.WhoWeArePage.77d72aaa5ec2", "The road so far")}
-        body={getCMSCopy("copy.WhoWeArePage.d018d79f674c", "Four dates the foundation marks its own history by.")}
+        body={getCMSCopy("copy.WhoWeArePage.road-body", "From a seed in 2010 to the tree it is today: every branch a moment the foundation marks its history by.")}
       />
-      <div className="cv-chapter">
-        <GrowthRings founded={founded} milestones={MILESTONES.map((m, i) => {
-          const photo = MILESTONE_PHOTOS[i];
-          return { ...m, color: PETAL_INKS[i % PETAL_INKS.length], photo: photo ? resolveCMSAsset(photo.asset, photo.src) : undefined, logo: photo?.logo };
-        })} />
+      <div className="cv-chapter road-chapter">
+        <RoadTree events={ROAD_EVENTS} labels={{
+          aria: getCMSCopy("copy.WhoWeArePage.road-aria", "The foundation’s history as a growing tree"),
+          seed: getCMSCopy("copy.WhoWeArePage.road-seed", "The seed"),
+          year: getCMSCopy("copy.WhoWeArePage.road-year", "Year"),
+          moments: getCMSCopy("copy.WhoWeArePage.road-moments", "moments"),
+          explore: getCMSCopy("copy.WhoWeArePage.road-explore", "Explore this chapter"),
+          today: getCMSCopy("copy.WhoWeArePage.road-today", "Today"),
+          hint: getCMSCopy("copy.WhoWeArePage.road-hint", "Scroll to watch it grow"),
+        }} />
       </div>
     </section></CMSSection>
 
@@ -329,9 +321,13 @@ export const WhoWeArePage: React.FC = () => {
           <p className="ed-eyebrow">{getCMSCopy("copy.WhoWeArePage.bc395eb428a7", "Registered office")}</p>
           <h3>{getCMSCopy("copy.WhoWeArePage.129d2c4eafb3", "Service begins")}<br /><em>{getCMSCopy("copy.WhoWeArePage.6265a53e30a6", "with a conversation.")}</em></h3>
           <address>{office.map((line, i) => <React.Fragment key={i}>{i > 0 && <br />}{line}</React.Fragment>)}</address>
-          <a className="who-postcard-map" href={getCMSLink("copy.Link.WhoWeArePage.maps", "https://www.google.com/maps/search/?api=1&query=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009")} target="_blank" rel="noreferrer">
-            <MapPin size={16} aria-hidden="true" />{getCMSCopy("copy.WhoWeArePage.maps", "Open in Maps")}<ArrowUpRight size={14} aria-hidden="true" />
-          </a>
+          {/* the office on Google's map, taped to the postcard: the foundation's own place card, and directions */}
+          {onGoogleMaps(officeMap) && (
+            <div className="who-postcard-mapframe">
+              <iframe title={getCMSCopy("copy.WhoWeArePage.map-title", "Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari Colony, Delhi")}
+                src={officeMap} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
+            </div>
+          )}
         </div>
         <div className="who-postcard-lines">
           <span className="who-postcard-stamp" aria-hidden="true"><img src={resolveCMSAsset("asset.WhoWeArePage.stamp", "/images/sncf-logo.webp")} alt="" width="70" height="68" loading="lazy" /><small>{getCMSCopy("copy.WhoWeArePage.stamp", "Since 2010")}</small></span>
