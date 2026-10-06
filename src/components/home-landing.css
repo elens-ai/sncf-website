@@ -38,7 +38,7 @@
   /* below the screen, the band where the ground flows down into the page's
      green; it ends where the hall begins and never lies over the hall, so
      the hall's words are never veiled */
-  --landing-blend: clamp(40px, 7vh, 80px);
+  --landing-blend: clamp(120px, 18vh, 220px);
 }
 /* The ground (HomeLanding) is laid on its own layer: solid under the whole
    screen, then flowing down past it into the page's green canvas (the very
@@ -48,10 +48,38 @@
    next colour (painted once, out of sight) and the upper one fades in or out
    over the second. Only their opacity moves, which the compositor draws on
    its own, so the changing colour costs the page nothing frame by frame. */
-.landing-ground { --flow: var(--landing-blend); position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  -webkit-mask-image: linear-gradient(#000 calc(100% - var(--flow)), rgb(0 0 0 / 0.9) calc(100% - var(--flow) * 0.8), rgb(0 0 0 / 0.7) calc(100% - var(--flow) * 0.6), rgb(0 0 0 / 0.45) calc(100% - var(--flow) * 0.4), rgb(0 0 0 / 0.2) calc(100% - var(--flow) * 0.2), transparent);
-  mask-image: linear-gradient(#000 calc(100% - var(--flow)), rgb(0 0 0 / 0.9) calc(100% - var(--flow) * 0.8), rgb(0 0 0 / 0.7) calc(100% - var(--flow) * 0.6), rgb(0 0 0 / 0.45) calc(100% - var(--flow) * 0.4), rgb(0 0 0 / 0.2) calc(100% - var(--flow) * 0.2), transparent);
+.landing-ground { --flow: var(--landing-blend); position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+/* THE SHORE. The ground no longer ends in a straight fade. At the screen's
+   foot its edge is a wave (the layer's own mask: solid above the crest, clear
+   below, so the hall's green canvas shows beneath), and the hall's green laps
+   up over it as two translucent waves of water (the layer's pseudo-elements,
+   masked the other way round: solid below their crests, clear above, so they
+   have no top edge at all), drifting a little, slowly. Nothing meets head-on. */
+.landing-ground > i {
+  -webkit-mask-image: linear-gradient(#000 calc(100% - var(--flow)), transparent calc(100% - var(--flow))), url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%200H1440V54C1300%2096%201190%2022%201020%2056C850%2090%20760%20136%20560%20112C380%2090%20240%2044%200%2084Z%22/%3E%3C/svg%3E");
+  mask-image: linear-gradient(#000 calc(100% - var(--flow)), transparent calc(100% - var(--flow))), url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%200H1440V54C1300%2096%201190%2022%201020%2056C850%2090%20760%20136%20560%20112C380%2090%20240%2044%200%2084Z%22/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%, 100% var(--flow); mask-size: 100% 100%, 100% var(--flow);
+  -webkit-mask-position: 0 0, 0 100%; mask-position: 0 0, 0 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
 }
+.landing-ground > i::before, .landing-ground > i::after {
+  content: ''; position: absolute; left: -4%; right: -4%; bottom: 0; height: var(--flow);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  animation: landing-lap 12s ease-in-out infinite alternate;
+}
+.landing-ground > i::before {
+  background: linear-gradient(color-mix(in srgb, var(--backdrop-mid, #397f62) 72%, var(--ground-end)), var(--backdrop-mid, #397f62));
+  opacity: 0.55;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%2070C200%2030%20330%20110%20520%2090C700%2070%20820%2020%201000%2048C1180%2076%201300%20120%201440%2080V200H0Z%22/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%2070C200%2030%20330%20110%20520%2090C700%2070%20820%2020%201000%2048C1180%2076%201300%20120%201440%2080V200H0Z%22/%3E%3C/svg%3E");
+}
+.landing-ground > i::after {
+  background: linear-gradient(color-mix(in srgb, var(--backdrop-mid, #397f62) 85%, var(--ground-end)), var(--backdrop-dark, #174c3e));
+  opacity: 0.38;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%20118C180%2078%20300%20150%20500%20128C690%20106%20800%2062%20980%2090C1160%20118%201290%20160%201440%20116V200H0Z%22/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%20118C180%2078%20300%20150%20500%20128C690%20106%20800%2062%20980%2090C1160%20118%201290%20160%201440%20116V200H0Z%22/%3E%3C/svg%3E");
+  animation-duration: 16s; animation-delay: -6s; animation-direction: alternate-reverse;
+}
+@keyframes landing-lap { from { transform: translate3d(-1.6%, 0, 0); } to { transform: translate3d(1.6%, 3px, 0); } }
+.home-landing[data-active='false'] .landing-ground > i::before, .home-landing[data-active='false'] .landing-ground > i::after { animation-play-state: paused; }
 /* each layer: lighter at the top, deeper at the foot, and below the screen
    turning, step by step, towards the hall's own green (rather than meeting its
    deep green head-on) as it fades, on an eased curve */
@@ -61,7 +89,7 @@
   --ground-end: color-mix(in srgb, var(--ground) 86%, #000);
   position: absolute; inset: 0;
   background:
-    linear-gradient(transparent calc(100% - var(--flow)), color-mix(in srgb, var(--ground-end) 70%, var(--backdrop-mid, #397f62)) calc(100% - var(--flow) * 0.55), color-mix(in srgb, var(--ground-end) 35%, var(--backdrop-dark, #174c3e)) 100%),
+    linear-gradient(transparent calc(100% - var(--flow) * 2.2), color-mix(in srgb, var(--ground-end) 82%, var(--backdrop-mid, #397f62)) calc(100% - var(--flow) * 0.9), color-mix(in srgb, var(--ground-end) 62%, var(--backdrop-mid, #397f62)) 100%),
     linear-gradient(160deg, var(--ground-top) 0%, var(--ground) 48%, var(--ground-end) 100%);
 }
 /* the fade is a little shorter than the step, so the upper layer is wholly there (or gone) before the one beneath it changes */
@@ -70,9 +98,9 @@
 .home-landing::after { content: ''; display: block; height: var(--landing-blend); pointer-events: none; }
 /* the photographs dissolve into the plain ground at the screen's foot, before it flows on */
 .home-landing .mosaic-wall {
-  -webkit-mask-image: radial-gradient(ellipse 60% 52% at 52% 40%, rgb(0 0 0 / 0.22), #000 82%), linear-gradient(#000 calc(100% - clamp(48px, 8vh, 96px)), transparent);
+  -webkit-mask-image: radial-gradient(ellipse 60% 52% at 52% 40%, rgb(0 0 0 / 0.22), #000 82%), linear-gradient(#000 calc(100% - clamp(160px, 26vh, 300px)), rgb(0 0 0 / 0.5) calc(100% - clamp(80px, 13vh, 150px)), transparent);
   -webkit-mask-composite: source-in;
-  mask-image: radial-gradient(ellipse 60% 52% at 52% 40%, rgb(0 0 0 / 0.22), #000 82%), linear-gradient(#000 calc(100% - clamp(48px, 8vh, 96px)), transparent);
+  mask-image: radial-gradient(ellipse 60% 52% at 52% 40%, rgb(0 0 0 / 0.22), #000 82%), linear-gradient(#000 calc(100% - clamp(160px, 26vh, 300px)), rgb(0 0 0 / 0.5) calc(100% - clamp(80px, 13vh, 150px)), transparent);
   mask-composite: intersect;
 }
 /* the photographs, toned to a grey-green (each greyscale tile takes the colour beneath it), and faint */
@@ -168,6 +196,7 @@
 .home-landing .mosaic-path:focus-visible { outline: 2px solid color-mix(in oklab, var(--path-accent) 86%, #06231f); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   .home-landing .mosaic-overture-title > span:first-child { animation: none; }
+  .landing-ground > i::before, .landing-ground > i::after { animation: none; }
 }
 @media (forced-colors: active) {
   .home-landing { background: Canvas; }

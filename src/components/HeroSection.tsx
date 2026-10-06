@@ -8,6 +8,8 @@ import { PILLARS } from '../data/pillars';
 import { PillarState } from '../types';
 import { PillarHeroVisual } from './PillarHeroVisual';
 import { PillarArtwork } from './PillarArtwork';
+import { MosaicWaves, type WaveInput } from './MosaicWaves';
+import { subjectFor } from '../utils/waves';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { ArrowUpRight, Pause, Play } from 'lucide-react';
 
@@ -62,6 +64,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     backdropStack.current = [...backdropStack.current.filter(id => id !== currentPillar.id), currentPillar.id];
   }
   const [heroVisible, setHeroVisible] = useState(true);
+  /* THE WATER UNDER THE HALL: the layered-wave artwork the chapters below
+     swim in, here beneath every path's page in that path's own colours (it
+     morphs with a ripple as the hall turns). It paints only while the hall
+     is on screen and moving, and stays still for those who ask for less
+     motion; the shore above laps down into it. */
+  const waveInput = useRef<WaveInput>({ travel: 0.5 });
+  const [calm, setCalm] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setCalm(query.matches);
+    sync(); query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
   // Keep the original carousel mounted while the curtain carries it away.
   const contentGridRef = useRef<HTMLDivElement | null>(null);
@@ -334,6 +349,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           path opaque: a change of path only crossfades them, rather than
           mounting a new one (its photograph decoded, its masks, filter and
           blend painted) in the middle of a turn of the hall's pages. */}
+      <div className="hero-waves" aria-hidden="true">
+        <MosaicWaves subject={subjectFor(displayPillar)} active={heroVisible && !isPaused && !calm} input={waveInput} scale={4} fps={24} />
+      </div>
       <div className="hero-backdrops">
         {BACKDROP_PATHS.map(id => <PillarHeroBackdrop key={id} pillar={id} shown={currentPillar.id === id} layer={backdropStack.current.indexOf(id) + 1} />)}
       </div>
