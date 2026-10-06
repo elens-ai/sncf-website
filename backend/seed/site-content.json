@@ -382,6 +382,90 @@
       ]
     },
     {
+      "id": "chiropractic",
+      "pillarId": "heal",
+      "title": "Chiropractic Services",
+      "period": "As on September 2026",
+      "blurb": "Chiropractic care at the International Samagams in Delhi–Samalkha and Maharashtra, given by visiting doctors.",
+      "headline": {
+        "label": "Patients treated",
+        "value": "83,146"
+      },
+      "dataPoints": [
+        {
+          "label": "Patients treated",
+          "value": "83,146"
+        },
+        {
+          "label": "Camps organised",
+          "value": "14"
+        },
+        {
+          "label": "Years of service",
+          "value": "9"
+        },
+        {
+          "label": "Camps at Delhi–Samalkha",
+          "value": "7"
+        },
+        {
+          "label": "Camps in Maharashtra",
+          "value": "7"
+        }
+      ],
+      "images": [],
+      "icon": "spine",
+      "menuLabel": "Chiropractic"
+    },
+    {
+      "id": "blood-bank",
+      "pillarId": "heal",
+      "title": "Blood Bank",
+      "period": "As on September 2026",
+      "blurb": "The foundation’s own blood banking, separate from the donation camps.",
+      "headline": {
+        "label": "Units",
+        "value": "54,261"
+      },
+      "dataPoints": [
+        {
+          "label": "Units",
+          "value": "54,261"
+        },
+        {
+          "label": "Camps",
+          "value": "444"
+        }
+      ],
+      "images": [
+        {
+          "src": "/images/programmes/blood-bank-mixer.webp",
+          "alt": "A unit of blood on a collection mixer"
+        },
+        {
+          "src": "/images/programmes/blood-bank-bags.webp",
+          "alt": "Collected units of blood"
+        },
+        {
+          "src": "/images/programmes/blood-bank-samples.webp",
+          "alt": "Blood samples racked for testing"
+        }
+      ],
+      "icon": "droplet",
+      "menuLabel": "Blood Bank",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/blood-bank-processing.jpg"
+        },
+        {
+          "src": "/images/programmes/blood-bank-storage.jpg"
+        },
+        {
+          "src": "/images/programmes/blood-bank-centrifuge.jpg"
+        }
+      ]
+    },
+    {
       "id": "health-centre",
       "pillarId": "heal",
       "title": "Sant Nirankari Health Centre",
@@ -470,54 +554,6 @@
         "width": 11,
         "height": 21
       }
-    },
-    {
-      "id": "blood-bank",
-      "pillarId": "heal",
-      "title": "Blood Bank",
-      "period": "As on September 2026",
-      "blurb": "The foundation’s own blood banking, separate from the donation camps.",
-      "headline": {
-        "label": "Units",
-        "value": "54,261"
-      },
-      "dataPoints": [
-        {
-          "label": "Units",
-          "value": "54,261"
-        },
-        {
-          "label": "Camps",
-          "value": "444"
-        }
-      ],
-      "images": [
-        {
-          "src": "/images/programmes/blood-bank-mixer.webp",
-          "alt": "A unit of blood on a collection mixer"
-        },
-        {
-          "src": "/images/programmes/blood-bank-bags.webp",
-          "alt": "Collected units of blood"
-        },
-        {
-          "src": "/images/programmes/blood-bank-samples.webp",
-          "alt": "Blood samples racked for testing"
-        }
-      ],
-      "icon": "droplet",
-      "menuLabel": "Blood Bank",
-      "hoverPhotos": [
-        {
-          "src": "/images/programmes/blood-bank-processing.jpg"
-        },
-        {
-          "src": "/images/programmes/blood-bank-storage.jpg"
-        },
-        {
-          "src": "/images/programmes/blood-bank-centrifuge.jpg"
-        }
-      ]
     },
     {
       "id": "schools-colleges",
@@ -3588,7 +3624,11 @@
     "copy.WhoWeArePage.road-today": "Today",
     "copy.WhoWeArePage.road-hint": "Scroll to watch it grow",
     "copy.Link.WhoWeArePage.map": "https://maps.google.com/maps?q=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009&z=16&hl=en&output=embed",
-    "copy.WhoWeArePage.map-title": "Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari Colony, Delhi"
+    "copy.WhoWeArePage.map-title": "Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari Colony, Delhi",
+    "copy.ValueAnalytics.healChiro": "Chiropractic camps",
+    "copy.ValueAnalytics.healChiroNote": "At the International Samagams in Delhi–Samalkha and Maharashtra.",
+    "copy.ValueAnalytics.chiroLegend": "Each figure stands for 2,500 patients",
+    "copy.Insights.chiro-per-camp": "patients treated per camp"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -8024,6 +8064,26 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari…"
+      },
+      "copy.ValueAnalytics.healChiro": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Chiropractic camps"
+      },
+      "copy.ValueAnalytics.healChiroNote": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · At the International Samagams in Delhi–Samalkha and Maharashtra."
+      },
+      "copy.ValueAnalytics.chiroLegend": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Each figure stands for 2,500 patients"
+      },
+      "copy.Insights.chiro-per-camp": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · patients treated per camp"
       }
     },
     "assets": {
@@ -8576,6 +8636,48 @@
       "period": "As on September 2026",
       "source": "SNCF Activity Report, September 2026"
     },
+    "activity:chiropractic:metric:patients-treated": {
+      "label": "Patients treated",
+      "value": "83,146",
+      "period": "As on September 2026",
+      "source": "SNCF chiropractic camps at the International Samagams, 2017–2026"
+    },
+    "activity:chiropractic:metric:camps-organised": {
+      "label": "Camps organised",
+      "value": "14",
+      "period": "As on September 2026",
+      "source": "SNCF chiropractic camps at the International Samagams, 2017–2026"
+    },
+    "activity:chiropractic:metric:years-of-service": {
+      "label": "Years of service",
+      "value": "9",
+      "period": "As on September 2026",
+      "source": "SNCF chiropractic camps at the International Samagams, 2017–2026"
+    },
+    "activity:chiropractic:metric:camps-at-delhi-samalkha": {
+      "label": "Camps at Delhi–Samalkha",
+      "value": "7",
+      "period": "As on September 2026",
+      "source": "SNCF chiropractic camps at the International Samagams, 2017–2026"
+    },
+    "activity:chiropractic:metric:camps-in-maharashtra": {
+      "label": "Camps in Maharashtra",
+      "value": "7",
+      "period": "As on September 2026",
+      "source": "SNCF chiropractic camps at the International Samagams, 2017–2026"
+    },
+    "activity:blood-bank:metric:units": {
+      "label": "Units",
+      "value": "54,261",
+      "period": "As on September 2026",
+      "source": "SNCF Activity Report, September 2026"
+    },
+    "activity:blood-bank:metric:camps": {
+      "label": "Camps",
+      "value": "444",
+      "period": "As on September 2026",
+      "source": "SNCF Activity Report, September 2026"
+    },
     "activity:health-centre:metric:allopathic": {
       "label": "Allopathic",
       "value": "47",
@@ -8639,18 +8741,6 @@
     "activity:health-centre:headline": {
       "label": "Allopathic centres",
       "value": "47",
-      "period": "As on September 2026",
-      "source": "SNCF Activity Report, September 2026"
-    },
-    "activity:blood-bank:metric:units": {
-      "label": "Units",
-      "value": "54,261",
-      "period": "As on September 2026",
-      "source": "SNCF Activity Report, September 2026"
-    },
-    "activity:blood-bank:metric:camps": {
-      "label": "Camps",
-      "value": "444",
       "period": "As on September 2026",
       "source": "SNCF Activity Report, September 2026"
     },

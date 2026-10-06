@@ -264,6 +264,7 @@ export interface Activity {
         | 'mountain'
         | 'house'
         | 'heart-handshake'
+        | 'spine'
       )
     | null;
   /**

@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-  Ambulance, Award, BarChart3, BedDouble, BookOpen, Building2, CalendarCheck, CalendarHeart, Clock, Droplet, Eye, Glasses, GraduationCap,
+  Ambulance, Award, BarChart3, BedDouble, BookOpen, Building2, CalendarCheck, CalendarDays, CalendarHeart, Clock, Droplet, Eye, Glasses, GraduationCap,
   HandHeart, Heart, HeartPulse, Hospital, IndianRupee, Laptop, MapPin, Package, School, Scissors, ShieldCheck, Sparkles, Sprout, Stethoscope,
   Syringe, Tent, TrainFront, TreePine, Trophy, Users, Waves, Wind,
 } from 'lucide-react';
@@ -18,7 +18,7 @@ const READINGS: [RegExp, LucideIcon][] = [
   [/tree|plantation|sapling|plant|oneness vann/i, TreePine], [/drive/i, CalendarCheck], [/manhour/i, Clock],
   [/volunteer/i, HandHeart], [/railway|rly/i, TrainFront], [/hospital/i, Hospital], [/waterbod|water bod/i, Waves],
   [/food/i, Package], [/mask|ppe/i, ShieldCheck], [/oxygen/i, Wind], [/vaccin/i, Syringe], [/icu|bed/i, BedDouble],
-  [/care centre/i, Building2], [/couple|marri/i, Heart], [/event/i, CalendarHeart],
+  [/care centre/i, Building2], [/couple|marri/i, Heart], [/event/i, CalendarHeart], [/year/i, CalendarDays],
   [/village|population|hamlet|panchayat|beneficiar|people/i, Users], [/cities|states/i, MapPin], [/area|acre|hectare|sq ft|green cover/i, Sprout],
 ];
 

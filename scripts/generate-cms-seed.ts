@@ -21,15 +21,18 @@ const [copy, assets, components] = await Promise.all([
   registry('generatedCopy.json'), registry('generatedAssets.json'), registry('generatedComponents.json'),
 ]);
 
-/* The report the figures in src/data are transcribed from: change it with them. */
+/* The report the figures in src/data are transcribed from: change it with them. A programme from another of
+   the foundation's records names that record instead. */
 const REPORT = 'SNCF Activity Report, September 2026';
+const RECORDS: Record<string, string> = { chiropractic: 'SNCF chiropractic camps at the International Samagams, 2017–2026' };
 const stats: Record<string, { label: string; value: string; period?: string; source: string }> = {};
 for (const activity of DEFAULT_ACTIVITIES) {
+  const source = RECORDS[activity.id] ?? REPORT;
   for (const metric of activity.dataPoints) {
-    stats[`activity:${activity.id}:metric:${statisticKey(metric.label)}`] = { ...metric, period: activity.period, source: REPORT };
+    stats[`activity:${activity.id}:metric:${statisticKey(metric.label)}`] = { ...metric, period: activity.period, source };
   }
   if (!activity.dataPoints.some(metric => metric.label === activity.headline.label)) {
-    stats[`activity:${activity.id}:headline`] = { ...activity.headline, period: activity.period, source: REPORT };
+    stats[`activity:${activity.id}:headline`] = { ...activity.headline, period: activity.period, source };
   }
 }
 for (const pillar of DEFAULT_EXTENDED_PILLARS) {

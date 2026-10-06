@@ -36,6 +36,7 @@ export const PROGRAMME_SDGS: Record<string, number[]> = {
   'health-checkup': [3],
   'eye-checkup': [3],
   'health-centre': [3],
+  chiropractic: [3],
   'blood-bank': [3],
   /* enrich */
   'schools-colleges': [4],

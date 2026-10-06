@@ -825,5 +825,9 @@
   "copy.WhoWeArePage.road-today": "Today",
   "copy.WhoWeArePage.road-hint": "Scroll to watch it grow",
   "copy.Link.WhoWeArePage.map": "https://maps.google.com/maps?q=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009&z=16&hl=en&output=embed",
-  "copy.WhoWeArePage.map-title": "Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari Colony, Delhi"
+  "copy.WhoWeArePage.map-title": "Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari Colony, Delhi",
+  "copy.ValueAnalytics.healChiro": "Chiropractic camps",
+  "copy.ValueAnalytics.healChiroNote": "At the International Samagams in Delhi–Samalkha and Maharashtra.",
+  "copy.ValueAnalytics.chiroLegend": "Each figure stands for 2,500 patients",
+  "copy.Insights.chiro-per-camp": "patients treated per camp"
 }

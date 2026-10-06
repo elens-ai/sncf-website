@@ -200,6 +200,10 @@ const HealAnalytics: React.FC<BandProps> = ({ activities, explorerId, onSelect }
       <div className="va-money"><Figure value={v('blood-bank', 'Units')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.bloodBankUnits", "units collected by the foundation’s own blood bank, in")} <Figure value={v('blood-bank', 'Camps')} size="md" /> {getCMSCopy("copy.ValueAnalytics.camps", "camps")}</span></div>
       <Pictogram total={v('blood-bank', 'Units')} unit={2500} icon={Droplet} legend={getCMSCopy("copy.ValueAnalytics.bankLegend", "Each drop stands for 2,500 units")} />
     </Card>
+    <Card title={getCMSCopy("copy.ValueAnalytics.healChiro", "Chiropractic camps")} note={getCMSCopy("copy.ValueAnalytics.healChiroNote", "At the International Samagams in Delhi–Samalkha and Maharashtra.")} period={w('chiropractic')} span={6} activityId="chiropractic" explorerId={explorerId} onSelect={onSelect} photo={pic('chiropractic')}>
+      <div className="va-money"><Figure value={v('chiropractic', 'Patients treated')} size="xl" /><span className="va-money-line">{getCMSCopy("copy.ValueAnalytics.patientsIn", "patients treated, in")} <Figure value={v('chiropractic', 'Camps organised')} size="md" /> {getCMSCopy("copy.ValueAnalytics.camps", "camps")}</span></div>
+      <Pictogram total={v('chiropractic', 'Patients treated')} unit={2500} icon={Users} legend={getCMSCopy("copy.ValueAnalytics.chiroLegend", "Each figure stands for 2,500 patients")} />
+    </Card>
   </>;
 };
 

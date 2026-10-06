@@ -46,6 +46,9 @@ const RULES: Record<string, (a: Activity) => (Insight | null)[]> = {
     const total = kinds.reduce((sum, label) => sum + n(a, label), 0);
     return [total ? { value: grouped(total), label: c('centre-network', 'facilities in the network, of {kinds} kinds').replace('{kinds}', String(kinds.length)), icon: Hospital } : null];
   },
+  chiropractic: a => [
+    per(n(a, 'Patients treated'), n(a, 'Camps organised'), c('chiro-per-camp', 'patients treated per camp'), Stethoscope),
+  ],
   'blood-bank': a => [
     per(n(a, 'Units'), n(a, 'Camps'), c('bank-per-camp', 'units collected per camp'), Droplet),
   ],

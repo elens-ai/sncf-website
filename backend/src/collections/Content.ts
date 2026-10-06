@@ -38,6 +38,7 @@ const ICON_OPTIONS = [
   ['graduation-cap', 'Graduation cap'], ['award', 'Award'], ['book-open', 'Open book'], ['laptop', 'Laptop'], ['scissors', 'Scissors'],
   ['trees', 'Trees'], ['sparkles', 'Sparkles'], ['package-check', 'Relief package'], ['heart', 'Heart'], ['hand-coins', 'Hand with coins'],
   ['waves', 'Waves'], ['sprout', 'Sprout'], ['mountain', 'Mountain'], ['house', 'House'], ['heart-handshake', 'Heart & handshake'],
+  ['spine', 'Spine (chiropractic)'],
 ].map(([value, label]) => ({ value, label }))
 const percent = (name: string, label: string): Field => ({ name, label, type: 'number', min: 0, max: 100 })
 
