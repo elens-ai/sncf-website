@@ -550,8 +550,6 @@
   "copy.Sayings.villages-by": "Sant Nirankari Mission",
   "copy.Sayings.contribute-english": "Life gets a meaning, if it is lived for others.",
   "copy.Sayings.contribute-by": "Nirankari Baba Hardev Singh Ji Maharaj",
-  "copy.NavPanels.feature-kicker": "Also from the Mission",
-  "copy.NavPanels.feature-go": "Visit its site",
   "copy.NavPanels.who-account": "Our story since 2010",
   "copy.NavPanels.who-mission": "What drives the work",
   "copy.NavPanels.who-road": "Milestones along the way",
@@ -776,5 +774,6 @@
   "copy.WhoWeArePage.cover-figures": "The foundation in figures",
   "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it.",
   "copy.GuidingForcePage.cover-lede": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document.",
-  "copy.WelcomeSplashScreen.welcome-hold-seconds": "10"
+  "copy.WelcomeSplashScreen.welcome-hold-seconds": "10",
+  "copy.NavPanels.feature-visit": "Visit"
 }

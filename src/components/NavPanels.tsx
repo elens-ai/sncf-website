@@ -96,7 +96,6 @@ export const ProjectsPanel: React.FC<{ links: NavLink[]; onNavigate: () => void 
                 </span>
                 <span className="nvproject-words">
                   <span className="nvproject-name">{link.label}</span>
-                  <span className="nvproject-figure"><strong>{project!.headline.value}</strong> {project!.headline.label}</span>
                 </span>
               </Go>
             </li>
@@ -109,9 +108,8 @@ export const ProjectsPanel: React.FC<{ links: NavLink[]; onNavigate: () => void 
           <Go key={link.href} link={link} className={`nvfeature${/healthcity/i.test(link.href) ? ' nvfeature-city' : ''}`} onNavigate={onNavigate}>
             {/healthcity/i.test(link.href) && <img className="nvfeature-photo" src={resolveCMSMedia(resolveCMSAsset("asset.ProjectsPage.healthCity", "/images/projects/health-city.webp"))} alt="" aria-hidden="true" loading="lazy" decoding="async" />}
             <span className="nvfeature-icon" aria-hidden="true"><Hospital size={20} strokeWidth={1.6} /></span>
-            <span className="nvfeature-kicker">{c('feature-kicker', 'Also from the Mission')}</span>
             <span className="nvfeature-name">{link.label}</span>
-            <span className="nvfeature-go">{c('feature-go', 'Visit its site')}<ArrowUpRight size={14} aria-hidden="true" /></span>
+            <span className="nvfeature-go">{c('feature-visit', 'Visit')}<ArrowUpRight size={14} aria-hidden="true" /></span>
           </Go>
         ))}
         {all && (
