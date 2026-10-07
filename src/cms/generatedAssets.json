@@ -75,10 +75,6 @@
     "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
     "label": "WelcomeSplashScreen · sncf-logo-only.webp"
   },
-  "asset.GuidingForcePage.56b9a5e0ea79": {
-    "source": "/images/satguru-mata-sudiksha-ji.jpg",
-    "label": "GuidingForcePage · satguru-mata-sudiksha-ji.jpg"
-  },
   "asset.GuidingForcePage.4daa8ff53979": {
     "source": "/images/mataji-rajpita-planting.webp",
     "label": "GuidingForcePage · mataji-rajpita-planting.webp"
@@ -247,10 +243,6 @@
     "source": "/images/petals/palm.webp",
     "label": "WorkingHands · palm.webp"
   },
-  "asset.GuidingForcePage.work-hc": {
-    "source": "/images/programmes/health-centre-inauguration.jpg",
-    "label": "GuidingForcePage · health-centre-inauguration.jpg"
-  },
   "asset.GuidingForcePage.work-amrit": {
     "source": "/images/programmes/amrit-riverbank.webp",
     "label": "GuidingForcePage · amrit-riverbank.webp"
@@ -298,5 +290,13 @@
   "asset.ProjectsMosaicArt.adopted-villages": {
     "source": "/images/programmes/adopted-villages-mandaura.webp",
     "label": "ProjectsMosaicArt · adopted-villages-mandaura.webp"
+  },
+  "asset.GuidingForcePage.cover-portrait": {
+    "source": "/images/satguru-mata-sudiksha-ji-portrait.webp",
+    "label": "GuidingForcePage · satguru-mata-sudiksha-ji-portrait.webp"
+  },
+  "asset.GuidingForcePage.work-hc-photo": {
+    "source": "/images/programmes/health-city-evening.webp",
+    "label": "GuidingForcePage · health-city-evening.webp"
   }
 }

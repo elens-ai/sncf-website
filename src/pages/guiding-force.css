@@ -1,20 +1,29 @@
 /* ==========================================================================
-   OUR GUIDING FORCE, REDRAWN (GuidingForcePage.tsx): the portrait in a halo
-   that carries the subject of Her teaching, the teaching set out as four
+   OUR GUIDING FORCE, REDRAWN (GuidingForcePage.tsx): the portrait standing
+   free over the cover's white and pink waves, the teaching set out as four
    words, the quote turning on its "One", the undertakings shown by their own
    photographs and counted by the record, and the pandemic drawn out in the
    site's own charts.
    ========================================================================== */
 
-/* ---- the cover: the portrait in its halo ---- */
+/* ---- the cover: the waves behind the words and the portrait, as the other covers have them; the portrait on its
+   own, with nothing drawn round it ---- */
 .gf-cover { isolation: isolate; }
-.gf-halo-art { position: absolute; left: 50%; top: 47%; z-index: -1; width: 136%; aspect-ratio: 1; translate: -50% -50%; overflow: visible; pointer-events: none; }
-.gf-halo-ring { fill: none; stroke: #d6a1b6; stroke-width: 1; opacity: 0.6; }
-.gf-halo-ring:nth-of-type(3), .gf-halo-ring:nth-of-type(5) { stroke-dasharray: 2 7; opacity: 0.8; }
-.gf-halo-words { transform-origin: 300px 300px; animation: gf-turn 160s linear infinite; }
-.gf-halo-words text { font: 700 12.5px var(--font-sans); letter-spacing: 0.3em; text-transform: uppercase; fill: #a65578; opacity: 0.78; }
-.gf-halo-orbs { transform-origin: 300px 300px; animation: gf-turn 90s linear infinite reverse; }
-.gf-halo-orbs circle { stroke: #fff; stroke-width: 3; }
+.gf-cover-ground { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+/* the ribbons' shading, drawn for dark grounds, would read as grey on this one: more saturation and a little light
+   keep them pink */
+.gf-cover-ground > .mosaic-waves { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; filter: saturate(1.8) brightness(1.12); transition: opacity 900ms ease; }
+.gf-cover-ground > .mosaic-waves[data-ready='true'] { opacity: 1; }
+@media (forced-colors: active), (prefers-contrast: more) { .gf-cover-ground > .mosaic-waves { display: none; } }
+/* the portrait stands free, cut out over the waves (its foot fading into them), larger than its arch allowed */
+.ed-portrait.gf-portrait { max-width: 660px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.ed-portrait.gf-portrait::before { content: none; }
+/* as tall as the first screen allows, beside the words */
+.ed-portrait.gf-portrait img { display: block; width: auto; height: auto; max-width: 100%; max-height: max(420px, calc(100svh - 200px)); margin-inline: auto; object-fit: contain; border-radius: 0; background: none; }
+.ed-portrait.gf-portrait figcaption { padding: 2px 5px 0; }
+/* the portrait's column the wider, and the cover's air above and below given to it */
+@media (min-width: 801px) { .ed-cover.gf-cover { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); padding-block: 100px 36px; } }
+@media (max-width: 800px) { .ed-portrait.gf-portrait { max-width: 440px; } }
 
 /* ---- 01 · the subject of Her teaching, and the quote ---- */
 .guiding-story .ww-prose > p:first-child::first-letter { float: left; margin: 0.08em 0.12em 0 0; font: 800 3.3em/0.8 var(--font-heading); color: #b0436e; }
@@ -42,6 +51,10 @@
 .gf-work[data-side='end'] { align-items: flex-end; }
 .gf-work[data-side='end'] .gf-work-body { max-width: min(440px, 58%); }
 .gf-work[data-side='end'] .gf-work-shade { background: linear-gradient(90deg, transparent 28%, rgb(24 10 20 / 0.55) 52%, rgb(24 10 20 / 0.9)); }
+/* the words at the start, narrow enough to keep clear of the people at the photograph's centre; the shade only
+   behind them */
+.gf-work[data-side='start'] .gf-work-body { max-width: min(400px, 48%); }
+.gf-work[data-side='start'] .gf-work-shade { background: linear-gradient(90deg, rgb(24 10 20 / 0.78), rgb(24 10 20 / 0.4) 38%, transparent 62%), linear-gradient(180deg, transparent 55%, rgb(24 10 20 / 0.45)); }
 /* the planting photograph is a cut-out: it stands on the green it was planted for */
 .gf-work[data-cutout] { background: radial-gradient(ellipse at 50% 30%, #c9ecb4, transparent 62%), linear-gradient(170deg, #77b85a, #2f6a2c); }
 .gf-work[data-cutout] .gf-work-photo { inset: 18px 0 auto; height: 58%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 14px 16px rgb(0 0 0 / 0.25)); }
@@ -75,7 +88,6 @@
 .gf-ripples i:nth-child(3) { animation-delay: 3s; }
 .gf-ripples b { width: 74px; aspect-ratio: 16 / 9; background: linear-gradient(100deg, #f81170, #b357ad 50%, #09a6cf); -webkit-mask: var(--lotus) center / contain no-repeat; mask: var(--lotus) center / contain no-repeat; }
 
-@keyframes gf-turn { to { rotate: 360deg; } }
 @keyframes gf-ripple { from { opacity: 0.8; scale: 0.45; } to { opacity: 0; scale: 1.25; } }
 @keyframes gf-live { 50% { box-shadow: 0 0 0 7px rgb(47 179 107 / 0.08); } }
 
@@ -87,8 +99,6 @@
   .gf-relief-charts .va-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
-  .gf-halo-art { width: 128%; }
-  .gf-halo-words { display: none; }
   .gf-teachings ul { grid-template-columns: minmax(0, 1fr); }
   .gf-bento { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-template-areas: none; grid-auto-rows: minmax(360px, auto); }
   .gf-bento > .gf-work { grid-area: auto !important; }
@@ -98,9 +108,14 @@
   .gf-work[data-side='end'] .gf-work-body { max-width: none; }
   .gf-work[data-side='end'] .gf-work-shade { background: linear-gradient(180deg, rgb(24 10 20 / 0.02) 18%, rgb(24 10 20 / 0.5) 46%, rgb(24 10 20 / 0.92)); }
   .gf-work[data-side='end'] .gf-work-photo { object-position: 18% 60% !important; }
+  /* too narrow for words beside the stage: the photograph above, fading into the card, and the words beneath it */
+  .gf-work[data-side='start'] { min-height: 430px; }
+  .gf-work[data-side='start'] .gf-work-photo { inset: 0 0 auto; height: 62%; object-position: 50% 70% !important; -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent); }
+  .gf-work[data-side='start'] .gf-work-body { max-width: none; }
+  .gf-work[data-side='start'] .gf-work-shade { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .gf-halo-words, .gf-halo-orbs, .gf-ripples i, .gf-work-status i { animation: none; }
+  .gf-ripples i, .gf-work-status i { animation: none; }
   .gf-ripples i:first-child { opacity: 0.5; scale: 0.9; }
   .gf-work-photo, .gf-teachings li { transition: none; }
 }

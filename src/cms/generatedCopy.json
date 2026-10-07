@@ -136,10 +136,8 @@
   "copy.GuidingForcePage.fb4c55902430": "Nirankari Youth Symposium & NIMA",
   "copy.GuidingForcePage.b733f26c2ca4": "Our Guiding Force",
   "copy.GuidingForcePage.bab255b4564b": "Our guiding force",
-  "copy.GuidingForcePage.ff4066e1863f": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document. This page says plainly where that guidance comes from.",
   "copy.GuidingForcePage.bc1bc49859a9": "The present Satguru ",
   "copy.GuidingForcePage.e19d3f2c98e2": "Satguru Mata Sudiksha Ji Maharaj",
-  "copy.GuidingForcePage.8b08fcc76f90": "Every camp, classroom and forest in this site traces back to spiritual\n      guidance rather than a strategy document. This page says plainly where\n      that guidance comes from.",
   "copy.GuidingForcePage.d16757403eaf": "The present Satguru",
   "copy.GuidingForcePage.d42bb56cd2a9": "Head of the Sant Nirankari Mission, whose subject is universal love, inner change and service asked of no one.",
   "copy.GuidingForcePage.9c10007c694f": "Her Holiness is the head of the Sant Nirankari Mission, a worldwide spiritual body whose concerns are peace, human oneness and the welfare of others. Her teaching reaches millions, and its subject is consistent: universal love, inner change, service asked of no one and offered to everyone, and the duty of being a decent citizen.",
@@ -808,5 +806,6 @@
   "copy.WhoWeArePage.cover-script": "the Mission’s working hands",
   "copy.WhoWeArePage.cover-lede": "The part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.",
   "copy.WhoWeArePage.cover-figures": "The foundation in figures",
-  "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it."
+  "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it.",
+  "copy.GuidingForcePage.cover-lede": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document."
 }

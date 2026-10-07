@@ -3,9 +3,12 @@ import { CMSSection, useCMSRevision } from '../cms/CMSContentProvider';
 import { getCMSLink } from '../cms/links';
 import { resolveCMSMedia } from '../cms/media';
 import React, { useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 import { ArrowDown, ArrowUpRight, HeartHandshake, Trees, Droplets, Music, Heart, Sprout, HandHeart, Landmark, Wind, Syringe, Building2, BedDouble } from 'lucide-react';
 import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion';
 import { PageShell } from '../components/PageShell';
+import { MosaicWaves, type WaveInput } from '../components/MosaicWaves';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 import { MediaGallery } from '../components/MediaGallery';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
@@ -71,7 +74,7 @@ const works = () => {
   const nimaCentres = pointOf('skill-nima', 'NIMA centres'), nimaYouth = pointOf('skill-nima', 'Youth benefitted');
   return [
     { area: 'hc', dir: 'health' as const, icon: HeartHandshake, link: '/projects#health-city', action: getCMSCopy("copy.GuidingForcePage.work-explore", "Explore this project"),
-      photo: resolveCMSAsset("asset.GuidingForcePage.work-hc", "/images/programmes/health-centre-inauguration.jpg"), focus: 'center 78%', side: 'end',
+      photo: resolveCMSAsset("asset.GuidingForcePage.work-hc-photo", "/images/programmes/health-city-evening.webp"), focus: '52% 86%', side: 'start',
       alt: getCMSCopy("copy.GuidingForcePage.work-hc-alt", "Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji on the stage before Sant Nirankari Health City"),
       status: getCMSCopy("copy.GuidingForcePage.work-hc-status", "Dedicated 23 February 2026 · OPD services started") },
     { area: 'vann', dir: 'nature' as const, icon: Trees, link: '/projects#project-oneness-vann', action: getCMSCopy("copy.GuidingForcePage.work-explore", "Explore this project"), cutout: true,
@@ -101,26 +104,21 @@ const Rolling: React.FC<{ value: string }> = ({ value }) => (
   <><span className="sr-only">{value}</span><span className="gf-roll" aria-hidden="true"><OdometerStatCounter value={value} duration={1300} /></span></>
 );
 
-/** The portrait in its halo: rings of light behind the arch, the subject of
-    Her teaching written round the outermost, and the logo's five petal
-    colours travelling the ring inside it. */
+/* the cover's waves, as the other covers have them, in its own white and pink */
+const GF_GROUND = { id: 'our-guiding-force', accentA: '#e2a3bd', accentB: '#fbe9f0' };
+
+/** The cover: the words, and the portrait standing free (cut out, its foot
+    fading away), over the page's own white and pink with the waves moving
+    across it. */
 const GuidingCover = () => {
   useCMSRevision();
-  const words = TEACHINGS.join('  ·  ');
-  const R = 266;
-  return <EditorialMotion><section className="ed-cover gf-cover"><div className="ed-cover-copy" data-reveal><p className="ed-eyebrow">{getCMSCopy("copy.GuidingForcePage.b733f26c2ca4", "Our Guiding Force")}</p><h1>{getCMSCopy("copy.GuidingForcePage.bab255b4564b", "Our guiding force")}</h1><p>{getCMSCopy("copy.GuidingForcePage.ff4066e1863f", "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document. This page says plainly where that guidance comes from.")}</p><a className="ed-link" href={getCMSLink("copy.Link.GuidingForcePage.7783614ae9f5", "#satguru")}>{getCMSCopy("copy.GuidingForcePage.bc1bc49859a9", "The present Satguru ")}<ArrowDown size={17} /></a></div>
-    <figure className="ed-portrait gf-halo" data-reveal>
-      <svg className="gf-halo-art" viewBox="0 0 600 600" aria-hidden="true">
-        <defs>
-          <path id="gf-halo-path" d={`M300 ${300 - R}a${R} ${R} 0 1 1 0 ${R * 2}a${R} ${R} 0 1 1 0 ${-R * 2}`} />
-          <radialGradient id="gf-halo-light"><stop offset="0.35" stopColor="#ffe1ec" stopOpacity="0.9" /><stop offset="1" stopColor="#ffe1ec" stopOpacity="0" /></radialGradient>
-        </defs>
-        <circle cx="300" cy="300" r="300" fill="url(#gf-halo-light)" />
-        {[168, 206, 242, 290].map((r, i) => <circle key={r} className="gf-halo-ring" cx="300" cy="300" r={r} style={{ '--i': i } as React.CSSProperties} />)}
-        <g className="gf-halo-words"><text><textPath href="#gf-halo-path" textLength={Math.round(Math.PI * R * 2 - 16)} lengthAdjust="spacing">{`${words}  ·  ${words}  ·  `}</textPath></text></g>
-        <g className="gf-halo-orbs">{PETAL_INKS.map((ink, i) => { const a = ((i * 72 - 90) * Math.PI) / 180; return <circle key={ink} cx={300 + 242 * Math.cos(a)} cy={300 + 242 * Math.sin(a)} r="8" fill={ink} />; })}</g>
-      </svg>
-      <img src={resolveCMSAsset("asset.GuidingForcePage.56b9a5e0ea79", "/images/satguru-mata-sudiksha-ji.jpg")} alt={getCMSCopy("copy.GuidingForcePage.e19d3f2c98e2", "Satguru Mata Sudiksha Ji Maharaj")} width="500" height="600" fetchPriority="high" />
+  const ref = useRef<HTMLElement>(null);
+  const active = useSectionActivity(ref);
+  const calm = useReducedMotion() ?? false;
+  const waveInput = useRef<WaveInput>({ travel: 0.5 });
+  return <EditorialMotion><section ref={ref} className="ed-cover gf-cover"><div className="gf-cover-ground" aria-hidden="true"><MosaicWaves subject={GF_GROUND} active={active && !calm} input={waveInput} scale={3} fps={24} /></div><div className="ed-cover-copy" data-reveal><p className="ed-eyebrow">{getCMSCopy("copy.GuidingForcePage.b733f26c2ca4", "Our Guiding Force")}</p><h1>{getCMSCopy("copy.GuidingForcePage.bab255b4564b", "Our guiding force")}</h1><p>{getCMSCopy("copy.GuidingForcePage.cover-lede", "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document.")}</p><a className="ed-link" href={getCMSLink("copy.Link.GuidingForcePage.7783614ae9f5", "#satguru")}>{getCMSCopy("copy.GuidingForcePage.bc1bc49859a9", "The present Satguru ")}<ArrowDown size={17} /></a></div>
+    <figure className="ed-portrait gf-portrait" data-reveal>
+      <img src={resolveCMSAsset("asset.GuidingForcePage.cover-portrait", "/images/satguru-mata-sudiksha-ji-portrait.webp")} alt={getCMSCopy("copy.GuidingForcePage.e19d3f2c98e2", "Satguru Mata Sudiksha Ji Maharaj")} width="940" height="1101" fetchPriority="high" />
       <figcaption>{getCMSCopy("copy.GuidingForcePage.e19d3f2c98e2", "Satguru Mata Sudiksha Ji Maharaj")}</figcaption>
     </figure></section></EditorialMotion>;
 };
@@ -164,8 +162,8 @@ return (
     accentPillarId="empower"
     eyebrow={getCMSCopy("copy.GuidingForcePage.b733f26c2ca4", "Our Guiding Force")}
     title={getCMSCopy("copy.GuidingForcePage.bab255b4564b", "Our guiding force")}
-    standfirst={getCMSCopy("copy.GuidingForcePage.8b08fcc76f90", "Every camp, classroom and forest in this site traces back to spiritual\n      guidance rather than a strategy document. This page says plainly where\n      that guidance comes from.")}
-    rail={<SubsectionNav label={getCMSCopy("copy.GuidingForcePage.rail", "On this page")} links={[
+    standfirst={getCMSCopy("copy.GuidingForcePage.cover-lede", "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document.")}
+    rail={<SubsectionNav variant="tabs" label={getCMSCopy("copy.GuidingForcePage.rail", "On this page")} links={[
       { id: 'satguru', label: getCMSCopy("copy.GuidingForcePage.rail-satguru", "The present Satguru"), ink: INK_B },
       { id: 'guidance', label: getCMSCopy("copy.GuidingForcePage.rail-guidance", "Under Her guidance"), ink: '#c6dfbd' },
       ...(RELIEF.length ? [{ id: 'gf-relief', label: getCMSCopy("copy.GuidingForcePage.rail-relief", "Pandemic response"), ink: '#f0c5ac' }] : []),
