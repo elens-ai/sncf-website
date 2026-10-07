@@ -46,9 +46,7 @@ interface MosaicChapterProps {
   onAttend: (activity: Activity | null) => void;
   /** In place of the photographic emblem (Core Values gives Enrich its scrapbook). */
   emblem?: React.ReactNode;
-  /** On the cornerstone's own page (Core Values): Explore leads down to its
-      story and Reports, Gallery and Stats to its tabs there, and a programme
-      opens in its report rather than in a spotlight. */
+  /** On Core Values, omit chapter shortcuts and open programmes in their reports. */
   inPage?: boolean;
   /** The name's heading level: h2 where the chapter is a section of its page. */
   heading?: 'h2' | 'h3';
@@ -82,25 +80,18 @@ export const MosaicChapter = React.memo(function MosaicChapter({
           </Name>
           <p>{pillar.headline}</p>
         </div>
-        <div className="activity-chapter-actions">
-          {inPage ? (
-            <a className="activity-chapter-explore" href={`#${id}-story`}>
-              {getCMSCopy('copy.ImpactMosaic.3b73900b8d29', 'Explore')} {name}<ArrowUpRight size={17} aria-hidden="true" />
-            </a>
-          ) : (
+        {!inPage && <div className="activity-chapter-actions">
             <Link className="activity-chapter-explore" to={id === 'projects' ? '/projects' : `/core-values#${id}`}>
               {getCMSCopy('copy.ImpactMosaic.3b73900b8d29', 'Explore')} {name}<ArrowUpRight size={17} aria-hidden="true" />
             </Link>
-          )}
-          {/* straight into the cornerstone's report, gallery or stats: its tabs on Core Values (on that page, just below) */}
+          {/* Homepage shortcuts lead directly to the cornerstone's tabs on Core Values. */}
           {id !== 'projects' && (
             <nav className="activity-chapter-quick" aria-label={`${name}: ${getCMSCopy('copy.ImpactMosaic.quick-label', 'reports, gallery and stats')}`}>
-              {([['reports', getCMSCopy('copy.ImpactMosaic.quick-reports', 'Reports')], ['gallery', getCMSCopy('copy.ImpactMosaic.quick-gallery', 'Gallery')], ['stats', getCMSCopy('copy.ImpactMosaic.quick-stats', 'Stats')]] as const).map(([tab, label]) => inPage
-                ? <a key={tab} href={`#${id}-${tab}`}>{label}</a>
-                : <Link key={tab} to={`/core-values#${id}-${tab}`}>{label}</Link>)}
+              {([['reports', getCMSCopy('copy.ImpactMosaic.quick-reports', 'Reports')], ['gallery', getCMSCopy('copy.ImpactMosaic.quick-gallery', 'Gallery')], ['stats', getCMSCopy('copy.ImpactMosaic.quick-stats', 'Stats')]] as const).map(([tab, label]) =>
+                <Link key={tab} to={`/core-values#${id}-${tab}`}>{label}</Link>)}
             </nav>
           )}
-        </div>
+        </div>}
       </header>
 
       <div className="activity-constellation" data-reveal style={{ '--activity-rows': rows } as React.CSSProperties}>

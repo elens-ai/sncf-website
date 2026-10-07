@@ -35,3 +35,11 @@
 .saying.donation-saying::after { left: 0; right: 30%; }
 .saying.donation-saying[data-script='english'] blockquote { font-size: clamp(17px, 1.5vw, 20px); }
 .saying.donation-saying figcaption { margin-top: 10px; font-size: 10px; }
+.saying.dossier-saying { --quote-gap: 20px; --quote-mark-size: 30px; margin: 0 0 20px; padding: 14px 0; }
+.saying.dossier-saying[data-script='hindi'] blockquote { font-size: clamp(22px, 1.8vw, 26px); line-height: 1.45; }
+.saying.dossier-saying .saying-meaning { font-size: 12px; line-height: 1.55; }
+.saying.dossier-saying figcaption { margin-top: 10px; font-size: 8.5px; letter-spacing: .07em; }
+@media (max-width: 640px) {
+  .value-chapter-body > .saying { --quote-gap: 20px; --quote-mark-size: 32px; padding: 20px 4px; }
+  .value-chapter-body > .saying[data-script='hindi'] blockquote { font-size: 25px; line-height: 1.5; }
+}

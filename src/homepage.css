@@ -271,7 +271,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 .hero-model-name {
   position: absolute; left: 0; right: 0; bottom: 0;
   margin: 0; text-align: center;
-  font: 600 calc(var(--hero-model-size, 320px) * .085)/1 'Cinzel', 'Times New Roman', serif;
+  font: 600 calc(var(--hero-model-size, 320px) * .085)/1 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   letter-spacing: .3em; text-indent: .3em; text-transform: uppercase;
   color: #fff; text-shadow: 0 2px 14px rgb(6 55 130 / .45);
 }

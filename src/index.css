@@ -14,7 +14,34 @@
   font-style: normal;
   font-display: swap;
 }
+/* A static weight-400 face for numeric glyphs at every requested weight.
+   Restricting its character range preserves each surrounding text face. The
+   weight range prevents synthetic bolding when a number occurs in a heading. */
+@font-face {
+  font-family: 'Outfit Numbers';
+  src: url('./assets/fonts/outfit-regular.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+@font-face {
+  font-family: 'Outfit Numbers';
+  src: url('./assets/fonts/outfit-regular.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+@font-face {
+  font-family: 'Outfit Regular';
+  src: url('./assets/fonts/outfit-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 @theme {
+  --font-numeric: 'Outfit Regular', Outfit, system-ui, sans-serif;
   --color-navy: #063782;
   --color-deep-blue: #102e56;
   --color-black: #063782;
@@ -35,13 +62,15 @@
   --drop-shadow-xl: 0 9px 7px rgb(16 46 86 / 0.1);
   --drop-shadow-2xl: 0 25px 25px rgb(16 46 86 / 0.15);
   --shadow-inner: inset 0 2px 4px 0 rgb(16 46 86 / 0.05);
-  --font-sans: Outfit, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Outfit Numbers', Georgia, 'Times New Roman', serif;
+  --font-mono: 'Outfit Numbers', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'Outfit Numbers', Outfit, system-ui, -apple-system, 'Segoe UI', sans-serif;
   /* the Projects and Core Values pages' tabs: Geist, a crisp open UI face in the manner of Apple's system face */
-  --font-tab: Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-heading: 'SNCF Flared', Outfit, system-ui, sans-serif;
-  --font-script: 'Dancing Script', cursive;
+  --font-tab: 'Outfit Numbers', Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-heading: 'Outfit Numbers', 'SNCF Flared', Outfit, system-ui, sans-serif;
+  --font-script: 'Outfit Numbers', 'Dancing Script', cursive;
   /* Hindi: a calligraphic Devanagari, the script face's counterpart */
-  --font-hindi: Tillana, 'Nirmala UI', 'Kohinoor Devanagari', 'Noto Sans Devanagari', serif;
+  --font-hindi: 'Outfit Numbers', Tillana, 'Nirmala UI', 'Kohinoor Devanagari', 'Noto Sans Devanagari', serif;
 }
 /* Every heading takes the heading face unless its own rule says otherwise:
    no specificity, so a component can still set a heading in another face. */
@@ -97,7 +126,7 @@
      name, and the clearance between the two was measured per-glyph and is
      not generous. Cinzel reads larger than Jakarta at equal size anyway —
      inscriptional capitals have no lowercase and sit full-height. */
-  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   /* Sized for the DEEPER band (inner edge 32.5, was 36): the name sits on a
      recentred arc (r 40.5) with real air on both sides now. WHITE over the
      five-ink band — every ink in it is mid-dark, so one white passes on
@@ -112,7 +141,7 @@
    five rooms once, but an itinerary at the door reads as a table of
    contents — "JOURNEY BEGINS" says the one thing a threshold needs to. */
 .lotus-gate-journey {
-  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   font-size: 1.55px;
   letter-spacing: 0.72px;
   font-weight: 500;
@@ -951,7 +980,7 @@
 }
 
 .font-signature {
-  font-family: 'Brittany Signature', var(--font-script);
+  font-family: 'Outfit Numbers', 'Brittany Signature', var(--font-script);
 }
 
 /* SNCF brand green, sampled from the logo swoosh */
@@ -4621,7 +4650,7 @@
 .media-wall-title {
   /* CINZEL — the gate's own inscriptional face; the wall's lockup letters
      itself the way the monument does */
-  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   /* 600 is the heaviest Cinzel weight the page loads */
   font-weight: 600;
   font-size: clamp(16px, 2.7vh, 23px);
@@ -5058,7 +5087,7 @@
   justify-content: center;
   pointer-events: none;
   user-select: none;
-  font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', Georgia, 'Times New Roman', serif;
   font-size: clamp(72px, 22vw, 300px);
   font-weight: 600;
   line-height: 1;
@@ -5121,7 +5150,7 @@
 
 .award-title {
   margin: 0;
-  font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', Georgia, 'Times New Roman', serif;
   font-weight: 500;
   font-size: clamp(26px, 4.2vw, 56px);
   line-height: 1.05;

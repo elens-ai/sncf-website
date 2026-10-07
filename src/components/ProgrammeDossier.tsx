@@ -9,6 +9,7 @@ import { insightsFor } from '../data/insights';
 import { ACTIVITY_SYMBOLS } from './activitySymbols';
 import { OdometerStatCounter } from './OdometerStatCounter';
 import { iconFor } from './figureIcons';
+import { Saying } from './Saying';
 import './programme-dossier.css';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.ProgrammeDossier.${key}`, fallback);
@@ -59,6 +60,7 @@ export const ProgrammeDossier: React.FC<{ id: string; activity: Activity; kicker
       </div>
 
       <div className="dossier-data">
+        {activity.id === 'blood-donation' && <Saying id="blood-donation" className="dossier-saying" />}
         <p className="dossier-blurb">{activity.blurb}</p>
         <div className="dossier-headline" key={`headline-${activity.id}`}>
           <strong><Rolling value={activity.headline.value} duration={1500} /></strong>

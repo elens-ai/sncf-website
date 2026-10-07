@@ -9,7 +9,8 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.Sayings.${key}`, f
 /* WORDS OF THE MISSION'S SATGURUS, AND ITS OWN SLOGANS, BESIDE THE WORK THEY
    SPEAK TO. Each is given as it was said (in Hindi where it was said in
    Hindi, its meaning beneath) and as the foundation and the press record it:
-     · Heal — Baba Hardev Singh Ji on blood donation (All India Radio, Hindi;
+     · Heal — the foundation's healthcare tagline;
+     · Blood donation — Baba Hardev Singh Ji (All India Radio, Hindi;
        the foundation's blood donation reports, in English);
      · Enrich — Satguru Mata Sudiksha Ji Maharaj (the foundation's Project
        Amrit page); Project Amrit — its own slogan (the same page);
@@ -22,9 +23,14 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.Sayings.${key}`, f
    Every line is editable in the CMS (Sayings). */
 export const SAYINGS = () => ({
   heal: {
-    hindi: c('heal-hindi', 'रक्त नाड़ियों में बहे, नालियों में नहीं।'),
-    english: c('heal-english', 'Blood should flow in veins, not in drains.'),
-    by: c('heal-by', 'Nirankari Baba Hardev Singh Ji Maharaj'),
+    hindi: c('heal-care-hindi', 'स्वास्थ्य–सेवा, संवेदना और सम्मान के साथ'),
+    english: c('heal-care-english', 'Healthcare with compassion and dignity.'),
+    by: '',
+  },
+  'blood-donation': {
+    hindi: c('blood-donation-hindi', 'रक्त नाड़ियों में बहे, नालियों में नहीं।'),
+    english: c('blood-donation-english', 'Blood should flow in veins, not in drains.'),
+    by: c('blood-donation-by', 'Nirankari Baba Hardev Singh Ji Maharaj'),
   },
   enrich: {
     english: c('enrich-english', 'We need to inspire everyone to take action, not just with words, but with deeds.'),
@@ -84,7 +90,7 @@ export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: bool
     <figure className={`saying${className ? ` ${className}` : ''}`} data-script={saying.hindi ? 'hindi' : 'english'}>
       <QuoteWords><blockquote lang={saying.hindi ? 'hi' : 'en'}>{saying.hindi ?? saying.english}</blockquote></QuoteWords>
       {saying.hindi && meaning && <p className="saying-meaning">{saying.english}</p>}
-      {byline && <figcaption>{saying.by}</figcaption>}
+      {byline && saying.by && <figcaption>{saying.by}</figcaption>}
     </figure>
   );
 };

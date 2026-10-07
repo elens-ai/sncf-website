@@ -1,0 +1,13 @@
+/* Regular, tabular figures with their natural punctuation spacing. */
+.odometer-counter {
+  max-width: 100%;
+  flex-wrap: nowrap;
+  white-space: pre;
+  font-family: var(--font-numeric);
+  font-weight: 400;
+  font-style: normal;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0;
+}
+.odometer-counter .odometer-character { color: inherit; font-family: var(--font-numeric); font-weight: 400; }
+.odometer-digit { flex: 0 0 1ch; }

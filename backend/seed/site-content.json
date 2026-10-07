@@ -3292,7 +3292,6 @@
     "copy.EnrichScrapbook.label": "Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres",
     "copy.EnrichScrapbook.kicker": "Our scrapbook",
     "copy.EnrichScrapbook.closing": "And the next page is still being written…",
-    "copy.HealStory.introLead": "For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.",
     "copy.WelcomeSplashScreen.mission-vision-label": "Mission & Vision",
     "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility",
     "copy.EmblemShowcase.previous": "Previous photograph",
@@ -3329,9 +3328,6 @@
     "copy.ProjectsPage.gallery-band": "photographs & films",
     "copy.PillarGallery.all": "Every programme",
     "copy.PillarGallery.filter": "Show the photographs of",
-    "copy.Sayings.heal-hindi": "रक्त नाड़ियों में बहे, नालियों में नहीं।",
-    "copy.Sayings.heal-english": "Blood should flow in veins, not in drains.",
-    "copy.Sayings.heal-by": "Nirankari Baba Hardev Singh Ji Maharaj",
     "copy.Sayings.enrich-english": "We need to inspire everyone to take action, not just with words, but with deeds.",
     "copy.Sayings.enrich-by": "Satguru Mata Sudiksha Ji Maharaj",
     "copy.Sayings.empower-hindi": "वृद्ध का साया, वृक्ष की छाया।",
@@ -3544,7 +3540,6 @@
     "copy.ProjectsPage.hcCollageCaption": "Dedicated to the service of humanity · 23 February 2026",
     "copy.CoreValuesPage.cover-headline": "Love, peace, kindness",
     "copy.CoreValuesPage.cover-headline-script": "with a purpose of giving",
-    "copy.CoreValuesPage.cover-explore-link": "Explore",
     "copy.UnAffiliation.unep-short": "UNEP",
     "copy.UnAffiliation.unep-name": "United Nations Environment Programme",
     "copy.WhoWeArePage.partner-more": "More about",
@@ -3574,7 +3569,15 @@
     "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it.",
     "copy.GuidingForcePage.cover-lede": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document.",
     "copy.WelcomeSplashScreen.welcome-hold-seconds": "10",
-    "copy.NavPanels.feature-visit": "Visit"
+    "copy.NavPanels.feature-visit": "Visit",
+    "copy.Sayings.heal-care-hindi": "स्वास्थ्य–सेवा, संवेदना और सम्मान के साथ",
+    "copy.Sayings.heal-care-english": "Healthcare with compassion and dignity.",
+    "copy.Sayings.blood-donation-hindi": "रक्त नाड़ियों में बहे, नालियों में नहीं।",
+    "copy.Sayings.blood-donation-english": "Blood should flow in veins, not in drains.",
+    "copy.Sayings.blood-donation-by": "Nirankari Baba Hardev Singh Ji Maharaj",
+    "copy.CoreValuesPage.heal-cover-introduction": "At SNCF, healing is a profound act of compassion. Beyond medicine, it upholds dignity, nurtures well-being and unites hearts, transforming care and compassion into a meaningful service to humanity.",
+    "copy.CoreValuesPage.enrich-cover-introduction": "Expanding access to education across schools, colleges, and training centers. Nurturing creativity and self reliance through libraries and arts initiatives.",
+    "copy.CoreValuesPage.empower-cover-introduction": "Driving sustainable social and economic development. Creating skills and career opportunities while working for a clean and green environment."
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -6338,11 +6341,6 @@
         "section": "Enrich scrapbook",
         "label": "Enrich scrapbook · And the next page is still being written…"
       },
-      "copy.HealStory.introLead": {
-        "page": "other",
-        "section": "Heal Story",
-        "label": "Heal Story · For decades, the Mission has been committed to preventive and curativ…"
-      },
       "copy.WelcomeSplashScreen.mission-vision-label": {
         "page": "home",
         "section": "Intro · Mission & vision page",
@@ -6522,21 +6520,6 @@
         "page": "core-values",
         "section": "Galleries",
         "label": "Galleries · Show the photographs of"
-      },
-      "copy.Sayings.heal-hindi": {
-        "page": "everywhere",
-        "section": "Sayings & slogans",
-        "label": "Sayings & slogans · रक्त नाड़ियों में बहे, नालियों में नहीं।"
-      },
-      "copy.Sayings.heal-english": {
-        "page": "everywhere",
-        "section": "Sayings & slogans",
-        "label": "Sayings & slogans · Blood should flow in veins, not in drains."
-      },
-      "copy.Sayings.heal-by": {
-        "page": "everywhere",
-        "section": "Sayings & slogans",
-        "label": "Sayings & slogans · Nirankari Baba Hardev Singh Ji Maharaj"
       },
       "copy.Sayings.enrich-english": {
         "page": "everywhere",
@@ -7598,11 +7581,6 @@
         "section": "Page",
         "label": "Page · with a purpose of giving"
       },
-      "copy.CoreValuesPage.cover-explore-link": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Explore"
-      },
       "copy.UnAffiliation.unep-short": {
         "page": "everywhere",
         "section": "UN standing & SDGs",
@@ -7752,6 +7730,46 @@
         "page": "everywhere",
         "section": "Menu",
         "label": "Menu · Visit"
+      },
+      "copy.Sayings.heal-care-hindi": {
+        "page": "core-values",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · स्वास्थ्य–सेवा, संवेदना और सम्मान के साथ"
+      },
+      "copy.Sayings.heal-care-english": {
+        "page": "core-values",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Healthcare with compassion and dignity."
+      },
+      "copy.Sayings.blood-donation-hindi": {
+        "page": "core-values",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · रक्त नाड़ियों में बहे, नालियों में नहीं।"
+      },
+      "copy.Sayings.blood-donation-english": {
+        "page": "core-values",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Blood should flow in veins, not in drains."
+      },
+      "copy.Sayings.blood-donation-by": {
+        "page": "core-values",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · Nirankari Baba Hardev Singh Ji Maharaj"
+      },
+      "copy.CoreValuesPage.heal-cover-introduction": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · At SNCF, healing is a profound act of compassion. Beyond medicine, it…"
+      },
+      "copy.CoreValuesPage.enrich-cover-introduction": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Expanding access to education across schools, colleges, and training …"
+      },
+      "copy.CoreValuesPage.empower-cover-introduction": {
+        "page": "core-values",
+        "section": "Page",
+        "label": "Page · Driving sustainable social and economic development. Creating skills …"
       }
     },
     "assets": {

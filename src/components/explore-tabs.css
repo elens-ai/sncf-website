@@ -13,7 +13,7 @@
    while its panel scrolls past, and leaves with its cornerstone. */
 .explore-tabs {
   position: sticky;
-  top: 130px;
+  top: calc(var(--site-header-height, 72px) + 12px);
   z-index: 6;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -74,7 +74,7 @@
 .explore-panel { padding-top: 26px; animation: explore-panel-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @keyframes explore-panel-in { from { opacity: 0; translate: 0 14px; } }
 @media (max-width: 640px) {
-  .explore-tabs { top: 122px; border-radius: 18px; }
+  .explore-tabs { top: calc(var(--site-header-height, 72px) + 8px); border-radius: 18px; }
   .explore-tabs [role='tab'] { grid-template-columns: 1fr; grid-template-areas: 'icon' 'name'; justify-items: center; row-gap: 5px; padding: 9px 4px; text-align: center; }
   .explore-tab-icon { width: 32px; height: 32px; border-radius: 10px; }
   .explore-tab-name { font-size: 13.5px; }
