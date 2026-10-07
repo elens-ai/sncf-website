@@ -38,13 +38,13 @@ interface MonogramPlacement {
 /* 'intro'   — the white first screen: logo + signature tagline.
    'welcome' — the white fades away, uncovering the welcome photo; the logo and
                tagline shrink and rise to sit above the heading and message.
-   'message' — the photo gives way to the logo's navy; the logo lands before
+   'message' — the photo gives way to a warm cream; the logo lands before
                the foundation's name, the Satguru's portrait comes in on the
                right, and her message is set beneath the name, its rail at
                the foot.
-   'mission' — the same frame: the message lifts away and the navy gives way
-               to the site's ground, and who we are, Our Mission and Our
-               Vision play beneath the name as chapters.
+   'mission' — the same frame, on the same cream: the message lifts away,
+               and who we are, Our Mission and Our Vision play beneath the
+               name as chapters.
    'leaving' — the page fades to the hero; the splash logo and monogram
                crossfade into the real header logo and wordmark. */
 type Stage = 'intro' | 'welcome' | 'message' | 'mission' | 'leaving';
@@ -58,12 +58,13 @@ const WHITE_FADE_MS = 1200;
 const BRAND_MOVE_MS = 1100;
 const BRAND_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
 /* How long each page stays before moving on by itself, in seconds: editable in
-   the CMS ("Intro · … time"). Each is a few seconds: the copy animates in
-   during the first one or two (index.css: WELCOME PAGE, MISSION PAGE), and the
+   the CMS ("Intro · … time"). The welcome page holds long enough to read its
+   paragraph (15s); the others a few seconds each: the copy animates in during
+   the first one or two (index.css: WELCOME PAGE, MISSION PAGE), and the
    message and mission pages' rails let a viewer hold them to read. The mission
    page's time is shared equally among its two chapters (MissionChapters). The
    arrow button moves on at any time. */
-const WELCOME_SECONDS = 3;
+const WELCOME_SECONDS = 15;
 const MESSAGE_SECONDS = 3;
 const MISSION_SECONDS = 6;
 /* Where the welcome photo and the Satguru portrait are centred: editable in the
@@ -93,7 +94,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   onComplete,
 }) => {
   const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
-  const welcomeMs = introSeconds(c("welcome-seconds", "3"), WELCOME_SECONDS);
+  const welcomeMs = introSeconds(c("welcome-hold-seconds", "15"), WELCOME_SECONDS);
   const messageMs = introSeconds(c("message-seconds", "3"), MESSAGE_SECONDS);
   const missionMs = introSeconds(c("mission-seconds", "6"), MISSION_SECONDS);
   const photoFocus = introFocus(c("welcome-photo-focus", "47% 46%"), WELCOME_PHOTO_FOCUS);
@@ -358,7 +359,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     >
       {/* Welcome page: one full-screen photo under the white first screen,
           uncovered as the white fades. It dissolves away as the message page
-          arrives on the logo's navy, which the mission page keeps (index.css:
+          arrives on its cream, which the mission page keeps (index.css:
           HAND-OFF); on leaving, the whole layer fades to reveal the hero.
           Opacity fades are
           GPU-composited, so they cost the same at any screen size. */}
@@ -438,7 +439,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                   frame, so it stays just as it is when the mission page begins. */}
               <div className="splash-satguru-frame">
                 <img
-                  src={resolveCMSAsset("asset.WelcomeSplashScreen.message-photo", "/images/satguru-mata-sudiksha-ji-message.webp")}
+                  src={resolveCMSAsset("asset.WelcomeSplashScreen.message-portrait", "/images/satguru-mata-sudiksha-ji-welcome.webp")}
                   alt={c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}
                 />
               </div>
@@ -558,10 +559,11 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
       </div>
 
       {/* Next page: welcome -> message -> mission -> the site. Shown once the white first
-          screen has gone and the logo and tagline have settled (CSS delay). */}
+          screen has gone and the logo and tagline have settled (CSS delay); light on the
+          welcome photograph, in the logo's navy on the message and mission pages' cream. */}
       {revealed && <button
         type="button"
-        className="splash-skip is-on-photo"
+        className={`splash-skip${offPhoto ? '' : ' is-on-photo'}`}
         onClick={advance}
         aria-label={c("next-label", "Next")}
         title={c("next-label", "Next")}

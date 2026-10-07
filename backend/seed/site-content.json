@@ -3272,7 +3272,6 @@
     "copy.WelcomeSplashScreen.mission-intro-3": "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation.",
     "copy.WelcomeSplashScreen.mission-intro-4": "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society.",
     "copy.WelcomeSplashScreen.mission-intro-name": "Sant Nirankari Charitable Foundation",
-    "copy.WelcomeSplashScreen.welcome-seconds": "3",
     "copy.WelcomeSplashScreen.mission-seconds": "6",
     "copy.WelcomeSplashScreen.welcome-photo-focus": "47% 46%",
     "copy.WelcomeSplashScreen.satguru-photo-focus": "50% 20%",
@@ -3606,7 +3605,8 @@
     "copy.WhoWeArePage.cover-lede": "The part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.",
     "copy.WhoWeArePage.cover-figures": "The foundation in figures",
     "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it.",
-    "copy.GuidingForcePage.cover-lede": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document."
+    "copy.GuidingForcePage.cover-lede": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document.",
+    "copy.WelcomeSplashScreen.welcome-hold-seconds": "15"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -3869,10 +3869,6 @@
       "source": "/images/sncf-logo.webp",
       "label": "WhoWeArePage · sncf-logo.webp"
     },
-    "asset.WelcomeSplashScreen.message-photo": {
-      "source": "/images/satguru-mata-sudiksha-ji-message.webp",
-      "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-message.webp"
-    },
     "asset.ProjectsPage.hcLogo": {
       "source": "/images/projects/health-city/logo.webp",
       "label": "ProjectsPage · logo.webp"
@@ -3908,6 +3904,10 @@
     "asset.GuidingForcePage.work-hc-photo": {
       "source": "/images/programmes/health-city-evening.webp",
       "label": "GuidingForcePage · health-city-evening.webp"
+    },
+    "asset.WelcomeSplashScreen.message-portrait": {
+      "source": "/images/satguru-mata-sudiksha-ji-welcome.webp",
+      "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-welcome.webp"
     }
   },
   "slots": {
@@ -6282,11 +6282,6 @@
         "section": "Intro · Mission & vision page",
         "label": "Intro · Mission & vision page · Sant Nirankari Charitable Foundation"
       },
-      "copy.WelcomeSplashScreen.welcome-seconds": {
-        "page": "home",
-        "section": "Intro · Welcome page time (seconds)",
-        "label": "Intro · Welcome page time (seconds) · 3"
-      },
       "copy.WelcomeSplashScreen.mission-seconds": {
         "page": "home",
         "section": "Intro · Mission page time (seconds)",
@@ -7956,6 +7951,11 @@
         "page": "guiding-force",
         "section": "Page",
         "label": "Page · Every camp, classroom and forest in this site traces back to spiritua…"
+      },
+      "copy.WelcomeSplashScreen.welcome-hold-seconds": {
+        "page": "home",
+        "section": "Intro · Welcome page",
+        "label": "Intro · Welcome page · 15"
       }
     },
     "assets": {
@@ -8284,11 +8284,6 @@
         "section": "Page",
         "label": "Page · sncf-logo.webp"
       },
-      "asset.WelcomeSplashScreen.message-photo": {
-        "page": "home",
-        "section": "Intro · Satguru portrait (message and mission pages)",
-        "label": "Intro · Satguru portrait (message and mission pages) · satguru-mata-sudiksha-ji-message.webp"
-      },
       "asset.ProjectsPage.hcLogo": {
         "page": "projects",
         "section": "Page",
@@ -8333,6 +8328,11 @@
         "page": "guiding-force",
         "section": "Page",
         "label": "Page · health-city-evening.webp"
+      },
+      "asset.WelcomeSplashScreen.message-portrait": {
+        "page": "home",
+        "section": "Intro · Message page",
+        "label": "Intro · Message page · satguru-mata-sudiksha-ji-welcome.webp"
       }
     }
   },

@@ -1661,27 +1661,29 @@
 }
 .splash-welcome-photo.is-mission .splash-mission-shade { opacity: 1; }
 
-/* THE MESSAGE AND MISSION PAGES' GROUND is the logo's own navy (the seal's
-   outer ring and lettering, #063782), deeper on the copy side and lit a little
-   with the logo's blue behind the portrait, laid over the site's: it comes in
-   over the photograph as the welcome page leaves, and stays through the
-   mission page, until the whole intro fades to reveal the hero. */
+/* THE MESSAGE AND MISSION PAGES' GROUND is a warm cream (#fdedd2), the
+   Satguru's portrait standing on it cut out, lit a little behind her and
+   warmer on the copy side: it comes in over the photograph as the welcome
+   page leaves, and stays through the mission page, until the whole intro
+   fades to reveal the hero. */
 .splash-message-ground {
   position: absolute;
   inset: 0;
   z-index: 1;
   background:
-    radial-gradient(ellipse 55% 75% at 74% 42%, rgb(41 178 233 / 0.16), rgb(41 178 233 / 0) 70%),
-    linear-gradient(to right, rgb(3 30 74 / 0.45) 0%, rgb(3 30 74 / 0) max(40%, 33rem)),
-    #063782;
+    radial-gradient(ellipse 55% 75% at 74% 42%, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0) 70%),
+    linear-gradient(to right, rgb(214 170 120 / 0.14) 0%, rgb(214 170 120 / 0) max(40%, 33rem)),
+    #fdedd2;
   opacity: 0;
   transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 .splash-message-ground[data-shown='true'] { opacity: 1; }
 
-/* The page's accent and quotation ink: the logo's own light blue (the seal's
-   ring) on its navy, on the message page and the mission page alike. */
+/* The page's inks on its cream, on the message page and the mission page
+   alike: the logo's navy for the name, the statements and the titles, a
+   deeper take on the logo's blue for the accents, and a dark navy-grey for
+   reading. */
 .splash-mission-page {
   --u: min(1vw, 1.62vh);
   --mp-pad: clamp(24px, 3.5vw, 56px);
@@ -1694,10 +1696,11 @@
   /* The name's two lines share one letter height, as large as the copy column
      allows (the longer line, logo included, is about 20 heights wide). */
   --name-line: min(clamp(22px, calc(var(--u) * 2.4), 40px), calc(100cqw / 20.2));
-  --mp-rule: rgb(255 255 255 / 0.2);
-  --mp-ink: rgb(255 255 255 / 0.84);
-  --mp-accent: #95d9f1;
-  --mp-quote-ink: #d3eefa;
+  --mp-rule: rgb(6 55 130 / 0.16);
+  --mp-ink: rgb(26 38 64 / 0.86);
+  --mp-strong: #063782;
+  --mp-accent: #0b5fa5;
+  --mp-quote-ink: #2c4a7c;
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -1719,7 +1722,7 @@
   --mp-pad-bottom: clamp(28px, 5vh, 60px);
   padding: var(--mp-pad-top) 0 var(--mp-pad-bottom);
   overflow: hidden auto;
-  color: #fff;
+  color: var(--mp-strong);
 }
 
 /* The copy column is a size container, so its contents follow its own width
@@ -1737,15 +1740,14 @@
   padding-left: var(--mp-pad);
 }
 
-/* Name: flared HEAL lettering in the page's accent (the logo's light blue,
-   then mint), with the landed logo before it. */
+/* Name: flared HEAL lettering in the logo's navy, with the landed logo
+   before it. */
 .splash-intro-name {
   display: flex;
   align-items: center;
   gap: calc(var(--mp-s) * 1.6);
   margin: 0;
-  color: var(--mp-accent);
-  filter: drop-shadow(0 3px 14px rgb(0 0 0 / 0.4));
+  color: var(--mp-strong);
   /* Fade only, no rise: the logo's landing spot is measured as this mounts. */
   animation: introNameIn 0.4s ease 0.3s both;
 }
@@ -1789,7 +1791,6 @@
   font: 400 1em / 1.72 var(--font-sans);
   color: var(--mp-ink);
   text-wrap: pretty;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.35);
   animation: messageIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
 }
 /* an opening mark in the accent over the first line, in the name's heavy face */
@@ -1836,7 +1837,7 @@
 @keyframes chapterSweep { from { opacity: 0; transform: translate3d(0, 10px, 0); -webkit-mask-position: 0 100%; mask-position: 0 100%; } }
 @keyframes chapterProgress { from { transform: scaleX(0); } to { transform: none; } }
 @keyframes chapterDivide { from { transform: scale(0); } }
-@keyframes chapterHeld { to { background-color: rgb(255 255 255 / 0.34); } }
+@keyframes chapterHeld { to { background-color: rgb(6 55 130 / 0.3); } }
 
 .mission-chapters {
   /* the heading over a statement, 5pt under the statement's size */
@@ -1886,20 +1887,20 @@
   margin: 0 0 calc(var(--mp-s) * 3);
   font: 600 var(--mc-statement) / 1.2 var(--font-sans);
   letter-spacing: -0.012em;
-  color: #fff;
+  color: var(--mp-strong);
   text-wrap: balance;
 }
 .mission-word { display: inline-block; }
 
-/* Our Mission, Our Vision: white, with a band of mint that glints across once
-   the title has landed. */
+/* Our Mission, Our Vision: in the logo's navy, with a band of the accent that
+   glints across once the title has landed. */
 .mission-chapter-title {
   width: fit-content;
   margin: 0 0 calc(var(--mp-s) * 1.4);
   font: 800 calc(var(--mc-title) * 0.82) / 1.08 var(--font-heading);
   letter-spacing: 0;
-  color: #fff;
-  background: linear-gradient(105deg, #fff 0 42%, var(--mp-accent) 50%, #fff 58%) 0 0 / 260% 100% no-repeat;
+  color: var(--mp-strong);
+  background: linear-gradient(105deg, var(--mp-strong) 0 42%, var(--mp-accent) 50%, var(--mp-strong) 58%) 0 0 / 260% 100% no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2014,7 +2015,7 @@
   padding: 6px 0 4px;
   border: 0;
   background: none;
-  color: rgb(255 255 255 / 0.5);
+  color: rgb(6 55 130 / 0.5);
   font: 600 clamp(9.5px, calc(var(--u) * 0.72), 12px) / 1.2 var(--font-sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -2023,14 +2024,14 @@
   transition: color 0.4s ease;
 }
 .mission-chapter-step:hover,
-.mission-chapter-step[aria-current='step'] { color: #fff; }
-.mission-chapter-step:focus-visible { outline: 2px solid #fff; outline-offset: 5px; border-radius: 3px; }
+.mission-chapter-step[aria-current='step'] { color: var(--mp-strong); }
+.mission-chapter-step:focus-visible { outline: 2px solid var(--mp-strong); outline-offset: 5px; border-radius: 3px; }
 .mission-chapter-progress {
   grid-column: 1 / -1;
   position: relative;
   height: 2px;
   border-radius: 2px;
-  background: rgb(255 255 255 / 0.16);
+  background: rgb(6 55 130 / 0.14);
   overflow: hidden;
 }
 .mission-chapter-progress > i {
@@ -2056,15 +2057,15 @@
   place-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid rgb(255 255 255 / 0.32);
+  border: 1px solid rgb(6 55 130 / 0.3);
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.06);
-  color: #fff;
+  background: rgb(6 55 130 / 0.05);
+  color: var(--mp-strong);
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-.mission-chapter-hold:hover { background: rgb(255 255 255 / 0.16); border-color: rgb(255 255 255 / 0.6); }
-.mission-chapter-hold:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.mission-chapter-hold:hover { background: rgb(6 55 130 / 0.12); border-color: rgb(6 55 130 / 0.55); }
+.mission-chapter-hold:focus-visible { outline: 2px solid var(--mp-strong); outline-offset: 3px; }
 
 /* Set still (reduced motion): the chapters set out at once, at the sizes a
    column of copy takes: One Purpose at the top, then Mission and Vision side
@@ -2107,7 +2108,6 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  color: #fff;
   text-align: center;
 }
 .splash-satguru-frame {
@@ -2158,7 +2158,6 @@
   white-space: nowrap;
   font: 600 calc(var(--mp-quote) * 1.8) / 1.5 var(--font-hindi);
   color: var(--mp-quote-ink);
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.45);
   animation: welcomeRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both;
 }
 .splash-couplet span { display: block; }
@@ -2172,7 +2171,6 @@
   font: 600 calc(var(--mp-quote) * 1.12) / 1.38 var(--font-script);
   color: var(--mp-quote-ink);
   text-wrap: balance;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.45);
 }
 .splash-satguru cite {
   display: block;
@@ -2181,7 +2179,7 @@
   font-style: normal;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.72);
+  color: rgb(6 55 130 / 0.7);
 }
 
 /* Short desktop screens: the same copy needs more width to fit the height,
@@ -2297,6 +2295,7 @@
 }
 .splash-skip:hover { transform: translateX(3px); background: rgb(255 255 255 / 0.22); }
 .splash-skip:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.splash-skip:not(.is-on-photo):focus-visible { outline-color: #063782; }
 #welcome-splash-screen.pointer-events-none .splash-skip { opacity: 0; }
 
 @media (prefers-reduced-motion: reduce) {

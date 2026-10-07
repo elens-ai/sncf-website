@@ -259,10 +259,6 @@
     "source": "/images/sncf-logo.webp",
     "label": "WhoWeArePage · sncf-logo.webp"
   },
-  "asset.WelcomeSplashScreen.message-photo": {
-    "source": "/images/satguru-mata-sudiksha-ji-message.webp",
-    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-message.webp"
-  },
   "asset.ProjectsPage.hcLogo": {
     "source": "/images/projects/health-city/logo.webp",
     "label": "ProjectsPage · logo.webp"
@@ -298,5 +294,9 @@
   "asset.GuidingForcePage.work-hc-photo": {
     "source": "/images/programmes/health-city-evening.webp",
     "label": "GuidingForcePage · health-city-evening.webp"
+  },
+  "asset.WelcomeSplashScreen.message-portrait": {
+    "source": "/images/satguru-mata-sudiksha-ji-welcome.webp",
+    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-welcome.webp"
   }
 }

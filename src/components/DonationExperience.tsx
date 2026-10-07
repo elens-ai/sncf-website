@@ -69,8 +69,14 @@ export function DonationExperience({ onClose }: { onClose?: () => void }) {
       <p className="donation-intro">{c('intro', 'There is more than one way to give. Help care reach a doorstep, open a classroom, or bring a community together.')}</p>
       <div className="donation-bloom" aria-hidden="true">
         <div className="donation-bloom-orbit" />
-        {/* the gift chosen, pictured: a jar for money, a box for any other way to give, what is given going into it */}
-        <DonationGifts way="money" />
+        {/* the gift chosen, pictured: for money, the three cornerstones as petals round a heart, the cause chosen lit;
+            for any other way to give, a box, what is given going into it */}
+        <div className="donation-petals">
+          <span className="donation-petal donation-petal-heal" data-selected={cause === 'heal' || cause === 'all'} />
+          <span className="donation-petal donation-petal-enrich" data-selected={cause === 'enrich' || cause === 'all'} />
+          <span className="donation-petal donation-petal-empower" data-selected={cause === 'empower' || cause === 'all'} />
+          <div className="donation-bloom-heart"><HeartHandshake size={36} strokeWidth={1.2} /></div>
+        </div>
         <DonationGifts way={nonMonetary as GiftWay} />
         <span className="donation-bloom-caption">{kind === 'time' ? c('giftsCaption', 'Every gift finds a home.') : c('bloomCaption', 'One shared purpose.')}</span>
       </div>
