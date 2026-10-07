@@ -73,9 +73,9 @@
 .mosaic-overture-title > span { display: block; font-family: var(--font-heading); font-weight: 800; letter-spacing: 0; font-size: clamp(38px, 4.4vw, 66px); opacity: var(--w, 0); transform: translateY(calc((1 - var(--w, 0)) * 24px)); }
 .mosaic-overture-title > .font-dancing-script { font-family: var(--font-script); font-size: clamp(58px, 6.7vw, 104px); letter-spacing: -.03em; margin-top: 8px; color: #ecf5e5; opacity: clamp(0, calc(var(--w, 0) * 1.25 - .25), 1); transform: translateY(calc((1 - var(--w, 0)) * 38px)); }
 .mosaic-overture-lead { max-width: 32ch; margin: 28px 0 0; font: 400 clamp(14px, 1.15vw, 17px)/1.85 var(--font-sans); color: #ffffffc9; opacity: var(--w, 0); transform: translateY(calc((1 - var(--w, 0)) * 20px)); }
-.mosaic-paths { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; max-width: 1200px; margin-inline: auto; }
+.mosaic-paths { display: grid; grid-template-columns: repeat(4, minmax(0, 260px)); justify-content: center; width: 100%; max-width: 1200px; margin-inline: auto; }
 .mosaic-path {
-  position: relative; display: grid; grid-template-columns: 36px 1fr 18px; align-items: center; gap: 14px;
+  position: relative; display: flex; align-items: center; justify-content: center; gap: 16px;
   padding: 26px 20px 24px; border: 0; border-top: 1px solid #ffffff40; background: none; color: #fff; cursor: pointer; text-align: left;
   opacity: clamp(0, calc(var(--links, 0) * 1.6 - var(--path-order) * .18), 1);
   transform: translateY(calc((1 - clamp(0, calc(var(--links, 0) * 1.6 - var(--path-order) * .18), 1)) * 18px));
@@ -86,14 +86,14 @@
 .mosaic-path:hover, .mosaic-path:focus-visible { background: #ffffff09; }
 .mosaic-path:focus-visible { opacity: 1; transform: none; }
 .mosaic-path:is(:hover, :focus-visible)::before { transform: scaleX(1); }
-.mosaic-path-number { position: absolute; top: 9px; left: 20px; font: 400 9px/1 var(--font-sans); letter-spacing: .14em; color: #ffffff80; }
-.mosaic-path-icon { width: 36px; height: 32px; fill: color-mix(in srgb, var(--path-ink) 40%, white); transition: transform .35s ease; }
+.mosaic-path-icon { flex: none; width: 48px; height: 43px; fill: color-mix(in srgb, var(--path-ink) 40%, white); transition: transform .35s ease; }
 .mosaic-path:is(:hover, :focus-visible) .mosaic-path-icon { transform: translateY(-3px) rotate(-5deg); }
-.mosaic-path-copy { display: grid; gap: 5px; }
-.mosaic-path-copy strong { font: 600 20px/1.2 var(--font-sans); }
+/* the pictured icons (Projects' bloom, Enrich's book), each with air round it: kept whole, and drawn up to the
+   marks' size */
+.mosaic-path-art { object-fit: contain; scale: 1.2; }
+.mosaic-path-copy { display: grid; gap: 4px; min-width: 0; }
+.mosaic-path-copy strong { font: 600 26px/1.15 var(--font-sans); }
 .mosaic-path-copy > span { font: 400 11px/1.5 var(--font-sans); color: #ffffffb8; }
-.mosaic-path-arrow { opacity: .5; transition: opacity .25s, transform .25s; }
-.mosaic-path:is(:hover, :focus-visible) .mosaic-path-arrow { opacity: 1; transform: translate(2px, -2px); }
 .mosaic-overture-foot { display: flex; align-items: center; justify-content: flex-end; gap: 24px; width: 100%; max-width: 1200px; margin-inline: auto; opacity: var(--links, 0); }
 .mosaic-scroll-cue { display: flex; align-items: center; gap: 10px; white-space: nowrap; font: 500 9px/1.5 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: #ffffffc7; }
 .mosaic-scroll-cue svg { animation: mosaic-cue-drift 2.8s ease-in-out infinite; }
@@ -112,18 +112,16 @@
   .mosaic-overture-title > .font-dancing-script { font-size: clamp(56px, 9vw, 88px); margin-top: 4px; }
   .mosaic-overture-lead { margin: 20px auto 8px; font-size: 14px; }
   .mosaic-paths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mosaic-path { padding: 28px 14px 20px; gap: 12px; grid-template-columns: 30px 1fr 14px; }
+  .mosaic-path { padding: 28px 14px 20px; gap: 10px; }
   .mosaic-path:nth-child(odd) { border-left: 0; }
-  .mosaic-path-number { left: 14px; }
-  .mosaic-path-icon { width: 30px; height: 28px; }
-  .mosaic-path-copy strong { font-size: 20px; }
+  .mosaic-path-icon { width: 36px; height: 32px; }
+  .mosaic-path-copy strong { font-size: 21px; }
   .mosaic-overture-foot { flex-direction: column-reverse; gap: 20px; text-align: center; }
 }
 @media (max-width: 389px) {
-  .mosaic-path { grid-template-columns: 24px 1fr; gap: 9px; padding-inline: 10px; }
-  .mosaic-path-icon { width: 24px; }
-  .mosaic-path-arrow { display: none; }
-  .mosaic-path-copy strong { font-size: 18px; }
+  .mosaic-path { gap: 7px; padding-inline: 10px; }
+  .mosaic-path-icon { width: 28px; height: 26px; }
+  .mosaic-path-copy strong { font-size: 19px; }
   .mosaic-path-copy > span { font-size: 9px; }
 }
 @media (min-width: 1024px) and (max-height: 760px) {
@@ -166,24 +164,20 @@
 @keyframes mosaic-wall-drift { from { transform: translateY(0); } to { transform: translateY(calc(-50% - 3.5px)); } }
 
 /* THE PATHS, as doors: frosted glass over the wall, each lifting into its
-   pillar's colour and saying how many programmes wait behind it. */
+   pillar's colour. */
 .mosaic-paths { gap: 14px; }
-.mosaic-path { overflow: hidden; padding: 32px 20px 22px; border: 0; border-radius: 18px; background: linear-gradient(165deg, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0.04) 62%); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), 0 24px 44px -30px rgb(2 22 18 / 0.9); -webkit-backdrop-filter: blur(10px) saturate(1.15); backdrop-filter: blur(10px) saturate(1.15); transition: background 0.35s ease, box-shadow 0.35s ease, translate 0.35s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.mosaic-path { overflow: hidden; padding: 20px 20px 18px; border: 0; border-radius: 18px; background: linear-gradient(165deg, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0.04) 62%); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16), 0 24px 44px -30px rgb(2 22 18 / 0.9); -webkit-backdrop-filter: blur(10px) saturate(1.15); backdrop-filter: blur(10px) saturate(1.15); transition: background 0.35s ease, box-shadow 0.35s ease, translate 0.35s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .mosaic-path + .mosaic-path { border-left: 0; }
 .mosaic-path::before { top: 0; left: 18px; right: 18px; border-radius: 0 0 2px 2px; }
 .mosaic-path:is(:hover, :focus-visible) { translate: 0 -4px; background: linear-gradient(165deg, color-mix(in srgb, var(--path-ink) 36%, rgb(255 255 255 / 0.1)), rgb(255 255 255 / 0.05) 70%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--path-ink) 55%, rgb(255 255 255 / 0.3)), 0 30px 50px -30px rgb(2 22 18 / 0.95); }
-.mosaic-path-number { top: 12px; }
-.mosaic-path-reach { position: absolute; top: 9px; right: 14px; padding: 3px 9px; border-radius: 999px; background: rgb(255 255 255 / 0.12); font: 600 9px/1.4 var(--font-sans); letter-spacing: 0.1em; text-transform: uppercase; color: #ffffffd6; transition: background-color 0.35s; }
-.mosaic-path:is(:hover, :focus-visible) .mosaic-path-reach { background: color-mix(in srgb, var(--path-ink) 55%, rgb(255 255 255 / 0.12)); }
 @media (max-width: 1023px) {
   .mosaic-wall { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; padding-inline: 5px; }
   .mosaic-wall-col { gap: 5px; }
   .mosaic-wall-col:nth-child(n + 7) { display: none; }
   @keyframes mosaic-wall-drift { from { transform: translateY(0); } to { transform: translateY(calc(-50% - 2.5px)); } }
   .mosaic-paths { gap: 10px; }
-  .mosaic-path { padding: 30px 14px 18px; }
+  .mosaic-path { padding: 16px 12px 14px; }
 }
-@media (max-width: 389px) { .mosaic-path-reach { display: none; } }
 @media (forced-colors: active) { .mosaic-wall { display: none; } }
 
 .mosaic-humility-word { display: inline-block; margin-left: .18em; }

@@ -242,16 +242,13 @@
 .value-screen .scrapbook-ground,
 .value-screen .pillar-art-contact-shadow { display: none; }
 .value-screen > .mosaic-chapter.activity-chapter { border-top: 0; padding: calc(var(--site-header-height, 72px) + var(--rail-h) + 52px) 20px 32px; }
-.value-screen > .mosaic-stage-label { top: calc(var(--site-header-height, 72px) + var(--rail-h) + 14px); left: 20px; }
 .value-screen .activity-chapter-number { display: none; }
 .value-screen .activity-chapter-identity { display: block; }
 @media (min-width: 768px) {
   .value-screen > .mosaic-chapter.activity-chapter { padding-inline: clamp(32px, 5vw, 100px); }
-  .value-screen > .mosaic-stage-label { left: clamp(32px, 5vw, 100px); }
 }
 @media (min-width: 1024px) {
   .value-screen > .mosaic-chapter.activity-chapter { min-height: 100svh; grid-template-rows: auto minmax(0, 1fr); gap: clamp(12px, 2.5vh, 28px); padding: calc(var(--site-header-height, 72px) + var(--rail-h) + 52px) clamp(32px, 5vw, 100px) 28px max(88px, 6vw); }
-  .value-screen > .mosaic-stage-label { left: max(88px, 6vw); }
   .value-screen .activity-nodes { min-height: 0; }
   .value-screen .activity-emblem { width: min(46%, calc((100svh - var(--site-header-height, 72px) - var(--rail-h) - 205px) * 1.05)); }
 }
@@ -261,14 +258,12 @@
 }
 @media (min-width: 1024px) and (max-height: 760px) {
   .value-screen > .mosaic-chapter.activity-chapter { padding-top: calc(var(--site-header-height, 72px) + var(--rail-h) + 40px); padding-bottom: 18px; gap: 10px; }
-  .value-screen > .mosaic-stage-label { top: calc(var(--site-header-height, 72px) + var(--rail-h) + 8px); }
 }
 /* The page's rail takes some of the screen the home page's chapters have, so
    below a full laptop's height the programmes' figures draw in as the home
    page's do on a short screen (mosaic-chapter.css), and the top a little. */
 @media (min-width: 1024px) and (max-height: 880px) {
   .value-screen > .mosaic-chapter.activity-chapter { padding-top: calc(var(--site-header-height, 72px) + var(--rail-h) + 42px); gap: clamp(10px, 2vh, 20px); }
-  .value-screen > .mosaic-stage-label { top: calc(var(--site-header-height, 72px) + var(--rail-h) + 10px); }
   .value-screen .activity-node-button { padding: 9px 10px 11px; }
   .value-screen .activity-node-heading { min-height: 32px; gap: 10px; }
   .value-screen .activity-node-symbol { width: 32px; height: 32px; flex-basis: 32px; }

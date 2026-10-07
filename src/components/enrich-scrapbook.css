@@ -221,7 +221,7 @@
   text-shadow: 0 0.2cqw 0.6cqw rgb(6 50 60 / 0.35);
 }
 
-/* Beneath the book: the caption, and the controls to turn and hold it. */
+/* Beneath the book: the caption. */
 .scrapbook-caption {
   display: flex;
   flex-wrap: wrap;
@@ -235,21 +235,6 @@
   text-transform: uppercase;
   color: #63766f;
 }
-.scrapbook-controls { display: inline-flex; gap: 6px; pointer-events: auto; }
-.scrapbook-controls button {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid color-mix(in srgb, var(--value-color, var(--sb-teal)) 35%, transparent);
-  border-radius: 50%;
-  background: #fff;
-  color: var(--value-color, var(--sb-teal));
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-.scrapbook-controls button:hover:not(:disabled) { background: color-mix(in srgb, var(--value-light, #8dd4df) 22%, #fff); border-color: var(--value-color, var(--sb-teal)); }
-.scrapbook-controls button:disabled { opacity: 0.35; cursor: default; }
 
 /* With reduced motion a page turns at once, without moving or shading. */
 @media (prefers-reduced-motion: reduce) {

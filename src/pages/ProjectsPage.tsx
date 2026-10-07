@@ -26,7 +26,6 @@ import { ACTIVITIES, type Activity } from '../data/activities';
 import { PROGRAMME_SDGS } from '../data/sdgs';
 import { PILLARS } from '../data/pillars';
 import { subjectFor } from '../utils/waves';
-import { MEDIA } from '../data/media';
 import { PAVILION_GALLERY, roomPhotoFor } from '../data/pavilionGallery';
 import { slug } from '../utils/slug';
 import './projects.css';
@@ -143,7 +142,6 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
      other projects', and says they are illustrative. */
   const own = (project.images ?? []).length > 0;
   const bloomed = own ? [project] : [{ ...project, images: PAVILION_GALLERY[3].map(photo => ({ src: photo.src, alt: photo.alt })) }];
-  const hung = (MEDIA[project.id] ?? []).filter(item => item.src).length;
   return <section id={id} className="project-chapter" style={inkStyle(index)} aria-labelledby={`${id}-title`}>
     <header className="project-chapter-heading"><span className="project-chapter-number">{getCMSCopy("copy.ProjectsPage.5feceb66ffc8", "0")}{index + 1}</span><div><p className="project-eyebrow">{face.label} / {face.scope}</p><h2 id={`${id}-title`}>{project.title}</h2></div><Icon size={32} strokeWidth={1.4} aria-hidden="true" /></header>
     <div className="project-story-grid">
@@ -162,12 +160,7 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
       </div>
     </div>
     {hasSaying(project.id) && <Saying id={project.id} />}
-    <ExploreTabs id={id} name={project.title} tab={tab} onTab={setTab}
-      notes={{
-        reports: `${project.dataPoints.length} ${getCMSCopy("copy.ProjectsPage.tab-measures", "reported measures")}`,
-        gallery: hung ? `${hung} ${getCMSCopy("copy.ProjectsPage.tab-gallery", "photographs, and films to come")}` : getCMSCopy("copy.ProjectsPage.tab-gallery-awaited", "Photographs on their way"),
-        stats: getCMSCopy("copy.ProjectsPage.tab-stats", "The figures, charted"),
-      }}
+    <ExploreTabs id={id} name={project.title} tab={tab} onTab={setTab} look="segmented"
       panels={{
         reports: () => (
           <div className="project-reports">
@@ -197,7 +190,7 @@ export const ProjectsPage: React.FC = () => {
     const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start', behavior: 'instant' }), 100);
     return () => clearTimeout(timer);
   }, [hash]);
-  return <PageShell accentPillarId="projects" eyebrow={getCMSCopy("copy.ProjectsPage.04e2a9728af7", "Projects")} title={getCMSCopy("copy.ProjectsPage.36fc0059896e", "Our projects")} standfirst={getCMSCopy("copy.ProjectsPage.995f1e05cac7", "Service with a lasting footprint.")} cover={<ProjectsCover />} rail={<SubsectionNav variant="tabs" label={getCMSCopy("copy.ProjectsPage.69c5a4506f97", "Explore projects")} links={[...getProjects().map((p, i) => ({ id: slug(p.title), label: p.title.replace(/^Project /, ''), ink: FACES[i % FACES.length].ink })), { id: 'health-city', label: getCMSCopy("copy.ProjectsPage.7560b5b78854", "Health City"), ink: '#0d6a8c' }]} />}>
+  return <PageShell accentPillarId="projects" eyebrow={getCMSCopy("copy.ProjectsPage.04e2a9728af7", "Projects")} title={getCMSCopy("copy.ProjectsPage.36fc0059896e", "Our projects")} standfirst={getCMSCopy("copy.ProjectsPage.995f1e05cac7", "Service with a lasting footprint.")} cover={<ProjectsCover />} rail={<SubsectionNav variant="tabs" look="segmented" label={getCMSCopy("copy.ProjectsPage.69c5a4506f97", "Explore projects")} links={[...getProjects().map((p, i) => ({ id: slug(p.title), label: p.title.replace(/^Project /, ''), ink: FACES[i % FACES.length].ink })), { id: 'health-city', label: getCMSCopy("copy.ProjectsPage.7560b5b78854", "Health City"), ink: '#0d6a8c' }]} />}>
     <div className="projects-editorial">
       {getProjects().map((project,index) => <ProjectChapter key={project.id} project={project} index={index} />)}
       <CMSSection id="ProjectsPage.health-city"><HealthCityFeature /></CMSSection>

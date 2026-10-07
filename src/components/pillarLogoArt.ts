@@ -31,9 +31,9 @@ export const PILLAR_LOGOS = {
 
 /* EMPOWER, ONE OF A GROUP. Wherever Empower's figure is shown — its photo
    emblem, its flat marks and icons — it stands with two companions: the same
-   figure twice more, a step behind it and lower on either side, a little
-   smaller, and faint: a pyramid of three, the one in front raised up by the
-   group. In emblem units, about the figure's own middle. */
+   figure twice more, a step behind it and lower on either side, leaning out,
+   a little smaller, and faint: a pyramid of three, the one in front raised up
+   by the group. In emblem units, about the figure's own middle. */
 export const EMPOWER_MIDDLE = [69.4, 60] as const;
 export const EMPOWER_COMPANIONS = [
   { dx: -36, dy: 18, k: 0.8 },
@@ -41,9 +41,14 @@ export const EMPOWER_COMPANIONS = [
 ] as const;
 export const companionTransform = (mate: { dx: number; dy: number; k: number }, tilt = 0) =>
   `translate(${EMPOWER_MIDDLE[0] + mate.dx} ${EMPOWER_MIDDLE[1] + mate.dy}) rotate(${tilt}) scale(${mate.k}) translate(${-EMPOWER_MIDDLE[0]} ${-EMPOWER_MIDDLE[1]})`;
-/** The three together, in emblem units: from the left companion's raised hand to the right one's, and from the
-    figure's head to the companions' feet. */
-export const EMPOWER_TRIO_BOX = { x: -20.2, y: 5.4, w: 179, h: 109.7 } as const;
+/** How far each companion leans out from the figure, in degrees (the left one to the left, the right one to the
+    right), as the hero visual and the flat marks draw them. */
+export const EMPOWER_TILT = 9;
+/** The three together, leaning so, in emblem units: from the left companion's raised hand to the right one's, and
+    from the figure's head to the companions' feet (measured). */
+export const EMPOWER_TRIO_BOX = { x: -26.4, y: 5.4, w: 191.4, h: 117.7 } as const;
+/** The two companions alone, leaning so, in emblem units: the span their fade runs over (measured). */
+export const EMPOWER_COMPANIONS_BOX = { x: -26.4, y: 26.4, w: 191.4, h: 96.6 } as const;
 /** The three fitted into the emblem box (146 × 120), for a flat mark the size of the other pillars'. */
 export const EMPOWER_TRIO_MARK_FIT = (() => {
   const s = Math.min(146 / EMPOWER_TRIO_BOX.w, 120 / EMPOWER_TRIO_BOX.h);

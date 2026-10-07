@@ -3,7 +3,7 @@ import { ProjectsMosaicArt } from './ProjectsMosaicArt';
 import { resolveCMSMedia } from '../cms/media';
 import { resolveCMSAsset } from '../cms/runtime';
 import './heal-photo-mosaic.css';
-import { BOOK_COVER, EMPOWER_COMPANIONS, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
+import { BOOK_COVER, EMPOWER_COMPANIONS, EMPOWER_TILT, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
 import { roomPhoto } from '../data/pavilionGallery';
 import { LocalOpacityControls } from './LocalOpacityControls';
@@ -141,7 +141,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
       {/* the emblem itself (Empower's with its companions, fitted to the others' size) */}
       <g transform={companions ? TRIO_FIT : undefined}>
       {companions && <g className="pillar-mosaic-companions" aria-hidden="true">
-        {EMPOWER_COMPANIONS.map(mate => <g key={mate.dx} mask={`url(#${clip}-companion-mask)`} transform={companionTransform(mate, Math.sign(mate.dx) * 9)}>
+        {EMPOWER_COMPANIONS.map(mate => <g key={mate.dx} mask={`url(#${clip}-companion-mask)`} transform={companionTransform(mate, Math.sign(mate.dx) * EMPOWER_TILT)}>
           {[6, 5, 4, 3, 2, 1].map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${-layer * .24} ${layer * .38})`} fill={layer > 4 ? '#234a4c' : logo.tint} />)}
           <g clipPath={`url(#${clip})`}>
             <rect x="0" y="0" width="146" height="120" fill={logo.tint} />

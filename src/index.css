@@ -36,6 +36,8 @@
   --drop-shadow-2xl: 0 25px 25px rgb(16 46 86 / 0.15);
   --shadow-inner: inset 0 2px 4px 0 rgb(16 46 86 / 0.05);
   --font-sans: Outfit, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* the Projects and Core Values pages' tabs: Geist, a crisp open UI face in the manner of Apple's system face */
+  --font-tab: Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --font-heading: 'SNCF Flared', Outfit, system-ui, sans-serif;
   --font-script: 'Dancing Script', cursive;
   /* Hindi: a calligraphic Devanagari, the script face's counterpart */
@@ -6318,10 +6320,10 @@
   outline: 2px solid var(--chip-ink);
   outline-offset: 2px;
 }
-/* THE RAIL AS TABS (variant 'tabs', the Projects page): the chips alone,
-   centred as one segmented control on a soft track, each marked with a dot
-   in its own ink; the section in view sits on a white pill that slides from
-   chip to chip. The auto margins centre the track while it fits and let the
+/* THE RAIL AS TABS (variant 'tabs'): the chips alone, centred as one
+   segmented control on a soft track, plain names with no marks; the section
+   in view sits on a white pill that slides from chip to chip, its name in its
+   own ink. The auto margins centre the track while it fits and let the
    rail scroll from its first chip when it does not. Same height as the rail
    (54px), so the anchored sections' clearances hold. */
 .subnav[data-variant='tabs'] { min-height: 54px; padding-block: 0; }
@@ -6355,30 +6357,25 @@
 .subnav[data-variant='tabs'] .subnav-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   min-height: 0;
   padding: 9px 16px;
   border: 0;
   font-size: 12.5px;
   line-height: 1;
 }
-.subnav[data-variant='tabs'] .subnav-chip::before {
-  content: '';
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--chip-ink);
-  opacity: 0.5;
-  transition: opacity 300ms ease, scale 300ms ease;
-}
 .subnav[data-variant='tabs'] .subnav-chip:hover { color: var(--ink-900); background: transparent; }
-.subnav[data-variant='tabs'] .subnav-chip:hover::before { opacity: 0.85; }
 .reading-room .subnav[data-variant='tabs'] .subnav-chip[data-on='true'] {
   background: transparent;
   color: color-mix(in srgb, var(--chip-ink) 72%, #102e56);
 }
-.subnav[data-variant='tabs'] .subnav-chip[data-on='true']::before { opacity: 1; scale: 1.15; }
+/* The Projects page's tabs (look 'segmented'): a quiet grey track, the section in view raised as a white slip, the
+   names alone in Geist (--font-tab), no colour. */
+.subnav[data-look='segmented'] .subnav-track { border-radius: 13px; background: rgb(238 238 236 / 0.92); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.04); }
+.subnav[data-look='segmented'] .subnav-lit { border-radius: 9px; box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 6px 14px -8px rgb(0 0 0 / 0.18); }
+.subnav[data-look='segmented'] .subnav-chip { border-radius: 9px; font: 500 13px/1 var(--font-tab); letter-spacing: -0.01em; color: #6b706e; }
+.subnav[data-look='segmented'] .subnav-chip:hover { color: #3d4644; }
+.reading-room .subnav[data-look='segmented'] .subnav-chip[data-on='true'] { color: #22302d; }
+.reading-room .subnav[data-look='segmented'] .subnav-chip:focus-visible { outline: 2px solid #22302d; outline-offset: 2px; }
 /* THE RAIL ON ITS SECTION'S GROUND (tinted; Core Values): the rail is laid in
    the ground of the section in view, the page's own ramp of that section's
    colours under the same deep wash, so it reads as that section's top edge;
@@ -6404,8 +6401,6 @@
 .subnav[data-tinted] .subnav-lit { box-shadow: 0 1px 2px rgb(6 55 130 / 0.12), 0 8px 18px -8px rgb(6 55 130 / 0.45); }
 .subnav[data-tinted] .subnav-chip { color: rgb(255 255 255 / 0.84); }
 .subnav[data-tinted] .subnav-chip:not([data-on='true']):hover { color: #fff; }
-.subnav[data-variant='tabs'][data-tinted] .subnav-chip::before { background: color-mix(in srgb, var(--chip-ink) 45%, #fff); opacity: 0.9; }
-.subnav[data-variant='tabs'][data-tinted] .subnav-chip[data-on='true']::before { background: var(--chip-ink); opacity: 1; }
 .reading-room[data-surface='light'] .subnav[data-tinted] .subnav-chip:focus-visible { outline-color: #fff; }
 @media (prefers-reduced-motion: reduce) {
   .subnav[data-tinted] { transition: none; }

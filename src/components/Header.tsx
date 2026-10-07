@@ -207,9 +207,9 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={onOpenDonate}
           className="donate-ribbon relative h-[40px] w-[124px] flex items-center justify-start pl-2.5 pr-5 shadow-md select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50"
           style={{
-            /* Follows the stage mood via the shared variable rather than the
-               front pillar, so it stays in step on the devotional slide too. */
-            backgroundColor: 'var(--accent-a)',
+            /* the welcome screen's warm cream, on every page, its heart and
+               word in the logo's navy as the welcome screen's are */
+            backgroundColor: '#fdedd2',
             clipPath: 'polygon(0 0, 100% 0, 84% 50%, 100% 100%, 0 100%)',
           }}
           title={getCMSCopy("copy.Header.e26586bdf140", "Support the foundation")}
@@ -218,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="donate-ribbon-sheen" aria-hidden="true" />
 
           {/* Heart glyph */}
-          <span className="mr-1.5 text-white flex-shrink-0 donate-ribbon-heart">
+          <span className="mr-1.5 text-[#063782] flex-shrink-0 donate-ribbon-heart">
             <svg
               className="w-[16px] h-[16px]"
               viewBox="0 0 24 24"
@@ -229,7 +229,7 @@ export const Header: React.FC<HeaderProps> = ({
             </svg>
           </span>
 
-          <span className="text-[11px] uppercase font-bold text-white tracking-wider">{getCMSCopy("copy.Header.c91ee0f2799d", "Donate")}</span>
+          <span className="text-[11px] uppercase font-bold text-[#063782] tracking-wider">{getCMSCopy("copy.Header.c91ee0f2799d", "Donate")}</span>
         </button>
       </div>
       {storiesOpen && <FoundationStories logo={logo} onClose={() => setStoriesOpen(false)} />}

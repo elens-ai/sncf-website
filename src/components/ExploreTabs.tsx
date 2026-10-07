@@ -28,10 +28,13 @@ export const ExploreTabs: React.FC<{
   name: string;
   tab: ExploreTab;
   onTab: (tab: ExploreTab) => void;
-  /** A line under each tab's name, e.g. "5 programmes". */
-  notes: Record<ExploreTab, string>;
+  /** A line under each tab's name, e.g. "5 programmes"; without it, the names stand alone. */
+  notes?: Record<ExploreTab, string>;
   panels: Record<ExploreTab, () => React.ReactNode>;
-}> = ({ id, name, tab, onTab, notes, panels }) => {
+  /** 'segmented': a quiet grey track with the tab chosen raised as a white slip, names alone, no icons and no
+      colour (the Projects and Core Values pages). */
+  look?: 'segmented';
+}> = ({ id, name, tab, onTab, notes, panels, look }) => {
   useCMSRevision();
   const { hash } = useLocation();
   const [opened, setOpened] = useState<ExploreTab[]>([tab]);
@@ -84,16 +87,16 @@ export const ExploreTabs: React.FC<{
   };
 
   return (
-    <div className="explore" data-tab={tab}>
+    <div className="explore" data-tab={tab} data-look={look}>
       <div ref={list} className="explore-tabs" role="tablist" aria-label={`${name}: ${getCMSCopy("copy.ExploreTabs.label", "reports, gallery and stats")}`}>
         <span className="explore-tabs-ink" aria-hidden="true" />
         {TABS.map(({ id: t, icon: Icon, name: label }) => (
           <button key={t} ref={node => { buttons.current[t] = node; }} id={`${id}-${t}`} type="button" role="tab"
             aria-selected={tab === t} aria-controls={`${id}-${t}-panel`} tabIndex={tab === t ? 0 : -1}
             onClick={() => select(t)} onKeyDown={keys}>
-            <span className="explore-tab-icon" aria-hidden="true"><Icon size={18} strokeWidth={1.7} /></span>
+            {look !== 'segmented' && <span className="explore-tab-icon" aria-hidden="true"><Icon size={18} strokeWidth={1.7} /></span>}
             <span className="explore-tab-name">{label()}</span>
-            <span className="explore-tab-note">{notes[t]}</span>
+            {notes && <span className="explore-tab-note">{notes[t]}</span>}
           </button>
         ))}
       </div>

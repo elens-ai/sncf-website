@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
@@ -297,8 +296,7 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
         </div>
         {/* Where a click turns a page: the left page one leaf back, the right
             page one leaf on. Plain boxes laid over the pages, so a click always
-            lands, whatever the leaves are doing in 3D beneath; the arrows below
-            do the same for the keyboard. */}
+            lands, whatever the leaves are doing in 3D beneath. */}
         {(['left', 'right'] as const).map(side => {
           const canTurn = side === 'left' ? turned > 0 : turned < count;
           return (
@@ -318,19 +316,6 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
       </div>
       <figcaption className="scrapbook-caption">
         <span>{caption}</span>
-        <span className="scrapbook-controls">
-          <button type="button" onClick={() => turnBy(-1)} disabled={turned === 0} aria-label={c('previous', 'Previous page')} title={c('previous', 'Previous page')}>
-            <ChevronLeft size={16} aria-hidden="true" />
-          </button>
-          {!still && (
-            <button type="button" onClick={() => setHeld(value => !value)} aria-label={held ? c('play', 'Play') : c('pause', 'Pause')} title={held ? c('play', 'Play') : c('pause', 'Pause')}>
-              {held ? <Play size={12} fill="currentColor" aria-hidden="true" /> : <Pause size={12} fill="currentColor" aria-hidden="true" />}
-            </button>
-          )}
-          <button type="button" onClick={() => turnBy(1)} disabled={turned >= count} aria-label={c('next', 'Next page')} title={c('next', 'Next page')}>
-            <ChevronRight size={16} aria-hidden="true" />
-          </button>
-        </span>
       </figcaption>
     </figure>
   );

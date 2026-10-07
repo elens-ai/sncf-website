@@ -212,13 +212,6 @@
 .impact-mosaic[data-mode='stage'] { height: calc(100svh * (var(--chapters, 4) + 1)); padding: 0; } /* a screen for each chapter (--chapters, ImpactMosaic), and the one it is pinned for */
 .impact-mosaic[data-mode='stage'] > * { max-width: none; margin: 0; }
 .mosaic-stage { position: sticky; top: 0; height: 100svh; overflow: clip; }
-.mosaic-stage-label {
-  position: absolute; z-index: 3; top: calc(var(--site-header-height, 72px) + 14px); left: clamp(20px, 5vw, 64px);
-  display: flex; align-items: center; gap: 12px; margin: 0;
-  font: 500 10px/1.8 var(--font-sans); letter-spacing: .24em; text-transform: uppercase; color: rgb(255 255 255 / .7);
-}
-.mosaic-stage-label > span:first-child { display: block; width: 28px; height: 1px; background: #ddc8a0; }
-.mosaic-stage-count { color: #ddc8a0; font-variant-numeric: tabular-nums; }
 .impact-mosaic[data-mode='stage'] .mosaic-chapter {
   position: absolute; inset: 0; grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr); align-items: stretch;
   gap: clamp(28px, 4vw, 64px); padding: calc(var(--site-header-height, 72px) + 48px) clamp(20px, 5vw, 64px) 36px clamp(20px, 5vw, 64px);
@@ -326,7 +319,7 @@
 .impact-mosaic[data-mode='stacked'] .mosaic-hub, .impact-mosaic[data-mode='stacked'] .mosaic-collage { z-index: 1; }
 .impact-mosaic[data-mode='stacked'] .mosaic-collage { position: relative; }
 /* the type keeps its margin over the art */
-.impact-mosaic .mosaic-name, .impact-mosaic .mosaic-headline, .impact-mosaic .mosaic-stage-label, .impact-mosaic .mosaic-tiles-note { text-shadow: 0 1px 24px rgb(6 55 130 / .35); }
+.impact-mosaic .mosaic-name, .impact-mosaic .mosaic-headline, .impact-mosaic .mosaic-tiles-note { text-shadow: 0 1px 24px rgb(6 55 130 / .35); }
 .impact-mosaic .mosaic-headline { color: rgb(255 255 255 / .88); }
 /* a canvas cannot honour forced colours; the art is decorative, so it simply goes */
 @media (forced-colors: active), (prefers-contrast: more) {
@@ -339,9 +332,6 @@
 .impact-mosaic .mosaic-headline { margin-inline: auto; }
 .impact-mosaic[data-mode='stage'] .mosaic-hub { padding-left: 0; }
 @media (min-width: 640px) and (max-width: 1023px) { .impact-mosaic .mosaic-hub { text-align: left; } }
-
-.mosaic-stage-label { opacity: 0; transition: opacity 500ms ease; }
-.mosaic-stage-label[data-show='true'] { opacity: 1; }
 
 /* A feathered photographic backdrop, with six small prints over the waves. */
 .mosaic-wash-mask { opacity: .8; }

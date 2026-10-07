@@ -13,7 +13,6 @@ import { MosaicChapter } from '../components/MosaicChapter';
 import { ExploreTabs, type ExploreTab } from '../components/ExploreTabs';
 import { ProgrammeDossier } from '../components/ProgrammeDossier';
 import { ACTIVITY_SYMBOLS } from '../components/activitySymbols';
-import { ReportActions } from '../components/ReportActions';
 import { PillarGallery } from '../components/PillarGallery';
 import { SdgTags } from '../components/UnAffiliation';
 import { Saying } from '../components/Saying';
@@ -51,10 +50,8 @@ const CornerstoneScreen: React.FC<{ id: Cornerstone; index: number; name: string
   const emblem = id === 'enrich'
     ? <EnrichScrapbook activities={activities} name={name} motto={pillar.headline} caption={getCMSCopy('copy.CoreValuesPage.foundationPhotos', 'From the foundation’s work, 2026')} />
     : undefined;
-  const count = (n: number) => String(n).padStart(2, '0');
   return (
     <div ref={root} className="impact-mosaic value-screen" data-mode="stacked">
-      <p className="mosaic-stage-label" data-show="true"><span aria-hidden="true" /><span className="mosaic-stage-count">{`${count(index + 1)} / ${count(CORNERSTONES.length)}`}</span></p>
       <MosaicChapter pillar={pillar} index={index} activities={activities} live={live} stacked
         openId={null} attendedId={attended?.id ?? null} onOpen={activity => onProgramme(activity.id)} onAttend={setAttended}
         emblem={emblem} inPage heading="h2" />
@@ -134,7 +131,6 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   useEffect(() => {
     if (ACTIVITIES.some(a => a.id === linkedActivity && a.pillarId === id)) { setSelectedId(linkedActivity); setTab('reports'); }
   }, [linkedActivity, id]);
-  const photographs = activities.reduce((sum, activity) => sum + (activity.images?.length ?? 0), 0);
   /* a programme chosen on the opening screen opens in the report below, and the page goes down to it */
   const showProgramme = (activityId: string) => {
     openProgramme(activityId);
@@ -152,16 +148,10 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
         <SdgTags goals={goalsOf(activities.map(activity => activity.id))} className="value-sdgs" />
 
 
-        <ExploreTabs id={id} name={name} tab={tab} onTab={setTab}
-          notes={{
-            reports: `${activities.length} ${getCMSCopy("copy.CoreValuesPage.tab-programmes", "programmes, every reported figure")}`,
-            gallery: `${photographs} ${getCMSCopy("copy.CoreValuesPage.tab-photographs", "photographs from the field")}`,
-            stats: getCMSCopy("copy.CoreValuesPage.tab-stats", "The figures, charted"),
-          }}
+        <ExploreTabs id={id} name={name} tab={tab} onTab={setTab} look="segmented"
           panels={{
             reports: () => (
               <div className="value-explorer">
-                <ReportActions id={id} title={name} ink={pillar.accentA} programmes={activities} />
                 <div className="value-explorer-heading"><div><p className="value-kicker">{getCMSCopy("copy.CoreValuesPage.e7b186e662f2", "Behind the numbers")}</p><h3>{getCMSCopy("copy.CoreValuesPage.6ae8bf36f85f", "Small actions. Lasting change.")}</h3></div><p>{getCMSCopy("copy.CoreValuesPage.92fcbaad24fc", "Choose a programme to explore its reach.")}</p></div>
                 <div className="value-explorer-grid">
                   <div className="value-programmes" role="group" aria-label={`${pillar.label} programmes`}>

@@ -282,5 +282,9 @@
   "asset.WelcomeSplashScreen.message-portrait": {
     "source": "/images/satguru-mata-sudiksha-ji-welcome.webp",
     "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-welcome.webp"
+  },
+  "asset.MosaicOverture.enrich-book": {
+    "source": "/images/emblem-marks/enrich-book.webp",
+    "label": "MosaicOverture · enrich-book.webp"
   }
 }

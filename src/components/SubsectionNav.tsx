@@ -13,10 +13,13 @@ interface SubsectionNavProps {
   /** Small caps line at the head of the rail. */
   label?: string;
   /** 'rail' (the default): the label at the head, the chips after it.
-      'tabs': the chips alone, centred as one segmented control, each marked
-      with a dot in its ink, a lit pill sliding to the section in view; the
-      label still names the control for screen readers. */
+      'tabs': the chips alone, centred as one segmented control, a lit pill
+      sliding to the section in view; the label still names the control for
+      screen readers. */
   variant?: 'rail' | 'tabs';
+  /** 'segmented' (with the 'tabs' variant): a quiet grey track, the section in view raised as a white slip, the
+      names alone in Geist, no colour (the Projects page). */
+  look?: 'segmented';
   /** The rail takes the ground of the section in view: it is marked with that
       section's id (data-ground), and the page gives each id its colours
       (--backdrop-dark, -mid, -light and -pale), which it fades between. */
@@ -46,6 +49,7 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
   links,
   label = 'On this page',
   variant = 'rail',
+  look,
   tinted = false,
 }) => {
   const [active, setActive] = useState(links[0]?.id ?? '');
@@ -231,7 +235,7 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
   );
 
   return (
-    <nav className="subnav" aria-label={label} ref={railRef} data-variant={variant}
+    <nav className="subnav" aria-label={label} ref={railRef} data-variant={variant} data-look={look}
       data-tinted={tinted || undefined} data-ground={tinted ? active : undefined}>
       {variant === 'tabs' ? (
         <div className="subnav-track" ref={trackRef}>

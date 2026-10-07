@@ -2834,8 +2834,6 @@
     "copy.GalleryModal.9a92a27a2688": "View ",
     "copy.GalleryModal.5090fffeca9e": "Spiritual Guides",
     "copy.GalleryModal.0e00e36c4422": "View Portrait",
-    "copy.Header.a01941bf3134": "Sant Nirankari Charitable Foundation",
-    "copy.Header.b79520f8055a": "Sant Nirankari Charitable Foundation logo",
     "copy.Header.44e3df1518ac": "Sant Nirankari Charitable Foundation Logo",
     "copy.Header.3eeeb717e545": "Sant Nirankari",
     "copy.Header.4b0937769465": "Charitable Foundation",
@@ -2909,9 +2907,6 @@
     "copy.WelcomeSplashScreen.da87301fca5f": "Sant Nirankari Charitable Foundation — Service with Humility",
     "copy.WelcomeSplashScreen.44e3df1518ac": "Sant Nirankari Charitable Foundation Logo",
     "copy.WelcomeSplashScreen.56219e473693": "Service with Humility",
-    "copy.CoreValuesPage.c7a3284847f9": "Preview a core value",
-    "copy.CoreValuesPage.4109634bf723": "Compassion, made visible.",
-    "copy.CoreValuesPage.5feceb66ffc8": "0",
     "copy.CoreValuesPage.e7b186e662f2": "Behind the numbers",
     "copy.CoreValuesPage.6ae8bf36f85f": "Small actions. Lasting change.",
     "copy.CoreValuesPage.92fcbaad24fc": "Choose a programme to explore its reach.",
@@ -2920,13 +2915,9 @@
     "copy.CoreValuesPage.ad3a80a2651a": "Programme in focus",
     "copy.CoreValuesPage.91c1f9479c9a": "Source: foundation activity report · Figures shown as reported.",
     "copy.CoreValuesPage.cd9fb71ad9c3": "Discover the next programme ",
-    "copy.CoreValuesPage.3824d3f1b90d": "The purpose behind the progress",
-    "copy.CoreValuesPage.616fea83dd06": "Continue the journey",
-    "copy.CoreValuesPage.7ca10410b52c": "Discover ",
     "copy.CoreValuesPage.c83be5fde065": "Core Values · Heal · Enrich · Empower",
     "copy.CoreValuesPage.97ff86ab30e2": "The three cornerstones",
     "copy.CoreValuesPage.1d90a9e6fdbc": "Compassion in action. Discover the programmes, people and reported progress behind Heal, Enrich and Empower.",
-    "copy.CoreValuesPage.64263b3319f0": "Explore our impact",
     "copy.GuidingForcePage.3c66946f7a8a": "Sant Nirankari Health City",
     "copy.GuidingForcePage.b98c09f4d313": "Oneness Vann",
     "copy.GuidingForcePage.a81619ca1e37": "Project Amrit",
@@ -3301,10 +3292,6 @@
     "copy.EnrichScrapbook.label": "Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres",
     "copy.EnrichScrapbook.kicker": "Our scrapbook",
     "copy.EnrichScrapbook.closing": "And the next page is still being written…",
-    "copy.EnrichScrapbook.previous": "Previous page",
-    "copy.EnrichScrapbook.play": "Play",
-    "copy.EnrichScrapbook.pause": "Pause",
-    "copy.EnrichScrapbook.next": "Next page",
     "copy.HealStory.introLead": "For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.",
     "copy.WelcomeSplashScreen.mission-vision-label": "Mission & Vision",
     "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility",
@@ -3334,15 +3321,8 @@
     "copy.UnAffiliation.observance": "UN observance",
     "copy.UnAffiliation.sdg-label": "Advancing the UN Sustainable Development Goals",
     "copy.UnAffiliation.sdg-title": "UN Sustainable Development Goal",
-    "copy.CoreValuesPage.tab-programmes": "programmes, every reported figure",
-    "copy.CoreValuesPage.tab-photographs": "photographs from the field",
-    "copy.CoreValuesPage.tab-stats": "The figures, charted",
     "copy.CoreValuesPage.programme-sdgs": "UN goals it advances",
     "copy.CoreValuesPage.gallery-band": "every photograph",
-    "copy.ProjectsPage.tab-measures": "reported measures",
-    "copy.ProjectsPage.tab-gallery": "photographs, and films to come",
-    "copy.ProjectsPage.tab-gallery-awaited": "Photographs on their way",
-    "copy.ProjectsPage.tab-stats": "The figures, charted",
     "copy.ProjectsPage.gallery-label": "photographs of the project, opening on the petals of the Projects emblem",
     "copy.ProjectsPage.foundationPhotos": "From the foundation’s work, 2026",
     "copy.ProjectsPage.illustrative": "Illustrative photographs from the foundation’s other projects",
@@ -3369,11 +3349,6 @@
     "copy.Sayings.villages-by": "Sant Nirankari Mission",
     "copy.Sayings.contribute-english": "Life gets a meaning, if it is lived for others.",
     "copy.Sayings.contribute-by": "Nirankari Baba Hardev Singh Ji Maharaj",
-    "copy.NavPanels.reports": "Reports",
-    "copy.NavPanels.gallery": "Gallery",
-    "copy.NavPanels.stats": "Stats",
-    "copy.NavPanels.tabs": "reports, gallery and stats",
-    "copy.NavPanels.explore-values": "Explore the three cornerstones",
     "copy.NavPanels.feature-kicker": "Also from the Mission",
     "copy.NavPanels.feature-go": "Visit its site",
     "copy.NavPanels.who-account": "Our story since 2010",
@@ -3408,8 +3383,6 @@
     "copy.EventsJournal.year": "The year at a glance",
     "copy.EventsJournal.today": "Today",
     "copy.EventsJournal.venue": "Find a venue near you",
-    "copy.MosaicOverture.count-projects": "projects",
-    "copy.MosaicOverture.count-programmes": "programmes",
     "copy.PhotoCarousel.carousel": "carousel",
     "copy.PhotoCarousel.slide": "slide",
     "copy.PhotoCarousel.of": "of",
@@ -3602,7 +3575,7 @@
     "copy.WhoWeArePage.cover-figures": "The foundation in figures",
     "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it.",
     "copy.GuidingForcePage.cover-lede": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document.",
-    "copy.WelcomeSplashScreen.welcome-hold-seconds": "15"
+    "copy.WelcomeSplashScreen.welcome-hold-seconds": "10"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -3769,10 +3742,6 @@
       "source": "/images/welcome-volunteers.jpg",
       "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
     },
-    "asset.PillarHeroBackdrop.heal-background": {
-      "source": "/images/heal-emblem/background.webp",
-      "label": "PillarHeroBackdrop · background.webp"
-    },
     "asset.PillarPhotoMosaic.heal-leaf-top-right": {
       "source": "/images/heal-emblem/leaf-top-right.webp",
       "label": "PillarPhotoMosaic · leaf-top-right.webp"
@@ -3845,10 +3814,6 @@
       "source": "/images/programmes/oneness-vann-planting.webp",
       "label": "WorkingHands · oneness-vann-planting.webp"
     },
-    "asset.WorkingHands.palm": {
-      "source": "/images/petals/palm.webp",
-      "label": "WorkingHands · palm.webp"
-    },
     "asset.GuidingForcePage.work-amrit": {
       "source": "/images/programmes/amrit-riverbank.webp",
       "label": "GuidingForcePage · amrit-riverbank.webp"
@@ -3896,6 +3861,10 @@
     "asset.WelcomeSplashScreen.message-portrait": {
       "source": "/images/satguru-mata-sudiksha-ji-welcome.webp",
       "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-welcome.webp"
+    },
+    "asset.MosaicOverture.enrich-book": {
+      "source": "/images/emblem-marks/enrich-book.webp",
+      "label": "MosaicOverture · enrich-book.webp"
     }
   },
   "slots": {
@@ -4079,16 +4048,6 @@
         "page": "everywhere",
         "section": "Gallery pop-up",
         "label": "Gallery pop-up · View Portrait"
-      },
-      "copy.Header.a01941bf3134": {
-        "page": "everywhere",
-        "section": "Header",
-        "label": "Header · Sant Nirankari Charitable Foundation"
-      },
-      "copy.Header.b79520f8055a": {
-        "page": "everywhere",
-        "section": "Header",
-        "label": "Header · Sant Nirankari Charitable Foundation logo"
       },
       "copy.Header.44e3df1518ac": {
         "page": "everywhere",
@@ -4455,21 +4414,6 @@
         "section": "Intro · First screen",
         "label": "Intro · First screen · Service with Humility"
       },
-      "copy.CoreValuesPage.c7a3284847f9": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Preview a core value"
-      },
-      "copy.CoreValuesPage.4109634bf723": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Compassion, made visible."
-      },
-      "copy.CoreValuesPage.5feceb66ffc8": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · 0"
-      },
       "copy.CoreValuesPage.e7b186e662f2": {
         "page": "core-values",
         "section": "Page",
@@ -4510,21 +4454,6 @@
         "section": "Page",
         "label": "Page · Discover the next programme"
       },
-      "copy.CoreValuesPage.3824d3f1b90d": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · The purpose behind the progress"
-      },
-      "copy.CoreValuesPage.616fea83dd06": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Continue the journey"
-      },
-      "copy.CoreValuesPage.7ca10410b52c": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Discover"
-      },
       "copy.CoreValuesPage.c83be5fde065": {
         "page": "core-values",
         "section": "Page",
@@ -4539,11 +4468,6 @@
         "page": "core-values",
         "section": "Page",
         "label": "Page · Compassion in action. Discover the programmes, people and reported pr…"
-      },
-      "copy.CoreValuesPage.64263b3319f0": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Explore our impact"
       },
       "copy.GuidingForcePage.3c66946f7a8a": {
         "page": "guiding-force",
@@ -6415,26 +6339,6 @@
         "section": "Enrich scrapbook",
         "label": "Enrich scrapbook · And the next page is still being written…"
       },
-      "copy.EnrichScrapbook.previous": {
-        "page": "core-values",
-        "section": "Enrich scrapbook",
-        "label": "Enrich scrapbook · Previous page"
-      },
-      "copy.EnrichScrapbook.play": {
-        "page": "core-values",
-        "section": "Enrich scrapbook",
-        "label": "Enrich scrapbook · Play"
-      },
-      "copy.EnrichScrapbook.pause": {
-        "page": "core-values",
-        "section": "Enrich scrapbook",
-        "label": "Enrich scrapbook · Pause"
-      },
-      "copy.EnrichScrapbook.next": {
-        "page": "core-values",
-        "section": "Enrich scrapbook",
-        "label": "Enrich scrapbook · Next page"
-      },
       "copy.HealStory.introLead": {
         "page": "other",
         "section": "Heal Story",
@@ -6580,21 +6484,6 @@
         "section": "UN standing & SDGs",
         "label": "UN standing & SDGs · UN Sustainable Development Goal"
       },
-      "copy.CoreValuesPage.tab-programmes": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · programmes, every reported figure"
-      },
-      "copy.CoreValuesPage.tab-photographs": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · photographs from the field"
-      },
-      "copy.CoreValuesPage.tab-stats": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · The figures, charted"
-      },
       "copy.CoreValuesPage.programme-sdgs": {
         "page": "core-values",
         "section": "Page",
@@ -6604,26 +6493,6 @@
         "page": "core-values",
         "section": "Page",
         "label": "Page · every photograph"
-      },
-      "copy.ProjectsPage.tab-measures": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · reported measures"
-      },
-      "copy.ProjectsPage.tab-gallery": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · photographs, and films to come"
-      },
-      "copy.ProjectsPage.tab-gallery-awaited": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Photographs on their way"
-      },
-      "copy.ProjectsPage.tab-stats": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · The figures, charted"
       },
       "copy.ProjectsPage.gallery-label": {
         "page": "projects",
@@ -6754,31 +6623,6 @@
         "page": "everywhere",
         "section": "Sayings & slogans",
         "label": "Sayings & slogans · Nirankari Baba Hardev Singh Ji Maharaj"
-      },
-      "copy.NavPanels.reports": {
-        "page": "everywhere",
-        "section": "Menu",
-        "label": "Menu · Reports"
-      },
-      "copy.NavPanels.gallery": {
-        "page": "everywhere",
-        "section": "Menu",
-        "label": "Menu · Gallery"
-      },
-      "copy.NavPanels.stats": {
-        "page": "everywhere",
-        "section": "Menu",
-        "label": "Menu · Stats"
-      },
-      "copy.NavPanels.tabs": {
-        "page": "everywhere",
-        "section": "Menu",
-        "label": "Menu · reports, gallery and stats"
-      },
-      "copy.NavPanels.explore-values": {
-        "page": "everywhere",
-        "section": "Menu",
-        "label": "Menu · Explore the three cornerstones"
       },
       "copy.NavPanels.feature-kicker": {
         "page": "everywhere",
@@ -6949,16 +6793,6 @@
         "page": "home",
         "section": "Events",
         "label": "Events · Find a venue near you"
-      },
-      "copy.MosaicOverture.count-projects": {
-        "page": "home",
-        "section": "Landing (Four paths. One purpose.)",
-        "label": "Landing (Four paths. One purpose.) · projects"
-      },
-      "copy.MosaicOverture.count-programmes": {
-        "page": "home",
-        "section": "Landing (Four paths. One purpose.)",
-        "label": "Landing (Four paths. One purpose.) · programmes"
       },
       "copy.PhotoCarousel.carousel": {
         "page": "core-values",
@@ -7923,7 +7757,7 @@
       "copy.WelcomeSplashScreen.welcome-hold-seconds": {
         "page": "home",
         "section": "Intro · Welcome page",
-        "label": "Intro · Welcome page · 15"
+        "label": "Intro · Welcome page · 10"
       }
     },
     "assets": {
@@ -8132,11 +7966,6 @@
         "section": "Intro · Welcome page",
         "label": "Intro · Welcome page · welcome-volunteers.jpg"
       },
-      "asset.PillarHeroBackdrop.heal-background": {
-        "page": "home",
-        "section": "Hero · Heal background",
-        "label": "Hero · Heal background · background.webp"
-      },
       "asset.PillarPhotoMosaic.heal-leaf-top-right": {
         "page": "home",
         "section": "Hero · Heal emblem photos",
@@ -8227,11 +8056,6 @@
         "section": "Cover · working hands",
         "label": "Cover · working hands · oneness-vann-planting.webp"
       },
-      "asset.WorkingHands.palm": {
-        "page": "who-we-are",
-        "section": "Cover · working hands",
-        "label": "Cover · working hands · palm.webp"
-      },
       "asset.GuidingForcePage.work-amrit": {
         "page": "guiding-force",
         "section": "Page",
@@ -8291,6 +8115,11 @@
         "page": "home",
         "section": "Intro · Message page",
         "label": "Intro · Message page · satguru-mata-sudiksha-ji-welcome.webp"
+      },
+      "asset.MosaicOverture.enrich-book": {
+        "page": "home",
+        "section": "Landing (Four paths. One purpose.)",
+        "label": "Landing (Four paths. One purpose.) · enrich-book.webp"
       }
     }
   },

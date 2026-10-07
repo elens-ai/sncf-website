@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown, ArrowUpRight, CalendarDays } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getCMSCopy } from '../cms/runtime';
+import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import { PETAL_ART, PALM_ART, PALM_TOP_ART, LOGO_COLOURS, logoInkSrc } from './petalArt';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import { PillarMarkShapes } from './PillarMark';
-import { ACTIVITIES } from '../data/activities';
 import { PILLARS } from '../data/pillars';
 import { MOSAIC_WALL } from './mosaicWallTiles';
 import { easeOut } from '../utils/waves';
@@ -111,8 +110,8 @@ function useAssembly(root: React.RefObject<HTMLElement | null>, play: boolean) {
 /** "FOUR PATHS. ONE PURPOSE." — the foundation's emblem assembling over a wall
     of its own photographs, and four doors, one for each path. It opens the
     home page: choosing a door walks the visitor into that path (onChoose is
-    handed the door it was chosen from), and the cue at its foot carries on
-    down the page. */
+    handed the door it was chosen from), or on a phone lights that path's
+    photographs, and the cue at its foot carries on down the page. */
 export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScrollOn }: {
   onChoose: (pillar: MosaicPillar, from: HTMLElement) => void;
   /** Starts the emblem assembling and the words and doors arriving. */
@@ -125,6 +124,16 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
   const root = useRef<HTMLElement>(null);
   useAssembly(root, play);
   const [lit, setLit] = useState<MosaicPillar | null>(null);
+  /* Where a cursor exists a door leads on, its photographs lit as it is pointed at; on a touch screen (a phone) a
+     tap only lights them, and the visitor stays where they are. */
+  const [cursor, setCursor] = useState(true);
+  useEffect(() => {
+    const query = matchMedia('(hover: hover) and (pointer: fine)');
+    const sync = () => setCursor(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
   const Title = heading;
   const title = getCMSCopy('copy.ImpactMosaic.eee670c33892', 'Different paths. One purpose.');
   const lines = title.match(/^(.+?[.!?])\s+(.+)$/);
@@ -167,14 +176,18 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
       </div>
       <nav className="mosaic-paths" aria-label="Explore our four pillars">
         {paths().map(({ id, detail }, index) => (
-          <button type="button" key={id} className="mosaic-path" onClick={event => onChoose(id, event.currentTarget)} aria-label={`${getCMSCopy('copy.MosaicOverture.enter', 'Enter')} ${PILLAR_LOGOS[id].label}: ${detail}`}
-            onPointerEnter={() => setLit(id)} onPointerLeave={() => setLit(null)} onFocus={() => setLit(id)} onBlur={() => setLit(null)}
+          <button type="button" key={id} className="mosaic-path" onClick={event => (cursor ? onChoose(id, event.currentTarget) : setLit(id))}
+            aria-label={`${cursor ? `${getCMSCopy('copy.MosaicOverture.enter', 'Enter')} ` : ''}${PILLAR_LOGOS[id].label}: ${detail}`} aria-pressed={cursor ? undefined : lit === id}
+            onPointerEnter={event => { if (event.pointerType !== 'touch') setLit(id); }} onPointerLeave={event => { if (event.pointerType !== 'touch') setLit(null); }}
+            onFocus={() => setLit(id)} onBlur={() => setLit(null)}
             style={{ '--path-ink': PILLAR_LOGOS[id].tint, '--path-accent': accent(id), '--path-order': index } as React.CSSProperties}>
-            <span className="mosaic-path-number" aria-hidden="true">0{index + 1}</span>
-            <span className="mosaic-path-reach" aria-hidden="true">{ACTIVITIES.filter(activity => activity.pillarId === id).length} {id === 'projects' ? getCMSCopy('copy.MosaicOverture.count-projects', 'projects') : getCMSCopy('copy.MosaicOverture.count-programmes', 'programmes')}</span>
-            <svg viewBox="0 0 146 120" className="mosaic-path-icon" aria-hidden="true"><PillarMarkShapes pillar={id} /></svg>
+            {/* Projects by the Projects page's own bloom, and Enrich by its 3D book (white pages in a teal cover), each in
+                its colours; Heal and Empower by their marks */}
+            {id === 'projects' || id === 'enrich'
+              ? <img className="mosaic-path-icon mosaic-path-art" data-art={id} alt="" draggable={false}
+                  src={id === 'projects' ? resolveCMSAsset("asset.projects.bloom", "/images/projects-bloom.png?v=balanced") : resolveCMSAsset("asset.MosaicOverture.enrich-book", "/images/emblem-marks/enrich-book.webp")} />
+              : <svg viewBox="0 0 146 120" className="mosaic-path-icon" aria-hidden="true"><PillarMarkShapes pillar={id} /></svg>}
             <span className="mosaic-path-copy"><strong>{PILLAR_LOGOS[id].label}</strong><span>{detail}</span></span>
-            <ArrowUpRight className="mosaic-path-arrow" size={18} aria-hidden="true" />
           </button>
         ))}
       </nav>

@@ -71,12 +71,12 @@
    rising and falling slowly, as the columns drift up and down, and swaying a
    little as water does, each to its own rhythm, so the two never move as one.
    The tint at their crests follows the ground's colour as it changes. */
-@property --shore-ground { syntax: '<color>'; inherits: true; initial-value: #f5efe6; }
+@property --shore-ground { syntax: '<color>'; inherits: true; initial-value: #f9e2c7; }
 .landing-shore {
   --shore-end: color-mix(in srgb, var(--shore-ground) 86%, #063782);
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; height: var(--landing-blend);
   overflow: hidden; pointer-events: none;
-  transition: --shore-ground 3s ease-in-out;
+  transition: --shore-ground 0.85s ease-in-out;
 }
 .landing-shore > i {
   position: absolute; left: -4%; right: -4%; top: 0; height: 100%;
@@ -104,7 +104,7 @@
    turning, step by step, towards the hall's own green (rather than meeting its
    deep green head-on) as it fades, on an eased curve */
 .landing-ground > i {
-  --ground: #f5efe6;
+  --ground: #f9e2c7;
   --ground-top: color-mix(in srgb, var(--ground) 78%, #fff);
   --ground-end: color-mix(in srgb, var(--ground) 86%, #063782);
   position: absolute; inset: 0;
@@ -113,7 +113,7 @@
     linear-gradient(160deg, var(--ground-top) 0%, var(--ground) 48%, var(--ground-end) 100%);
 }
 /* the fade is a little shorter than the step, so the upper layer is wholly there (or gone) before the one beneath it changes */
-.landing-ground > i + i { opacity: 0; transition: opacity 3s ease-in-out; will-change: opacity; }
+.landing-ground > i + i { opacity: 0; transition: opacity 0.85s ease-in-out; will-change: opacity; }
 .landing-ground[data-upper='shown'] > i + i { opacity: 1; }
 .home-landing::after { content: ''; display: block; height: var(--landing-blend); pointer-events: none; }
 /* the photographs run on past the screen's foot, down into the water, and
@@ -127,10 +127,10 @@
   mask-composite: intersect;
 }
 /* the photographs, toned to a grey-green (each greyscale tile takes the colour beneath it), and faint */
-.home-landing .mosaic-wall-col > i { background-color: color-mix(in srgb, var(--backdrop-mid, #3e8b75) 18%, var(--ground-tile)); opacity: 0.14; }
-.home-landing .mosaic-wall[data-lit] .mosaic-wall-col > i { opacity: 0.07; }
+.home-landing .mosaic-wall-col > i { background-color: color-mix(in srgb, var(--backdrop-mid, #3e8b75) 34%, var(--ground-tile)); opacity: 0.34; }
+.home-landing .mosaic-wall[data-lit] .mosaic-wall-col > i { opacity: 0.1; }
 .home-landing .mosaic-wall[data-lit='heal'] i[data-pillar='heal'], .home-landing .mosaic-wall[data-lit='enrich'] i[data-pillar='enrich'],
-.home-landing .mosaic-wall[data-lit='empower'] i[data-pillar='empower'], .home-landing .mosaic-wall[data-lit='projects'] i[data-pillar='projects'] { opacity: 0.24; }
+.home-landing .mosaic-wall[data-lit='empower'] i[data-pillar='empower'], .home-landing .mosaic-wall[data-lit='projects'] i[data-pillar='projects'] { opacity: 0.6; }
 /* quiet light where the emblem and the words sit, in place of the dark wash */
 .home-landing .mosaic-overture::before {
   background: radial-gradient(ellipse at 30% 46%, rgb(255 255 255 / var(--ground-glow-a)), transparent 46%),
@@ -193,11 +193,8 @@
   backdrop-filter: blur(14px) saturate(1.25);
 }
 .home-landing .mosaic-path::before { background: var(--path-accent); }
-.home-landing .mosaic-path-number { color: rgb(20 58 51 / 0.45); }
-.home-landing .mosaic-path-reach { background: color-mix(in srgb, var(--path-accent) 14%, rgb(255 255 255 / 0.55)); color: color-mix(in oklab, var(--path-accent) 84%, #102e56); }
 .home-landing .mosaic-path-icon { fill: var(--path-accent); }
 .home-landing .mosaic-path-copy > span { color: rgb(20 58 51 / 0.64); }
-.home-landing .mosaic-path-arrow { color: var(--path-accent); }
 .home-landing .mosaic-path:is(:hover, :focus-visible) {
   background: linear-gradient(165deg, color-mix(in srgb, var(--path-accent) 18%, rgb(240 244 242 / 0.66)), rgb(205 214 209 / 0.4) 70%);
   box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--path-accent) 60%, rgb(255 255 255 / 0.6)), 0 26px 44px -26px color-mix(in srgb, var(--path-accent) 60%, transparent);
@@ -214,7 +211,6 @@
 }
 .home-landing .mosaic-overture-events:is(:hover, :focus-visible) { background: var(--landing-navy); color: #fff; translate: 0 -2px; box-shadow: 0 16px 30px -18px rgb(4 55 147 / 0.75); }
 .home-landing .mosaic-overture-events:focus-visible { outline: 2px solid var(--landing-navy); outline-offset: 3px; }
-.home-landing .mosaic-path:is(:hover, :focus-visible) .mosaic-path-reach { background: var(--path-accent); color: #fff; }
 .home-landing .mosaic-path:is(:hover, :focus-visible) .mosaic-path-copy strong { color: color-mix(in oklab, var(--path-accent) 86%, #102e56); }
 .home-landing .mosaic-path:focus-visible { outline: 2px solid color-mix(in oklab, var(--path-accent) 86%, #102e56); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {

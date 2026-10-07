@@ -7,8 +7,8 @@ import './home-landing.css';
 /* THE LANDING'S GROUND passes through these colours, a new one each second,
    starting from the peach: soft tints of the seal's own, and a mid grey, never
    white. The header over the landing is frosted glass, so it shows the same. */
-const GROUND_COLOURS = ['#f5efe6', '#f3edf0', '#eeedf5', '#eaf2f5', '#edf3ee'];
-const GROUND_STEP = 8000;
+const GROUND_COLOURS = ['#f9e2c7', '#f1dde6', '#dad8ee', '#cde6f2', '#cfe3d8', '#b3bcb7'];
+const GROUND_STEP = 1000;
 
 /** THE LANDING: "Different paths. One purpose." opens the home page, before
     the hall. Its emblem assembles once the welcome has handed over, and each
