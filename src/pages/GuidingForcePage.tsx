@@ -9,7 +9,7 @@ import { PageShell } from '../components/PageShell';
 import { MediaGallery } from '../components/MediaGallery';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
-import { Tiles, Waffle } from '../components/ValueAnalytics';
+import { Tiles } from '../components/ValueAnalytics';
 import { onArrival } from '../utils/arrival';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
@@ -38,26 +38,10 @@ const INK_B = PILLAR?.accentB ?? '#f48fb1';
 const PETAL_INKS = ['#f81170', '#b357ad', '#6663b5', '#09a6cf', '#69b947'];
 
 let UNDER_HER_GUIDANCE = bindCMSValue(() => ([
-  {
-    title: getCMSCopy("copy.GuidingForcePage.3c66946f7a8a", "Sant Nirankari Health City"),
-    text: getCMSCopy("copy.GuidingForcePage.3e41e2816cc7", "A multi-specialty charitable hospital campus taking shape in North Delhi, meant to put advanced care within reach of those who cannot pay for it."),
-  },
-  {
-    title: getCMSCopy("copy.GuidingForcePage.b98c09f4d313", "Oneness Vann"),
-    /* The count that used to close this sentence — "around a thousand of them
-       across the country" — is not in the record. activities.ts reports the
-       sites and calls itself the source of truth, so the prose carries no
-       count and the card's figure carries the counted one. */
-    text: getCMSCopy("copy.GuidingForcePage.04b3679a46a7", "Volunteers turning small plots into dense indigenous micro-forests across the country."),
-  },
-  {
-    title: getCMSCopy("copy.GuidingForcePage.a81619ca1e37", "Project Amrit"),
-    text: getCMSCopy("copy.GuidingForcePage.0ad8c918c908", "A national effort with the Government of India to clean and revive rivers, ponds, ghats and beaches, and to keep them clean afterwards."),
-  },
-  {
-    title: getCMSCopy("copy.GuidingForcePage.fb4c55902430", "Nirankari Youth Symposium & NIMA"),
-    text: getCMSCopy("copy.GuidingForcePage.625e24c33bf4", "Platforms for young people — one for their questions, one for music and the performing arts."),
-  },
+  { title: getCMSCopy("copy.GuidingForcePage.3c66946f7a8a", "Sant Nirankari Health City") },
+  { title: getCMSCopy("copy.GuidingForcePage.b98c09f4d313", "Oneness Vann") },
+  { title: getCMSCopy("copy.GuidingForcePage.a81619ca1e37", "Project Amrit") },
+  { title: getCMSCopy("copy.GuidingForcePage.fb4c55902430", "Nirankari Youth Symposium & NIMA") },
 ]), value => { UNDER_HER_GUIDANCE = value; });
 
 /** What the prose says Her teaching is about, a word or two each. */
@@ -124,7 +108,7 @@ const GuidingCover = () => {
   useCMSRevision();
   const words = TEACHINGS.join('  ·  ');
   const R = 266;
-  return <EditorialMotion><section className="ed-cover gf-cover"><div className="ed-cover-copy" data-reveal><div className="ed-dots" aria-hidden="true">{[0,1,2,3,4].map(i => <i key={i} />)}</div><p className="ed-eyebrow">{getCMSCopy("copy.GuidingForcePage.b733f26c2ca4", "Our Guiding Force")}</p><h1>{getCMSCopy("copy.GuidingForcePage.bab255b4564b", "Our guiding force")}</h1><p>{getCMSCopy("copy.GuidingForcePage.ff4066e1863f", "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document. This page says plainly where that guidance comes from.")}</p><a className="ed-link" href={getCMSLink("copy.Link.GuidingForcePage.7783614ae9f5", "#satguru")}>{getCMSCopy("copy.GuidingForcePage.bc1bc49859a9", "The present Satguru ")}<ArrowDown size={17} /></a></div>
+  return <EditorialMotion><section className="ed-cover gf-cover"><div className="ed-cover-copy" data-reveal><p className="ed-eyebrow">{getCMSCopy("copy.GuidingForcePage.b733f26c2ca4", "Our Guiding Force")}</p><h1>{getCMSCopy("copy.GuidingForcePage.bab255b4564b", "Our guiding force")}</h1><p>{getCMSCopy("copy.GuidingForcePage.ff4066e1863f", "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document. This page says plainly where that guidance comes from.")}</p><a className="ed-link" href={getCMSLink("copy.Link.GuidingForcePage.7783614ae9f5", "#satguru")}>{getCMSCopy("copy.GuidingForcePage.bc1bc49859a9", "The present Satguru ")}<ArrowDown size={17} /></a></div>
     <figure className="ed-portrait gf-halo" data-reveal>
       <svg className="gf-halo-art" viewBox="0 0 600 600" aria-hidden="true">
         <defs>
@@ -149,9 +133,9 @@ const Quote: React.FC<{ text: string }> = ({ text }) => (
 );
 
 /** The pandemic, as it was counted, in the site's own charts: the centres and
-    beds as tiles, the ICU beds as their share of all the beds (one activity,
-    one date), and the relief fund apart, as an amount never set beside a count. */
-const ReliefCharts: React.FC<{ label: string; relief: { label: string; value: string }[]; icu?: string; beds?: string }> = ({ label, relief, icu, beds }) => {
+    beds as tiles (one activity, one date), and the relief fund apart, as an
+    amount never set beside a count. */
+const ReliefCharts: React.FC<{ label: string; relief: { label: string; value: string }[] }> = ({ label, relief }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [arrived, setArrived] = useState(false);
   useEffect(() => { const el = ref.current; if (!el) return; return onArrival(el, () => setArrived(true)); }, []);
@@ -159,11 +143,6 @@ const ReliefCharts: React.FC<{ label: string; relief: { label: string; value: st
   return (
     <div ref={ref} className="value-analytics gf-relief-charts" role="group" aria-label={label} data-arrived={arrived} style={{ '--value-color': INK_A, '--value-light': INK_B } as React.CSSProperties}>
       <Tiles items={relief.map(d => ({ icon: icons[d.label] ?? Building2, value: d.value, label: d.label }))} />
-      {icu && beds && (
-        <div className="gf-relief-icu">
-          <Waffle part={{ value: icu, label: getCMSCopy("copy.GuidingForcePage.icu", "of the care-centre beds were ICU beds") }} whole={{ label: getCMSCopy("copy.GuidingForcePage.icu-of", "beds") }} wholeValue={beds} />
-        </div>
-      )}
     </div>
   );
 };
@@ -174,8 +153,6 @@ const WANTED = ['Oxygen concentrators', 'Vaccination centres', 'Care centres', '
 const RELIEF = WANTED.map((l) => COVID?.dataPoints.find((d) => d.label === l)).filter(
   Boolean,
 ) as { label: string; value: string }[];
-const ICU = COVID?.dataPoints.find((d) => d.label === 'ICU beds')?.value;
-const BEDS = COVID?.dataPoints.find((d) => d.label === 'Total beds')?.value;
 
 const FUND = ACTIVITIES.find((a) => a.id === 'financial-support');
 const RELIEF_FUND = FUND?.dataPoints.find((d) => d.label === 'Disaster relief & fund');
@@ -190,7 +167,6 @@ return (
     standfirst={getCMSCopy("copy.GuidingForcePage.8b08fcc76f90", "Every camp, classroom and forest in this site traces back to spiritual\n      guidance rather than a strategy document. This page says plainly where\n      that guidance comes from.")}
     rail={<SubsectionNav label={getCMSCopy("copy.GuidingForcePage.rail", "On this page")} links={[
       { id: 'satguru', label: getCMSCopy("copy.GuidingForcePage.rail-satguru", "The present Satguru"), ink: INK_B },
-      { id: 'rajpita', label: getCMSCopy("copy.GuidingForcePage.rail-rajpita", "Rajpita Ji"), ink: '#dcd0eb' },
       { id: 'guidance', label: getCMSCopy("copy.GuidingForcePage.rail-guidance", "Under Her guidance"), ink: '#c6dfbd' },
       ...(RELIEF.length ? [{ id: 'gf-relief', label: getCMSCopy("copy.GuidingForcePage.rail-relief", "Pandemic response"), ink: '#f0c5ac' }] : []),
       { id: 'gf-media', label: getCMSCopy("copy.GuidingForcePage.rail-media", "Photographs"), ink: '#b9dee1' },
@@ -222,31 +198,12 @@ return (
       </div>
     </section></CMSSection>
 
-    <CMSSection id="GuidingForcePage.rajpita"><section id="rajpita" className="gf-rajpita" aria-labelledby="rajpita-title" data-reveal>
-      <figure className="gf-rajpita-portrait">
-        <img src={resolveCMSAsset('asset.GuidingForcePage.rajpita', '/images/nirankari-rajpita-ramit-ji.jpg')} alt={getCMSCopy('copy.GuidingForcePage.rajpitaName', 'Nirankari Rajpita Ramit Ji')} width="831" height="1134" loading="lazy" />
-        <figcaption>{getCMSCopy('copy.GuidingForcePage.rajpitaName', 'Nirankari Rajpita Ramit Ji')}</figcaption>
-      </figure>
-      <div className="gf-rajpita-copy">
-        <p className="ed-eyebrow">{getCMSCopy('copy.GuidingForcePage.rajpitaEyebrow', 'A shared spirit of service')}</p>
-        <h2 id="rajpita-title">{getCMSCopy('copy.GuidingForcePage.rajpitaName', 'Nirankari Rajpita Ramit Ji')}</h2>
-        <span className="gf-rajpita-rule" aria-hidden="true" />
-        <p>{getCMSCopy('copy.GuidingForcePage.rajpitaBody', 'At the heart of the Nirankari spirit is a simple invitation: to see humanity as one family and to meet one another with love, respect and understanding.')}</p>
-        <p>{getCMSCopy('copy.GuidingForcePage.rajpitaService', 'This spirit finds expression in everyday acts of care — giving time, sharing what we can, and serving with humility. It is the shared purpose that connects the foundation’s work in healthcare, education and community welfare.')}</p>
-        <div className="gf-rajpita-signature">{getCMSCopy('copy.GuidingForcePage.rajpitaSignature', 'Together, in the spirit of oneness.')}</div>
-      </div>
-    </section></CMSSection>
-
     {/* ── 02 · UNDER HER GUIDANCE ──────────────────────────────────────── */}
     <CMSSection id="GuidingForcePage.guidance"><section data-reveal {...roomProps('guidance')}>
       <div className="cv-margin-print" data-room="our-guiding-force" aria-hidden="true" />
       <EditorialHeading n={2} id="guidance" label={getCMSCopy("copy.GuidingForcePage.a367e6652e45", "What follows from it")} title={getCMSCopy("copy.GuidingForcePage.457585ce2838", "Under Her guidance")} body={getCMSCopy("copy.GuidingForcePage.ee5bdda7de91", "Four undertakings the Mission runs, and one emergency it was counted through.")} />
 
       <div className="cv-chapter">
-        <p className="gf-directions">
-          <span>{getCMSCopy("copy.GuidingForcePage.directions", "The three directions Her guidance has pushed hardest")}</span>
-          {Object.values(dirs).map(d => <span key={d.name} className="gf-direction" style={{ '--dir': d.color } as React.CSSProperties}><i aria-hidden="true" />{d.name}</span>)}
-        </p>
         <ul className="gf-bento">
           {works().map((w, i) => {
             const words = UNDER_HER_GUIDANCE[i];
@@ -260,7 +217,6 @@ return (
                 <div className="gf-work-body">
                   <span className="gf-direction"><i aria-hidden="true" />{dir.name}</span>
                   <h3 className="font-artistic-heading"><Icon size={20} strokeWidth={1.6} aria-hidden="true" />{words.title}</h3>
-                  <p>{words.text}</p>
                   {w.figure ? (
                     <div className="gf-work-figure"><strong><Rolling value={w.figure.value} /></strong><span>{w.figure.label}{w.figure.more && <small> · {w.figure.more.value} {w.figure.more.label.toLowerCase()}</small>}</span></div>
                   ) : w.status ? <p className="gf-work-status"><i aria-hidden="true" />{w.status}</p> : null}
@@ -277,7 +233,7 @@ return (
           <CMSSection id="GuidingForcePage.gf-relief"><section id="gf-relief" className="gf-relief" aria-labelledby="gf-relief-title" data-reveal>
             <p className="ed-eyebrow">{getCMSCopy("copy.GuidingForcePage.reliefEyebrow", "Pandemic response")}{COVID?.period ? ` · ${COVID.period}` : ''}</p>
             <h3 id="gf-relief-title" className="cv-sub cv-sub-wide font-artistic-display">{getCMSCopy("copy.GuidingForcePage.b9c6d4099b41", "The COVID-19 emergency, as it was counted")}</h3>
-            <ReliefCharts label={getCMSCopy("copy.GuidingForcePage.747466c9112f", "COVID-19 relief figures")} relief={RELIEF} icu={ICU} beds={BEDS} />
+            <ReliefCharts label={getCMSCopy("copy.GuidingForcePage.747466c9112f", "COVID-19 relief figures")} relief={RELIEF} />
             {RELIEF_FUND && (
               <ul className="cv-amounts">
                 <li>
