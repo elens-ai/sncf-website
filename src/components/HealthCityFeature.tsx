@@ -46,13 +46,13 @@ export const HealthCityFeature: React.FC = () => {
         <span className="hc-dots hc-dots-a" aria-hidden="true" />
         <span className="hc-dots hc-dots-b" aria-hidden="true" />
         <span className="hc-print hc-print-team">
-          <img src={resolveCMSMedia(resolveCMSAsset("asset.ProjectsPage.hcTeam", "/images/projects/health-city/team.webp"))} alt={getCMSCopy("copy.ProjectsPage.hcTeamAlt", "The Health City's team gathered in the hospital's atrium")} width={1400} height={934} loading="lazy" decoding="async" />
+          <img src={resolveCMSMedia(resolveCMSAsset("asset.ProjectsPage.hcTeam", "/images/projects/health-city/team-atrium.webp"))} alt={getCMSCopy("copy.ProjectsPage.hcTeamAlt", "The Health City's team gathered in the hospital's atrium")} width={1400} height={933} loading="lazy" decoding="async" />
         </span>
         <span className="hc-print hc-print-plaque">
           <img src={resolveCMSMedia(resolveCMSAsset("asset.ProjectsPage.hcPlaque", "/images/projects/health-city/plaque.webp"))} alt={getCMSCopy("copy.ProjectsPage.hcPlaqueAlt", "The plaque recording that Satguru Mata Sudiksha Ji Maharaj dedicated the premises of Sant Nirankari Health City to the service of humanity on 23 February 2026")} width={900} height={1252} loading="lazy" decoding="async" />
         </span>
         <span className="hc-print hc-print-stage">
-          <img src={resolveCMSMedia(resolveCMSAsset("asset.ProjectsPage.hcDedication", "/images/projects/health-city/dedication.webp"))} alt={getCMSCopy("copy.ProjectsPage.hcDedicationAlt", "The ceremony dedicating Sant Nirankari Health City to the service of humanity")} width={1200} height={659} loading="lazy" decoding="async" />
+          <img src={resolveCMSMedia(resolveCMSAsset("asset.ProjectsPage.hcDedication", "/images/projects/health-city/ceremony.webp"))} alt={getCMSCopy("copy.ProjectsPage.hcDedicationAlt", "A gathering at Sant Nirankari Health City, the SNHC monogram in flowers on the stage before the hospital")} width={1400} height={933} loading="lazy" decoding="async" />
         </span>
         <span className="hc-badge"><i aria-hidden="true" />{getCMSCopy("copy.ProjectsPage.hcBadge", "OPD services started")}</span>
         <figcaption className="hc-collage-caption">{getCMSCopy("copy.ProjectsPage.hcCollageCaption", "Dedicated to the service of humanity · 23 February 2026")}</figcaption>

@@ -1,0 +1,119 @@
+/* ==========================================================================
+   THE WHO WE ARE COVER (WhoWeArePage's WhoCover), laid out as the Core
+   Values and Projects covers are but light: the logo's light blue in the tone
+   of the contact postcard's paper, its waves over it in the same blues; the
+   words, in the logo's navy, and the way on beside the lotus, its five petals
+   the five things the foundation's hands do; beneath the lotus, the line the
+   foundation was set up to act on; at the foot, UNEP and the foundation's own
+   figures; and the page's paper lapping up over the foot as two waves.
+   ========================================================================== */
+.who-cover {
+  /* the words' tones: the logo's navy, and softer for the lede and the notes */
+  --who-type: #01327f; --who-type-soft: rgb(1 50 127 / 0.8); --who-type-faint: rgb(1 50 127 / 0.62); --who-rule: rgb(1 50 127 / 0.16);
+  --shore-h: clamp(36px, 5vw, 72px); position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: 24px clamp(32px, 5vw, 96px); padding: 145px max(7%, 28px) var(--shore-h); overflow: hidden; color: var(--who-type);
+}
+/* the paper's pale blue, deepening to the logo's light blue behind the lotus */
+.who-cover-ground {
+  position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  background: radial-gradient(58% 78% at 80% 44%, rgb(148 217 240 / 0.45), transparent 72%), linear-gradient(160deg, #e9f2f5, #d7e9f1 52%, #c3e3f0);
+}
+/* the ribbons' shading, drawn for dark grounds, would read as steel grey on this one: a little more saturation
+   keeps them the logo's blue */
+.who-cover-ground > .mosaic-waves { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; filter: saturate(1.45) brightness(1.04); transition: opacity 900ms ease; }
+.who-cover-ground > .mosaic-waves[data-ready='true'] { opacity: 1; }
+@media (forced-colors: active), (prefers-contrast: more) { .who-cover-ground > .mosaic-waves { display: none; } }
+/* the paper laps up over the foot: a translucent wave behind, higher and drifting, and a solid one in front that
+   runs on into the page below (as the Core Values cover's foot takes Heal's water) */
+.who-cover-ground::before, .who-cover-ground::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; height: var(--shore-h); pointer-events: none; background: #fbfaf8;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2070C170%2042%20330%2096%20520%2078C700%2060%20820%2030%201000%2052C1180%2074%201300%20104%201440%2078V120H0Z%22%2F%3E%3C%2Fsvg%3E") 0 0 / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2070C170%2042%20330%2096%20520%2078C700%2060%20820%2030%201000%2052C1180%2074%201300%20104%201440%2078V120H0Z%22%2F%3E%3C%2Fsvg%3E") 0 0 / 100% 100% no-repeat;
+}
+.who-cover-ground::before {
+  left: -4%; right: -4%; opacity: 0.5;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2044C210%2014%20360%2076%20560%2056C760%2036%20880%206%201060%2030C1240%2054%201330%2080%201440%2050V120H0Z%22%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20120%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2044C210%2014%20360%2076%20560%2056C760%2036%20880%206%201060%2030C1240%2054%201330%2080%201440%2050V120H0Z%22%2F%3E%3C%2Fsvg%3E");
+  animation: who-shore-sway 14s ease-in-out infinite alternate, who-shore-rise 8s ease-in-out infinite alternate;
+}
+@keyframes who-shore-sway { from { transform: translate3d(-2%, 0, 0); } to { transform: translate3d(2%, 0, 0); } }
+@keyframes who-shore-rise { from { translate: 0 4px; } to { translate: 0 -4px; } }
+
+/* THE WORDS: the headline and its script line, the lede with its phrases marked, what the phrase in view comes to,
+   and the way on. All in the one navy: no colours. */
+.who-cover-copy { min-width: 0; align-self: center; padding: 28px 0 50px; }
+.who-cover h1 { margin: 0 0 16px; font: 800 clamp(36px, 4.4vw, 66px)/1.06 var(--font-heading); letter-spacing: 0; text-wrap: balance; color: var(--who-type); animation: who-reveal 0.85s both; }
+.who-cover h1 em { font: 700 1.2em/1.12 var(--font-script); letter-spacing: -0.02em; text-transform: none; color: var(--who-type); }
+.who-cover .who-cover-lede { max-width: 500px; margin: 0; font: 400 15.5px/1.95 var(--font-sans); color: var(--who-type-soft); }
+.who-cover .hands-reading { animation: who-reveal 0.85s 0.12s both; }
+/* the phrases are still switches for their petals, marked in white rather than in their colours; the one in view
+   is a white slip */
+.who-cover .hands-chip { color: inherit; background: linear-gradient(transparent 60%, rgb(255 255 255 / 0.9) 60%); }
+.who-cover .hands-chip:hover { background-color: rgb(255 255 255 / 0.45); }
+.who-cover .hands-chip[aria-pressed='true'] { color: var(--who-type); background: #fff; box-shadow: 0 1px 2px rgb(1 50 127 / 0.08); }
+.who-cover .hands-chip:focus-visible { outline-color: var(--who-type); }
+.who-cover h1 .hands-chip { padding: 0 0.1em; border-radius: 0.2em; }
+/* the way on: down to the story */
+.who-cover-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 24px; animation: who-reveal 0.85s 0.2s both; }
+.who-cover-cta { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 5px; border-bottom: 1px solid color-mix(in srgb, currentColor 40%, transparent); color: var(--who-type); font: 500 14px/1 var(--font-sans); transition: border-color 0.3s; }
+.who-cover-cta svg { transition: translate 0.3s; }
+.who-cover-cta:hover { border-bottom-color: currentColor; }
+.who-cover-cta:hover svg { translate: 0 2px; }
+
+/* THE LOTUS, and the line beneath it */
+.who-cover-stage { display: flex; flex-direction: column; align-items: center; align-self: center; min-width: 0; }
+.who-cover-stage > .hands-bloom { max-width: 640px; }
+.who-cover-voice { display: grid; justify-items: center; width: 100%; min-height: 84px; }
+.saying.who-cover-saying { --saying-ink: var(--who-type); margin: 0 auto; padding: 4px 12px 0; max-width: 500px; animation: who-reveal 0.85s 0.3s both; }
+.who-cover-saying blockquote { color: var(--who-type); }
+.who-cover-saying[data-script='english'] blockquote { font-size: 16px; font-weight: 500; line-height: 1.5; }
+.who-cover-saying .saying-meaning { margin-top: 2px; font-size: 12.5px; color: var(--who-type-soft); }
+.who-cover-saying figcaption { margin-top: 6px; font-size: 9.5px; color: var(--who-type-faint); }
+.saying.who-cover-saying::before, .saying.who-cover-saying::after, .who-cover-saying .saying-mark { display: none; }
+
+/* AT THE FOOT: UNEP, and the foundation's own figures */
+.who-cover-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 14px 0; border-top: 1px solid var(--who-rule); font-size: 10px; letter-spacing: 0.06em; color: var(--who-type-faint); }
+.who-cover-standing { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.who-cover-impact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; margin: 0; padding: 0; list-style: none; }
+.who-cover-impact li { display: grid; padding: 3px 10px 2px 11px; border-left: 3px solid var(--way-ink); border-radius: 0 10px 10px 0; color: var(--who-type); }
+.who-cover-impact-figure { font: 700 18px/1.15 var(--font-sans); letter-spacing: -0.02em; color: var(--who-type); }
+/* the rolling counter keeps the figure's own colour and face */
+.who-cover-impact-figure [aria-hidden] * { color: inherit; font-family: inherit; }
+.who-cover-impact-unit { font-size: 10.5px; letter-spacing: 0.02em; color: var(--who-type-faint); }
+
+.who-cover[data-active='false'] *, .who-cover[data-active='false'] .who-cover-ground::before { animation-play-state: paused !important; }
+.who-cover :is(a, button):focus-visible { outline: 3px solid var(--who-type); outline-offset: 4px; }
+
+/* Copy and lotus as one composition, centred and at most 1360px across: the lotus as large as its column and the
+   screen's height allow (it stands 0.82 as tall as it is wide), the cover and the sticky subnav (54px) filling at
+   least the first screen. */
+@media (min-width: 801px) {
+  .who-cover { min-height: calc(100svh - 54px); grid-template-rows: 1fr auto; padding-top: clamp(96px, 13svh, 130px); padding-inline: max(7%, 28px, calc((100% - 1360px) / 2)); }
+  .who-cover-copy { padding-block: clamp(8px, 2svh, 28px); }
+  .who-cover h1 { margin-block: clamp(12px, 2.2svh, 22px) clamp(10px, 1.8svh, 16px); font-size: clamp(30px, min(3.1vw, 6svh), 50px); }
+  .who-cover-actions { margin-top: clamp(14px, 2.6svh, 24px); }
+  .who-cover-stage > .hands-bloom { max-width: clamp(280px, calc((100svh - clamp(96px, 13svh, 130px) - 190px) * 1.21), 640px); }
+  @media (min-height: 760px) {
+    .who-cover-stage > .hands-bloom { max-width: clamp(280px, calc((100svh - clamp(96px, 13svh, 130px) - 310px) * 1.21), 640px); }
+    .who-cover-voice { padding-top: 14px; }
+  }
+  /* on a short screen the line beneath the lotus gives way */
+  @media (max-height: 759px) {
+    .who-cover { row-gap: 8px; }
+    .who-cover-footer { padding-block: 9px; }
+    .who-cover-voice { display: none; }
+  }
+}
+@media (min-width: 801px) and (max-width: 1100px) {
+  .who-cover-impact { gap: 8px 12px; }
+  .who-cover-impact-figure { font-size: 16px; }
+}
+/* one column: the words, the lotus, the foot */
+@media (max-width: 800px) {
+  .who-cover { grid-template-columns: 1fr; gap: 10px; padding: 110px 28px var(--shore-h); }
+  .who-cover-copy { padding: 0; }
+  .who-cover h1 { font-size: clamp(36px, 7vw, 54px); }
+  .who-cover-stage > .hands-bloom { max-width: 480px; margin-top: 8px; }
+  .who-cover-footer { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 18px; }
+}
+@media (max-width: 520px) { .who-cover { padding-inline: 20px; } }
+@media (prefers-reduced-motion: reduce) { .who-cover *, .who-cover-ground::before { animation: none !important; transition: none !important; } }

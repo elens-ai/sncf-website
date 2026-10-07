@@ -5,6 +5,7 @@ import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import { PETAL_ART, PALM_ART, PALM_TOP_ART, LOGO_COLOURS, logoInkSrc } from './petalArt';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
+import { PillarMarkShapes } from './PillarMark';
 import { ACTIVITIES } from '../data/activities';
 import { PILLARS } from '../data/pillars';
 import { MOSAIC_WALL } from './mosaicWallTiles';
@@ -171,7 +172,7 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
             style={{ '--path-ink': PILLAR_LOGOS[id].tint, '--path-accent': accent(id), '--path-order': index } as React.CSSProperties}>
             <span className="mosaic-path-number" aria-hidden="true">0{index + 1}</span>
             <span className="mosaic-path-reach" aria-hidden="true">{ACTIVITIES.filter(activity => activity.pillarId === id).length} {id === 'projects' ? getCMSCopy('copy.MosaicOverture.count-projects', 'projects') : getCMSCopy('copy.MosaicOverture.count-programmes', 'programmes')}</span>
-            <svg viewBox="0 0 146 120" className="mosaic-path-icon" aria-hidden="true">{PILLAR_LOGOS[id].paths.map(d => <path key={d} d={d} />)}</svg>
+            <svg viewBox="0 0 146 120" className="mosaic-path-icon" aria-hidden="true"><PillarMarkShapes pillar={id} /></svg>
             <span className="mosaic-path-copy"><strong>{PILLAR_LOGOS[id].label}</strong><span>{detail}</span></span>
             <ArrowUpRight className="mosaic-path-arrow" size={18} aria-hidden="true" />
           </button>

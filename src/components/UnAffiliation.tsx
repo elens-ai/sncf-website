@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Globe2 } from 'lucide-react';
+import { Globe2 } from 'lucide-react';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { SDGS } from '../data/sdgs';
@@ -19,34 +19,18 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.UnAffiliation.${ke
 /** UNDP's logo, when the foundation has UNDP's permission and has uploaded it. */
 const undpLogo = () => resolveCMSAsset("asset.UnSeal.undp-logo", "");
 
-/** The standing, as a small seal (covers, the footer) or as a panel that says
-    what it means (Partners, Who we are). */
-export const UnSeal: React.FC<{ variant?: 'seal' | 'panel'; className?: string }> = ({ variant = 'seal', className }) => {
+/** The standing, as a small seal (the menus). */
+export const UnSeal: React.FC<{ className?: string }> = ({ className }) => {
   useCMSRevision();
   const logo = undpLogo();
   const mark = logo
     ? <img className="un-seal-logo" src={logo} alt={c('undp-alt', 'UNDP')} decoding="async" />
-    : <span className="un-seal-globe" aria-hidden="true"><Globe2 size={variant === 'panel' ? 24 : 15} strokeWidth={1.6} /></span>;
-  if (variant === 'seal') {
-    return (
-      <span className={`un-seal${className ? ` ${className}` : ''}`} data-variant="seal" title={c('title', 'Special consultative status with the United Nations Economic and Social Council (ECOSOC)')}>
-        {mark}
-        <span className="un-seal-words"><strong>{c('short', 'UN ECOSOC')}</strong><span>{c('status', 'Special consultative status')}</span></span>
-      </span>
-    );
-  }
+    : <span className="un-seal-globe" aria-hidden="true"><Globe2 size={15} strokeWidth={1.6} /></span>;
   return (
-    <aside className={`un-seal${className ? ` ${className}` : ''}`} data-variant="panel" aria-label={c('panel-label', 'Our United Nations standing')}>
+    <span className={`un-seal${className ? ` ${className}` : ''}`} data-variant="seal" title={c('title', 'Special consultative status with the United Nations Economic and Social Council (ECOSOC)')}>
       {mark}
-      <div className="un-seal-body">
-        <p className="un-seal-kicker">{c('kicker', 'United Nations')}</p>
-        <h3 className="un-seal-title">{c('panel-title', 'Special consultative status with ECOSOC')}</h3>
-        <p className="un-seal-text">{c('panel-text', 'The foundation holds special consultative status with the United Nations Economic and Social Council (ECOSOC), which lets it take part in the UN’s work and contribute to the Sustainable Development Goals.')}</p>
-        <a className="un-seal-link" href="https://ecosoc.un.org/en/ngo/consultative-status" target="_blank" rel="noopener noreferrer">
-          {c('panel-link', 'What consultative status means')}<ArrowUpRight size={14} aria-hidden="true" />
-        </a>
-      </div>
-    </aside>
+      <span className="un-seal-words"><strong>{c('short', 'UN ECOSOC')}</strong><span>{c('status', 'Special consultative status')}</span></span>
+    </span>
   );
 };
 
@@ -56,8 +40,8 @@ export const UnSeal: React.FC<{ variant?: 'seal' | 'panel'; className?: string }
 const unepLogo = () => resolveCMSAsset("asset.UnepSeal.logo", "/images/partners/unep.png");
 
 /** The UN Environment Programme, as a seal in the seal's style: the Core
-    Values and Projects covers carry it in place of the ECOSOC standing,
-    UNEP's logo and, beside it, its name in full. */
+    Values, Projects and Who We Are covers and the footer carry it in place of
+    the ECOSOC standing, UNEP's logo and, beside it, its name in full. */
 export const UnepSeal: React.FC<{ className?: string }> = ({ className }) => {
   useCMSRevision();
   const name = c('unep-name', 'United Nations Environment Programme');

@@ -144,8 +144,8 @@
     "label": "InvitationCard · sncf-logo.webp"
   },
   "asset.projects.bloom": {
-    "source": "/images/projects-bloom.png?v=balanced",
-    "label": "projects · projects-bloom.png?v=balanced"
+    "source": "/images/projects-bloom.png?v=five",
+    "label": "projects · projects-bloom.png?v=five"
   },
   "/images/petals/petal-empower.webp": {
     "source": "/images/petals/petal-empower.webp",
@@ -280,19 +280,27 @@
     "label": "ProjectsPage · logo.webp"
   },
   "asset.ProjectsPage.hcTeam": {
-    "source": "/images/projects/health-city/team.webp",
-    "label": "ProjectsPage · team.webp"
+    "source": "/images/projects/health-city/team-atrium.webp",
+    "label": "ProjectsPage · team-atrium.webp"
   },
   "asset.ProjectsPage.hcPlaque": {
     "source": "/images/projects/health-city/plaque.webp",
     "label": "ProjectsPage · plaque.webp"
   },
   "asset.ProjectsPage.hcDedication": {
-    "source": "/images/projects/health-city/dedication.webp",
-    "label": "ProjectsPage · dedication.webp"
+    "source": "/images/projects/health-city/ceremony.webp",
+    "label": "ProjectsPage · ceremony.webp"
   },
   "asset.UnepSeal.logo": {
     "source": "/images/partners/unep.png",
     "label": "UnepSeal · unep.png"
+  },
+  "asset.ProjectsMosaicArt.health-city": {
+    "source": "/images/projects/health-city.webp",
+    "label": "ProjectsMosaicArt · health-city.webp"
+  },
+  "asset.ProjectsMosaicArt.adopted-villages": {
+    "source": "/images/programmes/adopted-villages-mandaura.webp",
+    "label": "ProjectsMosaicArt · adopted-villages-mandaura.webp"
   }
 }

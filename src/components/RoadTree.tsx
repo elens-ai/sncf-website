@@ -15,9 +15,14 @@ import './road-tree.css';
  * the branch's tip (growthTree.ts grows and draws it). The stage stays on
  * screen while the tree grows: on a wide screen the tree stands between the
  * year it has reached and that year's events; on a narrow one they follow
- * beneath it. A photograph's button takes the tree to its year. Doves cross
- * the section now and then, dropping seeds (roadDoves.ts); the first drops
- * the seed the tree grows from.
+ * beneath it. Scrolled down from above, the tree grows with the scroll;
+ * scrolled back up, it stays as grown as it has been (the year and its events
+ * still follow the scroll, over the grown tree), and a reader who comes to it
+ * from below finds it grown. Once the reader has gone back above the section,
+ * the next way down it grows again from the seed. A
+ * photograph's button takes the tree to its year. Doves cross the section now
+ * and then, dropping seeds (roadDoves.ts); the first drops the seed the tree
+ * grows from.
  *
  * With reduced motion the tree is shown grown, and every event is listed
  * beneath it by year. Assistive technology is given the whole history as a
@@ -50,8 +55,12 @@ export function RoadTree({ events, labels }: { events: RoadEvent[]; labels: Road
   const painter = useRef<TreePainter | null>(null);
   const medalEls = useRef<Record<string, HTMLButtonElement | null>>({});
   const shown = useRef(-Infinity);
+  /* the furthest the tree has grown, whatever the scroll has done since */
+  const grown = useRef(-Infinity);
   const [tree, setTree] = useState<Tree | null>(null);
+  /* the time the scroll has reached, which the year and its events follow, and the time the tree has grown to */
   const [T, setT] = useState(0);
+  const [grownTo, setGrownTo] = useState(0);
   const startYear = useMemo(() => Math.min(...events.map(e => e.year)), [events]);
   const endYear = useMemo(() => Math.max(new Date().getFullYear(), ...events.map(e => e.year)), [events]);
   const years = useMemo(() => [...new Set(events.map(e => e.year))].sort((a, b) => a - b), [events]);
@@ -82,8 +91,8 @@ export function RoadTree({ events, labels }: { events: RoadEvent[]; labels: Road
     return () => { observer.disconnect(); window.clearTimeout(timer); };
   }, [events, startYear, endYear]);
 
-  /* THE TIME the tree has reached, from the scroll while the stage is pinned (the seed resting a moment first);
-     each frame draws the tree and carries the photographs out on their branches */
+  /* THE TIME the scroll has reached while the stage is pinned (the seed resting a moment first), and the tree grown
+     as far as it has ever reached; each frame draws the tree and carries the photographs out on their branches */
   useEffect(() => {
     if (!tree) return;
     const draw = (at: number) => {
@@ -103,18 +112,23 @@ export function RoadTree({ events, labels }: { events: RoadEvent[]; labels: Road
         el.inert = !p.shown;
       });
     };
-    if (calm) { draw(tree.settle); setT(tree.settle); return; }
+    if (calm) { draw(tree.settle); setT(tree.settle); setGrownTo(tree.settle); return; }
     let frame = 0;
     const read = () => {
       frame = 0;
       const el = track.current;
       if (!el) return;
       const { top, rect, run } = pinOf(el);
+      /* gone back above the section: on the way down again, the tree grows again from its seed */
+      if (rect.top >= window.innerHeight) grown.current = -Infinity;
       const p = clamp((top - rect.top) / run, 0, 1);
       const at = startYear + clamp((p - REST) / (1 - REST), 0, 1) * (tree.settle - startYear);
-      draw(at);
+      /* scrolled back, the tree stays as grown as it has been; past its end, it is grown */
+      grown.current = Math.max(grown.current, p >= 1 ? tree.settle : at);
+      draw(grown.current);
       /* the years and the panel follow in eighths of a year: enough for what they show */
       setT(Math.floor(at * 8) / 8);
+      setGrownTo(Math.floor(grown.current * 8) / 8);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
     read();
@@ -144,6 +158,8 @@ export function RoadTree({ events, labels }: { events: RoadEvent[]; labels: Road
     window.addEventListener('resize', fit);
     const seen = new IntersectionObserver(([entry]) => {
       flock.run(entry.isIntersecting);
+      /* the reader gone back above the section: when the tree starts again from its seed, a dove brings it again */
+      if (!entry.isIntersecting && entry.boundingClientRect.top > 0) flock.rearm();
       if (entry.intersectionRatio >= 0.7 && shown.current < startYear + 0.3) flock.sow();
     }, { threshold: [0, 0.7] });
     seen.observe(box);
@@ -189,7 +205,7 @@ export function RoadTree({ events, labels }: { events: RoadEvent[]; labels: Road
           <div ref={stage} className="road-stage" role="group" aria-label={labels.aria}>
             <canvas ref={canvas} className="road-canvas" aria-hidden="true" />
             {tree && tree.marks.filter(m => years.includes(m.year)).map(m => (
-              <span key={m.year} className="road-mark" data-seed={m.seed || undefined} data-on={m.year === focus || undefined} data-shown={T >= m.birth || undefined}
+              <span key={m.year} className="road-mark" data-seed={m.seed || undefined} data-on={m.year === focus || undefined} data-shown={grownTo >= m.birth || undefined}
                 style={{ left: `${(m.x / tree.W) * 100}%`, top: `${(m.y / tree.H) * 100}%` }} aria-hidden="true">{m.year}</span>
             ))}
             {tree && tree.medals.map(m => {
@@ -212,7 +228,7 @@ export function RoadTree({ events, labels }: { events: RoadEvent[]; labels: Road
                 <strong>{focus}</strong>
                 <span>{yearLabel(focus)}{focusEvents.length > 1 && ` · ${focusEvents.length} ${labels.moments}`}</span>
               </p>
-              <p className="road-hint" data-shown={T < startYear + 0.8 || undefined} aria-hidden="true">{labels.hint}</p>
+              <p className="road-hint" data-shown={grownTo < startYear + 0.8 || undefined} aria-hidden="true">{labels.hint}</p>
             </div>
             <ul className="road-cards" key={`cards-${focus}`} data-count={focusEvents.length}>{focusEvents.map(card)}</ul>
           </>}

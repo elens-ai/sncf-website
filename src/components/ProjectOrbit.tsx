@@ -26,9 +26,20 @@ export interface OrbitProject {
     photograph ringed in its colour. The needle travels to each in turn while
     the orbit is in view; pointing at a project (or reaching it by keyboard)
     brings it into view and holds it there, and choosing it goes to its
-    chapter. */
-export function ProjectOrbit({ projects, choice, onChange, active }: {
+    chapter. The Who We Are cover sets its own emblem at the centre (the
+    lotus) and the things the foundation's hands do round it, and turns the
+    needle itself. */
+export function ProjectOrbit({ projects, choice, onChange, active, centre, signature, label, auto = true, className }: {
   projects: OrbitProject[]; choice: number; onChange: (index: number) => void; active: boolean;
+  /** what stands at the centre: the Projects emblem unless given */
+  centre?: React.ReactNode;
+  /** the motto beneath it: the Projects one unless given, none if null */
+  signature?: React.ReactNode | null;
+  /** what the moons are, for assistive technology */
+  label?: string;
+  /** whether the needle moves on by itself while the orbit is in view */
+  auto?: boolean;
+  className?: string;
 }) {
   const n = projects.length;
   const [reduced, setReduced] = useState(false);
@@ -43,16 +54,16 @@ export function ProjectOrbit({ projects, choice, onChange, active }: {
     return () => query.removeEventListener('change', sync);
   }, []);
   useEffect(() => {
-    if (!active || reduced || over || n < 2) return;
+    if (!auto || !active || reduced || over || n < 2) return;
     const timer = window.setTimeout(() => onChange((choice + 1) % n), 4800);
     return () => clearTimeout(timer);
-  }, [active, reduced, over, choice, n, onChange]);
+  }, [auto, active, reduced, over, choice, n, onChange]);
   /* the needle turns the short way round to the project in view */
   const turn = useRef(choice * 360 / n);
   turn.current += ((choice * 360 / n - turn.current) % 360 + 540) % 360 - 180;
   const current = projects[choice];
 
-  return <div className="service-compass project-orbit" data-resting={reduced || !active}
+  return <div className={`service-compass project-orbit${className ? ` ${className}` : ''}`} data-resting={reduced || !active}
     style={{ '--value-color': current.ink, '--value-light': current.light } as React.CSSProperties}>
     <div className="service-compass-stage">
       <div className="service-compass-aura" aria-hidden="true" />
@@ -65,11 +76,11 @@ export function ProjectOrbit({ projects, choice, onChange, active }: {
         <span className="service-compass-etch service-compass-etch-three" />
       </div>
       <div className="service-compass-sculpture" aria-hidden="true">
-        <div className="service-compass-model"><PillarHeroVisual pillar="projects" active={shown} caption={false} /></div>
+        <div className="service-compass-model">{centre ?? <PillarHeroVisual pillar="projects" active={shown} caption={false} />}</div>
         <div className="service-compass-shadow" />
-        <div className="service-compass-signature">{c('signature', 'One purpose.')}<br /><em>{c('signature-script', 'lasting impact')}</em></div>
+        {signature !== null && <div className="service-compass-signature">{signature ?? <>{c('signature', 'One purpose.')}<br /><em>{c('signature-script', 'lasting impact')}</em></>}</div>}
       </div>
-      <ul className="project-orbit-nodes" aria-label={c('label', 'The projects')}
+      <ul className="project-orbit-nodes" aria-label={label ?? c('label', 'The projects')}
         onPointerEnter={() => setOver(true)} onPointerLeave={() => setOver(false)}
         onFocus={() => setOver(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOver(false); }}>
         {projects.map((project, i) => {

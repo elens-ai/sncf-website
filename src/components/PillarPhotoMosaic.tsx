@@ -3,7 +3,7 @@ import { ProjectsMosaicArt } from './ProjectsMosaicArt';
 import { resolveCMSMedia } from '../cms/media';
 import { resolveCMSAsset } from '../cms/runtime';
 import './heal-photo-mosaic.css';
-import { BOOK_COVER, PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
+import { BOOK_COVER, DEPTH_TINT, EMPOWER_COMPANIONS, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
 import { roomPhoto } from '../data/pavilionGallery';
 
@@ -49,6 +49,16 @@ const healHeroLeaves = (): { box: [number, number, number, number]; src: string 
   { box: [18.52, 73.15, 42.26, 38.38], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-bottom-left", "/images/heal-emblem/leaf-bottom-left.webp") },
 ];
 
+/* Empower's figure is lifted by its companions (EMPOWER_COMPANIONS), here with
+   photographs of their own: the room's dealt round one place for the first and
+   two for the second, so that each is someone else; and faint. */
+const COMPANION_OPACITY = 0.35;
+/* With its companions the figure spreads wider than Heal's leaves or Enrich's
+   book, so the three are drawn together a little smaller than those, about
+   their own middle and onto the middle the leaves and the book share. */
+const TRIO = { scale: 0.86, from: [69.3, 57], to: [71.5, 58.5] } as const;
+const TRIO_FIT = `translate(${TRIO.to[0]} ${TRIO.to[1]}) scale(${TRIO.scale}) translate(${-TRIO.from[0]} ${-TRIO.from[1]})`;
+
 /* Faint currents of air drifting across the emblem, left to right. */
 const HEAL_AIR_CURRENTS = [
   { d: 'M-2 30C28 22 48 38 78 30S132 20 166 28', duration: 7.5, delay: 0 },
@@ -60,6 +70,8 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
   const logo = PILLAR_LOGOS[pillar];
   /* Only the hero's Heal emblem shows the foundation's own photographs. */
   const ownPhotos = heroArt && pillar === 'heal';
+  /* Empower's figure always stands with its companions. */
+  const companions = pillar === 'empower';
   const clip = useId().replace(/:/g, '');
   const tintChannels = [1, 3, 5].map(offset => parseInt(logo.tint.slice(offset, offset + 2), 16) / 255);
   const photoFilter = `url(#${clip}-photo-tone)`;
@@ -107,6 +119,15 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
           <stop offset="1" stopColor="#142f38" stopOpacity=".14" />
         </linearGradient>
         <clipPath id={`${clip}-cover`}><path d={BOOK_COVER} /></clipPath>
+        {/* a companion fades out towards its feet, standing further back */}
+        {companions && <>
+          <linearGradient id={`${clip}-fade-ramp`} gradientUnits="userSpaceOnUse" x1="0" y1="66" x2="0" y2="110">
+            <stop offset="0" stopColor="#fff" /><stop offset="1" stopColor="#000" />
+          </linearGradient>
+          <mask id={`${clip}-fade`} maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="-10" y="-14" width="166" height="140">
+            <rect x="-10" y="-14" width="166" height="140" fill={`url(#${clip}-fade-ramp)`} />
+          </mask>
+        </>}
         {pillar === 'heal' && HEAL_WAVES.map((wave, i) => <React.Fragment key={wave.tile}>
             <linearGradient id={`${clip}-sheen-bands-${i}`} gradientUnits="userSpaceOnUse" x1="0" y1={wave.tile} x2={wave.tile / 2} y2={wave.tile / 2} spreadMethod="repeat">
               {SHEEN_STOPS.map(stop => <stop key={stop.offset} offset={stop.offset} stopColor={stop.color} stopOpacity={stop.opacity} />)}
@@ -128,8 +149,22 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
       {pillar === 'heal' && <g className="heal-air" aria-hidden="true">
         {HEAL_AIR_CURRENTS.map(current => <path key={current.d} d={current.d} pathLength="100" style={{ animationDuration: `${current.duration}s`, animationDelay: `${current.delay}s` }} />)}
       </g>}
+      {/* the emblem itself (Empower's with its companions, fitted to the others' size) */}
+      <g transform={companions ? TRIO_FIT : undefined}>
+      {companions && <g className="pillar-mosaic-companions" aria-hidden="true">
+        {EMPOWER_COMPANIONS.map((mate, shift) => <g key={mate.dx} opacity={COMPANION_OPACITY} mask={`url(#${clip}-fade)`} transform={companionTransform(mate)}>
+          {[6, 5, 4, 3, 2, 1].map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${-layer * .24} ${layer * .38})`} fill={layer > 4 ? '#234a4c' : logo.tint} />)}
+          <g clipPath={`url(#${clip})`}>
+            <rect x="0" y="0" width="146" height="120" fill={logo.edge} />
+            <g filter={photoFilter}>
+              {TILES.map((tile, i) => <image key={i} href={resolveCMSMedia(roomPhoto(pillar, ((tile.photo + shift) % 5) + 1))} x={tile.x} y={tile.y} width={tile.w} height={tile.h} preserveAspectRatio="xMidYMid slice" />)}
+            </g>
+          </g>
+          <use href={`#${clip}-outline`} fill="none" stroke={`url(#${clip}-bevel)`} strokeWidth=".45" strokeLinejoin="round" />
+        </g>)}
+      </g>}
       <g className="pillar-mosaic-depth" aria-hidden="true">
-        {[6, 5, 4, 3, 2, 1].map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${-layer * .24} ${layer * .38})`} fill={layer > 4 ? '#234a4c' : logo.tint} />)}
+        {[6, 5, 4, 3, 2, 1].map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${-layer * .24} ${layer * .38})`} fill={layer > 4 ? '#234a4c' : DEPTH_TINT[pillar] ?? logo.tint} />)}
         <use href={`#${clip}-outline`} transform="translate(-.25 .4)" fill={logo.edge} />
       </g>
       <g className="heal-mosaic-leaves">
@@ -141,7 +176,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
             <image href={leaf.src} x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} preserveAspectRatio="xMidYMid slice" />
           </g>)}
           {logo.paths.map(d => <path key={d} d={d} fill="none" stroke={logo.edge} strokeWidth=".3" strokeLinejoin="round" />)}
-        </> : pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} /> : <>
+        </> : pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} edge={logo.edge} /> : <>
         {pillar === 'enrich' && <g clipPath={`url(#${clip}-cover)`}>
           <image href={resolveCMSMedia(roomPhoto('enrich', 5))} width="146" height="120" preserveAspectRatio="xMidYMid slice" filter={photoFilter} />
           <rect width="146" height="120" fill={logo.tint} opacity=".4" />
@@ -162,6 +197,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
           {pillar === 'heal' && HEAL_WAVES.map((wave, i) => <rect key={wave.tile} x="-4" y="-12" width="174" height="142" fill={`url(#${clip}-sheen-${i})`} />)}
         </g>
         <use href={`#${clip}-outline`} fill="none" stroke={`url(#${clip}-bevel)`} strokeWidth=".45" strokeLinejoin="round" aria-hidden="true" />
+      </g>
       </g>
     </svg>
     {caption && <figcaption>{PILLARS.find(item => item.id === pillar)?.emblemCaption ?? logo.caption}</figcaption>}

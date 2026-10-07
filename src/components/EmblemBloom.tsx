@@ -1,7 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { resolveCMSMedia } from '../cms/media';
 import type { Activity } from '../data/activities';
-import { PILLAR_LOGOS } from './pillarLogoArt';
+import { DEPTH_TINT, PILLAR_LOGOS, PROJECTS_CENTRE, PROJECTS_HUB_R, PROJECTS_SCALE } from './pillarLogoArt';
+import { PROJECTS_FIVE_BOXES } from './projectsLogoOutline';
 import { ContourEdge, EMBLEM, EmblemDepth, ShowcaseBar, at, contourMask, dealSnaps, place, useAutoAdvance, useShowcase } from './emblemShowcase';
 import './emblem-bloom.css';
 
@@ -22,8 +23,9 @@ interface Bloom {
   heart: readonly [number, number];
   /** The order the parts open in; the first names the programme beneath. */
   order: readonly number[];
-  /** The foundation's badge at the heart (the Projects emblem's own). */
-  badge?: boolean;
+  /** The foundation's badge at the heart (the Projects emblem's own), at this scale, on a pale hub of this radius
+      beneath the parts (which fills the gaps between the petals' curled bases and the badge). */
+  badge?: { scale: number; hub: number };
 }
 
 const BLOOMS: Record<BloomEmblem, Bloom> = {
@@ -31,7 +33,8 @@ const BLOOMS: Record<BloomEmblem, Bloom> = {
   heal: { boxes: [[63.18, 5.66, 73.74, 64.86], [5.08, 21.73, 54.25, 48.35], [63.2, 74.16, 27.7, 24.88], [20.11, 74.58, 39.19, 35.43]], heart: [61.2, 72.3], order: [0, 2, 3, 1] },
   /* the body, then the head, opening from the chest */
   empower: { boxes: [[52.35, 5.36, 34.04, 34.06], [2.4, 7.22, 133.76, 99.16]], heart: [69.4, 56], order: [1, 0] },
-  projects: { boxes: [[36.62, 6.81, 42.08, 64.09], [58.4, 39.77, 64.92, 51.34], [22.7, 64.06, 67.62, 49.83]], heart: [64.84, 69.35], order: [0, 1, 2], badge: true },
+  /* the five petals round from the top, opening from the badge */
+  projects: { boxes: PROJECTS_FIVE_BOXES, heart: PROJECTS_CENTRE, order: [0, 1, 2, 3, 4], badge: { scale: PROJECTS_SCALE, hub: PROJECTS_HUB_R } },
 };
 /* The badge at the bloom's heart (ProjectsMosaicArt draws the same). */
 const BADGE_R = 16.8;
@@ -69,7 +72,12 @@ export const EmblemBloom: React.FC<{ emblem: BloomEmblem; activities: Activity[]
     <figure ref={root} className="showcase emblem-bloom" data-emblem={emblem} aria-label={label} data-playing={playing}>
       <div className="showcase-stage" {...hold} onClick={() => move(1)} role="img" aria-label={lead?.alt ?? label}
         style={{ '--open-ms': `${OPEN_MS}ms` } as React.CSSProperties}>
-        <EmblemDepth paths={logo.paths} tint={logo.tint} edge={logo.edge} />
+        <EmblemDepth paths={logo.paths} tint={DEPTH_TINT[emblem] ?? logo.tint} edge={logo.edge} />
+        {badge && (
+          <svg className="bloom-hub" viewBox={`0 0 ${EMBLEM.w} ${EMBLEM.h}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <circle cx={heart[0]} cy={heart[1]} r={badge.hub} fill="#f4fcf8" />
+          </svg>
+        )}
         {logo.paths.map((d, part) => {
           const box = boxes[part], opening = bloom.was >= 0 && n > 1;
           return (
@@ -87,9 +95,9 @@ export const EmblemBloom: React.FC<{ emblem: BloomEmblem; activities: Activity[]
         })}
         {badge && (
           <svg className="bloom-badge" viewBox={`0 0 ${EMBLEM.w} ${EMBLEM.h}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <circle className="bloom-ring" cx={heart[0]} cy={heart[1]} r={BADGE_R + 2.6} pathLength="100" />
-            <circle cx={heart[0]} cy={heart[1]} r={BADGE_R} fill="#f4fcf8" stroke="#fff" strokeWidth=".5" />
-            <image href={resolveCMSMedia('/images/sncf-logo.webp')} x={heart[0] - 16.32} y={heart[1] - 16.32} width="32.64" height="32.64" preserveAspectRatio="xMidYMid meet" />
+            <circle className="bloom-ring" cx={heart[0]} cy={heart[1]} r={(BADGE_R + 2.6) * badge.scale} pathLength="100" />
+            <circle cx={heart[0]} cy={heart[1]} r={BADGE_R * badge.scale} fill="#f4fcf8" stroke="#fff" strokeWidth=".5" />
+            <image href={resolveCMSMedia('/images/sncf-logo.webp')} x={heart[0] - 16.32 * badge.scale} y={heart[1] - 16.32 * badge.scale} width={32.64 * badge.scale} height={32.64 * badge.scale} preserveAspectRatio="xMidYMid meet" />
           </svg>
         )}
       </div>

@@ -1,47 +1,65 @@
 import React, { useId } from 'react';
 import { resolveCMSMedia } from '../cms/media';
-import { roomPhotoFor } from '../data/pavilionGallery';
-import { PROJECTS_LOGO_OUTLINE } from './projectsLogoOutline';
+import { resolveCMSAsset } from '../cms/runtime';
+import { roomPhoto } from '../data/pavilionGallery';
+import { PROJECTS_FIVE_BOXES, PROJECTS_FIVE_OUTLINE, PROJECTS_LOGO_OUTLINE } from './projectsLogoOutline';
+import { PROJECTS_CENTRE, PROJECTS_HUB_R, PROJECTS_SCALE, projectsPetalTransform, projectsUnder } from './pillarLogoArt';
 
-const PETALS = [
-  { colour: '#a7d4b0', tiles: [
-    { x: 27, y: 0, w: 55, h: 28, src: '/images/pavilion/projects-3.jpg' },
-    { x: 27, y: 28.5, w: 28, h: 32, src: '/images/pavilion/empower-4.jpg' },
-    { x: 55.5, y: 28.5, w: 27, h: 32, src: '/images/pavilion/projects-4.jpg' },
-    { x: 27, y: 61, w: 56, h: 36, src: '/images/pavilion/empower-3.jpg' },
-  ] },
-  { colour: '#82ced7', tiles: [
-    { x: 55, y: 32, w: 37, h: 28, src: '/images/pavilion/projects-1.jpg' },
-    { x: 92.5, y: 32, w: 40, h: 28, src: '/images/pavilion/projects-2.jpg' },
-    { x: 55, y: 60.5, w: 30, h: 40, src: '/images/projects/amrit.webp' },
-    { x: 85.5, y: 60.5, w: 47, h: 40, src: '/images/pavilion/projects-5.jpg' },
-  ] },
-  { colour: '#e4aec7', tiles: [
-    { x: 17, y: 54, w: 40, h: 34, src: '/images/pavilion/heal-1.jpg' },
-    { x: 57.5, y: 54, w: 43, h: 34, src: '/images/pavilion/heal-4.jpg' },
-    { x: 17, y: 88.5, w: 40, h: 33, src: '/images/projects/health-city.webp' },
-    { x: 57.5, y: 88.5, w: 43, h: 33, src: '/images/pavilion/heal-2.jpg' },
-  ] },
+/* THE PROJECTS' FLOWER: the emblem's own petal five times round the
+   foundation's badge, each tucked under the next as the three were
+   (projectsLogoOutline), a petal for each flagship project. Each carries one
+   photograph of its project, laid upright over the whole petal: Sant
+   Nirankari Health City at the top, then, round to the right, Oneness Vann,
+   the watershed, Project Amrit and the adopted villages, each in its
+   project's own colour (the Projects page's), washed faintly over its
+   photograph. Every edge is drawn once and kept to its own petal: a thin
+   light rim, as Heal's leaves have, runs inside each petal along its own
+   edge, so where it tucks under the next it is that petal's rim that shows,
+   its shadow falling on the one below. A pale hub beneath the petals fills
+   the gaps between their curled bases and the badge. In emblem units (the
+   shared 146 × 120 box); PillarPhotoMosaic gives the petals their depth and
+   glaze. */
+
+/* each project's photograph (replaceable in the CMS) and colour, in the petals' order */
+const projectPetals = () => [
+  { colour: '#e4aec7', alt: 'Sant Nirankari Health City', src: resolveCMSAsset("asset.ProjectsMosaicArt.health-city", "/images/projects/health-city.webp") },
+  { colour: '#a7d4b0', alt: 'Oneness Vann', src: resolveCMSMedia(roomPhoto('projects', 2)) },
+  { colour: '#e6cb98', alt: 'The Watershed Programme', src: resolveCMSMedia(roomPhoto('empower', 2)) },
+  { colour: '#82ced7', alt: 'Project Amrit', src: resolveCMSMedia(roomPhoto('projects', 1)) },
+  { colour: '#cdb7de', alt: 'Adopted Villages', src: resolveCMSAsset("asset.ProjectsMosaicArt.adopted-villages", "/images/programmes/adopted-villages-mandaura.webp") },
 ];
 
-export const ProjectsMosaicArt: React.FC<{ photoFilter?: string }> = ({ photoFilter }) => {
+export const ProjectsMosaicArt: React.FC<{ photoFilter?: string; edge: string }> = ({ photoFilter, edge }) => {
   const id = useId().replace(/:/g, '');
+  const petals = projectPetals();
+  const [cx, cy] = PROJECTS_CENTRE;
   return <g className="projects-mosaic-petals">
-    <defs>{PROJECTS_LOGO_OUTLINE.map((path, i) => <clipPath key={i} id={`${id}-${i}`}><path d={path} /></clipPath>)}</defs>
-    {PETALS.map((petal, i) => <g key={petal.colour}>
-      <path d={PROJECTS_LOGO_OUTLINE[i]} fill={petal.colour} transform="translate(-.65 .85)" />
-      <g clipPath={`url(#${id}-${i})`}>
-        <rect width="146" height="120" fill="#fbfffc" />
-        <g filter={photoFilter}>
-          {petal.tiles.map((tile, j) => <image key={j} x={tile.x} y={tile.y} width={tile.w} height={tile.h} href={resolveCMSMedia(roomPhotoFor(tile.src))} preserveAspectRatio="xMidYMid slice" />)}
-        </g>
-        <rect width="146" height="120" fill={petal.colour} opacity=".2" />
-      </g>
-      <path d={PROJECTS_LOGO_OUTLINE[i]} fill="none" stroke={petal.colour} strokeWidth=".55" strokeLinejoin="round" />
+    <defs>
+      {PROJECTS_FIVE_OUTLINE.map((d, i) => <clipPath key={i} id={`${id}-${i}`}><path d={d} /></clipPath>)}
+      {PROJECTS_FIVE_OUTLINE.map((_, i) => <clipPath key={i} id={`${id}-under-${i}`}>{projectsUnder(i).map(j => <path key={j} d={PROJECTS_FIVE_OUTLINE[j]} />)}</clipPath>)}
+      <filter id={`${id}-soft`} x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation=".6" /></filter>
+    </defs>
+    <circle cx={cx} cy={cy} r={PROJECTS_HUB_R} fill="#f4fcf8" />
+    {petals.map((petal, i) => {
+      const [x, y, width, height] = PROJECTS_FIVE_BOXES[i];
+      return <g key={petal.alt} clipPath={`url(#${id}-${i})`}>
+        <title>{petal.alt}</title>
+        <rect x={x} y={y} width={width} height={height} fill="#fbfffc" />
+        <image x={x} y={y} width={width} height={height} href={petal.src} preserveAspectRatio="xMidYMid slice" filter={photoFilter} />
+        <rect x={x} y={y} width={width} height={height} fill={petal.colour} opacity=".12" />
+      </g>;
+    })}
+    {/* each petal's shadow on the two it lies over */}
+    {petals.map((petal, i) => <g key={petal.alt} clipPath={`url(#${id}-under-${i})`} aria-hidden="true">
+      <path d={PROJECTS_FIVE_OUTLINE[i]} transform="translate(-.5 .75)" fill="#0b2a24" opacity=".3" filter={`url(#${id}-soft)`} />
+    </g>)}
+    {/* each petal's rim, inside it and along its own edge */}
+    {petals.map((petal, i) => <g key={petal.alt} clipPath={`url(#${id}-${i})`} aria-hidden="true">
+      <path d={PROJECTS_LOGO_OUTLINE[0]} transform={projectsPetalTransform(i)} fill="none" stroke={edge} strokeWidth={.8 / PROJECTS_SCALE} strokeLinejoin="round" />
     </g>)}
     <g className="projects-centre-badge">
-      <circle cx="64.84" cy="69.35" r="16.8" fill="#f4fcf8" stroke="#fff" strokeWidth=".5" />
-      <image href={resolveCMSMedia('/images/sncf-logo.webp')} x="48.52" y="53.03" width="32.64" height="32.64" preserveAspectRatio="xMidYMid meet" />
+      <circle cx={cx} cy={cy} r={16.8 * PROJECTS_SCALE} fill="#f4fcf8" stroke="#fff" strokeWidth=".5" />
+      <image href={resolveCMSMedia('/images/sncf-logo.webp')} x={cx - 16.32 * PROJECTS_SCALE} y={cy - 16.32 * PROJECTS_SCALE} width={32.64 * PROJECTS_SCALE} height={32.64 * PROJECTS_SCALE} preserveAspectRatio="xMidYMid meet" />
     </g>
   </g>;
 };

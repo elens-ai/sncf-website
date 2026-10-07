@@ -44,6 +44,7 @@
 .hc-print-plaque{--d:.25s;right:0;top:15cqw;z-index:2;width:33cqw;aspect-ratio:4/5;rotate:2.2deg}
 .hc-print-plaque img{object-position:50% 38%}
 .hc-print-stage{--d:.5s;left:9cqw;top:47cqw;z-index:3;width:50cqw;aspect-ratio:1.82;rotate:1deg}
+.hc-print-stage img{object-position:50% 22%}
 .project-health-city[data-arrived='true'] .hc-print{opacity:1;translate:0 0}
 @media(hover:hover){.hc-print:hover{z-index:4;rotate:0deg;scale:1.03;box-shadow:0 1px 2px rgb(20 50 45/.08),0 34px 54px -26px rgb(16 52 48/.6)}}
 .hc-dots{position:absolute;z-index:0;width:36cqw;aspect-ratio:1.5;background:radial-gradient(circle,rgb(27 70 64/.3) 1.2px,transparent 1.9px) 0 0/12px 12px;-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 72%);mask-image:radial-gradient(ellipse at center,#000 30%,transparent 72%);opacity:0;transition:opacity 1.2s ease .3s}

@@ -4,8 +4,12 @@ import { getCMSLink } from '../cms/links';
 import { resolveCMSMedia } from '../cms/media';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight, HeartHandshake, CalendarHeart, Globe, MapPinned, Phone, Mail, BadgeCheck } from 'lucide-react';
+import { useReducedMotion } from 'motion/react';
+import { ArrowDown, ArrowUpRight, HeartHandshake, Phone, Mail, BadgeCheck } from 'lucide-react';
 import { PageShell } from '../components/PageShell';
+import { MosaicWaves, type WaveInput } from '../components/MosaicWaves';
+import { Saying } from '../components/Saying';
+import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { MediaGallery } from '../components/MediaGallery';
 import { Tally } from '../components/Tally';
 import { MissionVision } from '../components/MissionVision';
@@ -17,10 +21,11 @@ import { toNumber, isTallyable } from '../utils/figures';
 import './who-we-are.css';
 import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion';
 import './who-editorial.css';
+import './who-cover.css';
 import { ServiceStory } from '../components/ServiceStory';
-import { UnSeal } from '../components/UnAffiliation';
+import { UnepSeal } from '../components/UnAffiliation';
 import { SubsectionNav } from '../components/SubsectionNav';
-import { HandsBloom, HandsLede, HandsProof, handWays } from '../components/WorkingHands';
+import { HandsBloom, HandsLede, HandsProof, handWays, splitFigure } from '../components/WorkingHands';
 import { RoadTree } from '../components/RoadTree';
 import { ROAD_EVENTS } from '../data/roadEvents';
 /* after the page's own stylesheets, so the wall's styles come after theirs */
@@ -37,19 +42,19 @@ import { PartnerMarquee } from '../components/PartnerMarquee';
  * positions, restated here rather than reproduced.
  *
  * IT IS BUILT AS ROOMS, like Core Values and Projects, and it has their
- * rail. The cover is the logo's own emblem come alive: the lotus held in two
+ * rail; its cover is drawn as theirs are, on the page's own ground. Beside
+ * its words is the logo's own emblem come alive: the lotus held in two
  * hands, each petal a photograph of what the lede says those hands do, and
  * the figure the record gives for it. The road so far is a tree growing
  * from a seed in 2010, a branch for every moment the foundation marks; the
  * organisations beside it pass by as a wall of their marks.
  */
 
+/* the year the foundation was founded, and its reach: the cover's foot carries them */
 let FACTS = bindCMSValue(() => ([
   { k: getCMSCopy("copy.WhoWeArePage.6520e4488973", "Founded"), v: getCMSCopy("copy.WhoWeArePage.7d12ba56e9f8", "2010") },
-  { k: getCMSCopy("copy.WhoWeArePage.e4b35726fbaf", "Standing"), v: getCMSCopy("copy.WhoWeArePage.d5af85a6a90e", "UN special consultative status") },
   { k: getCMSCopy("copy.WhoWeArePage.2068b81b75d4", "Reach"), v: getCMSCopy("copy.WhoWeArePage.9d3f458ea970", "250+ branches nationwide") },
 ]), value => { FACTS = value; });
-const FACT_ICONS = [CalendarHeart, Globe, MapPinned];
 /* the contact postcard's map is Google's only: the CMS may move its pin, but cannot embed another site */
 const onGoogleMaps = (url: string) => /^https:\/\/(?:www\.google\.com|maps\.google\.com)\/maps[/?]/.test(url);
 const FACT_INKS = ['#f81170', '#09a6cf', '#69b947'];
@@ -110,17 +115,30 @@ const marked = (text: string, marks: { phrase: string; ink: string }[]) => {
   return out;
 };
 
+/* THE COVER, laid out as the Core Values and Projects covers are but light: the logo's light blue in the tone of
+   the contact postcard's paper, with the same waves over it in those blues. */
+const WHO_GROUND = { id: 'who-we-are', accentA: '#2ab2ea', accentB: '#cfe9f3' };
+
+/** The cover: the words and the way on, beside the logo's lotus, each of its
+    five petals a photograph of a thing the foundation's hands do. The script
+    line and the lede carry those things as highlighted phrases, and pointing
+    at any of them (phrase or petal) brings it into view with its reported
+    figure. Beneath the lotus, the line the foundation was set up to act on;
+    at the foot, UNEP and the foundation's own figures; and the page's paper
+    laps up over the foot. */
 const WhoCover: React.FC = () => {
   useCMSRevision();
   const ref = useRef<HTMLElement>(null);
   const active = useSectionActivity(ref);
-  const ways = handWays(FACTS[2]?.v ?? '');
+  const calm = useReducedMotion() ?? false;
+  const waveInput = useRef<WaveInput>({ travel: 0.5 });
+  const ways = handWays(FACTS[1]?.v ?? '');
   const [current, setCurrent] = useState(0);
   const [held, setHeld] = useState(false);
   /* announced only when the visitor chooses, never on the bloom's own turns; and once they
      have chosen, the bloom stops turning on its own */
   const [told, setTold] = useState(false);
-  const pick = (i: number) => { setTold(true); setCurrent(i); };
+  const pick = (i: number) => { if (i < 0) return; setTold(true); setCurrent(i); };
   useEffect(() => {
     if (!active || held || told || ways.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const timer = window.setInterval(() => { setTold(false); setCurrent(i => (i + 1) % ways.length); }, 4600);
@@ -131,17 +149,58 @@ const WhoCover: React.FC = () => {
     onFocus: () => setHeld(true), onBlur: (event: React.FocusEvent) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setHeld(false); },
   };
   const way = ways[current] ?? ways[0];
+  /* the script line carries the hands; the lede, the rest */
+  const handsAt = ways.findIndex(w => w.id === 'hands');
+  const hands = ways[handsAt];
+  const script = getCMSCopy("copy.WhoWeArePage.cover-script", "the Mission’s working hands");
+  const at = hands ? script.toLowerCase().indexOf(hands.phrase.toLowerCase()) : -1;
+  const lede = ways.filter(w => w.id !== 'hands');
+  /* the foot: the year it was founded, its reach and its years of service */
+  const founded = FACTS[0]?.v ?? '';
+  const years = new Date().getFullYear() - (Number.parseInt(founded, 10) || 2010);
+  const [reachFigure, reachUnit] = splitFigure(FACTS[1]?.v ?? '');
+  const figures = [
+    { figure: founded, unit: FACTS[0]?.k ?? '', roll: false },
+    { figure: reachFigure, unit: reachUnit, roll: true },
+    { figure: years > 0 ? String(years) : '', unit: getCMSCopy("copy.WhoWeArePage.fact-years", "years of service"), roll: true },
+  ].filter(item => item.figure);
   return <section ref={ref} className="who-cover" data-active={active} aria-labelledby="who-title">
+    <div className="who-cover-ground" aria-hidden="true">
+      <MosaicWaves subject={WHO_GROUND} active={active && !calm} input={waveInput} scale={3} fps={24} />
+    </div>
     <div className="who-cover-copy" data-reveal>
-      <h1 id="who-title">{getCMSCopy("copy.WhoWeArePage.696ab4d5bfb5", "Who we are")}</h1>
+      <h1 id="who-title">{getCMSCopy("copy.WhoWeArePage.696ab4d5bfb5", "Who we are")}<br />
+        <em>{hands && at >= 0
+          ? <>{script.slice(0, at)}<button type="button" className="hands-chip" style={{ '--way': hands.color } as React.CSSProperties}
+              aria-pressed={current === handsAt} onClick={() => pick(handsAt)} onPointerEnter={() => pick(handsAt)}>{script.slice(at, at + hands.phrase.length)}</button>{script.slice(at + hands.phrase.length)}</>
+          : script}</em>
+      </h1>
       <div className="hands-reading" {...hold}>
-        <HandsLede text={getCMSCopy("copy.WhoWeArePage.5f1d766bc647", "The Sant Nirankari Charitable Foundation is the Mission’s working hands — the part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.")} ways={ways} current={current} onPick={pick} />
+        <HandsLede text={getCMSCopy("copy.WhoWeArePage.cover-lede", "The part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.")}
+          ways={lede} current={lede.findIndex(w => w.id === way?.id)} onPick={i => pick(ways.indexOf(lede[i]))} />
         {way && <HandsProof way={way} told={told} />}
       </div>
-      <div className="who-cover-actions"><a href={getCMSLink("copy.Link.WhoWeArePage.f24daa84860f", "#account")}>{getCMSCopy("copy.WhoWeArePage.3c34f30db957", "Discover our story ")}<ArrowDown size={17} /></a></div>
-      <span className="who-cover-signature"><HeartHandshake size={19} />{getCMSCopy("copy.WhoWeArePage.368abdd6a9dc", " Service with humility · Since 2010")}</span>
+      <div className="who-cover-actions"><a className="who-cover-cta" href={getCMSLink("copy.Link.WhoWeArePage.f24daa84860f", "#account")}>{getCMSCopy("copy.WhoWeArePage.3c34f30db957", "Discover our story ")}<ArrowDown size={15} aria-hidden="true" /></a></div>
     </div>
-    <div className="who-cover-stage" {...hold}><HandsBloom ways={ways} current={current} onPick={pick} /></div>
+    {/* the lotus, and beneath it the line the foundation was set up to act on */}
+    <div className="who-cover-stage" {...hold}>
+      <HandsBloom ways={ways} current={current} onPick={pick} />
+      <div className="who-cover-voice"><Saying id="contribute" className="who-cover-saying" /></div>
+    </div>
+    <div className="who-cover-footer">
+      <span className="who-cover-standing"><UnepSeal /></span>
+      <ul className="who-cover-impact" aria-label={getCMSCopy("copy.WhoWeArePage.cover-figures", "The foundation in figures")}>
+        {figures.map((item, i) => (
+          <li key={item.unit} style={{ '--way-ink': FACT_INKS[i % FACT_INKS.length] } as React.CSSProperties}>
+            {/* a rolling figure is for the eye; the figure itself is what is read */}
+            <span className="who-cover-impact-figure">{item.roll
+              ? <><span className="sr-only">{item.figure}</span><span aria-hidden="true"><OdometerStatCounter value={item.figure} duration={1400} /></span></>
+              : item.figure}</span>
+            <span className="who-cover-impact-unit">{item.unit}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>;
 };
 
@@ -157,8 +216,6 @@ export const WhoWeArePage: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   const { hash } = useLocation();
-  const founded = Number.parseInt(FACTS[0]?.v ?? '', 10) || 2010;
-  const years = new Date().getFullYear() - founded;
   const pillarInk = (id: string) => PILLARS.find(p => p.id === id)?.accentA ?? '#426b89';
   useEffect(() => {
     if (!hash) return;
@@ -174,7 +231,7 @@ export const WhoWeArePage: React.FC = () => {
     eyebrow={getCMSCopy("copy.WhoWeArePage.eefebe5695c5", "Who We Are · About the foundation")}
     title={getCMSCopy("copy.WhoWeArePage.696ab4d5bfb5", "Who we are")}
     standfirst={getCMSCopy("copy.WhoWeArePage.b96d49653114", "The Sant Nirankari Charitable Foundation is the Mission’s working hands\n      — the part of it that builds hospitals, funds classrooms, plants forests\n      and turns up after a flood.")}
-    rail={<SubsectionNav label={getCMSCopy("copy.WhoWeArePage.rail", "On this page")} links={[
+    rail={<SubsectionNav variant="tabs" label={getCMSCopy("copy.WhoWeArePage.rail", "On this page")} links={[
       { id: 'account', label: getCMSCopy("copy.WhoWeArePage.rail-account", "About us"), ink: '#f0c5ac' },
       { id: 'mission', label: getCMSCopy("copy.WhoWeArePage.rail-mission", "Mission & vision"), ink: '#dcd0eb' },
       { id: 'road', label: getCMSCopy("copy.WhoWeArePage.rail-road", "The road so far"), ink: '#c6dfbd' },
@@ -196,33 +253,22 @@ export const WhoWeArePage: React.FC = () => {
       />
 
       <div className="cv-chapter">
-        {/* THE CREED: the founding line, the governing phrase and the three
-            cornerstones, each picked out in the prose where it is written */}
-        <div className="ww-prose">
-          <p className="font-artistic-serif">{marked(getCMSCopy("copy.WhoWeArePage.8fb1d447ef9c", "The foundation was set up in 2010 to act on a single line of Baba Hardev Singh Ji’s: that a life gets its meaning if it is lived for others. That is not a slogan the organisation wears lightly — it is the whole operating principle. Everything below follows from it."), [{ phrase: getCMSCopy("copy.WhoWeArePage.mark-line", "a life gets its meaning if it is lived for others"), ink: '#a75e48' }])}</p>
-          <p className="font-artistic-serif">{getCMSCopy("copy.WhoWeArePage.d9b601893e49", "Its governing phrase is ")}<em>{getCMSCopy("copy.WhoWeArePage.56219e473693", "Service with Humility")}</em>{getCMSCopy("copy.WhoWeArePage.1ae89fe4f166", ". The humility matters as much as the service: the work is done without asking who the recipient is, what they believe, or whether they can return the favour. Blood is given to whoever needs it. A classroom is opened to whoever will sit in it.")}</p>
-          <p className="font-artistic-serif">{marked(getCMSCopy("copy.WhoWeArePage.d4ef378ef3af", "The work is organised into three cornerstones — healing, enriching and empowering — with care for the natural world running through all three rather than sitting apart from them. Its reach is deliberately weighted towards places that are easy to overlook: remote districts, under-served neighbourhoods, villages a long way from a hospital."), [
+        {/* THE CREED, in three moments: the founding line as the foundation
+            tells it (the cover's saying), the governing phrase set on its own,
+            and the three cornerstones; each phrase picked out in the prose
+            where it is written */}
+        <div className="ww-creed">
+          <p className="ww-moment-lead">{marked(getCMSCopy("copy.WhoWeArePage.8fb1d447ef9c", "The foundation was set up in 2010 to act on a single line of Baba Hardev Singh Ji’s: that a life gets its meaning if it is lived for others. That is not a slogan the organisation wears lightly — it is the whole operating principle. Everything below follows from it."), [{ phrase: getCMSCopy("copy.WhoWeArePage.mark-line", "a life gets its meaning if it is lived for others"), ink: '#01327f' }])}</p>
+          <div className="ww-interlude">
+            <p className="ww-interlude-phrase">{getCMSCopy("copy.WhoWeArePage.56219e473693", "Service with Humility")}</p>
+            <p className="ww-interlude-line">{getCMSCopy("copy.WhoWeArePage.interlude-line", "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it.")}</p>
+          </div>
+          <p className="ww-moment-text">{marked(getCMSCopy("copy.WhoWeArePage.d4ef378ef3af", "The work is organised into three cornerstones — healing, enriching and empowering — with care for the natural world running through all three rather than sitting apart from them. Its reach is deliberately weighted towards places that are easy to overlook: remote districts, under-served neighbourhoods, villages a long way from a hospital."), [
             { phrase: getCMSCopy("copy.WhoWeArePage.mark-heal", "healing"), ink: pillarInk('heal') },
             { phrase: getCMSCopy("copy.WhoWeArePage.mark-enrich", "enriching"), ink: pillarInk('enrich') },
             { phrase: getCMSCopy("copy.WhoWeArePage.mark-empower", "empowering"), ink: pillarInk('empower') },
           ])}</p>
         </div>
-
-        <ul className="ww-facts who-facts">
-          {FACTS.map((f, i) => {
-            const Icon = FACT_ICONS[i] ?? MapPinned;
-            return (
-              <li key={f.k} style={{ '--fact': FACT_INKS[i % FACT_INKS.length] } as React.CSSProperties}>
-                <span className="who-fact-icon" aria-hidden="true"><Icon size={20} strokeWidth={1.6} /></span>
-                <span className="ww-fact-k">{f.k}</span>
-                <span className="ww-fact-v font-artistic-heading">{f.v}</span>
-                {i === 0 && years > 0 && <span className="who-fact-more">{years} {getCMSCopy("copy.WhoWeArePage.fact-years", "years of service")}</span>}
-              </li>
-            );
-          })}
-        </ul>
-        {/* the standing above, and what it means */}
-        <UnSeal variant="panel" className="ww-un" />
 
         {/* HOW SERVICE TAKES SHAPE — the three moments, told one at a time */}
         <div className="who-approach">
@@ -237,7 +283,7 @@ export const WhoWeArePage: React.FC = () => {
             them; these count them, a door for each with its own photograph,
             each figure at its own date, so nothing is ranked against anything else. */}
         <div className="cv-tally">
-          <h3 className="cv-sub font-artistic-display">{getCMSCopy("copy.WhoWeArePage.25c28cead1f0", "Three values. Everyday action.")}</h3>
+          <h3 className="cv-sub font-artistic-display">{getCMSCopy("copy.WhoWeArePage.tally-title", "Everyday action.")}</h3>
           <ul className="cv-tally-list who-doors">
             {getBiggest().map(({ pillar, act }) => {
               const photo = act.images?.[0]?.src ?? act.cardPhoto?.src;
@@ -262,7 +308,6 @@ export const WhoWeArePage: React.FC = () => {
               );
             })}
           </ul>
-          <p className="cv-scale-note">{getCMSCopy("copy.WhoWeArePage.daa59bc900b6", "One figure per cornerstone — the largest plain count each of them reports. They are counted in different units and stopped at different dates, so nothing here is ranked against anything else. The full record is on the Core Values page.")}</p>
         </div>
 
         {/* MISSION & VISION, and the bridge between them */}

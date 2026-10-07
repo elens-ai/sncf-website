@@ -5,7 +5,7 @@
    being read, when it lifts and comes into full colour; the logo's two
    hands cup the bloom from beneath.
    ========================================================================== */
-.who-cover-stage { position: relative; width: 100%; max-width: 600px; justify-self: center; }
+
 .hands-bloom { display: block; width: 100%; height: auto; overflow: visible; }
 .hands-halo { transition: opacity 0.6s; animation: hands-breathe 7s ease-in-out infinite alternate; transform-origin: 300px 300px; }
 

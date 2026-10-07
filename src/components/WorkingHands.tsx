@@ -28,7 +28,7 @@ export interface HandWay {
 const activity = (id: string) => ACTIVITIES.find(a => a.id === id);
 const pointOf = (id: string, label: string) => activity(id)?.dataPoints.find(p => p.label === label);
 /** "250+ branches nationwide" → ["250+", "branches nationwide"]; a line with no figure up front is all unit */
-const split = (text: string): [string, string] => {
+export const splitFigure = (text: string): [string, string] => {
   const m = /^([₹≈]?\s?\d[\d,.]*\+?%?)\s+(.+)$/.exec(text.trim());
   return m ? [m[1], m[2]] : ['', text];
 };
@@ -42,7 +42,7 @@ export const handWays = (reach: string): HandWay[] => {
   const schools = activity('schools-colleges');
   const trees = activity('tree-plantation');
   const relief = pointOf('financial-support', 'Disaster relief & fund');
-  const [reachFigure, reachUnit] = split(reach);
+  const [reachFigure, reachUnit] = splitFigure(reach);
   const ways: HandWay[] = [
     { id: 'hands', phrase: c('hands', 'working hands'), photo: resolveCMSAsset('asset.WorkingHands.hands', '/images/welcome-volunteers.jpg'),
       alt: c('hands-alt', 'Foundation volunteers in their blue shirts, hands folded, beneath a wall that reads Service with Humility'),

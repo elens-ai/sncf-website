@@ -2977,22 +2977,16 @@
     "copy.ProjectsPage.4a4eb64be162": "Each project’s figures retain their own reporting period and units. Different measures are not combined into a single total.",
     "copy.WhoWeArePage.a01941bf3134": "Sant Nirankari Charitable Foundation",
     "copy.WhoWeArePage.696ab4d5bfb5": "Who we are",
-    "copy.WhoWeArePage.5f1d766bc647": "The Sant Nirankari Charitable Foundation is the Mission’s working hands — the part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.",
     "copy.WhoWeArePage.3c34f30db957": "Discover our story ",
-    "copy.WhoWeArePage.368abdd6a9dc": " Service with humility · Since 2010",
     "copy.WhoWeArePage.eefebe5695c5": "Who We Are · About the foundation",
     "copy.WhoWeArePage.b96d49653114": "The Sant Nirankari Charitable Foundation is the Mission’s working hands\n      — the part of it that builds hospitals, funds classrooms, plants forests\n      and turns up after a flood.",
     "copy.WhoWeArePage.788281056a5e": "About the foundation",
     "copy.WhoWeArePage.faac0dc151a5": "A purpose bigger than ourselves.",
     "copy.WhoWeArePage.428e0aab4777": "The belief that brings us together, and the work that carries it forward.",
     "copy.WhoWeArePage.8fb1d447ef9c": "The foundation was set up in 2010 to act on a single line of Baba Hardev Singh Ji’s: that a life gets its meaning if it is lived for others. That is not a slogan the organisation wears lightly — it is the whole operating principle. Everything below follows from it.",
-    "copy.WhoWeArePage.d9b601893e49": "Its governing phrase is ",
     "copy.WhoWeArePage.56219e473693": "Service with Humility",
-    "copy.WhoWeArePage.1ae89fe4f166": ". The humility matters as much as the service: the work is done without asking who the recipient is, what they believe, or whether they can return the favour. Blood is given to whoever needs it. A classroom is opened to whoever will sit in it.",
     "copy.WhoWeArePage.d4ef378ef3af": "The work is organised into three cornerstones — healing, enriching and empowering — with care for the natural world running through all three rather than sitting apart from them. Its reach is deliberately weighted towards places that are easy to overlook: remote districts, under-served neighbourhoods, villages a long way from a hospital.",
-    "copy.WhoWeArePage.25c28cead1f0": "Three values. Everyday action.",
     "copy.WhoWeArePage.2e1ac6e9292a": "Explore ",
-    "copy.WhoWeArePage.daa59bc900b6": "One figure per cornerstone — the largest plain count each of them reports. They are counted in different units and stopped at different dates, so nothing here is ranked against anything else. The full record is on the Core Values page.",
     "copy.WhoWeArePage.1d3009abb21e": "Since 2010",
     "copy.WhoWeArePage.77d72aaa5ec2": "The road so far",
     "copy.WhoWeArePage.b68d1e8eda83": "Supports & collaborations",
@@ -3034,8 +3028,6 @@
     "copy.ProjectsPage.c2eb86f270ec": "Growing stronger, together.",
     "copy.WhoWeArePage.7d12ba56e9f8": "2010",
     "copy.WhoWeArePage.6520e4488973": "Founded",
-    "copy.WhoWeArePage.e4b35726fbaf": "Standing",
-    "copy.WhoWeArePage.d5af85a6a90e": "UN special consultative status",
     "copy.WhoWeArePage.2068b81b75d4": "Reach",
     "copy.WhoWeArePage.9d3f458ea970": "250+ branches nationwide",
     "copy.Link.InvitationCard.e3dc1a537132": "tel:+911147660380",
@@ -3353,11 +3345,6 @@
     "copy.UnAffiliation.title": "Special consultative status with the United Nations Economic and Social Council (ECOSOC)",
     "copy.UnAffiliation.short": "UN ECOSOC",
     "copy.UnAffiliation.status": "Special consultative status",
-    "copy.UnAffiliation.panel-label": "Our United Nations standing",
-    "copy.UnAffiliation.kicker": "United Nations",
-    "copy.UnAffiliation.panel-title": "Special consultative status with ECOSOC",
-    "copy.UnAffiliation.panel-text": "The foundation holds special consultative status with the United Nations Economic and Social Council (ECOSOC), which lets it take part in the UN’s work and contribute to the Sustainable Development Goals.",
-    "copy.UnAffiliation.panel-link": "What consultative status means",
     "copy.UnAffiliation.observance": "UN observance",
     "copy.UnAffiliation.sdg-label": "Advancing the UN Sustainable Development Goals",
     "copy.UnAffiliation.sdg-title": "UN Sustainable Development Goal",
@@ -3602,7 +3589,7 @@
     "copy.ProjectsPage.hcStatsSource": "As Sant Nirankari Health City states them",
     "copy.ProjectsPage.hcTeamAlt": "The Health City's team gathered in the hospital's atrium",
     "copy.ProjectsPage.hcPlaqueAlt": "The plaque recording that Satguru Mata Sudiksha Ji Maharaj dedicated the premises of Sant Nirankari Health City to the service of humanity on 23 February 2026",
-    "copy.ProjectsPage.hcDedicationAlt": "The ceremony dedicating Sant Nirankari Health City to the service of humanity",
+    "copy.ProjectsPage.hcDedicationAlt": "A gathering at Sant Nirankari Health City, the SNHC monogram in flowers on the stage before the hospital",
     "copy.ProjectsPage.hcCollageCaption": "Dedicated to the service of humanity · 23 February 2026",
     "copy.CoreValuesPage.cover-headline": "Love, peace, kindness",
     "copy.CoreValuesPage.cover-headline-script": "with a purpose of giving",
@@ -3628,7 +3615,12 @@
     "copy.ValueAnalytics.healChiro": "Chiropractic camps",
     "copy.ValueAnalytics.healChiroNote": "At the International Samagams in Delhi–Samalkha and Maharashtra.",
     "copy.ValueAnalytics.chiroLegend": "Each figure stands for 2,500 patients",
-    "copy.Insights.chiro-per-camp": "patients treated per camp"
+    "copy.Insights.chiro-per-camp": "patients treated per camp",
+    "copy.WhoWeArePage.tally-title": "Everyday action.",
+    "copy.WhoWeArePage.cover-script": "the Mission’s working hands",
+    "copy.WhoWeArePage.cover-lede": "The part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.",
+    "copy.WhoWeArePage.cover-figures": "The foundation in figures",
+    "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it."
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -3776,8 +3768,8 @@
       "label": "InvitationCard · sncf-logo.webp"
     },
     "asset.projects.bloom": {
-      "source": "/images/projects-bloom.png?v=balanced",
-      "label": "projects · projects-bloom.png?v=balanced"
+      "source": "/images/projects-bloom.png?v=five",
+      "label": "projects · projects-bloom.png?v=five"
     },
     "/images/petals/petal-empower.webp": {
       "source": "/images/petals/petal-empower.webp",
@@ -3912,20 +3904,28 @@
       "label": "ProjectsPage · logo.webp"
     },
     "asset.ProjectsPage.hcTeam": {
-      "source": "/images/projects/health-city/team.webp",
-      "label": "ProjectsPage · team.webp"
+      "source": "/images/projects/health-city/team-atrium.webp",
+      "label": "ProjectsPage · team-atrium.webp"
     },
     "asset.ProjectsPage.hcPlaque": {
       "source": "/images/projects/health-city/plaque.webp",
       "label": "ProjectsPage · plaque.webp"
     },
     "asset.ProjectsPage.hcDedication": {
-      "source": "/images/projects/health-city/dedication.webp",
-      "label": "ProjectsPage · dedication.webp"
+      "source": "/images/projects/health-city/ceremony.webp",
+      "label": "ProjectsPage · ceremony.webp"
     },
     "asset.UnepSeal.logo": {
       "source": "/images/partners/unep.png",
       "label": "UnepSeal · unep.png"
+    },
+    "asset.ProjectsMosaicArt.health-city": {
+      "source": "/images/projects/health-city.webp",
+      "label": "ProjectsMosaicArt · health-city.webp"
+    },
+    "asset.ProjectsMosaicArt.adopted-villages": {
+      "source": "/images/programmes/adopted-villages-mandaura.webp",
+      "label": "ProjectsMosaicArt · adopted-villages-mandaura.webp"
     }
   },
   "slots": {
@@ -4825,20 +4825,10 @@
         "section": "Page",
         "label": "Page · Who we are"
       },
-      "copy.WhoWeArePage.5f1d766bc647": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The Sant Nirankari Charitable Foundation is the Mission’s working han…"
-      },
       "copy.WhoWeArePage.3c34f30db957": {
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Discover our story"
-      },
-      "copy.WhoWeArePage.368abdd6a9dc": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Service with humility · Since 2010"
       },
       "copy.WhoWeArePage.eefebe5695c5": {
         "page": "who-we-are",
@@ -4870,40 +4860,20 @@
         "section": "Page",
         "label": "Page · The foundation was set up in 2010 to act on a single line of Baba Har…"
       },
-      "copy.WhoWeArePage.d9b601893e49": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Its governing phrase is"
-      },
       "copy.WhoWeArePage.56219e473693": {
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Service with Humility"
-      },
-      "copy.WhoWeArePage.1ae89fe4f166": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · . The humility matters as much as the service: the work is done witho…"
       },
       "copy.WhoWeArePage.d4ef378ef3af": {
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · The work is organised into three cornerstones — healing, enriching an…"
       },
-      "copy.WhoWeArePage.25c28cead1f0": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Three values. Everyday action."
-      },
       "copy.WhoWeArePage.2e1ac6e9292a": {
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Explore"
-      },
-      "copy.WhoWeArePage.daa59bc900b6": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · One figure per cornerstone — the largest plain count each of them rep…"
       },
       "copy.WhoWeArePage.1d3009abb21e": {
         "page": "who-we-are",
@@ -5109,16 +5079,6 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Founded"
-      },
-      "copy.WhoWeArePage.e4b35726fbaf": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Standing"
-      },
-      "copy.WhoWeArePage.d5af85a6a90e": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · UN special consultative status"
       },
       "copy.WhoWeArePage.2068b81b75d4": {
         "page": "who-we-are",
@@ -6705,31 +6665,6 @@
         "section": "UN standing & SDGs",
         "label": "UN standing & SDGs · Special consultative status"
       },
-      "copy.UnAffiliation.panel-label": {
-        "page": "everywhere",
-        "section": "UN standing & SDGs",
-        "label": "UN standing & SDGs · Our United Nations standing"
-      },
-      "copy.UnAffiliation.kicker": {
-        "page": "everywhere",
-        "section": "UN standing & SDGs",
-        "label": "UN standing & SDGs · United Nations"
-      },
-      "copy.UnAffiliation.panel-title": {
-        "page": "everywhere",
-        "section": "UN standing & SDGs",
-        "label": "UN standing & SDGs · Special consultative status with ECOSOC"
-      },
-      "copy.UnAffiliation.panel-text": {
-        "page": "everywhere",
-        "section": "UN standing & SDGs",
-        "label": "UN standing & SDGs · The foundation holds special consultative status with the United Nati…"
-      },
-      "copy.UnAffiliation.panel-link": {
-        "page": "everywhere",
-        "section": "UN standing & SDGs",
-        "label": "UN standing & SDGs · What consultative status means"
-      },
       "copy.UnAffiliation.observance": {
         "page": "everywhere",
         "section": "UN standing & SDGs",
@@ -7953,7 +7888,7 @@
       "copy.ProjectsPage.hcDedicationAlt": {
         "page": "projects",
         "section": "Page",
-        "label": "Page · The ceremony dedicating Sant Nirankari Health City to the service of …"
+        "label": "Page · A gathering at Sant Nirankari Health City, the SNHC monogram in flowe…"
       },
       "copy.ProjectsPage.hcCollageCaption": {
         "page": "projects",
@@ -8084,6 +8019,31 @@
         "page": "core-values",
         "section": "Charts",
         "label": "Charts · patients treated per camp"
+      },
+      "copy.WhoWeArePage.tally-title": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Everyday action."
+      },
+      "copy.WhoWeArePage.cover-script": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · the Mission’s working hands"
+      },
+      "copy.WhoWeArePage.cover-lede": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The part of it that builds hospitals, funds classrooms, plants forest…"
+      },
+      "copy.WhoWeArePage.cover-figures": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The foundation in figures"
+      },
+      "copy.WhoWeArePage.interlude-line": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The humility matters as much as the service: blood is given to whoeve…"
       }
     },
     "assets": {
@@ -8270,7 +8230,7 @@
       "asset.projects.bloom": {
         "page": "other",
         "section": "3D model cards",
-        "label": "3D model cards · projects-bloom.png?v=balanced"
+        "label": "3D model cards · projects-bloom.png?v=five"
       },
       "/images/petals/petal-empower.webp": {
         "page": "home",
@@ -8440,7 +8400,7 @@
       "asset.ProjectsPage.hcTeam": {
         "page": "projects",
         "section": "Page",
-        "label": "Page · team.webp"
+        "label": "Page · team-atrium.webp"
       },
       "asset.ProjectsPage.hcPlaque": {
         "page": "projects",
@@ -8450,12 +8410,22 @@
       "asset.ProjectsPage.hcDedication": {
         "page": "projects",
         "section": "Page",
-        "label": "Page · dedication.webp"
+        "label": "Page · ceremony.webp"
       },
       "asset.UnepSeal.logo": {
         "page": "other",
         "section": "Unep Seal",
         "label": "Unep Seal · unep.png"
+      },
+      "asset.ProjectsMosaicArt.health-city": {
+        "page": "other",
+        "section": "Projects Mosaic Art",
+        "label": "Projects Mosaic Art · health-city.webp"
+      },
+      "asset.ProjectsMosaicArt.adopted-villages": {
+        "page": "other",
+        "section": "Projects Mosaic Art",
+        "label": "Projects Mosaic Art · adopted-villages-mandaura.webp"
       }
     }
   },

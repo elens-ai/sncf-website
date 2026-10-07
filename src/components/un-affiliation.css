@@ -1,6 +1,6 @@
 /* ==========================================================================
-   UN AFFILIATION (UnAffiliation.tsx): the foundation's ECOSOC standing as a
-   seal or a panel, and the SDG tags on cornerstones, projects and
+   UN AFFILIATION (UnAffiliation.tsx): the foundation's ECOSOC standing and
+   UNEP as seals, and the SDG tags on cornerstones, projects and
    programmes. The UN's blue is used for the standing only, never as an
    emblem; each goal keeps its own UN colour.
    ========================================================================== */
@@ -16,20 +16,6 @@
 /* UNEP's seal: its logo in place of the globe, a little taller for its wordmark */
 .un-seal--unep[data-variant='seal'] { gap: 10px; padding-block: 4px; padding-left: 12px; }
 .un-seal--unep[data-variant='seal'] .un-seal-logo { height: 30px; }
-
-/* the panel: the standing, and what it means */
-.un-seal[data-variant='panel'] { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: start; padding: 22px 24px; border-radius: 18px; background: linear-gradient(120deg, #fff 30%, color-mix(in srgb, var(--un-blue) 7%, #fff)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--un-blue) 18%, #e3e9e5), 0 14px 30px -24px #0a3d6a80; text-align: left; }
-.un-seal[data-variant='panel'] .un-seal-globe { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; color: #fff; background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--un-blue) 70%, #fff), var(--un-blue) 70%); box-shadow: 0 10px 20px -12px var(--un-blue); }
-.un-seal[data-variant='panel'] .un-seal-logo { height: 64px; }
-.un-seal-kicker { margin: 0; font: 700 10px/1.4 var(--font-sans); letter-spacing: .18em; text-transform: uppercase; color: var(--un-blue); }
-.un-seal-title { margin: 4px 0 6px; font: 800 clamp(17px, 1.6vw, 20px)/1.25 var(--font-heading); letter-spacing: 0; color: #17302b; }
-.un-seal-text { margin: 0; max-width: 46em; font: 400 13.5px/1.65 var(--font-sans); color: #4e625c; }
-.un-seal-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font: 600 12.5px/1 var(--font-sans); color: var(--un-blue); border-bottom: 1px solid color-mix(in srgb, var(--un-blue) 35%, transparent); padding-bottom: 3px; }
-.un-seal-link:hover { border-bottom-color: currentColor; }
-@media (max-width: 520px) { .un-seal[data-variant='panel'] { grid-template-columns: 1fr; } }
-
-/* Who we are: under the facts row that names the standing */
-.ww-un { margin: 26px 0 8px; }
 
 /* a UN international day, marked as such wherever the events are listed */
 .un-day { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px 3px 7px; border-radius: 999px; background: #0a6fb8; color: #fff; font: 700 10px/1.25 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }

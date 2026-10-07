@@ -16,6 +16,7 @@ import { EventsCalendarModal } from './EventsCalendarModal';
 import { PillarPhotoMosaic } from './PillarPhotoMosaic';
 import { PillarArtwork } from './PillarArtwork';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
+import { PillarMarkShapes } from './PillarMark';
 import { UnDayMark, isUnObservance } from './UnAffiliation';
 import './events-journal.css';
 
@@ -24,7 +25,7 @@ const FILTERS: ('all' | MosaicPillar)[] = ['all', 'heal', 'enrich', 'empower', '
 
 function JournalPillarIcon({ pillar }: { pillar: MosaicPillar }) {
   return <svg className="journal-pillar-icon" viewBox="0 0 146 120" aria-hidden="true">
-    {PILLAR_LOGOS[pillar].paths.map(d => <path key={d} d={d} />)}
+    <PillarMarkShapes pillar={pillar} />
   </svg>;
 }
 

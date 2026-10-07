@@ -1,7 +1,8 @@
 /* THE DOVES over the Who We Are page's growing tree (RoadTree.tsx). Now and
-   then a white dove, sometimes a pair, crosses the section, dropping a seed or
-   two over the ground about the tree; the first, as the section comes into
-   view, carries the seed the tree grows from and drops it at the tree's foot.
+   then a white dove, sometimes a pair, crosses the section with a seed in its
+   beak, and lets it fall over the ground about the tree; the first, as the
+   section comes into view, carries the seed the tree grows from and lets it
+   fall to land at the tree's foot.
    They have a canvas of their own over the section, drawn only while a dove
    or a seed is in the air and the section is on screen; where motion is
    reduced there are none. */
@@ -10,6 +11,9 @@ import { rng } from './growthTree';
 const TAU = Math.PI * 2;
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+/* a falling seed keeps this much of the dove's speed as it leaves the beak, and loses it at this rate (per second) */
+const SEED_CARRY = 0.6;
+const SEED_DRAG = 1.1;
 
 /** The doves' canvas: its size; the tree's foot, where the first seed lands, and how far its ground reaches either
     side; and the band they fly across. */
@@ -25,17 +29,36 @@ interface Dove {
   level: number; swell: number; swellAt: number;
   /** its wings: the stroke's phase, where they are (1 up, -1 down), and the glides between strokes */
   stroke: number; lift: number; glide: number; flapFor: number;
-  /** where it lets its seeds go (the first dove: the tree's own, timed to land at its foot) */
-  drops: number[]; carries: boolean;
+  /** the seed in its beak: the tree's own (let go to land at its foot) or one it scatters, let go over `dropAt` */
+  seed: 'tree' | 'scatter' | null; dropAt: number;
 }
 interface Seed { x: number; y: number; vx: number; vy: number; turn: number; spin: number; age: number; landed: number; size: number; home?: number }
 
+/* the seed a dove carries, held at the tip of its beak, in the dove's own units */
+const BEAK_SEED = { x: 22.6, y: -1.7, rx: 2.8, ry: 1.8 };
+/* the dove's drawing: its scale, and how far its head is tilted */
+const scaleOf = (size: number) => size * 1.25;
+const tiltOf = (glide: number) => -0.07 + glide * 0.05;
+/** Where the seed in a dove's beak is, on the sky, and how it lies. */
+export function beakSeedAt(x: number, y: number, size: number, dir: number, glide = 0) {
+  const s = scaleOf(size), t = tiltOf(glide), cos = Math.cos(t), sin = Math.sin(t);
+  return { x: x + dir * s * (BEAK_SEED.x * cos - BEAK_SEED.y * sin), y: y + s * (BEAK_SEED.x * sin + BEAK_SEED.y * cos), angle: dir * t };
+}
+/* a seed: brown, with a little light on it */
+function seedShape(c: CanvasRenderingContext2D, rx: number, ry: number) {
+  c.fillStyle = '#7a5532';
+  c.beginPath(); c.ellipse(0, 0, rx, ry, 0, 0, TAU); c.fill();
+  c.fillStyle = 'rgba(255, 236, 200, 0.5)';
+  c.beginPath(); c.ellipse(-rx * 0.26, -ry * 0.32, rx * 0.39, ry * 0.32, 0, 0, TAU); c.fill();
+}
+
 /** A dove, facing `dir` (1 right, -1 left), its wings at `lift` (1 up, -1 down), `size` about 1 at the drawing's
-    own scale: white, shaded grey beneath, outlined softly so it reads on a pale ground. */
-export function drawDove(c: CanvasRenderingContext2D, x: number, y: number, size: number, dir: number, lift: number, glide = 0) {
-  const s = size * 1.25;
+    own scale: white, shaded grey beneath, outlined softly so it reads on a pale ground; `holding`, with a seed in
+    its beak. */
+export function drawDove(c: CanvasRenderingContext2D, x: number, y: number, size: number, dir: number, lift: number, glide = 0, holding = false) {
+  const s = scaleOf(size);
   c.save();
-  c.translate(x, y); c.scale(dir * s, s); c.rotate(-0.07 + glide * 0.05);
+  c.translate(x, y); c.scale(dir * s, s); c.rotate(tiltOf(glide));
   c.lineJoin = 'round'; c.lineCap = 'round';
   c.lineWidth = 0.75; c.strokeStyle = 'rgba(78, 96, 104, 0.55)';
   wing(c, lift * 0.9, true);
@@ -54,6 +77,7 @@ export function drawDove(c: CanvasRenderingContext2D, x: number, y: number, size
   c.beginPath(); c.arc(14.3, -2.7, 4.3, 0, TAU); c.fillStyle = '#fbfcfc'; c.fill(); c.stroke();
   c.beginPath(); c.moveTo(18.2, -3.3); c.lineTo(22, -2); c.lineTo(18.3, -0.9); c.closePath(); c.fillStyle = '#d58f72'; c.fill();
   c.beginPath(); c.arc(15.4, -3.6, 0.9, 0, TAU); c.fillStyle = '#263036'; c.fill();
+  if (holding) { c.save(); c.translate(BEAK_SEED.x, BEAK_SEED.y); seedShape(c, BEAK_SEED.rx, BEAK_SEED.ry); c.restore(); }
   wing(c, lift, false);
   c.restore();
 }
@@ -119,13 +143,16 @@ export class Doves {
     else this.plan(1800 + this.random() * 2600);
   }
 
-  /** The first dove: carrying the tree's seed to its foot (once). */
+  /** The first dove: carrying the tree's seed to its foot (once each time the tree starts from its seed). */
   sow() {
     if (this.sown || !this.sky) return;
     this.sown = true;
     this.launch(true);
     this.wake();
   }
+
+  /** The tree will start again from its seed: the next sowing brings the seed again. */
+  rearm() { this.sown = false; }
 
   stop() { this.live = false; this.rest(); }
 
@@ -165,22 +192,23 @@ export class Doves {
     const make = (behind: number, dy: number, s: number): Dove => ({
       x: (dir > 0 ? -34 * s : sky.width + 34 * s) - dir * behind, y: level + dy, vx: dir * speed, dir, size: s,
       level: level + dy, swell: (3 + r() * 5) * sky.k, swellAt: r() * TAU,
-      stroke: r() * TAU, lift: 0, glide: 0, flapFor: 0.9 + r() * 1.2, drops: [], carries: false,
+      stroke: r() * TAU, lift: 0, glide: 0, flapFor: 0.9 + r() * 1.2,
+      seed: carries ? 'tree' : 'scatter', dropAt: sky.foot.x + (r() * 2 - 1) * sky.foot.reach * 1.05,
     });
-    const lead = make(0, 0, size);
-    if (carries) lead.carries = true;
-    else for (let i = 0, n = 1 + Math.floor(r() * 3); i < n; i++) lead.drops.push(sky.foot.x + (r() * 2 - 1) * sky.foot.reach * 1.05);
-    lead.drops.sort((a, b) => (a - b) * dir);
-    this.doves.push(lead);
+    this.doves.push(make(0, 0, size));
     if (!carries && r() < 0.35) this.doves.push(make(50 * size + r() * 50, (r() - 0.5) * 44 * sky.k, size * (0.85 + r() * 0.15)));
   }
 
+  /* the dove lets go of the seed in its beak: it falls from there, carried on a little by the dove's speed */
   private release(d: Dove, home?: number) {
     const sky = this.sky!;
+    const at = beakSeedAt(d.x, d.y, d.size, d.dir, d.glide > 0 ? 1 : 0);
     this.seeds.push({
-      x: d.x - d.dir * 1.5 * d.size, y: d.y + 6 * d.size, vx: d.vx * 0.42, vy: 18 * sky.k,
-      turn: this.random() * TAU, spin: (this.random() - 0.5) * 9, age: 0, landed: -1, size: sky.k * (0.9 + this.random() * 0.3), home,
+      x: at.x, y: at.y, vx: d.vx * SEED_CARRY, vy: 8 * sky.k,
+      turn: at.angle, spin: d.dir * (2 + this.random() * 5), age: 0, landed: -1,
+      size: (BEAK_SEED.rx * scaleOf(d.size)) / 3.1, home,
     });
+    d.seed = null;
   }
 
   private step(dt: number) {
@@ -201,14 +229,15 @@ export class Doves {
         if (d.flapFor <= 0 && d.lift > 0.3) { d.glide = 0.45 + this.random() * 0.45; d.flapFor = 1 + this.random() * 1.4; }
       }
       d.y = d.level + d.swell * Math.sin(d.swellAt + d.x * 0.006) - (d.glide > 0 ? 0 : 1.4 * d.size * Math.sin(d.stroke));
-      /* its seeds */
-      if (d.carries) {
-        /* let go where, drifting as it falls, the seed comes down at the tree's foot */
-        const fall = Math.sqrt((2 * Math.max(0, sky.foot.y - d.y)) / G);
-        if ((sky.foot.x - d.x) * d.dir <= Math.abs(d.vx) * 0.42 * fall * 0.72) { this.release(d, sky.foot.x); d.carries = false; }
-      } else if (d.drops.length && (d.x - d.drops[0]) * d.dir >= 0) {
-        d.drops.shift();
-        this.release(d);
+      /* the seed in its beak */
+      if (d.seed) {
+        const at = beakSeedAt(d.x, d.y, d.size, d.dir, d.glide > 0 ? 1 : 0);
+        if (d.seed === 'tree') {
+          /* let go where, carried on and slowing as it falls, the seed comes down at the tree's foot */
+          const fall = Math.sqrt((2 * Math.max(0, sky.foot.y - at.y)) / G);
+          const carried = (Math.abs(d.vx) * SEED_CARRY * (1 - Math.exp(-SEED_DRAG * fall))) / SEED_DRAG;
+          if ((sky.foot.x - at.x) * d.dir <= carried) this.release(d, sky.foot.x);
+        } else if ((at.x - d.dropAt) * d.dir >= 0) this.release(d);
       }
     }
     this.doves = this.doves.filter(d => (d.dir > 0 ? d.x < sky.width + 40 * d.size : d.x > -40 * d.size));
@@ -216,7 +245,7 @@ export class Doves {
       s.age += dt;
       if (s.landed >= 0) continue;
       s.vy = Math.min(s.vy + G * dt, 300 * sky.k);
-      s.vx *= 1 - 1.1 * dt;
+      s.vx *= 1 - SEED_DRAG * dt;
       s.x += s.vx * dt; s.y += s.vy * dt;
       s.turn += s.spin * dt;
       /* the tree's own seed is drawn home to the foot as it falls */
@@ -240,16 +269,13 @@ export class Doves {
       c.save();
       c.globalAlpha = fade;
       c.translate(s.x, s.y); c.rotate(s.landed >= 0 ? 0.2 : s.turn);
-      c.fillStyle = '#7a5532';
-      c.beginPath(); c.ellipse(0, 0, 3.1 * s.size, 1.9 * s.size, 0, 0, TAU); c.fill();
-      c.fillStyle = 'rgba(255, 236, 200, 0.5)';
-      c.beginPath(); c.ellipse(-0.8 * s.size, -0.6 * s.size, 1.2 * s.size, 0.6 * s.size, 0, 0, TAU); c.fill();
+      seedShape(c, 3.1 * s.size, 1.9 * s.size);
       c.restore();
       const r = 5 * s.size;
       this.drawn.push([s.x - r, s.y - r, 2 * r, 2 * r]);
     }
     for (const d of this.doves) {
-      drawDove(c, d.x, d.y, d.size, d.dir, d.lift, d.glide > 0 ? 1 : 0);
+      drawDove(c, d.x, d.y, d.size, d.dir, d.lift, d.glide > 0 ? 1 : 0, d.seed !== null);
       const r = 36 * d.size;
       this.drawn.push([d.x - r, d.y - r, 2 * r, 2 * r]);
     }
