@@ -82,13 +82,20 @@ export const hasSaying = (id: string): id is SayingId => id in SAYINGS();
 
 /** A saying set beside the work it speaks to: the words large (in Hindi where
     they were said in Hindi, set in Devanagari), their meaning beneath, and
-    who said them. A place may leave out the meaning or who said it. */
-export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: boolean; byline?: boolean }> = ({ id, className, meaning = true, byline = true }) => {
+    who said them. A place may leave out the meaning or who said it, start a
+    new line where `breakBefore` falls in the words, and set the closing mark
+    at the end of the words rather than at the far side (`closeInline`). */
+export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: boolean; byline?: boolean; breakBefore?: string; closeInline?: boolean }> = ({ id, className, meaning = true, byline = true, breakBefore, closeInline = false }) => {
   useCMSRevision();
   const saying: { hindi?: string; english: string; by: string } = SAYINGS()[id];
+  const words = saying.hindi ?? saying.english;
+  const at = breakBefore ? words.indexOf(breakBefore) : -1;
   return (
     <figure className={`saying${className ? ` ${className}` : ''}`} data-script={saying.hindi ? 'hindi' : 'english'}>
-      <QuoteWords><blockquote lang={saying.hindi ? 'hi' : 'en'}>{saying.hindi ?? saying.english}</blockquote></QuoteWords>
+      <QuoteWords close={!closeInline}><blockquote lang={saying.hindi ? 'hi' : 'en'}>
+        {at > 0 ? <>{words.slice(0, at).trimEnd()}<br />{words.slice(at)}</> : words}
+        {closeInline && <span className="quote-mark-inline" aria-hidden="true">”</span>}
+      </blockquote></QuoteWords>
       {saying.hindi && meaning && <p className="saying-meaning">{saying.english}</p>}
       {byline && saying.by && <figcaption>{saying.by}</figcaption>}
     </figure>

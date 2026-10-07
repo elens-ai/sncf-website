@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BarChart3, FileText, Images, type LucideIcon } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { getCMSCopy } from '../cms/runtime';
@@ -7,14 +7,15 @@ import './explore-tabs.css';
 
 export type ExploreTab = 'reports' | 'gallery' | 'stats';
 
-const TABS: { id: ExploreTab; icon: LucideIcon; name: () => string }[] = [
+const ALL_TABS: { id: ExploreTab; icon: LucideIcon; name: () => string }[] = [
   { id: 'reports', icon: FileText, name: () => getCMSCopy("copy.ExploreTabs.reports", "Reports") },
   { id: 'gallery', icon: Images, name: () => getCMSCopy("copy.ExploreTabs.gallery", "Gallery") },
   { id: 'stats', icon: BarChart3, name: () => getCMSCopy("copy.ExploreTabs.stats", "Stats") },
 ];
 
-/** THE THREE WAYS INTO A CORNERSTONE OR A PROJECT: its report, its gallery
-    and its figures charted, as tabs beneath its masthead. The bar stays in
+/** THE WAYS INTO A CORNERSTONE OR A PROJECT: its report, its gallery (a
+    project's; Core Values has none) and its figures charted, as tabs beneath
+    its masthead. The bar stays in
     view under the page's own rail while its panel scrolls past.
 
     Every tab is an address: #heal-gallery opens Heal's gallery and the page
@@ -29,13 +30,17 @@ export const ExploreTabs: React.FC<{
   tab: ExploreTab;
   onTab: (tab: ExploreTab) => void;
   /** A line under each tab's name, e.g. "5 programmes"; without it, the names stand alone. */
-  notes?: Record<ExploreTab, string>;
-  panels: Record<ExploreTab, () => React.ReactNode>;
+  notes?: Partial<Record<ExploreTab, string>>;
+  /** The tabs shown, in order; all three when not given (Core Values has no Gallery). */
+  tabs?: ExploreTab[];
+  panels: Partial<Record<ExploreTab, () => React.ReactNode>>;
   /** 'segmented': a quiet grey track with the tab chosen raised as a white slip, names alone, no icons and no
       colour (the Projects and Core Values pages). */
   look?: 'segmented';
-}> = ({ id, name, tab, onTab, notes, panels, look }) => {
+}> = ({ id, name, tab, onTab, notes, tabs: shown, panels, look }) => {
   useCMSRevision();
+  const only = shown?.join(',');
+  const TABS = useMemo(() => (only ? ALL_TABS.filter(t => only.split(',').includes(t.id)) : ALL_TABS), [only]);
   const { hash } = useLocation();
   const [opened, setOpened] = useState<ExploreTab[]>([tab]);
   const list = useRef<HTMLDivElement>(null);
@@ -55,7 +60,7 @@ export const ExploreTabs: React.FC<{
     follow();
     window.addEventListener('hashchange', follow);
     return () => window.removeEventListener('hashchange', follow);
-  }, [id, hash]);
+  }, [id, hash, TABS]);
 
   /* the ink beneath the chosen tab slides across to it */
   useLayoutEffect(() => {
@@ -88,7 +93,7 @@ export const ExploreTabs: React.FC<{
 
   return (
     <div className="explore" data-tab={tab} data-look={look}>
-      <div ref={list} className="explore-tabs" role="tablist" aria-label={`${name}: ${getCMSCopy("copy.ExploreTabs.label", "reports, gallery and stats")}`}>
+      <div ref={list} className="explore-tabs" role="tablist" aria-label={`${name}: ${TABS.map(t => t.name().toLowerCase()).join(', ')}`}>
         <span className="explore-tabs-ink" aria-hidden="true" />
         {TABS.map(({ id: t, icon: Icon, name: label }) => (
           <button key={t} ref={node => { buttons.current[t] = node; }} id={`${id}-${t}`} type="button" role="tab"
@@ -102,7 +107,7 @@ export const ExploreTabs: React.FC<{
       </div>
       {TABS.map(({ id: t }) => opened.includes(t) && (
         <div key={t} id={`${id}-${t}-panel`} className="explore-panel" role="tabpanel" aria-labelledby={`${id}-${t}`} hidden={tab !== t}>
-          {panels[t]()}
+          {panels[t]?.()}
         </div>
       ))}
     </div>

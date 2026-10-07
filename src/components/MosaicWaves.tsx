@@ -35,6 +35,7 @@ import type { PillarState } from '../types';
 const SCALE = 2;
 const FPS = 30;
 const MORPH_SECONDS = 1.6;
+const STEADY_SECONDS = .35;
 
 /** Faint under the signature column, full behind the collage — over a wide,
     gentle ramp, so the column never reads as a seam in the picture. */
@@ -92,19 +93,23 @@ interface MosaicWavesProps {
   /** A cheaper pass for a busy screen: CSS pixels per painted pixel, and frames a second. */
   scale?: number;
   fps?: number;
+  /** Through a change of subject keep the waves' shape and motion, and let only the colours blend, with no
+      breath: for a cover whose subject turns by itself every few seconds. */
+  steady?: boolean;
 }
 
-export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input, scale = SCALE, fps = FPS }) => {
+export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input, scale = SCALE, fps = FPS, steady = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const state = useRef({
     from: null as Genome | null, to: null as Genome | null, shown: null as Genome | null, u: 1,
     pose: { time: 0, travel: 0, px: 0, py: 0, ripple: 0 } as Pose,
-    tx: 0, ty: 0, key: '', motes: seedMotes(),
+    tx: 0, ty: 0, key: '', motes: seedMotes(), steady,
     w: 0, h: 0, mask: null as CanvasGradient | null,
     ctx: null as CanvasRenderingContext2D | null,
     paint: () => {},
   });
   const clock = useRef<ReturnType<typeof createFrameClock> | null>(null);
+  useEffect(() => { state.current.steady = steady; }, [steady]);
 
   /* The buffer, the mask, the pointer and the clock — set up once. */
   useEffect(() => {
@@ -116,7 +121,7 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
     s.ctx = ctx;
     s.paint = () => {
       if (!s.shown || !s.mask) return;
-      const flush = s.u < 1 ? Math.sin(Math.PI * s.u) : 0;
+      const flush = s.u < 1 && !s.steady ? Math.sin(Math.PI * s.u) : 0;
       paintWaves(ctx, s.shown, s.w, s.h, s.pose, s.mask, .88 + .12 * flush, 3, s.motes);
       if (canvas.dataset.ready !== 'true') canvas.dataset.ready = 'true';
     };
@@ -147,8 +152,10 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
       driftMotes(s.motes, delta, pose.time);
       pose.ripple = pose.ripple > .01 ? pose.ripple * Math.exp(-delta / .45) : 0;
       if (s.u < 1 && s.from && s.to) {
-        s.u = Math.min(1, s.u + delta / MORPH_SECONDS);
-        s.shown = lerpGenome(s.from, s.to, easeOut(s.u));
+        /* a steady picture's colours follow its ground, which changes at once, within a breath */
+        s.u = Math.min(1, s.u + delta / (s.steady ? STEADY_SECONDS : MORPH_SECONDS));
+        /* a steady blend eases in as well as out, so the colours drift rather than leap */
+        s.shown = lerpGenome(s.from, s.to, s.steady ? s.u * s.u * (3 - 2 * s.u) : easeOut(s.u));
       }
       s.paint();
     }, fps);
@@ -183,18 +190,19 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
     s.key = key;
     const next = genome(subject);
     if (!s.shown) {
-      s.from = s.to = s.shown = next;
+      /* a steady picture swells long and quiet: its finer ripples damped, kept so through every change */
+      s.from = s.to = s.shown = steady ? { ...next, amp: next.amp.map(row => row.map((v, k) => v * [1, .55, .2][k])) } : next;
       s.u = 1;
     } else {
       s.from = s.shown;
-      s.to = next;
+      s.to = steady ? { ...s.shown, colour: next.colour } : next;
       s.u = 0;
-      s.pose.ripple = 1;
+      if (!steady) s.pose.ripple = 1;
     }
     /* With the clock stopped the new palette must still show: land the
        morph and paint once, with no breath baked into the still. */
-    if (!active) { s.shown = next; s.u = 1; s.pose.ripple = 0; s.paint(); }
-  }, [subject.id, subject.accentA, subject.accentB, active]);
+    if (!active) { s.shown = s.to; s.u = 1; s.pose.ripple = 0; s.paint(); }
+  }, [subject.id, subject.accentA, subject.accentB, active, steady]);
 
   useEffect(() => {
     const s = state.current;

@@ -36,7 +36,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     body: 'Expanding access to education across schools, colleges, and training centers. Nurturing creativity and self reliance through libraries and arts initiatives.',
     cardImageAlt: 'Skill training classroom',
     shortTagline: 'Come for an evening of purpose — see how ENRICH comes to life.',
-    emblemCaption: 'Possibility, on every page.',
+    emblemCaption: 'Possibility on every page.',
     /* Figures from the SNCF activity report, September 2026. Youth skilled
        sums the NIMA, sewing and beautician programmes (4,114 + 16,500 + 631
        = 21,245); schools & colleges is 14 schools and 1 college. */

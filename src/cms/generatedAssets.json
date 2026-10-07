@@ -163,22 +163,6 @@
     "source": "/images/welcome-volunteers.jpg",
     "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
   },
-  "asset.PillarPhotoMosaic.heal-leaf-top-right": {
-    "source": "/images/heal-emblem/leaf-top-right.webp",
-    "label": "PillarPhotoMosaic · leaf-top-right.webp"
-  },
-  "asset.PillarPhotoMosaic.heal-leaf-top-left": {
-    "source": "/images/heal-emblem/leaf-top-left.webp",
-    "label": "PillarPhotoMosaic · leaf-top-left.webp"
-  },
-  "asset.PillarPhotoMosaic.heal-leaf-bottom-right": {
-    "source": "/images/heal-emblem/leaf-bottom-right.webp",
-    "label": "PillarPhotoMosaic · leaf-bottom-right.webp"
-  },
-  "asset.PillarPhotoMosaic.heal-leaf-bottom-left": {
-    "source": "/images/heal-emblem/leaf-bottom-left.webp",
-    "label": "PillarPhotoMosaic · leaf-bottom-left.webp"
-  },
   "asset.Reports.heal": {
     "source": "",
     "label": "Reports · heal (PDF, empty until uploaded)"
@@ -286,5 +270,21 @@
   "asset.MosaicOverture.enrich-book": {
     "source": "/images/emblem-marks/enrich-book.webp",
     "label": "MosaicOverture · enrich-book.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-top-right": {
+    "source": "/images/heal-emblem/photo-top-right.webp",
+    "label": "PillarPhotoMosaic · photo-top-right.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-top-left": {
+    "source": "/images/heal-emblem/photo-top-left.webp",
+    "label": "PillarPhotoMosaic · photo-top-left.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-bottom-right": {
+    "source": "/images/heal-emblem/photo-bottom-right.webp",
+    "label": "PillarPhotoMosaic · photo-bottom-right.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-bottom-left": {
+    "source": "/images/heal-emblem/photo-bottom-left.webp",
+    "label": "PillarPhotoMosaic · photo-bottom-left.webp"
   }
 }

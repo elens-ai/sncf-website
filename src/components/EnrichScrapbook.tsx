@@ -130,7 +130,7 @@ const Page: React.FC<{ side: Side; face: 'front' | 'back'; snap?: Snap; folio: n
   </div>
 );
 
-export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; motto: string; caption: string }> = ({ activities, name, motto, caption }) => {
+export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; motto: string; caption?: string }> = ({ activities, name, motto, caption }) => {
   const snaps = dealSnaps(activities);
   const leaves = Array.from({ length: Math.ceil(snaps.length / 2) }, (_, i) => ({ front: snaps[2 * i], back: snaps[2 * i + 1] }));
   const count = leaves.length;
@@ -314,9 +314,9 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
           );
         })}
       </div>
-      <figcaption className="scrapbook-caption">
+      {caption && <figcaption className="scrapbook-caption">
         <span>{caption}</span>
-      </figcaption>
+      </figcaption>}
     </figure>
   );
 };

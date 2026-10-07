@@ -16,7 +16,8 @@
   top: calc(var(--site-header-height, 72px) + 12px);
   z-index: 6;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* as many equal columns as there are tabs */
+  grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column;
   gap: 6px;
   padding: 6px;
   border-radius: 22px;

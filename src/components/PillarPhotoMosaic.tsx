@@ -38,16 +38,17 @@ const SHEEN_STOPS = SINE_STEPS.map(o => {
   const s = Math.sin(o * Math.PI * 2);
   return { offset: o, color: s >= 0 ? '#ffffff' : '#0b2a24', opacity: +(Math.abs(s) * (s >= 0 ? .12 : .09)).toFixed(3) };
 });
-/* The hero's Heal emblem carries the foundation's own photographs: one collage
-   per leaf (the Health City and its inauguration, the camps, the pharmacy and
-   lab, registration), each replaceable in the CMS. Each box places its image
-   over its leaf, in emblem units, in the order of the outline's paths; images
-   fill their box, so a replacement photo of any shape still covers its leaf. */
-const healHeroLeaves = (): { box: [number, number, number, number]; src: string }[] => [
-  { box: [61.62, 4.12, 76.77, 67.85], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-top-right", "/images/heal-emblem/leaf-top-right.webp") },
-  { box: [3.54, 20.12, 57.24, 51.52], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-top-left", "/images/heal-emblem/leaf-top-left.webp") },
-  { box: [61.62, 72.64, 30.81, 27.78], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-bottom-right", "/images/heal-emblem/leaf-bottom-right.webp") },
-  { box: [18.52, 73.15, 42.26, 38.38], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-leaf-bottom-left", "/images/heal-emblem/leaf-bottom-left.webp") },
+/* Heal's emblem carries the foundation's own photographs, one to a leaf: the yoga
+   day (top right), a blood donation camp (top left), the Health City (bottom
+   right) and an eye checkup camp (bottom left), each cropped to its leaf and
+   replaceable in the CMS. Each box places its image over its leaf, in emblem
+   units, in the order of the outline's paths; images fill their box, so a
+   replacement photo of any shape still covers its leaf. */
+const healLeaves = (): { box: [number, number, number, number]; src: string }[] => [
+  { box: [61.62, 4.12, 76.77, 67.85], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-top-right", "/images/heal-emblem/photo-top-right.webp") },
+  { box: [3.54, 20.12, 57.24, 51.52], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-top-left", "/images/heal-emblem/photo-top-left.webp") },
+  { box: [61.62, 72.64, 30.81, 27.78], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-bottom-right", "/images/heal-emblem/photo-bottom-right.webp") },
+  { box: [18.52, 73.15, 42.26, 38.38], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-bottom-left", "/images/heal-emblem/photo-bottom-left.webp") },
 ];
 
 /* Empower's figure is lifted by its companions (EMPOWER_COMPANIONS), here with
@@ -61,8 +62,8 @@ const TRIO_FIT = `translate(${TRIO.to[0]} ${TRIO.to[1]}) scale(${TRIO.scale}) tr
 
 export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boolean; heroArt?: boolean; solid?: boolean }> = ({ pillar, caption = true, heroArt = false, solid = false }) => {
   const logo = PILLAR_LOGOS[pillar];
-  /* Only the hero's Heal emblem shows the foundation's own photographs. */
-  const ownPhotos = heroArt && pillar === 'heal';
+  /* Heal's emblem shows the foundation's own photographs, one to a leaf, wherever it is drawn. */
+  const ownPhotos = pillar === 'heal';
   /* Empower's figure always stands with its companions. */
   const companions = pillar === 'empower';
   const clip = useId().replace(/:/g, '');
@@ -161,7 +162,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         <g id={`${clip}-photo-face`}>
         {solid ? <>{logo.paths.map(d => <path key={d} d={d} fill={logo.tint} stroke={logo.edge} strokeWidth=".3" strokeLinejoin="round" />)}</> : ownPhotos ? <>
           {/* the photographs keep their own colour, as in the foundation's print */}
-          {healHeroLeaves().map((leaf, i) => <g key={i} clipPath={`url(#${clip}-leaf-${i})`}>
+          {healLeaves().map((leaf, i) => <g key={i} clipPath={`url(#${clip}-leaf-${i})`}>
             <rect x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} fill={logo.edge} />
             <image href={leaf.src} x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} preserveAspectRatio="xMidYMid slice" />
           </g>)}

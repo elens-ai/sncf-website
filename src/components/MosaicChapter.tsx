@@ -86,8 +86,8 @@ export const MosaicChapter = React.memo(function MosaicChapter({
             </Link>
           {/* Homepage shortcuts lead directly to the cornerstone's tabs on Core Values. */}
           {id !== 'projects' && (
-            <nav className="activity-chapter-quick" aria-label={`${name}: ${getCMSCopy('copy.ImpactMosaic.quick-label', 'reports, gallery and stats')}`}>
-              {([['reports', getCMSCopy('copy.ImpactMosaic.quick-reports', 'Reports')], ['gallery', getCMSCopy('copy.ImpactMosaic.quick-gallery', 'Gallery')], ['stats', getCMSCopy('copy.ImpactMosaic.quick-stats', 'Stats')]] as const).map(([tab, label]) =>
+            <nav className="activity-chapter-quick" aria-label={`${name}: ${getCMSCopy('copy.ImpactMosaic.quick-label', 'reports and stats')}`}>
+              {([['reports', getCMSCopy('copy.ImpactMosaic.quick-reports', 'Reports')], ['stats', getCMSCopy('copy.ImpactMosaic.quick-stats', 'Stats')]] as const).map(([tab, label]) =>
                 <Link key={tab} to={`/core-values#${id}-${tab}`}>{label}</Link>)}
             </nav>
           )}

@@ -13,7 +13,7 @@ export const PILLAR_LOGOS = {
   enrich: {
     label: 'Enrich',
     paths: ['M18 17Q18 14 21 13C39 7 56 12 67 20Q70 22 70 26V62Q70 65 72 67V92C67 94 61 87 43 86C33 85 27 86 21 88Q18 89 18 85Z', 'M126 17Q126 14 123 13C105 7 88 12 77 20Q74 22 74 26V62Q74 65 72 67V92C77 94 83 87 101 86C111 85 117 86 123 88Q126 89 126 85Z'],
-    tint: '#2cacc0', edge: '#f8f8ff', caption: 'Possibility, on every page.', description: 'education, students and learning',
+    tint: '#2cacc0', edge: '#f8f8ff', caption: 'Possibility on every page.', description: 'education, students and learning',
   },
   empower: {
     label: 'Empower',
