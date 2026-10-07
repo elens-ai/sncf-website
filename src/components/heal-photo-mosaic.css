@@ -21,6 +21,8 @@
 .heal-photo-mosaic { position: relative; width: 100%; margin: 0 auto; }
 .heal-photo-mosaic::before { content: ''; position: absolute; inset: -4% -3% 8%; border-radius: 50%; background: radial-gradient(ellipse, #ecfff329, transparent 67%); pointer-events: none; }
 .heal-photo-mosaic > svg { display: block; position: relative; width: 100%; height: auto; overflow: visible; filter: brightness(1.12) saturate(1.1) drop-shadow(0 0 14px rgb(255 255 255 / .65)) drop-shadow(0 0 34px rgb(255 255 255 / .38)) drop-shadow(0 6px 8px rgb(8 35 29 / .15)); }
+.heal-photo-mosaic[data-pillar='heal']::before { content: none; }
+.heal-photo-mosaic[data-pillar='heal'] > svg { filter: brightness(1.12) saturate(1.1) drop-shadow(0 6px 8px rgb(8 35 29 / .15)); }
 .heal-photo-mosaic[data-pillar='empower'] > svg { filter: brightness(1.12) saturate(1.1) drop-shadow(0 0 14px rgb(255 255 255 / .75)) drop-shadow(0 0 34px rgb(255 255 255 / .45)); }
 .hero-heal-art:has(.heal-photo-mosaic[data-pillar='empower']) .pillar-art-contact-shadow { background: #fff; opacity: .55; }
 :is(.heal-photo-mosaic, .hero-heal-art) > figcaption { position: relative; text-align: center; color: var(--pillar-ui-ink, #24494b); font: 400 23px/1.4 var(--font-script); margin-top: 8px; }

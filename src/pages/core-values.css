@@ -234,6 +234,13 @@
    and of the page's rail parked under it (--rail-h), its counter at the top */
 .value-screen { --home-line: rgb(255 255 255 / 0.16); --home-ease: cubic-bezier(0.22, 1, 0.36, 1); --rail-h: 0px; z-index: 0; padding: 0; overflow: clip; }
 .value-screen > * { max-width: none; }
+.value-screen .heal-photo-mosaic[data-pillar='empower'] { --empower-companion-top: .5; --empower-companion-bottom: 0; }
+.value-screen .heal-photo-mosaic[data-pillar]::before { content: none; }
+.value-screen .heal-photo-mosaic[data-pillar] > svg,
+.value-screen .scrapbook-binding { filter: brightness(1.12) saturate(1.1); }
+.value-screen .heal-photo-mosaic[data-pillar='heal'] > svg { filter: brightness(1.12) saturate(1.1) drop-shadow(0 6px 8px rgb(8 35 29 / .15)); }
+.value-screen .scrapbook-ground,
+.value-screen .pillar-art-contact-shadow { display: none; }
 .value-screen > .mosaic-chapter.activity-chapter { border-top: 0; padding: calc(var(--site-header-height, 72px) + var(--rail-h) + 52px) 20px 32px; }
 .value-screen > .mosaic-stage-label { top: calc(var(--site-header-height, 72px) + var(--rail-h) + 14px); left: 20px; }
 .value-screen .activity-chapter-number { display: none; }
