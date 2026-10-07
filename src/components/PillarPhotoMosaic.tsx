@@ -3,7 +3,7 @@ import { ProjectsMosaicArt } from './ProjectsMosaicArt';
 import { resolveCMSMedia } from '../cms/media';
 import { resolveCMSAsset } from '../cms/runtime';
 import './heal-photo-mosaic.css';
-import { BOOK_COVER, DEPTH_TINT, EMPOWER_COMPANIONS, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
+import { BOOK_COVER, EMPOWER_COMPANIONS, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
 import { roomPhoto } from '../data/pavilionGallery';
 
@@ -150,7 +150,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         </g>)}
       </g>}
       <g className="pillar-mosaic-depth" aria-hidden="true">
-        {[6, 5, 4, 3, 2, 1].map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${-layer * .24} ${layer * .38})`} fill={layer > 4 ? '#234a4c' : DEPTH_TINT[pillar] ?? logo.tint} />)}
+        {[6, 5, 4, 3, 2, 1].map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${-layer * .24} ${layer * .38})`} fill={layer > 4 ? '#234a4c' : logo.tint} />)}
         <use href={`#${clip}-outline`} transform="translate(-.25 .4)" fill={logo.edge} />
       </g>
       <g className="heal-mosaic-leaves">
@@ -162,7 +162,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
             <image href={leaf.src} x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} preserveAspectRatio="xMidYMid slice" />
           </g>)}
           {logo.paths.map(d => <path key={d} d={d} fill="none" stroke={logo.edge} strokeWidth=".3" strokeLinejoin="round" />)}
-        </> : pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} edge={logo.edge} /> : <>
+        </> : pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} /> : <>
         {pillar === 'enrich' && <g clipPath={`url(#${clip}-cover)`}>
           <rect width="146" height="120" fill="#ffffff" />
         </g>}

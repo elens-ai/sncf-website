@@ -2910,8 +2910,6 @@
     "copy.WelcomeSplashScreen.44e3df1518ac": "Sant Nirankari Charitable Foundation Logo",
     "copy.WelcomeSplashScreen.56219e473693": "Service with Humility",
     "copy.CoreValuesPage.c7a3284847f9": "Preview a core value",
-    "copy.CoreValuesPage.d677190e0a99": "Service",
-    "copy.CoreValuesPage.bb8643e88aae": "with humility",
     "copy.CoreValuesPage.4109634bf723": "Compassion, made visible.",
     "copy.CoreValuesPage.5feceb66ffc8": "0",
     "copy.CoreValuesPage.e7b186e662f2": "Behind the numbers",
@@ -3421,8 +3419,6 @@
     "copy.PhotoCarousel.pause": "Pause the slideshow",
     "copy.PhotoCarousel.play": "Play the slideshow",
     "copy.PhotoCarousel.choose": "Choose a photograph",
-    "copy.ProjectOrbit.signature": "One purpose.",
-    "copy.ProjectOrbit.signature-script": "lasting impact",
     "copy.ProjectOrbit.label": "The projects",
     "copy.ProjectsPage.cover-impact": "Each project’s reported reach",
     "copy.PartnerCircle.sector-together": "Walking with us",
@@ -3746,8 +3742,8 @@
       "label": "InvitationCard · sncf-logo.webp"
     },
     "asset.projects.bloom": {
-      "source": "/images/projects-bloom.png?v=five",
-      "label": "projects · projects-bloom.png?v=five"
+      "source": "/images/projects-bloom.png?v=balanced",
+      "label": "projects · projects-bloom.png?v=balanced"
     },
     "/images/petals/petal-empower.webp": {
       "source": "/images/petals/petal-empower.webp",
@@ -3888,14 +3884,6 @@
     "asset.UnepSeal.logo": {
       "source": "/images/partners/unep.png",
       "label": "UnepSeal · unep.png"
-    },
-    "asset.ProjectsMosaicArt.health-city": {
-      "source": "/images/projects/health-city.webp",
-      "label": "ProjectsMosaicArt · health-city.webp"
-    },
-    "asset.ProjectsMosaicArt.adopted-villages": {
-      "source": "/images/programmes/adopted-villages-mandaura.webp",
-      "label": "ProjectsMosaicArt · adopted-villages-mandaura.webp"
     },
     "asset.GuidingForcePage.cover-portrait": {
       "source": "/images/satguru-mata-sudiksha-ji-portrait.webp",
@@ -4471,16 +4459,6 @@
         "page": "core-values",
         "section": "Page",
         "label": "Page · Preview a core value"
-      },
-      "copy.CoreValuesPage.d677190e0a99": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · Service"
-      },
-      "copy.CoreValuesPage.bb8643e88aae": {
-        "page": "core-values",
-        "section": "Page",
-        "label": "Page · with humility"
       },
       "copy.CoreValuesPage.4109634bf723": {
         "page": "core-values",
@@ -7027,16 +7005,6 @@
         "section": "Galleries",
         "label": "Galleries · Choose a photograph"
       },
-      "copy.ProjectOrbit.signature": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · One purpose."
-      },
-      "copy.ProjectOrbit.signature-script": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · lasting impact"
-      },
       "copy.ProjectOrbit.label": {
         "page": "projects",
         "section": "Page",
@@ -8132,7 +8100,7 @@
       "asset.projects.bloom": {
         "page": "other",
         "section": "3D model cards",
-        "label": "3D model cards · projects-bloom.png?v=five"
+        "label": "3D model cards · projects-bloom.png?v=balanced"
       },
       "/images/petals/petal-empower.webp": {
         "page": "home",
@@ -8308,16 +8276,6 @@
         "page": "other",
         "section": "Unep Seal",
         "label": "Unep Seal · unep.png"
-      },
-      "asset.ProjectsMosaicArt.health-city": {
-        "page": "other",
-        "section": "Projects Mosaic Art",
-        "label": "Projects Mosaic Art · health-city.webp"
-      },
-      "asset.ProjectsMosaicArt.adopted-villages": {
-        "page": "other",
-        "section": "Projects Mosaic Art",
-        "label": "Projects Mosaic Art · adopted-villages-mandaura.webp"
       },
       "asset.GuidingForcePage.cover-portrait": {
         "page": "guiding-force",

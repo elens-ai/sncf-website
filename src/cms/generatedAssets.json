@@ -136,8 +136,8 @@
     "label": "InvitationCard · sncf-logo.webp"
   },
   "asset.projects.bloom": {
-    "source": "/images/projects-bloom.png?v=five",
-    "label": "projects · projects-bloom.png?v=five"
+    "source": "/images/projects-bloom.png?v=balanced",
+    "label": "projects · projects-bloom.png?v=balanced"
   },
   "/images/petals/petal-empower.webp": {
     "source": "/images/petals/petal-empower.webp",
@@ -278,14 +278,6 @@
   "asset.UnepSeal.logo": {
     "source": "/images/partners/unep.png",
     "label": "UnepSeal · unep.png"
-  },
-  "asset.ProjectsMosaicArt.health-city": {
-    "source": "/images/projects/health-city.webp",
-    "label": "ProjectsMosaicArt · health-city.webp"
-  },
-  "asset.ProjectsMosaicArt.adopted-villages": {
-    "source": "/images/programmes/adopted-villages-mandaura.webp",
-    "label": "ProjectsMosaicArt · adopted-villages-mandaura.webp"
   },
   "asset.GuidingForcePage.cover-portrait": {
     "source": "/images/satguru-mata-sudiksha-ji-portrait.webp",

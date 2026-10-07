@@ -15,8 +15,6 @@
 @keyframes bloom-open { from { clip-path: circle(0% at var(--from)); } }
 @keyframes bloom-swell { 45% { scale: 1.035; } }
 
-/* the pale hub beneath the petals, filling the gaps between their curled bases and the badge */
-.bloom-hub { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .bloom-badge { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; filter: drop-shadow(0 1.2cqw 1.6cqw rgb(16 54 58 / 0.25)); }
 /* a fine ring of dashes turning about the badge */
 .bloom-ring { fill: none; stroke: color-mix(in srgb, var(--showcase-ink) 55%, #fff); stroke-width: 0.5; stroke-dasharray: 1.6 2.4; stroke-linecap: round; transform-box: fill-box; transform-origin: center; animation: bloom-ring 26s linear infinite; }

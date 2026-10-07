@@ -1,4 +1,4 @@
-import { PROJECTS_BADGE, PROJECTS_FIVE_FIT, PROJECTS_FIVE_OUTLINE } from './projectsLogoOutline';
+import { PROJECTS_LOGO_OUTLINE } from './projectsLogoOutline';
 import { HEAL_LOGO_OUTLINE } from './healLogoOutline';
 
 export type MosaicPillar = 'heal' | 'enrich' | 'empower' | 'projects';
@@ -24,14 +24,10 @@ export const PILLAR_LOGOS = {
     tint: '#db4293', edge: '#fff0f8', caption: 'Together, we rise.', description: 'environmental care, growing plants and sustainable communities',
   },
   projects: {
-    label: 'Projects', paths: PROJECTS_FIVE_OUTLINE, tint: '#78bdc3', edge: '#edfbf6',
+    label: 'Projects', paths: PROJECTS_LOGO_OUTLINE, tint: '#78bdc3', edge: '#edfbf6',
     caption: 'One purpose. Lasting impact.', description: 'forestry, water conservation and healthcare projects surrounding the SNCF badge',
   },
 } satisfies Record<MosaicPillar, { label: string; paths: string[]; tint: string; edge: string; caption: string; description: string }>;
-
-/* An emblem's thickness is drawn in its pillar's colour, but Projects' light teal reads as a pale outline on
-   its own teal ground rather than as depth, so its thickness is a shade deeper, as the other pillars' are. */
-export const DEPTH_TINT: Partial<Record<MosaicPillar, string>> = { projects: '#3f8f99' };
 
 /* EMPOWER, ONE OF A GROUP. Wherever Empower's figure is shown — its photo
    emblem, its flat marks and icons — it stands with two companions: the same
@@ -54,20 +50,3 @@ export const EMPOWER_TRIO_MARK_FIT = (() => {
   const cx = EMPOWER_TRIO_BOX.x + EMPOWER_TRIO_BOX.w / 2, cy = EMPOWER_TRIO_BOX.y + EMPOWER_TRIO_BOX.h / 2;
   return `translate(73 60) scale(${s.toFixed(4)}) translate(${-cx} ${-cy})`;
 })();
-
-/* PROJECTS, A PETAL FOR EACH PROJECT. The five petals (projectsLogoOutline's PROJECTS_FIVE_OUTLINE), each tucked
-   under the next round the badge, and what drawing them needs: the badge they turn round, the scale they are drawn
-   at against the three petals the emblem had, the pale hub beneath them that fills the gaps between their curled
-   bases and the badge, and each petal whole (uncut), for an edge that runs along its own outline only. */
-export const PROJECTS_SCALE = PROJECTS_FIVE_FIT.scale;
-export const PROJECTS_CENTRE = [
-  PROJECTS_BADGE[0] * PROJECTS_FIVE_FIT.scale + PROJECTS_FIVE_FIT.dx,
-  PROJECTS_BADGE[1] * PROJECTS_FIVE_FIT.scale + PROJECTS_FIVE_FIT.dy,
-] as const;
-export const PROJECTS_HUB_R = 20 * PROJECTS_FIVE_FIT.scale;
-/** The transform that draws the upright petal (PROJECTS_LOGO_OUTLINE[0]) as petal k of the five, uncut. */
-export const projectsPetalTransform = (k: number) =>
-  `translate(${PROJECTS_FIVE_FIT.dx} ${PROJECTS_FIVE_FIT.dy}) scale(${PROJECTS_FIVE_FIT.scale}) rotate(${k * 72} ${PROJECTS_BADGE[0]} ${PROJECTS_BADGE[1]})`;
-/** The petals a petal lies over: the two before it, round the flower. The two after it lie over it. */
-export const projectsUnder = (k: number) => [(k + 4) % 5, (k + 3) % 5];
-export const projectsOver = (k: number) => [(k + 1) % 5, (k + 2) % 5];

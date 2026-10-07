@@ -91,7 +91,7 @@ let MARKS: Record<string, Mark> = bindCMSValue(() => ({
   // Matching still of the shared 3D Projects bloom.
   projects: {
     color: '#0d6a8c',
-    img: resolveCMSAsset('asset.projects.bloom', '/images/projects-bloom.png?v=five'),
+    img: resolveCMSAsset('asset.projects.bloom', '/images/projects-bloom.png?v=balanced'),
     art: null,
   },
 
