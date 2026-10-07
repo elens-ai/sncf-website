@@ -7,11 +7,11 @@ import { Trees } from 'lucide-react';
 import type { Look, ModelView } from './pillarRenderer';
 export const MODEL_PILLARS = new Set(['heal', 'enrich', 'empower', 'projects']);
 
-export function PillarModelCard({ id, label, animate, active = false, rotationRef, look = 'light' }: {
-  id: string; label: string; animate: boolean; active?: boolean; rotationRef?: { current: number }; look?: Look;
+export function PillarModelCard({ id, label, animate, active = false, rotationRef, look = 'light', modelUrl }: {
+  id: string; label: string; animate: boolean; active?: boolean; rotationRef?: { current: number }; look?: Look; modelUrl?: string;
 }) {
   useCMSRevision();
-  const modelURL = pillarModelUrl(id);
+  const modelURL = modelUrl ?? pillarModelUrl(id);
   const hostRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<ModelView | null>(null);
   const stateRef = useRef({ active, animate, rotationRef });

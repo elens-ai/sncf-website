@@ -20,6 +20,10 @@
 .service-compass-model { position: absolute; inset: 0 7% 35%; }
 /* the hero's emblem, as large as the sculpture it replaced; its art (not the svg's uneven margins) centred on the face */
 .service-compass-model .hero-heal-art { position: absolute; left: 50%; top: 50%; width: 160%; translate: -44.25% -46%; }
+.service-compass[data-value] .service-compass-sculpture { top: 52.5%; width: 40%; height: auto; aspect-ratio: 1; z-index: 1; }
+.service-compass[data-value] .service-compass-model { inset: 0; }
+.service-compass[data-value] .service-compass-shadow { bottom: 8%; }
+.service-compass[data-value] .service-compass-values { z-index: 2; }
 .service-compass-shadow { position: absolute; width: 60%; height: 10%; left: 20%; bottom: 30%; background: radial-gradient(ellipse,#29493c21,transparent 70%); transform: scaleY(.65); }
 .service-compass-signature { position: absolute; left: -10%; right: -10%; bottom: 0; isolation: isolate; text-align: center; color: #2d5142; font: 500 clamp(19px,2.2vw,28px)/1 var(--font-sans); letter-spacing: -.04em; }
 /* a clearing in the face's etched lines, so the motto reads clean */

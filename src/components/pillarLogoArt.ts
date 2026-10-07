@@ -43,8 +43,8 @@ export const EMPOWER_COMPANIONS = [
   { dx: -36, dy: 18, k: 0.8 },
   { dx: 36, dy: 18, k: 0.8 },
 ] as const;
-export const companionTransform = (mate: { dx: number; dy: number; k: number }) =>
-  `translate(${EMPOWER_MIDDLE[0] + mate.dx} ${EMPOWER_MIDDLE[1] + mate.dy}) scale(${mate.k}) translate(${-EMPOWER_MIDDLE[0]} ${-EMPOWER_MIDDLE[1]})`;
+export const companionTransform = (mate: { dx: number; dy: number; k: number }, tilt = 0) =>
+  `translate(${EMPOWER_MIDDLE[0] + mate.dx} ${EMPOWER_MIDDLE[1] + mate.dy}) rotate(${tilt}) scale(${mate.k}) translate(${-EMPOWER_MIDDLE[0]} ${-EMPOWER_MIDDLE[1]})`;
 /** The three together, in emblem units: from the left companion's raised hand to the right one's, and from the
     figure's head to the companions' feet. */
 export const EMPOWER_TRIO_BOX = { x: -20.2, y: 5.4, w: 179, h: 109.7 } as const;

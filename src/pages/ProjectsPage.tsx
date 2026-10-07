@@ -82,7 +82,6 @@ const ProjectsCover: React.FC = () => {
   return <section ref={root} className="projects-cover" data-active={active} style={{ '--cover-ink': current.ink, '--cover-light': current.light, '--ground-a': ground?.accentA, '--ground-b': ground?.accentB } as React.CSSProperties} aria-labelledby="projects-heading">
     <div className="projects-cover-ground" aria-hidden="true">
       {ground && <MosaicWaves subject={subjectFor(ground)} active={active && !calm} input={waveInput} scale={3} fps={24} />}
-      <PillarArtwork pillarId="projects" />
     </div>
     <div className="projects-cover-copy">
       <p className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.982a72dda0d4", "Service that takes shape")}</p>

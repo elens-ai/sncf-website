@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
-import { PillarHeroVisual } from './PillarHeroVisual';
+import { PillarModelCard } from './PillarModelCard';
 import './value-compass.css';
 import './project-orbit.css';
 
@@ -76,9 +76,9 @@ export function ProjectOrbit({ projects, choice, onChange, active, centre, signa
         <span className="service-compass-etch service-compass-etch-three" />
       </div>
       <div className="service-compass-sculpture" aria-hidden="true">
-        <div className="service-compass-model">{centre ?? <PillarHeroVisual pillar="projects" active={shown} caption={false} />}</div>
+        <div className="service-compass-model">{centre ?? <div className="project-orbit-bloom"><PillarModelCard id="projects" label="Projects bloom" active={active && shown} animate={active && !reduced} modelUrl="/models/projects.glb?v=sncf-bloom-balanced" /></div>}</div>
         <div className="service-compass-shadow" />
-        {signature !== null && <div className="service-compass-signature">{signature ?? <>{c('signature', 'One purpose.')}<br /><em>{c('signature-script', 'lasting impact')}</em></>}</div>}
+        {signature != null && <div className="service-compass-signature">{signature}</div>}
       </div>
       <ul className="project-orbit-nodes" aria-label={label ?? c('label', 'The projects')}
         onPointerEnter={() => setOver(true)} onPointerLeave={() => setOver(false)}
