@@ -3,8 +3,8 @@ import { HEAL_LOGO_OUTLINE } from './healLogoOutline';
 
 export type MosaicPillar = 'heal' | 'enrich' | 'empower' | 'projects';
 
-/** The Enrich book's cover, showing past its pages at the sides and the foot. */
-export const BOOK_COVER = 'M6 23L11.65 20V95C35 92 54 97 71.3 105C94 97 116 92 132.34 95V20L138 23V105H6Z';
+/** Rounded cover and inset pages follow the supplied Enrich GLB's front silhouette. */
+export const BOOK_COVER = 'M8 24Q8 21 12 19Q14 18 14 14Q14 11 18 9C37 3 55 7 72 18C89 7 107 3 126 9Q131 10 131 14Q130 18 134 20Q136 21 136 24V96Q136 100 132 100H83C79 100 78 103 72 103C66 103 65 100 61 100H12Q8 100 8 96Z';
 
 // Curves measured in reference-image coordinates, then uniformly scaled to the
 // shared viewBox. The book's continuous spine and Empower's flat base are intentional.
@@ -12,8 +12,8 @@ export const PILLAR_LOGOS = {
   heal: { label: 'Heal', paths: HEAL_LOGO_OUTLINE, tint: '#1c9b68', edge: '#f1fff5', caption: 'Care, in every leaf.', description: 'healthcare professionals and patient care' },
   enrich: {
     label: 'Enrich',
-    paths: ['M11.650 10.252C32.620 3.728 55.454 6.291 71.298 20.271L71.298 102.986C52.425 94.598 31.688 90.171 11.650 95.064Z', 'M71.298 20.271C87.841 6.524 110.442 3.728 132.344 10.252L132.344 95.064C111.141 90.404 90.637 94.831 71.298 102.986Z'],
-    tint: '#2cacc0', edge: '#e9faff', caption: 'Possibility, on every page.', description: 'education, students and learning',
+    paths: ['M18 17Q18 14 21 13C39 7 56 12 67 20Q70 22 70 26V62Q70 65 72 67V92C67 94 61 87 43 86C33 85 27 86 21 88Q18 89 18 85Z', 'M126 17Q126 14 123 13C105 7 88 12 77 20Q74 22 74 26V62Q74 65 72 67V92C77 94 83 87 101 86C111 85 117 86 123 88Q126 89 126 85Z'],
+    tint: '#2cacc0', edge: '#f8f8ff', caption: 'Possibility, on every page.', description: 'education, students and learning',
   },
   empower: {
     label: 'Empower',

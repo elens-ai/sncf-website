@@ -1,12 +1,11 @@
 import React from 'react';
-import { ArrowUpRight, Award, BarChart3, BookOpen, Compass, FileText, Handshake, Hospital, Images, Mail, Milestone, type LucideIcon } from 'lucide-react';
+import { ArrowUpRight, Award, BookOpen, Compass, Handshake, Hospital, Mail, Milestone, type LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { resolveCMSMedia } from '../cms/media';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { ACTIVITIES, type Activity } from '../data/activities';
 import type { NavLink, PillarGroup } from '../data/navigation';
 import { PILLARS } from '../data/pillars';
-import { SDGS, goalsOf } from '../data/sdgs';
 import { slug } from '../utils/slug';
 import { ACTIVITY_SYMBOLS } from './activitySymbols';
 import { UnSeal } from './UnAffiliation';
@@ -15,9 +14,7 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.NavPanels.${key}`,
 
 /* THE MENUS' PANELS, each a small map of what its page holds.
      · Core Values: a card for each cornerstone (its door, with its leading
-       figure and the UN goals it advances; its programmes, each with its
-       symbol; and a way straight into its Reports, Gallery and Stats), then
-       the way to all three and the foundation's UN standing.
+       figure and its programmes, each with its symbol).
      · Projects: a card for each project (its photograph, symbol and leading
        figure), and beside them the Health City and the way to all projects.
      · Any other menu (Who we are): its links, each with a symbol and a line
@@ -38,11 +35,6 @@ const programmeOf = (href: string): Activity | undefined => {
   return path === '/core-values' ? ACTIVITIES.find(a => a.id === hash) : path === '/projects' ? ACTIVITIES.find(a => a.pillarId === 'projects' && slug(a.title) === hash) : undefined;
 };
 const symbolOf = (activity?: Activity) => (activity?.icon ? ACTIVITY_SYMBOLS[activity.icon] : undefined);
-const TABS: { id: 'reports' | 'gallery' | 'stats'; icon: LucideIcon; name: () => string }[] = [
-  { id: 'reports', icon: FileText, name: () => c('reports', 'Reports') },
-  { id: 'gallery', icon: Images, name: () => c('gallery', 'Gallery') },
-  { id: 'stats', icon: BarChart3, name: () => c('stats', 'Stats') },
-];
 
 export const ValuesPanel: React.FC<{ groups: PillarGroup[]; onNavigate: () => void }> = ({ groups, onNavigate }) => (
   <>
@@ -61,9 +53,6 @@ export const ValuesPanel: React.FC<{ groups: PillarGroup[]; onNavigate: () => vo
               <span className="nvroom-name font-artistic-display">{group.title}</span>
               <span className="nvroom-blurb">{group.blurb}</span>
               {lead && <span className="nvroom-figure"><strong>{lead.headline.value}</strong> {lead.headline.label}</span>}
-              <span className="nvroom-goals" aria-hidden="true">
-                {goalsOf(programmes.map(a => a.id)).map(goal => <i key={goal} title={`SDG ${goal}: ${SDGS[goal].name}`} style={{ background: SDGS[goal].color }} />)}
-              </span>
             </Go>
             <ul className="nvroom-index">
               {rows.map(link => {
@@ -79,23 +68,10 @@ export const ValuesPanel: React.FC<{ groups: PillarGroup[]; onNavigate: () => vo
                 );
               })}
             </ul>
-            {/* straight into the cornerstone's tabs on Core Values */}
-            <div className="nvroom-tabs" aria-label={`${group.title}: ${c('tabs', 'reports, gallery and stats')}`} role="group">
-              {TABS.map(({ id, icon: Icon, name }) => (
-                <Go key={id} link={{ label: name(), href: `/core-values#${group.pillarId}-${id}` }} onNavigate={onNavigate}>
-                  <Icon size={13} strokeWidth={1.8} aria-hidden="true" />{name()}
-                </Go>
-              ))}
-            </div>
+
           </div>
         );
       })}
-    </div>
-    <div className="nvpanel-foot">
-      <Go link={{ label: '', href: '/core-values' }} className="nvpanel-explore" onNavigate={onNavigate}>
-        {c('explore-values', 'Explore the three cornerstones')}<ArrowUpRight size={15} aria-hidden="true" />
-      </Go>
-      <UnSeal />
     </div>
   </>
 );

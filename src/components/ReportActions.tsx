@@ -49,6 +49,7 @@ export const ReportActions: React.FC<{
       period: programme.period,
       dataPoints: programme.dataPoints,
       goals: (PROGRAMME_SDGS[programme.id] ?? []).map(goal => `SDG ${goal} ${SDGS[goal].name}`),
+
     })),
   });
   return (

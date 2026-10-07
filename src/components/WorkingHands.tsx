@@ -33,7 +33,7 @@ export const splitFigure = (text: string): [string, string] => {
   return m ? [m[1], m[2]] : ['', text];
 };
 
-/** The lotus, petal by petal, in the colours of the logo's own petals. Every
+/** The star, leaf by leaf, in the colours of the foundation's emblem. Every
     figure is read out of the record (a CMS edit flows through); a way whose
     figure has gone from the record drops out rather than printing a blank. */
 export const handWays = (reach: string): HandWay[] => {
@@ -109,30 +109,19 @@ export const HandsProof: React.FC<{ way: HandWay; told: boolean }> = ({ way, tol
 
 /* ---------- the bloom ---------- */
 
-/* Drawn in a 600-wide box: five petals rising from one arc, the way the
-   logo's lotus does, and the two hands of the logo cupped beneath them. */
-const BASE: [number, number] = [300, 430];
-const PETALS = [
-  /* back to front, so the middle petal stands over the rest */
-  { slot: 'outer-left', angle: -66, length: 236, width: 158, dx: -58, dy: 10 },
-  { slot: 'outer-right', angle: 66, length: 236, width: 158, dx: 58, dy: 10 },
-  { slot: 'inner-left', angle: -33, length: 292, width: 178, dx: -26, dy: 4 },
-  { slot: 'inner-right', angle: 33, length: 292, width: 178, dx: 26, dy: 4 },
-  { slot: 'centre', angle: 0, length: 340, width: 204, dx: 0, dy: 0 },
-];
+/* Five swept leaves share a small open centre, like the reference star. */
+const BASE: [number, number] = [300, 300];
+const PETALS = ['centre', 'inner-right', 'outer-right', 'outer-left', 'inner-left'].map((slot, index) => {
+  const angle = index * 72;
+  const radians = angle * Math.PI / 180;
+  return { slot, angle, length: 218, width: 164, dx: 24 * Math.sin(radians), dy: -24 * Math.cos(radians) };
+});
 type Petal = (typeof PETALS)[number];
-/* which way sits on which petal: the hands in the middle, the rest outwards in the lede's order */
 const SLOT_OF: Record<string, string> = { hands: 'centre', hospitals: 'inner-right', classrooms: 'inner-left', forests: 'outer-left', flood: 'outer-right' };
-/* the logo's figures: a dot for a head between the petals */
-const HEADS = [
-  { angle: -50, r: 276, color: '#f81170' }, { angle: -16, r: 330, color: '#6663b5' },
-  { angle: 16, r: 330, color: '#09a6cf' }, { angle: 50, r: 276, color: '#69b947' },
-];
 
-/** a petal pointing up from (0, 0): fuller below the middle, drawn to a point */
 const petal = (length: number, width: number) => {
   const h = length, w = width / 2;
-  return `M0 0C${-w * 1.18} ${-h * 0.2} ${-w * 1.02} ${-h * 0.74} 0 ${-h}C${w * 1.02} ${-h * 0.74} ${w * 1.18} ${-h * 0.2} 0 0Z`;
+  return `M0 0C${-w * .9} ${-h * .18} ${-w * 1.22} ${-h * .69} ${-w * .35} ${-h}C${w * 1.18} ${-h * .9} ${w * 1.28} ${-h * .3} 0 0Z`;
 };
 /** a line of water across a square of the given side, a wavelength longer at
     each end so it can drift one wavelength and loop without a seam */
@@ -141,12 +130,10 @@ const wave = (side: number, y: number) => {
   const from = -side / 2 - WAVE, halves = Math.ceil((side + WAVE * 2) / (WAVE / 2));
   return `M${from} ${y}q${WAVE / 4} -7 ${WAVE / 2} 0${` t${WAVE / 2} 0`.repeat(halves)}`;
 };
-const polar = (r: number, deg: number): [number, number] => [BASE[0] + r * Math.sin((deg * Math.PI) / 180), BASE[1] - r * Math.cos((deg * Math.PI) / 180)];
 
 export const HandsBloom: React.FC<{ ways: HandWay[]; current: number; onPick: (i: number) => void }> = ({ ways, current, onPick }) => {
   const id = useId().replace(/:/g, '');
   const lit = ways[current];
-  const palm = resolveCMSAsset('asset.WorkingHands.palm', '/images/petals/palm.webp');
   /* one petal, its photograph upright inside the tilt (or, with none, its water) */
   const draw = (p: Petal, way: HandWay, i: number, front = false) => {
     const [x, y] = [BASE[0] + p.dx, BASE[1] + p.dy];
@@ -182,7 +169,7 @@ export const HandsBloom: React.FC<{ ways: HandWay[]; current: number; onPick: (i
   const placed = PETALS.map(p => { const i = ways.findIndex(way => SLOT_OF[way.id] === p.slot); return { p, i, way: ways[i] }; }).filter(x => x.way);
   const chosen = placed.find(x => x.i === current);
   return (
-    <svg className="hands-bloom" viewBox="0 46 600 494" aria-hidden="true" style={{ '--lit': lit?.color } as React.CSSProperties}>
+    <svg className="hands-bloom" viewBox="0 0 600 600" aria-hidden="true" style={{ '--lit': lit?.color } as React.CSSProperties}>
       <defs>
         <radialGradient id={`${id}-halo`}>
           <stop offset="0" stopColor="var(--lit)" stopOpacity="0.3" />
@@ -196,17 +183,11 @@ export const HandsBloom: React.FC<{ ways: HandWay[]; current: number; onPick: (i
         {PETALS.map(p => <clipPath key={p.slot} id={`${id}-${p.slot}`}><path d={petal(p.length, p.width)} /></clipPath>)}
       </defs>
 
-      <circle className="hands-halo" cx="300" cy="290" r="280" fill={`url(#${id}-halo)`} />
+      <circle className="hands-halo" cx="300" cy="300" r="270" fill={`url(#${id}-halo)`} />
       {placed.map(({ p, i, way }) => draw(p, way, i))}
       {/* the petal being read comes to the front, whole */}
       {chosen && draw(chosen.p, chosen.way, chosen.i, true)}
-      {HEADS.map(h => { const [x, y] = polar(h.r, h.angle); return <circle key={h.angle} className="hands-head" cx={x} cy={y} r="10" fill={h.color} />; })}
 
-      {/* the logo's two hands, cupped: one as drawn, its twin turned to face it */}
-      <g className="hands-palms">
-        <image href={palm} x="300" y="408" width="296" height="112" preserveAspectRatio="none" />
-        <image href={palm} x="300" y="408" width="296" height="112" preserveAspectRatio="none" transform="translate(600 0) scale(-1 1)" />
-      </g>
     </svg>
   );
 };

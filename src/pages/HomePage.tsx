@@ -412,7 +412,7 @@ export default function HomePage() {
   };
 
   return (
-    <div ref={pageRef} className="home-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans select-none" data-hero-theme={currentPillar.id}>
+    <div ref={pageRef} className="home-page relative min-h-screen w-full flex flex-col bg-deep-blue font-sans select-none" data-hero-theme={currentPillar.id}>
       {/* One fixed color surface beneath the hero and every following section.
           The active chapter takes over the palette as it enters view. */}
       <div className="accent-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />

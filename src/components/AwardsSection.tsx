@@ -56,6 +56,20 @@ let STANDIN = bindCMSValue(() => ([
     'Youth empowerment, plantation drives and disaster relief.'),
 ]), value => { STANDIN = value; });
 
+// Lead with major national and international recognitions, then retain the archive order.
+const LEADING_HONOURS = [
+  'csr-summit-most-impactful-ngo-2024',
+  'queens-golden-jubilee-award-2015',
+  'nbtc-award-of-excellence-2016',
+  'unep-world-environment-day-2024',
+  'pm-cares-2020',
+  'ministry-of-culture-project-amrit-2023',
+];
+const honourPriority = (award: Award) => {
+  const index = LEADING_HONOURS.indexOf(award.id);
+  return index >= 0 ? index : award.featured ? LEADING_HONOURS.length : LEADING_HONOURS.length + 1;
+};
+
 /** AWARDS & RECOGNITIONS, as an archive's page of fragments: a quiet heading
     (its two lines of text, and beside them the years, from the first honour
     to this one), and
@@ -68,10 +82,11 @@ export const AwardsSection: React.FC = () => {
   const inView = useSectionActivity(rootRef);
   const [calm, setCalm] = useState(false);
   const [shown, setShown] = useState(false);
+  const [fieldReady, setFieldReady] = useState(false);
   const [target, setTarget] = useState<LightboxTarget | null>(null);
   const items: Item[] = useMemo(() => {
     void revision;
-    return AWARDS.length ? AWARDS.filter(a => a.photos?.length).map(a => ({
+    return AWARDS.length ? AWARDS.filter(a => a.photos?.length).sort((a, b) => honourPriority(a) - honourPriority(b)).map(a => ({
       key: a.id, src: a.photos![0].src, alt: a.photos![0].alt,
       focal: a.photos![0].focal, ghost: a.year, award: a, photos: a.photos!,
     })) : STANDIN;
@@ -87,6 +102,28 @@ export const AwardsSection: React.FC = () => {
     sync(); mq.addEventListener('change', sync);
     return () => mq.removeEventListener('change', sync);
   }, []);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const simple = calm || window.innerWidth < 640;
+      const progress = simple ? 1 : Math.min(1, Math.max(0, (70 - root.getBoundingClientRect().top) / (window.innerHeight * 0.85)));
+      root.style.setProperty('--awards-spread', String(progress));
+      root.style.setProperty('--awards-heading-opacity', String(Math.max(0, 1 - progress * 2)));
+      setFieldReady(simple || progress > 0.45);
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [calm]);
   const open = useCallback((honour: number, photo: number) => {
     const item = items[honour];
     if (item) setTarget({ award: item.award, photos: item.photos, index: photo });
@@ -95,6 +132,7 @@ export const AwardsSection: React.FC = () => {
 
   return <section id="awards-section" ref={rootRef} className="recognition-section" data-arrived={shown} data-active={inView}
     aria-label={getCMSCopy('copy.AwardsSection.589b32fb4660', 'Awards and recognitions')}>
+    <div className="recognition-viewport">
     <header className="recognition-heading honour-heading">
       <div>
         <p className="continuity-eyebrow"><span />{getCMSCopy('copy.AwardsSection.22466b5a68ad', 'Recognition')}</p>
@@ -108,9 +146,12 @@ export const AwardsSection: React.FC = () => {
         <div><dt>{getCMSCopy('copy.AwardsSection.meta-years', 'Years')}</dt><dd>{span}</dd></div>
       </dl>}
     </header>
+    <div className="recognition-field" inert={!fieldReady}>
     {items.length
-      ? <HonourPile honours={items} arrived={shown} running={inView && target === null} calm={calm} onOpen={open} />
+      ? <HonourPile honours={items} arrived={shown} running={inView && fieldReady && target === null} calm={calm} onOpen={open} />
       : <p className="recognition-intro">New recognitions will appear here as they are added to our archive.</p>}
+    </div>
+    </div>
     <AwardLightbox target={target} onClose={close} onNavigate={i => setTarget(t => t ? { ...t, index: i } : null)} />
   </section>;
 };

@@ -31,11 +31,11 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.EnrichScrapbook.${
 /* Geometry, in the emblem's own units (pillarLogoArt). Both page boxes are as
    wide as the right page, so a leaf turned over lands exactly on the left. */
 const [LEFT_PAGE, RIGHT_PAGE] = PILLAR_LOGOS.enrich.paths;
-const SPINE = 71.298;
-const PAGE_W = 132.344 - SPINE;
+const SPINE = 72;
+const PAGE_W = 54;
 const LEFT_X = SPINE - PAGE_W;
-const PAGE_TOP = 6.4;
-const PAGE_H = 97;
+const PAGE_TOP = 8;
+const PAGE_H = 86;
 /* The whole book, its cover included. */
 const VIEW = { x: 2, y: 2, w: 142, h: 108 };
 
@@ -233,11 +233,11 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
   /* The thickness of the leaves on either side, under the pages. */
   const stack = (side: Side, edges: number) => Array.from({ length: edges }, (_, k) => edges - k).map(depth => (
     <path key={`${side}-${depth}`} className="scrapbook-stack" d={SIDES[side].d}
-      transform={`translate(${(side === 'left' ? -0.32 : 0.32) * depth} ${0.7 * depth})`} />
+      transform={`translate(0 ${0.38 * depth})`} />
   ));
 
   return (
-    <figure ref={root} className="enrich-scrapbook" style={{ '--turn-ms': `${TURN_MS}ms` } as React.CSSProperties} aria-label={c('label', 'Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres')}>
+    <figure ref={root} className="enrich-scrapbook" style={{ '--turn-ms': `${TURN_MS}ms`, '--sb-teal': PILLAR_LOGOS.enrich.tint, '--sb-edge': PILLAR_LOGOS.enrich.edge } as React.CSSProperties} aria-label={c('label', 'Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres')}>
       <div
         className="scrapbook-book"
         data-hover={hover && !inAir ? hover : undefined}
@@ -246,15 +246,11 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
       >
         <svg className="scrapbook-binding" viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`} aria-hidden="true" focusable="false">
           <defs>
-            {/* the cloth in the home page's Enrich book's teal (PillarPhotoMosaic): its tint washed over a photograph, as it renders */}
-            <linearGradient id={`${ids}-cloth`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#4d969a" />
-              <stop offset="1" stopColor="#2e7378" />
-            </linearGradient>
             <filter id={`${ids}-soft`} x="-10%" y="-200%" width="120%" height="500%"><feGaussianBlur stdDeviation="1.4" /></filter>
           </defs>
           <ellipse className="scrapbook-ground" cx={SPINE} cy="105.6" rx="64" ry="2.4" filter={`url(#${ids}-soft)`} />
-          <path className="scrapbook-cover" d={BOOK_COVER} fill={`url(#${ids}-cloth)`} />
+          <path d={BOOK_COVER} fill="#238fa7" transform="translate(-1 1.4)" />
+          <path className="scrapbook-cover" d={BOOK_COVER} fill={PILLAR_LOGOS.enrich.tint} />
           {stack('left', Math.min(4, turned, landed))}
           {stack('right', Math.min(4, count - Math.max(turned, landed)))}
         </svg>

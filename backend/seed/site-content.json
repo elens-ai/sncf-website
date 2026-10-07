@@ -3349,7 +3349,7 @@
     "copy.ProjectsPage.gallery-band": "photographs & films",
     "copy.PillarGallery.all": "Every programme",
     "copy.PillarGallery.filter": "Show the photographs of",
-    "copy.Sayings.heal-hindi": "रक्त नालियों में नहीं, नाड़ियों में बहे।",
+    "copy.Sayings.heal-hindi": "रक्त नाड़ियों में बहे, नालियों में नहीं।",
     "copy.Sayings.heal-english": "Blood should flow in veins, not in drains.",
     "copy.Sayings.heal-by": "Nirankari Baba Hardev Singh Ji Maharaj",
     "copy.Sayings.enrich-english": "We need to inspire everyone to take action, not just with words, but with deeds.",
@@ -6658,7 +6658,7 @@
       "copy.Sayings.heal-hindi": {
         "page": "everywhere",
         "section": "Sayings & slogans",
-        "label": "Sayings & slogans · रक्त नालियों में नहीं, नाड़ियों में बहे।"
+        "label": "Sayings & slogans · रक्त नाड़ियों में बहे, नालियों में नहीं।"
       },
       "copy.Sayings.heal-english": {
         "page": "everywhere",

@@ -44,7 +44,7 @@ export function EventsPage() {
   };
 
   return (
-    <div className="home-page events-page relative min-h-screen w-full flex flex-col bg-neutral-950 font-sans">
+    <div className="home-page events-page relative min-h-screen w-full flex flex-col bg-deep-blue font-sans">
       <div className="accent-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
       <CMSSection id="shared.Header"><Header
         currentPillar={heal}

@@ -15,7 +15,7 @@
 
 
 /* the creed */
-.who-story .who-mark { padding: 0 0.08em; border-radius: 0.2em; color: color-mix(in srgb, var(--mark) 80%, #1d2a24); background: linear-gradient(transparent 58%, color-mix(in srgb, var(--mark) 20%, transparent) 58%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.who-story .who-mark { padding: 0 0.08em; border-radius: 0.2em; color: color-mix(in srgb, var(--mark) 80%, #102e56); background: linear-gradient(transparent 58%, color-mix(in srgb, var(--mark) 20%, transparent) 58%); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .who-editorial .who-story .ww-prose em { font: 400 1.45em/1 var(--font-script); color: #a75e48; }
 
 /* the standing, as a strip of facts */

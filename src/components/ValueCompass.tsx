@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { getCMSCopy } from '../cms/runtime';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { resolveCMSMedia } from '../cms/media';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PILLARS } from '../data/pillars';
-import { PillarModelCard } from './PillarModelCard';
+import { EMPOWER_COMPANIONS, PILLAR_LOGOS, companionTransform } from './pillarLogoArt';
 import { createFrameClock } from '../utils/frameClock';
 import './value-compass.css';
 
@@ -19,6 +18,7 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
   held?: boolean;
 }) {
   useCMSRevision();
+  const companionFade = useId();
   const selected = VALUES.indexOf(choice);
   const [reduced, setReduced] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -28,11 +28,7 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
   const reached = useRef(selected);
   const change = useRef(onChange);
   change.current = onChange;
-  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
-  /* The emblem enters the first time the compass is in view, then stays, even
-     while a dialog covers the page. */
-  const [shown, setShown] = useState(active);
-  useEffect(() => { if (active) setShown(true); }, [active]);
+
 
   useEffect(() => {
     const query = matchMedia('(prefers-reduced-motion: reduce)');
@@ -65,17 +61,16 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
     return () => clock.stop();
   }, [active, reduced, dragging, held]);
 
-  const select = (index: number, focus = false) => {
+  const select = (index: number) => {
     const next = (index + VALUES.length) % VALUES.length;
     onChange(VALUES[next]);
-    if (focus) buttons.current[next]?.focus();
   };
-  const keys = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+  const keys = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const next = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? selected + 1
       : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? selected - 1
       : event.key === 'Home' ? 0 : event.key === 'End' ? VALUES.length - 1 : null;
     if (next === null) return;
-    event.preventDefault(); select(next, true);
+    event.preventDefault(); select(next);
   };
   const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!event.isPrimary || event.button !== 0 || (event.target as Element).closest('button')) return;
@@ -93,38 +88,31 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
   };
 
   return <div className="service-compass" data-resting={reduced || !active} data-value={choice}>
-    <div className="service-compass-stage" data-dragging={dragging}
+    <div className="service-compass-stage" data-dragging={dragging} tabIndex={0} role="group" aria-label={`${PILLARS.find(p => p.id === choice)!.label}. Use arrow keys or swipe to change the vertical.`} onKeyDown={keys}
       onPointerDown={startDrag} onPointerUp={finishDrag} onPointerCancel={finishDrag}
       onLostPointerCapture={() => { drag.current = null; setDragging(false); }}>
       <div className="service-compass-aura" aria-hidden="true" />
       <div className="service-compass-face" aria-hidden="true">
-        <div className="service-compass-ticks" />
-        <div className="service-compass-track" />
-        <div ref={orbit} className="service-compass-needle"><i /></div>
-        <span className="service-compass-etch service-compass-etch-one" />
-        <span className="service-compass-etch service-compass-etch-two" />
-        <span className="service-compass-etch service-compass-etch-three" />
+        <div className="service-compass-inner-ring" />
+        <div ref={orbit} className="service-compass-needle" />
+        <svg className="service-compass-flourish" viewBox="0 0 200 200" fill="none">
+          <ellipse cx="100" cy="100" rx="43" ry="83" transform="rotate(-35 100 100)" />
+          <ellipse cx="100" cy="100" rx="43" ry="83" transform="rotate(35 100 100)" />
+        </svg>
       </div>
       <div className="service-compass-sculpture" aria-hidden="true">
-        <div className="service-compass-model">
-          <PillarModelCard id={choice} label={PILLARS.find(pillar => pillar.id === choice)!.label}
-            active={active && shown} animate={active && !reduced}
-            modelUrl={`/models/core-values/${choice}.glb?v=${choice === 'enrich' ? '20261007-2' : '20261007'}`} />
-        </div>
+        {choice === 'empower' ? <svg className="service-compass-empower-mark" viewBox="-30 0 200 132" fill="white">
+          <defs><linearGradient id={companionFade} gradientUnits="userSpaceOnUse" x1="0" y1="5.365" x2="0" y2="106.375">
+            <stop offset="0" stopColor="white" stopOpacity=".5" />
+            <stop offset="1" stopColor="white" stopOpacity="0" />
+          </linearGradient></defs>
+          {EMPOWER_COMPANIONS.map(mate => <g key={mate.dx} transform={companionTransform(mate, Math.sign(mate.dx) * 9)} fill={`url(#${companionFade})`}>
+            {PILLAR_LOGOS.empower.paths.map(d => <path key={d} d={d} />)}
+          </g>)}
+          {PILLAR_LOGOS.empower.paths.map(d => <path key={d} d={d} />)}
+        </svg> : <i className="service-compass-centre-mark" style={{ '--mark': `url("${mark(choice)}")` } as React.CSSProperties} />}
+        <p className="values-cover-vertical-name">{PILLARS.find(p => p.id === choice)!.label}</p>
         <div className="service-compass-shadow" />
-      </div>
-      <div className="service-compass-values" role="radiogroup" aria-label={getCMSCopy('copy.CoreValuesPage.c7a3284847f9', 'Preview a core value')}>
-        {VALUES.map((id, index) => {
-          const pillar = PILLARS.find(p => p.id === id)!;
-          return <button key={id} ref={node => { buttons.current[index] = node; }}
-            className={`service-compass-value service-compass-value-${id}`} role="radio" aria-checked={choice === id}
-            tabIndex={choice === id ? 0 : -1}
-            onKeyDown={keys} onClick={() => onChange(id)}
-            style={{ '--node-ink': pillar.accentA, '--node-light': pillar.accentB } as React.CSSProperties}>
-            <span className="service-compass-value-symbol"><i className="service-compass-value-mark" style={{ '--mark': `url("${mark(id)}")` } as React.CSSProperties} /></span>
-            <span className="service-compass-value-name">{pillar.label}</span>
-          </button>;
-        })}
       </div>
     </div>
   </div>;

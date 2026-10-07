@@ -4,10 +4,10 @@ import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import type { Activity } from '../data/activities';
 import { PROGRAMME_SDGS } from '../data/sdgs';
+import { SdgTags } from './UnAffiliation';
 import { insightsFor } from '../data/insights';
 import { ACTIVITY_SYMBOLS } from './activitySymbols';
 import { OdometerStatCounter } from './OdometerStatCounter';
-import { SdgTags } from './UnAffiliation';
 import { iconFor } from './figureIcons';
 import './programme-dossier.css';
 
@@ -81,6 +81,7 @@ export const ProgrammeDossier: React.FC<{ id: string; activity: Activity; kicker
             return <div key={point.label} style={{ '--i': i } as React.CSSProperties}><dt><Icon size={14} strokeWidth={1.8} aria-hidden="true" />{point.label}</dt><dd><Rolling value={point.value} /></dd></div>;
           })}
         </dl>
+
         <SdgTags goals={PROGRAMME_SDGS[activity.id] ?? []} label={getCMSCopy("copy.CoreValuesPage.programme-sdgs", "UN goals it advances")} className="value-detail-sdgs" />
         <p className="value-source">{getCMSCopy("copy.CoreValuesPage.91c1f9479c9a", "Source: foundation activity report · Figures shown as reported.")}{insights.length > 0 && ` ${c('insights-source', 'The insights are worked out from those figures; nothing is estimated.')}`}</p>
         {onNext && <button className="value-next-programme" onClick={onNext}>{getCMSCopy("copy.CoreValuesPage.cd9fb71ad9c3", "Discover the next programme ")}<ArrowUpRight size={16} /></button>}

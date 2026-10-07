@@ -1,5 +1,5 @@
-dialog#donate-modal-backdrop { padding: 0; margin: auto; width: min(1120px,calc(100% - 40px)); max-width: none; max-height: calc(100dvh - 40px); border: 1px solid #e4e7da; border-radius: 28px; overflow-y: auto; background: #fbfaf5; color: #244035; box-shadow: 0 35px 120px #00180e66; overscroll-behavior: contain; }
-dialog#donate-modal-backdrop::backdrop { background: #0b211cc9; backdrop-filter: blur(7px); }
+dialog#donate-modal-backdrop { padding: 0; margin: auto; width: min(1120px,calc(100% - 40px)); max-width: none; max-height: calc(100dvh - 40px); border: 1px solid #e4e7da; border-radius: 28px; overflow-y: auto; background: #fbfaf5; color: #244035; box-shadow: 0 35px 120px #102e5666; overscroll-behavior: contain; }
+dialog#donate-modal-backdrop::backdrop { background: #102e56c9; backdrop-filter: blur(7px); }
 #donate-modal-panel { position: relative; width: 100%; }
 .donation-experience { position: relative; display: grid; grid-template-columns: .9fr 1.1fr; color: #244035; font-family: var(--font-sans); background: #fdfcf8; }
 .donation-experience button, .donation-experience a, .donation-experience summary { -webkit-tap-highlight-color: transparent; }

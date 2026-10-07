@@ -144,7 +144,30 @@ class PillarRenderer {
         pivot, extent: Math.max(size.y / 2 + radius * .14 + .1, radius) * 1.015, elapsed: 0, phase: id === 'heal' ? 0 : id === 'enrich' ? 1.8 : 3.6,
         tints: collectTints(model), look: 'light', poster: {},
       };
-      if (id === 'enrich') asset.book = createBookOpening(model);
+      if (id === 'enrich' && url.includes('/models/core-values/')) {
+        // Keep the supplied icon intact; extra animated paper planes overlap
+        // its white pages and make the centre flicker as the model turns.
+        model.traverse(node => {
+          if (!(node instanceof T.Mesh) || !/white[ _]open[ _]page/i.test(node.name)) return;
+          const materials = Array.isArray(node.material) ? node.material : [node.material];
+          materials.forEach(material => {
+            if (material instanceof T.MeshBasicMaterial || material instanceof T.MeshStandardMaterial) {
+              material.color.set('#f8f8ff');
+              material.toneMapped = false;
+              const tint = asset.tints.find(entry => entry.material === material);
+              tint?.light.copy(material.color);
+              tint?.dark.copy(material.color);
+            }
+            material.polygonOffset = true;
+            material.polygonOffsetFactor = -1;
+            material.polygonOffsetUnits = -4;
+            material.depthWrite = true;
+            material.transparent = false;
+            material.opacity = 1;
+            material.needsUpdate = true;
+          });
+        });
+      } else if (id === 'enrich') asset.book = createBookOpening(model);
       this.assets.set(assetKey, asset); this.scene.add(pivot);
       if (!this.lost) for (const look of new Set([...this.clients].filter(client => client.assetKey === assetKey).map(client => client.look))) this.snapshot(asset, 0, look);
       this.sync();

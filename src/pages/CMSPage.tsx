@@ -30,7 +30,7 @@ function Section({ section }: { section: RecordValue }) {
     {section.heading && <h2 className="font-artistic-heading text-3xl mb-6">{text(section.heading)}</h2>}
     {section.blockType === 'media' && <Media item={section} />}
     {section.body && <p className="text-lg leading-relaxed whitespace-pre-line my-6">{text(section.body)}</p>}
-    {section.blockType === 'cards' && <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{records(section.cards).map((card, index) => <article className="p-6 bg-white rounded-2xl border border-black/10" key={text(card.id) || index}>
+    {section.blockType === 'cards' && <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{records(section.cards).map((card, index) => <article className="p-6 bg-white rounded-2xl border border-navy/10" key={text(card.id) || index}>
       <Media item={card} />
       {card.title && <h3 className="font-artistic-heading text-2xl mt-5 mb-3">{text(card.title)}</h3>}
       <p className="leading-relaxed whitespace-pre-line">{text(card.body)}</p>

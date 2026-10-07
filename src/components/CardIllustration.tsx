@@ -189,7 +189,7 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
             be (0.16 vs 0.105 of the card) because Dancing Script's small
             x-height reads noticeably smaller at the same nominal size. */}
         <span
-          className="font-dancing-script font-bold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] whitespace-nowrap leading-none"
+          className="font-dancing-script font-bold text-white drop-shadow-[0_2px_6px_rgba(6,55,130,0.4)] whitespace-nowrap leading-none"
           style={{
             fontSize: 'calc(var(--card-width, 210px) * 0.16)',
             marginTop: 'calc(var(--card-width, 210px) * 0.055)',

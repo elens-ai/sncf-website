@@ -62,12 +62,12 @@ export const SocialSidebar: React.FC = () => {
             rel="noopener noreferrer"
             aria-label={item.ariaLabel}
             title={item.name}
-            className={`group relative w-9 h-9 lg:w-10 lg:h-10 rounded-full border border-white/20 bg-black/25 backdrop-blur-md flex items-center justify-center text-white/75 transition-all duration-300 hover:scale-115 hover:bg-white/15 active:scale-95 ${item.colorHover}`}
+            className={`group relative w-9 h-9 lg:w-10 lg:h-10 rounded-full border border-white/20 bg-navy/25 backdrop-blur-md flex items-center justify-center text-white/75 transition-all duration-300 hover:scale-115 hover:bg-white/15 active:scale-95 ${item.colorHover}`}
           >
             {item.icon}
 
             {/* Subtle Tooltip on Hover */}
-            <span className="absolute left-full ml-3 px-2 py-1 rounded bg-black/80 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-wider opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap shadow-lg border border-white/15">
+            <span className="absolute left-full ml-3 px-2 py-1 rounded bg-navy/80 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-wider opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap shadow-lg border border-white/15">
               {item.name}
             </span>
           </a>

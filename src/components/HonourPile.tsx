@@ -11,7 +11,7 @@ export interface PileHonour { key: string; award: Award; photos: AwardPhoto[] }
 /* THE PILE OF HONOURS, after an archive's page of fragments. The photographs
    of the honours are prints laid loosely on the section's own ground: tilted,
    overlapping, each with its shadow, as if tipped out onto a table. Fifteen lie
-   there at a time, dealt at random and never two of one honour; the rest wait
+   there at a time, the major honours first and never two of one honour; the rest wait
    their turn. A print brought forward rises where it lies, straightens, grows
    and comes to the front, and its honour's card stands beside it: the year,
    the honour, who gave it, and why. Pointing at a print brings it forward (so
@@ -54,10 +54,10 @@ const layOut = (count: number, aspect: number): Slot[] => {
   return Array.from({ length: count }, (_, k) => {
     const row = Math.floor(cells[k] / cols), col = cells[k] % cols;
     return {
-      x: (col + 0.5) * cw + (row % 2 ? 0.22 : -0.22) * cw + (rand() - 0.5) * cw * 0.5,
-      y: (row + 0.5) * ch + (rand() - 0.5) * ch * 0.45,
-      w: cw * (1.22 + rand() * 0.22),
-      r: (rand() - 0.5) * 17,
+      x: (col + 0.5) * cw + (row % 2 ? 0.09 : -0.09) * cw + (rand() - 0.5) * cw * 0.16,
+      y: (row + 0.5) * ch + (rand() - 0.5) * ch * 0.18,
+      w: cw * (0.84 + rand() * 0.14),
+      r: (rand() - 0.5) * 11,
     };
   });
 };
@@ -68,8 +68,8 @@ const layOut = (count: number, aspect: number): Slot[] => {
    phone the card sits beneath the pile instead). */
 type Shape = 'wide' | 'medium' | 'narrow';
 const SHAPES: Record<Shape, { aspect: number; liftW: number; liftH: number; maxLift: number; cardW: number }> = {
-  wide: { aspect: 2.45, liftW: 40, liftH: 88, maxLift: 2.1, cardW: 25 },
-  medium: { aspect: 1.75, liftW: 48, liftH: 86, maxLift: 2.4, cardW: 34 },
+  wide: { aspect: 2.45, liftW: 32, liftH: 68, maxLift: 1.85, cardW: 24 },
+  medium: { aspect: 1.75, liftW: 40, liftH: 72, maxLift: 2, cardW: 32 },
   narrow: { aspect: 0.75, liftW: 84, liftH: 56, maxLift: 3.6, cardW: 0 },
 };
 const shapeNow = (): Shape => matchMedia('(min-width: 1100px)').matches ? 'wide' : matchMedia('(min-width: 640px)').matches ? 'medium' : 'narrow';
@@ -118,6 +118,7 @@ export const HonourPile: React.FC<{
   const stage = useRef<HTMLDivElement>(null);
   const cardId = useId();
   const [stageWidth, setStageWidth] = useState(0);
+  const [stageAspect, setStageAspect] = useState(SHAPES[shape].aspect);
   const [laid, setLaid] = useState<Laid[]>([]);
   const [leaving, setLeaving] = useState<Laid[]>([]);
   const [lifted, setLifted] = useState<number | null>(null);
@@ -131,8 +132,10 @@ export const HonourPile: React.FC<{
   const liftedRef = useRef<number | null>(null);
   /* the print forward was chosen by someone, not brought forward by the pile */
   const chosenRef = useRef(false);
+  const viewed = useRef<{ k: number; since: number } | null>(null);
   /* the prints waiting their turn, in the order they will come, and how many prints have come so far */
   const deck = useRef<number[]>([]);
+  const openingTour = useRef<number[]>([]);
   const seq = useRef(0);
   const settleTimer = useRef(0);
   const leaveTimers = useRef(new Set<number>());
@@ -141,24 +144,28 @@ export const HonourPile: React.FC<{
   const count = Math.min(ON_PILE, prints.length);
   /* which photographs there are, in order: the content can be refreshed without any of them changing */
   const signature = useMemo(() => prints.map(print => print.key).join('|'), [prints]);
-  const slots = useMemo(() => layOut(count, SHAPES[shape].aspect), [count, shape]);
+  const slots = useMemo(() => layOut(count, stageAspect), [count, stageAspect]);
 
   useEffect(() => {
     const el = stage.current;
     if (!el) return;
-    const observer = new ResizeObserver(([entry]) => setStageWidth(Math.round(entry.contentRect.width / 20) * 20));
+    const observer = new ResizeObserver(([entry]) => {
+      setStageWidth(Math.round(entry.contentRect.width / 20) * 20);
+      if (entry.contentRect.height > 0) setStageAspect(entry.contentRect.width / entry.contentRect.height);
+    });
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  /* the first prints, dealt at random (never two of one honour while there are other honours to deal); they land in
+  /* The first prints follow the editorial priority (never two of one honour while others wait); they land in
      the order they are dealt, each over the last */
   useEffect(() => {
-    const order: number[] = shuffled(prints.map((_, k) => k));
+    const order = prints.map((_, k) => k);
     const dealt: number[] = [], honoursIn = new Set<number>();
     for (const k of order) if (dealt.length < count && !honoursIn.has(prints[k].honour)) { dealt.push(k); honoursIn.add(prints[k].honour); }
     for (const k of order) if (dealt.length < count && !dealt.includes(k)) dealt.push(k);
     deck.current = order.filter(k => !dealt.includes(k));
+    openingTour.current = dealt.slice(1);
     seq.current = 0;
     setLaid(dealt.map((k, slot) => ({ k, slot, seq: ++seq.current, dx: 0, dy: 0, dr: 0, first: true })));
     setLeaving([]);
@@ -183,7 +190,8 @@ export const HonourPile: React.FC<{
      cannot stand beside it. */
   const place = useCallback((entry: Laid) => {
     const print = prints[entry.k], slot = slots[entry.slot];
-    const { aspect, liftW, liftH, maxLift, cardW } = SHAPES[shape];
+    const { liftW, liftH, maxLift, cardW } = SHAPES[shape];
+    const aspect = stageAspect;
     const ratio = print.width && print.height ? print.width / print.height : 4 / 3;
     /* sized to its place and its proportions, and never, lying there, taller than most of the pile */
     const pw = Math.min(clamp(slot.w * Math.sqrt(ratio / (4 / 3)), slot.w * 0.72, slot.w * 1.3), 78 * ratio / aspect);
@@ -201,7 +209,7 @@ export const HonourPile: React.FC<{
       : cardRight ? clamp(x, lw / 2 + 1, 99 - cardW - CARD_GAP - lw / 2)
       : clamp(x, 1 + cardW + CARD_GAP + lw / 2, 99 - lw / 2);
     return { ...print, ...entry, x, y, pw, r: slot.r + entry.dr, ls, lw, lx, ly: clamp(y, lh / 2 + 2, 98 - lh / 2), cardRight };
-  }, [prints, slots, shape, stageWidth]);
+  }, [prints, slots, shape, stageWidth, stageAspect]);
 
   /* the prints in the order they are drawn: one being taken away just before the one that took its place (so neither
      moves in the page), each lying over every print that came before it */
@@ -240,11 +248,12 @@ export const HonourPile: React.FC<{
 
   /* One print taken away and another dropped in its place: one of the five that have lain there longest (never one
      kept), for the next waiting print of an honour not on the pile. Returns the print dropped in. */
-  const turnOver = (keep: number[]): number | null => {
+  const turnOver = (keep: number[], viewedK?: number): number | null => {
     if (prints.length <= laid.length) return null;
     const oldest = laid.filter(entry => !keep.includes(entry.k)).sort((a, b) => a.seq - b.seq).slice(0, 5);
     if (!oldest.length) return null;
-    const out = oldest[Math.floor(Math.random() * oldest.length)];
+    const out = viewedK === undefined ? oldest[Math.floor(Math.random() * oldest.length)] : laid.find(entry => entry.k === viewedK);
+    if (!out) return null;
     const busy = new Set(laid.map(entry => prints[entry.k].honour));
     const free = (k: number) => !busy.has(prints[k].honour);
     let at = deck.current.findIndex(free);
@@ -253,10 +262,11 @@ export const HonourPile: React.FC<{
       const onPile = new Set(laid.map(entry => entry.k));
       deck.current = shuffled(prints.map((_, k) => k).filter(k => !onPile.has(k)));
       at = deck.current.findIndex(free);
-      if (at < 0) at = deck.current.length ? 0 : -1;
+      if (at < 0) at = viewedK === undefined ? (deck.current.length ? 0 : -1) : deck.current.findIndex(k => prints[k].honour !== prints[out.k].honour);
       if (at < 0) return null;
     }
     const [k] = deck.current.splice(at, 1);
+    openingTour.current = openingTour.current.filter(k => k !== out.k);
     const slot = slots[out.slot];
     const entry: Laid = { k, slot: out.slot, seq: ++seq.current, dx: (Math.random() - 0.5) * slot.w * 0.16, dy: (Math.random() - 0.5) * 5, dr: (Math.random() - 0.5) * 7, first: false };
     setLaid(list => list.map(e => (e.seq === out.seq ? entry : e)));
@@ -265,7 +275,17 @@ export const HonourPile: React.FC<{
     leaveTimers.current.add(timer);
     return k;
   };
-  const top = (): number => laid.reduce((a, b) => (b.seq > a.seq ? b : a)).k;
+  const finishViewing = (k: number) => {
+    const seen = viewed.current;
+    if (!seen || seen.k !== k) return;
+    viewed.current = null;
+    // Passing over a print on the way elsewhere does not count as viewing it.
+    if (!running || performance.now() - seen.since < 800) return;
+    if (turnOver([], k) === null) return;
+    if (liftedRef.current === k) { putDown(); setCardK(null); }
+    if (landing === k) setLanding(null);
+  };
+  const top = (): number => laid.reduce((a, b) => (b.k < a.k ? b : a)).k;
 
   /* by itself: the top print shortly after the prints are down; then, honour by honour, the pile turns over and the
      new print is brought forward. Without motion: the top print is simply forward, and a print is changed now and then. */
@@ -288,7 +308,9 @@ export const HonourPile: React.FC<{
     const timer = window.setTimeout(() => {
       putDown();
       const others = laid.filter(entry => entry.k !== lifted);
-      setLanding(turnOver([lifted]) ?? (others.length ? others[Math.floor(Math.random() * others.length)].k : null));
+      const next = openingTour.current.shift();
+      setLanding(next !== undefined && laid.some(entry => entry.k === next) ? next
+        : turnOver([lifted]) ?? (others.length ? others[Math.floor(Math.random() * others.length)].k : null));
     }, chosenRef.current ? CHOSEN_DWELL_MS : DWELL_MS);
     return () => window.clearTimeout(timer);
     // turnOver and top read the same state as this effect, which it already follows
@@ -346,10 +368,12 @@ export const HonourPile: React.FC<{
               tabIndex={print.leaving ? -1 : undefined} aria-hidden={print.leaving || undefined}
               style={{ '--x': print.x, '--y': print.y, '--pw': print.pw, '--r': `${print.r}deg`, '--lx': print.lx, '--ly': print.ly, '--ls': print.ls, '--z': print.z, '--i': print.first ? print.seq - 1 : 0 } as React.CSSProperties}
               aria-label={`${award.title}${award.year ? `, ${award.year}` : ''}`} aria-describedby={forward ? cardId : undefined}
-              onPointerEnter={event => { if (event.pointerType !== 'touch') lift(print.k, true); }}
+              onPointerEnter={event => { if (event.pointerType !== 'touch' && !print.leaving) { viewed.current = { k: print.k, since: performance.now() }; lift(print.k, true); } }}
+              onPointerLeave={event => { if (event.pointerType !== 'touch' && !event.currentTarget.matches(':focus')) finishViewing(print.k); }}
               /* by keyboard only: a tap focuses the print too, and the tap itself decides (forward first, then open) */
-              onFocus={event => { if (event.currentTarget.matches(':focus-visible')) lift(print.k, true); }}
-              onClick={() => (liftedRef.current === print.k ? onOpen(print.honour, print.photo) : lift(print.k, true))}>
+              onFocus={event => { if (event.currentTarget.matches(':focus-visible')) { viewed.current = { k: print.k, since: performance.now() }; lift(print.k, true); } }}
+              onBlur={() => finishViewing(print.k)}
+              onClick={() => { viewed.current = null; if (liftedRef.current === print.k) onOpen(print.honour, print.photo); else lift(print.k, true); }}>
               <img src={resolveCMSMedia(print.src)} alt="" width={print.width} height={print.height} loading="lazy" decoding="async" draggable={false} />
               <span className="honour-print-open" aria-hidden="true"><Maximize2 size={13} /></span>
             </button>

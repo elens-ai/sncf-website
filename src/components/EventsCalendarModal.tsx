@@ -218,7 +218,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
     >
       <div
         id="events-calendar-panel"
-        className="relative w-full max-w-4xl my-auto rounded-[32px] bg-neutral-950/95 border border-white/15 shadow-2xl p-5 sm:p-7"
+        className="relative w-full max-w-4xl my-auto rounded-[32px] bg-deep-blue/95 border border-white/15 shadow-2xl p-5 sm:p-7"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -343,7 +343,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                     }}
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors cursor-pointer ${
                       active
-                        ? 'text-neutral-900 bg-white border-white'
+                        ? 'text-navy bg-white border-white'
                         : 'text-white/80 bg-white/5 border-white/15 hover:bg-white/15'
                     }`}
                   >
@@ -439,7 +439,7 @@ export const EventsCalendarModal: React.FC<EventsCalendarModalProps> = ({
                         wrapCalendar(vevent(selected.event, selected.date, nowStamp())),
                       )}
                       download={`${selected.event.id}.ics`}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold text-neutral-900 bg-white hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold text-navy bg-white hover:scale-[1.04] active:scale-95 transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     >
                       <CalendarPlus className="w-3.5 h-3.5" />{getCMSCopy("copy.EventsCalendarModal.9d60f9126db7", "Add to my calendar")}</a>
                     {selected.event.href && (

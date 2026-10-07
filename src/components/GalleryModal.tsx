@@ -48,12 +48,12 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label={getCMSCopy("copy.GalleryModal.352cfc749e55", "Gallery")}
-      className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-xl animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-start justify-center p-4 sm:p-6 overflow-y-auto bg-navy/85 backdrop-blur-xl animate-fadeIn"
       onClick={onClose}
     >
       <div
         id="gallery-modal-panel"
-        className="relative w-full max-w-6xl my-auto rounded-[32px] bg-neutral-950/95 border border-white/15 shadow-2xl p-5 sm:p-8"
+        className="relative w-full max-w-6xl my-auto rounded-[32px] bg-deep-blue/95 border border-white/15 shadow-2xl p-5 sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -92,7 +92,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
                 <CardIllustration pillar={pillar} index={index} roundedClass="rounded-[20px]" />
 
                 {/* Hover veil with the pillar name */}
-                <span className="absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-navy/80 via-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-[11px] uppercase font-bold tracking-widest text-white">{getCMSCopy("copy.GalleryModal.9a92a27a2688", "View ")}{pillar.label}
                   </span>
                 </span>
@@ -117,7 +117,7 @@ export const GalleryModal: React.FC<GalleryModalProps> = ({
               >
                 <DevotionalPhotoCard leader={leader} roundedClass="rounded-[20px]" isFrontFacing />
 
-                <span className="absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="absolute inset-0 flex items-end justify-center pb-4 bg-gradient-to-t from-navy/80 via-navy/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-[11px] uppercase font-bold tracking-widest text-white">{getCMSCopy("copy.GalleryModal.0e00e36c4422", "View Portrait")}</span>
                 </span>
               </button>

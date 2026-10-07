@@ -9,18 +9,18 @@
 .dossier-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: dossier-photo-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .dossier-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(8 24 20 / 0.5) 0%, transparent 26%, transparent 44%, rgb(8 24 20 / 0.86) 100%); pointer-events: none; }
 /* a programme with no photograph of its own: its symbol on its colour */
-.dossier-media[data-empty='true'] { background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--value-light) 60%, transparent), transparent 60%), linear-gradient(150deg, color-mix(in srgb, var(--value-color) 85%, #fff), color-mix(in srgb, var(--value-color) 70%, #0d2421)); }
+.dossier-media[data-empty='true'] { background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--value-light) 60%, transparent), transparent 60%), linear-gradient(150deg, color-mix(in srgb, var(--value-color) 85%, #fff), color-mix(in srgb, var(--value-color) 70%, #102e56)); }
 .dossier-symbol { position: absolute; inset: 0 0 30%; display: grid; place-items: center; color: rgb(255 255 255 / 0.85); }
 .dossier-media-top { position: absolute; top: 16px; left: 18px; right: 18px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
 .dossier-media-top > span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: rgb(255 255 255 / 0.16); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25); color: #fff; font: 700 9.5px/1.2 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; }
 .dossier-media-foot { position: absolute; left: 22px; right: 22px; bottom: 20px; color: #fff; }
-.value-dossier .dossier-media-foot h4 { margin: 0; font: 800 clamp(21px, 2.1vw, 28px)/1.15 var(--font-heading); text-shadow: 0 2px 14px rgb(0 0 0 / 0.35); animation: dossier-reveal 0.45s both; }
+.value-dossier .dossier-media-foot h4 { margin: 0; font: 800 clamp(21px, 2.1vw, 28px)/1.15 var(--font-heading); text-shadow: 0 2px 14px rgb(6 55 130 / 0.35); animation: dossier-reveal 0.45s both; }
 .dossier-caption { margin: 8px 0 0; max-width: 42ch; font: 400 12px/1.5 var(--font-sans); color: rgb(255 255 255 / 0.85); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .dossier-strip { display: flex; gap: 6px; margin-top: 14px; }
 .dossier-strip button { width: 52px; height: 38px; padding: 0; overflow: hidden; border: 0; border-radius: 8px; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.4); opacity: 0.7; cursor: pointer; transition: opacity 0.25s, box-shadow 0.25s, translate 0.25s; }
 .dossier-strip button img { width: 100%; height: 100%; object-fit: cover; }
 .dossier-strip button:hover { opacity: 1; }
-.dossier-strip button[aria-pressed='true'] { opacity: 1; translate: 0 -2px; box-shadow: 0 0 0 2px #fff, 0 6px 14px -6px rgb(0 0 0 / 0.6); }
+.dossier-strip button[aria-pressed='true'] { opacity: 1; translate: 0 -2px; box-shadow: 0 0 0 2px #fff, 0 6px 14px -6px rgb(6 55 130 / 0.6); }
 .dossier-strip button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
 .dossier-data { display: flex; flex-direction: column; min-width: 0; padding: 24px 26px 22px; }
@@ -32,11 +32,11 @@
 .dossier-roll * { color: inherit; font-family: inherit; }
 
 .dossier-insights { margin: 0 0 14px; padding: 12px 14px 14px; border-radius: 16px; background: linear-gradient(135deg, color-mix(in srgb, var(--value-light) 22%, #fff), #fff); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--value-color) 18%, transparent); animation: dossier-reveal 0.5s 0.15s both; }
-.dossier-insights-note { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; font: 700 9.5px/1.2 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--value-color) 82%, #0d2421); }
+.dossier-insights-note { display: flex; align-items: center; gap: 6px; margin: 0 0 10px; font: 700 9.5px/1.2 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--value-color) 82%, #102e56); }
 .dossier-insights ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
 .dossier-insights li { display: grid; grid-template-columns: 30px auto minmax(0, 1fr); align-items: center; gap: 10px; }
 .dossier-insight-icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; background: var(--value-color); color: #fff; box-shadow: 0 6px 12px -6px var(--value-color); }
-.dossier-insights strong { font: 700 20px/1 var(--font-sans); letter-spacing: -0.01em; white-space: nowrap; color: color-mix(in srgb, var(--value-color) 88%, #0d2421); }
+.dossier-insights strong { font: 700 20px/1 var(--font-sans); letter-spacing: -0.01em; white-space: nowrap; color: color-mix(in srgb, var(--value-color) 88%, #102e56); }
 .dossier-insights li > span:last-child { font: 400 12px/1.35 var(--font-sans); color: #4e625c; }
 
 .dossier-figures { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 8px; margin: 0; }
@@ -45,7 +45,6 @@
 .dossier-figures dt { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font: 500 10.5px/1.3 var(--font-sans); color: #62756d; }
 .dossier-figures dt svg { flex: none; color: var(--value-color); }
 .dossier-figures dd { margin: 0; font: 600 19px/1.2 var(--font-sans); color: #22392f; overflow-wrap: anywhere; }
-.value-dossier .value-detail-sdgs { margin-top: 16px; }
 .value-dossier .value-source { margin-top: 14px; font-size: 10px; color: #6b7d76; }
 .value-dossier .value-next-programme { display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; margin-top: 14px; padding: 0; border: 0; background: none; color: var(--value-color); font: 500 12px/1.4 var(--font-sans); cursor: pointer; }
 
@@ -75,3 +74,5 @@
 @media (prefers-reduced-motion: reduce) {
   .dossier-photo, .dossier-figures > div, .dossier-insights, .value-dossier .dossier-media-foot h4 { animation: none; }
 }
+
+.value-dossier .value-detail-sdgs { margin-top: 16px; }

@@ -185,3 +185,5 @@
 }
 @media (max-width: 389px) { .mosaic-path-reach { display: none; } }
 @media (forced-colors: active) { .mosaic-wall { display: none; } }
+
+.mosaic-humility-word { display: inline-block; margin-left: .18em; }

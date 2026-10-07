@@ -129,7 +129,7 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
   const title = getCMSCopy('copy.ImpactMosaic.eee670c33892', 'Different paths. One purpose.');
   const lines = title.match(/^(.+?[.!?])\s+(.+)$/);
   /* the motto in two voices: what we serve, then how, in the signature hand */
-  const motto = getCMSCopy('copy.MosaicOverture.purpose', 'Service to humanity, Service with humility');
+  const motto = getCMSCopy('copy.MosaicOverture.purpose', 'Service to humanity, Service with Humility').replace(/\bhumility\b/g, 'Humility');
   const mottoParts = motto.match(/^(.+?,)\s*(.+)$/);
   /* each path's colour, for the words to take when a door is pointed at
      (and, while none is, to pass through slowly) */
@@ -158,7 +158,7 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
             <span>{lines ? lines[1] : title}</span>
             {lines && <span className="font-dancing-script">{lines[2]}</span>}
           </Title>
-          <p className="mosaic-overture-lead">{mottoParts ? <>{mottoParts[1]} <span className="mosaic-overture-sign font-signature">{mottoParts[2]}</span></> : motto}</p>
+          <p className="mosaic-overture-lead">{mottoParts ? <>{mottoParts[1]} <span className="mosaic-overture-sign font-signature">{mottoParts[2].split(/(Humility)/).map((part, index) => part === 'Humility' ? <span key={index} className="mosaic-humility-word">{part}</span> : part)}</span></> : motto}</p>
           {/* the service journal: camps, drives and observances, on a page of its own */}
           <Link to="/events" className="mosaic-overture-events">
             <CalendarDays size={16} aria-hidden="true" />{getCMSCopy('copy.MosaicOverture.events', 'Event info')}<ArrowUpRight size={15} aria-hidden="true" />

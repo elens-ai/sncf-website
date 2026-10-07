@@ -43,8 +43,8 @@ import { PartnerMarquee } from '../components/PartnerMarquee';
  *
  * IT IS BUILT AS ROOMS, like Core Values and Projects, and it has their
  * rail; its cover is drawn as theirs are, on the page's own ground. Beside
- * its words is the logo's own emblem come alive: the lotus held in two
- * hands, each petal a photograph of what the lede says those hands do, and
+ * its words is a five-leaf star, each leaf a photograph of what the
+ * lede says the foundation's hands do, and
  * the figure the record gives for it. The road so far is a tree growing
  * from a seed in 2010, a branch for every moment the foundation marks; the
  * organisations beside it pass by as a wall of their marks.
@@ -119,11 +119,11 @@ const marked = (text: string, marks: { phrase: string; ink: string }[]) => {
    the contact postcard's paper, with the same waves over it in those blues. */
 const WHO_GROUND = { id: 'who-we-are', accentA: '#2ab2ea', accentB: '#cfe9f3' };
 
-/** The cover: the words and the way on, beside the logo's lotus, each of its
+/** The cover: the words and the way on, beside the five-leaf star, each of its
     five petals a photograph of a thing the foundation's hands do. The script
     line and the lede carry those things as highlighted phrases, and pointing
     at any of them (phrase or petal) brings it into view with its reported
-    figure. Beneath the lotus, the line the foundation was set up to act on;
+    figure. Beneath the star, the line the foundation was set up to act on;
     at the foot, UNEP and the foundation's own figures; and the page's paper
     laps up over the foot. */
 const WhoCover: React.FC = () => {
@@ -182,7 +182,7 @@ const WhoCover: React.FC = () => {
       </div>
       <div className="who-cover-actions"><a className="who-cover-cta" href={getCMSLink("copy.Link.WhoWeArePage.f24daa84860f", "#account")}>{getCMSCopy("copy.WhoWeArePage.3c34f30db957", "Discover our story ")}<ArrowDown size={15} aria-hidden="true" /></a></div>
     </div>
-    {/* the lotus, and beneath it the line the foundation was set up to act on */}
+    {/* the five-leaf star, and beneath it the line the foundation was set up to act on */}
     <div className="who-cover-stage" {...hold}>
       <HandsBloom ways={ways} current={current} onPick={pick} />
       <div className="who-cover-voice"><Saying id="contribute" className="who-cover-saying" /></div>

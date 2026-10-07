@@ -29,7 +29,7 @@ export interface OrbitProject {
     chapter. The Who We Are cover sets its own emblem at the centre (the
     lotus) and the things the foundation's hands do round it, and turns the
     needle itself. */
-export function ProjectOrbit({ projects, choice, onChange, active, centre, signature, label, auto = true, className }: {
+export function ProjectOrbit({ projects, choice, onChange, active, centre, signature, label, auto = true, interval = 4800, className }: {
   projects: OrbitProject[]; choice: number; onChange: (index: number) => void; active: boolean;
   /** what stands at the centre: the Projects emblem unless given */
   centre?: React.ReactNode;
@@ -39,6 +39,7 @@ export function ProjectOrbit({ projects, choice, onChange, active, centre, signa
   label?: string;
   /** whether the needle moves on by itself while the orbit is in view */
   auto?: boolean;
+  interval?: number;
   className?: string;
 }) {
   const n = projects.length;
@@ -55,9 +56,9 @@ export function ProjectOrbit({ projects, choice, onChange, active, centre, signa
   }, []);
   useEffect(() => {
     if (!auto || !active || reduced || over || n < 2) return;
-    const timer = window.setTimeout(() => onChange((choice + 1) % n), 4800);
+    const timer = window.setTimeout(() => onChange((choice + 1) % n), interval);
     return () => clearTimeout(timer);
-  }, [auto, active, reduced, over, choice, n, onChange]);
+  }, [auto, active, reduced, over, choice, n, onChange, interval]);
   /* the needle turns the short way round to the project in view */
   const turn = useRef(choice * 360 / n);
   turn.current += ((choice * 360 / n - turn.current) % 360 + 540) % 360 - 180;
@@ -68,12 +69,12 @@ export function ProjectOrbit({ projects, choice, onChange, active, centre, signa
     <div className="service-compass-stage">
       <div className="service-compass-aura" aria-hidden="true" />
       <div className="service-compass-face" aria-hidden="true">
-        <div className="service-compass-ticks" />
-        <div className="service-compass-track" />
-        <div className="service-compass-needle project-orbit-needle" style={{ transform: `rotate(${turn.current}deg)` }}><i /></div>
-        <span className="service-compass-etch service-compass-etch-one" />
-        <span className="service-compass-etch service-compass-etch-two" />
-        <span className="service-compass-etch service-compass-etch-three" />
+        {!centre && <svg className="project-orbit-artwork" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="85" />
+          <ellipse cx="100" cy="100" rx="43" ry="79" transform="rotate(-35 100 100)" />
+          <ellipse cx="100" cy="100" rx="43" ry="79" transform="rotate(35 100 100)" />
+          <path d="M28 125Q67 91 100 125T172 125M32 133Q67 104 100 133T168 133" />
+        </svg>}
       </div>
       <div className="service-compass-sculpture" aria-hidden="true">
         <div className="service-compass-model">{centre ?? <div className="project-orbit-bloom"><PillarModelCard id="projects" label="Projects bloom" active={active && shown} animate={active && !reduced} modelUrl="/models/projects.glb?v=sncf-bloom-balanced" /></div>}</div>

@@ -12,7 +12,7 @@
   background:
     radial-gradient(ellipse 55% 70% at 6% 0%, rgb(31 138 92 / 0.22), transparent 70%),
     radial-gradient(ellipse 45% 60% at 98% 35%, rgb(179 87 173 / 0.13), transparent 70%),
-    linear-gradient(180deg, #0c3134 0%, #082528 55%, #061b1d 100%);
+    linear-gradient(180deg, #0c3134 0%, #082528 55%, #102e56 100%);
 }
 /* the wave the band rises in, sitting on the page above it */
 .footer-crest { position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); width: 100%; height: clamp(28px, 4vw, 56px); pointer-events: none; }
@@ -28,7 +28,7 @@
 .footer-ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
 .footer-way { position: relative; display: grid; align-content: start; gap: 4px; width: 100%; height: 100%; padding: 18px 18px 16px; border: 0; border-radius: 18px; background: linear-gradient(160deg, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0.03)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12); color: #fff; text-align: left; cursor: pointer; transition: translate 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.3s, box-shadow 0.3s; }
 .footer-way:is(:hover, :focus-visible) { translate: 0 -3px; background: linear-gradient(160deg, color-mix(in srgb, var(--way) 30%, rgb(255 255 255 / 0.06)), rgb(255 255 255 / 0.03)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--way) 60%, transparent), 0 18px 30px -20px var(--way); }
-.footer-way-icon { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 8px; border-radius: 12px; background: color-mix(in srgb, var(--way) 82%, #000); color: #fff; box-shadow: 0 8px 16px -8px var(--way); }
+.footer-way-icon { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 8px; border-radius: 12px; background: color-mix(in srgb, var(--way) 82%, #063782); color: #fff; box-shadow: 0 8px 16px -8px var(--way); }
 .footer-way strong { font: 700 15px/1.25 var(--font-sans); }
 .footer-way > span:not(.footer-way-icon) { font: 400 11.5px/1.5 var(--font-sans); color: rgb(255 255 255 / 0.66); }
 .footer-way > svg:last-child { position: absolute; top: 16px; right: 16px; opacity: 0.5; transition: opacity 0.3s, translate 0.3s; }

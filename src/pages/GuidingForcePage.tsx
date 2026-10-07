@@ -17,6 +17,7 @@ import { onArrival } from '../utils/arrival';
 import { PILLARS } from '../data/pillars';
 import { ACTIVITIES } from '../data/activities';
 import './guiding-force.css';
+import { QuoteWords } from '../components/QuoteWords';
 
 /**
  * OUR GUIDING FORCE — where the work gets its direction.
@@ -126,7 +127,7 @@ const GuidingCover = () => {
 /** The quote, its every "One" lit: the word the whole sentence turns on. */
 const Quote: React.FC<{ text: string }> = ({ text }) => (
   <blockquote className="gf-quote font-dancing-script">
-    {text.split(/\b(One)\b/).map((part, i) => (part === 'One' ? <span key={i} className="gf-one">{part}</span> : part))}
+    <QuoteWords>{text.split(/\b(One)\b/).map((part, i) => (part === 'One' ? <span key={i} className="gf-one">{part}</span> : part))}</QuoteWords>
   </blockquote>
 );
 

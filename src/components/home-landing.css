@@ -73,7 +73,7 @@
    The tint at their crests follows the ground's colour as it changes. */
 @property --shore-ground { syntax: '<color>'; inherits: true; initial-value: #f5efe6; }
 .landing-shore {
-  --shore-end: color-mix(in srgb, var(--shore-ground) 86%, #000);
+  --shore-end: color-mix(in srgb, var(--shore-ground) 86%, #063782);
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; height: var(--landing-blend);
   overflow: hidden; pointer-events: none;
   transition: --shore-ground 3s ease-in-out;
@@ -106,7 +106,7 @@
 .landing-ground > i {
   --ground: #f5efe6;
   --ground-top: color-mix(in srgb, var(--ground) 78%, #fff);
-  --ground-end: color-mix(in srgb, var(--ground) 86%, #000);
+  --ground-end: color-mix(in srgb, var(--ground) 86%, #063782);
   position: absolute; inset: 0;
   background:
     linear-gradient(transparent calc(100% - var(--flow) * 2.2), color-mix(in srgb, var(--ground-end) 82%, var(--backdrop-mid, #397f62)) calc(100% - var(--flow) * 0.9), color-mix(in srgb, var(--ground-end) 62%, var(--backdrop-mid, #397f62)) 100%),
@@ -140,7 +140,7 @@
 .home-landing .mosaic-overture { color: var(--landing-ink); }
 .home-landing .mosaic-overture-title { text-shadow: none; }
 .home-landing .mosaic-overture-title > span:first-child { color: var(--landing-ink); transition: color 0.8s ease; animation: none; }
-.home-landing .mosaic-overture[data-lit] .mosaic-overture-title > span:first-child { animation: none; color: color-mix(in oklab, var(--lit-accent) 86%, #06231f); }
+.home-landing .mosaic-overture[data-lit] .mosaic-overture-title > span:first-child { animation: none; color: color-mix(in oklab, var(--lit-accent) 86%, #102e56); }
 .home-landing .mosaic-overture-title > .font-dancing-script { color: var(--landing-navy); }
 /* "Different paths." is a little over half the size of "One purpose.", which
    carries the line: a little over half as wide, its broad capitals set at
@@ -154,11 +154,11 @@
   .home-landing .mosaic-overture-title > span:first-child { font-size: 17.5px; }
 }
 @keyframes landing-paths-ink {
-  0%, 19% { color: color-mix(in oklab, var(--ink-heal) 86%, #06231f); }
-  25%, 44% { color: color-mix(in oklab, var(--ink-enrich) 86%, #06231f); }
-  50%, 69% { color: color-mix(in oklab, var(--ink-empower) 86%, #06231f); }
-  75%, 94% { color: color-mix(in oklab, var(--ink-projects) 86%, #06231f); }
-  100% { color: color-mix(in oklab, var(--ink-heal) 86%, #06231f); }
+  0%, 19% { color: color-mix(in oklab, var(--ink-heal) 86%, #102e56); }
+  25%, 44% { color: color-mix(in oklab, var(--ink-enrich) 86%, #102e56); }
+  50%, 69% { color: color-mix(in oklab, var(--ink-empower) 86%, #102e56); }
+  75%, 94% { color: color-mix(in oklab, var(--ink-projects) 86%, #102e56); }
+  100% { color: color-mix(in oklab, var(--ink-heal) 86%, #102e56); }
 }
 .home-landing .mosaic-overture-lead { max-width: none; font-weight: 500; letter-spacing: 0.01em; color: var(--landing-soft); }
 /* the motto's second voice, in the signature of the welcome's tagline */
@@ -194,7 +194,7 @@
 }
 .home-landing .mosaic-path::before { background: var(--path-accent); }
 .home-landing .mosaic-path-number { color: rgb(20 58 51 / 0.45); }
-.home-landing .mosaic-path-reach { background: color-mix(in srgb, var(--path-accent) 14%, rgb(255 255 255 / 0.55)); color: color-mix(in oklab, var(--path-accent) 84%, #06231f); }
+.home-landing .mosaic-path-reach { background: color-mix(in srgb, var(--path-accent) 14%, rgb(255 255 255 / 0.55)); color: color-mix(in oklab, var(--path-accent) 84%, #102e56); }
 .home-landing .mosaic-path-icon { fill: var(--path-accent); }
 .home-landing .mosaic-path-copy > span { color: rgb(20 58 51 / 0.64); }
 .home-landing .mosaic-path-arrow { color: var(--path-accent); }
@@ -215,8 +215,8 @@
 .home-landing .mosaic-overture-events:is(:hover, :focus-visible) { background: var(--landing-navy); color: #fff; translate: 0 -2px; box-shadow: 0 16px 30px -18px rgb(4 55 147 / 0.75); }
 .home-landing .mosaic-overture-events:focus-visible { outline: 2px solid var(--landing-navy); outline-offset: 3px; }
 .home-landing .mosaic-path:is(:hover, :focus-visible) .mosaic-path-reach { background: var(--path-accent); color: #fff; }
-.home-landing .mosaic-path:is(:hover, :focus-visible) .mosaic-path-copy strong { color: color-mix(in oklab, var(--path-accent) 86%, #06231f); }
-.home-landing .mosaic-path:focus-visible { outline: 2px solid color-mix(in oklab, var(--path-accent) 86%, #06231f); outline-offset: 3px; }
+.home-landing .mosaic-path:is(:hover, :focus-visible) .mosaic-path-copy strong { color: color-mix(in oklab, var(--path-accent) 86%, #102e56); }
+.home-landing .mosaic-path:focus-visible { outline: 2px solid color-mix(in oklab, var(--path-accent) 86%, #102e56); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   .home-landing .mosaic-overture-title > span:first-child { animation: none; }
   .landing-shore { transition: none; }

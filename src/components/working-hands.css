@@ -1,10 +1,4 @@
-/* ==========================================================================
-   THE WORKING HANDS (WorkingHands.tsx): the logo's lotus grown into the
-   Who We Are cover. Each petal is a photograph of what the lede says the
-   foundation's hands do, washed in its own petal colour until it is the one
-   being read, when it lifts and comes into full colour; the logo's two
-   hands cup the bloom from beneath.
-   ========================================================================== */
+/* Five photographic leaves form the Who We Are star; each leaf selects its impact figure. */
 
 .hands-bloom { display: block; width: 100%; height: auto; overflow: visible; }
 .hands-halo { transition: opacity 0.6s; animation: hands-breathe 7s ease-in-out infinite alternate; transform-origin: 300px 300px; }
@@ -22,9 +16,6 @@
 /* the drawn petal: water, drifting */
 .hands-wave { fill: none; stroke: rgb(255 255 255 / 0.5); stroke-width: 2.2; stroke-linecap: round; animation: hands-wave 5.5s linear calc(var(--k) * -1.3s) infinite; }
 .hands-water-mark { color: #fff; opacity: 0.92; pointer-events: none; }
-.hands-head { stroke: #fff; stroke-width: 3; animation: hands-head 5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
-.hands-head:nth-of-type(2n) { animation-delay: -2.5s; }
-.hands-palms image { filter: drop-shadow(0 10px 12px rgb(150 40 100 / 0.22)); }
 
 /* the lede's phrases, each a switch for its petal: marked like a highlighter until chosen, then filled */
 .hands-chip { display: inline; padding: 0 0.16em; margin: 0 -0.04em; border: 0; border-radius: 0.28em; font: inherit; color: color-mix(in srgb, var(--way) 68%, #23313b); background: linear-gradient(transparent 60%, color-mix(in srgb, var(--way) 24%, transparent) 60%); cursor: pointer; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: color 0.35s, background-color 0.35s; }

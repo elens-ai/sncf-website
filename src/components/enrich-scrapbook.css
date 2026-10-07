@@ -5,19 +5,20 @@
    spread scales as one, from a phone to a wide screen.
    ========================================================================== */
 .enrich-scrapbook {
-  --sb-teal: #2dacc3;
+  --sb-teal: #2cacc0;
+  --sb-edge: #f8f8ff;
   --sb-ink: #17707f;
-  --sb-paper: #fffdf7;
-  --sb-paper-alt: #f0f9fa;
+  --sb-paper: #f8f8ff;
+  --sb-paper-alt: #f5fcff;
   margin: 0;
 }
 
 .scrapbook-book { position: relative; container-type: inline-size; aspect-ratio: 142 / 108; user-select: none; -webkit-user-select: none; }
-.scrapbook-binding { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.scrapbook-ground { fill: rgb(16 58 66 / 0.24); }
-.scrapbook-cover { stroke: #23575a; stroke-width: 0.45; stroke-linejoin: round; }
+.scrapbook-binding { filter: brightness(1.12) saturate(1.1) drop-shadow(0 0 14px rgb(255 255 255 / 0.65)) drop-shadow(0 0 34px rgb(255 255 255 / 0.38)); position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.scrapbook-ground { fill: rgb(255 255 255 / 0.38); }
+.scrapbook-cover { stroke: #8ed5df; stroke-width: 0.4; stroke-linejoin: round; }
 /* the edges of the leaves beneath the top page */
-.scrapbook-stack { fill: #f6f2e8; stroke: rgb(23 112 127 / 0.5); stroke-width: 0.28; stroke-linejoin: round; }
+.scrapbook-stack { fill: var(--sb-edge); stroke: #dbe3e8; stroke-width: 0.28; stroke-linejoin: round; }
 
 /* The leaves turn in one shared 3D space: the stage gives the perspective,
    seen from just above the spine, close enough that a leaf in the air swells
@@ -73,7 +74,7 @@
   background: linear-gradient(to right, rgb(9 60 72 / 0.26), rgb(9 60 72 / 0.07) 6%, transparent 15%), linear-gradient(to left, rgb(255 255 255 / 0.45), transparent 4%);
 }
 .scrapbook-edge { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.scrapbook-edge path { fill: none; stroke: var(--sb-teal); stroke-width: 2.6px; vector-effect: non-scaling-stroke; }
+.scrapbook-edge path { fill: none; stroke: var(--sb-edge); stroke-width: 2.6px; vector-effect: non-scaling-stroke; }
 
 /* A turning leaf darkens as it tips away from the light and brightens as it
    settles, each side in turn. The shade follows the leaf's angle under the
@@ -185,9 +186,9 @@
    first page and a closing line after the last. */
 .scrapbook-endpaper {
   background:
-    radial-gradient(circle at 25% 25%, rgb(255 255 255 / 0.16) 0.45cqw, transparent 0.55cqw) 0 0 / 4cqw 4cqw,
-    radial-gradient(circle at 75% 75%, rgb(255 255 255 / 0.1) 0.3cqw, transparent 0.4cqw) 0 0 / 4cqw 4cqw,
-    linear-gradient(160deg, #4d969a, #2e7378);
+    radial-gradient(circle at 25% 25%, rgb(255 255 255 / 0.1) 0.25cqw, transparent 0.55cqw) 0 0 / 4cqw 4cqw,
+    radial-gradient(circle at 75% 75%, rgb(255 255 255 / 0.07) 0.2cqw, transparent 0.4cqw) 0 0 / 4cqw 4cqw,
+    linear-gradient(160deg, color-mix(in srgb, var(--sb-teal) 84%, #fff), var(--sb-teal));
 }
 .scrapbook-bookplate {
   position: absolute;

@@ -2,6 +2,7 @@ import React from 'react';
 import { getCMSCopy } from '../cms/runtime';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import './sayings.css';
+import { QuoteWords } from './QuoteWords';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.Sayings.${key}`, fallback);
 
@@ -21,7 +22,7 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.Sayings.${key}`, f
    Every line is editable in the CMS (Sayings). */
 export const SAYINGS = () => ({
   heal: {
-    hindi: c('heal-hindi', 'रक्त नालियों में नहीं, नाड़ियों में बहे।'),
+    hindi: c('heal-hindi', 'रक्त नाड़ियों में बहे, नालियों में नहीं।'),
     english: c('heal-english', 'Blood should flow in veins, not in drains.'),
     by: c('heal-by', 'Nirankari Baba Hardev Singh Ji Maharaj'),
   },
@@ -76,14 +77,12 @@ export const hasSaying = (id: string): id is SayingId => id in SAYINGS();
 /** A saying set beside the work it speaks to: the words large (in Hindi where
     they were said in Hindi, set in Devanagari), their meaning beneath, and
     who said them. A place may leave out the meaning or who said it. */
-export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: boolean; byline?: boolean; sideMarks?: boolean }> = ({ id, className, meaning = true, byline = true, sideMarks = false }) => {
+export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: boolean; byline?: boolean }> = ({ id, className, meaning = true, byline = true }) => {
   useCMSRevision();
   const saying: { hindi?: string; english: string; by: string } = SAYINGS()[id];
   return (
-    <figure className={`saying${className ? ` ${className}` : ''}`} data-script={saying.hindi ? 'hindi' : 'english'} data-side-marks={sideMarks || undefined}>
-      <span className="saying-mark" aria-hidden="true">“</span>
-      {sideMarks && <span className="saying-mark saying-mark-close" aria-hidden="true">”</span>}
-      <blockquote lang={saying.hindi ? 'hi' : 'en'}>{saying.hindi ?? saying.english}</blockquote>
+    <figure className={`saying${className ? ` ${className}` : ''}`} data-script={saying.hindi ? 'hindi' : 'english'}>
+      <QuoteWords><blockquote lang={saying.hindi ? 'hi' : 'en'}>{saying.hindi ?? saying.english}</blockquote></QuoteWords>
       {saying.hindi && meaning && <p className="saying-meaning">{saying.english}</p>}
       {byline && <figcaption>{saying.by}</figcaption>}
     </figure>

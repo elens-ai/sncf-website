@@ -1,9 +1,37 @@
+import { QuoteWords } from './QuoteWords';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { introFocus, introSeconds } from '../cms/introSettings';
 import { FlaredWordmark } from './PillarWordmark';
 import { MissionChapters, type MissionChapter } from './MissionChapters';
 import { useReducedMotion } from 'motion/react';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+
+/** Reserve the whole paragraph while revealing its letters, so the page never reflows. */
+const WelcomeTypewriter = ({ text, delay, duration }: { text: string; delay: number; duration: number }) => {
+  const letters = useRef<HTMLSpanElement>(null);
+  const reduced = useReducedMotion();
+  useEffect(() => {
+    const nodes = Array.from(letters.current?.children ?? []) as HTMLElement[];
+    nodes.forEach(node => { node.style.visibility = reduced ? 'visible' : 'hidden'; });
+    if (reduced) return;
+    let shown = 0;
+    let frame = 0;
+    const start = performance.now() + delay;
+    const type = (now: number) => {
+      const count = Math.floor(Math.max(0, Math.min(1, (now - start) / duration)) * nodes.length);
+      while (shown < count) nodes[shown++].style.visibility = 'visible';
+      if (shown < nodes.length) frame = requestAnimationFrame(type);
+    };
+    frame = requestAnimationFrame(type);
+    return () => cancelAnimationFrame(frame);
+  }, [text, delay, duration, reduced]);
+  return <>
+    <span className="sr-only">{text}</span>
+    <span ref={letters} className="welcome-typewriter" aria-hidden="true">
+      {Array.from(text).map((letter, index) => <span key={index}>{letter}</span>)}
+    </span>
+  </>;
+};
 
 interface WelcomeSplashScreenProps {
   /** Fired when the logo starts flying to the header. */
@@ -59,12 +87,12 @@ const BRAND_MOVE_MS = 1100;
 const BRAND_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
 /* How long each page stays before moving on by itself, in seconds: editable in
    the CMS ("Intro · … time"). The welcome page holds long enough to read its
-   paragraph (15s); the others a few seconds each: the copy animates in during
+   paragraph (10s); the others a few seconds each: the copy animates in during
    the first one or two (index.css: WELCOME PAGE, MISSION PAGE), and the
    message and mission pages' rails let a viewer hold them to read. The mission
    page's time is shared equally among its two chapters (MissionChapters). The
    arrow button moves on at any time. */
-const WELCOME_SECONDS = 15;
+const WELCOME_SECONDS = 10;
 const MESSAGE_SECONDS = 3;
 const MISSION_SECONDS = 6;
 /* Where the welcome photo and the Satguru portrait are centred: editable in the
@@ -94,7 +122,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   onComplete,
 }) => {
   const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
-  const welcomeMs = introSeconds(c("welcome-hold-seconds", "15"), WELCOME_SECONDS);
+  const welcomeMs = introSeconds(c("welcome-hold-seconds", "10"), WELCOME_SECONDS);
   const messageMs = introSeconds(c("message-seconds", "3"), MESSAGE_SECONDS);
   const missionMs = introSeconds(c("mission-seconds", "6"), MISSION_SECONDS);
   const photoFocus = introFocus(c("welcome-photo-focus", "47% 46%"), WELCOME_PHOTO_FOCUS);
@@ -304,7 +332,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     body: [],
     content: (
       <figure className="splash-message">
-        <blockquote>{c("message-text", "We are all part of one human family, children of the same formless Creator (Nirankar). This shared connection inspires compassion and selfless service, guiding us to stand by one another. At the heart of our Mission lies the spirit of healing, enrichment and empowerment – believing that nurturing one life uplifts the whole community. May we all be granted with the wisdom and strength to live in peace, to serve with humility and to care for our Earth and each other with a shared sense of responsibility.")}</blockquote>
+        <blockquote><QuoteWords>{c("message-text", "We are all part of one human family, children of the same formless Creator (Nirankar). This shared connection inspires compassion and selfless service, guiding us to stand by one another. At the heart of our Mission lies the spirit of healing, enrichment and empowerment – believing that nurturing one life uplifts the whole community. May we all be granted with the wisdom and strength to live in peace, to serve with humility and to care for our Earth and each other with a shared sense of responsibility.")}</QuoteWords></blockquote>
         <figcaption><cite>{c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite></figcaption>
       </figure>
     ),
@@ -369,6 +397,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         style={{
           opacity: stage === 'leaving' ? 0 : 1,
           transition: `opacity ${LEAVE_MS}ms ease-in-out`,
+          '--welcome-duration': `${welcomeMs}ms`,
           '--focus-x': photoFocus.x,
           '--focus-y': photoFocus.y,
         } as React.CSSProperties}
@@ -388,10 +417,10 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
             <div ref={brandSlotRef} aria-hidden="true" style={{ height: brandHeight * brandScale, marginBottom: 'calc(var(--wp-s) * 2.6)', flex: 'none' }} />
             <h1 className="splash-welcome-heading">
               <FlaredWordmark text={c("welcome-short-name", "SNCF")} className="splash-welcome-sncf" />
-              <span className="splash-welcome-name"><span>{c("welcome-full-name", "Sant Nirankari Charitable Foundation")}</span></span>
+              <span className="splash-welcome-name"><span><WelcomeTypewriter text={c("welcome-full-name", "Sant Nirankari Charitable Foundation")} delay={750} duration={2000} /></span></span>
             </h1>
             {/* Editable in the CMS. */}
-            <p className="splash-welcome-text">{c("welcome-text", "Established in 2010, the Sant Nirankari Charitable Foundation was created to give organized direction to diverse social initiatives. Guided by the principle of oneness, we bring compassion, care, and kindness to communities worldwide. Our mission extends beyond charity. We tackle social and environmental challenges, empower the underprivileged, and safeguard our planet to build a better world for all. Staying true to our motto ‘Service with Humility,’ we strive to uplift lives with dignity and selflessness.")}</p>
+            <p className="splash-welcome-text"><WelcomeTypewriter delay={1800} duration={Math.max(1000, welcomeMs - 2000)} text={c("welcome-text", "Established in 2010, the Sant Nirankari Charitable Foundation was created to give organized direction to diverse social initiatives. Guided by the principle of oneness, we bring compassion, care, and kindness to communities worldwide. Our mission extends beyond charity. We tackle social and environmental challenges, empower the underprivileged, and safeguard our planet to build a better world for all. Staying true to our motto ‘Service with Humility,’ we strive to uplift lives with dignity and selflessness.")} /></p>
           </div>
         )}
         {/* Message page, then mission page, in one frame: the foundation's
@@ -447,7 +476,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                   when it appears; there the Hindi couplet stands in its place,
                   and gives way to it on the mission page */}
               <figcaption data-shown={onMission}>
-                <blockquote>{c("satguru-quote", "“A life lived for others is a life worth living.”")}</blockquote>
+                <blockquote><QuoteWords>{c("satguru-quote", "A life lived for others is a life worth living.").replace(/^“|”$/g, '')}</QuoteWords></blockquote>
                 <cite>— {c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite>
                 {/* Editable in the CMS. */}
                 <p className="splash-couplet" lang="hi" data-gone={onMission} aria-hidden={onMission || undefined}>
@@ -536,7 +565,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
               className="font-signature pb-4 leading-[1.15] whitespace-nowrap"
               style={{
                 color: revealed ? '#fff' : 'var(--sncf-tagline)',
-                textShadow: revealed ? '0 3px 24px rgb(0 0 0 / 0.45)' : 'none',
+                textShadow: revealed ? '0 3px 24px rgb(6 55 130 / 0.45)' : 'none',
                 transition: `color ${WHITE_FADE_MS}ms ease-in-out, text-shadow ${WHITE_FADE_MS}ms ease-in-out`,
                 fontSize: 'clamp(1.75rem, 7.1vw, 91px)',
                 wordSpacing: '0.26em',

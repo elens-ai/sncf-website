@@ -121,6 +121,26 @@
 }
 :is(.recognition-section, .collaboration-section)[data-active='false'] > :not(.continuity-art) { animation-play-state: paused; }
 :is(.recognition-section, .collaboration-section)[data-active='false'] .continuity-art i { animation-play-state: paused; }
+
+/* A centered introduction opens into a full-screen field of honours. */
+#awards-section.recognition-section { padding: 0; min-height: 280svh; overflow: clip; }
+#awards-section > .recognition-viewport { position: sticky; top: 70px; height: calc(100svh - 70px); max-width: none; }
+.recognition-viewport .honour-heading { position: absolute; inset: 50% 24px auto; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; transform: translateY(calc(-50% - var(--awards-spread, 0) * 100px)); opacity: var(--awards-heading-opacity, 1); pointer-events: none; }
+.recognition-viewport .continuity-eyebrow { justify-content: center; }
+.recognition-viewport .honour-heading h2 { font-size: clamp(34px, 4vw, 54px); }
+.recognition-viewport .honour-heading-columns { display: block; max-width: 560px; margin: 24px auto 0; }
+.recognition-viewport .honour-heading-columns p + p { margin-top: 10px; }
+.recognition-viewport .honour-meta { padding: 0; border: 0; }
+.recognition-field { position: absolute; inset: 20px max(24px, 3vw); transform: translateY(calc((1 - var(--awards-spread, 0)) * 78svh)) scale(calc(.78 + var(--awards-spread, 0) * .22)); opacity: min(1, calc(var(--awards-spread, 0) * 1.8)); transform-origin: center; }
+.recognition-field .honour-pile-wrap { margin: 0; height: 100%; }
+.recognition-field .honour-pile { width: 100%; height: 100%; aspect-ratio: auto; }
+@media (max-width: 639px), (prefers-reduced-motion: reduce) {
+  #awards-section.recognition-section { min-height: 0; padding: 100px 20px 56px; }
+  #awards-section > .recognition-viewport { position: relative; top: auto; height: auto; }
+  .recognition-viewport .honour-heading { position: relative; inset: auto; opacity: 1; transform: none; }
+  .recognition-field { position: relative; inset: auto; transform: none; opacity: 1; margin-top: 36px; }
+  .recognition-field .honour-pile { height: auto; aspect-ratio: var(--pile-aspect); }
+}
 @media (prefers-reduced-motion: reduce) { .recognition-section *, .collaboration-section * { animation: none !important; transition: none !important; } }
 
 /* Full documents remain readable in the viewer on short screens as well. */
@@ -133,4 +153,3 @@
 .recognition-viewer .award-icon-btn:focus-visible { outline: 2px solid #e4efd4; outline-offset: 3px; }
 @media (max-width: 639px) { .recognition-viewer .award-lightbox-stage { height: 48dvh; }.recognition-viewer figcaption h3 { font-size: 16px; } }
 @media (prefers-reduced-motion: reduce) { .recognition-viewer { animation: none; } }
-

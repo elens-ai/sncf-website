@@ -177,7 +177,7 @@ export const DevotionalPhotoCard: React.FC<DevotionalPhotoCardProps> = ({
                 {/* Hair & Draping Head Covering */}
                 <path
                   d="M66 85 C66 48, 80 40, 100 40 C120 40, 134 48, 134 85 C134 98, 130 115, 126 125 C118 100, 115 65, 100 65 C85 65, 82 100, 74 125 C70 115, 66 98, 66 85 Z"
-                  fill="#2d1b14"
+                  fill="#102e56"
                 />
                 {/* Gentle White Head Covering Veil */}
                 <path
@@ -264,19 +264,19 @@ export const DevotionalPhotoCard: React.FC<DevotionalPhotoCardProps> = ({
                 {/* Neat Styled Hair */}
                 <path
                   d="M68 80 C68 46, 80 38, 100 38 C120 38, 132 46, 132 80 C132 86, 131 92, 129 95 C126 80, 122 55, 100 55 C78 55, 74 80, 71 95 C69 92, 68 86, 68 80 Z"
-                  fill="#1e1e24"
+                  fill="#102e56"
                 />
 
                 {/* Dignified Beard & Moustache */}
                 <path
                   d="M74 92 C74 122, 85 132, 100 132 C115 132, 126 122, 126 92 C122 105, 115 124, 100 124 C85 124, 78 105, 74 92 Z"
-                  fill="#24242e"
+                  fill="#102e56"
                   opacity="0.9"
                 />
                 {/* Moustache */}
                 <path
                   d="M86 98 Q100 104 114 98 Q100 95 86 98 Z"
-                  fill="#181820"
+                  fill="#102e56"
                 />
 
                 {/* Calm Eyes & Expression */}
@@ -315,11 +315,11 @@ export const DevotionalPhotoCard: React.FC<DevotionalPhotoCardProps> = ({
       </div>
 
       {/* Subtle Bottom Vignette for Clean Label Readability */}
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy/40 via-transparent to-transparent pointer-events-none" />
 
       {/* Minimalist Name Caption Bar ONLY (No badge, no headings, no body description, no button) */}
       <div className="relative z-10 p-3.5 sm:p-4 text-center">
-        <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-neutral-950/80 backdrop-blur-md border border-white/20 shadow-lg">
+        <div className="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full bg-deep-blue/80 backdrop-blur-md border border-white/20 shadow-lg">
           <p className="font-artistic-serif text-white font-medium text-xs sm:text-sm tracking-wider whitespace-nowrap drop-shadow">
             {leader.name}
           </p>

@@ -1,0 +1,4 @@
+.quote-words { position: relative; padding-inline: var(--quote-gap, clamp(26px, 3vw, 38px)); }
+.quote-mark { position: absolute; top: 0; left: 0; font: 700 var(--quote-mark-size, clamp(38px, 4vw, 52px))/1 var(--font-heading); color: var(--saying-ink, currentColor); opacity: .2; pointer-events: none; }
+.quote-mark-close { left: auto; right: 0; }
+:is(.values-cover-saying, .projects-cover-saying, .who-cover-saying, .donation-saying, .splash-satguru) { --quote-mark-size: 32px; --quote-gap: 24px; }

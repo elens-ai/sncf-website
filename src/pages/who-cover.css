@@ -68,7 +68,7 @@
 .who-cover-saying[data-script='english'] blockquote { font-size: 16px; font-weight: 500; line-height: 1.5; }
 .who-cover-saying .saying-meaning { margin-top: 2px; font-size: 12.5px; color: var(--who-type-soft); }
 .who-cover-saying figcaption { margin-top: 6px; font-size: 9.5px; color: var(--who-type-faint); }
-.saying.who-cover-saying::before, .saying.who-cover-saying::after, .who-cover-saying .saying-mark { display: none; }
+.saying.who-cover-saying::before, .saying.who-cover-saying::after { display: none; }
 
 /* AT THE FOOT: UNEP, and the foundation's own figures */
 .who-cover-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 14px 0; border-top: 1px solid var(--who-rule); font-size: 10px; letter-spacing: 0.06em; color: var(--who-type-faint); }

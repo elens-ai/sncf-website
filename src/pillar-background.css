@@ -58,7 +58,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #031b1840, #03151f99);
+  background: linear-gradient(90deg, #102e5640, #102e5699);
   opacity: var(--page-depth, 0);
 }
 /* Feather every hero-only layer, including the photo and both curved sheets,

@@ -6,7 +6,7 @@
 .explore {
   --explore-ink: var(--value-color, var(--project-ink, #1f8a5c));
   /* deepened for white type on it */
-  --explore-deep: color-mix(in srgb, var(--explore-ink) 80%, #0d2421);
+  --explore-deep: color-mix(in srgb, var(--explore-ink) 80%, #102e56);
   margin: 34px 0 44px;
 }
 /* The bar parks under the site's header and the page's rail (72px + 50px)

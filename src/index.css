@@ -15,6 +15,26 @@
   font-display: swap;
 }
 @theme {
+  --color-navy: #063782;
+  --color-deep-blue: #102e56;
+  --color-black: #063782;
+  --shadow-2xs: 0 1px rgb(16 46 86 / 0.05);
+  --shadow-xs: 0 1px 2px 0 rgb(16 46 86 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(16 46 86 / 0.1), 0 1px 2px -1px rgb(16 46 86 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(16 46 86 / 0.1), 0 2px 4px -2px rgb(16 46 86 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(16 46 86 / 0.1), 0 4px 6px -4px rgb(16 46 86 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(16 46 86 / 0.1), 0 8px 10px -6px rgb(16 46 86 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(16 46 86 / 0.25);
+  --inset-shadow-2xs: inset 0 1px rgb(16 46 86 / 0.05);
+  --inset-shadow-xs: inset 0 1px 1px rgb(16 46 86 / 0.05);
+  --inset-shadow-sm: inset 0 2px 4px rgb(16 46 86 / 0.05);
+  --drop-shadow-xs: 0 1px 1px rgb(16 46 86 / 0.05);
+  --drop-shadow-sm: 0 1px 2px rgb(16 46 86 / 0.15);
+  --drop-shadow-md: 0 3px 3px rgb(16 46 86 / 0.12);
+  --drop-shadow-lg: 0 4px 4px rgb(16 46 86 / 0.15);
+  --drop-shadow-xl: 0 9px 7px rgb(16 46 86 / 0.1);
+  --drop-shadow-2xl: 0 25px 25px rgb(16 46 86 / 0.15);
+  --shadow-inner: inset 0 2px 4px 0 rgb(16 46 86 / 0.05);
   --font-sans: Outfit, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-heading: 'SNCF Flared', Outfit, system-ui, sans-serif;
   --font-script: 'Dancing Script', cursive;
@@ -315,7 +335,7 @@
   bottom: -280px;
   left: calc(50% - 50vw);
   right: calc(50% - 50vw);
-  background: #04060a;
+  background: #102e56;
   opacity: var(--wall-shade, 0);
   pointer-events: none;
 }
@@ -341,10 +361,10 @@
   right: calc(50% - 50vw);
   background: linear-gradient(
     176deg,
-    color-mix(in srgb, var(--wall-a, #1f8a5c) 34%, #0b0e13),
-    color-mix(in srgb, var(--wall-b, #1f8a5c) 22%, #080a0e) 82%
+    color-mix(in srgb, var(--wall-a, #1f8a5c) 34%, #102e56),
+    color-mix(in srgb, var(--wall-b, #1f8a5c) 22%, #102e56) 82%
   );
-  box-shadow: 0 30px 90px -30px rgb(0 0 0 / 0.8);
+  box-shadow: 0 30px 90px -30px rgb(6 55 130 / 0.8);
 }
 /* The room's content is CENTRED in this box, so padding at the foot lifts
    the whole wall — label, plaques and frames together — off the rail. The
@@ -389,8 +409,8 @@
   overflow: hidden;
   background: rgb(255 255 255 / 0.07);
   box-shadow:
-    7px 11px 26px -9px rgb(0 0 0 / 0.62),
-    2px 3px 7px -3px rgb(0 0 0 / 0.4),
+    7px 11px 26px -9px rgb(6 55 130 / 0.62),
+    2px 3px 7px -3px rgb(6 55 130 / 0.4),
     inset 0 1px 0 rgb(255 255 255 / 0.22);
 }
 .lotus-plate img {
@@ -408,7 +428,7 @@
   border-radius: 2px;
 }
 .lotus-plate[data-style='mat'] .lotus-plate-art > * {
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.18);
+  box-shadow: 0 0 0 1px rgb(6 55 130 / 0.18);
 }
 
 /* moulding in the petal's own ink, image to the edge */
@@ -423,7 +443,7 @@
   border: 2px solid var(--plate-ink);
   border-radius: 1px;
   box-shadow:
-    9px 14px 30px -8px rgb(0 0 0 / 0.66),
+    9px 14px 30px -8px rgb(6 55 130 / 0.66),
     inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
@@ -486,14 +506,14 @@
   font-weight: 700;
   color: #fff;
   line-height: 1;
-  text-shadow: 0 2px 10px rgb(0 0 0 / 0.65);
+  text-shadow: 0 2px 10px rgb(6 55 130 / 0.65);
 }
 .lotus-plate-metric {
   font-size: 9px;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: rgb(255 255 255 / 0.8);
-  text-shadow: 0 1px 6px rgb(0 0 0 / 0.7);
+  text-shadow: 0 1px 6px rgb(6 55 130 / 0.7);
 }
 
 /* THE WALL LABEL sits BESIDE the work, not across it. A caption bar laid
@@ -514,7 +534,7 @@
 
 /* The wall label: a stat, engraved. */
 .lotus-plaque {
-  background: rgb(0 0 0 / 0.24);
+  background: rgb(6 55 130 / 0.24);
   border: 1px solid rgb(255 255 255 / 0.16);
   border-radius: 10px;
   backdrop-filter: blur(6px);
@@ -840,12 +860,12 @@
 /* 3D Layered Extruded Text Shadow */
 .text-3d-extruded {
   text-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.95),
+    0 1px 0 rgba(6, 55, 130, 0.95),
     0 2px 0 rgba(20, 15, 10, 0.9),
-    0 3px 1px rgba(0, 0, 0, 0.85),
-    0 4px 2px rgba(0, 0, 0, 0.7),
-    0 6px 6px rgba(0, 0, 0, 0.55),
-    0 0 14px rgba(0, 0, 0, 0.4);
+    0 3px 1px rgba(6, 55, 130, 0.85),
+    0 4px 2px rgba(6, 55, 130, 0.7),
+    0 6px 6px rgba(6, 55, 130, 0.55),
+    0 0 14px rgba(6, 55, 130, 0.4);
 }
 
 /* Keyframes for modals & smooth entries */
@@ -1113,7 +1133,7 @@
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.25),
+    0 4px 24px rgba(6, 55, 130, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   overflow: hidden;
   transition:
@@ -1174,7 +1194,7 @@
 .search-morph:focus-within {
   background: rgba(255, 255, 255, 0.14);
   box-shadow:
-    0 6px 30px rgba(0, 0, 0, 0.35),
+    0 6px 30px rgba(6, 55, 130, 0.35),
     0 0 0 4px color-mix(in srgb, var(--accent-b, #ffffff) 26%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -1450,7 +1470,7 @@
 }
 
 .splash-welcome-photo.is-revealed .splash-welcome-photo-image {
-  animation: welcomePhotoSettle 7s cubic-bezier(0.25, 0.6, 0.3, 1) both;
+  animation: welcomePhotoSettle var(--welcome-duration, 10s) cubic-bezier(0.25, 0.6, 0.3, 1) both;
 }
 
 /* Deep-green tint plus a soft vignette keep the heading legible over any
@@ -1522,7 +1542,7 @@
   from { opacity: 0; transform: translateY(14%) scale(0.94); }
   to { opacity: 1; transform: none; }
 }
-.splash-welcome-sncf { display: block; color: #95d9f1; filter: drop-shadow(0 6px 26px rgb(0 0 0 / 0.42)); }
+.splash-welcome-sncf { display: block; color: #95d9f1; filter: drop-shadow(0 6px 26px rgb(6 55 130 / 0.42)); }
 .splash-welcome-sncf svg { display: block; height: var(--wp-sncf); width: auto; max-width: 100%; overflow: visible; }
 .splash-welcome-sncf path {
   transform-box: fill-box;
@@ -1541,7 +1561,7 @@
   font: 600 var(--wp-name) / 1.4 var(--font-sans);
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.4);
+  text-shadow: 0 2px 14px rgb(6 55 130 / 0.4);
   animation: welcomeRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both;
 }
 /* letter-spacing trails the last letter; the matching indent recentres it */
@@ -1568,7 +1588,7 @@
   hyphens: auto;
   -webkit-hyphens: auto;
   hyphenate-limit-chars: 7 3 3;
-  text-shadow: 0 2px 12px rgb(0 0 0 / 0.45);
+  text-shadow: 0 2px 12px rgb(6 55 130 / 0.45);
   animation: welcomeRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.95s both;
 }
 
@@ -1654,7 +1674,7 @@
      edge. The logo's navy now lies over it on the message and mission pages,
      so it only deepens the photograph as it dissolves into the navy. */
   --shade-copy: max(40%, 33rem);
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0.5) var(--shade-copy), rgba(0, 0, 0, 0.2) calc(var(--shade-copy) + 22%), rgba(0, 0, 0, 0.45) 100%);
+  background: linear-gradient(to right, rgba(6, 55, 130, 0.68) 0%, rgba(6, 55, 130, 0.5) var(--shade-copy), rgba(6, 55, 130, 0.2) calc(var(--shade-copy) + 22%), rgba(6, 55, 130, 0.45) 100%);
   opacity: 0;
   transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
@@ -1792,15 +1812,6 @@
   color: var(--mp-ink);
   text-wrap: pretty;
   animation: messageIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-}
-/* an opening mark in the accent over the first line, in the name's heavy face */
-.splash-message blockquote::before {
-  content: '\201C' / '';
-  display: block;
-  height: 0.5em;
-  margin-bottom: 0.12em;
-  font: 800 4em / 1 var(--font-heading);
-  color: var(--mp-accent);
 }
 .splash-message figcaption {
   display: flex;
@@ -2208,7 +2219,7 @@
   }
   .splash-mission-copy { max-width: none; padding-inline: clamp(20px, 5vw, 40px); }
   /* the copy runs the full width here, so the ground is darkened evenly under it */
-  .splash-mission-shade { background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)); }
+  .splash-mission-shade { background: linear-gradient(rgba(6, 55, 130, 0.6), rgba(6, 55, 130, 0.5)); }
   /* the page scrolls here, so each chapter starts just under the name */
   .mission-chapter-stage { align-items: start; }
   /* the rail can run down to the foot of the screen here, so its pause button
@@ -2560,9 +2571,9 @@
        page-wide layer it shades both screens identically. */
     linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.65) 0%,
-      rgba(0, 0, 0, 0.2) 60%,
-      rgba(0, 0, 0, 0.45) 100%
+      rgba(6, 55, 130, 0.65) 0%,
+      rgba(6, 55, 130, 0.2) 60%,
+      rgba(6, 55, 130, 0.45) 100%
     ),
     linear-gradient(var(--stage-angle, 135deg), var(--accent-a), var(--accent-b));
   transition:
@@ -2589,9 +2600,9 @@
   background:
     linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.65) 0%,
-      rgba(0, 0, 0, 0.2) 60%,
-      rgba(0, 0, 0, 0.45) 100%
+      rgba(6, 55, 130, 0.65) 0%,
+      rgba(6, 55, 130, 0.2) 60%,
+      rgba(6, 55, 130, 0.45) 100%
     ),
     linear-gradient(var(--stage-angle, 135deg), var(--lotus-a), var(--lotus-b));
 }
@@ -2758,7 +2769,7 @@
   padding: 6px 10px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--nav-a) 45%, rgb(255 255 255 / 0.25));
-  background: rgb(0 0 0 / 0.38);
+  background: rgb(6 55 130 / 0.38);
   color: rgb(255 255 255 / 0.85);
   cursor: pointer;
   backdrop-filter: blur(6px);
@@ -2769,7 +2780,7 @@
   transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 .exhibition-nav-chip:hover {
-  background: color-mix(in srgb, var(--nav-a) 35%, rgb(0 0 0 / 0.35));
+  background: color-mix(in srgb, var(--nav-a) 35%, rgb(6 55 130 / 0.35));
   color: #fff;
 }
 /* The nav rides above the section jump button; on a phone that stack eats
@@ -2801,7 +2812,7 @@
   border: 0;
   padding: 0;
   cursor: pointer;
-  background: radial-gradient(120% 90% at 50% 40%, rgb(0 0 0 / 0.72), rgb(0 0 0 / 0.94));
+  background: radial-gradient(120% 90% at 50% 40%, rgb(6 55 130 / 0.72), rgb(6 55 130 / 0.94));
   backdrop-filter: blur(10px);
 }
 .gallery-catalogue-body {
@@ -2811,9 +2822,9 @@
   overflow: auto;
   overscroll-behavior: contain;
   border-radius: 16px;
-  background: #0d1014;
+  background: #102e56;
   border: 1px solid rgb(255 255 255 / 0.13);
-  box-shadow: 0 40px 110px -30px rgb(0 0 0 / 0.85);
+  box-shadow: 0 40px 110px -30px rgb(6 55 130 / 0.85);
   padding: clamp(22px, 3.4vw, 44px) clamp(16px, 3vw, 40px) 14px;
   animation: case-rise 320ms cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -2828,12 +2839,12 @@
   place-items: center;
   border-radius: 50%;
   border: 1px solid rgb(255 255 255 / 0.22);
-  background: rgb(0 0 0 / 0.4);
+  background: rgb(6 55 130 / 0.4);
   color: #fff;
   cursor: pointer;
 }
 .gallery-catalogue-close:hover {
-  background: rgb(0 0 0 / 0.65);
+  background: rgb(6 55 130 / 0.65);
 }
 .gallery-catalogue-head {
   text-align: center;
@@ -2918,8 +2929,8 @@
   padding: 0;
   cursor: pointer;
   background:
-    radial-gradient(120% 90% at 50% 45%, rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.9)),
-    color-mix(in srgb, var(--case-a) 30%, #05070a);
+    radial-gradient(120% 90% at 50% 45%, rgb(6 55 130 / 0.62), rgb(6 55 130 / 0.9)),
+    color-mix(in srgb, var(--case-a) 30%, #102e56);
   backdrop-filter: blur(9px);
 }
 .activity-case-body {
@@ -2928,9 +2939,9 @@
   max-height: 88vh;
   overflow: auto;
   border-radius: 16px;
-  background: color-mix(in srgb, var(--case-a) 22%, #0d1014);
+  background: color-mix(in srgb, var(--case-a) 22%, #102e56);
   border: 1px solid rgb(255 255 255 / 0.14);
-  box-shadow: 0 40px 110px -30px rgb(0 0 0 / 0.85);
+  box-shadow: 0 40px 110px -30px rgb(6 55 130 / 0.85);
   animation: case-rise 320ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 @keyframes case-rise {
@@ -2949,12 +2960,12 @@
   place-items: center;
   border-radius: 50%;
   border: 1px solid rgb(255 255 255 / 0.22);
-  background: rgb(0 0 0 / 0.4);
+  background: rgb(6 55 130 / 0.4);
   color: #fff;
   cursor: pointer;
 }
 .activity-case-close:hover {
-  background: rgb(0 0 0 / 0.65);
+  background: rgb(6 55 130 / 0.65);
 }
 .activity-case-grid {
   display: grid;
@@ -2977,7 +2988,7 @@
   background: #f4f1ea;
   padding: 3.5%;
   box-shadow:
-    8px 13px 34px -10px rgb(0 0 0 / 0.7),
+    8px 13px 34px -10px rgb(6 55 130 / 0.7),
     inset 0 1px 0 rgb(255 255 255 / 0.3);
 }
 .activity-case-art img {
@@ -3096,7 +3107,7 @@
   box-shadow:
     0 0 0 1px var(--plate-ink),
     0 0 30px -4px var(--plate-ink),
-    7px 11px 26px -9px rgb(0 0 0 / 0.62);
+    7px 11px 26px -9px rgb(6 55 130 / 0.62);
 }
 .lotus-plate:hover .lotus-plate-label {
   color: #fff;
@@ -3150,7 +3161,7 @@
 .patron-plaque {
   border-radius: 14px;
   border: 2px solid color-mix(in srgb, var(--plate-ink, #fff) 55%, transparent);
-  background: rgb(0 0 0 / 0.22);
+  background: rgb(6 55 130 / 0.22);
   backdrop-filter: blur(8px);
   padding: 18px 20px;
   opacity: 0;
@@ -3589,7 +3600,7 @@
   background: var(--node-ink, #fff);
   box-shadow:
     0 0 0 3px color-mix(in srgb, var(--node-ink, #fff) 28%, transparent),
-    0 6px 18px -4px rgb(0 0 0 / 0.55),
+    0 6px 18px -4px rgb(6 55 130 / 0.55),
     0 0 16px -4px var(--node-ink, #fff);
   transition: transform 300ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 300ms ease;
 }
@@ -3614,7 +3625,7 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.06em;
-  color: var(--node-ink, #333);
+  color: var(--node-ink, #102e56);
 }
 .orbit-node:hover .orbit-medallion {
   transform: scale(1.18);
@@ -3623,7 +3634,7 @@
   transform: scale(1.3);
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--node-ink, #fff) 40%, transparent),
-    0 6px 18px -4px rgb(0 0 0 / 0.55),
+    0 6px 18px -4px rgb(6 55 130 / 0.55),
     0 0 34px 0 var(--node-ink, #fff);
 }
 /* THE NAME RIDES ALONG, revealed only for the medallion being pointed at.
@@ -3660,7 +3671,7 @@
   height: 26%;
   translate: -50% 46%;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgb(0 0 0 / 0.42) 0%, transparent 68%);
+  background: radial-gradient(ellipse, rgb(6 55 130 / 0.42) 0%, transparent 68%);
   transform: rotateX(var(--orbit-tilt));
   transform-origin: 50% 50%;
 }
@@ -3687,7 +3698,7 @@
   width: 100%;
   margin-top: -32%;
   position: relative;
-  filter: drop-shadow(0 10px 24px rgb(0 0 0 / 0.4));
+  filter: drop-shadow(0 10px 24px rgb(6 55 130 / 0.4));
 }
 /* the presented plaque rises with each new selection (keyed remount) */
 .patron-plaque-presented {
@@ -3744,7 +3755,7 @@
   position: relative;
   padding: 12px 12px 12px 15px;
   border-radius: 12px;
-  background: rgb(0 0 0 / 0.24);
+  background: rgb(6 55 130 / 0.24);
   border: 1px solid rgb(255 255 255 / 0.12);
   backdrop-filter: blur(8px);
   overflow: hidden;
@@ -3816,9 +3827,9 @@
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #0b0e13;
+  color: #102e56;
   background: linear-gradient(100deg, var(--accent-a, #fff), var(--accent-b, #fff));
-  box-shadow: 0 10px 26px -10px rgb(0 0 0 / 0.8);
+  box-shadow: 0 10px 26px -10px rgb(6 55 130 / 0.8);
   transition: transform 260ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 260ms ease,
     filter 260ms ease;
 }
@@ -3831,7 +3842,7 @@
 .partner-cta:hover {
   transform: translateY(-2px);
   filter: brightness(1.08);
-  box-shadow: 0 16px 34px -12px rgb(0 0 0 / 0.85);
+  box-shadow: 0 16px 34px -12px rgb(6 55 130 / 0.85);
 }
 .partner-cta:hover::after {
   transform: translateX(4px);
@@ -4004,7 +4015,7 @@
   background: var(--node-ink, #fff);
   box-shadow:
     0 0 0 2px color-mix(in srgb, var(--node-ink, #fff) 30%, transparent),
-    0 6px 16px -6px rgb(0 0 0 / 0.7);
+    0 6px 16px -6px rgb(6 55 130 / 0.7);
 }
 .partner-plaque-mark .orbit-medallion-core {
   width: 78%;
@@ -4101,7 +4112,7 @@
   padding: 8px 15px;
   border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, var(--chip-a, #fff) 55%, rgb(255 255 255 / 0.14));
-  background: rgb(0 0 0 / 0.18);
+  background: rgb(6 55 130 / 0.18);
   color: rgb(255 255 255 / 0.85);
   font-size: 10.5px;
   font-weight: 800;
@@ -4150,7 +4161,7 @@
 .partner-card {
   border-radius: 14px;
   border: 1.5px solid color-mix(in srgb, var(--card-ink, #fff) 45%, rgb(255 255 255 / 0.12));
-  background: rgb(0 0 0 / 0.22);
+  background: rgb(6 55 130 / 0.22);
   backdrop-filter: blur(8px);
   overflow: hidden;
   transition: border-color 280ms ease, box-shadow 280ms ease;
@@ -4214,7 +4225,7 @@
 .partner-card-initials {
   font-size: 11px;
   font-weight: 800;
-  color: var(--card-ink, #333);
+  color: var(--card-ink, #102e56);
 }
 .partner-card-chevron {
   flex: none;
@@ -4320,7 +4331,7 @@
   padding: 7px 10px;
   border-radius: 12px;
   border: 1.5px solid color-mix(in srgb, var(--card-ink, #fff) 42%, rgb(255 255 255 / 0.12));
-  background: rgb(0 0 0 / 0.2);
+  background: rgb(6 55 130 / 0.2);
   backdrop-filter: blur(8px);
   text-align: left;
   cursor: pointer;
@@ -4332,7 +4343,7 @@
 }
 .partner-row[data-selected='true'] {
   border-color: var(--card-ink);
-  background: rgb(0 0 0 / 0.32);
+  background: rgb(6 55 130 / 0.32);
   box-shadow: 0 0 0 1px var(--card-ink), 0 0 22px -7px var(--card-ink);
 }
 .partner-row:focus-visible {
@@ -4403,7 +4414,7 @@
   padding: 8px 12px;
   border-radius: 10px;
   border: 1.5px solid color-mix(in srgb, var(--cause-a, #fff) 45%, rgb(255 255 255 / 0.15));
-  background: rgb(0 0 0 / 0.28);
+  background: rgb(6 55 130 / 0.28);
   color: #fff;
   font-size: 13px;
   transition: border-color 240ms ease, box-shadow 240ms ease;
@@ -4478,7 +4489,7 @@
   background: linear-gradient(
     115deg,
     color-mix(in srgb, var(--pill-a, #6f86c9) 22%, rgb(255 255 255 / 0.04)) 0%,
-    color-mix(in srgb, var(--pill-b, #41598f) 30%, rgb(0 0 0 / 0.28)) 100%
+    color-mix(in srgb, var(--pill-b, #41598f) 30%, rgb(6 55 130 / 0.28)) 100%
   );
   border-color: color-mix(in srgb, var(--pill-a, #fff) 50%, rgb(255 255 255 / 0.14));
 }
@@ -4516,7 +4527,7 @@
   padding: 1.5px 7px;
   border-radius: 999px;
   margin-top: 3px;
-  background: color-mix(in srgb, var(--pill-a, #fff) 45%, rgb(0 0 0 / 0.3));
+  background: color-mix(in srgb, var(--pill-a, #fff) 45%, rgb(6 55 130 / 0.3));
   border: 1px solid color-mix(in srgb, var(--pill-a, #fff) 55%, transparent);
 }
 .partner-row .partner-card-mark {
@@ -4571,7 +4582,7 @@
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.9),
     inset 0 -14px 26px -20px rgb(20 30 60 / 0.35),
-    0 34px 60px -30px rgb(0 0 0 / 0.6);
+    0 34px 60px -30px rgb(6 55 130 / 0.6);
   /* the wall is trucked in and stood up on arrival */
   opacity: 0;
   transform: translateY(26px);
@@ -4779,7 +4790,7 @@
   background: linear-gradient(90deg, rgb(13 22 40 / 0.92) 0%, rgb(19 30 54 / 0.88) 100%);
   border: 1px solid rgb(255 255 255 / 0.14);
   backdrop-filter: blur(8px);
-  box-shadow: 0 18px 36px -22px rgb(0 0 0 / 0.7);
+  box-shadow: 0 18px 36px -22px rgb(6 55 130 / 0.7);
   /* it follows the wall in, a beat later */
   opacity: 0;
   transform: translateY(18px);
@@ -5069,7 +5080,7 @@
   overflow: hidden;
   background: rgb(20 14 22 / 0.45);
   cursor: pointer;
-  box-shadow: 0 40px 80px -32px rgb(0 0 0 / 0.85);
+  box-shadow: 0 40px 80px -32px rgb(6 55 130 / 0.85);
 }
 .award-card img {
   display: block;
@@ -5081,7 +5092,7 @@
   object-fit: cover;
   object-position: var(--focal, 50% 50%);
 }
-.award-card--center { box-shadow: 0 56px 110px -36px rgb(0 0 0 / 0.9); }
+.award-card--center { box-shadow: 0 56px 110px -36px rgb(6 55 130 / 0.9); }
 .award-card:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 
 /* ---------- masthead, as the ring had it ---------- */
@@ -5278,7 +5289,7 @@
   line-height: 1;
   color: var(--ink-900);
   margin: 0;
-  text-shadow: 0 6px 30px rgb(0 0 0 / 0.4);
+  text-shadow: 0 6px 30px rgb(6 55 130 / 0.4);
 }
 .page-rule {
   width: 76px;
@@ -5372,10 +5383,10 @@
      plate is just as saturated and white clears 4.5:1 across the whole face. */
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--ink-a) 84%, #16182b) 0%,
-    color-mix(in srgb, var(--ink-a) 94%, #16182b) 100%
+    color-mix(in srgb, var(--ink-a) 84%, #102e56) 0%,
+    color-mix(in srgb, var(--ink-a) 94%, #102e56) 100%
   );
-  box-shadow: 0 18px 34px -22px color-mix(in srgb, var(--ink-a) 70%, #16182b);
+  box-shadow: 0 18px 34px -22px color-mix(in srgb, var(--ink-a) 70%, #102e56);
   transition: transform 260ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 260ms ease;
 }
 /* a soft light from the top-left corner, so four identical plates in a row
@@ -5758,10 +5769,10 @@
      its bright end measured 2.44:1 under white type */
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--ink-a) 84%, #16182b) 0%,
-    color-mix(in srgb, var(--ink-a) 94%, #16182b) 100%
+    color-mix(in srgb, var(--ink-a) 84%, #102e56) 0%,
+    color-mix(in srgb, var(--ink-a) 94%, #102e56) 100%
   );
-  box-shadow: 0 20px 40px -22px color-mix(in srgb, var(--ink-a) 70%, #16182b);
+  box-shadow: 0 20px 40px -22px color-mix(in srgb, var(--ink-a) 70%, #102e56);
 }
 .pj-plate-value {
   font-size: clamp(30px, 5.5vw, 46px);
@@ -6091,7 +6102,7 @@
   /* THE INK. One near-black with a little indigo in it, stepped down by
      opacity rather than by mixing toward grey — greyed text on warm paper
      reads as faded, tinted text reads as considered. */
-  --ink-900: #16182b;
+  --ink-900: #102e56;
   --ink-700: #3a3f57;
   --ink-500: #626981;
   --ink-400: #838aa8;
@@ -6126,7 +6137,7 @@
       rgb(9 166 207 / 0.14) 74%,
       rgb(105 185 71 / 0.16) 100%
     ),
-    linear-gradient(180deg, #171334 0%, #120f2a 100%);
+    linear-gradient(180deg, #171334 0%, #102e56 100%);
   box-shadow: 0 1px 0 rgb(255 255 255 / 0.08), 0 10px 30px -18px rgb(18 15 42 / 0.8);
 }
 
@@ -6365,7 +6376,7 @@
 .subnav[data-variant='tabs'] .subnav-chip:hover::before { opacity: 0.85; }
 .reading-room .subnav[data-variant='tabs'] .subnav-chip[data-on='true'] {
   background: transparent;
-  color: color-mix(in srgb, var(--chip-ink) 72%, #16182b);
+  color: color-mix(in srgb, var(--chip-ink) 72%, #102e56);
 }
 .subnav[data-variant='tabs'] .subnav-chip[data-on='true']::before { opacity: 1; scale: 1.15; }
 /* THE RAIL ON ITS SECTION'S GROUND (tinted; Core Values): the rail is laid in
@@ -6383,14 +6394,14 @@
   --rail-light: var(--backdrop-light, #90cfae);
   --rail-pale: var(--backdrop-pale, #cde9d9);
   background:
-    linear-gradient(90deg, #031b1840, #03151f99),
+    linear-gradient(90deg, #102e5640, #102e5699),
     linear-gradient(90deg, var(--rail-dark), var(--rail-mid) 43%, var(--rail-light) 77%, var(--rail-pale));
   backdrop-filter: none;
   border-bottom-color: rgb(255 255 255 / 0.06);
   transition: --rail-dark 700ms ease, --rail-mid 700ms ease, --rail-light 700ms ease, --rail-pale 700ms ease;
 }
 .subnav[data-tinted] .subnav-track { background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); }
-.subnav[data-tinted] .subnav-lit { box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 8px 18px -8px rgb(0 0 0 / 0.45); }
+.subnav[data-tinted] .subnav-lit { box-shadow: 0 1px 2px rgb(6 55 130 / 0.12), 0 8px 18px -8px rgb(6 55 130 / 0.45); }
 .subnav[data-tinted] .subnav-chip { color: rgb(255 255 255 / 0.84); }
 .subnav[data-tinted] .subnav-chip:not([data-on='true']):hover { color: #fff; }
 .subnav[data-variant='tabs'][data-tinted] .subnav-chip::before { background: color-mix(in srgb, var(--chip-ink) 45%, #fff); opacity: 0.9; }
@@ -6588,7 +6599,7 @@ button.mgal-plate:focus-visible {
   height: 38px;
   border-radius: 999px;
   font-size: 14px;
-  color: color-mix(in srgb, var(--ink-a, #626981) 62%, #16182b);
+  color: color-mix(in srgb, var(--ink-a, #626981) 62%, #102e56);
   background: rgb(255 255 255 / 0.72);
   border: 1px solid color-mix(in srgb, var(--ink-a, #626981) 20%, transparent);
 }
@@ -6597,7 +6608,7 @@ button.mgal-plate:focus-visible {
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ink-a, #626981) 58%, #16182b);
+  color: color-mix(in srgb, var(--ink-a, #626981) 58%, #102e56);
 }
 .mgal-caption {
   margin: 8px 2px 0;
@@ -6642,7 +6653,7 @@ button.mgal-plate:focus-visible {
   border-radius: 12px;
   display: block;
   margin: 0 auto;
-  background: #000;
+  background: #063782;
   border: 0;
 }
 .mgal-viewer-figure iframe {
@@ -6778,7 +6789,7 @@ button.mgal-plate:focus-visible {
 .reading-room[data-surface='light'] .pj-scope,
 .reading-room[data-surface='light'] .pj-link,
 .reading-room[data-surface='light'] .gf-eyebrow {
-  color: var(--ink-type, color-mix(in srgb, var(--ink-a, #3a3f57) 82%, #16182b));
+  color: var(--ink-type, color-mix(in srgb, var(--ink-a, #3a3f57) 82%, #102e56));
 }
 .reading-room[data-surface='light'] .pj-link {
   border-bottom-color: color-mix(in srgb, var(--ink-type, var(--ink-a, #3a3f57)) 40%, transparent);
@@ -6836,7 +6847,7 @@ html:has(.reading-room[data-surface='light']) {
 /* A film tile with a file but no still: an ink ground for the play mark to
    sit on, rather than a broken image. */
 .mgal-plate[data-poster='none'] {
-  background: linear-gradient(140deg, #22263f 0%, #16182b 100%);
+  background: linear-gradient(140deg, #22263f 0%, #102e56 100%);
 }
 
 /* ---- PAPER CORRECTIONS ------------------------------------------------ */
@@ -6850,8 +6861,8 @@ html:has(.reading-room[data-surface='light']) {
    for white type: white on Health City's #9ad6ef measured 1.59:1. The chip
    therefore darkens whatever ink it is given rather than trusting it. */
 .reading-room[data-surface='light'] .subnav-chip[data-on='true'] {
-  background: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
-  border-color: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  background: color-mix(in srgb, var(--chip-ink) 42%, #102e56);
+  border-color: color-mix(in srgb, var(--chip-ink) 42%, #102e56);
   color: #fff;
 }
 
@@ -6911,10 +6922,10 @@ html:has(.reading-room[data-surface='light']) {
 /* FOCUS RINGS kept the bright accent, which was the visible one on
    near-black and is not on paper. */
 .reading-room[data-surface='light'] .cv-record-head:focus-visible {
-  outline-color: var(--ink-type, #16182b);
+  outline-color: var(--ink-type, #102e56);
 }
 .reading-room[data-surface='light'] .pj-tab:focus-visible {
-  outline: 2px solid #16182b;
+  outline: 2px solid #102e56;
   outline-offset: 2px;
 }
 
@@ -6926,8 +6937,8 @@ html:has(.reading-room[data-surface='light']) {
   border-bottom-color: rgb(31 79 143 / 0.35);
 }
 .reading-room[data-surface='light'] .ww-contact-grid a:hover {
-  color: #16182b;
-  border-bottom-color: #16182b;
+  color: #102e56;
+  border-bottom-color: #102e56;
 }
 
 /* THE PORTRAIT FRAME was a white hairline on a white card — no frame at all
@@ -7128,7 +7139,7 @@ html:has(.reading-room[data-surface='light']) {
      4.5:1 on #ffffff measured 3.45-4.5 here. Carrying the ink most of the way
      to the page's near-black keeps each room's hue and buys the contrast
      back on every one of the seven bands. */
-  color: color-mix(in srgb, var(--ink-a) 58%, #16182b);
+  color: color-mix(in srgb, var(--ink-a) 58%, #102e56);
   margin: 0 0 8px;
 }
 .cv-threshold-title {
@@ -7893,7 +7904,7 @@ button.mgal-plate-awaiting:hover {
    fills with — 6.27:1. Scoped to the light surface, which is the ground the
    number was measured against. */
 .reading-room[data-surface='light'] .subnav-chip:focus-visible {
-  outline-color: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  outline-color: color-mix(in srgb, var(--chip-ink) 42%, #102e56);
 }
 
 /* THE TWO PAGES THAT WERE SKIPPED, PRINTED LIKE THE REST.
@@ -7975,3 +7986,7 @@ button.mgal-plate-awaiting:hover {
 [data-motion="paused"]::after,
 [data-motion="paused"] *::before,
 [data-motion="paused"] *::after{animation-play-state:paused!important}
+
+/* Letter-by-letter welcome copy; the complete text remains available to assistive technology. */
+.welcome-typewriter > span { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .welcome-typewriter > span { visibility: visible; } }

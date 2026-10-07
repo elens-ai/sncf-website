@@ -23,11 +23,11 @@ import { SdgTags, UnepSeal } from '../components/UnAffiliation';
 import { Saying, hasSaying, type SayingId } from '../components/Saying';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ACTIVITIES, type Activity } from '../data/activities';
+import { PROGRAMME_SDGS } from '../data/sdgs';
 import { PILLARS } from '../data/pillars';
 import { subjectFor } from '../utils/waves';
 import { MEDIA } from '../data/media';
 import { PAVILION_GALLERY, roomPhotoFor } from '../data/pavilionGallery';
-import { PROGRAMME_SDGS } from '../data/sdgs';
 import { slug } from '../utils/slug';
 import './projects.css';
 
@@ -43,7 +43,7 @@ const inkStyle = (i: number) => ({ '--project-ink': FACES[i % FACES.length].ink,
 /* a project's name on the cover: Amrit, Oneness Vann, Watershed, Adopted Villages */
 const shortName = (project: Activity) => project.title.replace(/^Project /, '').replace(/ Programme$/, '');
 
-/* beneath the orbit the projects speak in short lines (their chapters below give the sayings in
+/* Beneath the subheading the projects speak in short lines (their chapters below give the sayings in
    full): Project Amrit's slogan without its source, Oneness Vann's own line, the watershed's
    saying in Hindi, and the villages' line without its meaning or source */
 const COVER_SAYINGS: Record<string, { id: SayingId; meaning?: boolean; byline?: boolean }> = {
@@ -57,7 +57,7 @@ const COVER_SAYINGS: Record<string, { id: SayingId; meaning?: boolean; byline?: 
     projects' teal under the page's deep wash, the waves the chapters swim in,
     and the projects' drawings): the words and the way on to the projects,
     beside the orbit, where every project is a moon and choosing one goes to
-    its chapter. Beneath the orbit, the voice of the project in view; at the
+    its chapter. Beneath the left-side introduction, the voice of the project in view; at the
     foot, the foundation's work with UNEP and each project's headline figure,
     opening its Stats. */
 const ProjectsCover: React.FC = () => {
@@ -87,17 +87,18 @@ const ProjectsCover: React.FC = () => {
       <p className="project-eyebrow">{getCMSCopy("copy.ProjectsPage.982a72dda0d4", "Service that takes shape")}</p>
       <h1 id="projects-heading">{getCMSCopy("copy.ProjectsPage.988b94ac8a81", "Built for people,")}<br /><em>{getCMSCopy("copy.ProjectsPage.27f463b7e8ab", "Rooted in purpose.")}</em></h1>
       <p className="projects-cover-lede">{getCMSCopy("copy.ProjectsPage.d90ca7d5eb20", "From reviving water bodies to growing forests and supporting villages, discover how our values become lasting projects.")}</p>
-      <div className="projects-cover-actions">
-        <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#project-amrit")} className="projects-cover-cta">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={15} aria-hidden="true" /></a>
-      </div>
-    </div>
-    {/* the orbit, and beneath it the voice of the project in view */}
-    <div className="projects-cover-stage">
-      <ProjectOrbit projects={ways} choice={choice} onChange={setChoice} active={active} />
       <div className="projects-cover-voice">
         {hasSaying(current.id) ? <Saying key={current.id} id={current.id} className="projects-cover-saying" {...COVER_SAYINGS[current.id]} />
           : <p key={current.id} className="projects-cover-status"><i aria-hidden="true" />{getCMSCopy("copy.ProjectsPage.hcBadge", "OPD services started")} · {getCMSCopy("copy.ProjectsPage.hcChip3", "North Delhi")}</p>}
       </div>
+      <div className="projects-cover-actions">
+        <a href={getCMSLink("copy.Link.ProjectsPage.6a68430d8c61", "#project-amrit")} className="projects-cover-cta">{getCMSCopy("copy.ProjectsPage.1102171bd1b3", "Explore our projects ")}<ArrowDown size={15} aria-hidden="true" /></a>
+      </div>
+    </div>
+    {/* The project orbit sits beside the copy and its saying. */}
+    <div className="projects-cover-stage">
+      <ProjectOrbit projects={ways} choice={choice} onChange={setChoice} active={active} interval={2000} />
+
     </div>
     <div className="projects-cover-footer">
       <span className="projects-cover-standing"><UnepSeal /></span>
@@ -157,6 +158,7 @@ const ProjectChapter: React.FC<{ project: Activity; index: number }> = ({ projec
           {modelId && <ProjectEmblem id={modelId} label={project.title} />}
         </div>
         <SdgTags goals={PROGRAMME_SDGS[project.id] ?? []} className="project-sdgs" />
+
       </div>
     </div>
     {hasSaying(project.id) && <Saying id={project.id} />}

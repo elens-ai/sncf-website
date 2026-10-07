@@ -50,7 +50,7 @@
   background:
     radial-gradient(ellipse 70% 62% at 50% 45%, color-mix(in srgb, var(--chapter-b) 50%, transparent), color-mix(in srgb, var(--chapter-a) 22%, transparent) 60%, transparent 100%),
     rgb(255 255 255 / .05);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16), 0 30px 60px -30px color-mix(in srgb, var(--chapter-a) 70%, black);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16), 0 30px 60px -30px color-mix(in srgb, var(--chapter-a) 70%, #063782);
   opacity: .7; transform: scale(.98);
   transition: opacity 700ms ease, transform 700ms var(--home-ease);
   animation: mosaic-breathe 7s ease-in-out infinite;
@@ -93,11 +93,11 @@
   transition: transform 500ms var(--home-ease), box-shadow 500ms ease;
 }
 .mosaic-print:not(.mosaic-print-lead) .mosaic-print-face {
-  padding: 1.3cqw 1.3cqw 1.2cqw; background: #fbf7ee; outline: 1px solid rgb(0 0 0 / .05);
-  box-shadow: 0 1px 2px rgb(0 0 0 / .18), 0 24px 44px -20px rgb(0 0 0 / .65);
+  padding: 1.3cqw 1.3cqw 1.2cqw; background: #fbf7ee; outline: 1px solid rgb(6 55 130 / .05);
+  box-shadow: 0 1px 2px rgb(6 55 130 / .18), 0 24px 44px -20px rgb(6 55 130 / .65);
 }
 .mosaic-print-face:hover { --lift: -5px; --zoom: 1.025; }
-.mosaic-print:not(.mosaic-print-lead) .mosaic-print-face:hover { box-shadow: 0 2px 4px rgb(0 0 0 / .18), 0 32px 54px -20px rgb(0 0 0 / .7); }
+.mosaic-print:not(.mosaic-print-lead) .mosaic-print-face:hover { box-shadow: 0 2px 4px rgb(6 55 130 / .18), 0 32px 54px -20px rgb(6 55 130 / .7); }
 .mosaic-print-face[aria-expanded='true'] { outline: 2px solid rgb(255 245 216 / .9); outline-offset: 4px; }
 .mosaic-print-photo { position: relative; display: block; aspect-ratio: 5 / 4; overflow: hidden; background: #d9d2c6; }
 .mosaic-print[data-slot='a'] .mosaic-print-photo, .mosaic-print[data-slot='c'] .mosaic-print-photo { aspect-ratio: 4 / 5; }
@@ -123,7 +123,7 @@
   mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 25%, rgb(0 0 0 / .85) 45%, rgb(0 0 0 / .35) 72%, transparent 100%);
 }
 .mosaic-wash-mask img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(.9) contrast(.97); }
-.mosaic-print-lead .mosaic-print-caption { position: absolute; left: 7%; top: 7%; max-width: 70%; padding: 0; color: #fff; text-shadow: 0 1px 12px rgb(0 0 0 / .6); }
+.mosaic-print-lead .mosaic-print-caption { position: absolute; left: 7%; top: 7%; max-width: 70%; padding: 0; color: #fff; text-shadow: 0 1px 12px rgb(6 55 130 / .6); }
 .mosaic-print-lead .mosaic-print-title { font-size: clamp(16px, 3.4cqw, 26px); }
 .mosaic-print-figure:empty { display: none; }
 .mosaic-print-lead .mosaic-print-figure, .mosaic-print-lead .mosaic-print-mark { color: rgb(255 255 255 / .82); }
@@ -247,20 +247,20 @@
   position: relative; width: min(1120px, 100%); max-height: 100%; min-height: 0;
   display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   border-radius: 26px; overflow: hidden; border: 1px solid rgb(255 255 255 / .16);
-  background: rgb(8 26 24 / .88); box-shadow: 0 50px 100px -40px rgb(0 0 0 / .85);
+  background: rgb(8 26 24 / .88); box-shadow: 0 50px 100px -40px rgb(6 55 130 / .85);
   animation: mosaic-spot-in 550ms var(--home-ease) both;
 }
-.mosaic-spot-gallery { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; background: #000; }
+.mosaic-spot-gallery { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; background: #063782; }
 .mosaic-spot-main { position: relative; margin: 0; aspect-ratio: 4 / 3; min-height: 0; overflow: hidden; }
 .mosaic-spot-main img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: mosaic-kenburns 12s ease-out both, mosaic-fade 500ms ease both; }
 .mosaic-spot-main figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 48px 20px 16px;
-  background: linear-gradient(to top, rgb(0 0 0 / .72), rgb(0 0 0 / 0));
+  background: linear-gradient(to top, rgb(6 55 130 / .72), rgb(6 55 130 / 0));
   font: 400 clamp(14px, 1.2vw, 17px)/1.4 var(--font-sans); letter-spacing: -.01em;
 }
 .mosaic-spot-mark {
   position: absolute; top: 12px; left: 12px; padding: 5px 9px; border-radius: 20px;
-  background: rgb(0 0 0 / .4); backdrop-filter: blur(8px);
+  background: rgb(6 55 130 / .4); backdrop-filter: blur(8px);
   font: 500 9px/1.4 var(--font-sans); letter-spacing: .14em; text-transform: uppercase; color: rgb(255 255 255 / .85);
 }
 .mosaic-spot-thumbs { display: flex; gap: 8px; margin: 0; padding: 12px; list-style: none; overflow-x: auto; scrollbar-width: none; }
@@ -326,7 +326,7 @@
 .impact-mosaic[data-mode='stacked'] .mosaic-hub, .impact-mosaic[data-mode='stacked'] .mosaic-collage { z-index: 1; }
 .impact-mosaic[data-mode='stacked'] .mosaic-collage { position: relative; }
 /* the type keeps its margin over the art */
-.impact-mosaic .mosaic-name, .impact-mosaic .mosaic-headline, .impact-mosaic .mosaic-stage-label, .impact-mosaic .mosaic-tiles-note { text-shadow: 0 1px 24px rgb(0 0 0 / .35); }
+.impact-mosaic .mosaic-name, .impact-mosaic .mosaic-headline, .impact-mosaic .mosaic-stage-label, .impact-mosaic .mosaic-tiles-note { text-shadow: 0 1px 24px rgb(6 55 130 / .35); }
 .impact-mosaic .mosaic-headline { color: rgb(255 255 255 / .88); }
 /* a canvas cannot honour forced colours; the art is decorative, so it simply goes */
 @media (forced-colors: active), (prefers-contrast: more) {

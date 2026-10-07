@@ -442,7 +442,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {showMetrics && (
               <div
                 style={{ transitionDelay: phase === 'exiting' ? '0ms' : '240ms' }}
-                className={`hero-impact grid grid-cols-2 gap-2.5 mb-5 px-3 py-2.5 rounded-xl bg-black/25 backdrop-blur-md border border-white/15 max-w-[360px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+                className={`hero-impact grid grid-cols-2 gap-2.5 mb-5 px-3 py-2.5 rounded-xl bg-navy/25 backdrop-blur-md border border-white/15 max-w-[360px] shadow-lg transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
               >
                 {displayPillar.stats.slice(0, 2).map((stat, i) => (
                   <div key={i} className="flex flex-col">

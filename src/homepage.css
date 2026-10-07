@@ -156,7 +156,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 .home-event-ticket > div > p { line-height: 1.7; }
 
 /* Photographs retain their revolving arrangement; framing is softened. */
-#awards-section .award-card { border-radius: 18px; border: 1px solid rgb(255 255 255 / .2); box-shadow: 0 32px 65px -25px rgb(0 0 0 / .55); }
+#awards-section .award-card { border-radius: 18px; border: 1px solid rgb(255 255 255 / .2); box-shadow: 0 32px 65px -25px rgb(6 55 130 / .55); }
 #awards-section .award-title { font-family: var(--font-sans); font-weight: 400; letter-spacing: -.035em; }
 #awards-section .award-title em { color: #e8d7b7; font-weight: 400; }
 /* The year as a watermark behind the masthead: light, outlined, and it
@@ -247,7 +247,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 #awards-section .award-glow { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 46% 42% at 50% 58%, color-mix(in srgb, var(--accent-b) 28%, transparent), transparent 70%), radial-gradient(ellipse 30% 30% at 18% 30%, color-mix(in srgb, var(--accent-a) 22%, transparent), transparent 70%); animation: award-glow-drift 14s ease-in-out infinite alternate; }
 @keyframes award-glow-drift { from { transform: translate3d(-2%, 1%, 0) scale(1); } to { transform: translate3d(2%, -2%, 0) scale(1.06); } }
 #awards-section .award-card { border-radius: 22px; transition-property: transform, filter, opacity, left, height, bottom, box-shadow; }
-#awards-section .award-card--center { box-shadow: 0 60px 120px -30px rgb(0 0 0 / .85), 0 0 0 1px rgb(255 255 255 / .25); }
+#awards-section .award-card--center { box-shadow: 0 60px 120px -30px rgb(6 55 130 / .85), 0 0 0 1px rgb(255 255 255 / .25); }
 @media (prefers-reduced-motion: reduce) { #awards-section .award-glow { animation: none; } }
 /* The hero's exit (HeroSection writes --hero-exit as it scrolls away): everything but the petals fades,
    and the watermark swells and brightens into the ghost petals the overture below assembles. */
@@ -263,9 +263,9 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 .hero-model-card { position: relative; }
 .hero-model-plate { position: absolute; z-index: 0; inset: -30% -30% -46%; }
 .hero-model-plate[data-tone='light'] { --foil: color-mix(in srgb, var(--plate-tint, #fff) 82%, #fff); --frame: rgb(255 255 255 / .95); }
-.hero-model-plate[data-tone='deep'] { --foil: color-mix(in srgb, var(--plate-accent, #000) 82%, #06202b); --frame: rgb(255 255 255 / .9); }
-.hero-plate-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 22px 26px rgb(0 0 0 / .38)); transition: filter 300ms ease; }
-.hero-model-card[data-front='true'] .hero-plate-art { filter: drop-shadow(0 30px 34px rgb(0 0 0 / .48)); }
+.hero-model-plate[data-tone='deep'] { --foil: color-mix(in srgb, var(--plate-accent, #063782) 82%, #06202b); --frame: rgb(255 255 255 / .9); }
+.hero-plate-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 22px 26px rgb(6 55 130 / .38)); transition: filter 300ms ease; }
+.hero-model-card[data-front='true'] .hero-plate-art { filter: drop-shadow(0 30px 34px rgb(6 55 130 / .48)); }
 .hero-plate-ink { fill: var(--foil); }
 .hero-plate-frame { fill: none; stroke: var(--frame); stroke-width: 2.4; }
 .hero-model-name {
@@ -273,7 +273,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
   margin: 0; text-align: center;
   font: 600 calc(var(--hero-model-size, 320px) * .085)/1 'Cinzel', 'Times New Roman', serif;
   letter-spacing: .3em; text-indent: .3em; text-transform: uppercase;
-  color: #fff; text-shadow: 0 2px 14px rgb(0 0 0 / .45);
+  color: #fff; text-shadow: 0 2px 14px rgb(6 55 130 / .45);
 }
 .hero-model-name::before {
   content: ''; position: absolute; left: 50%; bottom: calc(100% + var(--hero-model-size, 320px) * .05);
@@ -289,7 +289,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 .home-page .mosaic-explore-all { padding: 12px 18px; border: 1px solid color-mix(in srgb, var(--chapter-b) 45%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--chapter-a) 15%, transparent); }
 .home-page .mosaic-explore-all:hover { background: color-mix(in srgb, var(--chapter-a) 40%, transparent); }
 .home-page #events-section { background: radial-gradient(ellipse at 5% 25%, #f3d9a510, transparent 48%); }
-.home-page #events-section .home-event-ticket { box-shadow: 0 24px 50px -30px #0009; }
+.home-page #events-section .home-event-ticket { box-shadow: 0 24px 50px -30px #06378299; }
 .home-page #awards-section { background: radial-gradient(ellipse at 50% 65%, #dcc69a14, transparent 60%); }
 .home-page #partners-section { background: radial-gradient(ellipse at 90% 65%, color-mix(in srgb, var(--accent-b) 13%, transparent), transparent 62%); }
 .home-page #hero-clone-stage .hero-activity-art { opacity: calc(1 - var(--hero-exit, 0)); }
@@ -310,7 +310,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
    path's colours and kept quiet: faint under the words on the left, fuller
    behind the photographs on the right (the artwork's own mask), and at just
    over half strength overall so the page's canvas still reads through. */
-#hero-clone-stage .hero-waves { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .58; }
+#hero-clone-stage .hero-waves { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .58; mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); }
 #hero-clone-stage .hero-waves .mosaic-waves { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 900ms ease; }
 #hero-clone-stage .hero-waves .mosaic-waves[data-ready='true'] { opacity: 1; }
 @media (forced-colors: active), (prefers-contrast: more) { #hero-clone-stage .hero-waves { display: none; } }

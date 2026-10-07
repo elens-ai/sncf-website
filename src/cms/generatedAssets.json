@@ -163,10 +163,6 @@
     "source": "/images/welcome-volunteers.jpg",
     "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
   },
-  "asset.PillarHeroBackdrop.heal-background": {
-    "source": "/images/heal-emblem/background.webp",
-    "label": "PillarHeroBackdrop · background.webp"
-  },
   "asset.PillarPhotoMosaic.heal-leaf-top-right": {
     "source": "/images/heal-emblem/leaf-top-right.webp",
     "label": "PillarPhotoMosaic · leaf-top-right.webp"
@@ -238,10 +234,6 @@
   "asset.WorkingHands.forests": {
     "source": "/images/programmes/oneness-vann-planting.webp",
     "label": "WorkingHands · oneness-vann-planting.webp"
-  },
-  "asset.WorkingHands.palm": {
-    "source": "/images/petals/palm.webp",
-    "label": "WorkingHands · palm.webp"
   },
   "asset.GuidingForcePage.work-amrit": {
     "source": "/images/programmes/amrit-riverbank.webp",

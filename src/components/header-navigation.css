@@ -96,26 +96,20 @@
 /* the emblem, bled off the corner and multiplied so its disc disappears */
 .nvroom-emblem { position: absolute; right: -14px; top: 38%; translate: 0 -50%; width: 84px; aspect-ratio: 1; object-fit: contain; mix-blend-mode: multiply; opacity: 0.38; -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 82%); mask-image: radial-gradient(closest-side, #000 58%, transparent 82%); pointer-events: none; }
 .nvroom-folio { display: block; font: 800 19px/1 var(--font-sans); letter-spacing: -0.03em; color: color-mix(in srgb, var(--ink-a) 32%, transparent); }
-.nvroom-name { display: block; margin-top: 3px; font-size: 12px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--ink-a) 58%, #16182b); }
+.nvroom-name { display: block; margin-top: 3px; font-size: 12px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--ink-a) 58%, #102e56); }
 .nvroom-blurb { display: block; margin-top: 2px; font-size: 11px; color: rgb(22 24 43 / 0.6); }
 .nvroom-figure { display: block; margin-top: 10px; font-size: 11px; line-height: 1.3; color: rgb(22 24 43 / 0.62); }
-.nvroom-figure strong { margin-right: 3px; font: 700 15px/1 var(--font-sans); letter-spacing: -0.01em; color: color-mix(in srgb, var(--ink-a) 80%, #16182b); }
-.nvroom-goals { display: flex; margin-top: 8px; }
-.nvroom-goals i { width: 10px; height: 10px; margin-left: -3px; border-radius: 50%; border: 2px solid #fff; }
-.nvroom-goals i:first-child { margin-left: 0; }
+.nvroom-figure strong { margin-right: 3px; font: 700 15px/1 var(--font-sans); letter-spacing: -0.01em; color: color-mix(in srgb, var(--ink-a) 80%, #102e56); }
 .nvroom-index,
 .nvlist { list-style: none; margin: 0; }
 .nvroom-index { flex: 1; padding: 6px; }
 .nvroom-row { display: flex; align-items: center; gap: 9px; padding: 7px 9px; border-radius: 9px; font-size: 12.5px; line-height: 1.35; color: #3a3f57; text-decoration: none; white-space: normal; transition: background-color 0.18s, color 0.18s; }
-.nvroom-row > svg:first-child { flex: none; color: color-mix(in srgb, var(--ink-a) 75%, #16182b); }
+.nvroom-row > svg:first-child { flex: none; color: color-mix(in srgb, var(--ink-a) 75%, #102e56); }
 .nvroom-row-dot { flex: none; width: 6px; height: 6px; margin-inline: 4px 5px; border-radius: 50%; background: var(--ink-b); }
 .nvroom-row > span:not(.nvroom-row-dot) { flex: 1; }
 .nvroom-row-arrow { flex: none; color: var(--ink-a); opacity: 0; translate: -4px 0; transition: opacity 0.18s, translate 0.18s; }
-.nvroom-row:hover { background: color-mix(in srgb, var(--ink-b) 16%, transparent); color: #16182b; }
+.nvroom-row:hover { background: color-mix(in srgb, var(--ink-b) 16%, transparent); color: #102e56; }
 .nvroom-row:is(:hover, :focus-visible) .nvroom-row-arrow { opacity: 1; translate: 0 0; }
-.nvroom-tabs { display: flex; gap: 4px; padding: 8px; border-top: 1px dashed rgb(22 24 43 / 0.1); background: color-mix(in srgb, var(--ink-b) 7%, #fff); }
-.nvroom-tabs a { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 4px; border-radius: 9px; font: 600 11px/1 var(--font-sans); color: color-mix(in srgb, var(--ink-a) 78%, #16182b); background: #fff; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink-a) 18%, transparent); transition: background-color 0.18s, color 0.18s; }
-.nvroom-tabs a:hover { background: color-mix(in srgb, var(--ink-a) 86%, #16182b); color: #fff; }
 .nvpanel-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 10px; padding: 10px 6px 0; border-top: 1px solid rgb(22 24 43 / 0.07); }
 .nvpanel-explore { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 3px; border-bottom: 1px solid rgb(32 60 56 / 0.3); font: 600 13px/1 var(--font-sans); color: #203c38; transition: border-color 0.2s; }
 .nvpanel-explore:hover { border-bottom-color: currentColor; }
@@ -132,9 +126,9 @@
 /* a project with no photograph yet: its symbol on faint contour lines */
 .nvproject-photo[data-empty='true'] { background: radial-gradient(circle at 28% 22%, rgb(255 255 255 / 0.75), transparent 46%), repeating-radial-gradient(ellipse at 50% 115%, rgb(8 125 139 / 0.16) 0 1px, transparent 1.5px 8px), linear-gradient(135deg, #bce7e5, #d2e8b7); }
 .nvproject-photo[data-empty='true'] .nvproject-symbol { left: 50%; top: 50%; bottom: auto; width: 32px; height: 32px; translate: -50% -50%; }
-.nvproject-symbol { position: absolute; left: 6px; bottom: 6px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: rgb(255 255 255 / 0.92); color: #087d8b; box-shadow: 0 4px 10px -4px rgb(0 0 0 / 0.3); }
+.nvproject-symbol { position: absolute; left: 6px; bottom: 6px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: rgb(255 255 255 / 0.92); color: #087d8b; box-shadow: 0 4px 10px -4px rgb(6 55 130 / 0.3); }
 .nvproject-words { display: grid; gap: 4px; min-width: 0; }
-.nvproject-name { font: 700 13.5px/1.25 var(--font-sans); color: #16182b; }
+.nvproject-name { font: 700 13.5px/1.25 var(--font-sans); color: #102e56; }
 .nvproject-figure { font-size: 11px; line-height: 1.35; color: rgb(22 24 43 / 0.6); }
 .nvproject-figure strong { font-weight: 700; color: #087d8b; }
 .nvprojects-side { display: flex; flex-direction: column; gap: 10px; }
@@ -151,7 +145,7 @@
 .nvfeature-city:hover .nvfeature-photo { transform: scale(1.05); }
 .nvfeature-city .nvfeature-icon { position: absolute; top: 10px; left: 10px; width: 32px; height: 32px; margin: 0; border-radius: 10px; background: rgb(255 255 255 / 0.2); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3); }
 .nvfeature-city .nvfeature-icon svg { width: 17px; height: 17px; }
-.nvfeature-city .nvfeature-name { text-shadow: 0 1px 8px rgb(0 0 0 / 0.35); }
+.nvfeature-city .nvfeature-name { text-shadow: 0 1px 8px rgb(6 55 130 / 0.35); }
 .nvprojects-side .nvpanel-explore { align-self: flex-start; margin: 6px 4px 0; }
 
 /* ANY OTHER MENU (Who we are): its links described, beside the foundation's motto */
@@ -162,7 +156,7 @@
 .nvlink:hover { background: rgb(102 99 181 / 0.08); }
 .nvlink-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgb(102 99 181 / 0.1); color: #4c4a9e; transition: background-color 0.18s, color 0.18s; }
 .nvlink:hover .nvlink-icon { background: #4c4a9e; color: #fff; }
-.nvlink-name { display: block; font: 600 13px/1.3 var(--font-sans); color: #16182b; }
+.nvlink-name { display: block; font: 600 13px/1.3 var(--font-sans); color: #102e56; }
 .nvlink-line { display: block; font: 400 11.5px/1.35 var(--font-sans); color: rgb(22 24 43 / 0.58); }
 .nvlinks-side { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 16px; border-radius: 14px; background: linear-gradient(150deg, #fff, #f3f1fb); border: 1px solid rgb(22 24 43 / 0.07); animation: nv-card-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both; }
 .nvlinks-motto { margin: 0; font-size: 28px; line-height: 1.1; color: #4c4a9e; }
@@ -191,7 +185,7 @@
 .home-page #site-header[data-light='true'] .chrome-scrim { opacity: 1; background: rgb(255 255 255 / 0.34); border-bottom-color: rgb(20 58 51 / 0.08); box-shadow: none; }
 .home-page #site-header[data-light='true'][data-compact='true'] .chrome-scrim { border-bottom-color: rgb(20 58 51 / 0.1); box-shadow: 0 8px 30px rgb(20 58 51 / 0.12); }
 .home-page #site-header[data-light='true'] :is(.nav-link, [class*='text-white']):not(#donate-ribbon-btn, #donate-ribbon-btn *) { color: var(--light-ink); }
-.home-page #site-header[data-light='true'] .nav-link:hover { color: #0a2621; }
+.home-page #site-header[data-light='true'] .nav-link:hover { color: #102e56; }
 .home-page #site-header[data-light='true'] .nav-spotlight { background: rgb(20 58 51 / 0.07); box-shadow: inset 0 0 0 1px rgb(20 58 51 / 0.1); }
 .home-page #site-header[data-light='true'] #site-wordmark :is(.brand-word-line, .brand-word-tail, .brand-moving-initial) { color: var(--light-ink); }
 .home-page #site-header[data-light='true'] .brand-monogram-dot { color: #1f8a5c; }
