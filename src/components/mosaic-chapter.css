@@ -82,8 +82,8 @@
 .activity-connections circle { fill: currentColor; }
 .activity-connections g[data-attended='true'] { opacity: 1; }
 .activity-emblem { position: absolute; top: 50%; left: 50%; width: 46%; transform: translate(-50%, -50%); pointer-events: none; }
-.activity-emblem::before { content: ''; position: absolute; inset: 0 -8%; border-radius: 50%; background: radial-gradient(ellipse, color-mix(in srgb, var(--chapter-b) 25%, transparent), transparent 68%); }
 .activity-emblem-art { position: relative; width: 100%; }
+.activity-emblem-art .heal-photo-mosaic[data-pillar='heal'] > svg { translate: 6.6% 0; }
 .activity-emblem-caption { position: relative; margin: -20px 0 0; text-align: center; font-size: clamp(21px, 2.3vw, 32px); line-height: 1.2; color: #fff4df; text-shadow: 0 2px 14px #09222255; }
 .activity-nodes { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.75fr) minmax(0, 1fr); grid-template-rows: repeat(var(--activity-rows), minmax(0, 1fr)); column-gap: 2%; height: 100%; min-height: 480px; margin: 0; padding: 0; list-style: none; pointer-events: none; }
 .activity-node { grid-column: var(--node-column); grid-row: var(--node-row) / span var(--node-span); align-self: center; min-width: 0; pointer-events: auto; }

@@ -189,7 +189,7 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
       <div id={`${id}-story`} className="value-chapter-body">
         {/* Heal's own line on its work, as written for it */}
         {id === 'heal' && <p className="value-standfirst">{getCMSCopy("copy.HealStory.introLead", "For decades, the Mission has been committed to preventive and curative healthcare, serving communities through diverse dimensions of healing.")}</p>}
-        <Saying id={id} />
+        <Saying id={id} sideMarks />
         <SdgTags goals={goalsOf(activities.map(activity => activity.id))} className="value-sdgs" />
 
         <ExploreTabs id={id} name={name} tab={tab} onTab={setTab}

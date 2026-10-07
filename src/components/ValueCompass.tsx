@@ -3,7 +3,7 @@ import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PILLARS } from '../data/pillars';
-import { PillarHeroVisual } from './PillarHeroVisual';
+import { PillarModelCard } from './PillarModelCard';
 import { createFrameClock } from '../utils/frameClock';
 import './value-compass.css';
 
@@ -106,12 +106,12 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
         <span className="service-compass-etch service-compass-etch-three" />
       </div>
       <div className="service-compass-sculpture" aria-hidden="true">
-        {/* the home page hero's photographic emblem, dissolving from one value to the next as it does there */}
         <div className="service-compass-model">
-          <PillarHeroVisual pillar={choice} active={shown} caption={false} />
+          <PillarModelCard id={choice} label={PILLARS.find(pillar => pillar.id === choice)!.label}
+            active={active && shown} animate={active && !reduced}
+            modelUrl={`/models/core-values/${choice}.glb?v=${choice === 'enrich' ? '20261007-2' : '20261007'}`} />
         </div>
         <div className="service-compass-shadow" />
-        <div className="service-compass-signature">{getCMSCopy('copy.CoreValuesPage.d677190e0a99', 'Service')}<br /><em>{getCMSCopy('copy.CoreValuesPage.bb8643e88aae', 'with humility')}</em></div>
       </div>
       <div className="service-compass-values" role="radiogroup" aria-label={getCMSCopy('copy.CoreValuesPage.c7a3284847f9', 'Preview a core value')}>
         {VALUES.map((id, index) => {

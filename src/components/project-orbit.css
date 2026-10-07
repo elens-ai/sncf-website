@@ -28,6 +28,9 @@
    art sits 44% across and 52% down its box, and is placed by that point. */
 .project-orbit .service-compass-sculpture { left: 0; top: 0; width: 100%; height: 100%; transform: none; }
 .project-orbit .service-compass-model { inset: 0; }
+.project-orbit-bloom { position: absolute; left: 28%; top: 30.5%; width: 44%; height: 44%; }
+.project-orbit .service-compass-sculpture { z-index: 1; }
+.project-orbit-nodes { z-index: 2; }
 .project-orbit .service-compass-model .hero-heal-art { left: 23.1cqw; top: 16.6cqw; width: 61cqw; translate: none; }
 .project-orbit .service-compass-shadow { left: 36.6cqw; top: 56.8cqw; bottom: auto; width: 26.8cqw; height: 3.3cqw; }
 .project-orbit .service-compass-signature { left: 26%; right: 26%; top: 59.8cqw; bottom: auto; font-size: 4.3cqw; }

@@ -76,12 +76,13 @@ export const hasSaying = (id: string): id is SayingId => id in SAYINGS();
 /** A saying set beside the work it speaks to: the words large (in Hindi where
     they were said in Hindi, set in Devanagari), their meaning beneath, and
     who said them. A place may leave out the meaning or who said it. */
-export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: boolean; byline?: boolean }> = ({ id, className, meaning = true, byline = true }) => {
+export const Saying: React.FC<{ id: SayingId; className?: string; meaning?: boolean; byline?: boolean; sideMarks?: boolean }> = ({ id, className, meaning = true, byline = true, sideMarks = false }) => {
   useCMSRevision();
   const saying: { hindi?: string; english: string; by: string } = SAYINGS()[id];
   return (
-    <figure className={`saying${className ? ` ${className}` : ''}`} data-script={saying.hindi ? 'hindi' : 'english'}>
+    <figure className={`saying${className ? ` ${className}` : ''}`} data-script={saying.hindi ? 'hindi' : 'english'} data-side-marks={sideMarks || undefined}>
       <span className="saying-mark" aria-hidden="true">“</span>
+      {sideMarks && <span className="saying-mark saying-mark-close" aria-hidden="true">”</span>}
       <blockquote lang={saying.hindi ? 'hi' : 'en'}>{saying.hindi ?? saying.english}</blockquote>
       {saying.hindi && meaning && <p className="saying-meaning">{saying.english}</p>}
       {byline && <figcaption>{saying.by}</figcaption>}
