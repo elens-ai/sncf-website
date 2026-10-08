@@ -1,0 +1,6 @@
+/* One clear symbol for the Mission's working hands. */
+.service-icon { position: relative; display: grid; place-items: center; width: 100%; max-width: 460px; aspect-ratio: 1.12; isolation: isolate; }
+.service-icon-glow { position: absolute; inset: 8%; z-index: -1; border-radius: 50%; background: radial-gradient(ellipse, #fff6e7bd, #eaf5fa55 50%, transparent 72%); }
+.service-icon-mark { display: block; width: 73%; height: 73%; overflow: visible; filter: drop-shadow(0 2px 0 #fff5ddb3) drop-shadow(0 14px 15px #06378224); }
+@media (min-width: 801px) { .who-cover-stage > .service-icon { max-width: min(460px, max(280px, calc(100svh - 345px))); } }
+@media (max-width: 800px) { .service-icon { max-width: 360px; margin-top: 20px; } }

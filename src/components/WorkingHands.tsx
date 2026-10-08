@@ -1,7 +1,6 @@
-import React, { useId } from 'react';
-import { ArrowUpRight, Waves } from 'lucide-react';
+import React from 'react';
+import { ArrowUpRight } from 'lucide-react';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
-import { resolveCMSMedia } from '../cms/media';
 import { ACTIVITIES } from '../data/activities';
 import { insightsFor } from '../data/insights';
 import { OdometerStatCounter } from './OdometerStatCounter';
@@ -106,88 +105,3 @@ export const HandsProof: React.FC<{ way: HandWay; told: boolean }> = ({ way, tol
     </div>
   </div>
 );
-
-/* ---------- the bloom ---------- */
-
-/* Five swept leaves share a small open centre, like the reference star. */
-const BASE: [number, number] = [300, 300];
-const PETALS = ['centre', 'inner-right', 'outer-right', 'outer-left', 'inner-left'].map((slot, index) => {
-  const angle = index * 72;
-  const radians = angle * Math.PI / 180;
-  return { slot, angle, length: 218, width: 164, dx: 24 * Math.sin(radians), dy: -24 * Math.cos(radians) };
-});
-type Petal = (typeof PETALS)[number];
-const SLOT_OF: Record<string, string> = { hands: 'centre', hospitals: 'inner-right', classrooms: 'inner-left', forests: 'outer-left', flood: 'outer-right' };
-
-const petal = (length: number, width: number) => {
-  const h = length, w = width / 2;
-  return `M0 0C${-w * .9} ${-h * .18} ${-w * 1.22} ${-h * .69} ${-w * .35} ${-h}C${w * 1.18} ${-h * .9} ${w * 1.28} ${-h * .3} 0 0Z`;
-};
-/** a line of water across a square of the given side, a wavelength longer at
-    each end so it can drift one wavelength and loop without a seam */
-const WAVE = 64;
-const wave = (side: number, y: number) => {
-  const from = -side / 2 - WAVE, halves = Math.ceil((side + WAVE * 2) / (WAVE / 2));
-  return `M${from} ${y}q${WAVE / 4} -7 ${WAVE / 2} 0${` t${WAVE / 2} 0`.repeat(halves)}`;
-};
-
-export const HandsBloom: React.FC<{ ways: HandWay[]; current: number; onPick: (i: number) => void }> = ({ ways, current, onPick }) => {
-  const id = useId().replace(/:/g, '');
-  const lit = ways[current];
-  /* one petal, its photograph upright inside the tilt (or, with none, its water) */
-  const draw = (p: Petal, way: HandWay, i: number, front = false) => {
-    const [x, y] = [BASE[0] + p.dx, BASE[1] + p.dy];
-    const side = p.length * 1.04;
-    return (
-      <g key={front ? `front-${way.id}` : p.slot} className={front ? 'hands-petal hands-petal-front' : 'hands-petal'} data-on={front}
-        style={{ '--way': way.color, transformOrigin: `${x}px ${y}px` } as React.CSSProperties}
-        onClick={() => onPick(i)} onPointerEnter={() => onPick(i)}>
-        <g transform={`translate(${x} ${y}) rotate(${p.angle})`}>
-          <g clipPath={`url(#${id}-${p.slot})`}>
-            <g transform={`translate(0 ${-p.length / 2}) rotate(${-p.angle})`}>
-              {way.photo
-                ? <image className="hands-photo" href={resolveCMSMedia(way.photo)} x={-side / 2} y={-side / 2} width={side} height={side} preserveAspectRatio="xMidYMid slice" />
-                : <g className="hands-water">
-                    <rect x={-side / 2} y={-side / 2} width={side} height={side} fill={`url(#${id}-water)`} />
-                    {[0.2, 0.38, 0.56, 0.74].map((t, k) => (
-                      <path key={t} className="hands-wave" style={{ '--k': k } as React.CSSProperties} d={wave(side, -side / 2 + side * t)} />
-                    ))}
-                  </g>}
-            </g>
-            <path className="hands-wash" d={petal(p.length, p.width)} />
-          </g>
-          {!way.photo && (
-            <g transform={`translate(0 ${-p.length * 0.5}) rotate(${-p.angle}) translate(-21 -21)`} className="hands-water-mark">
-              <Waves size={42} strokeWidth={1.5} />
-            </g>
-          )}
-          <path className="hands-rim" d={petal(p.length, p.width)} />
-        </g>
-      </g>
-    );
-  };
-  const placed = PETALS.map(p => { const i = ways.findIndex(way => SLOT_OF[way.id] === p.slot); return { p, i, way: ways[i] }; }).filter(x => x.way);
-  const chosen = placed.find(x => x.i === current);
-  return (
-    <svg className="hands-bloom" viewBox="0 0 600 600" aria-hidden="true" style={{ '--lit': lit?.color } as React.CSSProperties}>
-      <defs>
-        <radialGradient id={`${id}-halo`}>
-          <stop offset="0" stopColor="var(--lit)" stopOpacity="0.3" />
-          <stop offset="0.55" stopColor="var(--lit)" stopOpacity="0.08" />
-          <stop offset="1" stopColor="var(--lit)" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id={`${id}-water`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#7fdcf0" />
-          <stop offset="1" stopColor="#0778a8" />
-        </linearGradient>
-        {PETALS.map(p => <clipPath key={p.slot} id={`${id}-${p.slot}`}><path d={petal(p.length, p.width)} /></clipPath>)}
-      </defs>
-
-      <circle className="hands-halo" cx="300" cy="300" r="270" fill={`url(#${id}-halo)`} />
-      {placed.map(({ p, i, way }) => draw(p, way, i))}
-      {/* the petal being read comes to the front, whole */}
-      {chosen && draw(chosen.p, chosen.way, chosen.i, true)}
-
-    </svg>
-  );
-};

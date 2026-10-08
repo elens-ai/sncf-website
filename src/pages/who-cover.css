@@ -61,7 +61,6 @@
 
 /* THE LOTUS, and the line beneath it */
 .who-cover-stage { display: flex; flex-direction: column; align-items: center; align-self: center; min-width: 0; }
-.who-cover-stage > .hands-bloom { max-width: 640px; }
 .who-cover-voice { display: grid; justify-items: center; width: 100%; min-height: 84px; }
 .saying.who-cover-saying { --saying-ink: var(--who-type); margin: 0 auto; padding: 4px 12px 0; max-width: 500px; animation: who-reveal 0.85s 0.3s both; }
 .who-cover-saying blockquote { color: var(--who-type); }
@@ -91,9 +90,7 @@
   .who-cover-copy { padding-block: clamp(8px, 2svh, 28px); }
   .who-cover h1 { margin-block: clamp(12px, 2.2svh, 22px) clamp(10px, 1.8svh, 16px); font-size: clamp(30px, min(3.1vw, 6svh), 50px); }
   .who-cover-actions { margin-top: clamp(14px, 2.6svh, 24px); }
-  .who-cover-stage > .hands-bloom { max-width: clamp(280px, calc((100svh - clamp(96px, 13svh, 130px) - 190px) * 1.21), 640px); }
   @media (min-height: 760px) {
-    .who-cover-stage > .hands-bloom { max-width: clamp(280px, calc((100svh - clamp(96px, 13svh, 130px) - 310px) * 1.21), 640px); }
     .who-cover-voice { padding-top: 14px; }
   }
   /* on a short screen the line beneath the lotus gives way */
@@ -112,7 +109,6 @@
   .who-cover { grid-template-columns: 1fr; gap: 10px; padding: 110px 28px var(--shore-h); }
   .who-cover-copy { padding: 0; }
   .who-cover h1 { font-size: clamp(36px, 7vw, 54px); }
-  .who-cover-stage > .hands-bloom { max-width: 480px; margin-top: 8px; }
   .who-cover-footer { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 18px; }
 }
 @media (max-width: 520px) { .who-cover { padding-inline: 20px; } }

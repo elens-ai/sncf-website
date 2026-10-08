@@ -1,22 +1,3 @@
-/* Five photographic leaves form the Who We Are star; each leaf selects its impact figure. */
-
-.hands-bloom { display: block; width: 100%; height: auto; overflow: visible; }
-.hands-halo { transition: opacity 0.6s; animation: hands-breathe 7s ease-in-out infinite alternate; transform-origin: 300px 300px; }
-
-.hands-petal { cursor: pointer; scale: 1; transition: scale 0.65s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.65s; }
-.hands-petal[data-on='true'] { scale: 1.06; filter: drop-shadow(0 16px 18px color-mix(in srgb, var(--way) 40%, transparent)); }
-/* the petal being read, drawn again in front of the others: it rises into full colour */
-.hands-petal-front { animation: hands-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.hands-photo { filter: grayscale(0.6) saturate(0.85) brightness(1.06); transition: filter 0.65s; }
-.hands-petal[data-on='true'] .hands-photo { filter: none; }
-.hands-wash { fill: var(--way); opacity: 0.36; mix-blend-mode: multiply; pointer-events: none; transition: opacity 0.65s; }
-.hands-petal[data-on='true'] .hands-wash { opacity: 0; }
-.hands-rim { fill: none; stroke: #fff; stroke-width: 3.5; transition: stroke 0.5s, stroke-width 0.5s; }
-.hands-petal[data-on='true'] .hands-rim { stroke: var(--way); stroke-width: 4.5; }
-/* the drawn petal: water, drifting */
-.hands-wave { fill: none; stroke: rgb(255 255 255 / 0.5); stroke-width: 2.2; stroke-linecap: round; animation: hands-wave 5.5s linear calc(var(--k) * -1.3s) infinite; }
-.hands-water-mark { color: #fff; opacity: 0.92; pointer-events: none; }
-
 /* the lede's phrases, each a switch for its petal: marked like a highlighter until chosen, then filled */
 .hands-chip { display: inline; padding: 0 0.16em; margin: 0 -0.04em; border: 0; border-radius: 0.28em; font: inherit; color: color-mix(in srgb, var(--way) 68%, #063782); background: linear-gradient(transparent 60%, color-mix(in srgb, var(--way) 24%, transparent) 60%); cursor: pointer; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: color 0.35s, background-color 0.35s; }
 .hands-chip:hover { background-color: color-mix(in srgb, var(--way) 10%, transparent); }
@@ -39,18 +20,12 @@
 .hands-proof-foot a { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: color-mix(in srgb, var(--way) 80%, #063782); }
 .hands-proof-foot a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-@keyframes hands-wave { to { transform: translateX(64px); } }
-@keyframes hands-head { from { translate: 0 0; } to { translate: 0 -5px; } }
-@keyframes hands-breathe { from { scale: 0.94; } to { scale: 1.04; } }
 @keyframes hands-proof-in { from { opacity: 0; translate: 0 6px; } }
-@keyframes hands-rise { from { opacity: 0; scale: 1; } }
 
-.who-cover[data-active='false'] :is(.hands-wave, .hands-head, .hands-halo) { animation-play-state: paused; }
 @media (max-width: 640px) {
   .hands-proof { min-height: 0; }
   .hands-proof-figure strong { font-size: 26px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hands-wave, .hands-head, .hands-halo, .hands-proof-body, .hands-petal-front { animation: none; }
-  .hands-petal, .hands-photo, .hands-wash, .hands-rim { transition: none; }
+  .hands-proof-body { animation: none; }
 }

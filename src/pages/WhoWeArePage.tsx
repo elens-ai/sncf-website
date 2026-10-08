@@ -25,7 +25,8 @@ import './who-cover.css';
 import { ServiceStory } from '../components/ServiceStory';
 import { UnepSeal } from '../components/UnAffiliation';
 import { SubsectionNav } from '../components/SubsectionNav';
-import { HandsBloom, HandsLede, HandsProof, handWays, splitFigure } from '../components/WorkingHands';
+import { HandsLede, HandsProof, handWays, splitFigure } from '../components/WorkingHands';
+import { ServicePortrait } from '../components/ServicePortrait';
 import { RoadTree } from '../components/RoadTree';
 import { ROAD_EVENTS } from '../data/roadEvents';
 /* after the page's own stylesheets, so the wall's styles come after theirs */
@@ -182,9 +183,9 @@ const WhoCover: React.FC = () => {
       </div>
       <div className="who-cover-actions"><a className="who-cover-cta" href={getCMSLink("copy.Link.WhoWeArePage.f24daa84860f", "#account")}>{getCMSCopy("copy.WhoWeArePage.3c34f30db957", "Discover our story ")}<ArrowDown size={15} aria-hidden="true" /></a></div>
     </div>
-    {/* the five-leaf star, and beneath it the line the foundation was set up to act on */}
+    {/* The service icon and the belief behind it. */}
     <div className="who-cover-stage" {...hold}>
-      <HandsBloom ways={ways} current={current} onPick={pick} />
+      <ServicePortrait />
       <div className="who-cover-voice"><Saying id="contribute" className="who-cover-saying" /></div>
     </div>
     <div className="who-cover-footer">
