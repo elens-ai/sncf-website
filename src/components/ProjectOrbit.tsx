@@ -87,7 +87,6 @@ export function ProjectOrbit({ projects, choice, onChange, active, centre, signa
         {projects.map((project, i) => {
           /* evenly round the face, the first at the top, a little out beyond its rim so the large moons keep clear of the centre */
           const angle = (i / n) * Math.PI * 2;
-          const Icon = project.icon;
           return <li key={project.id} style={{
             '--x': `${50 + 41 * Math.sin(angle)}%`, '--y': `${52.5 - 42.5 * Math.cos(angle)}%`,
             '--node-ink': project.ink, '--node-light': project.light,
@@ -97,7 +96,6 @@ export function ProjectOrbit({ projects, choice, onChange, active, centre, signa
               <span className="project-orbit-moon" data-empty={!project.photo}>
                 {project.photo && <img src={resolveCMSMedia(project.photo)} alt="" loading="lazy" decoding="async" />}
               </span>
-              <span className="project-orbit-symbol" aria-hidden="true"><Icon size={13} strokeWidth={1.9} /></span>
               <span className="service-compass-value-name">{project.name}</span>
             </a>
           </li>;

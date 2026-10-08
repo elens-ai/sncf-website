@@ -112,18 +112,7 @@
 .projects-cover-status { display: inline-flex; align-items: center; gap: 9px; height: fit-content; margin: 14px 0 0; padding: 8px 15px; border-radius: 999px; background: #fffdf8; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cover-ink) 22%, transparent), 0 10px 22px -16px var(--cover-ink); font: 700 10.5px/1.3 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--cover-ink) 82%, #102e56); animation: projects-cover-reveal 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .projects-cover-status i { width: 8px; height: 8px; border-radius: 50%; background: #2fbf86; box-shadow: 0 0 0 0 rgb(47 191 134 / 0.55); animation: hc-pulse 2s ease-out infinite; }
 @keyframes projects-cover-reveal { from { opacity: 0; transform: translateY(8px); } }
-/* at the foot: the UN standing and goals, and each project's headline figure */
-.projects-cover-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 14px 0; border-top: 1px solid rgb(255 255 255 / 0.22); font-size: 10px; letter-spacing: 0.06em; color: rgb(255 255 255 / 0.72); }
-.projects-cover-standing { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
-.projects-cover-impact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; }
-.projects-cover-impact a { display: grid; padding: 3px 10px 2px 11px; border-left: 3px solid color-mix(in srgb, var(--way-ink) 45%, #fff); border-radius: 0 10px 10px 0; color: #fff; transition: translate 0.25s, background-color 0.4s; }
-.projects-cover-impact a:hover { translate: 0 -2px; }
-.projects-cover-impact a[data-active='true'] { background: rgb(255 255 255 / 0.1); }
-.projects-cover-impact-figure { font: 700 18px/1.15 var(--font-sans); letter-spacing: -0.02em; color: #fff; }
 /* the rolling counter keeps the figure's own colour and face */
-.projects-cover-impact-figure [aria-hidden] * { color: inherit; font-family: inherit; }
-.projects-cover-impact-unit { font-size: 10.5px; letter-spacing: 0.02em; color: rgb(255 255 255 / 0.74); }
-.projects-cover-impact em { font-style: normal; font-size: 9px; font-weight: 700; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: color-mix(in srgb, var(--way-ink) 32%, #fff); }
 .projects-cover[data-active='false'] * { animation-play-state: paused !important; }
 .projects-cover :is(a, button):focus-visible { outline-color: var(--cover-ink); }
 
@@ -133,7 +122,7 @@
    the cover and the sticky subnav (54px) fill at least the first screen, and
    on a shorter screen the foot and the subnav follow just below it. */
 @media (min-width: 801px) {
-  .projects-cover { min-height: calc(100svh - 54px); grid-template-rows: 1fr auto; padding-top: clamp(96px, 13svh, 130px); padding-inline: max(7%, 28px, calc((100% - 1360px) / 2)); }
+  .projects-cover { min-height: calc(100svh - 54px); grid-template-rows: 1fr; padding-top: clamp(96px, 13svh, 130px); padding-inline: max(7%, 28px, calc((100% - 1360px) / 2)); }
   .projects-cover-copy { padding-block: clamp(8px, 2svh, 28px); }
   .projects-cover h1 { margin-block: clamp(12px, 2.2svh, 22px) clamp(10px, 1.8svh, 16px); font-size: clamp(30px, min(3.1vw, 6svh), 50px); }
   .projects-cover-actions { margin-top: clamp(14px, 2.6svh, 24px); }
@@ -141,21 +130,14 @@
   /* Keep the cover compact on short screens. */
   @media (max-height: 759px) {
     .projects-cover { row-gap: 8px; }
-    .projects-cover-footer { padding-block: 9px; }
   }
 }
-/* a narrower cover: the figures draw in */
-@media (min-width: 801px) and (max-width: 1100px) {
-  .projects-cover-impact { gap: 8px 12px; }
-  .projects-cover-impact-figure { font-size: 16px; }
-}
-/* one column: the copy, the orbit, the foot */
+/* one column: the copy, the orbit */
 @media (max-width: 800px) {
   .projects-cover { grid-template-columns: 1fr; gap: 10px; padding: 110px 28px 0; }
   .projects-cover-copy { padding: 0; }
   .projects-cover h1 { font-size: clamp(36px, 7vw, 54px); }
   .projects-cover-stage > .project-orbit { max-width: 480px; margin-top: 8px; }
-  .projects-cover-footer { flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 18px; }
 }
 @media (max-width: 520px) {
   .projects-cover { padding-inline: 20px; }
@@ -166,4 +148,10 @@
    still in view. The page's scroll padding clears the header; this, the rail (54px). */
 .reading-room main .projects-editorial > section.project-chapter:first-child { scroll-margin-top: 38px; }
 
-.project-sdgs { margin-top: 20px; }
+/* the goals as Core Values flies them (SdgRow): the line, and the flags beneath it, in the project's ink */
+.sdg-row.project-goals { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 8px; margin-top: 20px; }
+.project-goals .sdg-row-label { min-height: 0; line-height: 16px; font-size: 11px; color: #33463f; }
+.project-goals .sdg-row-label svg { color: var(--project-ink); }
+.project-goals .sdg-row-flag:focus-visible { outline-color: var(--project-ink); }
+/* the report takes the project's colours where Core Values' takes its value's */
+.project-chapter .preport { --value-color: var(--project-ink); --value-light: var(--project-light); }

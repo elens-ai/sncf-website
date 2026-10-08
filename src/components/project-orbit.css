@@ -14,11 +14,9 @@
 .project-orbit-moon img { display: block; width: 100%; height: 100%; object-fit: cover; filter: saturate(0.8); transition: filter 0.45s; }
 /* a project without a photograph yet: contour lines in its colour */
 .project-orbit-moon[data-empty='true'] { background: radial-gradient(circle at 30% 24%, rgb(255 255 255 / 0.7), transparent 46%), repeating-radial-gradient(ellipse at 50% 115%, color-mix(in srgb, var(--node-ink) 24%, transparent) 0 1px, transparent 1.5px 7px), linear-gradient(135deg, color-mix(in srgb, var(--node-light) 60%, #fff), var(--node-light)); }
-.project-orbit-symbol { position: absolute; top: calc(var(--moon) * 0.146 - 12px); left: calc(50% + var(--moon) * 0.354 - 12px); display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #fffdf8; color: color-mix(in srgb, var(--node-ink) 80%, #102e56); box-shadow: 0 3px 8px -2px rgb(20 40 36 / 0.32); transition: background-color 0.45s, color 0.45s, translate 0.45s; }
 .project-orbit-node .service-compass-value-name { position: relative; z-index: 1; margin-top: calc(var(--moon) * -0.143); font-size: 10.5px; letter-spacing: 0.12em; white-space: nowrap; text-transform: uppercase; transition: background-color 0.45s, color 0.45s; }
 .project-orbit-node[data-active='true'] .project-orbit-moon { transform: scale(1.1); box-shadow: 0 0 0 3px #fffdf8, 0 0 0 6px var(--node-ink), 0 18px 28px -12px color-mix(in srgb, var(--node-ink) 70%, transparent); }
 .project-orbit-node[data-active='true'] .project-orbit-moon img { filter: none; }
-.project-orbit-node[data-active='true'] .project-orbit-symbol { background: var(--node-ink); color: #fff; translate: 6px -6px; }
 .project-orbit-node[data-active='true'] .service-compass-value-name { background: var(--node-ink); color: #fff; }
 @media (hover: hover) { .project-orbit-node:hover .project-orbit-moon { transform: scale(1.1); } }
 

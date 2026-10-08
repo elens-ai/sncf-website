@@ -31,7 +31,7 @@ const TURN_EVERY_MS = 4200;
 /** A PROGRAMME'S REPORT on Core Values, laid out to show as much as it can at once: its photographs turning as a
     carousel (the one in view large, its neighbours small at either side), and beside them its name, a few lines on the work (programmeAbout), its headline
     figure, every figure it reports as a tile, what those figures say read together, and the UN goals it advances. */
-export const ProgrammeReport: React.FC<{ id: string; activity: Activity; photos?: Photo[] }> = ({ id, activity, photos: given }) => {
+export const ProgrammeReport: React.FC<{ id: string; activity: Activity; photos?: Photo[]; kicker?: string }> = ({ id, activity, photos: given, kicker }) => {
   useCMSRevision();
   const own = given ?? programmePhotos(activity);
   const photos = own.length ? own : activity.cardPhoto ? [{ src: activity.cardPhoto.src, alt: activity.cardPhoto.alt ?? '' }] : [];
@@ -82,7 +82,7 @@ export const ProgrammeReport: React.FC<{ id: string; activity: Activity; photos?
             })
             : <span className="preport-symbol-large" aria-hidden="true">{Symbol && <Symbol size={72} strokeWidth={1.1} />}</span>}
           <div className="preport-lead-top">
-            <span>{c('kicker', 'Programme in focus')}</span>
+            <span>{kicker ?? c('kicker', 'Programme in focus')}</span>
             <span><CalendarDays size={13} aria-hidden="true" />{activity.period}</span>
           </div>
           {photos.length > 0 && <div className="preport-stage-foot">

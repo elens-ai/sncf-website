@@ -1690,6 +1690,7 @@
   "awards": [
     {
       "id": "csr-summit-most-impactful-ngo-2024",
+      "category": "awards",
       "title": "Most Impactful NGO of the Year",
       "awardedBy": "11th CSR Summit & Awards 2024, UBS Forums",
       "year": "2024",
@@ -1711,11 +1712,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "give-me-trees-commendation-2024",
+      "category": "awards",
       "title": "Certificate of Commendation — 5,00,000 trees",
       "awardedBy": "Give Me Trees Trust",
       "year": "2024",
@@ -1728,11 +1729,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "ltmg-sion-lions-club-2024",
+      "category": "awards",
       "title": "Certificate of Appreciation — blood donation drives",
       "awardedBy": "Blood Centre, Lokmanya Tilak Municipal General Hospital, Sion, with the Lions Club of (Bombay) Mahanagar",
       "year": "2024",
@@ -1752,11 +1753,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "nbtc-ngo-conclave-2024",
+      "category": "awards",
       "title": "Certificate of Appreciation — India Blood Donation NGO Conclave 2024",
       "awardedBy": "National Blood Transfusion Council, Ministry of Health & Family Welfare, with the Akhil Bhartiya Terapanth Yuvak Parishad",
       "year": "2024",
@@ -1769,11 +1770,11 @@
           "height": 884,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "unep-world-environment-day-2024",
+      "category": "awards",
       "title": "Certificate of Appreciation — World Environment Day 2024",
       "awardedBy": "United Nations Environment Programme (UNEP)",
       "year": "2024",
@@ -1786,11 +1787,11 @@
           "height": 1046,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "red-cross-telangana-2024",
+      "category": "awards",
       "title": "Highest Blood Donor Motivator — World Blood Donor Day 2024",
       "awardedBy": "Indian Red Cross Society, Telangana Branch",
       "year": "2024",
@@ -1803,11 +1804,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "gmers-junagadh-blood-donor-day-2024",
+      "category": "awards",
       "title": "Memento for the best work in blood donation",
       "awardedBy": "Blood Centre, GMERS Medical College & Hospital, Junagadh",
       "year": "2024",
@@ -1820,11 +1821,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "iit-roorkee-thomso-2024",
+      "category": "awards",
       "title": "Appreciation — Thomso’24",
       "awardedBy": "IIT Roorkee",
       "year": "2024",
@@ -1837,11 +1838,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "divyang-para-sports-2024",
+      "category": "awards",
       "title": "Guest of Honour — Delhi State Para-Athletics & Para-Powerlifting Championships",
       "awardedBy": "Divyang Para Sports Association of Delhi",
       "year": "2024–25",
@@ -1854,11 +1855,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "mdacs-blood-donation-day-2023",
+      "category": "awards",
       "title": "Certificate of Appreciation — National Voluntary Blood Donation Day 2023",
       "awardedBy": "Mumbai Districts AIDS Control Society, Brihanmumbai Mahanagarpalika",
       "year": "2023",
@@ -1871,11 +1872,11 @@
           "height": 1018,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "ministry-of-culture-project-amrit-2023",
+      "category": "tweets",
       "title": "Swachh Jal Swachh Mann — Project Amrit",
       "awardedBy": "Ministry of Culture, Government of India",
       "year": "2023",
@@ -1888,11 +1889,11 @@
           "height": 1200,
           "focal": "50% 40%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "aiims-blood-donation-day-2022",
+      "category": "awards",
       "title": "Thank you — National Voluntary Blood Donation Day 2022",
       "awardedBy": "Blood Centre, Main Hospital, AIIMS New Delhi, with the BTS Division, DGHS, Ministry of Health & Family Welfare",
       "year": "2022",
@@ -1905,11 +1906,11 @@
           "height": 915,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "indian-blind-sports-association-2022",
+      "category": "tweets",
       "title": "Recognition of the Sant Nirankari Sewadal",
       "awardedBy": "Indian Blind Sports Association",
       "year": "2022",
@@ -1922,11 +1923,11 @@
           "height": 1016,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "rpf-northern-railway-2022",
+      "category": "tweets",
       "title": "Thanks from the Railway Protection Force",
       "awardedBy": "RPF, Northern Railway",
       "year": "2022",
@@ -1939,11 +1940,11 @@
           "height": 780,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "give-me-trees-sonepat-2022",
+      "category": "tweets",
       "title": "Oneness Vann — 2,000 saplings at Sonepat",
       "awardedBy": "Give Me Trees Trust",
       "year": "2022",
@@ -1956,11 +1957,11 @@
           "height": 1049,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "peepal-baba-oneness-vann-2021",
+      "category": "tweets",
       "title": "Oneness Vann plantations — Ambala, Yamunanagar and Kurukshetra",
       "awardedBy": "Swami Prem Parivartan (Peepal Baba)",
       "year": "2021",
@@ -1973,11 +1974,11 @@
           "height": 662,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "zee-news-covid-centre-2021",
+      "category": "press",
       "title": "Delhi’s temporary COVID-19 centre — in the news",
       "awardedBy": "Zee News English",
       "year": "2021",
@@ -1990,11 +1991,11 @@
           "height": 1173,
           "focal": "50% 50%"
         }
-      ],
-      "category": "press"
+      ]
     },
     {
       "id": "pm-cares-2020",
+      "category": "tweets",
       "title": "Appreciation for the PM-CARES contribution",
       "awardedBy": "Shri Narendra Modi, Prime Minister of India",
       "year": "2020",
@@ -2007,11 +2008,11 @@
           "height": 1179,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "haryana-corona-relief-fund-2020",
+      "category": "tweets",
       "title": "Thanks for the Haryana Corona Relief Fund contribution",
       "awardedBy": "Shri Manohar Lal, Chief Minister of Haryana",
       "year": "2020",
@@ -2024,11 +2025,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "delhi-ppe-kits-2020",
+      "category": "tweets",
       "title": "Thanks for 10,000 PPE kits",
       "awardedBy": "Shri Arvind Kejriwal, Chief Minister of Delhi",
       "year": "2020",
@@ -2041,11 +2042,11 @@
           "height": 696,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "aajtak-north-delhi-sanitisation-2020",
+      "category": "press",
       "title": "Sanitising North Delhi with the fire brigade — in the news",
       "awardedBy": "Aaj Tak",
       "year": "2020",
@@ -2058,11 +2059,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "press"
+      ]
     },
     {
       "id": "vadodara-swachhata-2019",
+      "category": "awards",
       "title": "Swachhata Competition 2019 — outstanding work",
       "awardedBy": "Vadodara Municipal Corporation",
       "year": "2019",
@@ -2075,11 +2076,11 @@
           "height": 759,
           "focal": "50% 55%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "toi-green-drive-letter-2018",
+      "category": "awards",
       "title": "Letter of Appreciation — Hero TOI Green Drive 2018",
       "awardedBy": "The Times of India (Bennett, Coleman & Co. Ltd.)",
       "year": "2018",
@@ -2092,11 +2093,11 @@
           "height": 1200,
           "focal": "50% 30%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "life-chiropractic-college-west-2017",
+      "category": "awards",
       "title": "Service to Humanity Award",
       "awardedBy": "Dr. Ronald Oberstein, President, and the Board of Regents, Life Chiropractic College West",
       "year": "2017",
@@ -2109,11 +2110,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "nbtc-award-of-excellence-2016",
+      "category": "awards",
       "title": "Award of Excellence — World Blood Donor Day",
       "awardedBy": "National Blood Transfusion Council and NACO, Ministry of Health & Family Welfare, Government of India",
       "year": "2016",
@@ -2127,11 +2128,11 @@
           "focal": "50% 50%",
           "caption": "World Blood Donor Day 2016 — “Blood Connects Us All”."
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "apj-abdul-kalam-world-peace-award-2016",
+      "category": "awards",
       "title": "Dr. APJ Abdul Kalam World Peace Award — 2016",
       "awardedBy": "All India Council of Human Rights",
       "year": "2016",
@@ -2144,11 +2145,11 @@
           "height": 546,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "queens-golden-jubilee-award-2015",
+      "category": "awards",
       "title": "The Queen’s Golden Jubilee Award for voluntary service by groups in the community",
       "awardedBy": "Her Majesty Queen Elizabeth II",
       "year": "2015",
@@ -2161,11 +2162,11 @@
           "height": 1180,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "toi-green-drive-2015",
+      "category": "awards",
       "title": "Highest participation — TOI Green Drive",
       "awardedBy": "The Times of India",
       "year": "2015",
@@ -2196,11 +2197,11 @@
           "focal": "50% 40%",
           "caption": "Baba Hardev Singh Ji Maharaj planting at the drive."
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "brampton-blood-donor-clinic-2012",
+      "category": "awards",
       "title": "Best wishes on the 19th Blood Donor Clinic, Brampton",
       "awardedBy": "Mayor Susan Fennell, City of Brampton",
       "year": "2012",
@@ -2213,11 +2214,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "salvation-army-brampton-2011",
+      "category": "awards",
       "title": "Certificate of Appreciation — the Brampton food bank",
       "awardedBy": "The Salvation Army, Canada and Bermuda Territory",
       "year": "2011",
@@ -2230,11 +2231,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "namami-gange-project-amrit",
+      "category": "tweets",
       "title": "Swachh Jal Swachh Mann — 1,100 water bodies",
       "awardedBy": "Namami Gange, National Mission for Clean Ganga",
       "year": "",
@@ -2247,11 +2248,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "amrit-mahotsav-project-amrit",
+      "category": "tweets",
       "title": "Project Amrit, shared by Azadi Ka Amrit Mahotsav",
       "awardedBy": "Azadi Ka Amrit Mahotsav",
       "year": "",
@@ -2264,11 +2265,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "gautam-gambhir-project-amrit",
+      "category": "tweets",
       "title": "Congratulations on Project Amrit",
       "awardedBy": "Shri Gautam Gambhir",
       "year": "",
@@ -2281,11 +2282,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "youth4water-sambalpur",
+      "category": "tweets",
       "title": "Project Amrit at Sambalpur",
       "awardedBy": "Youth4Water Plus",
       "year": "",
@@ -2298,11 +2299,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "nasha-mukt-bharat-mou",
+      "category": "tweets",
       "title": "MoU under the Nasha Mukt Bharat Abhiyan",
       "awardedBy": "Department of Social Justice & Empowerment, Government of India",
       "year": "",
@@ -2315,11 +2316,11 @@
           "height": 545,
           "focal": "50% 50%"
         }
-      ],
-      "category": "tweets"
+      ]
     },
     {
       "id": "health-minister-memento",
+      "category": "awards",
       "title": "A memento from the Union Health Minister",
       "awardedBy": "Dr. Mansukh Mandaviya, Union Minister of Health & Family Welfare",
       "year": "",
@@ -2332,11 +2333,11 @@
           "height": 1200,
           "focal": "50% 40%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "red-cross-haryana-blood-donors",
+      "category": "awards",
       "title": "Honoured by the Indian Red Cross Society, Haryana",
       "awardedBy": "Indian Red Cross Society, Haryana State Branch",
       "year": "",
@@ -2349,11 +2350,11 @@
           "height": 1200,
           "focal": "50% 40%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "earth-day-network-india",
+      "category": "awards",
       "title": "Commendation — Earth Day Network India",
       "awardedBy": "Earth Day Network India (EARTHDAY.ORG)",
       "year": "",
@@ -2366,11 +2367,11 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "swachh-bharat-mission-memento",
+      "category": "awards",
       "title": "Swachh Bharat Mission memento",
       "awardedBy": "Swachh Bharat Mission",
       "year": "",
@@ -2383,11 +2384,11 @@
           "height": 752,
           "focal": "50% 50%"
         }
-      ],
-      "category": "awards"
+      ]
     },
     {
       "id": "swachh-rail-bct",
+      "category": "tweets",
       "title": "Swachh Rail Swachh Bharat Abhiyan at Mumbai Central",
       "awardedBy": "Ministry of Railways",
       "year": "",
@@ -2400,8 +2401,7 @@
           "height": 668,
           "focal": "50% 45%"
         }
-      ],
-      "category": "tweets"
+      ]
     }
   ],
   "gallery": [
@@ -3007,7 +3007,6 @@
     "copy.WhoWeArePage.56219e473693": "Service with Humility",
     "copy.WhoWeArePage.d4ef378ef3af": "The work is organised into three cornerstones — healing, enriching and empowering — with care for the natural world running through all three rather than sitting apart from them. Its reach is deliberately weighted towards places that are easy to overlook: remote districts, under-served neighbourhoods, villages a long way from a hospital.",
     "copy.WhoWeArePage.2e1ac6e9292a": "Explore ",
-    "copy.WhoWeArePage.1d3009abb21e": "Since 2010",
     "copy.WhoWeArePage.77d72aaa5ec2": "The road so far",
     "copy.WhoWeArePage.b68d1e8eda83": "Supports & collaborations",
     "copy.WhoWeArePage.b66e8cc28209": "Who walks with us",
@@ -3334,10 +3333,6 @@
     "copy.UnAffiliation.sdg-label": "Advancing the UN Sustainable Development Goals",
     "copy.UnAffiliation.sdg-title": "UN Sustainable Development Goal",
     "copy.CoreValuesPage.programme-sdgs": "UN goals it advances",
-    "copy.ProjectsPage.gallery-label": "photographs of the project, opening on the petals of the Projects emblem",
-    "copy.ProjectsPage.foundationPhotos": "From the foundation’s work, 2026",
-    "copy.ProjectsPage.illustrative": "Illustrative photographs from the foundation’s other projects",
-    "copy.ProjectsPage.gallery-band": "photographs & films",
     "copy.PillarGallery.all": "Every programme",
     "copy.PillarGallery.filter": "Show the photographs of",
     "copy.Sayings.enrich-english": "We need to inspire everyone to take action, not just with words, but with deeds.",
@@ -3399,7 +3394,6 @@
     "copy.PhotoCarousel.play": "Play the slideshow",
     "copy.PhotoCarousel.choose": "Choose a photograph",
     "copy.ProjectOrbit.label": "The projects",
-    "copy.ProjectsPage.cover-impact": "Each project’s reported reach",
     "copy.PartnerCircle.sector-together": "Walking with us",
     "copy.PartnerCircle.label": "Our partners, around the foundation",
     "copy.PartnerCircle.read": "read this collaboration",
@@ -3557,14 +3551,6 @@
     "copy.WhoWeArePage.partners-rows": "The organisations that walk with us",
     "copy.WhoWeArePage.partner-visit": "Visit their website",
     "copy.WhoWeArePage.partner-close": "Close",
-    "copy.WhoWeArePage.road-body": "From a seed in 2010 to the tree it is today: every branch a moment the foundation marks its history by.",
-    "copy.WhoWeArePage.road-aria": "The foundation’s history as a growing tree",
-    "copy.WhoWeArePage.road-seed": "The seed",
-    "copy.WhoWeArePage.road-year": "Year",
-    "copy.WhoWeArePage.road-moments": "moments",
-    "copy.WhoWeArePage.road-explore": "Explore this chapter",
-    "copy.WhoWeArePage.road-today": "Today",
-    "copy.WhoWeArePage.road-hint": "Scroll to watch it grow",
     "copy.Link.WhoWeArePage.map": "https://maps.google.com/maps?q=Sant%20Nirankari%20Charitable%20Foundation%2C%2080-A%20Avtar%20Marg%2C%20Nirankari%20Colony%2C%20Delhi%20110009&z=16&hl=en&output=embed",
     "copy.WhoWeArePage.map-title": "Map: Sant Nirankari Charitable Foundation, 80-A Avtar Marg, Nirankari Colony, Delhi",
     "copy.ValueAnalytics.healChiro": "Chiropractic camps",
@@ -3779,11 +3765,11 @@
     "copy.ServiceSceneArtwork.coaching": "Coaching",
     "copy.ServiceSceneArtwork.disaster-relief": "Disaster Relief",
     "copy.ServiceSceneArtwork.nima-room": "NIMA",
+    "copy.RailwayCleanupDrawing.station-name": "भोडवाल माजरी",
+    "copy.RailwayCleanupDrawing.train-name": "SNCF Express",
     "copy.ServiceIllustration.railway-label": "Empower • Bhodwal Majri",
     "copy.ServiceIllustration.railway-caption": "Every journey begins with care.",
     "copy.ServiceIllustration.railway-description": "The SNCF Express passenger train approaches the viewer along the tracks and slows to a stop at Bhodwal Majri. Six SNCF saints independently sweep and collect litter across the left-hand platform throughout.",
-    "copy.RailwayCleanupDrawing.station-name": "भोडवाल माजरी",
-    "copy.RailwayCleanupDrawing.train-name": "SNCF Express",
     "copy.ServiceIllustration.fort-button": "Red Fort",
     "copy.ServiceIllustration.taj-button": "Taj Mahal",
     "copy.ServiceIllustration.flood-button": "Flood Relief",
@@ -3797,7 +3783,16 @@
     "copy.RecognitionArchive.press.title": "Press & Media",
     "copy.RecognitionArchive.press.eyebrow": "Service in the news",
     "copy.RecognitionArchive.press.intro": "Stories of the foundation’s work, as reported by the media.",
-    "copy.ServicePortrait.icon-label": "Sant Nirankari Charitable Foundation emblem"
+    "copy.ServicePortrait.icon-label": "Sant Nirankari Charitable Foundation emblem",
+    "copy.WhoWeArePage.1d3009abb21e": "Since 2010",
+    "copy.WhoWeArePage.road-body": "From a seed in 2010 to the tree it is today: every branch a moment the foundation marks its history by.",
+    "copy.WhoWeArePage.road-aria": "The foundation’s history as a growing tree",
+    "copy.WhoWeArePage.road-seed": "The seed",
+    "copy.WhoWeArePage.road-year": "Year",
+    "copy.WhoWeArePage.road-moments": "moments",
+    "copy.WhoWeArePage.road-explore": "Explore this chapter",
+    "copy.WhoWeArePage.road-today": "Today",
+    "copy.WhoWeArePage.road-hint": "Scroll to watch it grow"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -4085,31 +4080,6 @@
         "page": "home",
         "section": "Awards",
         "label": "Awards · Next photograph"
-      },
-      "copy.AwardsSection.589b32fb4660": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · Awards and recognitions"
-      },
-      "copy.AwardsSection.22466b5a68ad": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · Recognition"
-      },
-      "copy.AwardsSection.39a8c7496bcc": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · Awards &"
-      },
-      "copy.AwardsSection.6d628e092af8": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · Recognitions"
-      },
-      "copy.AwardsSection.146746cd2494": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · Your appreciation makes us stronger to serve humanity."
       },
       "copy.DevotionalLightboxModal.8d5e2ed870c4": {
         "page": "everywhere",
@@ -4940,11 +4910,6 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Explore"
-      },
-      "copy.WhoWeArePage.1d3009abb21e": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Since 2010"
       },
       "copy.WhoWeArePage.77d72aaa5ec2": {
         "page": "who-we-are",
@@ -6576,26 +6541,6 @@
         "section": "Page",
         "label": "Page · UN goals it advances"
       },
-      "copy.ProjectsPage.gallery-label": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · photographs of the project, opening on the petals of the Projects emb…"
-      },
-      "copy.ProjectsPage.foundationPhotos": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · From the foundation’s work, 2026"
-      },
-      "copy.ProjectsPage.illustrative": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Illustrative photographs from the foundation’s other projects"
-      },
-      "copy.ProjectsPage.gallery-band": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · photographs & films"
-      },
       "copy.PillarGallery.all": {
         "page": "core-values",
         "section": "Galleries",
@@ -6900,11 +6845,6 @@
         "page": "projects",
         "section": "Page",
         "label": "Page · The projects"
-      },
-      "copy.ProjectsPage.cover-impact": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Each project’s reported reach"
       },
       "copy.PartnerCircle.sector-together": {
         "page": "home",
@@ -7501,16 +7441,6 @@
         "section": "Landing (Four paths. One purpose.)",
         "label": "Landing (Four paths. One purpose.) · Event info"
       },
-      "copy.AwardsSection.pile-how": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · Each photograph is an honour the foundation has received. Point at on…"
-      },
-      "copy.AwardsSection.meta-years": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · Years"
-      },
       "copy.AwardsSection.card-undated": {
         "page": "home",
         "section": "Awards",
@@ -7700,46 +7630,6 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · Close"
-      },
-      "copy.WhoWeArePage.road-body": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · From a seed in 2010 to the tree it is today: every branch a moment th…"
-      },
-      "copy.WhoWeArePage.road-aria": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The foundation’s history as a growing tree"
-      },
-      "copy.WhoWeArePage.road-seed": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The seed"
-      },
-      "copy.WhoWeArePage.road-year": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Year"
-      },
-      "copy.WhoWeArePage.road-moments": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · moments"
-      },
-      "copy.WhoWeArePage.road-explore": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Explore this chapter"
-      },
-      "copy.WhoWeArePage.road-today": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Today"
-      },
-      "copy.WhoWeArePage.road-hint": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Scroll to watch it grow"
       },
       "copy.Link.WhoWeArePage.map": {
         "page": "who-we-are",
@@ -8614,247 +8504,342 @@
       "copy.SocialSidebar.floating-follow": {
         "page": "everywhere",
         "section": "Social links",
-        "label": "Social links · Floating follow invitation"
+        "label": "Social links · Follow and subscribe us"
       },
       "copy.ServiceIllustration.heal-label": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Heal Label"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Heal • Care with compassion"
       },
       "copy.ServiceIllustration.heal-caption": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Heal Caption"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · A little care. A healthier tomorrow."
       },
       "copy.ServiceIllustration.heal-description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Heal Description"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · A hand-drawn community clinic: a doctor cares for a patient, while a …"
       },
       "copy.ServiceIllustration.enrich-label": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Enrich Label"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Enrich • Room to grow"
       },
       "copy.ServiceIllustration.enrich-caption": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Enrich Caption"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Every lesson opens a new possibility."
       },
       "copy.ServiceIllustration.enrich-description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Enrich Description"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Two schoolgirls with backpacks walk towards Sant Nirankari Public Sch…"
       },
       "copy.ServiceIllustration.nima-label": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Nima Label"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · NIMA • Music, dance & painting"
       },
       "copy.ServiceIllustration.nima-caption": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Nima Caption"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Where creativity finds its expression."
       },
       "copy.ServiceIllustration.nima-description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Nima Description"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Illustrations inspired by the NIMA banner: a painter at an easel, a s…"
       },
       "copy.ServiceIllustration.fort-label": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Fort Label"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Empower • Red Fort, Delhi"
       },
       "copy.ServiceIllustration.fort-caption": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Fort Caption"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Small acts of care. A shared tomorrow."
       },
       "copy.ServiceIllustration.fort-description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Fort Description"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · The Red Fort Lahori Gate, with its seven domes, flanking bastions and…"
       },
       "copy.ServiceIllustration.taj-label": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Taj Label"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Empower • Taj Mahal, Agra"
       },
       "copy.ServiceIllustration.taj-caption": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Taj Caption"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Caring for the places we share."
       },
       "copy.ServiceIllustration.taj-description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Taj Description"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · The Taj Mahal with its central onion dome, symmetrical arched facade …"
       },
       "copy.ServiceIllustration.flood-label": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Flood Label"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Empower • Flood Relief"
       },
       "copy.ServiceIllustration.flood-caption": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Flood Caption"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Standing together when it matters most."
       },
       "copy.ServiceIllustration.flood-description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Flood Description"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Volunteers pass essential supplies to a rescue boat carrying a family…"
       },
       "copy.ServiceIllustration.learning-button": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Learning Button"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Learning"
       },
       "copy.ServiceIllustration.nima-button": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Nima Button"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · NIMA"
       },
       "copy.ServiceIllustration.choose-scene": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Choose Scene"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Choose an illustration"
       },
       "copy.ServiceSceneArtwork.school-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "School Name"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Sant Nirankari Public School"
       },
       "copy.ServiceSceneArtwork.health-centre-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Health Centre Name"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Sant Nirankari Health Centre"
       },
       "copy.ServiceSceneArtwork.blood-bank-brand": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Blood Bank Brand"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Sant Nirankari"
       },
       "copy.ServiceSceneArtwork.blood-bank-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Blood Bank Name"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Blood Bank"
       },
       "copy.ServiceSceneArtwork.health-city-brand": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Health City Brand"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Sant Nirankari"
       },
       "copy.ServiceSceneArtwork.health-city-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Health City Name"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Health City"
       },
       "copy.AmbulancePass.description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Description"
+        "page": "other",
+        "section": "Ambulance Pass",
+        "label": "Ambulance Pass · Sant Nirankari Mobile Dispensary Cum Ambulance, with turning wheels a…"
       },
       "copy.AmbulancePass.brand": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Brand"
+        "page": "other",
+        "section": "Ambulance Pass",
+        "label": "Ambulance Pass · Sant Nirankari"
       },
       "copy.AmbulancePass.purpose": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Purpose"
+        "page": "other",
+        "section": "Ambulance Pass",
+        "label": "Ambulance Pass · Mobile Dispensary Cum Ambulance"
       },
       "copy.ServiceSceneArtwork.sewing-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Sewing Name"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Sewing Centre"
       },
       "copy.ServiceSceneArtwork.nima-building-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Nima Building Name"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Nirankari Vocational Centre"
       },
       "copy.SchoolBusDrawing.description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Description"
+        "page": "other",
+        "section": "School Bus Drawing",
+        "label": "School Bus Drawing · A Sant Nirankari Public School bus arrives from the right, stops to d…"
       },
       "copy.SchoolBusDrawing.name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Name"
+        "page": "other",
+        "section": "School Bus Drawing",
+        "label": "School Bus Drawing · Sant Nirankari Public School"
       },
       "copy.ServiceSceneArtwork.nvc-subtitle": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Nvc Subtitle"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Learning • Skills • Creativity"
       },
       "copy.ServiceSceneArtwork.library": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Library"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Library"
       },
       "copy.ServiceSceneArtwork.coaching": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Coaching"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Coaching"
       },
       "copy.ServiceSceneArtwork.disaster-relief": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Disaster Relief"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · Disaster Relief"
       },
       "copy.ServiceSceneArtwork.nima-room": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Nima Room"
-      },
-      "copy.ServiceIllustration.railway-label": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Railway Label"
-      },
-      "copy.ServiceIllustration.railway-caption": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Railway Caption"
-      },
-      "copy.ServiceIllustration.railway-description": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Railway Description"
+        "page": "other",
+        "section": "Service Scene Artwork",
+        "label": "Service Scene Artwork · NIMA"
       },
       "copy.RailwayCleanupDrawing.station-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Station Name"
+        "page": "other",
+        "section": "Railway Cleanup Drawing",
+        "label": "Railway Cleanup Drawing · भोडवाल माजरी"
       },
       "copy.RailwayCleanupDrawing.train-name": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Train Name"
+        "page": "other",
+        "section": "Railway Cleanup Drawing",
+        "label": "Railway Cleanup Drawing · SNCF Express"
+      },
+      "copy.ServiceIllustration.railway-label": {
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Empower • Bhodwal Majri"
+      },
+      "copy.ServiceIllustration.railway-caption": {
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Every journey begins with care."
+      },
+      "copy.ServiceIllustration.railway-description": {
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · The SNCF Express passenger train approaches the viewer along the trac…"
       },
       "copy.ServiceIllustration.fort-button": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Red Fort"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Red Fort"
       },
       "copy.ServiceIllustration.taj-button": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Taj Mahal"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Taj Mahal"
       },
       "copy.ServiceIllustration.flood-button": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Flood Relief"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Flood Relief"
       },
       "copy.ServiceIllustration.railway-button": {
-        "page": "Core Values",
-        "section": "Service illustrations",
-        "label": "Bhodwal Majri"
+        "page": "other",
+        "section": "Service Illustration",
+        "label": "Service Illustration · Bhodwal Majri"
+      },
+      "copy.RecognitionArchive.tweets.title": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Tweets"
+      },
+      "copy.RecognitionArchive.tweets.eyebrow": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Voices of appreciation"
+      },
+      "copy.RecognitionArchive.tweets.intro": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Words of encouragement from public figures, institutions and communit…"
+      },
+      "copy.RecognitionArchive.awards.title": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Awards & Certificates"
+      },
+      "copy.RecognitionArchive.awards.eyebrow": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Service, recognised"
+      },
+      "copy.RecognitionArchive.awards.intro": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Honours, certificates and mementos that celebrate a shared commitment…"
+      },
+      "copy.RecognitionArchive.press.title": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Press & Media"
+      },
+      "copy.RecognitionArchive.press.eyebrow": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Service in the news"
+      },
+      "copy.RecognitionArchive.press.intro": {
+        "page": "other",
+        "section": "Recognition Archive",
+        "label": "Recognition Archive · Stories of the foundation’s work, as reported by the media."
+      },
+      "copy.ServicePortrait.icon-label": {
+        "page": "other",
+        "section": "Service Portrait",
+        "label": "Service Portrait · Sant Nirankari Charitable Foundation emblem"
+      },
+      "copy.WhoWeArePage.1d3009abb21e": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Since 2010"
+      },
+      "copy.WhoWeArePage.road-body": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · From a seed in 2010 to the tree it is today: every branch a moment th…"
+      },
+      "copy.WhoWeArePage.road-aria": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The foundation’s history as a growing tree"
+      },
+      "copy.WhoWeArePage.road-seed": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · The seed"
+      },
+      "copy.WhoWeArePage.road-year": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Year"
+      },
+      "copy.WhoWeArePage.road-moments": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · moments"
+      },
+      "copy.WhoWeArePage.road-explore": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Explore this chapter"
+      },
+      "copy.WhoWeArePage.road-today": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Today"
+      },
+      "copy.WhoWeArePage.road-hint": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Scroll to watch it grow"
       }
     },
     "assets": {
@@ -8862,41 +8847,6 @@
         "page": "everywhere",
         "section": "Anthem player",
         "label": "Anthem player · sncf-anthem-instrumental-v1.2.mp3"
-      },
-      "asset.AwardsSection.56b9a5e0ea79": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · satguru-mata-sudiksha-ji.jpg"
-      },
-      "asset.AwardsSection.4daa8ff53979": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · mataji-rajpita-planting.webp"
-      },
-      "asset.AwardsSection.b4324b25c1ce": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · nirankari-rajpita-ramit-ji.jpg"
-      },
-      "asset.AwardsSection.76f684891a21": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · volunteers-planning.webp"
-      },
-      "asset.AwardsSection.7144da391fb1": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · vertical-heal.webp"
-      },
-      "asset.AwardsSection.486823e29a83": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · vertical-enrich.webp"
-      },
-      "asset.AwardsSection.7e886446b163": {
-        "page": "home",
-        "section": "Awards",
-        "label": "Awards · vertical-empower.webp"
       },
       "asset.CardIllustration.7144da391fb1": {
         "page": "everywhere",
@@ -9217,6 +9167,16 @@
         "page": "home",
         "section": "Hero · Heal emblem photos",
         "label": "Hero · Heal emblem photos · photo-bottom-left.webp"
+      },
+      "asset.ServicePortrait.model": {
+        "page": "other",
+        "section": "Service Portrait",
+        "label": "Service Portrait · sncf-emblem.glb"
+      },
+      "asset.ServicePortrait.poster": {
+        "page": "other",
+        "section": "Service Portrait",
+        "label": "Service Portrait · sncf-logo.webp"
       }
     }
   },
