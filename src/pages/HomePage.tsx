@@ -453,7 +453,7 @@ export default function HomePage() {
           3. HERO — the site's single hero, the hall, second. */}
       <CMSLayout sections={[
         {id:'home.landing',node:(<HomeLandingMemo play={welcomeLeaving || !isSplashUp} onEnter={enterPath} onScrollOn={toFirstPath} />)},
-        {id:'home.intro',node:(<div id="hero-track" className="hero-track" style={{ '--hero-count': activePillarsList.length } as React.CSSProperties}>
+        {id:'home.intro',node:(<><div id="hero-track" className="hero-track" style={{ '--hero-count': activePillarsList.length } as React.CSSProperties}>
         <HeroSection
         activeIndex={activeIndex}
         onActiveIndexChange={handleActiveIndexChange}
@@ -463,7 +463,7 @@ export default function HomePage() {
         introActive={!isSplashUp && heroArrived}
         scrollDriven
         onChoosePillar={goToPillar}
-      /></div>)},
+      /></div></>)},
         /* the projects' chapter, which followed here, is now the Projects page's cover (ProjectsPage) */
         {id:'home.awards',node:<AwardsSectionMemo />},
         {id:'home.partners',node:(<PartnersSectionMemo

@@ -76,7 +76,7 @@ export function drawDove(c: CanvasRenderingContext2D, x: number, y: number, size
   /* the head, its beak and eye */
   c.beginPath(); c.arc(14.3, -2.7, 4.3, 0, TAU); c.fillStyle = '#fbfcfc'; c.fill(); c.stroke();
   c.beginPath(); c.moveTo(18.2, -3.3); c.lineTo(22, -2); c.lineTo(18.3, -0.9); c.closePath(); c.fillStyle = '#d58f72'; c.fill();
-  c.beginPath(); c.arc(15.4, -3.6, 0.9, 0, TAU); c.fillStyle = '#263036'; c.fill();
+  c.beginPath(); c.arc(15.4, -3.6, 0.9, 0, TAU); c.fillStyle = '#063782'; c.fill();
   if (holding) { c.save(); c.translate(BEAK_SEED.x, BEAK_SEED.y); seedShape(c, BEAK_SEED.rx, BEAK_SEED.ry); c.restore(); }
   wing(c, lift, false);
   c.restore();

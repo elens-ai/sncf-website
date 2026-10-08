@@ -1711,7 +1711,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "give-me-trees-commendation-2024",
@@ -1727,7 +1728,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "ltmg-sion-lions-club-2024",
@@ -1750,7 +1752,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "nbtc-ngo-conclave-2024",
@@ -1766,7 +1769,8 @@
           "height": 884,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "unep-world-environment-day-2024",
@@ -1782,7 +1786,8 @@
           "height": 1046,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "red-cross-telangana-2024",
@@ -1798,7 +1803,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "gmers-junagadh-blood-donor-day-2024",
@@ -1814,7 +1820,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "iit-roorkee-thomso-2024",
@@ -1830,7 +1837,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "divyang-para-sports-2024",
@@ -1846,7 +1854,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "mdacs-blood-donation-day-2023",
@@ -1862,7 +1871,8 @@
           "height": 1018,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "ministry-of-culture-project-amrit-2023",
@@ -1878,7 +1888,8 @@
           "height": 1200,
           "focal": "50% 40%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "aiims-blood-donation-day-2022",
@@ -1894,7 +1905,8 @@
           "height": 915,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "indian-blind-sports-association-2022",
@@ -1910,7 +1922,8 @@
           "height": 1016,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "rpf-northern-railway-2022",
@@ -1926,7 +1939,8 @@
           "height": 780,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "give-me-trees-sonepat-2022",
@@ -1942,7 +1956,8 @@
           "height": 1049,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "peepal-baba-oneness-vann-2021",
@@ -1958,7 +1973,8 @@
           "height": 662,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "zee-news-covid-centre-2021",
@@ -1974,7 +1990,8 @@
           "height": 1173,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "press"
     },
     {
       "id": "pm-cares-2020",
@@ -1990,7 +2007,8 @@
           "height": 1179,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "haryana-corona-relief-fund-2020",
@@ -2006,7 +2024,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "delhi-ppe-kits-2020",
@@ -2022,7 +2041,8 @@
           "height": 696,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "aajtak-north-delhi-sanitisation-2020",
@@ -2038,7 +2058,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "press"
     },
     {
       "id": "vadodara-swachhata-2019",
@@ -2054,7 +2075,8 @@
           "height": 759,
           "focal": "50% 55%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "toi-green-drive-letter-2018",
@@ -2070,7 +2092,8 @@
           "height": 1200,
           "focal": "50% 30%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "life-chiropractic-college-west-2017",
@@ -2086,7 +2109,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "nbtc-award-of-excellence-2016",
@@ -2103,7 +2127,8 @@
           "focal": "50% 50%",
           "caption": "World Blood Donor Day 2016 — “Blood Connects Us All”."
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "apj-abdul-kalam-world-peace-award-2016",
@@ -2119,7 +2144,8 @@
           "height": 546,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "queens-golden-jubilee-award-2015",
@@ -2135,7 +2161,8 @@
           "height": 1180,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "toi-green-drive-2015",
@@ -2169,7 +2196,8 @@
           "focal": "50% 40%",
           "caption": "Baba Hardev Singh Ji Maharaj planting at the drive."
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "brampton-blood-donor-clinic-2012",
@@ -2185,7 +2213,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "salvation-army-brampton-2011",
@@ -2201,7 +2230,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "namami-gange-project-amrit",
@@ -2217,7 +2247,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "amrit-mahotsav-project-amrit",
@@ -2233,7 +2264,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "gautam-gambhir-project-amrit",
@@ -2249,7 +2281,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "youth4water-sambalpur",
@@ -2265,7 +2298,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "nasha-mukt-bharat-mou",
@@ -2281,7 +2315,8 @@
           "height": 545,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "tweets"
     },
     {
       "id": "health-minister-memento",
@@ -2297,7 +2332,8 @@
           "height": 1200,
           "focal": "50% 40%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "red-cross-haryana-blood-donors",
@@ -2313,7 +2349,8 @@
           "height": 1200,
           "focal": "50% 40%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "earth-day-network-india",
@@ -2329,7 +2366,8 @@
           "height": 1200,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "swachh-bharat-mission-memento",
@@ -2345,7 +2383,8 @@
           "height": 752,
           "focal": "50% 50%"
         }
-      ]
+      ],
+      "category": "awards"
     },
     {
       "id": "swachh-rail-bct",
@@ -2361,7 +2400,8 @@
           "height": 668,
           "focal": "50% 45%"
         }
-      ]
+      ],
+      "category": "tweets"
     }
   ],
   "gallery": [
@@ -2801,11 +2841,6 @@
     "copy.AwardLightbox.ed90d2b23113": "Close photograph",
     "copy.AwardLightbox.c7cd30884cd6": "Previous photograph",
     "copy.AwardLightbox.a471f92bee76": "Next photograph",
-    "copy.AwardsSection.589b32fb4660": "Awards and recognitions",
-    "copy.AwardsSection.22466b5a68ad": "Recognition",
-    "copy.AwardsSection.39a8c7496bcc": "Awards & ",
-    "copy.AwardsSection.6d628e092af8": "Recognitions",
-    "copy.AwardsSection.146746cd2494": "Your appreciation makes us stronger to serve humanity.",
     "copy.DevotionalLightboxModal.8d5e2ed870c4": "Close Lightbox",
     "copy.DevotionalLightboxModal.6a4aa2122de2": "Spiritual Guidance",
     "copy.DevotionalLightboxModal.1cd0846b2924": "ੴ",
@@ -3244,22 +3279,9 @@
     "copy.WelcomeSplashScreen.welcome-short-name": "SNCF",
     "copy.WelcomeSplashScreen.welcome-full-name": "Sant Nirankari Charitable Foundation",
     "copy.WelcomeSplashScreen.welcome-text": "Established in 2010, the Sant Nirankari Charitable Foundation was created to give organized direction to diverse social initiatives. Guided by the principle of oneness, we bring compassion, care, and kindness to communities worldwide. Our mission extends beyond charity. We tackle social and environmental challenges, empower the underprivileged, and safeguard our planet to build a better world for all. Staying true to our motto ‘Service with Humility,’ we strive to uplift lives with dignity and selflessness.",
-    "copy.WelcomeSplashScreen.mission-title": "Our Mission",
-    "copy.WelcomeSplashScreen.mission-quote": "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed.",
-    "copy.WelcomeSplashScreen.mission-text-1": "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring.",
-    "copy.WelcomeSplashScreen.mission-text-2": "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe.",
-    "copy.WelcomeSplashScreen.vision-title": "Our Vision",
-    "copy.WelcomeSplashScreen.vision-quote": "“Living the spirit of service”",
-    "copy.WelcomeSplashScreen.vision-text": "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.",
     "copy.WelcomeSplashScreen.next-label": "Next",
     "copy.WelcomeSplashScreen.satguru-name": "Satguru Mata Sudiksha Ji Maharaj",
-    "copy.WelcomeSplashScreen.satguru-quote": "“A life lived for others is a life worth living.”",
-    "copy.WelcomeSplashScreen.mission-intro-1": "SNCF is dedicated to serving humanity through selfless service and meaningful social initiatives.",
-    "copy.WelcomeSplashScreen.mission-intro-2": "From healthcare and community empowerment to environmental conservation, SNCF works to address vital social and ecological needs.",
-    "copy.WelcomeSplashScreen.mission-intro-3": "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation.",
-    "copy.WelcomeSplashScreen.mission-intro-4": "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society.",
     "copy.WelcomeSplashScreen.mission-intro-name": "Sant Nirankari Charitable Foundation",
-    "copy.WelcomeSplashScreen.mission-seconds": "6",
     "copy.WelcomeSplashScreen.welcome-photo-focus": "47% 46%",
     "copy.WelcomeSplashScreen.satguru-photo-focus": "50% 20%",
     "copy.DonationExperience.closeAnswer": "Close answer",
@@ -3282,15 +3304,11 @@
     "copy.ProjectsPage.faceForestAlt": "Women planting saplings for a Oneness Vann micro-forest in Solapur",
     "copy.ProjectsPage.faceLandAlt": "A volunteer plants a sapling on a hillside",
     "copy.ProjectsPage.faceCommunitiesAlt": "A volunteer checks an elderly villager in Mandaura, an adopted village",
-    "copy.WelcomeSplashScreen.mission-intro-label": "One Purpose",
-    "copy.WelcomeSplashScreen.mission-chapters-label": "Chapters",
     "copy.WelcomeSplashScreen.mission-pause": "Pause",
     "copy.WelcomeSplashScreen.mission-play": "Play",
     "copy.EnrichScrapbook.label": "Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres",
     "copy.EnrichScrapbook.kicker": "Our scrapbook",
     "copy.EnrichScrapbook.closing": "And the next page is still being written…",
-    "copy.WelcomeSplashScreen.mission-vision-label": "Mission & Vision",
-    "copy.WelcomeSplashScreen.mission-intro-highlight": "Service with Humility",
     "copy.EmblemShowcase.previous": "Previous photograph",
     "copy.EmblemShowcase.play": "Play",
     "copy.EmblemShowcase.pause": "Pause",
@@ -3498,12 +3516,9 @@
     "copy.MosaicOverture.enter": "Enter",
     "copy.MosaicOverture.scroll": "Scroll to explore",
     "copy.WelcomeSplashScreen.message-seconds": "3",
-    "copy.WelcomeSplashScreen.message-text": "We are all part of one human family, children of the same formless Creator (Nirankar). This shared connection inspires compassion and selfless service, guiding us to stand by one another. At the heart of our Mission lies the spirit of healing, enrichment and empowerment – believing that nurturing one life uplifts the whole community. May we all be granted with the wisdom and strength to live in peace, to serve with humility and to care for our Earth and each other with a shared sense of responsibility.",
     "copy.WelcomeSplashScreen.message-couplet-1": "मानव को हो मानव प्यारा",
     "copy.WelcomeSplashScreen.message-couplet-2": "इक दूजे का बने सहारा",
     "copy.MosaicOverture.events": "Event info",
-    "copy.AwardsSection.pile-how": "Each photograph is an honour the foundation has received. Point at one, or tap it, to bring it forward and read what it honours and who gave it.",
-    "copy.AwardsSection.meta-years": "Years",
     "copy.AwardsSection.card-undated": "Recognition",
     "copy.AwardsSection.card-photograph": "Photograph",
     "copy.AwardsSection.pile-label": "The honours: choose a photograph to bring it forward, and again to see it in full",
@@ -3723,40 +3738,70 @@
     "copy.ProgrammePhotos.bank-processing": "Technicians in the blood bank’s processing room",
     "copy.ProgrammePhotos.bank-storage": "Blood kept in the blood bank’s refrigerators",
     "copy.ProgrammePhotos.bank-centrifuge": "A technician at the blood bank’s centrifuge",
-    "copy.ProgrammePhotos.centre-dedication": "Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji at the dedication of Sant Nirankari Health City"
+    "copy.ProgrammePhotos.centre-dedication": "Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji at the dedication of Sant Nirankari Health City",
+    "copy.SocialSidebar.floating-follow": "Follow and subscribe us",
+    "copy.ServiceIllustration.heal-label": "Heal • Care with compassion",
+    "copy.ServiceIllustration.heal-caption": "A little care. A healthier tomorrow.",
+    "copy.ServiceIllustration.heal-description": "A hand-drawn community clinic: a doctor cares for a patient, while a second doctor attends a seated blood donor beside a collection bag.",
+    "copy.ServiceIllustration.enrich-label": "Enrich • Room to grow",
+    "copy.ServiceIllustration.enrich-caption": "Every lesson opens a new possibility.",
+    "copy.ServiceIllustration.enrich-description": "Two schoolgirls with backpacks walk towards Sant Nirankari Public School. The school is on the left. NVC has four equal rooms for NIMA arts, sewing, library and coaching, with an arriving school bus.",
+    "copy.ServiceIllustration.nima-label": "NIMA • Music, dance & painting",
+    "copy.ServiceIllustration.nima-caption": "Where creativity finds its expression.",
+    "copy.ServiceIllustration.nima-description": "Illustrations inspired by the NIMA banner: a painter at an easel, a sitar player, a tabla player and a classical dancer.",
+    "copy.ServiceIllustration.fort-label": "Empower • Red Fort, Delhi",
+    "copy.ServiceIllustration.fort-caption": "Small acts of care. A shared tomorrow.",
+    "copy.ServiceIllustration.fort-description": "The Red Fort Lahori Gate, with its seven domes, flanking bastions and Indian flag. Volunteers sweep and care for the surrounding grounds.",
+    "copy.ServiceIllustration.taj-label": "Empower • Taj Mahal, Agra",
+    "copy.ServiceIllustration.taj-caption": "Caring for the places we share.",
+    "copy.ServiceIllustration.taj-description": "The Taj Mahal with its central onion dome, symmetrical arched facade and four minarets. Volunteers care for the surrounding grounds.",
+    "copy.ServiceIllustration.flood-label": "Empower • Flood Relief",
+    "copy.ServiceIllustration.flood-caption": "Standing together when it matters most.",
+    "copy.ServiceIllustration.flood-description": "Volunteers pass essential supplies to a rescue boat carrying a family in life jackets, with flooded homes in the distance.",
+    "copy.ServiceIllustration.learning-button": "Learning",
+    "copy.ServiceIllustration.nima-button": "NIMA",
+    "copy.ServiceIllustration.choose-scene": "Choose an illustration",
+    "copy.ServiceSceneArtwork.school-name": "Sant Nirankari Public School",
+    "copy.ServiceSceneArtwork.health-centre-name": "Sant Nirankari Health Centre",
+    "copy.ServiceSceneArtwork.blood-bank-brand": "Sant Nirankari",
+    "copy.ServiceSceneArtwork.blood-bank-name": "Blood Bank",
+    "copy.ServiceSceneArtwork.health-city-brand": "Sant Nirankari",
+    "copy.ServiceSceneArtwork.health-city-name": "Health City",
+    "copy.AmbulancePass.description": "Sant Nirankari Mobile Dispensary Cum Ambulance, with turning wheels and illuminated roof lights.",
+    "copy.AmbulancePass.brand": "Sant Nirankari",
+    "copy.AmbulancePass.purpose": "Mobile Dispensary Cum Ambulance",
+    "copy.ServiceSceneArtwork.sewing-name": "Sewing Centre",
+    "copy.ServiceSceneArtwork.nima-building-name": "Nirankari Vocational Centre",
+    "copy.SchoolBusDrawing.description": "A Sant Nirankari Public School bus arrives from the right, stops to drop off pupils, then continues left.",
+    "copy.SchoolBusDrawing.name": "Sant Nirankari Public School",
+    "copy.ServiceSceneArtwork.nvc-subtitle": "Learning • Skills • Creativity",
+    "copy.ServiceSceneArtwork.library": "Library",
+    "copy.ServiceSceneArtwork.coaching": "Coaching",
+    "copy.ServiceSceneArtwork.disaster-relief": "Disaster Relief",
+    "copy.ServiceSceneArtwork.nima-room": "NIMA",
+    "copy.ServiceIllustration.railway-label": "Empower • Bhodwal Majri",
+    "copy.ServiceIllustration.railway-caption": "Every journey begins with care.",
+    "copy.ServiceIllustration.railway-description": "The SNCF Express passenger train approaches the viewer along the tracks and slows to a stop at Bhodwal Majri. Six SNCF saints independently sweep and collect litter across the left-hand platform throughout.",
+    "copy.RailwayCleanupDrawing.station-name": "भोडवाल माजरी",
+    "copy.RailwayCleanupDrawing.train-name": "SNCF Express",
+    "copy.ServiceIllustration.fort-button": "Red Fort",
+    "copy.ServiceIllustration.taj-button": "Taj Mahal",
+    "copy.ServiceIllustration.flood-button": "Flood Relief",
+    "copy.ServiceIllustration.railway-button": "Bhodwal Majri",
+    "copy.RecognitionArchive.tweets.title": "Tweets",
+    "copy.RecognitionArchive.tweets.eyebrow": "Voices of appreciation",
+    "copy.RecognitionArchive.tweets.intro": "Words of encouragement from public figures, institutions and communities.",
+    "copy.RecognitionArchive.awards.title": "Awards & Certificates",
+    "copy.RecognitionArchive.awards.eyebrow": "Service, recognised",
+    "copy.RecognitionArchive.awards.intro": "Honours, certificates and mementos that celebrate a shared commitment to humanity.",
+    "copy.RecognitionArchive.press.title": "Press & Media",
+    "copy.RecognitionArchive.press.eyebrow": "Service in the news",
+    "copy.RecognitionArchive.press.intro": "Stories of the foundation’s work, as reported by the media."
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
       "source": "/media/sncf-anthem-instrumental-v1.2.mp3",
       "label": "AnthemPlayer · sncf-anthem-instrumental-v1.2.mp3"
-    },
-    "asset.AwardsSection.56b9a5e0ea79": {
-      "source": "/images/satguru-mata-sudiksha-ji.jpg",
-      "label": "AwardsSection · satguru-mata-sudiksha-ji.jpg"
-    },
-    "asset.AwardsSection.4daa8ff53979": {
-      "source": "/images/mataji-rajpita-planting.webp",
-      "label": "AwardsSection · mataji-rajpita-planting.webp"
-    },
-    "asset.AwardsSection.b4324b25c1ce": {
-      "source": "/images/nirankari-rajpita-ramit-ji.jpg",
-      "label": "AwardsSection · nirankari-rajpita-ramit-ji.jpg"
-    },
-    "asset.AwardsSection.76f684891a21": {
-      "source": "/images/volunteers-planning.webp",
-      "label": "AwardsSection · volunteers-planning.webp"
-    },
-    "asset.AwardsSection.7144da391fb1": {
-      "source": "/images/vertical-heal.webp",
-      "label": "AwardsSection · vertical-heal.webp"
-    },
-    "asset.AwardsSection.486823e29a83": {
-      "source": "/images/vertical-enrich.webp",
-      "label": "AwardsSection · vertical-enrich.webp"
-    },
-    "asset.AwardsSection.7e886446b163": {
-      "source": "/images/vertical-empower.webp",
-      "label": "AwardsSection · vertical-empower.webp"
     },
     "asset.CardIllustration.7144da391fb1": {
       "source": "/images/vertical-heal.webp",
@@ -6247,41 +6292,6 @@
         "section": "Intro · Welcome page",
         "label": "Intro · Welcome page · Established in 2010, the Sant Nirankari Charitable Foundation was cre…"
       },
-      "copy.WelcomeSplashScreen.mission-title": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · Our Mission"
-      },
-      "copy.WelcomeSplashScreen.mission-quote": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · When we give cheerfully, and when it is accepted with gratitude to th…"
-      },
-      "copy.WelcomeSplashScreen.mission-text-1": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · SNCF with its holy roots is set up with an objective to provide a bet…"
-      },
-      "copy.WelcomeSplashScreen.mission-text-2": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · The mission of the SNCF thus, is to serve with humility and share our…"
-      },
-      "copy.WelcomeSplashScreen.vision-title": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · Our Vision"
-      },
-      "copy.WelcomeSplashScreen.vision-quote": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · “Living the spirit of service”"
-      },
-      "copy.WelcomeSplashScreen.vision-text": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · The work that SNCF engages in with individuals, families and communit…"
-      },
       "copy.WelcomeSplashScreen.next-label": {
         "page": "home",
         "section": "Intro · Welcome page",
@@ -6292,40 +6302,10 @@
         "section": "Intro · Mission & vision page",
         "label": "Intro · Mission & vision page · Satguru Mata Sudiksha Ji Maharaj"
       },
-      "copy.WelcomeSplashScreen.satguru-quote": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · “A life lived for others is a life worth living.”"
-      },
-      "copy.WelcomeSplashScreen.mission-intro-1": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · SNCF is dedicated to serving humanity through selfless service and me…"
-      },
-      "copy.WelcomeSplashScreen.mission-intro-2": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · From healthcare and community empowerment to environmental conservati…"
-      },
-      "copy.WelcomeSplashScreen.mission-intro-3": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · With thousands of volunteers contributing across 3,500+ branches worl…"
-      },
-      "copy.WelcomeSplashScreen.mission-intro-4": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · Guided by the spirit of “Service with Humility,” SNCF continues to wo…"
-      },
       "copy.WelcomeSplashScreen.mission-intro-name": {
         "page": "home",
         "section": "Intro · Mission & vision page",
         "label": "Intro · Mission & vision page · Sant Nirankari Charitable Foundation"
-      },
-      "copy.WelcomeSplashScreen.mission-seconds": {
-        "page": "home",
-        "section": "Intro · Mission page time (seconds)",
-        "label": "Intro · Mission page time (seconds) · 6"
       },
       "copy.WelcomeSplashScreen.welcome-photo-focus": {
         "page": "home",
@@ -6437,16 +6417,6 @@
         "section": "Page",
         "label": "Page · A volunteer checks an elderly villager in Mandaura, an adopted village"
       },
-      "copy.WelcomeSplashScreen.mission-intro-label": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · One Purpose"
-      },
-      "copy.WelcomeSplashScreen.mission-chapters-label": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · Chapters"
-      },
       "copy.WelcomeSplashScreen.mission-pause": {
         "page": "home",
         "section": "Intro · Mission & vision page",
@@ -6471,16 +6441,6 @@
         "page": "core-values",
         "section": "Enrich scrapbook",
         "label": "Enrich scrapbook · And the next page is still being written…"
-      },
-      "copy.WelcomeSplashScreen.mission-vision-label": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · Mission & Vision"
-      },
-      "copy.WelcomeSplashScreen.mission-intro-highlight": {
-        "page": "home",
-        "section": "Intro · Mission & vision page",
-        "label": "Intro · Mission & vision page · Service with Humility"
       },
       "copy.EmblemShowcase.previous": {
         "page": "core-values",
@@ -7516,11 +7476,6 @@
         "page": "home",
         "section": "Intro · Message page time (seconds)",
         "label": "Intro · Message page time (seconds) · 3"
-      },
-      "copy.WelcomeSplashScreen.message-text": {
-        "page": "home",
-        "section": "Intro · Message page",
-        "label": "Intro · Message page · We are all part of one human family, children of the same formless Cr…"
       },
       "copy.WelcomeSplashScreen.message-couplet-1": {
         "page": "home",
@@ -8646,6 +8601,251 @@
         "page": "other",
         "section": "Programme Photos",
         "label": "Programme Photos · Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji at th…"
+      },
+      "copy.SocialSidebar.floating-follow": {
+        "page": "everywhere",
+        "section": "Social links",
+        "label": "Social links · Floating follow invitation"
+      },
+      "copy.ServiceIllustration.heal-label": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Heal Label"
+      },
+      "copy.ServiceIllustration.heal-caption": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Heal Caption"
+      },
+      "copy.ServiceIllustration.heal-description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Heal Description"
+      },
+      "copy.ServiceIllustration.enrich-label": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Enrich Label"
+      },
+      "copy.ServiceIllustration.enrich-caption": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Enrich Caption"
+      },
+      "copy.ServiceIllustration.enrich-description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Enrich Description"
+      },
+      "copy.ServiceIllustration.nima-label": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Nima Label"
+      },
+      "copy.ServiceIllustration.nima-caption": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Nima Caption"
+      },
+      "copy.ServiceIllustration.nima-description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Nima Description"
+      },
+      "copy.ServiceIllustration.fort-label": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Fort Label"
+      },
+      "copy.ServiceIllustration.fort-caption": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Fort Caption"
+      },
+      "copy.ServiceIllustration.fort-description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Fort Description"
+      },
+      "copy.ServiceIllustration.taj-label": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Taj Label"
+      },
+      "copy.ServiceIllustration.taj-caption": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Taj Caption"
+      },
+      "copy.ServiceIllustration.taj-description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Taj Description"
+      },
+      "copy.ServiceIllustration.flood-label": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Flood Label"
+      },
+      "copy.ServiceIllustration.flood-caption": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Flood Caption"
+      },
+      "copy.ServiceIllustration.flood-description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Flood Description"
+      },
+      "copy.ServiceIllustration.learning-button": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Learning Button"
+      },
+      "copy.ServiceIllustration.nima-button": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Nima Button"
+      },
+      "copy.ServiceIllustration.choose-scene": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Choose Scene"
+      },
+      "copy.ServiceSceneArtwork.school-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "School Name"
+      },
+      "copy.ServiceSceneArtwork.health-centre-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Health Centre Name"
+      },
+      "copy.ServiceSceneArtwork.blood-bank-brand": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Blood Bank Brand"
+      },
+      "copy.ServiceSceneArtwork.blood-bank-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Blood Bank Name"
+      },
+      "copy.ServiceSceneArtwork.health-city-brand": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Health City Brand"
+      },
+      "copy.ServiceSceneArtwork.health-city-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Health City Name"
+      },
+      "copy.AmbulancePass.description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Description"
+      },
+      "copy.AmbulancePass.brand": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Brand"
+      },
+      "copy.AmbulancePass.purpose": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Purpose"
+      },
+      "copy.ServiceSceneArtwork.sewing-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Sewing Name"
+      },
+      "copy.ServiceSceneArtwork.nima-building-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Nima Building Name"
+      },
+      "copy.SchoolBusDrawing.description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Description"
+      },
+      "copy.SchoolBusDrawing.name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Name"
+      },
+      "copy.ServiceSceneArtwork.nvc-subtitle": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Nvc Subtitle"
+      },
+      "copy.ServiceSceneArtwork.library": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Library"
+      },
+      "copy.ServiceSceneArtwork.coaching": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Coaching"
+      },
+      "copy.ServiceSceneArtwork.disaster-relief": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Disaster Relief"
+      },
+      "copy.ServiceSceneArtwork.nima-room": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Nima Room"
+      },
+      "copy.ServiceIllustration.railway-label": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Railway Label"
+      },
+      "copy.ServiceIllustration.railway-caption": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Railway Caption"
+      },
+      "copy.ServiceIllustration.railway-description": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Railway Description"
+      },
+      "copy.RailwayCleanupDrawing.station-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Station Name"
+      },
+      "copy.RailwayCleanupDrawing.train-name": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Train Name"
+      },
+      "copy.ServiceIllustration.fort-button": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Red Fort"
+      },
+      "copy.ServiceIllustration.taj-button": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Taj Mahal"
+      },
+      "copy.ServiceIllustration.flood-button": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Flood Relief"
+      },
+      "copy.ServiceIllustration.railway-button": {
+        "page": "Core Values",
+        "section": "Service illustrations",
+        "label": "Bhodwal Majri"
       }
     },
     "assets": {

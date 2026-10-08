@@ -134,6 +134,7 @@ export function resolvePartners(publication: CMSPublication, defaults: Partner[]
 export function resolveAwards(publication: CMSPublication, defaults: Award[]) {
   /* An honour the source lists without a year keeps an empty one — never a plausible one — so `year` is optional here and in the CMS. */
   return collection(publication.awards, defaults, (item): item is Award => isRecord(item) && recordID(item.id) && fields(item, ['title', 'awardedBy']) && optionalFields(item, ['year', 'note']) &&
+    (item.category === undefined || item.category === null || ['tweets', 'awards', 'press'].includes(String(item.category))) &&
     (item.photos === undefined || (Array.isArray(item.photos) && item.photos.every(photo => image(photo) && isRecord(photo) &&
       typeof photo.width === 'number' && Number.isFinite(photo.width) && photo.width > 0 && typeof photo.height === 'number' && Number.isFinite(photo.height) && photo.height > 0 && optionalFields(photo, ['focal', 'caption'])))))
     .map(award => ({ ...award, year: award.year ?? '' }));

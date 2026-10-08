@@ -110,8 +110,9 @@ export const Partners = contentCollection('partners', {
 
 export const Awards = contentCollection('awards', {
   singular: 'Award', plural: 'Awards', group: GROUP.content, title: 'title', columns: ['title', 'awardedBy', 'year'], search: ['title', 'awardedBy'],
-  description: 'Verified honours only. Leave the year empty when the source does not give one.',
+  description: 'Verified tweets, awards, certificates and media coverage. Leave the year empty when the source does not give one.',
 }, [
+  { name: 'category', label: 'Archive section', type: 'select', options: [{ label: 'Tweets', value: 'tweets' }, { label: 'Awards & Certificates', value: 'awards' }, { label: 'Press & Media', value: 'press' }] },
   text('title', true, { label: 'Honour' }), { type: 'row', fields: [text('awardedBy', true, { label: 'Awarded by' }), text('year', false, { label: 'Year' })] },
   area('note', false, { label: 'Note' }), { name: 'featured', label: 'Feature this award', type: 'checkbox' },
   { name: 'photos', label: 'Photos', type: 'array', labels: { singular: 'Photo', plural: 'Photos' }, fields: imageFields },

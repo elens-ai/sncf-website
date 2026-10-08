@@ -1,0 +1,17 @@
+.ambulance-road { position: relative; height: clamp(110px, 12vw, 155px); width: 100%; overflow: hidden; margin: -8px 0 18px; }
+.ambulance-road-line { position: absolute; inset: auto 0 12px; height: 1px; background: linear-gradient(90deg, transparent, #f4e8d959 15%, #f4e8d959 85%, transparent); }
+.ambulance-vehicle { position: absolute; bottom: 10px; left: 0; width: clamp(250px, 27vw, 340px); will-change: transform; }
+.ambulance-vehicle svg { display: block; width: 100%; overflow: visible; stroke: var(--sketch-ink); stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.ambulance-name { font: 500 15px/1.2 var(--font-sans); letter-spacing: .3px; fill: var(--sketch-ink); stroke: none; }
+.ambulance-purpose { font: 400 10.8px/1.2 var(--font-sans); fill: var(--sketch-ink); stroke: none; }
+.ambulance-wheel { transform: rotate(var(--wheel-turn, 0deg)); }
+.ambulance-beacon { animation: ambulance-beacon 1.5s ease-in-out infinite; animation-play-state: paused; }
+.ambulance-beacon-halo { opacity: 0; animation: ambulance-halo 1.5s ease-in-out infinite; animation-play-state: paused; }
+.ambulance-road[data-passing='true'] :is(.ambulance-beacon, .ambulance-beacon-halo) { animation-play-state: running; }
+@keyframes ambulance-beacon { 0%, 100% { fill: #cd685b; } 50% { fill: #fff0ad; } }
+@keyframes ambulance-halo { 0%, 100% { opacity: .1; } 50% { opacity: .8; } }
+@media (prefers-reduced-motion: reduce) {
+  .ambulance-beacon, .ambulance-beacon-halo { animation: none; }
+  .ambulance-beacon { fill: #f1b091; }
+  .ambulance-vehicle { will-change: auto; }
+}

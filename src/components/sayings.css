@@ -19,7 +19,7 @@
 .saying blockquote { margin: 0; color: color-mix(in srgb, var(--saying-ink) 82%, #102e56); text-wrap: balance; }
 /* Hindi is lettered, not typeset: the calligraphic face, in two tones of its
    work's colour as a brush leaves them, over a brush stroke of the same ink */
-.saying[data-script='hindi'] blockquote { width: fit-content; margin-inline: auto; font: 600 clamp(27px, 3.1vw, 40px)/1.5 var(--font-hindi); font-synthesis: none; }
+.saying[data-script='hindi'] blockquote { width: fit-content; margin-inline: auto; font: 400 clamp(27px, 3.1vw, 40px)/1.5 var(--font-hindi); font-synthesis: none; }
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
   .saying[data-script='hindi'] blockquote { background: linear-gradient(100deg, color-mix(in srgb, var(--saying-ink) 70%, #102e56), var(--saying-ink) 50%, color-mix(in srgb, var(--saying-ink) 78%, #102e56)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 }

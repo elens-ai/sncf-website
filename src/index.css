@@ -40,11 +40,31 @@
   font-style: normal;
   font-display: swap;
 }
+/* Bundled Aparajita keeps Hindi typography consistent on every device. */
+@font-face {
+  font-family: 'Aparajita';
+  src: url('./assets/fonts/aparajita-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 @theme {
   --font-numeric: 'Outfit Regular', Outfit, system-ui, sans-serif;
   --color-navy: #063782;
   --color-deep-blue: #102e56;
   --color-black: #063782;
+  /* Dark neutral utilities also use the foundation's navy palette. */
+  --color-neutral-700: #244c7c;
+  --color-neutral-750: #1d436e;
+  --color-neutral-800: #15365b;
+  --color-neutral-900: #102e56;
+  --color-neutral-950: #0b2445;
+  --color-gray-900: #102e56;
+  --color-gray-950: #0b2445;
+  --color-zinc-900: #102e56;
+  --color-zinc-950: #0b2445;
+  --color-stone-900: #102e56;
+  --color-stone-950: #0b2445;
   --shadow-2xs: 0 1px rgb(16 46 86 / 0.05);
   --shadow-xs: 0 1px 2px 0 rgb(16 46 86 / 0.05);
   --shadow-sm: 0 1px 3px 0 rgb(16 46 86 / 0.1), 0 1px 2px -1px rgb(16 46 86 / 0.1);
@@ -69,9 +89,11 @@
   --font-tab: 'Outfit Numbers', Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --font-heading: 'Outfit Numbers', 'SNCF Flared', Outfit, system-ui, sans-serif;
   --font-script: 'Outfit Numbers', 'Dancing Script', cursive;
-  /* Hindi: a calligraphic Devanagari, the script face's counterpart */
-  --font-hindi: 'Outfit Numbers', Tillana, 'Nirmala UI', 'Kohinoor Devanagari', 'Noto Sans Devanagari', serif;
+  /* Shared Hindi face for quotations, slogans and illustration labels. */
+  --font-hindi: 'Outfit Numbers', 'Aparajita', 'Noto Serif Devanagari', 'Kohinoor Devanagari', serif;
 }
+:lang(hi) { font-family: var(--font-hindi); font-synthesis: none; }
+
 /* Every heading takes the heading face unless its own rule says otherwise:
    no specificity, so a component can still set a heading in another face. */
 :where(h1, h2, h3, h4, h5, h6) { font-family: var(--font-heading); }
@@ -148,10 +170,10 @@
   fill: rgb(255 255 255 / 0.58);
 }
 
-/* The farewell's salutation, in Devanagari — the Mission's own greeting.
-   None of the site's display faces carry the script, so this leans on the
-   system stack deliberately rather than pretending otherwise. */
+/* The farewell uses the same Hindi face as the quotes and station signs. */
 .lotus-gate-dhan {
+  font-family: var(--font-hindi);
+  font-synthesis: none;
   font-size: 2.4px;
   font-weight: 600;
   fill: rgb(255 255 255 / 0.6);
@@ -1488,7 +1510,7 @@
    same two-stop ramp of the page's ink, at the same angle, from the same
    --accent-a / --accent-b the page underneath paints with), so the mission page
    reads as part of the site and leaving it uncovers the same ground beneath.
-   It sat on a flat near-black green before, a colour nothing else on the site
+   It sat on a flat near-#063782 green before, a colour nothing else on the site
    uses. Keep this in step with .accent-canvas if that changes. */
 .splash-welcome-photo { overflow: hidden; background: linear-gradient(var(--stage-angle, 135deg), var(--accent-a), var(--accent-b)); }
 
@@ -1830,37 +1852,6 @@
 .splash-copy-body > * { grid-area: 1 / 1; }
 .splash-message-sequence { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 .splash-message-sequence[data-gone='true'] { pointer-events: none; animation: chapterOut 0.45s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
-.splash-message {
-  --msg: clamp(15px, calc(var(--u) * 1.42), 24px);
-  min-width: 0;
-  margin: 0;
-  padding-right: var(--mp-gutter);
-  font-size: var(--msg);
-}
-.splash-message blockquote {
-  margin: 0;
-  font: 400 1em / 1.72 var(--font-sans);
-  color: var(--mp-ink);
-  text-wrap: pretty;
-  animation: messageIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-}
-.splash-message figcaption {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.9em;
-  margin-top: 1.5em;
-  animation: welcomeRise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both;
-}
-.splash-message figcaption::before { content: ''; width: 2.6em; height: 1px; background: var(--mp-accent); opacity: 0.8; }
-.splash-message cite {
-  font: 500 0.66em / 1.4 var(--font-sans);
-  font-style: normal;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--mp-accent);
-}
-
 /* --------------------------------------------------------------------------
    The chapters. One plays at a time on a stage as tall as the longest, so
    nothing beneath it moves as they change; each is set larger than a column
@@ -2187,27 +2178,6 @@
 /* on the message page her message stands beside the portrait, so its own
    quotation waits, its place kept, for the mission page */
 .splash-satguru figcaption[data-shown='false'] { visibility: hidden; animation: none; }
-/* The message page's Hindi couplet, in that same place under the portrait:
-   set over the quotation's (hidden) lines, its last line on the attribution's,
-   so the caption keeps the quotation's size and the portrait never moves. */
-.splash-couplet {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  translate: -50% 0;
-  margin: 0;
-  visibility: visible;
-  white-space: nowrap;
-  font: 600 calc(var(--mp-quote) * 1.8) / 1.5 var(--font-hindi);
-  color: var(--mp-quote-ink);
-  animation: welcomeRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both;
-}
-.splash-couplet span { display: block; }
-/* in quotation marks, as the mission page's quotation is, and in its script;
-   the marks are the page's, so the CMS holds just the words */
-.splash-couplet span:first-child::before { content: '\201C'; font-family: var(--font-script); }
-.splash-couplet span:last-child::after { content: '\201D'; font-family: var(--font-script); }
-.splash-couplet[data-gone='true'] { pointer-events: none; animation: chapterOut 0.45s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
 .splash-satguru blockquote {
   margin: 0;
   font: 600 calc(var(--mp-quote) * 1.12) / 1.38 var(--font-script);
@@ -2273,7 +2243,6 @@
   .splash-satguru figcaption { margin-top: calc(var(--mp-s) * 1.6); }
   /* centred on the screen here, the couplet keeps clear of the arrow at the
      bottom right: its lines are about ten times its size across */
-  .splash-couplet { font-size: min(calc(var(--mp-quote) * 1.8), calc((100vw - 2 * clamp(16px, 2.5vw, 36px) - 132px) / 10.05)); }
 }
 /* A narrow copy column puts the logo above the name, so the name can use the
    full width, and keeps the rail to the chapters' names. */
@@ -3315,7 +3284,7 @@
 }
 /* the slab's side: three layers filling the thickness — as ANNULI, not
    discs. Full discs stacked their alpha (nine dark sheets under the middle
-   summed to a black drum, twice measured); a rim band paints only where a
+   summed to a #063782 drum, twice measured); a rim band paints only where a
    slab's side actually shows, and the interiors stay clear for the top
    surfaces alone, so the page's accent finally breathes through the glass. */
 .orbit-tier i {
@@ -6399,12 +6368,12 @@
 }
 /* The Projects page's tabs (look 'segmented'): a quiet grey track, the section in view raised as a white slip, the
    names alone in Geist (--font-tab), no colour. */
-.subnav[data-look='segmented'] .subnav-track { border-radius: 13px; background: rgb(238 238 236 / 0.92); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.04); }
-.subnav[data-look='segmented'] .subnav-lit { border-radius: 9px; box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 6px 14px -8px rgb(0 0 0 / 0.18); }
+.subnav[data-look='segmented'] .subnav-track { border-radius: 13px; background: rgb(238 238 236 / 0.92); box-shadow: inset 0 0 0 1px rgb(6 55 130 / 0.04); }
+.subnav[data-look='segmented'] .subnav-lit { border-radius: 9px; box-shadow: 0 1px 2px rgb(6 55 130 / 0.06), 0 6px 14px -8px rgb(6 55 130 / 0.18); }
 .subnav[data-look='segmented'] .subnav-chip { border-radius: 9px; font: 500 13px/1 var(--font-tab); letter-spacing: -0.01em; color: #6b706e; }
 .subnav[data-look='segmented'] .subnav-chip:hover { color: #3d4644; }
-.reading-room .subnav[data-look='segmented'] .subnav-chip[data-on='true'] { color: #22302d; }
-.reading-room .subnav[data-look='segmented'] .subnav-chip:focus-visible { outline: 2px solid #22302d; outline-offset: 2px; }
+.reading-room .subnav[data-look='segmented'] .subnav-chip[data-on='true'] { color: #063782; }
+.reading-room .subnav[data-look='segmented'] .subnav-chip:focus-visible { outline: 2px solid #063782; outline-offset: 2px; }
 /* THE RAIL ON ITS SECTION'S GROUND (tinted; Core Values): the rail is laid in
    the ground of the section in view, the page's own ramp of that section's
    colours under the same deep wash, so it reads as that section's top edge;
@@ -6762,10 +6731,8 @@ button.mgal-plate:focus-visible {
     rgb(22 24 43 / 0.34)
   );
 }
-/* NOTE: no rule for `.social-rail span` here. SocialSidebar has no label
-   spans — its only <span> is the hover tooltip, which carries its own dark
-   pill and white text, and a light override repainted that white text to
-   near-white-on-near-black's opposite. Left alone deliberately. */
+/* Keep tooltip ink separate from the floating invitation, whose light
+   surface treatment lives in social-sidebar.css. */
 
 /* The project spreads are stacked now rather than tabbed, so they need air
    between them — and their entrance animation was written for a tab swap,
@@ -6786,7 +6753,7 @@ button.mgal-plate:focus-visible {
 
 /* THE INK PROBLEM. Each pillar carries two colours: accentA (deep) and
    accentB (bright). The reading rooms were written for the dark hall, where
-   the BRIGHT one is the readable one — Heal's #6fd19a glows on near-black.
+   the BRIGHT one is the readable one — Heal's #6fd19a glows on near-#063782.
    On paper it measures 1.86:1 against white, which is not text, it is a
    watermark. Type therefore switches to a paper cut of each ink, and the
    bright one keeps only the jobs where contrast does not apply: bar fills,
@@ -7161,7 +7128,7 @@ html:has(.reading-room[data-surface='light']) {
      is NOT sitting on white: the band is a mid-light tint of its own colour,
      which lifts the ground and eats the margin. The paper cuts that clear
      4.5:1 on #ffffff measured 3.45-4.5 here. Carrying the ink most of the way
-     to the page's near-black keeps each room's hue and buys the contrast
+     to the page's near-#063782 keeps each room's hue and buys the contrast
      back on every one of the seven bands. */
   color: color-mix(in srgb, var(--ink-a) 58%, #102e56);
   margin: 0 0 8px;

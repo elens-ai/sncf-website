@@ -14,7 +14,7 @@ import { PILLARS } from '../data/pillars';
  * no artwork pipeline behind it.
  */
 
-export const eventQr = (eventId: string, dark = '#16182b') =>
+export const eventQr = (eventId: string, dark = '#063782') =>
   toDataURL(inviteUrl(eventId), { errorCorrectionLevel: 'M', margin: 1, width: 640, color: { dark, light: '#ffffff' } });
 
 const loadImage = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
@@ -91,7 +91,7 @@ async function renderPortrait(item: ResolvedEvent, W: number, H: number): Promis
   const label = (pillar?.label ?? event.pillarId).toUpperCase().split('').join(' ');
   const lw = ctx.measureText(label).width + 56;
   rounded(ctx, W / 2 - lw / 2, 292 * sy, lw, 48, 24); ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fill();
-  ctx.fillStyle = '#16182b'; ctx.fillText(label, W / 2, 292 * sy + 32);
+  ctx.fillStyle = '#063782'; ctx.fillText(label, W / 2, 292 * sy + 32);
 
   ctx.fillStyle = '#ffffff'; ctx.font = '400 60px "Outfit Numbers", "Dancing Script", cursive';
   ctx.fillText('You are warmly invited', W / 2, 430 * sy);
@@ -148,7 +148,7 @@ async function renderBanner(item: ResolvedEvent): Promise<Blob> {
   const label = (pillar?.label ?? event.pillarId).toUpperCase().split('').join(' ');
   const lw = ctx.measureText(label).width + 48;
   rounded(ctx, left + 124, 140, lw, 42, 21); ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fill();
-  ctx.fillStyle = '#16182b'; ctx.fillText(label, left + 148, 168);
+  ctx.fillStyle = '#063782'; ctx.fillText(label, left + 148, 168);
 
   ctx.fillStyle = '#ffffff'; ctx.font = '400 54px "Outfit Numbers", "Dancing Script", cursive';
   ctx.fillText('You are warmly invited', left, 300);

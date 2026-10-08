@@ -20,7 +20,7 @@
 .showcase-spot { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 0; min-height: 3.4em; animation: showcase-spot-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .showcase-programme { font: 700 clamp(19px, 2.2vw, 24px)/1.2 var(--font-script); color: color-mix(in srgb, var(--showcase-ink) 78%, #102e56); }
 .showcase-figure { font: 400 13px/1.5 var(--font-sans); color: #4e625c; }
-.showcase-figure strong { font-weight: 700; color: #1d3531; }
+.showcase-figure strong { font-weight: 700; color: #063782; }
 .showcase-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 16px; font-size: 8px; line-height: 1.6; letter-spacing: 0.08em; text-transform: uppercase; color: #63766f; }
 .showcase-controls { display: inline-flex; gap: 6px; }
 .showcase-controls button { display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid color-mix(in srgb, var(--showcase-ink) 35%, transparent); border-radius: 50%; background: #fff; color: var(--showcase-ink); cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }

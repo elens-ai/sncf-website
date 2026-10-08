@@ -252,6 +252,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 /* The hero's exit (HeroSection writes --hero-exit as it scrolls away): everything but the petals fades,
    and the watermark swells and brightens into the ghost petals the overture below assembles. */
 #hero-foreground-content { opacity: calc(1 - var(--hero-exit, 0)); }
+.home-page .hero-path-tabs { opacity: max(0, calc(1 - var(--hero-exit, 0) * 1.6)); }
 #hero-lotus-watermark img { opacity: calc(.045 + var(--hero-exit, 0) * .16); transform: scale(calc(1 + var(--hero-exit, 0) * .22)); }
 
 
@@ -290,7 +291,7 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 .home-page .mosaic-explore-all:hover { background: color-mix(in srgb, var(--chapter-a) 40%, transparent); }
 .home-page #events-section { background: radial-gradient(ellipse at 5% 25%, #f3d9a510, transparent 48%); }
 .home-page #events-section .home-event-ticket { box-shadow: 0 24px 50px -30px #06378299; }
-.home-page #awards-section { background: radial-gradient(ellipse at 50% 65%, #dcc69a14, transparent 60%); }
+.home-page #awards-section:not(.recognition-hub) { background: radial-gradient(ellipse at 50% 65%, #dcc69a14, transparent 60%); }
 .home-page #partners-section { background: radial-gradient(ellipse at 90% 65%, color-mix(in srgb, var(--accent-b) 13%, transparent), transparent 62%); }
 .home-page #hero-clone-stage .hero-activity-art { opacity: calc(1 - var(--hero-exit, 0)); }
 

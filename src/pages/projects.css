@@ -1,4 +1,4 @@
-.projects-editorial{color:#243d3d;font-family:var(--font-sans)}
+.projects-editorial{color:#063782;font-family:var(--font-sans)}
 .project-eyebrow{font:600 10px/1.8 var(--font-sans);text-transform:uppercase;letter-spacing:.14em;color:#5a7777}
 .projects-cover h1 em{font-family:var(--font-script);color:#0d7584;font-weight:500}
 .project-primary-link{display:inline-flex;align-items:center;gap:25px;margin-top:26px;padding:13px 20px;border:1px solid #bad0cc;border-radius:30px;background:#fff9;color:#146a77;font-size:12px;transition:background .2s,transform .2s}.project-primary-link:hover{background:white;transform:translateY(-2px)}

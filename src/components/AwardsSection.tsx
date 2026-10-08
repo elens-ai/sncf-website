@@ -1,157 +1,105 @@
-import { bindCMSValue, resolveCMSAsset, getCMSCopy } from '../cms/runtime';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSectionActivity } from '../hooks/useSectionActivity';
+import { ArrowLeft, ArrowRight, Maximize2, Pause, Play } from 'lucide-react';
+import { getCMSCopy } from '../cms/runtime';
+import { resolveCMSMedia } from '../cms/media';
 import { useCMSRevision } from '../cms/CMSContentProvider';
-import { onArrival } from '../utils/arrival';
+import { useSectionActivity } from '../hooks/useSectionActivity';
+import { AWARDS, type Award, type RecognitionCategory } from '../data/awards';
+import { groupRecognitions } from '../data/recognition';
+import { AwardLightbox, type LightboxTarget } from './AwardLightbox';
 import './recognition-partners.css';
-import { AWARDS, Award, AwardPhoto } from '../data/awards';
-import { AwardLightbox, LightboxTarget } from './AwardLightbox';
-import { HonourPile } from './HonourPile';
+import './recognition-archive.css';
 
-interface Item {
-  key: string;
-  src: string;
-  alt: string;
-  focal?: string;
-  /** The word set huge behind the stage — a year where there is one. */
-  ghost: string;
-  award: Award;
-  photos: AwardPhoto[];
-}
-
-const standIn = (
-  key: string, src: string, alt: string, ghost: string,
-  title: string, awardedBy: string, note: string, focal?: string,
-): Item => ({
-  key, src, alt, ghost, focal,
-  photos: [{ src, alt, width: 1200, height: 1500, focal }],
-  award: { id: key, title, awardedBy, year: '', note },
-});
-
-let STANDIN = bindCMSValue(() => ([
-  standIn('satguru', resolveCMSAsset("asset.AwardsSection.56b9a5e0ea79", "/images/satguru-mata-sudiksha-ji.jpg"),
-    'Portrait of Satguru Mata Sudiksha Ji Maharaj', 'Guiding',
-    'Satguru Mata Sudiksha Ji Maharaj', 'Sixth spiritual guide, Sant Nirankari Mission',
-    'The Mission’s guiding force.', '50% 24%'),
-  standIn('planting', resolveCMSAsset("asset.AwardsSection.4daa8ff53979", "/images/mataji-rajpita-planting.webp"),
-    'Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling', 'Vann',
-    'Planting a sapling', 'Oneness Vann',
-    'Native saplings planted and tended until they grow into community forests.', '50% 32%'),
-  standIn('rajpita', resolveCMSAsset("asset.AwardsSection.b4324b25c1ce", "/images/nirankari-rajpita-ramit-ji.jpg"),
-    'Portrait of Nirankari Rajpita Ramit Ji', 'Guiding',
-    'Nirankari Rajpita Ramit Ji', 'Spiritual guide, Sant Nirankari Mission',
-    'The Mission’s guiding force.', '50% 14%'),
-  standIn('volunteers', resolveCMSAsset("asset.AwardsSection.76f684891a21", "/images/volunteers-planning.webp"),
-    'Foundation volunteers planning a service drive', 'Sewa',
-    'Volunteers planning a service drive', 'Documented service',
-    'From the foundation’s own library, standing in until the honours are catalogued.',
-    '50% 45%'),
-  standIn('heal', resolveCMSAsset("asset.AwardsSection.7144da391fb1", "/images/vertical-heal.webp"), 'Emblem for the Heal programme', 'Heal',
-    'Heal', 'Health and blood donation',
-    'Blood donation drives, eye-care camps and free health checkups.'),
-  standIn('enrich', resolveCMSAsset("asset.AwardsSection.486823e29a83", "/images/vertical-enrich.webp"), 'Emblem for the Enrich programme', 'Enrich',
-    'Enrich', 'Education and skills', 'Schools, scholarships and skill development.'),
-  standIn('empower', resolveCMSAsset("asset.AwardsSection.7e886446b163", "/images/vertical-empower.webp"), 'Emblem for the Empower programme', 'Empower',
-    'Empower', 'Youth and environment',
-    'Youth empowerment, plantation drives and disaster relief.'),
-]), value => { STANDIN = value; });
-
-// Lead with major national and international recognitions, then retain the archive order.
-const LEADING_HONOURS = [
-  'csr-summit-most-impactful-ngo-2024',
-  'queens-golden-jubilee-award-2015',
-  'nbtc-award-of-excellence-2016',
-  'unep-world-environment-day-2024',
-  'pm-cares-2020',
-  'ministry-of-culture-project-amrit-2023',
+const ARCHIVES: { category: RecognitionCategory; id: string; title: string; intro: string; eyebrow: string }[] = [
+  { category: 'tweets', id: 'tweets-section', get title() { return getCMSCopy("copy.RecognitionArchive.tweets.title", 'Tweets'); }, get eyebrow() { return getCMSCopy("copy.RecognitionArchive.tweets.eyebrow", 'Voices of appreciation'); }, get intro() { return getCMSCopy("copy.RecognitionArchive.tweets.intro", 'Words of encouragement from public figures, institutions and communities.'); } },
+  { category: 'awards', id: 'awards-section', get title() { return getCMSCopy("copy.RecognitionArchive.awards.title", 'Awards & Certificates'); }, get eyebrow() { return getCMSCopy("copy.RecognitionArchive.awards.eyebrow", 'Service, recognised'); }, get intro() { return getCMSCopy("copy.RecognitionArchive.awards.intro", 'Honours, certificates and mementos that celebrate a shared commitment to humanity.'); } },
+  { category: 'press', id: 'press-media-section', get title() { return getCMSCopy("copy.RecognitionArchive.press.title", 'Press & Media'); }, get eyebrow() { return getCMSCopy("copy.RecognitionArchive.press.eyebrow", 'Service in the news'); }, get intro() { return getCMSCopy("copy.RecognitionArchive.press.intro", 'Stories of the foundation’s work, as reported by the media.'); } },
 ];
-const honourPriority = (award: Award) => {
-  const index = LEADING_HONOURS.indexOf(award.id);
-  return index >= 0 ? index : award.featured ? LEADING_HONOURS.length : LEADING_HONOURS.length + 1;
-};
+const LEADING = ['csr-summit-most-impactful-ngo-2024', 'queens-golden-jubilee-award-2015', 'nbtc-award-of-excellence-2016', 'unep-world-environment-day-2024'];
+const priority = (item: Award) => { const i = LEADING.indexOf(item.id); return i < 0 ? LEADING.length : i; };
 
-/** AWARDS & RECOGNITIONS, as an archive's page of fragments: a quiet heading
-    (its two lines of text, and beside them the years, from the first honour
-    to this one), and
-    beneath it the photographs of the honours laid loosely as a pile of prints,
-    some at a time, turning over (HonourPile). One brought forward stands
-    beside its card; one already forward opens full size. */
-export const AwardsSection: React.FC = () => {
-  const revision = useCMSRevision();
-  const rootRef = useRef<HTMLElement>(null);
-  const inView = useSectionActivity(rootRef);
-  const [calm, setCalm] = useState(false);
-  const [shown, setShown] = useState(false);
-  const [fieldReady, setFieldReady] = useState(false);
+const RecognitionArchive: React.FC<{ archive: typeof ARCHIVES[number]; items: Award[]; number: number }> = ({ archive, items, number }) => {
+  const root = useRef<HTMLElement>(null);
+  const inView = useSectionActivity(root);
+  const [selected, setSelected] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [held, setHeld] = useState(false);
+  const [reduced, setReduced] = useState(false);
   const [target, setTarget] = useState<LightboxTarget | null>(null);
-  const items: Item[] = useMemo(() => {
-    void revision;
-    return AWARDS.length ? AWARDS.filter(a => a.photos?.length).sort((a, b) => honourPriority(a) - honourPriority(b)).map(a => ({
-      key: a.id, src: a.photos![0].src, alt: a.photos![0].alt,
-      focal: a.photos![0].focal, ghost: a.year, award: a, photos: a.photos!,
-    })) : STANDIN;
-  }, [revision]);
-  /* the years of the honours, for the heading's side: from the first to this one */
-  const years = items.map(item => parseInt(item.award.year, 10)).filter(year => year > 0);
-  const first = Math.min(...years), last = Math.max(...years, new Date().getFullYear());
-  const span = years.length ? (first === last ? String(first) : `${first} – ${last}`) : '';
-  useEffect(() => { if (rootRef.current) return onArrival(rootRef.current, () => setShown(true)); }, []);
+  const prints = useMemo(() => items.flatMap(award => (award.photos ?? []).map((photo, index) => ({ award, photo, index, key: `${award.id}-${index}` }))), [items]);
+  const active = prints.length ? selected % prints.length : 0;
+  const current = prints[active];
+  const step = useCallback((direction: number) => setSelected(i => prints.length ? (i + direction + prints.length) % prints.length : 0), [prints.length]);
   useEffect(() => {
-    const mq = matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => setCalm(mq.matches);
-    sync(); mq.addEventListener('change', sync);
-    return () => mq.removeEventListener('change', sync);
+    const query = matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setReduced(query.matches);
+    sync(); query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
   }, []);
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const simple = calm || window.innerWidth < 640;
-      const progress = simple ? 1 : Math.min(1, Math.max(0, (70 - root.getBoundingClientRect().top) / (window.innerHeight * 0.85)));
-      root.style.setProperty('--awards-spread', String(progress));
-      root.style.setProperty('--awards-heading-opacity', String(Math.max(0, 1 - progress * 2)));
-      setFieldReady(simple || progress > 0.45);
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    update();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-    };
-  }, [calm]);
-  const open = useCallback((honour: number, photo: number) => {
-    const item = items[honour];
-    if (item) setTarget({ award: item.award, photos: item.photos, index: photo });
-  }, [items]);
+    if (!inView || paused || held || reduced || target || prints.length < 2) return;
+    const timer = window.setInterval(() => step(1), 5000);
+    return () => window.clearInterval(timer);
+  }, [inView, paused, held, reduced, target, prints.length, step]);
   const close = useCallback(() => setTarget(null), []);
+  const open = () => { if (current) setTarget({ award: current.award, photos: current.award.photos!, index: current.index }); };
+  const title = archive.title;
+  const visible = Array.from({ length: Math.min(5, prints.length) }, (_, offset) => ({ ...prints[(active + offset) % prints.length], offset, indexInArchive: (active + offset) % prints.length }));
+  const years = items.map(item => parseInt(item.year, 10)).filter(Number.isFinite);
 
-  return <section id="awards-section" ref={rootRef} className="recognition-section" data-arrived={shown} data-active={inView}
-    aria-label={getCMSCopy('copy.AwardsSection.589b32fb4660', 'Awards and recognitions')}>
-    <div className="recognition-viewport">
-    <header className="recognition-heading honour-heading">
-      <div>
-        <p className="continuity-eyebrow"><span />{getCMSCopy('copy.AwardsSection.22466b5a68ad', 'Recognition')}</p>
-        <h2>{getCMSCopy('copy.AwardsSection.39a8c7496bcc', 'Awards & ')}<em>{getCMSCopy('copy.AwardsSection.6d628e092af8', 'Recognitions')}</em></h2>
-        <div className="honour-heading-columns">
-          <p>{getCMSCopy('copy.AwardsSection.146746cd2494', 'Your appreciation makes us stronger to serve humanity.')}</p>
-          <p>{getCMSCopy('copy.AwardsSection.pile-how', 'Each photograph is an honour the foundation has received. Point at one, or tap it, to bring it forward and read what it honours and who gave it.')}</p>
+  return <section ref={root} id={`${archive.category}-archive-panel`} className="recognition-archive" data-category={archive.category} role="tabpanel" aria-labelledby={`${archive.category}-archive-tab`} tabIndex={0}>
+    <div className="archive-inner">
+      <header className="archive-heading">
+        <div>
+          <p className="archive-eyebrow"><span>{String(number).padStart(2, '0')}</span>{archive.eyebrow}</p>
+          <h2 id={`${archive.id}-title`}>{title}</h2>
+          <p className="archive-intro">{archive.intro}</p>
         </div>
-      </div>
-      {span && <dl className="honour-meta">
-        <div><dt>{getCMSCopy('copy.AwardsSection.meta-years', 'Years')}</dt><dd>{span}</dd></div>
-      </dl>}
-    </header>
-    <div className="recognition-field" inert={!fieldReady}>
-    {items.length
-      ? <HonourPile honours={items} arrived={shown} running={inView && fieldReady && target === null} calm={calm} onOpen={open} />
-      : <p className="recognition-intro">New recognitions will appear here as they are added to our archive.</p>}
+        <div className="archive-catalogue"><span>{String(items.length).padStart(2, '0')} records</span>{years.length > 0 && <span>{Math.min(...years)} — {Math.max(...years)}</span>}</div>
+      </header>
+      {current ? <div className="archive-exhibition" onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)} onFocusCapture={() => setHeld(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setHeld(false); }}>
+        <div className="archive-desk" role="group" aria-label={`${title} — select a print to bring it forward`}>
+          {visible.map(print => <button key={print.key} type="button" className="archive-print" data-slot={print.offset} aria-label={`${print.offset === 0 ? 'Enlarge' : 'Select'} ${print.award.title}`} aria-pressed={print.offset === 0}
+            style={{ '--print-ratio': print.photo.width / print.photo.height } as React.CSSProperties}
+            onClick={() => { if (print.offset === 0) open(); else setSelected(print.indexInArchive); }}>
+            <img src={resolveCMSMedia(print.photo.src)} alt={print.photo.alt} width={print.photo.width} height={print.photo.height} loading="lazy" decoding="async" draggable={false} />
+            <span className="archive-print-enlarge" aria-hidden="true"><Maximize2 size={15} /></span>
+          </button>)}
+        </div>
+          <div className="archive-controls" role="group" aria-label={`${title} controls`}>
+            <button type="button" aria-label={`Previous ${title} record`} disabled={prints.length < 2} onClick={() => step(-1)}><ArrowLeft size={18} /></button>
+            <span aria-live="off">{String(active + 1).padStart(2, '0')} / {String(prints.length).padStart(2, '0')}</span>
+            <button type="button" aria-label={`Next ${title} record`} disabled={prints.length < 2} onClick={() => step(1)}><ArrowRight size={18} /></button>
+            {!reduced && prints.length > 1 && <button type="button" aria-label={`${paused ? 'Play' : 'Pause'} ${title} slideshow`} aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? <Play size={14} /> : <Pause size={14} />}</button>}
+          </div>
+      </div> : <p className="archive-empty">Records will appear here as they are added to the archive.</p>}
     </div>
+    <AwardLightbox target={target} onClose={close} onNavigate={index => setTarget(value => value ? { ...value, index } : null)} />
+  </section>;
+}
+
+/** One archive with three distinct, keyboard-accessible collections. */
+export const AwardsSection: React.FC = () => {
+  const revision = useCMSRevision();
+  const [tab, setTab] = useState<RecognitionCategory>('tweets');
+  const tabs = useRef<HTMLDivElement>(null);
+  const groups = useMemo(() => { void revision; return groupRecognitions([...AWARDS].sort((a, b) => priority(a) - priority(b))); }, [revision]);
+  const index = ARCHIVES.findIndex(archive => archive.category === tab);
+  return <section id="awards-section" className="recognition-hub" aria-label="Tweets, awards and media archive">
+    <div ref={tabs} className="archive-tabs" role="tablist" aria-label="Archive collections">
+      {ARCHIVES.map((archive, i) => <button key={archive.category} type="button" role="tab" id={`${archive.category}-archive-tab`} aria-controls={`${archive.category}-archive-panel`} aria-selected={tab === archive.category} tabIndex={tab === archive.category ? 0 : -1}
+        onClick={() => setTab(archive.category)} onKeyDown={event => {
+          let next = i;
+          if (event.key === 'ArrowRight') next = (i + 1) % ARCHIVES.length;
+          else if (event.key === 'ArrowLeft') next = (i + ARCHIVES.length - 1) % ARCHIVES.length;
+          else if (event.key === 'Home') next = 0;
+          else if (event.key === 'End') next = ARCHIVES.length - 1;
+          else return;
+          event.preventDefault(); event.stopPropagation();
+          setTab(ARCHIVES[next].category);
+          tabs.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+        }}><span>{String(i + 1).padStart(2, '0')}</span>{archive.title}</button>)}
     </div>
-    <AwardLightbox target={target} onClose={close} onNavigate={i => setTarget(t => t ? { ...t, index: i } : null)} />
+    <RecognitionArchive key={tab} archive={ARCHIVES[index]} items={groups[tab]} number={index + 1} />
   </section>;
 };

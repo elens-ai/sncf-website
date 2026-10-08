@@ -16,6 +16,7 @@ import { ACTIVITY_SYMBOLS } from '../components/activitySymbols';
 import { Saying } from '../components/Saying';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { PageShell } from '../components/PageShell';
+import { ServiceIllustration } from '../components/ServiceIllustration';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { onArrival } from '../utils/arrival';
 import { PROGRAMME_SDGS, goalsOf } from '../data/sdgs';
@@ -158,6 +159,7 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   return (
     <section id={id} className="value-chapter" data-cornerstone={id} aria-labelledby={`mosaic-${id}-title`} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties}>
       <CornerstoneScreen id={id} index={index} name={name} activities={listed} onProgramme={showProgramme} />
+      <ServiceIllustration pillar={id} />
       <div id={`${id}-story`} className="value-chapter-body">
         <Saying id={id} />
 

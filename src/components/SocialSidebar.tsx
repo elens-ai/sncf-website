@@ -1,9 +1,10 @@
 import { getCMSCopy } from '../cms/runtime';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Instagram, Youtube, Facebook, Linkedin, MessageCircle } from 'lucide-react';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { getSiteSettings } from '../cms/siteSettings';
 import type { SocialLink } from '../cms/siteDefaults';
+import './social-sidebar.css';
 
 // Custom clean SVG for Spotify & X to match exact official ghost circular iconography
 const SpotifyIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
@@ -36,17 +37,54 @@ export const SOCIAL_ART = PLATFORM;
 const FOOTER_ONLY: string[] = ['linkedin'];
 
 export const SocialSidebar: React.FC = () => {
-  useCMSRevision();
+  const revision = useCMSRevision();
+  const rail = useRef<HTMLElement>(null);
+  useEffect(() => {
+    let frame = 0;
+    const syncContrast = () => {
+      frame = 0;
+      const element = rail.current;
+      if (!element || !element.offsetWidth) return;
+      const readingRoom = element.closest('.reading-room');
+      const darkAreas = [...document.querySelectorAll('.values-cover, .value-chapter, .page-cover, .projects-cover')].map(section => section.getBoundingClientRect());
+      const landing = document.querySelector('.home-landing > .mosaic-overture')?.getBoundingClientRect();
+      element.querySelectorAll<HTMLElement>('.social-rail-link').forEach(link => {
+        const bounds = link.getBoundingClientRect();
+        const x = bounds.left + bounds.width / 2;
+        const y = bounds.top + bounds.height / 2;
+        const light = readingRoom
+          ? !darkAreas.some(area => area.left <= x && area.right >= x && area.top <= y && area.bottom >= y)
+          : Boolean(landing && landing.top <= y && landing.bottom >= y);
+        link.dataset.contrast = light ? 'light' : 'dark';
+      });
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(syncContrast); };
+    schedule();
+    const observer = new ResizeObserver(schedule);
+    if (rail.current) observer.observe(rail.current);
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [revision]);
   /* LinkedIn is the footer's alone: the rail down the left edge keeps to the others */
   const socialLinks = getSiteSettings().social.filter(link => !FOOTER_ONLY.includes(link.platform)).map(link => ({ ...PLATFORM[link.platform], url: link.url }));
+  // Hide the invitation across the whole icon stack, including its gaps.
+  const stackHalfHeight = `(${socialLinks.length} * var(--social-icon-size) + ${Math.max(0, socialLinks.length - 1) * 10}px) / 2 + 6px`;
+  const textMask = [
+    'linear-gradient(to bottom, transparent 64px, #000 112px, #000 calc(100% - 32px), transparent)',
+    `linear-gradient(to bottom, #000 calc(50% - (${stackHalfHeight}) - 3px), transparent calc(50% - (${stackHalfHeight})), transparent calc(50% + (${stackHalfHeight})), #000 calc(50% + (${stackHalfHeight}) + 3px))`,
+  ].join(', ');
 
   return (
     <aside
+      ref={rail}
       id="hero-social-sidebar"
       aria-label={getCMSCopy("copy.SocialSidebar.e6a6fd6c2f93", "Social Media Connections")}
-      /* left-[38px] centres the 40px icon column on x=58 — the same vertical axis as
-         the 52px header logo (32px inset + 26px radius), so logo and icons read as
-         one aligned rail down the left edge. */
       className="social-rail fixed left-3 sm:left-5 md:left-[15px] top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-3.5 select-none pointer-events-auto"
     >
       {/* Top Vertical Divider Line */}
@@ -62,7 +100,8 @@ export const SocialSidebar: React.FC = () => {
             rel="noopener noreferrer"
             aria-label={item.ariaLabel}
             title={item.name}
-            className={`group relative w-9 h-9 lg:w-10 lg:h-10 rounded-full border border-white/20 bg-navy/25 backdrop-blur-md flex items-center justify-center text-white/75 transition-all duration-300 hover:scale-115 hover:bg-white/15 active:scale-95 ${item.colorHover}`}
+            data-contrast="dark"
+            className={`social-rail-link group relative w-9 h-9 lg:w-10 lg:h-10 rounded-full border border-white/20 bg-navy/25 backdrop-blur-md flex items-center justify-center text-white/75 transition-all duration-300 hover:scale-115 hover:bg-white/15 active:scale-95 ${item.colorHover}`}
           >
             {item.icon}
 
@@ -74,6 +113,11 @@ export const SocialSidebar: React.FC = () => {
         ))}
       </div>
 
+      {socialLinks.length > 0 && <div className="social-rail-text-track" aria-hidden="true" style={{ maskImage: textMask }}>
+        <div className="social-rail-text-traveller">
+          <span className="social-rail-floating-text"><span>{getCMSCopy('copy.SocialSidebar.floating-follow', 'Follow and subscribe us')}</span></span>
+        </div>
+      </div>}
       {/* Bottom Vertical Divider Line */}
       <div className="rail-line w-[1px] h-12 lg:h-16 bg-gradient-to-b from-white/60 via-white/35 to-transparent" />
     </aside>

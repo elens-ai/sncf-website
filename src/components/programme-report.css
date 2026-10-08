@@ -6,9 +6,9 @@
 /* it scrolls sideways where the chips do not fit, with no scrollbar shown */
 .programme-picker { display: flex; gap: 8px; margin: 0 0 14px; padding: 2px 2px 8px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; }
 .programme-picker::-webkit-scrollbar { display: none; }
-.programme-chip { flex: 1 1 0; min-width: 168px; display: flex; align-items: center; gap: 10px; padding: 7px 12px 7px 7px; border: 1px solid #dfe6e1; border-radius: 14px; background: #fff; color: #22302d; text-align: left; cursor: pointer; transition: background-color .25s, border-color .25s, color .25s, box-shadow .25s, translate .25s; }
+.programme-chip { flex: 1 1 0; min-width: 168px; display: flex; align-items: center; gap: 10px; padding: 7px 12px 7px 7px; border: 1px solid #dfe6e1; border-radius: 14px; background: #fff; color: #063782; text-align: left; cursor: pointer; transition: background-color .25s, border-color .25s, color .25s, box-shadow .25s, translate .25s; }
 .programme-chip:hover { border-color: color-mix(in srgb, var(--value-color) 45%, #dfe6e1); translate: 0 -1px; }
-.programme-chip[aria-pressed='true'] { border-color: transparent; background: var(--value-color); color: #fff; box-shadow: 0 10px 22px -14px color-mix(in srgb, var(--value-color) 80%, #000); }
+.programme-chip[aria-pressed='true'] { border-color: transparent; background: var(--value-color); color: #fff; box-shadow: 0 10px 22px -14px color-mix(in srgb, var(--value-color) 80%, #063782); }
 .programme-chip:focus-visible { outline: 3px solid var(--value-color); outline-offset: 2px; }
 .programme-chip-thumb { flex: none; display: grid; place-items: center; width: 40px; height: 40px; overflow: hidden; border-radius: 10px; background: color-mix(in srgb, var(--value-light) 30%, #fff); color: var(--value-color); }
 .programme-chip[aria-pressed='true'] .programme-chip-thumb { box-shadow: 0 0 0 2px rgb(255 255 255 / .7); }
@@ -41,7 +41,7 @@
 .preport-lead-top { position: absolute; z-index: 5; top: 12px; left: calc(var(--side) + 12px); right: calc(var(--side) + 12px); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; }
 .preport-lead-top span, .nvc-kicker span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 99px; background: rgb(10 25 22 / .4); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: #fff; font: 700 9.5px/1.2 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; }
 .preport-stage-foot { position: absolute; z-index: 5; left: calc(var(--side) + 14px); right: calc(var(--side) + 12px); bottom: 12px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
-.preport-caption { margin: 0; max-width: 62%; color: #fff; font: 500 13px/1.45 var(--font-sans); text-shadow: 0 1px 6px rgb(0 0 0 / .45); animation: preport-in .6s ease both; }
+.preport-caption { margin: 0; max-width: 62%; color: #fff; font: 500 13px/1.45 var(--font-sans); text-shadow: 0 1px 6px rgb(6 55 130 / .45); animation: preport-in .6s ease both; }
 .preport-stage-turns { flex: none; display: flex; align-items: center; gap: 8px; color: #fff; font: 600 11.5px/1 var(--font-sans); font-variant-numeric: tabular-nums; }
 .preport-stage-turns button { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid rgb(255 255 255 / .55); border-radius: 50%; background: rgb(255 255 255 / .14); color: #fff; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); transition: background-color .2s, color .2s; }
 .preport-stage-turns button:hover { background: #fff; color: var(--value-color); }
@@ -96,11 +96,11 @@
 .nvc-head-figures dd { margin: 4px 0 0; font: 600 22px/1.1 var(--font-sans); font-variant-numeric: tabular-nums; }
 .nvc-head-figures dd small { font: 500 11px/1 var(--font-sans); color: rgb(255 255 255 / .75); }
 .nvc-head-figures .nvc-head-share { margin-top: 3px; font: 400 11px/1.35 var(--font-sans); color: rgb(255 255 255 / .7); }
-.nvc-tabs { display: inline-flex; justify-self: start; gap: 4px; padding: 4px; border-radius: 13px; background: rgb(238 238 236 / .92); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .04); }
+.nvc-tabs { display: inline-flex; justify-self: start; gap: 4px; padding: 4px; border-radius: 13px; background: rgb(238 238 236 / .92); box-shadow: inset 0 0 0 1px rgb(6 55 130 / .04); }
 .nvc-tabs button { padding: 9px 20px; border: 0; border-radius: 9px; background: none; color: #6b706e; font: 500 13.5px/1 var(--font-tab); letter-spacing: -.01em; cursor: pointer; transition: background-color .25s, color .25s, box-shadow .25s; }
 .nvc-tabs button:hover { color: #3d4644; }
-.nvc-tabs button[aria-selected='true'] { background: #fff; color: #22302d; box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 6px 14px -8px rgb(0 0 0 / .18); }
-.nvc-tabs button:focus-visible { outline: 2px solid #22302d; outline-offset: 2px; }
+.nvc-tabs button[aria-selected='true'] { background: #fff; color: #063782; box-shadow: 0 1px 2px rgb(6 55 130 / .06), 0 6px 14px -8px rgb(6 55 130 / .18); }
+.nvc-tabs button:focus-visible { outline: 2px solid #063782; outline-offset: 2px; }
 .nvc-panel { animation: preport-in .4s ease both; }
 
 @media (max-width: 900px) {

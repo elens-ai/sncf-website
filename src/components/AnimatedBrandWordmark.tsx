@@ -105,14 +105,14 @@ export const AnimatedBrandWordmark: React.FC<{
       </span>)}
     </span>
     <span className="brand-monogram-measure" aria-hidden="true">
-      {words.map((word, i) => <span key={i}><span ref={element => { targetLetters.current[i] = element; }}>{word[0]}</span>{i < words.length - 1 && <span>.</span>}</span>)}
+      {words.map((word, i) => <span key={i}><span ref={element => { targetLetters.current[i] = element; }}>{word[0]}</span><span>.</span></span>)}
     </span>
     <span className="brand-initials" aria-hidden="true">
       {positions.slice(0, words.length).map((position, i) => <span key={i} className="brand-moving-initial" style={{
         '--full-x': `${position.x}px`, '--full-y': `${position.y}px`, '--full-scale': position.scale,
         '--short-x': `${position.shortX}px`, '--short-y': `${position.shortY}px`, '--letter-index': i,
         '--full-weight': i < rows[0].length ? 800 : 600,
-      } as React.CSSProperties}>{words[i][0]}{i < words.length - 1 && <span className="brand-monogram-dot">.</span>}</span>)}
+      } as React.CSSProperties}>{words[i][0]}<span className="brand-monogram-dot">.</span></span>)}
     </span>
   </Link>;
 };

@@ -20,7 +20,9 @@
 .ed-portrait.gf-portrait::before { content: none; }
 /* as tall as the first screen allows, beside the words */
 .ed-portrait.gf-portrait img { display: block; width: auto; height: auto; max-width: 100%; max-height: max(420px, calc(100svh - 200px)); margin-inline: auto; object-fit: contain; border-radius: 0; background: none; }
-.ed-portrait.gf-portrait figcaption { padding: 2px 5px 0; }
+/* Lift the original portrait's exposure and soften its warm cast without retouching facial detail. */
+.gf-cover .gf-portrait img { filter: brightness(1.08) saturate(.9); }
+.ed-portrait.gf-portrait figcaption { padding: 10px 5px 0; font-size: clamp(18px, 1.6vw, 24px); font-weight: 500; line-height: 1.5; color: #063782; }
 /* the portrait's column the wider, and the cover's air above and below given to it */
 @media (min-width: 801px) { .ed-cover.gf-cover { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); padding-block: 100px 36px; } }
 @media (max-width: 800px) { .ed-portrait.gf-portrait { max-width: 440px; } }

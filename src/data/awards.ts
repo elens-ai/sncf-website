@@ -42,7 +42,11 @@ export interface AwardPhoto {
   caption?: string;
 }
 
+export type RecognitionCategory = 'tweets' | 'awards' | 'press';
+
 export interface Award {
+  /** Archive section; optional for publications created before the sections were split. */
+  category?: RecognitionCategory;
   id: string;
   /** The award exactly as it is named on the certificate. */
   title: string;
@@ -64,6 +68,7 @@ export interface Award {
 export const DEFAULT_AWARDS: Award[] = [
   {
     id: 'csr-summit-most-impactful-ngo-2024',
+    category: 'awards',
     title: 'Most Impactful NGO of the Year',
     awardedBy: '11th CSR Summit & Awards 2024, UBS Forums',
     year: '2024',
@@ -85,6 +90,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'give-me-trees-commendation-2024',
+    category: 'awards',
     title: 'Certificate of Commendation — 5,00,000 trees',
     awardedBy: 'Give Me Trees Trust',
     year: '2024',
@@ -97,6 +103,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'ltmg-sion-lions-club-2024',
+    category: 'awards',
     title: 'Certificate of Appreciation — blood donation drives',
     awardedBy: 'Blood Centre, Lokmanya Tilak Municipal General Hospital, Sion, with the Lions Club of (Bombay) Mahanagar',
     year: '2024',
@@ -116,6 +123,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'nbtc-ngo-conclave-2024',
+    category: 'awards',
     title: 'Certificate of Appreciation — India Blood Donation NGO Conclave 2024',
     awardedBy: 'National Blood Transfusion Council, Ministry of Health & Family Welfare, with the Akhil Bhartiya Terapanth Yuvak Parishad',
     year: '2024',
@@ -128,6 +136,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'unep-world-environment-day-2024',
+    category: 'awards',
     title: 'Certificate of Appreciation — World Environment Day 2024',
     awardedBy: 'United Nations Environment Programme (UNEP)',
     year: '2024',
@@ -140,6 +149,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'red-cross-telangana-2024',
+    category: 'awards',
     title: 'Highest Blood Donor Motivator — World Blood Donor Day 2024',
     awardedBy: 'Indian Red Cross Society, Telangana Branch',
     year: '2024',
@@ -152,6 +162,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'gmers-junagadh-blood-donor-day-2024',
+    category: 'awards',
     title: 'Memento for the best work in blood donation',
     awardedBy: 'Blood Centre, GMERS Medical College & Hospital, Junagadh',
     year: '2024',
@@ -164,6 +175,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'iit-roorkee-thomso-2024',
+    category: 'awards',
     title: 'Appreciation — Thomso’24',
     awardedBy: 'IIT Roorkee',
     year: '2024',
@@ -176,6 +188,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'divyang-para-sports-2024',
+    category: 'awards',
     title: 'Guest of Honour — Delhi State Para-Athletics & Para-Powerlifting Championships',
     awardedBy: 'Divyang Para Sports Association of Delhi',
     year: '2024–25',
@@ -188,6 +201,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'mdacs-blood-donation-day-2023',
+    category: 'awards',
     title: 'Certificate of Appreciation — National Voluntary Blood Donation Day 2023',
     awardedBy: 'Mumbai Districts AIDS Control Society, Brihanmumbai Mahanagarpalika',
     year: '2023',
@@ -200,6 +214,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'ministry-of-culture-project-amrit-2023',
+    category: 'tweets',
     title: 'Swachh Jal Swachh Mann — Project Amrit',
     awardedBy: 'Ministry of Culture, Government of India',
     year: '2023',
@@ -212,6 +227,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'aiims-blood-donation-day-2022',
+    category: 'awards',
     title: 'Thank you — National Voluntary Blood Donation Day 2022',
     awardedBy: 'Blood Centre, Main Hospital, AIIMS New Delhi, with the BTS Division, DGHS, Ministry of Health & Family Welfare',
     year: '2022',
@@ -224,6 +240,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'indian-blind-sports-association-2022',
+    category: 'tweets',
     title: 'Recognition of the Sant Nirankari Sewadal',
     awardedBy: 'Indian Blind Sports Association',
     year: '2022',
@@ -236,6 +253,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'rpf-northern-railway-2022',
+    category: 'tweets',
     title: 'Thanks from the Railway Protection Force',
     awardedBy: 'RPF, Northern Railway',
     year: '2022',
@@ -248,6 +266,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'give-me-trees-sonepat-2022',
+    category: 'tweets',
     title: 'Oneness Vann — 2,000 saplings at Sonepat',
     awardedBy: 'Give Me Trees Trust',
     year: '2022',
@@ -260,6 +279,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'peepal-baba-oneness-vann-2021',
+    category: 'tweets',
     title: 'Oneness Vann plantations — Ambala, Yamunanagar and Kurukshetra',
     awardedBy: 'Swami Prem Parivartan (Peepal Baba)',
     year: '2021',
@@ -272,6 +292,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'zee-news-covid-centre-2021',
+    category: 'press',
     title: 'Delhi’s temporary COVID-19 centre — in the news',
     awardedBy: 'Zee News English',
     year: '2021',
@@ -284,6 +305,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'pm-cares-2020',
+    category: 'tweets',
     title: 'Appreciation for the PM-CARES contribution',
     awardedBy: 'Shri Narendra Modi, Prime Minister of India',
     year: '2020',
@@ -296,6 +318,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'haryana-corona-relief-fund-2020',
+    category: 'tweets',
     title: 'Thanks for the Haryana Corona Relief Fund contribution',
     awardedBy: 'Shri Manohar Lal, Chief Minister of Haryana',
     year: '2020',
@@ -308,6 +331,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'delhi-ppe-kits-2020',
+    category: 'tweets',
     title: 'Thanks for 10,000 PPE kits',
     awardedBy: 'Shri Arvind Kejriwal, Chief Minister of Delhi',
     year: '2020',
@@ -320,6 +344,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'aajtak-north-delhi-sanitisation-2020',
+    category: 'press',
     title: 'Sanitising North Delhi with the fire brigade — in the news',
     awardedBy: 'Aaj Tak',
     year: '2020',
@@ -332,6 +357,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'vadodara-swachhata-2019',
+    category: 'awards',
     title: 'Swachhata Competition 2019 — outstanding work',
     awardedBy: 'Vadodara Municipal Corporation',
     year: '2019',
@@ -344,6 +370,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'toi-green-drive-letter-2018',
+    category: 'awards',
     title: 'Letter of Appreciation — Hero TOI Green Drive 2018',
     awardedBy: 'The Times of India (Bennett, Coleman & Co. Ltd.)',
     year: '2018',
@@ -356,6 +383,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'life-chiropractic-college-west-2017',
+    category: 'awards',
     title: 'Service to Humanity Award',
     awardedBy: 'Dr. Ronald Oberstein, President, and the Board of Regents, Life Chiropractic College West',
     year: '2017',
@@ -368,6 +396,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'nbtc-award-of-excellence-2016',
+    category: 'awards',
     title: 'Award of Excellence — World Blood Donor Day',
     awardedBy: 'National Blood Transfusion Council and NACO, Ministry of Health & Family Welfare, Government of India',
     year: '2016',
@@ -381,6 +410,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'apj-abdul-kalam-world-peace-award-2016',
+    category: 'awards',
     title: 'Dr. APJ Abdul Kalam World Peace Award — 2016',
     awardedBy: 'All India Council of Human Rights',
     year: '2016',
@@ -393,6 +423,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'queens-golden-jubilee-award-2015',
+    category: 'awards',
     title: 'The Queen’s Golden Jubilee Award for voluntary service by groups in the community',
     awardedBy: 'Her Majesty Queen Elizabeth II',
     year: '2015',
@@ -405,6 +436,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'toi-green-drive-2015',
+    category: 'awards',
     title: 'Highest participation — TOI Green Drive',
     awardedBy: 'The Times of India',
     year: '2015',
@@ -433,6 +465,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'brampton-blood-donor-clinic-2012',
+    category: 'awards',
     title: 'Best wishes on the 19th Blood Donor Clinic, Brampton',
     awardedBy: 'Mayor Susan Fennell, City of Brampton',
     year: '2012',
@@ -445,6 +478,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'salvation-army-brampton-2011',
+    category: 'awards',
     title: 'Certificate of Appreciation — the Brampton food bank',
     awardedBy: 'The Salvation Army, Canada and Bermuda Territory',
     year: '2011',
@@ -457,6 +491,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'namami-gange-project-amrit',
+    category: 'tweets',
     title: 'Swachh Jal Swachh Mann — 1,100 water bodies',
     awardedBy: 'Namami Gange, National Mission for Clean Ganga',
     year: '',
@@ -469,6 +504,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'amrit-mahotsav-project-amrit',
+    category: 'tweets',
     title: 'Project Amrit, shared by Azadi Ka Amrit Mahotsav',
     awardedBy: 'Azadi Ka Amrit Mahotsav',
     year: '',
@@ -481,6 +517,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'gautam-gambhir-project-amrit',
+    category: 'tweets',
     title: 'Congratulations on Project Amrit',
     awardedBy: 'Shri Gautam Gambhir',
     year: '',
@@ -493,6 +530,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'youth4water-sambalpur',
+    category: 'tweets',
     title: 'Project Amrit at Sambalpur',
     awardedBy: 'Youth4Water Plus',
     year: '',
@@ -505,6 +543,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'nasha-mukt-bharat-mou',
+    category: 'tweets',
     title: 'MoU under the Nasha Mukt Bharat Abhiyan',
     awardedBy: 'Department of Social Justice & Empowerment, Government of India',
     year: '',
@@ -517,6 +556,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'health-minister-memento',
+    category: 'awards',
     title: 'A memento from the Union Health Minister',
     awardedBy: 'Dr. Mansukh Mandaviya, Union Minister of Health & Family Welfare',
     year: '',
@@ -529,6 +569,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'red-cross-haryana-blood-donors',
+    category: 'awards',
     title: 'Honoured by the Indian Red Cross Society, Haryana',
     awardedBy: 'Indian Red Cross Society, Haryana State Branch',
     year: '',
@@ -541,6 +582,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'earth-day-network-india',
+    category: 'awards',
     title: 'Commendation — Earth Day Network India',
     awardedBy: 'Earth Day Network India (EARTHDAY.ORG)',
     year: '',
@@ -553,6 +595,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'swachh-bharat-mission-memento',
+    category: 'awards',
     title: 'Swachh Bharat Mission memento',
     awardedBy: 'Swachh Bharat Mission',
     year: '',
@@ -565,6 +608,7 @@ export const DEFAULT_AWARDS: Award[] = [
   },
   {
     id: 'swachh-rail-bct',
+    category: 'tweets',
     title: 'Swachh Rail Swachh Bharat Abhiyan at Mumbai Central',
     awardedBy: 'Ministry of Railways',
     year: '',

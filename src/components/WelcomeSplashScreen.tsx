@@ -1,4 +1,4 @@
-import { QuoteWords } from './QuoteWords';
+import { HumanitySlogan } from './HumanitySlogan';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { introFocus, introSeconds } from '../cms/introSettings';
 import { FlaredWordmark } from './PillarWordmark';
@@ -70,12 +70,9 @@ interface MonogramPlacement {
                the foundation's name, the Satguru's portrait comes in on the
                right, and her message is set beneath the name, its rail at
                the foot.
-   'mission' — the same frame, on the same cream: the message lifts away,
-               and who we are, Our Mission and Our Vision play beneath the
-               name as chapters.
    'leaving' — the page fades to the hero; the splash logo and monogram
                crossfade into the real header logo and wordmark. */
-type Stage = 'intro' | 'welcome' | 'message' | 'mission' | 'leaving';
+type Stage = 'intro' | 'welcome' | 'message' | 'leaving';
 
 /* Signature finishes ~3.35s (0.35s delay + 3s write); the shine sweep then
    runs 3.45s -> 4.45s. Holding to 4700ms lets the glint finish and leaves a
@@ -94,7 +91,6 @@ const BRAND_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
    arrow button moves on at any time. */
 const WELCOME_SECONDS = 10;
 const MESSAGE_SECONDS = 3;
-const MISSION_SECONDS = 6;
 /* Where the welcome photo and the Satguru portrait are centred: editable in the
    CMS as "across% down%", for when an editor swaps either picture. */
 const WELCOME_PHOTO_FOCUS = { x: '47%', y: '46%' };
@@ -124,7 +120,6 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
   const welcomeMs = introSeconds(c("welcome-hold-seconds", "10"), WELCOME_SECONDS);
   const messageMs = introSeconds(c("message-seconds", "3"), MESSAGE_SECONDS);
-  const missionMs = introSeconds(c("mission-seconds", "6"), MISSION_SECONDS);
   const photoFocus = introFocus(c("welcome-photo-focus", "47% 46%"), WELCOME_PHOTO_FOCUS);
   const portraitFocus = introFocus(c("satguru-photo-focus", "50% 20%"), PORTRAIT_FOCUS);
   /* With reduced motion the chapters are set one after another, and the page simply holds. */
@@ -254,15 +249,11 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   }, []);
 
   const beginMessage = useCallback(() => setStage('message'), []);
-  /* Only from the message page: its rail keeps time after the arrow has moved
-     on early, and running out then must not bring the mission page back. */
-  const beginMission = useCallback(() => setStage(current => (current === 'message' ? 'mission' : current)), []);
-
   /* Once the message page is laid out, land the logo before the name; it stays
      there through the mission page until the hero loads, then flies on to the
      header (beginLeave). */
   useLayoutEffect(() => {
-    if (stage === 'message' || stage === 'mission') flyLogoToTitle();
+    if (stage === 'message') flyLogoToTitle();
   }, [stage, flyLogoToTitle]);
 
   /* Fades the splash to the hero. The real header logo is revealed under the
@@ -292,35 +283,32 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   useEffect(() => {
     const next = stage === 'intro' ? [beginWelcome, HOLD_MS]
       : stage === 'welcome' ? [beginMessage, welcomeMs]
-      : stage === 'message' && still ? [beginMission, messageMs]
-      : stage === 'mission' && still ? [beginLeave, missionMs]
+      : stage === 'message' && still ? [beginLeave, messageMs]
       : null;
     if (!next) return;
     const timer = setTimeout(next[0] as () => void, next[1] as number);
     return () => clearTimeout(timer);
-  }, [stage, still, beginWelcome, beginMessage, beginMission, beginLeave, welcomeMs, messageMs, missionMs]);
+  }, [stage, still, beginWelcome, beginMessage, beginLeave, welcomeMs, messageMs]);
 
   /* Distant last resort, in case a stage's timer never fires: re-armed with
      each stage for the time still to come. It stands down while the message
      and the chapters play, since a viewer may pause them for as long as they
      like. */
   useEffect(() => {
-    const rest = stage === 'intro' ? HOLD_MS + welcomeMs + messageMs + missionMs
-      : stage === 'welcome' ? welcomeMs + messageMs + missionMs
-      : stage === 'message' ? (still ? messageMs + missionMs : null)
-      : stage === 'mission' ? (still ? missionMs : null)
+    const rest = stage === 'intro' ? HOLD_MS + welcomeMs + messageMs
+      : stage === 'welcome' ? welcomeMs + messageMs
+      : stage === 'message' ? (still ? messageMs : null)
       : 0;
     if (rest === null) return;
     const finishTimer = setTimeout(completeOnce, rest + FLY_MS + 6000);
     return () => clearTimeout(finishTimer);
-  }, [completeOnce, stage, still, welcomeMs, messageMs, missionMs]);
+  }, [completeOnce, stage, still, welcomeMs, messageMs]);
 
-  const advance = () => (stage === 'welcome' ? beginMessage() : stage === 'message' ? beginMission() : beginLeave());
+  const advance = () => (stage === 'welcome' ? beginMessage() : beginLeave());
 
   const revealed = stage !== 'intro';
   /* past the welcome page: the photograph has given way to the site's ground */
   const offPhoto = revealed && stage !== 'welcome';
-  const onMission = stage === 'mission' || stage === 'leaving';
   const brandTransform = placement ? `translateY(${placement.dy}px) scale(${placement.scale})` : 'none';
 
   /* The message page plays as a sequence of one, so it has the mission page's
@@ -331,49 +319,12 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     label: c("message-label", "Satguru's Message"),
     body: [],
     content: (
-      <figure className="splash-message">
-        <blockquote><QuoteWords>{c("message-text", "We are all part of one human family, children of the same formless Creator (Nirankar). This shared connection inspires compassion and selfless service, guiding us to stand by one another. At the heart of our Mission lies the spirit of healing, enrichment and empowerment – believing that nurturing one life uplifts the whole community. May we all be granted with the wisdom and strength to live in peace, to serve with humility and to care for our Earth and each other with a shared sense of responsibility.")}</QuoteWords></blockquote>
-        <figcaption><cite>{c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite></figcaption>
-      </figure>
+      <HumanitySlogan active={stage === 'message'} lines={[
+        c("message-couplet-1", "मानव को हो मानव प्यारा"),
+        c("message-couplet-2", "इक दूजे का बने सहारा"),
+      ]} />
     ),
   }];
-
-  /* The mission page's chapters, every line editable in the CMS. */
-  const chapters: MissionChapter[] = [
-    {
-      id: 'who-we-are',
-      label: c("mission-intro-label", "One Purpose"),
-      statement: c("mission-intro-1", "SNCF is dedicated to serving humanity through selfless service and meaningful social initiatives."),
-      /* one block: three editable sentences, run together */
-      body: [[
-        c("mission-intro-2", "From healthcare and community empowerment to environmental conservation, SNCF works to address vital social and ecological needs."),
-        c("mission-intro-3", "With thousands of volunteers contributing across 3,500+ branches worldwide, its efforts aim to create lasting, grassroots-level transformation."),
-        c("mission-intro-4", "Guided by the spirit of “Service with Humility,” SNCF continues to work towards building a healthier, greener and more compassionate society."),
-      ].join(' ')],
-      highlight: c("mission-intro-highlight", "Service with Humility"),
-    },
-    {
-      /* Our Mission and Our Vision, side by side */
-      id: 'mission-vision',
-      label: c("mission-vision-label", "Mission & Vision"),
-      body: [],
-      parts: [
-        {
-          title: c("mission-title", "Our Mission"),
-          quote: c("mission-quote", "When we give cheerfully, and when it is accepted with gratitude to the almighty, all are blessed."),
-          body: [
-            c("mission-text-1", "SNCF with its holy roots is set up with an objective to provide a better body, mind and soul to all those who are deprived, with the essence of being an instrument to god’s will and purpose. We believe that happiness increases by sharing and caring."),
-            c("mission-text-2", "The mission of the SNCF thus, is to serve with humility and share our resources to heal, enrich and empower millions around the globe."),
-          ],
-        },
-        {
-          title: c("vision-title", "Our Vision"),
-          quote: c("vision-quote", "“Living the spirit of service”"),
-          body: [c("vision-text", "The work that SNCF engages in with individuals, families and communities around the world is only made possible by the involvement of ordinary individuals with and extra ordinary spirit of service. SNCF envisions a world with smiles, a heaven where all humans are healthy, educated and self-dependent; and as such would continue to strive and achieve this very objective by utilizing all its resources for the benefit of people across the world. We see a future where our pro-active efforts along with our association with other like-minded organizations would help turn this dream into a reality.")],
-        },
-      ],
-    },
-  ];
 
   return (
     <div
@@ -410,7 +361,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         </div>
         <div className="splash-mission-shade" aria-hidden="true" />
         {/* the message and mission pages' ground, the logo's navy, over the site's */}
-        <div className="splash-message-ground" data-shown={stage === 'message' || onMission} aria-hidden="true" />
+        <div className="splash-message-ground" data-shown={offPhoto} aria-hidden="true" />
         {revealed && (
           <div className="splash-welcome-content" data-gone={offPhoto}>
             {/* Room for the logo + tagline, which glide in from the first screen. */}
@@ -423,16 +374,9 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
             <p className="splash-welcome-text"><WelcomeTypewriter delay={1800} duration={Math.max(1000, welcomeMs - 2000)} text={c("welcome-text", "Established in 2010, the Sant Nirankari Charitable Foundation was created to give organized direction to diverse social initiatives. Guided by the principle of oneness, we bring compassion, care, and kindness to communities worldwide. Our mission extends beyond charity. We tackle social and environmental challenges, empower the underprivileged, and safeguard our planet to build a better world for all. Staying true to our motto ‘Service with Humility,’ we strive to uplift lives with dignity and selflessness.")} /></p>
           </div>
         )}
-        {/* Message page, then mission page, in one frame: the foundation's
-            name at the top of the copy column, the portrait on the right.
-            Beneath the name, first the Satguru's message, then (as it lifts
-            away) who we are, Our Mission and Our Vision played one at a time
-            as a title sequence, each with its rail at the foot
-            (MissionChapters). The portrait column spans the page's height,
-            standing on its quotation, whose last line meets the rail. Both
-            pages take their colours from the logo (index.css). */}
+        {/* The Hindi slogan shares the cream screen with the portrait, then exits to the hero. */}
         {offPhoto && (
-          <div className="splash-mission-page" data-page={onMission ? 'mission' : 'message'}>
+          <div className="splash-mission-page" data-page="message">
             <div className="splash-mission-copy">
               <header className="splash-intro">
                 <h2 className="splash-intro-name">
@@ -442,48 +386,26 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
                 </h2>
               </header>
               <div className="splash-copy-body">
-                {/* the message, its rail with it; it lifts away as the chapters begin */}
-                <div className="splash-message-sequence" data-gone={onMission} aria-hidden={onMission || undefined} inert={onMission}>
+                {/* The slogan and its pauseable progress rail. */}
+                <div className="splash-message-sequence" data-gone={stage === 'leaving'}>
                   <MissionChapters
                     chapters={message}
                     totalMs={messageMs}
                     still={still}
                     labels={{ rail: c("message-rail-label", "Message progress"), pause: c("mission-pause", "Pause"), play: c("mission-play", "Play") }}
-                    onEnd={beginMission}
-                  />
-                </div>
-                {onMission && (
-                  <MissionChapters
-                    chapters={chapters}
-                    totalMs={missionMs}
-                    still={still}
-                    labels={{ rail: c("mission-chapters-label", "Chapters"), pause: c("mission-pause", "Pause"), play: c("mission-play", "Play") }}
                     onEnd={beginLeave}
                   />
-                )}
+                </div>
               </div>
             </div>
             <figure className="splash-satguru" style={{ '--portrait-focus': `${portraitFocus.x} ${portraitFocus.y}` } as React.CSSProperties}>
-              {/* One portrait for the message and mission pages, in the same
-                  frame, so it stays just as it is when the mission page begins. */}
+              {/* The portrait remains beside the slogan until the hero appears. */}
               <div className="splash-satguru-frame">
                 <img
                   src={resolveCMSAsset("asset.WelcomeSplashScreen.message-portrait", "/images/satguru-mata-sudiksha-ji-welcome.webp")}
                   alt={c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}
                 />
               </div>
-              {/* kept in place on the message page, so the portrait does not move
-                  when it appears; there the Hindi couplet stands in its place,
-                  and gives way to it on the mission page */}
-              <figcaption data-shown={onMission}>
-                <blockquote><QuoteWords>{c("satguru-quote", "A life lived for others is a life worth living.").replace(/^“|”$/g, '')}</QuoteWords></blockquote>
-                <cite>— {c("satguru-name", "Satguru Mata Sudiksha Ji Maharaj")}</cite>
-                {/* Editable in the CMS. */}
-                <p className="splash-couplet" lang="hi" data-gone={onMission} aria-hidden={onMission || undefined}>
-                  <span>{c("message-couplet-1", "मानव को हो मानव प्यारा")}</span>
-                  <span>{c("message-couplet-2", "इक दूजे का बने सहारा")}</span>
-                </p>
-              </figcaption>
             </figure>
           </div>
         )}
@@ -587,7 +509,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
         </div>
       </div>
 
-      {/* Next page: welcome -> message -> mission -> the site. Shown once the white first
+      {/* Next page: welcome -> slogan -> the site. Shown once the white first
           screen has gone and the logo and tagline have settled (CSS delay); light on the
           welcome photograph, in the logo's navy on the message and mission pages' cream. */}
       {revealed && <button

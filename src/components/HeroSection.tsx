@@ -122,6 +122,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     mq.addEventListener('change', onMotionChange);
 
     const stage = document.getElementById('hero-clone-stage');
+    const pathTabs = stage?.querySelector<HTMLElement>('.hero-path-tabs');
     /* the page's shade is written on the canvas that draws it: on the page,
        every element inherited each step of it and was restyled */
     const canvas = stage?.closest<HTMLElement>('.home-page')?.querySelector<HTMLElement>(':scope > .accent-canvas');
@@ -151,6 +152,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       if (exit !== lastExit) {
         lastExit = exit;
         stage?.style.setProperty('--hero-exit', String(exit));
+        if (pathTabs) pathTabs.inert = exit >= .65;
         // Deepen the same page surface as the hero leaves, keeping white
         // chapter copy legible without introducing another section background.
         canvas?.style.setProperty('--page-depth', String(exit));

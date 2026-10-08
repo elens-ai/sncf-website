@@ -33,7 +33,7 @@
 .stories-avatar { display: block; width: 49px; height: 49px; padding: 3px; flex: 0 0 auto; border-radius: 50%; background: linear-gradient(135deg, #6ecb9b, var(--story-ink), #e577b3); }
 .stories-avatar img { display: block; width: 100%; height: 100%; border: 2px solid #102b40; border-radius: inherit; object-fit: cover; }
 .stories-stage { display: grid; justify-items: center; min-width: 0; }
-.stories-card { position: relative; isolation: isolate; width: min(100%, calc((100dvh - 176px) * .5625)); aspect-ratio: 9 / 16; min-width: 270px; overflow: hidden; border-radius: 22px; background: linear-gradient(145deg, #194556, var(--story-ink)); box-shadow: 0 24px 80px #0005, 0 0 0 1px #ffffff26; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
+.stories-card { position: relative; isolation: isolate; width: min(100%, calc((100dvh - 176px) * .5625)); aspect-ratio: 9 / 16; min-width: 270px; overflow: hidden; border-radius: 22px; background: linear-gradient(145deg, #194556, var(--story-ink)); box-shadow: 0 24px 80px #06378255, 0 0 0 1px #ffffff26; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
 .stories-photo, .stories-card-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
 .stories-photo { object-fit: cover; }
 .stories-card-shade { background: linear-gradient(180deg, #082332b3 0%, transparent 32%, #08233245 46%, #082332ed 100%); pointer-events: none; }
