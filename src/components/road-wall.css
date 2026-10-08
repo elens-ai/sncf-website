@@ -1,0 +1,57 @@
+/* THE ROAD SO FAR, AS A WALL (RoadWall). A tall section, the wall held in view within it, full bleed across the page.
+   The wall is a grid of square cells (--wall-cell, set where it is drawn to cover the view). How far each photograph
+   has come, how much of the wall's colour is on it and whether its year shows are set where it is drawn, frame by
+   frame, as the scroll goes; everything that changes only moves or fades, so the wall stays light to draw. The wall
+   keeps its photographs in 3D, so they can fly in from in front of it. */
+.road-wall { position: relative; height: calc(100svh + var(--wall-span) * 48svh); margin-inline: calc(50% - 50vw); background: #0d1c48; }
+.road-wall-view { position: sticky; top: 0; height: 100svh; overflow: hidden; perspective: 1600px; background: linear-gradient(180deg, #0d1c48, #12306e 55%, #3b1d52); }
+.road-wall-wall { position: absolute; left: 0; top: 0; display: grid; grid-template-columns: repeat(var(--wall-cols), var(--wall-cell)); grid-auto-rows: var(--wall-cell); transform-origin: 0 0; transform-style: preserve-3d; will-change: transform; }
+
+/* a plain cell, and a photograph's empty slot before it comes: the wall's own colour, some lighter, some darker */
+.road-wall-plain, .road-wall-slot { position: relative; display: block; }
+.road-wall-slot { transform-style: preserve-3d; }
+.road-wall-plain::before, .road-wall-slot::before { content: ''; position: absolute; inset: 0; background: var(--wall-tint); opacity: .55; filter: brightness(var(--wall-tone)); }
+
+/* a photograph, cut from the sprite, and over it the same photograph larger once fetched, for the close view; over
+   both the wall's colour, laid in colour only so the photograph keeps its light, lifted away while its stop is in view */
+.road-wall-photo {
+  position: absolute; inset: 0; z-index: 1; overflow: hidden; isolation: isolate; backface-visibility: hidden;
+  background: var(--wall-tint) var(--wall-sprite, none) no-repeat; background-size: calc(var(--wall-sprite-cols) * 100%) calc(var(--wall-sprite-rows) * 100%);
+}
+.road-wall-sharp { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; opacity: 0; transition: opacity .5s ease; user-select: none; }
+.road-wall-sharp[data-ready] { opacity: 1; }
+.road-wall-tone { position: absolute; inset: 0; background: var(--wall-tint); mix-blend-mode: color; }
+/* the year, small at the foot of its dated photograph as on a print */
+.road-wall-year {
+  position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; padding: 14% 6% 5%; background: linear-gradient(transparent, rgb(8 6 24 / .5));
+  color: #fff; font: 600 calc(var(--wall-cell) * .075)/1 var(--font-sans); letter-spacing: .06em; font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 3px rgb(0 0 0 / .6);
+}
+
+/* layers lying exactly over the wall (given its size and its view where it is drawn): the foundation's seal, set where
+   it is drawn, faint over the empty wall at the start and at the end coming up over the photographs, which still show
+   through it; and over all of it the wall's colour, the seal's own navy, sky blue and pink, laid in colour only, so the
+   seal and the photographs are one picture */
+.road-wall-over { position: absolute; left: 0; top: 0; transform-origin: 0 0; pointer-events: none; will-change: transform; }
+/* at the end, the photographs faded back a little: the ground behind them laid over them, as if they were fainter */
+.road-wall-dim { position: absolute; inset: 0; pointer-events: none; opacity: 0; visibility: hidden; background: linear-gradient(180deg, #0d1c48, #12306e 55%, #3b1d52); }
+.road-wall-tint { background: linear-gradient(174deg, rgb(24 48 120), rgb(48 168 240) 50%, rgb(216 96 168)); mix-blend-mode: color; opacity: 0; }
+.road-wall-seal { opacity: 0; }
+.road-wall-seal img { position: absolute; left: var(--seal-x); top: var(--seal-y); width: var(--seal-size); height: var(--seal-size); max-width: none; object-fit: contain; user-select: none; }
+
+/* a stop's years, large in the middle of what shows below the header and the tabs, before its photographs come */
+.road-wall-ranges { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.road-wall-range {
+  position: absolute; left: 0; right: 0; top: calc(124px + (100% - 124px) / 2); margin: 0; text-align: center; opacity: 0;
+  color: #fff; font: 800 clamp(56px, 9vw, 150px)/1 var(--font-heading); letter-spacing: .02em; font-variant-numeric: tabular-nums;
+  text-shadow: 0 8px 40px rgb(12 6 32 / .45);
+}
+@media (max-width: 767px) {
+  .road-wall-range { top: calc(108px + (100% - 108px) / 2); }
+}
+
+/* where motion is unwelcome, the wall whole, the seal over it */
+.road-wall[data-still] { height: 100svh; }
+@media (prefers-reduced-motion: reduce) {
+  .road-wall-wall { will-change: auto; }
+}

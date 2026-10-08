@@ -3784,15 +3784,14 @@
     "copy.RecognitionArchive.press.eyebrow": "Service in the news",
     "copy.RecognitionArchive.press.intro": "Stories of the foundation’s work, as reported by the media.",
     "copy.ServicePortrait.icon-label": "Sant Nirankari Charitable Foundation emblem",
-    "copy.WhoWeArePage.1d3009abb21e": "Since 2010",
-    "copy.WhoWeArePage.road-body": "From a seed in 2010 to the tree it is today: every branch a moment the foundation marks its history by.",
-    "copy.WhoWeArePage.road-aria": "The foundation’s history as a growing tree",
-    "copy.WhoWeArePage.road-seed": "The seed",
-    "copy.WhoWeArePage.road-year": "Year",
-    "copy.WhoWeArePage.road-moments": "moments",
-    "copy.WhoWeArePage.road-explore": "Explore this chapter",
-    "copy.WhoWeArePage.road-today": "Today",
-    "copy.WhoWeArePage.road-hint": "Scroll to watch it grow"
+    "copy.RoadClock.moment": "moment",
+    "copy.RoadClock.moments": "moments",
+    "copy.RoadClock.label": "The foundation’s road so far, year by year",
+    "copy.RoadClock.arc": "Sixteen years of service with humility",
+    "copy.RoadClock.seal": "The foundation’s seal",
+    "copy.RoadClock.hc-plaque": "The plaque recording the dedication of Sant Nirankari Health City to the service of humanity",
+    "copy.RoadClock.hc-ceremony": "The ceremony at Sant Nirankari Health City",
+    "copy.RoadClock.hc-atrium": "The Health City’s team in the hospital’s atrium"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -8796,50 +8795,45 @@
         "section": "Service Portrait",
         "label": "Service Portrait · Sant Nirankari Charitable Foundation emblem"
       },
-      "copy.WhoWeArePage.1d3009abb21e": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Since 2010"
+      "copy.RoadClock.moment": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · moment"
       },
-      "copy.WhoWeArePage.road-body": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · From a seed in 2010 to the tree it is today: every branch a moment th…"
+      "copy.RoadClock.moments": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · moments"
       },
-      "copy.WhoWeArePage.road-aria": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The foundation’s history as a growing tree"
+      "copy.RoadClock.label": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · The foundation’s road so far, year by year"
       },
-      "copy.WhoWeArePage.road-seed": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The seed"
+      "copy.RoadClock.arc": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · Sixteen years of service with humility"
       },
-      "copy.WhoWeArePage.road-year": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Year"
+      "copy.RoadClock.seal": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · The foundation’s seal"
       },
-      "copy.WhoWeArePage.road-moments": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · moments"
+      "copy.RoadClock.hc-plaque": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · The plaque recording the dedication of Sant Nirankari Health City to …"
       },
-      "copy.WhoWeArePage.road-explore": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Explore this chapter"
+      "copy.RoadClock.hc-ceremony": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · The ceremony at Sant Nirankari Health City"
       },
-      "copy.WhoWeArePage.road-today": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Today"
-      },
-      "copy.WhoWeArePage.road-hint": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Scroll to watch it grow"
+      "copy.RoadClock.hc-atrium": {
+        "page": "other",
+        "section": "Road Clock",
+        "label": "Road Clock · The Health City’s team in the hospital’s atrium"
       }
     },
     "assets": {

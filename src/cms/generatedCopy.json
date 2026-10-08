@@ -945,13 +945,8 @@
   "copy.RecognitionArchive.press.eyebrow": "Service in the news",
   "copy.RecognitionArchive.press.intro": "Stories of the foundation’s work, as reported by the media.",
   "copy.ServicePortrait.icon-label": "Sant Nirankari Charitable Foundation emblem",
-  "copy.WhoWeArePage.1d3009abb21e": "Since 2010",
-  "copy.WhoWeArePage.road-body": "From a seed in 2010 to the tree it is today: every branch a moment the foundation marks its history by.",
-  "copy.WhoWeArePage.road-aria": "The foundation’s history as a growing tree",
-  "copy.WhoWeArePage.road-seed": "The seed",
-  "copy.WhoWeArePage.road-year": "Year",
-  "copy.WhoWeArePage.road-moments": "moments",
-  "copy.WhoWeArePage.road-explore": "Explore this chapter",
-  "copy.WhoWeArePage.road-today": "Today",
-  "copy.WhoWeArePage.road-hint": "Scroll to watch it grow"
+  "copy.RoadWall.label": "The foundation’s photographs, year by year from 2010 to 2026, coming together as Satguru Mata Sudiksha Ji’s portrait",
+  "copy.RoadWall.hc-plaque": "The plaque recording the dedication of Sant Nirankari Health City to the service of humanity",
+  "copy.RoadWall.hc-ceremony": "The ceremony at Sant Nirankari Health City",
+  "copy.RoadWall.hc-atrium": "The Health City’s team in the hospital’s atrium"
 }

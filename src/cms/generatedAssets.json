@@ -266,5 +266,9 @@
   "asset.ServicePortrait.poster": {
     "source": "/images/sncf-logo.webp",
     "label": "ServicePortrait · sncf-logo.webp"
+  },
+  "asset.RoadWall.seal": {
+    "source": "/images/sncf-logo.webp",
+    "label": "RoadWall · sncf-logo.webp"
   }
 }

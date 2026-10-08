@@ -1,6 +1,7 @@
 /**
- * THE ROAD SO FAR — the moments the Who We Are page's tree grows a branch for
- * (RoadTree.tsx). Each is the foundation's own record, as the site already
+ * THE ROAD SO FAR — the moments whose photographs the Who We Are page's wall
+ * brings in year by year (RoadWall.tsx, by way of roadYears.ts and
+ * scripts/build-road-wall.ts). Each is the foundation's own record, as the site already
  * states it: the founding and its first programmes from the history it marks,
  * the honours from the awards register (data/awards.ts), and Sant Nirankari
  * Health City from the Health City's own news. A year may hold several; each

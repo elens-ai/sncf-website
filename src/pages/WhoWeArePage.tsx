@@ -27,8 +27,7 @@ import { UnepSeal } from '../components/UnAffiliation';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { HandsLede, HandsProof, handWays, splitFigure } from '../components/WorkingHands';
 import { ServicePortrait } from '../components/ServicePortrait';
-import { RoadTree } from '../components/RoadTree';
-import { ROAD_EVENTS } from '../data/roadEvents';
+import { RoadWall } from '../components/RoadWall';
 /* after the page's own stylesheets, so the wall's styles come after theirs */
 import { PartnerMarquee } from '../components/PartnerMarquee';
 
@@ -46,9 +45,10 @@ import { PartnerMarquee } from '../components/PartnerMarquee';
  * rail; its cover is drawn as theirs are, on the page's own ground. Beside
  * its words is a five-leaf star, each leaf a photograph of what the
  * lede says the foundation's hands do, and
- * the figure the record gives for it. The road so far is a tree growing
- * from a seed in 2010, a branch for every moment the foundation marks; the
- * organisations beside it pass by as a wall of their marks.
+ * the figure the record gives for it. The road so far is a wall of the
+ * foundation's photographs that fills a year at a time as the page scrolls,
+ * 2010 to 2026, and becomes Satguru Mata Sudiksha Ji's portrait (RoadWall);
+ * the organisations beside it pass by as a wall of their marks.
  */
 
 /* the year the foundation was founded, and its reach: the cover's foot carries them */
@@ -311,26 +311,11 @@ export const WhoWeArePage: React.FC = () => {
     </section></CMSSection>
 
     {/* ── 02 · THE ROAD SO FAR ─────────────────────────────────────────── */}
-    <CMSSection id="WhoWeArePage.road"><section {...roomProps('road')}>
+    {/* the wall alone: no heading of its own, its section named for the rail and for screen readers */}
+    <CMSSection id="WhoWeArePage.road"><section {...roomProps('road')} aria-labelledby={undefined} aria-label={getCMSCopy("copy.WhoWeArePage.77d72aaa5ec2", "The road so far")}>
       <div className="cv-margin-print" data-room="who-we-are" aria-hidden="true" />
-      <Leaf
-        n={2}
-        id="road"
-        mark
-        label={getCMSCopy("copy.WhoWeArePage.1d3009abb21e", "Since 2010")}
-        title={getCMSCopy("copy.WhoWeArePage.77d72aaa5ec2", "The road so far")}
-        body={getCMSCopy("copy.WhoWeArePage.road-body", "From a seed in 2010 to the tree it is today: every branch a moment the foundation marks its history by.")}
-      />
       <div className="cv-chapter road-chapter">
-        <RoadTree events={ROAD_EVENTS} labels={{
-          aria: getCMSCopy("copy.WhoWeArePage.road-aria", "The foundation’s history as a growing tree"),
-          seed: getCMSCopy("copy.WhoWeArePage.road-seed", "The seed"),
-          year: getCMSCopy("copy.WhoWeArePage.road-year", "Year"),
-          moments: getCMSCopy("copy.WhoWeArePage.road-moments", "moments"),
-          explore: getCMSCopy("copy.WhoWeArePage.road-explore", "Explore this chapter"),
-          today: getCMSCopy("copy.WhoWeArePage.road-today", "Today"),
-          hint: getCMSCopy("copy.WhoWeArePage.road-hint", "Scroll to watch it grow"),
-        }} />
+        <RoadWall />
       </div>
     </section></CMSSection>
 
