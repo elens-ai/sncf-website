@@ -17,15 +17,15 @@ export const DevotionalLightboxModal: React.FC<DevotionalLightboxModalProps> = (
   return (
     <div
       id="devotional-lightbox-backdrop"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/85 backdrop-blur-xl animate-fadeIn"
       onClick={onClose}
     >
       <div
         id="devotional-lightbox-card"
-        className="relative w-full max-w-lg rounded-[36px] overflow-hidden bg-neutral-950 border border-white/20 shadow-2xl p-6 sm:p-8 text-center flex flex-col items-center"
+        className="relative w-full max-w-lg rounded-[36px] overflow-hidden bg-deep-blue border border-white/20 shadow-2xl p-6 sm:p-8 text-center flex flex-col items-center"
         onClick={(e) => e.stopPropagation()}
         style={{
-          boxShadow: `0 0 60px ${leader.glowColor}30, 0 25px 50px -12px rgba(0, 0, 0, 0.9)`,
+          boxShadow: `0 0 60px ${leader.glowColor}30, 0 25px 50px -12px rgba(6,55,130, 0.9)`,
         }}
       >
         {/* Close Button */}
@@ -50,9 +50,9 @@ export const DevotionalLightboxModal: React.FC<DevotionalLightboxModalProps> = (
           {/* Portrait Icon Graphics */}
           <div className="relative z-10 text-center">
             <div className="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-full bg-neutral-100 border-2 border-neutral-300 flex items-center justify-center shadow-md mb-3">
-              <span className="font-artistic-display text-2xl sm:text-3xl text-neutral-900 font-bold tracking-wider">{getCMSCopy("copy.DevotionalLightboxModal.1cd0846b2924", "ੴ")}</span>
+              <span className="font-artistic-display text-2xl sm:text-3xl text-navy font-bold tracking-wider">{getCMSCopy("copy.DevotionalLightboxModal.1cd0846b2924", "ੴ")}</span>
             </div>
-            <div className="px-3 py-1 rounded-full bg-neutral-900 text-[11px] font-bold text-white uppercase tracking-widest shadow-sm">{getCMSCopy("copy.DevotionalLightboxModal.4e51d6a701d7", "Sant Nirankari Mission")}</div>
+            <div className="px-3 py-1 rounded-full bg-deep-blue text-[11px] font-bold text-white uppercase tracking-widest shadow-sm">{getCMSCopy("copy.DevotionalLightboxModal.4e51d6a701d7", "Sant Nirankari Mission")}</div>
           </div>
         </div>
 

@@ -85,7 +85,7 @@ export const oklabMix = (a: Lab, b: Lab, t: number): Lab => [a[0] + (b[0] - a[0]
 export function genome(pillar: Subject): Genome {
   const A = hexToOklab(pillar.accentA), B = hexToOklab(pillar.accentB);
   const neutral = hexToOklab('#edf8f6');
-  const white = hexToOklab('#ffffff'), ink = hexToOklab('#0b1a1a');
+  const white = hexToOklab('#ffffff'), ink = hexToOklab('#063782');
   const temper = TEMPER[pillar.id] ?? 1, slope = SLOPE[pillar.id] ?? 1;
   return {
     /* the lean, not a stagger, gives each pillar its pose: even gaps keep the bands from pinching */
@@ -158,7 +158,7 @@ export function sampleEdges(g: Genome, width: number, height: number, pose: Pose
   return edges;
 }
 
-const INK = hexToOklab('#0b1a1a');
+const INK = hexToOklab('#063782');
 
 /** A speck of light in the air over the water. Normalised x/y; r in buffer px. */
 export interface Mote { x: number; y: number; r: number; a: number }

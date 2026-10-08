@@ -264,6 +264,7 @@ export interface Activity {
         | 'mountain'
         | 'house'
         | 'heart-handshake'
+        | 'spine'
       )
     | null;
   /**
@@ -498,7 +499,7 @@ export interface Partner {
   _status?: ('draft' | 'published') | null;
 }
 /**
- * Verified honours only. Leave the year empty when the source does not give one.
+ * Verified tweets, awards, certificates and media coverage. Leave the year empty when the source does not give one.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "awards".
@@ -513,6 +514,7 @@ export interface Award {
    * Lower numbers come first.
    */
   order?: number | null;
+  category?: ('tweets' | 'awards' | 'press') | null;
   title: string;
   awardedBy: string;
   year?: string | null;
@@ -1205,6 +1207,7 @@ export interface PartnersSelect<T extends boolean = true> {
 export interface AwardsSelect<T extends boolean = true> {
   key?: T;
   order?: T;
+  category?: T;
   title?: T;
   awardedBy?: T;
   year?: T;
@@ -1608,7 +1611,7 @@ export interface SiteSetting {
       }[]
     | null;
   /**
-   * Icons down the left edge of the site, in this order. Leave a link empty to hide that icon.
+   * Icons down the left edge of the site and in the footer, in this order (LinkedIn appears in the footer only). Leave a link empty to hide that icon.
    */
   social?:
     | {

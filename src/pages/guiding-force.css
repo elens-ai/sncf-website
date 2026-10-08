@@ -1,0 +1,122 @@
+/* ==========================================================================
+   OUR GUIDING FORCE, REDRAWN (GuidingForcePage.tsx): the portrait standing
+   free over the cover's white and pink waves, the teaching set out as four
+   words, the quote turning on its "One", the undertakings shown by their own
+   photographs and counted by the record, and the pandemic drawn out in the
+   site's own charts.
+   ========================================================================== */
+
+/* ---- the cover: the waves behind the words and the portrait, as the other covers have them; the portrait on its
+   own, with nothing drawn round it ---- */
+.gf-cover { isolation: isolate; }
+.gf-cover-ground { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+/* the ribbons' shading, drawn for dark grounds, would read as grey on this one: more saturation and a little light
+   keep them pink */
+.gf-cover-ground > .mosaic-waves { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; filter: saturate(1.8) brightness(1.12); transition: opacity 900ms ease; }
+.gf-cover-ground > .mosaic-waves[data-ready='true'] { opacity: 1; }
+@media (forced-colors: active), (prefers-contrast: more) { .gf-cover-ground > .mosaic-waves { display: none; } }
+/* the portrait stands free, cut out over the waves (its foot fading into them), larger than its arch allowed */
+.ed-portrait.gf-portrait { max-width: 660px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.ed-portrait.gf-portrait::before { content: none; }
+/* as tall as the first screen allows, beside the words */
+.ed-portrait.gf-portrait img { display: block; width: auto; height: auto; max-width: 100%; max-height: max(420px, calc(100svh - 200px)); margin-inline: auto; object-fit: contain; border-radius: 0; background: none; }
+/* Lift the original portrait's exposure and soften its warm cast without retouching facial detail. */
+.gf-cover .gf-portrait img { filter: brightness(1.08) saturate(.9); }
+.ed-portrait.gf-portrait figcaption { padding: 10px 5px 0; font-size: clamp(18px, 1.6vw, 24px); font-weight: 500; line-height: 1.5; color: #063782; }
+/* the portrait's column the wider, and the cover's air above and below given to it */
+@media (min-width: 801px) { .ed-cover.gf-cover { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); padding-block: 100px 36px; } }
+@media (max-width: 800px) { .ed-portrait.gf-portrait { max-width: 440px; } }
+
+/* ---- 01 · the subject of Her teaching, and the quote ---- */
+.guiding-story .ww-prose > p:first-child::first-letter { float: left; margin: 0.08em 0.12em 0 0; font: 800 3.3em/0.8 var(--font-heading); color: #b0436e; }
+.guiding-story .gf-teachings { grid-column: 1 / -1; }
+.gf-teachings ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 12px 0 0; padding: 0; list-style: none; }
+.gf-teachings li { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--ink) 8%, #fff)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 22%, #efe4ea); transition: translate 0.3s, box-shadow 0.3s; }
+.gf-teachings li:hover { translate: 0 -3px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 40%, #efe4ea), 0 14px 26px -20px var(--ink); }
+.gf-teaching-icon { display: grid; flex: none; place-items: center; width: 44px; height: 44px; border-radius: 50%; color: #fff; background: var(--ink); box-shadow: 0 8px 16px -10px var(--ink); }
+.gf-teachings strong { font: 700 14px/1.3 var(--font-sans); color: #43303d; }
+.guiding-story .gf-quote { isolation: isolate; overflow: hidden; }
+.guiding-story .gf-quote::after { content: ''; position: absolute; right: -40px; bottom: -36px; z-index: -1; width: 260px; aspect-ratio: 16 / 9; background: #f2d6e2; -webkit-mask: url('/images/lotus-watermark.png') center / contain no-repeat; mask: url('/images/lotus-watermark.png') center / contain no-repeat; opacity: 0.7; }
+.gf-one { padding: 0 0.04em; background: linear-gradient(100deg, #f81170, #b357ad 45%, #09a6cf); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
+
+/* ---- 02 · the undertakings, by their own photographs ---- */
+.gf-direction { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--dir) 10%, #fff); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--dir) 32%, #fff); font: 600 11.5px/1.2 var(--font-sans); color: color-mix(in srgb, var(--dir) 78%, #102e56); }
+.gf-direction i { width: 8px; height: 8px; border-radius: 50%; background: var(--dir); }
+
+.gf-bento { display: grid; grid-template-columns: 1.2fr 1fr 0.9fr; grid-template-rows: 330px 330px; grid-template-areas: 'hc hc vann' 'amrit nima vann'; gap: 18px; margin: 0 0 60px; padding: 0; list-style: none; }
+.gf-work { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-width: 0; margin: 0; overflow: hidden; isolation: isolate; border-radius: 22px; background: #102e56; color: #fff; box-shadow: 0 22px 40px -32px #3a1426; }
+.gf-work-photo { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: scale 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.gf-work:hover .gf-work-photo { scale: 1.05; }
+.gf-work-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(24 10 20 / 0.02) 18%, rgb(24 10 20 / 0.5) 52%, rgb(24 10 20 / 0.9)); }
+/* a photograph whose people stand at its left: the words sit to the right of them */
+.gf-work[data-side='end'] { align-items: flex-end; }
+.gf-work[data-side='end'] .gf-work-body { max-width: min(440px, 58%); }
+.gf-work[data-side='end'] .gf-work-shade { background: linear-gradient(90deg, transparent 28%, rgb(24 10 20 / 0.55) 52%, rgb(24 10 20 / 0.9)); }
+/* the words at the start, narrow enough to keep clear of the people at the photograph's centre; the shade only
+   behind them */
+.gf-work[data-side='start'] .gf-work-body { max-width: min(400px, 48%); }
+.gf-work[data-side='start'] .gf-work-shade { background: linear-gradient(90deg, rgb(24 10 20 / 0.78), rgb(24 10 20 / 0.4) 38%, transparent 62%), linear-gradient(180deg, transparent 55%, rgb(24 10 20 / 0.45)); }
+/* the planting photograph is a cut-out: it stands on the green it was planted for */
+.gf-work[data-cutout] { background: radial-gradient(ellipse at 50% 30%, #c9ecb4, transparent 62%), linear-gradient(170deg, #77b85a, #2f6a2c); }
+.gf-work[data-cutout] .gf-work-photo { inset: 18px 0 auto; height: 58%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 14px 16px rgb(6 55 130 / 0.25)); }
+.gf-work[data-cutout] .gf-work-shade { background: linear-gradient(180deg, transparent 45%, rgb(20 50 22 / 0.75) 70%, rgb(16 40 18 / 0.92)); }
+.gf-work-body { display: grid; justify-items: start; gap: 8px; padding: 22px 24px 22px; }
+.gf-work .gf-direction { background: rgb(255 255 255 / 0.16); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.gf-work h3 { display: flex; align-items: center; gap: 10px; margin: 2px 0 0; font: 800 clamp(19px, 1.8vw, 25px)/1.15 var(--font-heading); letter-spacing: 0; color: #fff; text-shadow: 0 2px 12px rgb(6 55 130 / 0.35); }
+.gf-work h3 svg { flex: none; color: color-mix(in srgb, var(--dir) 55%, #fff); }
+.gf-work-figure { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin: 4px 0 0; }
+.gf-work-figure strong { font: 600 30px/1 var(--font-sans); letter-spacing: -0.02em; color: #fff; white-space: nowrap; }
+.gf-roll * { color: inherit; font-family: inherit; font-weight: inherit; }
+.gf-work-figure > span { font: 500 12px/1.4 var(--font-sans); color: rgb(255 255 255 / 0.85); }
+.gf-work-figure small { font-size: inherit; color: rgb(255 255 255 / 0.7); }
+.gf-work-status { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 0; padding: 6px 12px; border-radius: 999px; background: rgb(255 255 255 / 0.92); color: #7b1d48; font: 700 11px/1.3 var(--font-sans); }
+.gf-work-status i { width: 8px; height: 8px; border-radius: 50%; background: #2fb36b; box-shadow: 0 0 0 4px rgb(47 179 107 / 0.25); animation: gf-live 2.4s ease-in-out infinite; }
+.gf-work-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding-bottom: 3px; border-bottom: 1px solid rgb(255 255 255 / 0.5); color: #fff; font: 600 12px/1.3 var(--font-sans); transition: gap 0.2s, border-color 0.2s; }
+.gf-work-link:hover { gap: 12px; border-color: #fff; }
+.gf-work-link:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+
+/* ---- the pandemic, drawn out ---- */
+.gf-relief .gf-relief-charts { margin: 22px 0; }
+.gf-relief-charts .va-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: stretch; }
+.gf-relief-charts .va-tiles li { justify-content: center; padding: 16px 18px; background: #fff; border-color: #ecdbe3; }
+.gf-relief-charts .va-tile-label { font: 500 11px/1.4 var(--font-sans); letter-spacing: 0.04em; color: #6b5764; }
+
+/* ---- the closing: listening, rings spreading from the lotus ---- */
+.gf-closing { position: relative; overflow: hidden; isolation: isolate; }
+.gf-ripples { position: relative; display: grid; place-items: center; width: 120px; height: 120px; margin: 0 auto 14px; }
+.gf-ripples i { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid #d58aa8; opacity: 0; animation: gf-ripple 4.5s ease-out infinite; }
+.gf-ripples i:nth-child(2) { animation-delay: 1.5s; }
+.gf-ripples i:nth-child(3) { animation-delay: 3s; }
+.gf-ripples b { width: 74px; aspect-ratio: 16 / 9; background: linear-gradient(100deg, #f81170, #b357ad 50%, #09a6cf); -webkit-mask: var(--lotus) center / contain no-repeat; mask: var(--lotus) center / contain no-repeat; }
+
+@keyframes gf-ripple { from { opacity: 0.8; scale: 0.45; } to { opacity: 0; scale: 1.25; } }
+@keyframes gf-live { 50% { box-shadow: 0 0 0 7px rgb(47 179 107 / 0.08); } }
+
+@media (max-width: 1000px) {
+  .gf-teachings ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gf-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: 330px 330px 330px; grid-template-areas: 'hc hc' 'vann amrit' 'vann nima'; }
+}
+@media (max-width: 800px) {
+  .gf-relief-charts .va-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .gf-teachings ul { grid-template-columns: minmax(0, 1fr); }
+  .gf-bento { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-template-areas: none; grid-auto-rows: minmax(360px, auto); }
+  .gf-bento > .gf-work { grid-area: auto !important; }
+  .gf-work-body { padding: 20px; }
+  /* too narrow for words beside the people: they sit beneath them, as on the other cards */
+  .gf-work[data-side='end'] { align-items: stretch; }
+  .gf-work[data-side='end'] .gf-work-body { max-width: none; }
+  .gf-work[data-side='end'] .gf-work-shade { background: linear-gradient(180deg, rgb(24 10 20 / 0.02) 18%, rgb(24 10 20 / 0.5) 46%, rgb(24 10 20 / 0.92)); }
+  .gf-work[data-side='end'] .gf-work-photo { object-position: 18% 60% !important; }
+  /* too narrow for words beside the stage: the photograph above, fading into the card, and the words beneath it */
+  .gf-work[data-side='start'] { min-height: 430px; }
+  .gf-work[data-side='start'] .gf-work-photo { inset: 0 0 auto; height: 62%; object-position: 50% 70% !important; -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent); }
+  .gf-work[data-side='start'] .gf-work-body { max-width: none; }
+  .gf-work[data-side='start'] .gf-work-shade { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gf-ripples i, .gf-work-status i { animation: none; }
+  .gf-ripples i:first-child { opacity: 0.5; scale: 0.9; }
+  .gf-work-photo, .gf-teachings li { transition: none; }
+}

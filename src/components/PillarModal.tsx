@@ -38,7 +38,7 @@ export const PillarModal: React.FC<PillarModalProps> = ({
   return (
     <div
       id="pillar-detail-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-md animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-navy/70 backdrop-blur-md animate-fadeIn"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-pillar-title"
@@ -48,7 +48,7 @@ export const PillarModal: React.FC<PillarModalProps> = ({
 
       {/* Modal Card */}
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-neutral-900 border border-white/20 shadow-2xl text-white z-10 animate-scaleUp transition-shadow duration-1000"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-deep-blue border border-white/20 shadow-2xl text-white z-10 animate-scaleUp transition-shadow duration-1000"
         style={{
           boxShadow: `0 25px 60px -15px ${pillar.accentA}66`,
         }}
@@ -64,7 +64,7 @@ export const PillarModal: React.FC<PillarModalProps> = ({
           <button
             id="close-pillar-modal-btn"
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-navy/30 hover:bg-navy/50 text-white flex items-center justify-center transition-all cursor-pointer border border-white/20"
             aria-label={getCMSCopy("copy.PillarModal.c8df66c5fe3f", "Close dialog")}
           >
             ✕

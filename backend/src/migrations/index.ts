@@ -4,6 +4,8 @@ import * as migration_20260909_225736_finale_model_controls from './20260909_225
 import * as migration_20260909_230221_finale_soft_light from './20260909_230221_finale_soft_light';
 import * as migration_20260909_231858_finale_balanced_light from './20260909_231858_finale_balanced_light';
 import * as migration_20261001_125822_sncf_studio_cleanup from './20261001_125822_sncf_studio_cleanup';
+import * as migration_20261007_005825_chiropractic_symbol from './20261007_005825_chiropractic_symbol';
+import * as migration_20261008_013421_recognition_categories from './20261008_013421_recognition_categories';
 
 export const migrations = [
   {
@@ -34,6 +36,16 @@ export const migrations = [
   {
     up: migration_20261001_125822_sncf_studio_cleanup.up,
     down: migration_20261001_125822_sncf_studio_cleanup.down,
-    name: '20261001_125822_sncf_studio_cleanup'
+    name: '20261001_125822_sncf_studio_cleanup',
+  },
+  {
+    up: migration_20261007_005825_chiropractic_symbol.up,
+    down: migration_20261007_005825_chiropractic_symbol.down,
+    name: '20261007_005825_chiropractic_symbol',
+  },
+  {
+    up: migration_20261008_013421_recognition_categories.up,
+    down: migration_20261008_013421_recognition_categories.down,
+    name: '20261008_013421_recognition_categories'
   },
 ];

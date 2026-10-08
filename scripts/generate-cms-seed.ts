@@ -21,15 +21,18 @@ const [copy, assets, components] = await Promise.all([
   registry('generatedCopy.json'), registry('generatedAssets.json'), registry('generatedComponents.json'),
 ]);
 
-/* The report the figures in src/data are transcribed from: change it with them. */
+/* The report the figures in src/data are transcribed from: change it with them. A programme from another of
+   the foundation's records names that record instead. */
 const REPORT = 'SNCF Activity Report, September 2026';
+const RECORDS: Record<string, string> = { chiropractic: 'SNCF chiropractic camps at the International Samagams, 2017–2026' };
 const stats: Record<string, { label: string; value: string; period?: string; source: string }> = {};
 for (const activity of DEFAULT_ACTIVITIES) {
+  const source = RECORDS[activity.id] ?? REPORT;
   for (const metric of activity.dataPoints) {
-    stats[`activity:${activity.id}:metric:${statisticKey(metric.label)}`] = { ...metric, period: activity.period, source: REPORT };
+    stats[`activity:${activity.id}:metric:${statisticKey(metric.label)}`] = { ...metric, period: activity.period, source };
   }
   if (!activity.dataPoints.some(metric => metric.label === activity.headline.label)) {
-    stats[`activity:${activity.id}:headline`] = { ...activity.headline, period: activity.period, source: REPORT };
+    stats[`activity:${activity.id}:headline`] = { ...activity.headline, period: activity.period, source };
   }
 }
 for (const pillar of DEFAULT_EXTENDED_PILLARS) {
@@ -49,13 +52,17 @@ const PAGE = { home: 'home', core: 'core-values', projects: 'projects', who: 'wh
 const COMPONENT_AREAS: Record<string, [string, string]> = {
   HeroSection: [PAGE.home, 'Hero'], WelcomeSplashScreen: [PAGE.home, 'Welcome screen'],
   PillarPhotoMosaic: [PAGE.home, 'Hero · Heal emblem photos'], PillarHeroBackdrop: [PAGE.home, 'Hero · Heal background'],
-  ImpactMosaic: [PAGE.home, 'Our work'], MosaicOverture: [PAGE.home, 'Our work'], MosaicChapter: [PAGE.home, 'Our work'], MosaicTile: [PAGE.home, 'Our work'],
+  ImpactMosaic: [PAGE.home, 'Our work'], MosaicOverture: [PAGE.home, 'Landing (Four paths. One purpose.)'], HomeLanding: [PAGE.home, 'Landing (Four paths. One purpose.)'], MosaicChapter: [PAGE.home, 'Our work'], MosaicTile: [PAGE.home, 'Our work'],
   PillarModal: [PAGE.home, 'Pillar details pop-up'],
-  EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
-  AwardsSection: [PAGE.home, 'Awards'], AwardLightbox: [PAGE.home, 'Awards'], PartnersSection: [PAGE.home, 'Partners'],
-  CoreValuesPage: [PAGE.core, 'Page'], ValueAnalytics: [PAGE.core, 'Charts'], EnrichScrapbook: [PAGE.core, 'Enrich scrapbook'],
-  ProjectsPage: [PAGE.projects, 'Page'], ProjectAnalytics: [PAGE.projects, 'Charts'],
-  WhoWeArePage: [PAGE.who, 'Page'], MissionVision: [PAGE.who, 'Mission & vision'], ServiceStory: [PAGE.who, 'Service story'], EditorialContent: [PAGE.who, 'Timeline & partners'],
+  EventsJournal: [PAGE.home, 'Events'], EventsSection: [PAGE.home, 'Events'], EventShare: [PAGE.home, 'Events'], EventsCalendarModal: [PAGE.home, 'Events calendar'], InvitationCard: [PAGE.home, 'Event invitation'],
+  AwardsSection: [PAGE.home, 'Awards'], AwardsTree: [PAGE.home, 'Awards'], AwardLightbox: [PAGE.home, 'Awards'], PartnersSection: [PAGE.home, 'Partners'], PartnerCircle: [PAGE.home, 'Partners'],
+  CoreValuesPage: [PAGE.core, 'Page'], ProgrammeDossier: [PAGE.core, 'Page'], ValueAnalytics: [PAGE.core, 'Charts'], Insights: [PAGE.core, 'Charts'], EnrichScrapbook: [PAGE.core, 'Enrich scrapbook'],
+  ExploreTabs: [PAGE.core, 'Reports · Gallery · Stats tabs'], ReportActions: [PAGE.core, 'Reports'], Reports: [PAGE.core, 'Reports · published PDFs'],
+  EmblemShowcase: [PAGE.core, 'Animated emblems'],
+  UnAffiliation: [PAGE.everywhere, 'UN standing & SDGs'], UnSeal: [PAGE.everywhere, 'UN standing & SDGs'],
+  Sayings: [PAGE.everywhere, 'Sayings & slogans'], PillarGallery: [PAGE.core, 'Galleries'], PhotoCarousel: [PAGE.core, 'Galleries'], NavPanels: [PAGE.everywhere, 'Menu'],
+  ProjectsPage: [PAGE.projects, 'Page'], ProjectOrbit: [PAGE.projects, 'Page'], ProjectAnalytics: [PAGE.projects, 'Charts'],
+  WhoWeArePage: [PAGE.who, 'Page'], MissionVision: [PAGE.who, 'Mission & vision'], ServiceStory: [PAGE.who, 'Service story'], EditorialContent: [PAGE.who, 'Timeline & partners'], WorkingHands: [PAGE.who, 'Cover · working hands'], GrowthRings: [PAGE.who, 'The road so far'],
   GuidingForcePage: [PAGE.guiding, 'Page'],
   ContributionPage: [PAGE.contribute, 'Contribute page'], DonationExperience: [PAGE.contribute, 'Donation form'], DonateModal: [PAGE.contribute, 'Donate pop-up'],
   Header: [PAGE.everywhere, 'Header'], MainNav: [PAGE.everywhere, 'Menu'], SiteFooter: [PAGE.everywhere, 'Footer'], SocialSidebar: [PAGE.everywhere, 'Social links'],
@@ -69,10 +76,13 @@ const excerpt = (value: string) => { const text = value.replace(/\s+/g, ' ').tri
    an editor knows what a value means (the label then quotes the value). */
 const INTRO_SECTIONS: [RegExp, string][] = [
   [/\.welcome-seconds$/, 'Intro · Welcome page time (seconds)'],
+  [/\.message-seconds$/, 'Intro · Message page time (seconds)'],
   [/\.mission-seconds$/, 'Intro · Mission page time (seconds)'],
   [/\.welcome-photo-focus$/, 'Intro · Welcome photo focus (across% down%)'],
   [/\.satguru-photo-focus$/, 'Intro · Satguru portrait focus (across% down%)'],
+  [/\.message-photo$/, 'Intro · Satguru portrait (message and mission pages)'],
   [/\.(welcome-|next-label)/, 'Intro · Welcome page'],
+  [/\.message-/, 'Intro · Message page'],
   [/\.(mission-|vision-|satguru-)/, 'Intro · Mission & vision page'],
 ];
 const area = (key: string) => {
@@ -93,7 +103,8 @@ const slots = {
   })),
   assets: Object.fromEntries(Object.entries(assets as Record<string, { source: string }>).map(([key, entry]) => {
     const where = area(key);
-    return [key, { page: where.page, section: where.section, label: `${where.section} · ${entry.source.split('/').pop()}` }];
+    /* a slot that starts empty (a file the foundation will upload) is named by its key */
+    return [key, { page: where.page, section: where.section, label: `${where.section} · ${entry.source.split('/').pop() || key.split('.').pop()}` }];
   })),
 };
 

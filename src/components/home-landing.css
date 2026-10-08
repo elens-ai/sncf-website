@@ -1,0 +1,223 @@
+/* ==========================================================================
+   THE LANDING (HomeLanding.tsx): the overture as the home page's first
+   screen, on the page's own ground.
+   ========================================================================== */
+/* drawn over the hall (z-index 10), whose backdrops run on up beneath its
+   shore (pillar-background.css): above the sand's edge the ground covers them */
+.home-landing { position: relative; z-index: 11; }
+/* the overture was drawn to fill a pinned stage; here it is a screen of its own */
+.home-landing > .mosaic-overture { position: relative; inset: auto; min-height: 100svh; }
+.home-landing[data-active='false'] .mosaic-overture * { animation-play-state: paused; }
+/* the cue at its foot is a way on */
+.home-landing button.mosaic-scroll-cue { padding: 6px 2px; border: 0; background: none; cursor: pointer; }
+
+/* ==========================================================================
+   A LIGHT GROUND. The photo wall stays, faint over a light colour, so the
+   words, the emblem in the seal's colours and the four doors each stand out
+   in their own colours. Pointing at a door brings its colour forward: its
+   photographs on the wall, its card, and the words "Different paths.", which
+   pass slowly through the four colours while no door is pointed at. "One
+   purpose." keeps one colour throughout, the seal's own navy. The ground
+   itself is alive: it starts on a warm peach and moves on to another light
+   colour each second (HomeLanding), and the doors and the header over it are
+   clear glass, so they take whatever colour lies behind them. At the screen's
+   foot it dissolves into the page's green, so the first path's page follows
+   on with no seam.
+   ========================================================================== */
+.home-landing {
+  --landing-ink: #143a33;
+  --landing-soft: rgb(20 58 51 / 0.7);
+  --landing-navy: #244563;
+  /* the photographs' tint, steady while the ground changes beneath them */
+  --ground-tile: #d3dad6;
+  /* the soft light behind the emblem and behind the words */
+  --ground-glow-a: 0.28;
+  --ground-glow-b: 0.33;
+  /* the doors' glass: clear and frosted, coloured by the ground through it */
+  --glass-a: rgb(255 255 255 / 0.78);
+  --glass-b: rgb(255 255 255 / 0.48);
+  --landing-glass: linear-gradient(165deg, var(--glass-a), var(--glass-b) 62%);
+  /* below the screen, the band where the ground flows down into the page's
+     green; it ends where the hall begins and never lies over the hall, so
+     the hall's words are never veiled */
+  --landing-blend: var(--shore-band, clamp(120px, 18vh, 220px));
+}
+/* The ground (HomeLanding) is laid on its own layer: solid under the whole
+   screen, then flowing down past it into the page's green canvas (the very
+   ground the first path's page stands on), so it runs on into the green below
+   rather than the green rising into it. The words, doors and cue stay on it.
+   It is two layers of colour, one over the other: the hidden one takes the
+   next colour (painted once, out of sight) and the upper one fades in or out
+   over the second. Only their opacity moves, which the compositor draws on
+   its own, so the changing colour costs the page nothing frame by frame. */
+.landing-ground { --flow: var(--landing-blend); position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+/* THE SHORE. The ground no longer ends in a straight fade. At the screen's
+   foot its edge is a wave (the layer's own mask: solid above the crest, clear
+   below, so the hall beneath shows through: its green, and its photograph and
+   sheets, which reach up under the band), and the hall's green laps up over
+   it as two translucent waves of water (.landing-shore, below). */
+.landing-ground > i {
+  -webkit-mask-image: linear-gradient(#000 calc(100% - var(--flow)), transparent calc(100% - var(--flow))), url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%200H1440V54C1300%2096%201190%2022%201020%2056C850%2090%20760%20136%20560%20112C380%2090%20240%2044%200%2084Z%22/%3E%3C/svg%3E");
+  mask-image: linear-gradient(#000 calc(100% - var(--flow)), transparent calc(100% - var(--flow))), url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%200H1440V54C1300%2096%201190%2022%201020%2056C850%2090%20760%20136%20560%20112C380%2090%20240%2044%200%2084Z%22/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%, 100% var(--flow); mask-size: 100% 100%, 100% var(--flow);
+  -webkit-mask-position: 0 0, 0 100%; mask-position: 0 0, 0 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+/* THE WATER: two translucent waves of the hall's green, over the photographs
+   (which run on down into them and dissolve there) and over the hall's
+   backdrops beneath. Each is masked solid below its crest and clear above,
+   so it has no top edge at all, and fades out towards the band's foot, where
+   the hall's own green carries on. They move as the photographs above do:
+   rising and falling slowly, as the columns drift up and down, and swaying a
+   little as water does, each to its own rhythm, so the two never move as one.
+   The tint at their crests follows the ground's colour as it changes. */
+@property --shore-ground { syntax: '<color>'; inherits: true; initial-value: #f9e2c7; }
+.landing-shore {
+  --shore-end: color-mix(in srgb, var(--shore-ground) 86%, #063782);
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; height: var(--landing-blend);
+  overflow: hidden; pointer-events: none;
+  transition: --shore-ground 0.85s ease-in-out;
+}
+.landing-shore > i {
+  position: absolute; left: -4%; right: -4%; top: 0; height: 100%;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+  animation: shore-rise 7s ease-in-out infinite alternate, shore-sway 13s ease-in-out infinite alternate;
+}
+.landing-shore > i:first-child {
+  background: linear-gradient(color-mix(in srgb, var(--backdrop-mid, #397f62) 72%, var(--shore-end)), var(--backdrop-mid, #397f62));
+  opacity: 0.55;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%2070C200%2030%20330%20110%20520%2090C700%2070%20820%2020%201000%2048C1180%2076%201300%20120%201440%2080V200H0Z%22/%3E%3C/svg%3E"), linear-gradient(#000 62%, transparent);
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%2070C200%2030%20330%20110%20520%2090C700%2070%20820%2020%201000%2048C1180%2076%201300%20120%201440%2080V200H0Z%22/%3E%3C/svg%3E"), linear-gradient(#000 62%, transparent);
+}
+.landing-shore > i:last-child {
+  background: linear-gradient(color-mix(in srgb, var(--backdrop-mid, #397f62) 85%, var(--shore-end)), var(--backdrop-dark, #174c3e));
+  opacity: 0.38;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%20118C180%2078%20300%20150%20500%20128C690%20106%20800%2062%20980%2090C1160%20118%201290%20160%201440%20116V200H0Z%22/%3E%3C/svg%3E"), linear-gradient(#000 72%, transparent);
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%201440%20200%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20fill=%22%23fff%22%20d=%22M0%20118C180%2078%20300%20150%20500%20128C690%20106%20800%2062%20980%2090C1160%20118%201290%20160%201440%20116V200H0Z%22/%3E%3C/svg%3E"), linear-gradient(#000 72%, transparent);
+  animation-duration: 9s, 17s; animation-delay: -4s, -6s; animation-direction: alternate-reverse;
+}
+@keyframes shore-rise { from { translate: 0 10px; } to { translate: 0 -8px; } }
+@keyframes shore-sway { from { transform: translate3d(-1.6%, 0, 0); } to { transform: translate3d(1.6%, 0, 0); } }
+.home-landing[data-active='false'] .landing-shore > i { animation-play-state: paused; }
+/* each layer: lighter at the top, deeper at the foot, and below the screen
+   turning, step by step, towards the hall's own green (rather than meeting its
+   deep green head-on) as it fades, on an eased curve */
+.landing-ground > i {
+  --ground: #f9e2c7;
+  --ground-top: color-mix(in srgb, var(--ground) 78%, #fff);
+  --ground-end: color-mix(in srgb, var(--ground) 86%, #063782);
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(transparent calc(100% - var(--flow) * 2.2), color-mix(in srgb, var(--ground-end) 82%, var(--backdrop-mid, #397f62)) calc(100% - var(--flow) * 0.9), color-mix(in srgb, var(--ground-end) 62%, var(--backdrop-mid, #397f62)) 100%),
+    linear-gradient(160deg, var(--ground-top) 0%, var(--ground) 48%, var(--ground-end) 100%);
+}
+/* the fade is a little shorter than the step, so the upper layer is wholly there (or gone) before the one beneath it changes */
+.landing-ground > i + i { opacity: 0; transition: opacity 0.85s ease-in-out; will-change: opacity; }
+.landing-ground[data-upper='shown'] > i + i { opacity: 1; }
+.home-landing::after { content: ''; display: block; height: var(--landing-blend); pointer-events: none; }
+/* the photographs run on past the screen's foot, down into the water, and
+   dissolve there as the columns drift into it and up out of it; the quiet
+   ellipse where the emblem and the words sit keeps to the screen above */
+.home-landing .mosaic-wall {
+  bottom: calc(-1 * var(--landing-blend));
+  -webkit-mask-image: radial-gradient(ellipse 60% 52svh at 52% calc((100% - var(--landing-blend)) * 0.4), rgb(0 0 0 / 0.22), #000 82%), linear-gradient(#000 calc(100% - var(--landing-blend) * 1.45), rgb(0 0 0 / 0.55) calc(100% - var(--landing-blend) * 0.8), transparent calc(100% - var(--landing-blend) * 0.3));
+  -webkit-mask-composite: source-in;
+  mask-image: radial-gradient(ellipse 60% 52svh at 52% calc((100% - var(--landing-blend)) * 0.4), rgb(0 0 0 / 0.22), #000 82%), linear-gradient(#000 calc(100% - var(--landing-blend) * 1.45), rgb(0 0 0 / 0.55) calc(100% - var(--landing-blend) * 0.8), transparent calc(100% - var(--landing-blend) * 0.3));
+  mask-composite: intersect;
+}
+/* the photographs, toned to a grey-green (each greyscale tile takes the colour beneath it), and faint */
+.home-landing .mosaic-wall-col > i { background-color: color-mix(in srgb, var(--backdrop-mid, #3e8b75) 34%, var(--ground-tile)); opacity: 0.34; }
+.home-landing .mosaic-wall[data-lit] .mosaic-wall-col > i { opacity: 0.1; }
+.home-landing .mosaic-wall[data-lit='heal'] i[data-pillar='heal'], .home-landing .mosaic-wall[data-lit='enrich'] i[data-pillar='enrich'],
+.home-landing .mosaic-wall[data-lit='empower'] i[data-pillar='empower'], .home-landing .mosaic-wall[data-lit='projects'] i[data-pillar='projects'] { opacity: 0.6; }
+/* quiet light where the emblem and the words sit, in place of the dark wash */
+.home-landing .mosaic-overture::before {
+  background: radial-gradient(ellipse at 30% 46%, rgb(255 255 255 / var(--ground-glow-a)), transparent 46%),
+    radial-gradient(ellipse at 72% 44%, rgb(255 255 255 / var(--ground-glow-b)), transparent 58%);
+}
+/* the words */
+.home-landing .mosaic-overture { color: var(--landing-ink); }
+.home-landing .mosaic-overture-title { text-shadow: none; }
+.home-landing .mosaic-overture-title > span:first-child { color: var(--landing-ink); transition: color 0.8s ease; animation: none; }
+.home-landing .mosaic-overture[data-lit] .mosaic-overture-title > span:first-child { animation: none; color: color-mix(in oklab, var(--lit-accent) 86%, #102e56); }
+.home-landing .mosaic-overture-title > .font-dancing-script { color: var(--landing-navy); }
+/* "Different paths." is a little over half the size of "One purpose.", which
+   carries the line: a little over half as wide, its broad capitals set at
+   about a fifth of the script's size (on phones held at a size that stays
+   easy to read) */
+.home-landing .mosaic-overture-title > span:first-child { font-size: clamp(17.5px, 1.6vw, 25.2px); }
+@media (max-width: 1023px) {
+  .home-landing .mosaic-overture-title > span:first-child { font-size: clamp(16.5px, 2.15vw, 21px); }
+}
+@media (min-width: 1024px) and (max-height: 760px) {
+  .home-landing .mosaic-overture-title > span:first-child { font-size: 17.5px; }
+}
+@keyframes landing-paths-ink {
+  0%, 19% { color: color-mix(in oklab, var(--ink-heal) 86%, #102e56); }
+  25%, 44% { color: color-mix(in oklab, var(--ink-enrich) 86%, #102e56); }
+  50%, 69% { color: color-mix(in oklab, var(--ink-empower) 86%, #102e56); }
+  75%, 94% { color: color-mix(in oklab, var(--ink-projects) 86%, #102e56); }
+  100% { color: color-mix(in oklab, var(--ink-heal) 86%, #102e56); }
+}
+.home-landing .mosaic-overture-lead { max-width: none; font-weight: 500; letter-spacing: 0.01em; color: var(--landing-soft); }
+/* the motto's second voice, in the signature of the welcome's tagline */
+.home-landing .mosaic-overture-sign { display: block; margin-top: 2px; font-size: clamp(35px, 3.1vw, 50px); line-height: 1.3; letter-spacing: 0; color: var(--landing-navy); }
+.home-landing .mosaic-scroll-cue { color: rgb(20 58 51 / 0.72); }
+.home-landing button.mosaic-scroll-cue:hover { color: var(--landing-ink); }
+.home-landing button.mosaic-scroll-cue:focus-visible { outline: 2px solid var(--landing-ink); outline-offset: 4px; border-radius: 4px; }
+/* the emblem: taller for the hand above. It is
+   brought forward off the grey while keeping the logo's colours: the same
+   hues, a little richer (the seal's pastels go grey on a grey ground), each
+   piece edged in a fine white rim and lifted by a soft white light (a
+   coloured glow only muddied the edges), with a light shadow beneath and a
+   soft white light behind it rather than a tinted disc. */
+.home-landing .mosaic-emblem { --emblem-aspect: 1.02; }
+.home-landing .mosaic-emblem::before {
+  inset: auto; left: 50%; top: 50%; width: 88%; aspect-ratio: 1; translate: -50% -50%;
+  background: radial-gradient(circle closest-side, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.2) 58%, rgb(255 255 255 / 0));
+}
+.home-landing .mosaic-lotus { filter: saturate(1.05); animation-duration: 16s; }
+.home-landing .mosaic-petal {
+  filter: invert(1) brightness(calc(1 - var(--veil, 0))) invert(1)
+    drop-shadow(0 0 1px rgb(255 255 255 / 0.95)) drop-shadow(0 0 10px rgb(255 255 255 / 0.55))
+    drop-shadow(0 6px 10px rgb(20 58 51 / 0.14));
+}
+.home-landing .mosaic-emblem-light { background: rgb(4 55 147 / 0.18); box-shadow: none; }
+/* the doors: frosted glass of the ground's grey, each in its path's colour, warming to it when pointed at */
+.home-landing .mosaic-path {
+  color: var(--landing-ink);
+  background: var(--landing-glass);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.75), 0 22px 40px -30px rgb(20 58 51 / 0.5);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+}
+.home-landing .mosaic-path::before { background: var(--path-accent); }
+.home-landing .mosaic-path-icon { fill: var(--path-accent); }
+.home-landing .mosaic-path-copy > span { color: rgb(20 58 51 / 0.64); }
+.home-landing .mosaic-path:is(:hover, :focus-visible) {
+  background: linear-gradient(165deg, color-mix(in srgb, var(--path-accent) 18%, rgb(240 244 242 / 0.66)), rgb(205 214 209 / 0.4) 70%);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--path-accent) 60%, rgb(255 255 255 / 0.6)), 0 26px 44px -26px color-mix(in srgb, var(--path-accent) 60%, transparent);
+}
+/* the way to the events, under the motto: the doors' glass, edged in the seal's navy, filling with it when pointed at */
+.home-landing .mosaic-overture-events {
+  display: inline-flex; align-items: center; gap: 9px; margin-top: 22px; padding: 11px 16px 11px 15px; border-radius: 999px;
+  font: 600 11.5px/1 var(--font-sans); letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+  color: var(--landing-navy); background: var(--landing-glass);
+  box-shadow: inset 0 0 0 1px rgb(4 55 147 / 0.3), 0 14px 30px -22px rgb(4 55 147 / 0.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2); backdrop-filter: blur(12px) saturate(1.2);
+  opacity: var(--w, 0); transform: translateY(calc((1 - var(--w, 0)) * 20px));
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, translate 0.3s ease;
+}
+.home-landing .mosaic-overture-events:is(:hover, :focus-visible) { background: var(--landing-navy); color: #fff; translate: 0 -2px; box-shadow: 0 16px 30px -18px rgb(4 55 147 / 0.75); }
+.home-landing .mosaic-overture-events:focus-visible { outline: 2px solid var(--landing-navy); outline-offset: 3px; }
+.home-landing .mosaic-path:is(:hover, :focus-visible) .mosaic-path-copy strong { color: color-mix(in oklab, var(--path-accent) 86%, #102e56); }
+.home-landing .mosaic-path:focus-visible { outline: 2px solid color-mix(in oklab, var(--path-accent) 86%, #102e56); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .home-landing .mosaic-overture-title > span:first-child { animation: none; }
+  .landing-shore { transition: none; }
+  .landing-shore > i { animation: none; }
+}
+@media (forced-colors: active) {
+  .home-landing { background: Canvas; }
+}

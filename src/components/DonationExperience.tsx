@@ -1,5 +1,4 @@
 import React, { useId, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Building2, Check, ChevronDown, Heart, HeartHandshake, Landmark, Mail, MapPin, Phone, Sprout, Users, X } from 'lucide-react';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { getCMSCopy } from '../cms/runtime';
@@ -10,6 +9,7 @@ import { ACTIVITIES } from '../data/activities';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import './donation.css';
 import { ContributionDialog } from './ContributionDialog';
+import { DonationGifts, type GiftWay } from './DonationGifts';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.DonationExperience.${key}`, fallback);
 const CAUSES = ['all', 'heal', 'enrich', 'empower'] as const;
@@ -18,7 +18,7 @@ const DONORS = ['individual', 'company', 'organisation'] as const;
 const DONOR_ICONS = [Users, Building2, Landmark];
 
 /** An enquiry planner; never presents an unconnected payment action as a checkout. */
-export function DonationExperience({ page = false, onClose }: { page?: boolean; onClose?: () => void }) {
+export function DonationExperience({ onClose }: { onClose?: () => void }) {
   useCMSRevision();
   const root = useRef<HTMLDivElement>(null);
   const active = useSectionActivity(root);
@@ -43,7 +43,6 @@ export function DonationExperience({ page = false, onClose }: { page?: boolean; 
   const emailBody = [c('emailGreeting', 'Hello SNCF accounts team,'), '', c('emailIntro', 'I would like to discuss a contribution to the foundation.'), `${c('givingAs', 'Giving as')}: ${donorLabels[DONORS.indexOf(donor)]}`, `${c('preferredCause', 'Preferred cause')}: ${causeLabel(cause)}`, kind === 'gift' ? c('financialGift', 'A financial gift') : `${nonMonetaryLabels[nonMonetary as keyof typeof nonMonetaryLabels]}: ${offer.trim() || c('discussOptions', 'I would like to discuss the options.')}`, '', c('emailRequest', 'Please guide me on the next steps and any applicable documentation.'), '', c('emailThanks', 'Thank you.')].join('\n');
   const emailHref = `mailto:${site.contact.email}?subject=${encodeURIComponent(c('emailSubject', 'An enquiry about contributing to SNCF'))}&body=${encodeURIComponent(emailBody)}`;
   const changeStep = (next: number) => { setStep(next); requestAnimationFrame(() => { stepTitle.current?.focus({ preventScroll: true }); stepTitle.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' }); }); };
-  const Heading = page ? 'h1' : 'h2';
   const guidance: { question: string; answer: React.ReactNode }[] = [
     { question: c('onlineQuestion', 'How can I donate online?'), answer: <><p>{c('onlineAnswer', 'The foundation lists debit and credit cards, net banking, bank transfers, e-wallets and UPI, through Razorpay (powered by HDFC Bank) and PayUmoney.')}</p><a href={contributionURL} onClick={e => { e.preventDefault(); setFormOpen(true); }}>{c('contributeAction', 'Continue to contribute')}<ArrowUpRight size={14} /></a></> },
     { question: c('taxQuestion', 'Are donations tax deductible?'), answer: <p>{c('taxAnswer', 'The foundation’s donation page states that contributions qualify for deduction under section 80G(5)(vi) of the Income Tax Act, 1961. Contact the accounts team for documentation.')}</p> },
@@ -60,18 +59,26 @@ export function DonationExperience({ page = false, onClose }: { page?: boolean; 
   const closeAnswer = (details: HTMLDetailsElement | null) => { if (!details) return; details.open = false; details.querySelector('summary')?.focus(); };
 
   return <div ref={root} data-active={active} data-kind={kind} data-step={step} className="donation-experience" style={{ '--give-ink': ink, '--give-light': light } as React.CSSProperties}
-    onKeyDown={page ? undefined : event => { const open = openAnswers()[0]; if (event.key === 'Escape' && open) { event.preventDefault(); closeAnswer(open); } }}
-    onPointerDown={page ? undefined : event => openAnswers().forEach(open => { if (!open.contains(event.target as Node)) open.open = false; })}>
+    onKeyDown={event => { const open = openAnswers()[0]; if (event.key === 'Escape' && open) { event.preventDefault(); closeAnswer(open); } }}
+    onPointerDown={event => openAnswers().forEach(open => { if (!open.contains(event.target as Node)) open.open = false; })}>
     {formOpen && <ContributionDialog onClose={() => setFormOpen(false)} />}
     {onClose && <button type="button" className="donation-close" aria-label={c('close', 'Close contribution planner')} onClick={onClose}><X size={20} /></button>}
     <div className="donation-story">
       <p className="donation-eyebrow"><span />{c('eyebrow', 'Generosity, made personal')}</p>
-      <Heading>{c('headline', 'A little care.')}<br /><em>{c('headlineScript', 'A lasting difference.')}</em></Heading>
+      <h2>{c('headline', 'A little care.')}<br /><em>{c('headlineScript', 'A lasting difference.')}</em></h2>
       <p className="donation-intro">{c('intro', 'There is more than one way to give. Help care reach a doorstep, open a classroom, or bring a community together.')}</p>
       <div className="donation-bloom" aria-hidden="true">
-        <div className="donation-bloom-orbit" /><span className="donation-petal donation-petal-heal" data-selected={cause === 'heal' || cause === 'all'} /><span className="donation-petal donation-petal-enrich" data-selected={cause === 'enrich' || cause === 'all'} /><span className="donation-petal donation-petal-empower" data-selected={cause === 'empower' || cause === 'all'} />
-        <div className="donation-bloom-heart"><HeartHandshake size={36} strokeWidth={1.2} /></div>
-        <span className="donation-bloom-caption">{c('bloomCaption', 'One shared purpose.')}</span>
+        <div className="donation-bloom-orbit" />
+        {/* the gift chosen, pictured: for money, the three cornerstones as petals round a heart, the cause chosen lit;
+            for any other way to give, a box, what is given going into it */}
+        <div className="donation-petals">
+          <span className="donation-petal donation-petal-heal" data-selected={cause === 'heal' || cause === 'all'} />
+          <span className="donation-petal donation-petal-enrich" data-selected={cause === 'enrich' || cause === 'all'} />
+          <span className="donation-petal donation-petal-empower" data-selected={cause === 'empower' || cause === 'all'} />
+          <div className="donation-bloom-heart"><HeartHandshake size={36} strokeWidth={1.2} /></div>
+        </div>
+        <DonationGifts way={nonMonetary as GiftWay} />
+        <span className="donation-bloom-caption">{kind === 'time' ? c('giftsCaption', 'Every gift finds a home.') : c('bloomCaption', 'One shared purpose.')}</span>
       </div>
       <div className="donation-impact" aria-live="polite" aria-atomic="true">
         {impact ? <div key={cause}><span className="donation-eyebrow">{c('reportedImpact', 'Reported programme impact')}</span><strong>{impact.headline.value}</strong><p>{impact.headline.label} · {impact.title}</p><small>{impact.period}</small></div>
@@ -101,8 +108,8 @@ export function DonationExperience({ page = false, onClose }: { page?: boolean; 
       </div>
       <div className="donation-practical">
         <div className="donation-practical-head"><p className="donation-eyebrow">{c('practicalTitle', 'A little guidance')}</p>
-          {!page && <Link className="donation-page-link" to="/donate" onClick={onClose}>{c('fullPage', 'Open the contribution page')}<ArrowUpRight size={13} /></Link>}</div>
-        <div className="donation-faq">{guidance.map((item, i) => <details key={i} onToggle={page ? undefined : oneAnswerAtATime}>
+</div>
+        <div className="donation-faq">{guidance.map((item, i) => <details key={i} onToggle={oneAnswerAtATime}>
           <summary>{item.question}<ChevronDown size={16} /></summary>
           <div className="donation-answer"><p className="donation-answer-title" aria-hidden="true">{item.question}</p>{item.answer}
             <button type="button" className="donation-answer-close" aria-label={c('closeAnswer', 'Close answer')} onClick={e => closeAnswer(e.currentTarget.closest('details'))}><X size={16} /></button></div>

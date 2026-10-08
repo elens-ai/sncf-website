@@ -3,34 +3,6 @@
     "source": "/media/sncf-anthem-instrumental-v1.2.mp3",
     "label": "AnthemPlayer · sncf-anthem-instrumental-v1.2.mp3"
   },
-  "asset.AwardsSection.56b9a5e0ea79": {
-    "source": "/images/satguru-mata-sudiksha-ji.jpg",
-    "label": "AwardsSection · satguru-mata-sudiksha-ji.jpg"
-  },
-  "asset.AwardsSection.4daa8ff53979": {
-    "source": "/images/mataji-rajpita-planting.webp",
-    "label": "AwardsSection · mataji-rajpita-planting.webp"
-  },
-  "asset.AwardsSection.b4324b25c1ce": {
-    "source": "/images/nirankari-rajpita-ramit-ji.jpg",
-    "label": "AwardsSection · nirankari-rajpita-ramit-ji.jpg"
-  },
-  "asset.AwardsSection.76f684891a21": {
-    "source": "/images/volunteers-planning.webp",
-    "label": "AwardsSection · volunteers-planning.webp"
-  },
-  "asset.AwardsSection.7144da391fb1": {
-    "source": "/images/vertical-heal.webp",
-    "label": "AwardsSection · vertical-heal.webp"
-  },
-  "asset.AwardsSection.486823e29a83": {
-    "source": "/images/vertical-enrich.webp",
-    "label": "AwardsSection · vertical-enrich.webp"
-  },
-  "asset.AwardsSection.7e886446b163": {
-    "source": "/images/vertical-empower.webp",
-    "label": "AwardsSection · vertical-empower.webp"
-  },
   "asset.CardIllustration.7144da391fb1": {
     "source": "/images/vertical-heal.webp",
     "label": "CardIllustration · vertical-heal.webp"
@@ -74,10 +46,6 @@
   "asset.WelcomeSplashScreen.25aa35189463": {
     "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
     "label": "WelcomeSplashScreen · sncf-logo-only.webp"
-  },
-  "asset.GuidingForcePage.56b9a5e0ea79": {
-    "source": "/images/satguru-mata-sudiksha-ji.jpg",
-    "label": "GuidingForcePage · satguru-mata-sudiksha-ji.jpg"
   },
   "asset.GuidingForcePage.4daa8ff53979": {
     "source": "/images/mataji-rajpita-planting.webp",
@@ -131,10 +99,6 @@
     "source": "/images/petals/palm.webp",
     "label": "palm.webp"
   },
-  "asset.GuidingForcePage.rajpita": {
-    "source": "/images/nirankari-rajpita-ramit-ji.jpg",
-    "label": "GuidingForcePage · Rajpita portrait"
-  },
   "asset.ProjectsPage.healthCity": {
     "source": "/images/projects/health-city.webp",
     "label": "ProjectsPage · health-city.webp"
@@ -167,48 +131,140 @@
     "source": "/images/petals/petal-projects.webp",
     "label": "petal-projects.webp"
   },
-  "asset.HealStory.doorH": {
-    "source": "/images/programmes/health-checkup-snhc-team.jpg",
-    "label": "HealStory · health-checkup-snhc-team.jpg"
-  },
-  "asset.HealStory.doorE": {
-    "source": "/images/programmes/eye-checkup-examination.jpg",
-    "label": "HealStory · eye-checkup-examination.jpg"
-  },
-  "asset.HealStory.doorA": {
-    "source": "/images/programmes/blood-bank-processing.jpg",
-    "label": "HealStory · blood-bank-processing.jpg"
-  },
-  "asset.HealStory.doorL": {
-    "source": "/images/programmes/blood-donation.jpg",
-    "label": "HealStory · blood-donation.jpg"
-  },
   "asset.WelcomeSplashScreen.welcome-photo": {
     "source": "/images/welcome-volunteers.jpg",
     "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
   },
-  "asset.WelcomeSplashScreen.satguru-photo": {
-    "source": "/images/satguru-mata-sudiksha-ji-cutout.webp",
-    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-cutout.webp"
+  "asset.Reports.heal": {
+    "source": "",
+    "label": "Reports · heal (PDF, empty until uploaded)"
   },
-  "asset.PillarHeroBackdrop.heal-background": {
-    "source": "/images/heal-emblem/background.webp",
-    "label": "PillarHeroBackdrop · background.webp"
+  "asset.Reports.enrich": {
+    "source": "",
+    "label": "Reports · enrich (PDF, empty until uploaded)"
   },
-  "asset.PillarPhotoMosaic.heal-leaf-top-right": {
-    "source": "/images/heal-emblem/leaf-top-right.webp",
-    "label": "PillarPhotoMosaic · leaf-top-right.webp"
+  "asset.Reports.empower": {
+    "source": "",
+    "label": "Reports · empower (PDF, empty until uploaded)"
   },
-  "asset.PillarPhotoMosaic.heal-leaf-top-left": {
-    "source": "/images/heal-emblem/leaf-top-left.webp",
-    "label": "PillarPhotoMosaic · leaf-top-left.webp"
+  "asset.Reports.project-amrit": {
+    "source": "",
+    "label": "Reports · project-amrit (PDF, empty until uploaded)"
   },
-  "asset.PillarPhotoMosaic.heal-leaf-bottom-right": {
-    "source": "/images/heal-emblem/leaf-bottom-right.webp",
-    "label": "PillarPhotoMosaic · leaf-bottom-right.webp"
+  "asset.Reports.oneness-vann": {
+    "source": "",
+    "label": "Reports · oneness-vann (PDF, empty until uploaded)"
   },
-  "asset.PillarPhotoMosaic.heal-leaf-bottom-left": {
-    "source": "/images/heal-emblem/leaf-bottom-left.webp",
-    "label": "PillarPhotoMosaic · leaf-bottom-left.webp"
+  "asset.Reports.watershed": {
+    "source": "",
+    "label": "Reports · watershed (PDF, empty until uploaded)"
+  },
+  "asset.Reports.adopted-villages": {
+    "source": "",
+    "label": "Reports · adopted-villages (PDF, empty until uploaded)"
+  },
+  "asset.UnSeal.undp-logo": {
+    "source": "",
+    "label": "UnSeal · UNDP logo (only with UNDP’s written permission)"
+  },
+  "asset.PartnerCircle.hub": {
+    "source": "/images/sncf-logo.webp",
+    "label": "PartnerCircle · sncf-logo.webp"
+  },
+  "asset.SiteFooter.lotus": {
+    "source": "/images/lotus-watermark.png",
+    "label": "SiteFooter · lotus-watermark.png"
+  },
+  "asset.WorkingHands.hands": {
+    "source": "/images/welcome-volunteers.jpg",
+    "label": "WorkingHands · welcome-volunteers.jpg"
+  },
+  "asset.WorkingHands.hospitals": {
+    "source": "/images/projects/health-city.webp",
+    "label": "WorkingHands · health-city.webp"
+  },
+  "asset.WorkingHands.classrooms": {
+    "source": "/images/programmes/schools-classroom.webp",
+    "label": "WorkingHands · schools-classroom.webp"
+  },
+  "asset.WorkingHands.forests": {
+    "source": "/images/programmes/oneness-vann-planting.webp",
+    "label": "WorkingHands · oneness-vann-planting.webp"
+  },
+  "asset.GuidingForcePage.work-amrit": {
+    "source": "/images/programmes/amrit-riverbank.webp",
+    "label": "GuidingForcePage · amrit-riverbank.webp"
+  },
+  "asset.GuidingForcePage.work-nima": {
+    "source": "/images/programmes/nima-tabla.webp",
+    "label": "GuidingForcePage · nima-tabla.webp"
+  },
+  "asset.GuidingForcePage.closing-lotus": {
+    "source": "/images/lotus-watermark.png",
+    "label": "GuidingForcePage · lotus-watermark.png"
+  },
+  "asset.WhoWeArePage.stamp": {
+    "source": "/images/sncf-logo.webp",
+    "label": "WhoWeArePage · sncf-logo.webp"
+  },
+  "asset.ProjectsPage.hcLogo": {
+    "source": "/images/projects/health-city/logo.webp",
+    "label": "ProjectsPage · logo.webp"
+  },
+  "asset.ProjectsPage.hcTeam": {
+    "source": "/images/projects/health-city/team-atrium.webp",
+    "label": "ProjectsPage · team-atrium.webp"
+  },
+  "asset.ProjectsPage.hcPlaque": {
+    "source": "/images/projects/health-city/plaque.webp",
+    "label": "ProjectsPage · plaque.webp"
+  },
+  "asset.ProjectsPage.hcDedication": {
+    "source": "/images/projects/health-city/ceremony.webp",
+    "label": "ProjectsPage · ceremony.webp"
+  },
+  "asset.UnepSeal.logo": {
+    "source": "/images/partners/unep.png",
+    "label": "UnepSeal · unep.png"
+  },
+  "asset.GuidingForcePage.cover-portrait": {
+    "source": "/images/satguru-mata-sudiksha-ji-portrait.webp",
+    "label": "GuidingForcePage · satguru-mata-sudiksha-ji-portrait.webp"
+  },
+  "asset.GuidingForcePage.work-hc-photo": {
+    "source": "/images/programmes/health-city-evening.webp",
+    "label": "GuidingForcePage · health-city-evening.webp"
+  },
+  "asset.WelcomeSplashScreen.message-portrait": {
+    "source": "/images/satguru-mata-sudiksha-ji-welcome.webp",
+    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-welcome.webp"
+  },
+  "asset.MosaicOverture.enrich-book": {
+    "source": "/images/emblem-marks/enrich-book.webp",
+    "label": "MosaicOverture · enrich-book.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-top-right": {
+    "source": "/images/heal-emblem/photo-top-right.webp",
+    "label": "PillarPhotoMosaic · photo-top-right.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-top-left": {
+    "source": "/images/heal-emblem/photo-top-left.webp",
+    "label": "PillarPhotoMosaic · photo-top-left.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-bottom-right": {
+    "source": "/images/heal-emblem/photo-bottom-right.webp",
+    "label": "PillarPhotoMosaic · photo-bottom-right.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-bottom-left": {
+    "source": "/images/heal-emblem/photo-bottom-left.webp",
+    "label": "PillarPhotoMosaic · photo-bottom-left.webp"
+  },
+  "asset.ServicePortrait.model": {
+    "source": "/models/sncf-emblem.glb",
+    "label": "ServicePortrait · sncf-emblem.glb"
+  },
+  "asset.ServicePortrait.poster": {
+    "source": "/images/sncf-logo.webp",
+    "label": "ServicePortrait · sncf-logo.webp"
   }
 }

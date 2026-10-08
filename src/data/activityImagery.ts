@@ -18,7 +18,9 @@ import { slug } from '../utils/slug';
  * file is rewritten into a copy slot.
  *
  * An activity's own `images[0]` — from the data or from the CMS — always
- * wins and is shown without the illustrative label.
+ * wins and is shown without the illustrative label. A programme the
+ * foundation has chosen to show without photographs for now borrows none
+ * either: its symbol stands in (SYMBOL_ONLY).
  */
 export interface ActivityImage {
   src: string;
@@ -56,6 +58,9 @@ export const DEFAULT_ACTIVITY_IMAGERY: Record<string, string> = {
   'watershed': 'projects-gallery-4',       // Planting a Oneness Vann
   'adopted-villages': 'projects-gallery-3',// Project Amrit volunteers
 };
+
+/** Programmes shown by their symbol alone until they have photographs of their own: no borrowed picture. */
+export const SYMBOL_ONLY: ReadonlySet<string> = new Set(['chiropractic']);
 
 const PHOTO_ID = /^(heal|enrich|empower|projects)-gallery-([1-5])$/;
 /* A borrowed photograph is real but shows another programme: say so to a

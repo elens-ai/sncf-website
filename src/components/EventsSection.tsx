@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarDays, CalendarPlus, ArrowUpRight, ChevronLeft, ChevronRight, Download, QrCode, Sparkles } from 'lucide-react';
+import { CalendarDays, CalendarPlus, ArrowUpRight, ChevronLeft, ChevronRight, Phone, QrCode, Sparkles } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
+import { getCMSLink } from '../cms/links';
 import { resolveCMSMedia } from '../cms/media';
 import { roomPhoto } from '../data/pavilionGallery';
 import { useCMSRevision } from '../cms/CMSContentProvider';
@@ -8,12 +9,15 @@ import { EVENTS } from '../data/events';
 import { PILLARS } from '../data/pillars';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { onArrival } from '../utils/arrival';
-import { resolveEvents, countdownLabel, icsHref, wrapCalendar, vevent, nowStamp, inviteUrl } from '../utils/events';
-import { eventQr, renderPoster, downloadBlob } from '../utils/eventPoster';
+import { resolveEvents, countdownLabel, icsHref, wrapCalendar, vevent, nowStamp, inviteUrl, dayOfYear, startOfToday, pad, MONTHS_SHORT, MONTHS_LONG } from '../utils/events';
+import { eventQr } from '../utils/eventPoster';
+import { EventShare } from './EventShare';
 import { EventsCalendarModal } from './EventsCalendarModal';
 import { PillarPhotoMosaic } from './PillarPhotoMosaic';
 import { PillarArtwork } from './PillarArtwork';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
+import { PillarMarkShapes } from './PillarMark';
+import { UnDayMark, isUnObservance } from './UnAffiliation';
 import './events-journal.css';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.EventsJournal.${key}`, fallback);
@@ -21,8 +25,26 @@ const FILTERS: ('all' | MosaicPillar)[] = ['all', 'heal', 'enrich', 'empower', '
 
 function JournalPillarIcon({ pillar }: { pillar: MosaicPillar }) {
   return <svg className="journal-pillar-icon" viewBox="0 0 146 120" aria-hidden="true">
-    {PILLAR_LOGOS[pillar].paths.map(d => <path key={d} d={d} />)}
+    <PillarMarkShapes pillar={pillar} />
   </svg>;
+}
+
+/* where a day falls along the year, as a share of its width */
+const yearAt = (month: number, day: number) => ((dayOfYear(month, day) - 0.5) / 365) * 100;
+
+/** Days, hours and minutes to the moment, turning over while the section is on screen. */
+function Ticker({ date, live }: { date: Date; live: boolean }) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!live) return;
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(id);
+  }, [live]);
+  const left = Math.max(0, date.getTime() - now);
+  return <span className="journal-ticker" aria-hidden="true">
+    <b>{Math.floor(left / 86400000)}</b>{c('days', 'd')}<b>{pad(Math.floor(left / 3600000) % 24)}</b>{c('hours', 'h')}<b>{pad(Math.floor(left / 60000) % 60)}</b>{c('minutes', 'm')}
+  </span>;
 }
 
 /** A featured invitation and a browsable agenda on the shared pillar-coloured ground. */
@@ -39,8 +61,6 @@ export const EventsSection: React.FC = () => {
   const [filter, setFilter] = useState<'all' | MosaicPillar>('all');
   const [calendar, setCalendar] = useState(false);
   const [qr, setQr] = useState<{ id: string; url: string } | null>(null);
-  const [printing, setPrinting] = useState(false);
-  const [posterError, setPosterError] = useState(false);
   useEffect(() => {
     if (!visible) return;
     setTick(t => t + 1);
@@ -57,19 +77,11 @@ export const EventsSection: React.FC = () => {
   const qrUrl = qr?.id === selected?.event.id ? qr?.url : null;
   useEffect(() => {
     let live = true;
-    setPosterError(false);
     if (selected) eventQr(selected.event.id, selected.accentA)
       .then(url => { if (live) setQr({ id: selected.event.id, url }); })
       .catch(() => { if (live) setQr(null); });
     return () => { live = false; };
   }, [selected?.event.id, selected?.accentA]);
-  const poster = async () => {
-    if (!selected || printing) return;
-    setPrinting(true); setPosterError(false);
-    try { downloadBlob(await renderPoster(selected), `${selected.event.id}-poster.png`); }
-    catch { setPosterError(true); }
-    finally { setPrinting(false); }
-  };
   const step = (direction: number) => {
     if (!selected || !filtered.length) return;
     setChosen(filtered[(filtered.indexOf(selected) + direction + filtered.length) % filtered.length].event.id);
@@ -103,14 +115,35 @@ export const EventsSection: React.FC = () => {
 
     <div className="journal-toolbar">
       <div className="journal-filters" role="group" aria-label={c('filter', 'Filter by value')}>
-        {FILTERS.map(id => <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)}
-          style={id === 'all' ? undefined : { '--filter-tint': PILLAR_LOGOS[id].edge } as React.CSSProperties}>
-          {id === 'all' ? <Sparkles size={16} strokeWidth={1.5} aria-hidden="true" /> : <JournalPillarIcon pillar={id} />}
-          <span>{id === 'all' ? c('all', 'All moments') : PILLAR_LOGOS[id].label}</span>
-          <small>{id === 'all' ? items.length : items.filter(i => i.event.pillarId === id).length}</small>
-        </button>)}
+        {FILTERS.map(id => {
+          const count = id === 'all' ? items.length : items.filter(i => i.event.pillarId === id).length;
+          /* a value with no dates yet is shown, but cannot be chosen into an empty page */
+          return <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} disabled={count === 0} title={count === 0 ? c('noDates', 'No dates announced yet') : undefined}
+            style={id === 'all' ? undefined : { '--filter-tint': PILLAR_LOGOS[id].edge } as React.CSSProperties}>
+            {id === 'all' ? <Sparkles size={16} strokeWidth={1.5} aria-hidden="true" /> : <JournalPillarIcon pillar={id} />}
+            <span>{id === 'all' ? c('all', 'All moments') : PILLAR_LOGOS[id].label}</span>
+            <small>{count}</small>
+          </button>;
+        })}
       </div>
       <p className="journal-toolbar-note">{c('invitationNote', 'Small moments. Lasting change.')}</p>
+    </div>
+
+    {/* the year at a glance: every dated moment where it falls, and today */}
+    <div className="journal-year" role="group" aria-label={c('year', 'The year at a glance')}>
+      <ol className="journal-year-months" aria-hidden="true">{MONTHS_SHORT.map(month => <li key={month}>{month}</li>)}</ol>
+      <div className="journal-year-track">
+        <span className="journal-year-today" style={{ left: `${yearAt(startOfToday().getMonth() + 1, startOfToday().getDate())}%` }} aria-hidden="true"><i>{c('today', 'Today')}</i></span>
+        {items.filter(item => item.date && item.event.month && item.event.day).map(item => {
+          const dim = filter !== 'all' && item.event.pillarId !== filter;
+          const month = item.event.month as number, day = item.event.day as number;
+          return <button key={item.event.id} type="button" className="journal-year-dot" data-current={item.event.id === selected?.event.id} data-dim={dim}
+            style={{ left: `${yearAt(month, day)}%`, '--event-ink': item.accentA, '--event-tint': item.accentB } as React.CSSProperties}
+            onClick={() => { if (dim) setFilter('all'); chooseEvent(item.event.id); }} aria-label={`${item.event.title}, ${day} ${MONTHS_LONG[month - 1]}`}>
+            <span className="journal-year-tip" aria-hidden="true">{item.event.title}<small>{day} {MONTHS_SHORT[month - 1]}</small></span>
+          </button>;
+        })}
+      </div>
     </div>
 
     <div className="journal-spread">
@@ -141,14 +174,16 @@ export const EventsSection: React.FC = () => {
               </div>
             </div>
             <div className="journal-feature-copy">
-              <p className="journal-tag">{selected.event.tag}</p>
+              <p className="journal-tag">{isUnObservance(selected.event.tag) ? <UnDayMark /> : selected.event.tag}</p>
               <h3 id="journal-event-title" tabIndex={-1}>{selected.event.title}</h3>
               <p className="journal-when"><CalendarDays size={15} aria-hidden="true" />{dateLabel}</p>
               <span className="journal-countdown"><span aria-hidden="true" />{selected.days !== null ? countdownLabel(selected.days) : c('yearRound', 'Year round')}</span>
+              {selected.date && (selected.days ?? 0) > 0 && <Ticker date={selected.date} live={visible} />}
               <p className="journal-blurb">{selected.event.blurb}{selected.event.location ? ` · ${selected.event.location}` : ''}{selected.event.time ? ` · ${selected.event.time}` : ''}</p>
               <div className="journal-actions">
                 {selected.date && <a className="journal-save-date" href={icsHref(wrapCalendar(vevent(selected.event, selected.date, nowStamp())))} download={`${selected.event.id}.ics`}><CalendarPlus size={17} aria-hidden="true" />{c('save', 'Save the date')}</a>}
                 <a className="journal-invitation-link" href={inviteUrl(selected.event.id)}>{c('invite', 'View invitation')}<ArrowUpRight size={16} aria-hidden="true" /></a>
+                <a className="journal-venue-link" href={getCMSLink("copy.Link.InvitationCard.e3dc1a537132", "tel:+911147660380")}><Phone size={14} aria-hidden="true" />{c('venue', 'Find a venue near you')}</a>
               </div>
             </div>
           </div>
@@ -160,11 +195,9 @@ export const EventsSection: React.FC = () => {
               <p>{c('takeMoment', 'Take this moment with you.')}</p>
               <span>{c('scanHint', 'Scan for your invitation, or share the poster.')}</span>
             </div>
-            <button className="journal-poster" type="button" onClick={poster} disabled={printing} aria-busy={printing}>
-              <Download size={16} aria-hidden="true" /><span>{printing ? c('passBusy', 'Preparing…') : c('poster', 'Download poster')}</span>
-            </button>
+            {/* send it on: the networks, a calendar, or its artwork */}
+            <EventShare item={selected} when={dateLabel} artwork className="journal-share" />
           </div>
-          {posterError && <p className="journal-error" role="status">{c('posterError', 'The poster could not be prepared. Please try again.')}</p>}
         </> : <div className="journal-empty">
           <JournalPillarIcon pillar={pillar} /><p className="journal-eyebrow">{pillarLabel(pillar)}</p>
           <h3 id="journal-event-title" tabIndex={-1}>{c('empty', 'No events in this category yet.')}</h3>
@@ -179,7 +212,7 @@ export const EventsSection: React.FC = () => {
           {filtered.map((item, i) => <button key={item.event.id} type="button" aria-pressed={item.event.id === selected?.event.id}
             onClick={() => chooseEvent(item.event.id)} style={{ '--event-ink': item.accentA, '--event-tint': item.accentB, '--i': i } as React.CSSProperties}>
             <span className="journal-mini-date"><strong>{item.date?.getDate() ?? '∞'}</strong><span>{item.date?.toLocaleDateString('en-GB', { month: 'short' }) ?? c('ongoingShort', 'Ongoing')}</span></span>
-            <span className="journal-mini-words"><small>{item.event.tag}</small><strong>{item.event.title}</strong></span>
+            <span className="journal-mini-words"><small>{isUnObservance(item.event.tag) ? <UnDayMark compact /> : item.event.tag}</small><strong>{item.event.title}</strong></span>
             <ArrowUpRight size={15} aria-hidden="true" />
           </button>)}
           {!filtered.length && <p className="journal-agenda-empty">{c('emptyAgenda', 'New dates will appear here as they are announced.')}</p>}

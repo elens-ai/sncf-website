@@ -58,6 +58,20 @@ export const LOGO_INK = [
   '#69b947', // green — the rightmost
 ];
 
+/** THE OFFICIAL LOGO'S COLOURS, read off the foundation's round seal itself
+    (the lotus, the two hands): softer than the commissioned
+    artwork's inks above, and the ones the logo is printed in. The home page's
+    landing wears its emblem in these (scripts/build-logo-ink-art.ts paints the
+    pieces, logoInkSrc). Petals in LOGO_INK's order; each head takes its petal's
+    colour, as in the seal. */
+export const LOGO_COLOURS = {
+  petals: ['#eb69a6', '#c398c7', '#89a9d8', '#69cbd2', '#9dce6a'],
+  /** the hand's rose, from its deep end to its lightest */
+  hand: ['#ce8aad', '#d599b9', '#dba9c4', '#e1b6cd', '#e7c6d9', '#f0d5e5'],
+};
+/** A piece of the emblem (a petal's id, or 'palm') painted in the logo's colours. */
+export const logoInkSrc = (id: string) => (id === 'palm' ? '/images/petals/ink/palm.webp' : `/images/petals/ink/petal-${id}.webp`);
+
 export interface PetalArt {
   /** Matches LOGO_PETALS' own id — welcome, heal, enrich, empower, projects. */
   id: string;
@@ -180,6 +194,22 @@ const PETAL_LIFT = Math.max(
 );
 
 export const PETAL_ART: PetalArt[] = RAW_PETALS.map((p) => ({ ...p, y: p.y - PETAL_LIFT }));
+
+/** THE HAND ABOVE, as the seal has it: the same hand turned half about the
+    flower's centre, so it reaches over from the other side, its fingertips
+    a little clear of the flower's heads (TOP_GAP). Drawn turned (the page
+    rotates the palm artwork); this is the box it is drawn in. */
+const TOP_GAP = 8;
+const FLOWER_LEFT = Math.min(...PETAL_ART.map((p) => p.x));
+const FLOWER_RIGHT = Math.max(...PETAL_ART.map((p) => p.x + p.w));
+const FLOWER_TOP = Math.min(...PETAL_ART.map((p) => p.y));
+export const PALM_TOP_ART = {
+  src: PALM_ART.src,
+  x: FLOWER_LEFT + FLOWER_RIGHT - (PALM_ART.x + PALM_ART.w),
+  y: FLOWER_TOP - TOP_GAP - PALM_ART.h,
+  w: PALM_ART.w,
+  h: PALM_ART.h,
+};
 
 /** THE DOT-FINDER. Each vector petal's shapes include its accent dot — the
     "head" above the figure — as its own small subpath. This walks a path's

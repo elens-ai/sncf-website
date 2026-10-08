@@ -12,6 +12,18 @@ interface SubsectionNavProps {
   links: SubsectionLink[];
   /** Small caps line at the head of the rail. */
   label?: string;
+  /** 'rail' (the default): the label at the head, the chips after it.
+      'tabs': the chips alone, centred as one segmented control, a lit pill
+      sliding to the section in view; the label still names the control for
+      screen readers. */
+  variant?: 'rail' | 'tabs';
+  /** 'segmented' (with the 'tabs' variant): a quiet grey track, the section in view raised as a white slip, the
+      names alone in Geist, no colour (the Projects page). */
+  look?: 'segmented';
+  /** The rail takes the ground of the section in view: it is marked with that
+      section's id (data-ground), and the page gives each id its colours
+      (--backdrop-dark, -mid, -light and -pale), which it fades between. */
+  tinted?: boolean;
 }
 
 /**
@@ -36,14 +48,19 @@ const calm = () =>
 export const SubsectionNav: React.FC<SubsectionNavProps> = ({
   links,
   label = 'On this page',
+  variant = 'rail',
+  look,
+  tinted = false,
 }) => {
   const [active, setActive] = useState(links[0]?.id ?? '');
   const railRef = useRef<HTMLElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
   /* While a click's own scroll is animating, the reader has already told us
      where they are going. Without this the spy narrates every section the
      page flies past and the rail strobes through the whole list. */
   const claimedRef = useRef<string | null>(null);
   const claimTimer = useRef<number | null>(null);
+  const claimWatch = useRef<(() => void) | null>(null);
 
   /* Callers build their links inline, so the array is a new object on every
      render — and CoreValuesPage re-renders whenever a record is opened. Keyed
@@ -98,6 +115,7 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
   useEffect(
     () => () => {
       if (claimTimer.current) window.clearTimeout(claimTimer.current);
+      if (claimWatch.current) window.removeEventListener('scroll', claimWatch.current);
     },
     [],
   );
@@ -108,16 +126,44 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
     if (!rail) return;
     const chip = rail.querySelector<HTMLElement>(`[data-for="${active}"]`);
     if (!chip) return;
-    /* only scroll the rail itself — never the page */
+    /* only scroll the rail itself — never the page; measured from the
+       boxes, as the tabs' track is the chips' offset parent */
     const r = chip.getBoundingClientRect();
     const rr = rail.getBoundingClientRect();
     if (r.left < rr.left || r.right > rr.right) {
       rail.scrollTo({
-        left: chip.offsetLeft - rail.clientWidth / 2 + chip.clientWidth / 2,
+        left: rail.scrollLeft + r.left - rr.left - rail.clientWidth / 2 + r.width / 2,
         behavior: calm() ? 'auto' : 'smooth',
       });
     }
   }, [active]);
+
+  /* The tabs' lit pill sits under the active chip, measured from the boxes
+     (again on resize, and once the fonts have set the chips' widths). It
+     first appears in place; only later moves slide (data-lit). */
+  useEffect(() => {
+    const track = trackRef.current;
+    if (variant !== 'tabs' || !track) return;
+    let frame = 0;
+    const place = () => {
+      const chip = track.querySelector<HTMLElement>(`[data-for="${active}"]`);
+      if (!chip) return;
+      const t = track.getBoundingClientRect();
+      const c = chip.getBoundingClientRect();
+      track.style.setProperty('--lit-x', `${c.left - t.left}px`);
+      track.style.setProperty('--lit-w', `${c.width}px`);
+      if (!track.dataset.lit) frame = requestAnimationFrame(() => { track.dataset.lit = 'true'; });
+    };
+    place();
+    let live = true;
+    document.fonts?.ready.then(() => { if (live) place(); });
+    window.addEventListener('resize', place, { passive: true });
+    return () => {
+      live = false;
+      window.removeEventListener('resize', place);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [active, variant]);
 
   if (links.length < 2) return null;
 
@@ -129,12 +175,25 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
        will not agree until the scroll finishes */
     setActive(id);
     claimedRef.current = id;
+    /* The claim lasts until the measurement agrees (the page has arrived) or
+       the page comes to rest, whichever is first: then the spy resumes, even
+       if the section never reaches the reading line. A fixed timeout ran out
+       mid-flight on a long jump down a phone's page, and the rail lit the
+       sections it was still passing. */
     if (claimTimer.current) window.clearTimeout(claimTimer.current);
-    /* a smooth scroll has no completion event — release the claim after the
-       longest it can plausibly take, so the spy resumes if it never lands */
-    claimTimer.current = window.setTimeout(() => {
-      claimedRef.current = null;
-    }, 1200);
+    if (claimWatch.current) window.removeEventListener('scroll', claimWatch.current);
+    const watch = () => {
+      if (claimTimer.current) window.clearTimeout(claimTimer.current);
+      claimTimer.current = window.setTimeout(() => {
+        window.removeEventListener('scroll', watch);
+        claimWatch.current = null;
+        claimedRef.current = null;
+        window.dispatchEvent(new Event('scroll'));
+      }, 250);
+    };
+    claimWatch.current = watch;
+    window.addEventListener('scroll', watch, { passive: true });
+    watch();
 
     /* scroll-margin-top on the section clears the header and the rail */
     el.scrollIntoView({ behavior: calm() ? 'auto' : 'smooth', block: 'start' });
@@ -155,26 +214,40 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
     el.focus({ preventScroll: true });
   };
 
+  const list = (
+    <ul className="subnav-list">
+      {links.map((l) => (
+        <li key={l.id}>
+          <button
+            type="button"
+            data-for={l.id}
+            className="subnav-chip"
+            data-on={active === l.id}
+            aria-current={active === l.id ? 'true' : undefined}
+            style={l.ink ? ({ '--chip-ink': l.ink } as React.CSSProperties) : undefined}
+            onClick={() => go(l.id)}
+          >
+            {l.label}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+
   return (
-    <nav className="subnav" aria-label={label} ref={railRef}>
-      <span className="subnav-label font-artistic-display">{label}</span>
-      <ul className="subnav-list">
-        {links.map((l) => (
-          <li key={l.id}>
-            <button
-              type="button"
-              data-for={l.id}
-              className="subnav-chip"
-              data-on={active === l.id}
-              aria-current={active === l.id ? 'true' : undefined}
-              style={l.ink ? ({ '--chip-ink': l.ink } as React.CSSProperties) : undefined}
-              onClick={() => go(l.id)}
-            >
-              {l.label}
-            </button>
-          </li>
-        ))}
-      </ul>
+    <nav className="subnav" aria-label={label} ref={railRef} data-variant={variant} data-look={look}
+      data-tinted={tinted || undefined} data-ground={tinted ? active : undefined}>
+      {variant === 'tabs' ? (
+        <div className="subnav-track" ref={trackRef}>
+          <span className="subnav-lit" aria-hidden="true" />
+          {list}
+        </div>
+      ) : (
+        <>
+          <span className="subnav-label font-artistic-display">{label}</span>
+          {list}
+        </>
+      )}
     </nav>
   );
 };

@@ -36,7 +36,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     body: 'Expanding access to education across schools, colleges, and training centers. Nurturing creativity and self reliance through libraries and arts initiatives.',
     cardImageAlt: 'Skill training classroom',
     shortTagline: 'Come for an evening of purpose — see how ENRICH comes to life.',
-    emblemCaption: 'Possibility, on every page.',
+    emblemCaption: 'Possibility on every page.',
     /* Figures from the SNCF activity report, September 2026. Youth skilled
        sums the NIMA, sewing and beautician programmes (4,114 + 16,500 + 631
        = 21,245); schools & colleges is 14 schools and 1 college. */
@@ -60,7 +60,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     accentA: '#c2185b',
     accentB: '#f48fb1',
     headline: 'Empowering Lives, Strengthening Society',
-    body: 'Fostering self reliance among youth and women. Extending care through relief, elder support, and inclusion.',
+    body: 'Driving sustainable social and economic development. Creating skills and career opportunities while working for a clean and green environment.',
     cardImageAlt: 'Youth volunteers planting trees',
     shortTagline: 'Come for an evening of purpose — see how EMPOWER comes to life.',
     emblemCaption: 'Together, we rise.',
@@ -94,7 +94,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     accentA: '#0d6a8c',
     accentB: '#6ac8ed',
     headline: 'Transforming Vision into Lasting Impact',
-    body: 'Our flagship projects embody the vision of health, harmony, and sustainability. From Sant Nirankari Health City to Oneness Vann, the Watershed Program, and Project Amrit, each initiative transforms compassion into lasting infrastructure, creating stronger communities and a better future.',
+    body: 'Flagship projects for health, harmony and sustainability, from Sant Nirankari Health City to Oneness Vann, the Watershed Program, Project Amrit and village development.',
     cardImageAlt: 'Sant Nirankari Health City campus',
     shortTagline: 'Come for an evening of purpose — see how PROJECTS comes to life.',
     emblemCaption: 'One purpose. Lasting impact.',

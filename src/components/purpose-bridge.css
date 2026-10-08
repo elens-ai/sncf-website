@@ -1,0 +1,33 @@
+/* ==========================================================================
+   THE BRIDGE BETWEEN MISSION AND VISION (MissionVision.tsx): each value a
+   lane in its cornerstone's ink, running from what is done today to what it
+   works towards, a light travelling along it.
+   ========================================================================== */
+.purpose-bridge { grid-column: 1 / -1; position: relative; overflow: hidden; padding: 24px clamp(18px, 3vw, 38px) 26px; border-radius: 24px; background: linear-gradient(90deg, #eef5fa, #fff 48%, #f8eff4); box-shadow: inset 0 0 0 1px #e0e9ef; }
+.purpose-bridge-title { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 0 0 18px; font: 800 11px/1.3 var(--font-heading); letter-spacing: 0.14em; text-transform: uppercase; color: #557087; }
+.purpose-bridge-title span:last-child { color: #8b5f7f; }
+.purpose-bridge-title em { font: 400 26px/1 var(--font-script); letter-spacing: 0; text-transform: none; color: #7d7a99; }
+.purpose-bridge ul { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.purpose-bridge li { display: grid; grid-template-columns: 150px minmax(40px, 1fr) 170px; align-items: center; gap: 18px; }
+.purpose-lane-from, .purpose-lane-to { display: inline-flex; align-items: center; padding: 10px 16px; border-radius: 999px; font: 800 13px/1 var(--font-heading); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.purpose-lane-from { justify-self: start; color: var(--a); background: #fff; box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--a) 45%, #fff); }
+.purpose-lane-to { justify-self: end; color: #fff; background: linear-gradient(120deg, var(--a), color-mix(in srgb, var(--b) 70%, var(--a))); box-shadow: 0 12px 22px -14px var(--a); }
+.purpose-lane-track { position: relative; height: 2px; border-radius: 2px; background: linear-gradient(90deg, color-mix(in srgb, var(--a) 70%, transparent), var(--b)); transform-origin: left center; }
+/* the arrowhead at the far end */
+.purpose-lane-track::after { content: ''; position: absolute; right: 0; top: 50%; width: 9px; height: 9px; border-top: 2px solid var(--b); border-right: 2px solid var(--b); translate: 0 -50%; rotate: 45deg; }
+/* the light that travels it */
+.purpose-lane-track i { position: absolute; top: 50%; left: 0; width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px var(--a), 0 0 14px 2px var(--b); translate: -50% -50%; animation: purpose-flow 3.4s cubic-bezier(0.45, 0, 0.55, 1) calc(var(--i) * 0.55s) infinite; }
+.purpose-bridge[data-arrived='true'] .purpose-lane-track { animation: purpose-draw 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i) * 150ms) both; }
+
+@keyframes purpose-flow { 0% { left: 0; opacity: 0; } 12% { opacity: 1; } 86% { opacity: 1; } 100% { left: calc(100% - 6px); opacity: 0; } }
+@keyframes purpose-draw { from { scale: 0 1; } }
+
+@media (max-width: 650px) {
+  .purpose-bridge li { grid-template-columns: auto minmax(28px, 1fr) auto; gap: 10px; }
+  .purpose-lane-from, .purpose-lane-to { padding: 8px 11px; font-size: 11px; }
+  .purpose-bridge-title em { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .purpose-lane-track i { animation: none; left: 50%; }
+  .purpose-bridge[data-arrived='true'] .purpose-lane-track { animation: none; }
+}

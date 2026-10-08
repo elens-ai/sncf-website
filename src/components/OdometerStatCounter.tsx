@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useId } from 'react';
+import './odometer-stat-counter.css';
 
 interface RollingOdometerProps {
   value: string;
@@ -102,11 +103,10 @@ const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
 
   return (
     <div
-      className="relative inline-block overflow-hidden align-middle select-none mx-[0.5px]"
+      className="odometer-digit relative inline-block overflow-hidden select-none"
       style={{
         height: '1.2em',
-        width: '0.62em',
-        verticalAlign: '-0.15em',
+        width: '1ch',
       }}
     >
       {/* Moving Digit Reel */}
@@ -125,7 +125,7 @@ const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
         {reel.map((digit, idx) => (
           <div
             key={idx}
-            className="flex items-center justify-center font-artistic-heading font-extrabold text-white text-center leading-none"
+            className="odometer-character flex items-center justify-center text-center leading-none"
             style={{
               height: '1.2em',
               lineHeight: '1.2em',
@@ -141,7 +141,8 @@ const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
   );
 };
 
-export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
+/* memoised below: a counter whose value has not changed has nothing to redo */
+const OdometerStat: React.FC<RollingOdometerProps> = ({
   value,
   duration = 1100,
   className = '',
@@ -187,7 +188,7 @@ export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
     <div
       ref={containerRef}
       id={`odometer-stat-${uniqueId.replace(/:/g, '')}`}
-      className={`inline-flex items-baseline flex-wrap leading-none ${className}`}
+      className={`odometer-counter inline-flex items-baseline leading-none ${className}`}
       aria-label={value}
       style={{
         fontVariantNumeric: 'tabular-nums',
@@ -211,11 +212,7 @@ export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
         return (
           <span
             key={`symbol-${idx}`}
-            className="font-artistic-heading font-extrabold text-white inline-block select-none leading-none align-baseline tracking-tight"
-            style={{
-              marginRight: token.text === ',' || token.text === '.' ? '0.04em' : '0.08em',
-              marginLeft: token.text === ',' || token.text === '.' ? '0.04em' : '0.08em',
-            }}
+            className="odometer-character inline-block select-none leading-none align-baseline"
           >
             {token.text}
           </span>
@@ -225,5 +222,6 @@ export const OdometerStatCounter: React.FC<RollingOdometerProps> = ({
   );
 };
 
+export const OdometerStatCounter = React.memo(OdometerStat);
 export const FlipClockStatCounter = OdometerStatCounter;
 export const RollingOdometerStatCounter = OdometerStatCounter;

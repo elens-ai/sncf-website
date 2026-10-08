@@ -1,0 +1,80 @@
+/* NIMA's story (NimaStory), in the teals of Enrich on the page's paper: a hero band with its photographs, then its
+   origin, its art forms, its journey, its impact and a closing word, each a block of its own. */
+.nima-story { display: grid; gap: clamp(18px, 2.4vw, 28px); color: #12324a; }
+.nima-kicker { margin: 0; font: 700 10.5px/1.3 var(--font-sans); letter-spacing: .16em; text-transform: uppercase; color: #1d8296; }
+.nima-title { margin: 6px 0 0; font: 600 clamp(22px, 2.4vw, 32px)/1.2 var(--font-sans); letter-spacing: -.01em; color: #0f2f4b; }
+.nima-body { margin: 12px 0 0; font: 400 15px/1.7 var(--font-sans); color: #33505f; }
+.nima-block { padding: clamp(20px, 2.6vw, 34px); border-radius: 22px; background: linear-gradient(160deg, #f6fcfd, #eaf6f8); box-shadow: inset 0 0 0 1px rgb(31 130 150 / .1); }
+
+/* the hero: its name and lines on a deep-to-light teal, the photographs gathered at its right */
+.nima-hero {
+  position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: clamp(18px, 3vw, 40px);
+  padding: clamp(24px, 3vw, 44px); overflow: hidden; border-radius: 22px; color: #fff;
+  background: radial-gradient(80% 120% at 85% 20%, rgb(150 225 235 / .45), transparent 65%), linear-gradient(135deg, #0f4d63, #1b7f96 55%, #5ab8c9);
+}
+.nima-hero .nima-kicker { color: rgb(220 248 250 / .85); }
+.nima-hero-name { margin: 8px 0 0; font: 800 clamp(56px, 7vw, 96px)/.95 var(--font-heading); letter-spacing: .01em; }
+.nima-hero-full { margin: 8px 0 0; font: 500 15px/1.3 var(--font-sans); color: rgb(235 250 252 / .9); }
+.nima-hero-headline { margin: 20px 0 0; font: 600 clamp(20px, 2.1vw, 28px)/1.25 var(--font-sans); letter-spacing: -.01em; }
+.nima-hero-lede { margin: 10px 0 0; font: 400 14px/1.6 var(--font-sans); color: rgb(235 250 252 / .85); }
+.nima-hero-collage { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; height: clamp(260px, 30vw, 380px); }
+.nima-hero-collage figure, .nima-origin-photos figure { margin: 0; overflow: hidden; border-radius: 16px; box-shadow: 0 14px 30px -18px rgb(5 30 45 / .7), 0 0 0 3px rgb(255 255 255 / .7); }
+.nima-hero-collage figure[data-slot='0'] { grid-row: 1 / 3; }
+.nima-hero-collage figure[data-slot='3'] { display: none; }
+.nima-hero-collage img, .nima-origin-photos img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* its origin, the words beside three photographs */
+.nima-origin { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: clamp(18px, 3vw, 40px); }
+.nima-origin-by { margin: 18px 0 0; padding-top: 12px; border-top: 1px solid rgb(31 130 150 / .2); font: 500 13px/1.5 var(--font-sans); color: #1d6b7c; }
+.nima-origin-photos { display: grid; grid-template-columns: 1.4fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; height: clamp(220px, 24vw, 300px); }
+.nima-origin-photos figure { box-shadow: 0 10px 24px -16px rgb(5 30 45 / .6); }
+.nima-origin-photos figure[data-slot='0'] { grid-row: 1 / 3; }
+
+/* the art forms, a card each, and the way through them */
+.nima-form-cards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 20px 0 0; padding: 0; list-style: none; }
+.nima-form-cards li { display: grid; grid-template-rows: auto auto auto; overflow: hidden; border-radius: 16px; background: #fff; box-shadow: 0 10px 24px -18px rgb(5 30 45 / .5), inset 0 0 0 1px rgb(31 130 150 / .12); }
+.nima-form-cards img, .nima-form-art { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.nima-form-art { display: grid; place-items: center; color: #fff; background: radial-gradient(70% 90% at 30% 20%, rgb(255 255 255 / .35), transparent 60%), linear-gradient(135deg, #2cacc0, #7a5fc7 70%, #e07aa8); }
+.nima-form-cards li[data-form='fine-arts'] .nima-form-art { background: radial-gradient(70% 90% at 30% 20%, rgb(255 255 255 / .35), transparent 60%), linear-gradient(135deg, #1b7f96, #3f9f7f 60%, #e2b45a); }
+.nima-form-cards strong { margin: 12px 14px 0; font: 600 14.5px/1.3 var(--font-sans); color: #0f2f4b; }
+.nima-form-cards small { margin: 3px 14px 14px; font: 500 10.5px/1.4 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; color: #5b7a86; }
+.nima-path { position: relative; display: flex; justify-content: space-between; margin: 22px 0 0; padding: 0; list-style: none; }
+.nima-path::before { content: ''; position: absolute; left: 6%; right: 6%; top: 5px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #2cacc0, #8fd3dd); }
+.nima-path li { position: relative; display: grid; justify-items: center; gap: 8px; flex: 1; font: 500 13px/1.2 var(--font-sans); color: #1d5163; }
+.nima-path span { width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px #2cacc0; }
+
+/* the programme's own photographs, a row of them */
+.nima-moments ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+.nima-moments figure { margin: 0; overflow: hidden; border-radius: 16px; background: #fff; box-shadow: 0 10px 24px -18px rgb(5 30 45 / .5), inset 0 0 0 1px rgb(31 130 150 / .12); }
+.nima-moments img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.nima-moments figcaption { padding: 10px 14px 12px; font: 400 12.5px/1.5 var(--font-sans); color: #33505f; }
+
+/* the journey's own panel keeps its place while its globe loads */
+.nima-journey-waiting { min-height: clamp(460px, 44vw, 600px); border-radius: 22px; background: linear-gradient(160deg, #0c2d3c, #12495a 55%, #0e3a4a); }
+
+/* its impact, four figures across */
+.nima-impact { text-align: center; }
+.nima-impact-figures { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 22px 0 0; }
+.nima-impact-figures > div { display: grid; gap: 4px; padding: 6px 12px; }
+.nima-impact-figures > div + div { border-left: 1px solid rgb(31 130 150 / .2); }
+.nima-impact-figures dd { margin: 0; }
+.nima-impact-figures .nima-impact-value { order: -1; font: 600 clamp(34px, 3.6vw, 48px)/1 var(--font-sans); letter-spacing: -.02em; color: #0f2f4b; font-variant-numeric: tabular-nums; }
+.nima-impact-figures dt { font: 600 14px/1.3 var(--font-sans); color: #1d5163; }
+.nima-impact-figures .nima-impact-when { font: 400 12px/1.4 var(--font-sans); letter-spacing: 0; color: #6a8792; }
+.nima-impact-note { margin: 18px auto 0; max-width: 560px; padding-top: 14px; border-top: 1px solid rgb(31 130 150 / .15); font: 400 13px/1.6 var(--font-sans); color: #4d6b77; }
+
+/* a closing word, over the centre's own people */
+.nima-closing { display: grid; align-content: center; justify-items: start; gap: 6px; min-height: 200px; padding: clamp(24px, 3vw, 44px); border-radius: 22px; color: #fff;
+  background: linear-gradient(90deg, rgb(8 40 58 / .88), rgb(8 40 58 / .55) 55%, rgb(8 40 58 / .2)), var(--photo) center 30% / cover no-repeat; }
+.nima-closing-line { margin: 0; font: 600 clamp(24px, 2.6vw, 36px)/1.2 var(--font-sans); letter-spacing: -.01em; }
+.nima-closing-script { margin: 0; font: 400 clamp(24px, 2.6vw, 34px)/1.2 var(--font-script); color: #a6ecf0; }
+
+@media (max-width: 900px) {
+  .nima-hero, .nima-origin { grid-template-columns: 1fr; }
+  .nima-form-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nima-form-cards li:last-child { grid-column: 1 / -1; }
+  .nima-impact-figures { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 18px; }
+  .nima-impact-figures > div:nth-child(3) { border-left: 0; }
+  .nima-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 16px; }
+  .nima-path::before { display: none; }
+}

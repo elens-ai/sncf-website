@@ -9,7 +9,9 @@ import type { ActivityIcon } from './activityIcons';
  * source of truth. Only the report's latest figures are shown, and every
  * activity is dated to the report: As on September 2026. Earlier rows of a
  * sheet (previous periods, yearly breakdowns, "added" rows) are left out, as
- * the foundation asked.
+ * the foundation asked. Chiropractic Services is from the foundation's own
+ * record of its camps at the Samagams (camp by camp, 2017 to 2026), of which
+ * only the totals are shown, likewise.
  *
  * `dataPoints` is the whole column set for that activity, not a selection —
  * this is what the frame opens onto, so nothing the report gives should be
@@ -101,6 +103,36 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     images: [],
   },
   {
+    id: 'chiropractic',
+    pillarId: 'heal',
+    title: 'Chiropractic Services',
+    period: 'As on September 2026',
+    blurb:
+      'Chiropractic care at the International Samagams in Delhi–Samalkha and Maharashtra, given by visiting doctors.',
+    headline: { label: 'Patients treated', value: '83,146' },
+    dataPoints: [
+      { label: 'Patients treated', value: '83,146' },
+      { label: 'Camps organised', value: '14' },
+      { label: 'Years of service', value: '9' },
+      { label: 'Camps at Delhi–Samalkha', value: '7' },
+      { label: 'Camps in Maharashtra', value: '7' },
+    ],
+    images: [],
+  },
+  {
+    id: 'blood-bank',
+    pillarId: 'heal',
+    title: 'Blood Bank',
+    period: 'As on September 2026',
+    blurb: 'The foundation’s own blood banking, separate from the donation camps.',
+    headline: { label: 'Units', value: '54,261' },
+    dataPoints: [
+      { label: 'Units', value: '54,261' },
+      { label: 'Camps', value: '444' },
+    ],
+    images: [],
+  },
+  {
     id: 'health-centre',
     pillarId: 'heal',
     title: 'Sant Nirankari Health Centre',
@@ -118,19 +150,6 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
       { label: 'X-ray centres', value: '2' },
       { label: 'Dental centres', value: '6' },
       { label: 'Eye centres', value: '5' },
-    ],
-    images: [],
-  },
-  {
-    id: 'blood-bank',
-    pillarId: 'heal',
-    title: 'Blood Bank',
-    period: 'As on September 2026',
-    blurb: 'The foundation’s own blood banking, separate from the donation camps.',
-    headline: { label: 'Units', value: '54,261' },
-    dataPoints: [
-      { label: 'Units', value: '54,261' },
-      { label: 'Camps', value: '444' },
     ],
     images: [],
   },
@@ -431,6 +450,8 @@ const PRESENTATION: Record<string, Partial<Activity>> = {
     /* Satguru Mata ji and Ramit ji at the centre of the team photograph. */
     hoverFocus: { photo: 2, x: 52, y: 63, width: 11, height: 21 },
   },
+  /* no photographs of the camps yet: its symbol stands in */
+  chiropractic: { icon: 'spine', menuLabel: 'Chiropractic' },
   'blood-bank': {
     icon: 'droplet', menuLabel: 'Blood Bank',
     images: [

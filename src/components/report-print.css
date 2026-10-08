@@ -1,0 +1,27 @@
+/* ==========================================================================
+   A PRINTED REPORT (utils/printReport.ts): an A4 copy of a cornerstone's or
+   project's report, shown only to the printer, the page hidden from it.
+   ========================================================================== */
+.report-print-root { display: none; }
+@media print {
+  @page { size: A4; margin: 16mm 15mm 18mm; }
+  body.printing-report > :not(.report-print-root) { display: none !important; }
+  body.printing-report > .report-print-root { display: block; }
+  body.printing-report { background: #fff !important; }
+}
+.report-sheet { font: 400 10pt/1.5 'Outfit Numbers', 'Outfit', system-ui, sans-serif; color: #063782; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.report-sheet-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16pt; padding-bottom: 12pt; margin-bottom: 16pt; border-bottom: 3pt solid var(--ink); }
+.report-sheet-head img { width: 54pt; height: 54pt; object-fit: contain; }
+.report-sheet-foundation { margin: 0; font-size: 8pt; letter-spacing: .16em; text-transform: uppercase; color: #5a706b; }
+.report-sheet h1 { margin: 4pt 0 2pt; font: 800 22pt/1.15 'Outfit Numbers', 'SNCF Flared', 'Outfit', sans-serif; color: var(--ink); }
+.report-sheet-subtitle { margin: 0; font-size: 10pt; color: #4e625c; }
+.report-sheet-programme { break-inside: avoid; margin: 0 0 14pt; padding-bottom: 10pt; border-bottom: .5pt solid #d5ddd9; }
+.report-sheet h2 { margin: 0; font: 700 13pt/1.3 'Outfit Numbers', 'Outfit', sans-serif; color: #063782; }
+.report-sheet-period { margin: 2pt 0 4pt; font-size: 8.5pt; color: #5a706b; }
+.report-sheet-blurb { margin: 0 0 6pt; color: #3d5751; }
+.report-sheet table { width: 100%; border-collapse: collapse; }
+.report-sheet th,
+.report-sheet td { padding: 3pt 0; border-top: .5pt solid #e3e9e5; text-align: left; font-weight: 400; }
+.report-sheet td { text-align: right; font-weight: 700; color: var(--ink); white-space: nowrap; padding-left: 12pt; }
+.report-sheet-foot { display: flex; justify-content: space-between; gap: 12pt; margin-top: 14pt; font-size: 8pt; color: #5a706b; }
+.report-sheet-foot p { margin: 0; }

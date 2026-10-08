@@ -9,6 +9,7 @@ import { PILLARS } from '../data/pillars';
 import { PillarGlyph } from './CardIllustration';
 import { FoilStroke } from './FoilStroke';
 import { OdometerStatCounter } from './OdometerStatCounter';
+import { EventShare } from './EventShare';
 import './invitation.css';
 const c = (key: string, fallback: string) => getCMSCopy(`copy.InvitationCard.${key}`, fallback);
 
@@ -121,6 +122,8 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({ item, onClose })
               {event.href && <a href={event.href} target="_blank" rel="noopener noreferrer" className="invite-secondary">{c('74fa7d10facc', 'Take part')}<ArrowUpRight size={15} /></a>}
               <a href={getCMSLink("copy.Link.InvitationCard.e3dc1a537132", "tel:+911147660380")} className="invite-phone"><Phone size={13} />{c('56a8d952ed9d', 'Venue near you: 011-47660380')}</a>
             </div>
+            {/* pass the invitation on: the networks, its link, or another calendar */}
+            <EventShare item={item} when={date ? date.toLocaleDateString('en-GB', { dateStyle: 'full' }) : c('f0ba2cd588e0', 'Year-round')} className="invite-share" />
             <p className="invite-signature font-signature">{c('56219e473693', 'Service with Humility')}</p>
           </div>
         </div>

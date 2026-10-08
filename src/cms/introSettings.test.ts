@@ -6,6 +6,7 @@ test('intro hold times read seconds and fall back on anything unusable', () => {
   assert.equal(introSeconds('11', 11), 11000);
   assert.equal(introSeconds(' 8.5 ', 11), 8500);
   assert.equal(introSeconds('7,5', 11), 7500);
+  assert.equal(introSeconds('2.5', 3), 2500, 'a page of a few seconds');
   assert.equal(introSeconds('', 11), 11000);
   assert.equal(introSeconds('soon', 24), 24000);
   assert.equal(introSeconds('1', 11), 11000, 'too short to read');

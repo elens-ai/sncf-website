@@ -14,7 +14,12 @@ import { Pause, Play } from 'lucide-react';
  * chapter's line fills while it plays, pressing a chapter's name plays it, and
  * the button pauses or resumes. Pointing at the copy, or moving through the
  * rail by keyboard, holds it too, for as long as that lasts. The last chapter
- * running out ends the page.
+ * running out ends the page. Each chapter plays for an equal share of the
+ * page's time, a few seconds, as the pages before it do; a viewer who wants
+ * to read on holds it.
+ *
+ * The message page before it plays as a sequence of one, its own markup as
+ * the chapter, so it has the same rail.
  *
  * Every chapter stays in the document, so a screen reader hears all of it in
  * order. Set still (reduced motion), the chapters are simply set one after
@@ -40,6 +45,8 @@ export interface MissionChapter {
   parts?: MissionPart[];
   /** A phrase picked out wherever the body says it, in the script. */
   highlight?: string;
+  /** A chapter that brings its own markup, set as given, as the Satguru's message does. */
+  content?: React.ReactNode;
 }
 
 /* The paragraph with each mention of the phrase picked out. */
@@ -50,13 +57,6 @@ const marked = (paragraph: string, phrase?: string) => {
   ));
 };
 
-/* Roughly how long a chapter takes to read. The page's total is shared out in
-   these proportions, with a floor so a short chapter still has time to land. */
-const readingWeight = (chapter: MissionChapter): number =>
-  2400 + ((chapter.statement?.length ?? 0) + (chapter.quote?.length ?? 0)) * 30 + chapter.body.join(' ').length * 28
-  + (chapter.parts ?? []).reduce((sum, part) => sum + readingWeight({ id: '', label: '', ...part }) - 2400, 0);
-const SHORTEST_MS = 6000;
-
 const numeral = (index: number) => String(index + 1).padStart(2, '0');
 /* Focus that arrived by keyboard; browsers too old to tell never hold the sequence. */
 const byKeyboard = (element: EventTarget) => {
@@ -65,7 +65,7 @@ const byKeyboard = (element: EventTarget) => {
 
 export const MissionChapters: React.FC<{
   chapters: MissionChapter[];
-  /** The whole sequence's length, shared out by how much each chapter says. */
+  /** The whole sequence's length, shared equally among its chapters. */
   totalMs: number;
   still: boolean;
   labels: { rail: string; pause: string; play: string };
@@ -81,13 +81,7 @@ export const MissionChapters: React.FC<{
   const [keyboard, setKeyboard] = useState(false);
   const paused = held || pointing || keyboard;
 
-  /* Keyed by the weights, not the array, which the page rebuilds on every render. */
-  const weights = chapters.map(readingWeight).join(' ');
-  const durations = useMemo(() => {
-    const each = weights.split(' ').map(Number);
-    const scale = totalMs / each.reduce((sum, weight) => sum + weight, 0);
-    return each.map(weight => Math.max(SHORTEST_MS, Math.round(weight * scale)));
-  }, [weights, totalMs]);
+  const chapterMs = Math.round(totalMs / chapters.length);
   /* Touch screens report a pointer entering on every tap and never leaving,
      so only a real hover holds the sequence. */
   const canHover = useMemo(() => window.matchMedia('(hover: hover)').matches, []);
@@ -103,7 +97,7 @@ export const MissionChapters: React.FC<{
   const clock = useRef({ run: -1, left: 0 });
   useEffect(() => {
     if (still) return;
-    if (clock.current.run !== run) clock.current = { run, left: durations[active] };
+    if (clock.current.run !== run) clock.current = { run, left: chapterMs };
     if (paused) return;
     const started = performance.now();
     const timer = window.setTimeout(() => (active < chapters.length - 1 ? play(active + 1) : onEnd()), clock.current.left);
@@ -111,7 +105,7 @@ export const MissionChapters: React.FC<{
       window.clearTimeout(timer);
       clock.current.left -= performance.now() - started;
     };
-  }, [still, paused, run, active, durations, chapters.length, play, onEnd]);
+  }, [still, paused, run, active, chapterMs, chapters.length, play, onEnd]);
 
   if (still) {
     return (
@@ -157,10 +151,11 @@ export const MissionChapters: React.FC<{
             aria-current={index === active ? 'step' : undefined}
             data-done={index < active}
             onClick={() => play(index)}
-            style={{ '--d': `${durations[index]}ms` } as React.CSSProperties}
+            style={{ '--d': `${chapterMs}ms` } as React.CSSProperties}
           >
             <span className="mission-chapter-progress" aria-hidden="true"><i key={index === active ? run : undefined} /></span>
-            <span className="mission-chapter-number" aria-hidden="true">{numeral(index)}</span>
+            {/* a sequence of one is not numbered */}
+            {chapters.length > 1 && <span className="mission-chapter-number" aria-hidden="true">{numeral(index)}</span>}
             <span className="mission-chapter-label">{chapter.label}</span>
           </button>
         ))}
@@ -187,7 +182,7 @@ const Chapter: React.FC<{
       onPointerEnter={onPoint && (() => onPoint(true))}
       onPointerLeave={onPoint && (() => onPoint(false))}
     >
-      {chapter.parts ? (
+      {chapter.content ? chapter.content : chapter.parts ? (
         <div className="mission-chapter-parts">
           {chapter.parts.map(part => (
             <section key={part.title} className="mission-chapter-part">

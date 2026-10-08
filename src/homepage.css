@@ -15,11 +15,21 @@
 .home-page > .accent-canvas { position: fixed; inset: 0; }
 .home-page {
   --home-paper: #f4f1e9;
+  --home-line: rgb(255 255 255 / .16);
+  --home-ease: cubic-bezier(.22, 1, .36, 1);
+  /* the shore: the band under the landing where its ground meets the water,
+     which the hall's backdrops reach up beneath (home-landing.css,
+     pillar-background.css) */
+  --shore-band: clamp(120px, 18vh, 220px);
+}
+/* The ink and tint mixed from the page's accent, worked out on the things that
+   use them (the header, the social rail, the hall, a focused control) rather
+   than on the page: there, every turn of the hall changed them for every
+   element of the page and restyled it all. */
+.home-page :is(#site-header, #hero-social-sidebar, #hero-clone-stage, :is(button, a, input):focus-visible) {
   --pillar-ui-ink: color-mix(in srgb, var(--accent-a) 42%, #103932);
   --pillar-ui-tint: color-mix(in srgb, var(--accent-b) 55%, #fff);
   --pillar-ui-shadow: color-mix(in srgb, var(--pillar-ui-ink) 35%, transparent);
-  --home-line: rgb(255 255 255 / .16);
-  --home-ease: cubic-bezier(.22, 1, .36, 1);
 }
 .home-page :is(h1, h2, h3) { text-wrap: balance; }
 .home-page :is(button, a, input):focus-visible {
@@ -39,6 +49,40 @@
 #hero-social-sidebar { opacity: .7; transition: opacity 300ms ease; }
 #hero-social-sidebar:hover, #hero-social-sidebar:focus-within { opacity: 1; }
 #hero-clone-stage { padding-top: 112px; padding-bottom: 28px; min-height: 100svh; }
+/* it takes focus only when a landing door leads into it, never by tabbing */
+#hero-clone-stage:focus { outline: none; }
+/* THE HALL'S TRACK (HomePage): the hero pinned while the page scrolls one
+   screen per path, Heal, then Enrich, then Empower, then Projects. A hero
+   taller than the screen first scrolls to its foot and then holds there
+   (--hero-sticky-top, --hero-height: HeroSection measures both). No snap
+   points: the hall is pinned, so they changed nothing on screen and only
+   pulled the scroll back mid-way, turning the page back and forth. */
+.hero-track { position: relative; z-index: 10; flex: none; height: calc(var(--hero-height, 100vh) + (var(--hero-count, 4) - 1) * 100vh); }
+.hero-track > #hero-clone-stage { position: sticky; top: var(--hero-sticky-top, 0px); }
+/* THE HALL'S PAGES TURN (HeroSection): the page in view leaves upwards, fading
+   and settling back a little, while the next rises from below into its place.
+   A view transition draws the two pages at once; it is named only while
+   turning, and nothing else on the page is animated by it. */
+html.hero-turning .hero-track #hero-foreground-content { view-transition-name: hero-page; }
+/* behind the turning hall the page is just the live page: the page itself is
+   not captured (a snapshot of the whole screen, taken twice and drawn through
+   a copy every frame of the turn), only the hall's page is. The page stays put
+   in the hall, so its frame does not move or resize: only the two pages do,
+   in opacity and transform, which the compositor draws on its own. */
+html.hero-turning { view-transition-name: none; }
+html.hero-turning::view-transition-group(hero-page) { animation: none; }
+html.hero-turning::view-transition-old(hero-page), html.hero-turning::view-transition-new(hero-page) { mix-blend-mode: normal; }
+html.hero-turning::view-transition-old(hero-page) { animation: hero-page-fade-out 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-leave 850ms cubic-bezier(.22, 1, .36, 1) both; }
+html.hero-turning::view-transition-new(hero-page) { animation: hero-page-fade-in 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-arrive 850ms cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes hero-page-fade-out { to { opacity: 0; } }
+@keyframes hero-page-leave { to { transform: translateY(-6vh) scale(.985); } }
+@keyframes hero-page-fade-in { from { opacity: 0; } }
+@keyframes hero-page-arrive { from { transform: translateY(6vh); } }
+/* scrolling back up: the page in view sinks back below, and the one before it returns from above */
+html.hero-turning.hero-turning-back::view-transition-old(hero-page) { animation: hero-page-fade-out 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-sink 850ms cubic-bezier(.22, 1, .36, 1) both; }
+html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation: hero-page-fade-in 650ms cubic-bezier(.22, 1, .36, 1) both, hero-page-return 850ms cubic-bezier(.22, 1, .36, 1) both; }
+@keyframes hero-page-sink { to { transform: translateY(6vh); } }
+@keyframes hero-page-return { from { transform: translateY(-6vh) scale(.985); } }
 #hero-foreground-content { max-width: 1440px; margin-inline: auto; gap: 36px; }
 /* Starts on the same line as the HEAL letters, which sit a few pixels inside their box. */
 .hero-eyebrow { display: flex; align-items: center; margin-bottom: 24px; padding-left: 3px; font-size: 12px; color: rgb(255 255 255 / .86); }
@@ -76,13 +120,19 @@
 .hero-impact > div + div { border-left: 1px solid var(--home-line); padding-left: 24px; }
 .hero-impact > div > span:first-child { font-family: var(--font-sans); font-weight: 400; font-size: 29px; }
 .hero-impact > div > span:last-child { margin-top: 6px; font-family: var(--font-sans); font-size: 11px; color: rgb(255 255 255 / .62); }
-[id^='hero-learn-more-'] {
-  background: var(--home-paper) !important;
-  color: var(--pillar-ui-ink, #163a33);
-  box-shadow: 0 8px 28px rgb(0 0 0 / .12) !important;
-  padding: 15px 24px;
-  font-family: var(--font-sans);
-  font-size: 12px; font-weight: 600; text-transform: none; letter-spacing: .025em;
+/* Explore, under the story: words on a hairline with their arrow, no button
+   face, as each chapter's own Explore below (mosaic-chapter.css,
+   .activity-chapter-explore), whose measures these are. */
+#hero-clone-stage .hero-explore-link { display: inline-flex; align-items: center; justify-content: center; gap: 18px; min-height: 46px; padding: 12px 0; border: 0; border-bottom: 1px solid #ffffff68; border-radius: 0; background: none; color: #fff; font: 500 12px/1.4 var(--font-sans); cursor: pointer; transition: color .25s, border-color .25s; }
+#hero-clone-stage .hero-explore-link svg { transition: transform .3s ease; }
+#hero-clone-stage .hero-explore-link:hover { border-color: #fff; }
+#hero-clone-stage .hero-explore-link:hover svg { transform: translate(3px, -3px); }
+#hero-clone-stage .hero-explore-link:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
+@media (max-width: 767px) {
+  #hero-clone-stage .hero-explore-link { min-height: 44px; padding: 8px 0; gap: 14px; font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hero-clone-stage .hero-explore-link, #hero-clone-stage .hero-explore-link svg { transition: none; }
 }
 .hero-bottom-line { position: relative; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 20px auto 0; width: 100%; max-width: 1280px; padding: 20px 0 0; border-top: 1px solid var(--home-line); color: rgb(255 255 255 / .5); font: 11px var(--font-sans); }
 .hero-playback { display: flex; align-items: center; gap: 20px; padding-right: 180px; }
@@ -106,7 +156,7 @@
 .home-event-ticket > div > p { line-height: 1.7; }
 
 /* Photographs retain their revolving arrangement; framing is softened. */
-#awards-section .award-card { border-radius: 18px; border: 1px solid rgb(255 255 255 / .2); box-shadow: 0 32px 65px -25px rgb(0 0 0 / .55); }
+#awards-section .award-card { border-radius: 18px; border: 1px solid rgb(255 255 255 / .2); box-shadow: 0 32px 65px -25px rgb(6 55 130 / .55); }
 #awards-section .award-title { font-family: var(--font-sans); font-weight: 400; letter-spacing: -.035em; }
 #awards-section .award-title em { color: #e8d7b7; font-weight: 400; }
 /* The year as a watermark behind the masthead: light, outlined, and it
@@ -197,11 +247,12 @@
 #awards-section .award-glow { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 46% 42% at 50% 58%, color-mix(in srgb, var(--accent-b) 28%, transparent), transparent 70%), radial-gradient(ellipse 30% 30% at 18% 30%, color-mix(in srgb, var(--accent-a) 22%, transparent), transparent 70%); animation: award-glow-drift 14s ease-in-out infinite alternate; }
 @keyframes award-glow-drift { from { transform: translate3d(-2%, 1%, 0) scale(1); } to { transform: translate3d(2%, -2%, 0) scale(1.06); } }
 #awards-section .award-card { border-radius: 22px; transition-property: transform, filter, opacity, left, height, bottom, box-shadow; }
-#awards-section .award-card--center { box-shadow: 0 60px 120px -30px rgb(0 0 0 / .85), 0 0 0 1px rgb(255 255 255 / .25); }
+#awards-section .award-card--center { box-shadow: 0 60px 120px -30px rgb(6 55 130 / .85), 0 0 0 1px rgb(255 255 255 / .25); }
 @media (prefers-reduced-motion: reduce) { #awards-section .award-glow { animation: none; } }
 /* The hero's exit (HeroSection writes --hero-exit as it scrolls away): everything but the petals fades,
    and the watermark swells and brightens into the ghost petals the overture below assembles. */
 #hero-foreground-content { opacity: calc(1 - var(--hero-exit, 0)); }
+.home-page .hero-path-tabs { opacity: max(0, calc(1 - var(--hero-exit, 0) * 1.6)); }
 #hero-lotus-watermark img { opacity: calc(.045 + var(--hero-exit, 0) * .16); transform: scale(calc(1 + var(--hero-exit, 0) * .22)); }
 
 
@@ -213,17 +264,17 @@
 .hero-model-card { position: relative; }
 .hero-model-plate { position: absolute; z-index: 0; inset: -30% -30% -46%; }
 .hero-model-plate[data-tone='light'] { --foil: color-mix(in srgb, var(--plate-tint, #fff) 82%, #fff); --frame: rgb(255 255 255 / .95); }
-.hero-model-plate[data-tone='deep'] { --foil: color-mix(in srgb, var(--plate-accent, #000) 82%, #06202b); --frame: rgb(255 255 255 / .9); }
-.hero-plate-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 22px 26px rgb(0 0 0 / .38)); transition: filter 300ms ease; }
-.hero-model-card[data-front='true'] .hero-plate-art { filter: drop-shadow(0 30px 34px rgb(0 0 0 / .48)); }
+.hero-model-plate[data-tone='deep'] { --foil: color-mix(in srgb, var(--plate-accent, #063782) 82%, #06202b); --frame: rgb(255 255 255 / .9); }
+.hero-plate-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 22px 26px rgb(6 55 130 / .38)); transition: filter 300ms ease; }
+.hero-model-card[data-front='true'] .hero-plate-art { filter: drop-shadow(0 30px 34px rgb(6 55 130 / .48)); }
 .hero-plate-ink { fill: var(--foil); }
 .hero-plate-frame { fill: none; stroke: var(--frame); stroke-width: 2.4; }
 .hero-model-name {
   position: absolute; left: 0; right: 0; bottom: 0;
   margin: 0; text-align: center;
-  font: 600 calc(var(--hero-model-size, 320px) * .085)/1 'Cinzel', 'Times New Roman', serif;
+  font: 600 calc(var(--hero-model-size, 320px) * .085)/1 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   letter-spacing: .3em; text-indent: .3em; text-transform: uppercase;
-  color: #fff; text-shadow: 0 2px 14px rgb(0 0 0 / .45);
+  color: #fff; text-shadow: 0 2px 14px rgb(6 55 130 / .45);
 }
 .hero-model-name::before {
   content: ''; position: absolute; left: 50%; bottom: calc(100% + var(--hero-model-size, 320px) * .05);
@@ -239,16 +290,12 @@
 .home-page .mosaic-explore-all { padding: 12px 18px; border: 1px solid color-mix(in srgb, var(--chapter-b) 45%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--chapter-a) 15%, transparent); }
 .home-page .mosaic-explore-all:hover { background: color-mix(in srgb, var(--chapter-a) 40%, transparent); }
 .home-page #events-section { background: radial-gradient(ellipse at 5% 25%, #f3d9a510, transparent 48%); }
-.home-page #events-section .home-event-ticket { box-shadow: 0 24px 50px -30px #0009; }
-.home-page #awards-section { background: radial-gradient(ellipse at 50% 65%, #dcc69a14, transparent 60%); }
+.home-page #events-section .home-event-ticket { box-shadow: 0 24px 50px -30px #06378299; }
+.home-page #awards-section:not(.recognition-hub) { background: radial-gradient(ellipse at 50% 65%, #dcc69a14, transparent 60%); }
 .home-page #partners-section { background: radial-gradient(ellipse at 90% 65%, color-mix(in srgb, var(--accent-b) 13%, transparent), transparent 62%); }
 .home-page #hero-clone-stage .hero-activity-art { opacity: calc(1 - var(--hero-exit, 0)); }
 
 /* The hero uses contextual line art in place of the former 3D carousel. */
-.hero-pillar-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 30px; }
-.hero-pillar-controls button { padding: 9px 14px; border: 1px solid #ffffff35; border-radius: 999px; font-size: 11px; color: #fff; cursor: pointer; background: #ffffff08; }
-.hero-pillar-controls button[aria-pressed='true'] { background: #f4f1e9; border-color: #f4f1e9; color: #163a33; }
-.hero-pillar-controls button:hover { border-color: #ffffffa0; }
 @media (min-width: 1024px) { #hero-clone-stage .hero-activity-art .pillar-artwork svg { right: -5%; width: 65%; } }
 @media (max-width: 1023px) { #hero-clone-stage .hero-activity-art .pillar-art-lines { opacity: .2; } }
 
@@ -258,3 +305,13 @@
 #site-header .search-morph:focus-within { background: transparent; border-color: transparent; box-shadow: none; backdrop-filter: none; }
 #site-header .search-morph::after,
 #site-header .search-sheen { display: none; }
+
+/* ----- the water under the hall (HeroSection → MosaicWaves) ----------------
+   The chapters' layered-wave artwork, laid beneath each path's page in that
+   path's colours and kept quiet: faint under the words on the left, fuller
+   behind the photographs on the right (the artwork's own mask), and at just
+   over half strength overall so the page's canvas still reads through. */
+#hero-clone-stage .hero-waves { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .58; mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); }
+#hero-clone-stage .hero-waves .mosaic-waves { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 900ms ease; }
+#hero-clone-stage .hero-waves .mosaic-waves[data-ready='true'] { opacity: 1; }
+@media (forced-colors: active), (prefers-contrast: more) { #hero-clone-stage .hero-waves { display: none; } }

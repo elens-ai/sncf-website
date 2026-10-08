@@ -62,7 +62,6 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
   #site-header #donate-ribbon-btn { width: 44px; justify-content: center; padding: 0; clip-path: none !important; border-radius: 50%; }
   #site-header #donate-ribbon-btn .donate-ribbon-heart { display: block; margin: 0; }
   #site-header #donate-ribbon-btn > span:last-child { display: none; }
-  .reading-room .projects-directory-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {

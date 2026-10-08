@@ -1,0 +1,68 @@
+.recognition-hub { position: relative; z-index: 10; scroll-margin-top: 72px; background: #102e56; padding-top: clamp(30px, 4svh, 50px); }
+.archive-tabs { display: flex; width: fit-content; max-width: calc(100% - 48px); margin: 0 auto; border-bottom: 1px solid #d4e2f033; gap: clamp(16px, 4vw, 64px); }
+.archive-tabs button { position: relative; display: flex; align-items: center; gap: 10px; padding: 16px 0; border: 0; background: none; color: #b9cde3; font: 500 clamp(11px, 1.1vw, 15px)/1.5 var(--font-sans); cursor: pointer; }
+.archive-tabs button span { color: #acc0da; font-size: 9px; }
+.archive-tabs button::after { content: ''; position: absolute; inset: auto 0 -1px; height: 2px; background: #f2d59a; transform: scaleX(0); transition: transform .3s; }
+.archive-tabs button[aria-selected='true'] { color: #fff4df; }
+.archive-tabs button[aria-selected='true']::after { transform: scaleX(1); }
+.archive-tabs button:focus-visible { outline: 2px solid #f2d59a; outline-offset: 5px; }
+@media(max-width:540px) { .archive-tabs { gap: 18px; } .archive-tabs button { gap: 5px; } .archive-tabs button span { display: none; } }
+/* An editorial archive: loose prints, one brought forward, its record alongside. */
+.recognition-archive {
+  position: relative; z-index: 10; isolation: isolate; overflow: clip;
+  padding: clamp(32px, 4vw, 60px) max(28px, 6vw) 48px;
+  scroll-margin-top: 72px; color: #f7f2e8;
+  background: radial-gradient(ellipse at 25% 70%, #24497566, transparent 65%), #102e56;
+  border-top: 0;
+}
+.recognition-archive[data-category='awards'] { background: radial-gradient(ellipse at 60% 60%, #315c8466, transparent 65%), #16375e; }
+.recognition-archive[data-category='press'] { background: radial-gradient(ellipse at 25% 70%, #28687e44, transparent 65%), #102e56; }
+.archive-inner { max-width: 1440px; margin-inline: auto; }
+.archive-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 28px; }
+.archive-eyebrow { display: flex; align-items: center; gap: 16px; margin: 0 0 18px; font: 500 10px/1.4 var(--font-sans); letter-spacing: .18em; text-transform: uppercase; color: #d0ddec; }
+.archive-eyebrow span { color: #e7cc91; }
+.archive-heading h2 { margin: 0; font: 400 clamp(36px, 4.6vw, 68px)/1.12 var(--font-serif, Georgia, serif); letter-spacing: -.035em; color: #fff4df; }
+.archive-intro { max-width: 530px; margin: 18px 0 0; font: 400 14px/1.8 var(--font-sans); color: #c6d6e8; }
+.archive-catalogue { display: grid; gap: 9px; flex: none; padding-bottom: 4px; font: 400 11px/1.5 var(--font-sans); letter-spacing: .09em; color: #d0ddec; text-align: right; }
+.archive-exhibition { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: center; }
+.archive-desk { position: relative; height: clamp(370px, 48svh, 550px); min-width: 0; width: min(100%, 1000px); margin-inline: auto; }
+.archive-print {
+  position: absolute; top: 50%; left: 47%; width: min(48%, calc(min(380px, 37svh) * var(--print-ratio))); max-height: 86%;
+  padding: 7px; border: 1px solid #fff4df66; border-radius: 2px; background: #f7f2e8; color: #063782;
+  box-shadow: 0 25px 48px -16px #071e43aa; cursor: pointer;
+  transform: translate(-50%, -50%) rotate(0deg); z-index: 5;
+  transition: left .85s cubic-bezier(.22,1,.36,1), top .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1), width .85s cubic-bezier(.22,1,.36,1), box-shadow .35s;
+}
+.archive-print img { display: block; width: 100%; height: auto; max-height: min(400px, 40svh); object-fit: contain; pointer-events: none; }
+.archive-print[data-slot='1'] { left: 19%; top: 44%; width: min(29%, calc(min(270px, 28svh) * var(--print-ratio))); transform: translate(-50%, -50%) rotate(-11deg); z-index: 4; }
+.archive-print[data-slot='2'] { left: 28%; top: 65%; width: min(32%, calc(min(270px, 28svh) * var(--print-ratio))); transform: translate(-50%, -50%) rotate(7deg); z-index: 3; }
+.archive-print[data-slot='3'] { left: 73%; top: 60%; width: min(30%, calc(min(270px, 28svh) * var(--print-ratio))); transform: translate(-50%, -50%) rotate(12deg); z-index: 2; }
+.archive-print[data-slot='4'] { left: 64%; top: 35%; width: min(28%, calc(min(270px, 28svh) * var(--print-ratio))); transform: translate(-50%, -50%) rotate(-9deg); z-index: 1; }
+.archive-print:not([data-slot='0']):hover { transform: translate(-50%, -54%) rotate(0); z-index: 6; }
+.archive-print-enlarge { position: absolute; bottom: 14px; right: 14px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #063782; color: #fff4df; opacity: 0; transition: opacity .2s; }
+.archive-print[data-slot='0'] .archive-print-enlarge { opacity: 1; }
+.archive-controls { display: flex; gap: 8px; align-items: center; margin: 10px auto 0; width: min(100%, 220px); }
+.archive-controls button { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid #c4d8f044; border-radius: 50%; color: #f7f2e8; background: transparent; cursor: pointer; }
+.archive-controls button:hover { background: #ffffff12; }
+.archive-controls button:disabled { opacity: .35; cursor: default; }
+.archive-controls span { flex: 1; font: 400 10px/1.5 var(--font-sans); color: #c6d6e8; text-align: center; }
+.recognition-archive :is(button, a):focus-visible { outline: 2px solid #f2d59a; outline-offset: 5px; }
+.archive-empty { padding-block: 80px; color: #c6d6e8; }
+@media (max-width: 900px) {
+  .archive-exhibition { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .archive-desk { height: 470px; }
+  .archive-heading h2 { font-size: clamp(36px, 6vw, 56px); }
+}
+@media (max-width: 540px) {
+  .recognition-archive { padding: 32px 24px 30px; }
+  .archive-heading { align-items: flex-start; gap: 14px; }
+  .archive-catalogue { font-size: 9px; min-width: 60px; padding-top: 2px; }
+  .archive-intro { font-size: 12px; }
+  .archive-desk { height: 350px; }
+  .archive-print { width: 62%; max-height: 90%; padding: 5px; }
+  .archive-print img { max-height: 300px; }
+  .archive-print[data-slot='1'] { left: 18%; width: 37%; }
+  .archive-print[data-slot='2'] { left: 28%; width: 36%; }
+  .archive-print[data-slot='3'] { left: 78%; width: 35%; }
+}
+@media (prefers-reduced-motion: reduce) { .recognition-archive *, .recognition-archive *::before { animation: none !important; transition: none !important; } }

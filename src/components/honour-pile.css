@@ -1,0 +1,97 @@
+/* ==========================================================================
+   THE PILE OF HONOURS (HonourPile.tsx), on the section's own ground. Every
+   measure of a print is in the pile's own units (cqw, cqh), so the whole pile
+   scales as one; a print's place comes from its --x, --y (its centre, in % of
+   the pile) and --pw (its width), and brought forward from --lx, --ly, --ls.
+   ========================================================================== */
+.honour-pile-wrap { margin-top: clamp(22px, 4vh, 44px); }
+/* the pile keeps to its proportions, and to most of a screen's height */
+.honour-pile {
+  position: relative; container-type: size;
+  width: min(100%, calc(62svh * var(--pile-aspect))); aspect-ratio: var(--pile-aspect);
+  margin-inline: auto;
+}
+.honour-pile-wrap[data-shape='narrow'] .honour-pile { width: 100%; }
+
+/* a print: the photograph on a cream mount, tilted where it lies, with its shadow */
+.honour-print {
+  position: absolute; left: 0; top: 0; z-index: var(--z);
+  width: calc(var(--pw) * 1cqw); padding: max(4px, 0.55cqw) max(4px, 0.55cqw) max(5px, 0.75cqw);
+  border: 0; border-radius: 3px; background: #f7f3ea; cursor: pointer;
+  box-shadow: 0 1px 2px rgb(6 55 130 / 0.22), 0 18px 30px -16px rgb(0 18 16 / 0.6);
+  transform: translate(calc(var(--x) * 1cqw - 50%), calc(var(--y) * 1cqh - 50%)) rotate(var(--r)) scale(1);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease, box-shadow 0.6s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.honour-print img { display: block; width: 100%; height: auto; border-radius: 1px; background: #d9d4c8; pointer-events: none; user-select: none; }
+/* brought forward: straightened, larger, above the pile, its shadow deeper; it opens full size from here */
+.honour-print[data-lifted='true'] {
+  z-index: 1000; cursor: zoom-in;
+  transform: translate(calc(var(--lx) * 1cqw - 50%), calc(var(--ly) * 1cqh - 50%)) rotate(0deg) scale(var(--ls));
+  box-shadow: 0 2px 4px rgb(6 55 130 / 0.18), 0 40px 70px -26px rgb(0 14 12 / 0.75);
+}
+/* going back: above the rest of the pile until it has settled */
+.honour-print[data-settling='true'] { z-index: 999; }
+/* the rest of the pile stays, a little quieter */
+.honour-pile[data-lifting='true'] .honour-print:not([data-lifted='true'], [data-leaving='true']) { opacity: 0.74; }
+/* taken away: lifted a little off the pile as it fades, no longer answering the pointer */
+.honour-print[data-leaving='true'] {
+  opacity: 0; translate: 0 -16px; scale: 1.03; pointer-events: none;
+  transition: opacity 0.6s ease, translate 0.6s ease, scale 0.6s ease;
+}
+.honour-print:focus-visible { outline: 2px solid #eff6dc; outline-offset: 4px; }
+/* the sign that the print forward opens: small, the same size however large the print has grown */
+.honour-print-open {
+  position: absolute; right: 7%; bottom: 8%; display: grid; place-items: center; width: 26px; height: 26px;
+  border-radius: 50%; background: rgb(8 30 28 / 0.62); color: #fff;
+  opacity: 0; scale: 0.8; transition: opacity 0.3s ease, scale 0.3s ease;
+}
+.honour-print[data-lifted='true'] .honour-print-open { opacity: 1; scale: calc(1 / var(--ls)); }
+
+/* the honour's card, beside the print forward: the site's paper, its ink and its gold. It is level with its print,
+   but kept within the pile's height: wholly inside it where it fits, hanging from the pile's top where it does not. */
+.honour-card {
+  position: absolute; z-index: 1001; left: calc(var(--card-left) * 1%); top: calc(var(--card-top) * 1%); width: calc(var(--card-w) * 1%);
+  translate: 0 max(calc(var(--card-top) * -1cqh), min(-50%, calc((100 - var(--card-top)) * 1cqh - 100%)));
+  transition: opacity 0.4s ease;
+}
+.honour-pile:not([data-lifting='true']) .honour-card { opacity: 0; pointer-events: none; }
+.honour-card-body {
+  padding: 20px 22px 22px; border-radius: 16px; border-top: 3px solid #d9bf86;
+  background: #f7f3ea; color: #183631; box-shadow: 0 30px 60px -30px rgb(0 14 12 / 0.8);
+}
+.honour-card-meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 12px; font: 600 10px/1.4 var(--font-sans); letter-spacing: 0.16em; text-transform: uppercase; color: #6c7d77; }
+.honour-card-meta > span:first-child { font-size: 12.5px; letter-spacing: 0.06em; color: #957026; }
+.honour-card h3 { margin: 0 0 10px; font: 800 clamp(16px, 1.45vw, 22px)/1.18 var(--font-heading); letter-spacing: 0; color: #12302b; text-wrap: balance; }
+.honour-card-issuer { margin: 0; font: 600 12.5px/1.5 var(--font-sans); color: #2c5a4f; }
+.honour-card-note { margin: 10px 0 0; font: 400 12px/1.7 var(--font-sans); color: #4c5f59; }
+.honour-card-photo { margin: 12px 0 0; font: 500 10px/1.4 var(--font-sans); letter-spacing: 0.14em; text-transform: uppercase; color: #6c7d77; }
+
+/* on a phone the card sits beneath the pile, always showing the last honour brought forward; every honour's card
+   lies in the same place, unseen but the one showing, so the place is as tall as the tallest and nothing below moves */
+.honour-pile-wrap[data-shape='narrow'] .honour-card { position: relative; z-index: auto; left: auto; top: auto; width: auto; translate: none; margin-top: 18px; opacity: 1; pointer-events: auto; }
+.honour-card-stack { display: grid; }
+.honour-card-stack > .honour-card-body { grid-area: 1 / 1; }
+.honour-card-stack > .honour-card-body:not([data-current='true']) { visibility: hidden; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the prints are laid down one after another as the section comes into view; a print dropped in later falls a
+     moment after the one it replaces is taken away */
+  .honour-pile:not([data-arrived='true']) .honour-print { opacity: 0; }
+  .honour-pile[data-arrived='true'] .honour-print { animation: honour-drop 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--i) * var(--drop-step, 70ms) + var(--delay, 0ms)) backwards; }
+  .honour-print[data-fresh='true'] { --delay: 250ms; }
+  @keyframes honour-drop { from { opacity: 0; translate: 0 -48px; rotate: 6deg; } }
+  /* each honour's card arrives with it */
+  .honour-card-body { animation: honour-card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .honour-card-stack > .honour-card-body:not([data-current='true']) { animation: none; }
+  @keyframes honour-card-in { from { opacity: 0; translate: 0 10px; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* without motion, a print comes and goes by fading where it lies */
+  .honour-print[data-fresh='true'] { animation: honour-fade 0.8s ease backwards; }
+  .honour-print[data-leaving='true'] { translate: none; scale: none; }
+  @keyframes honour-fade { from { opacity: 0; } }
+}
+@media (hover: none) {
+  .honour-print[data-lifted='true'] { cursor: pointer; }
+}

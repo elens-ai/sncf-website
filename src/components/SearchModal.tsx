@@ -82,11 +82,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       id="search-results-modal"
       role="dialog" aria-modal="true" aria-labelledby="search-results-title"
       onKeyDown={event => { if (event.key === "Escape") onClose(); }}
-      className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/60 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-navy/60 backdrop-blur-sm animate-fadeIn"
       onClick={onClose}
     >
       <div
-        className="search-dialog-panel w-full max-w-xl bg-neutral-900 border border-white/20 rounded-2xl shadow-2xl p-5 text-white"
+        className="search-dialog-panel w-full max-w-xl bg-deep-blue border border-white/20 rounded-2xl shadow-2xl p-5 text-white"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
@@ -112,7 +112,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         <label className="block mt-4">
           <span className="sr-only">{getCMSCopy("copy.SearchModal.9d87aeddb779", "Search the foundation")}</span>
-          <input autoFocus type="search" inputMode="search" value={query} onChange={event => onQueryChange(event.target.value)} placeholder={getCMSCopy("copy.SearchModal.62ebafd01583", "Search activities, projects and stories")} className="w-full min-h-12 rounded-xl border border-white/20 bg-neutral-950 px-4 py-3 text-base text-white outline-none focus:border-white/60" />
+          <input autoFocus type="search" inputMode="search" value={query} onChange={event => onQueryChange(event.target.value)} placeholder={getCMSCopy("copy.SearchModal.62ebafd01583", "Search activities, projects and stories")} className="w-full min-h-12 rounded-xl border border-white/20 bg-deep-blue px-4 py-3 text-base text-white outline-none focus:border-white/60" />
         </label>
         <div className="search-dialog-results mt-3 max-h-80 overflow-y-auto space-y-2">
           {filteredResults.length > 0 ? (

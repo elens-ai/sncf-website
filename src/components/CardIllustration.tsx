@@ -19,6 +19,15 @@ interface CardIllustrationProps {
  * decode/raster work that made the wheel stutter.
  */
 
+/* the Empower figure, arms raised, in the glyph's 24 × 24 box */
+const EMPOWER_FIGURE = (
+  <>
+    <circle cx="12" cy="5.6" r="2.75" />
+    <path d="M9.4 11c0-1.3 1-2.1 2.6-2.1s2.6.8 2.6 2.1v8.4c0 .6-.5 1-1.2 1h-2.8c-.7 0-1.2-.4-1.2-1V11Z" />
+    <path d="M10.1 10.9 3.5 6.6M13.9 10.9l6.6-4.3" fill="none" stroke="currentColor" strokeWidth="2.7" strokeLinecap="round" />
+  </>
+);
+
 interface Mark {
   /** Solid colour of the glyph, matching the supplied vertical artwork. */
   color: string;
@@ -65,21 +74,16 @@ let MARKS: Record<string, Mark> = bindCMSValue(() => ({
     ),
   },
 
-  // EMPOWER — figure with arms raised
+  // EMPOWER — figure with arms raised, among two companions (pillarLogoArt's EMPOWER_COMPANIONS): lower either
+  // side, smaller and faint, the three fitted to the glyph's box
   empower: {
     img: resolveCMSAsset("asset.CardIllustration.7e886446b163", "/images/vertical-empower.webp"),
     color: '#E0459A',
     art: (
       <>
-        <circle cx="12" cy="5.6" r="2.75" />
-        <path d="M9.4 11c0-1.3 1-2.1 2.6-2.1s2.6.8 2.6 2.1v8.4c0 .6-.5 1-1.2 1h-2.8c-.7 0-1.2-.4-1.2-1V11Z" />
-        <path
-          d="M10.1 10.9 3.5 6.6M13.9 10.9l6.6-4.3"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.7"
-          strokeLinecap="round"
-        />
+        <g opacity=".45" transform="translate(7.44 13.48) scale(.688) translate(-12 -11.6)">{EMPOWER_FIGURE}</g>
+        <g opacity=".45" transform="translate(16.56 13.48) scale(.688) translate(-12 -11.6)">{EMPOWER_FIGURE}</g>
+        <g transform="translate(12 11.2) scale(.86) translate(-12 -11.6)">{EMPOWER_FIGURE}</g>
       </>
     ),
   },
@@ -185,7 +189,7 @@ export const CardIllustration: React.FC<CardIllustrationProps> = ({
             be (0.16 vs 0.105 of the card) because Dancing Script's small
             x-height reads noticeably smaller at the same nominal size. */}
         <span
-          className="font-dancing-script font-bold text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] whitespace-nowrap leading-none"
+          className="font-dancing-script font-bold text-white drop-shadow-[0_2px_6px_rgba(6,55,130,0.4)] whitespace-nowrap leading-none"
           style={{
             fontSize: 'calc(var(--card-width, 210px) * 0.16)',
             marginTop: 'calc(var(--card-width, 210px) * 0.055)',

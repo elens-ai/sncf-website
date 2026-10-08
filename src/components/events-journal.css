@@ -32,7 +32,7 @@
 .journal-toolbar-note { flex: none; margin: 0; color: #ffffff99; font: 400 12px/1.5 var(--font-script); letter-spacing: .05em; }
 
 .journal-spread { display: grid; grid-template-columns: minmax(0, 2.5fr) minmax(260px, 1fr); gap: clamp(24px, 3.3vw, 50px); align-items: stretch; }
-.journal-feature { min-width: 0; position: relative; border: 1px solid #ffffff29; border-radius: 26px; background: linear-gradient(130deg, #ffffff08, #061e2730); box-shadow: 0 28px 70px -50px #04151d99; scroll-margin-top: calc(var(--site-header-height, 72px) + 20px); }
+.journal-feature { min-width: 0; position: relative; border: 1px solid #ffffff29; border-radius: 26px; background: linear-gradient(130deg, #ffffff08, #061e2730); box-shadow: 0 28px 70px -50px #102e5699; scroll-margin-top: calc(var(--site-header-height, 72px) + 20px); }
 .journal-feature-top { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: 0 26px; padding: 17px 0; border-bottom: 1px solid #ffffff24; }
 .journal-pillar-label { display: inline-flex; align-items: center; gap: 10px; color: var(--event-tint); font: 500 10px/1.5 var(--font-sans); letter-spacing: .2em; transition: color .5s; }
 .journal-navigation { display: flex; align-items: center; gap: 8px; }
@@ -50,8 +50,7 @@
 .journal-emblem-orbits ellipse:nth-child(2) { stroke-dasharray: 2 8; opacity: .17; }
 .journal-emblem-orbits circle { fill: currentColor; opacity: .6; }
 .journal-emblem { position: relative; width: 105%; flex: none; }
-.journal-emblem .heal-photo-mosaic > svg { filter: drop-shadow(-5px 14px 10px #020e1859); }
-.journal-date-ticket { position: absolute; left: 14%; right: 7%; bottom: 10%; display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 80px; padding: 12px 15px; border: 1px solid #ffffffad; border-radius: 14px; background: #f7fcf3; color: #173a3b; box-shadow: 0 15px 25px -12px #02151b66; transform: rotate(-4deg); }
+.journal-date-ticket { position: absolute; left: 14%; right: 7%; bottom: 10%; display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 80px; padding: 12px 15px; border: 1px solid #ffffffad; border-radius: 14px; background: #f7fcf3; color: #173a3b; box-shadow: 0 15px 25px -12px #102e5666; transform: rotate(-4deg); }
 .journal-date-ticket > svg { opacity: .65; width: 15px; flex: none; }
 .journal-date-ticket > strong { font: 400 clamp(36px, 4vw, 60px)/1 var(--font-sans); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
 .journal-date-ticket > span { font: 500 12px/1.5 var(--font-sans); }
@@ -68,7 +67,7 @@
 .journal-blurb { margin: 20px 0 0; color: #ffffffbf; font: 400 12px/1.8 var(--font-sans); max-width: 45ch; }
 .journal-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 24px; }
 .journal-actions a { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; font: 500 11px/1.5 var(--font-sans); text-decoration: none; transition: background .25s, transform .25s; }
-.journal-save-date { padding: 12px 18px; border-radius: 30px; background: #f7fcf3; color: #193b3a; box-shadow: 0 12px 20px -14px #03141a80; }
+.journal-save-date { padding: 12px 18px; border-radius: 30px; background: #f7fcf3; color: #193b3a; box-shadow: 0 12px 20px -14px #102e5680; }
 .journal-save-date:hover { background: #fff; transform: translateY(-2px); }
 .journal-invitation-link { color: #fff; border-bottom: 1px solid #ffffff50; }
 .journal-invitation-link svg { transition: transform .25s; }
@@ -81,10 +80,6 @@
 .journal-pass-code img { width: 64px; height: 64px; image-rendering: pixelated; }
 .journal-pass-copy p { margin: 0 0 5px; font: 400 clamp(18px, 1.7vw, 25px)/1.2 var(--font-script); color: #f7f7e8; }
 .journal-pass-copy > span { display: block; max-width: 30ch; font: 400 10px/1.6 var(--font-sans); color: #ffffffa3; }
-.journal-poster { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; padding: 8px 0; background: none; border: 0; border-bottom: 1px solid #ffffff4d; color: #fff; font: 500 10px/1.5 var(--font-sans); }
-.journal-poster svg { color: var(--event-tint); flex: none; }
-.journal-poster:hover { border-color: #fff; }
-.journal-error { margin: 0; padding: 0 26px 15px; color: #fff0d4; font: 400 11px/1.6 var(--font-sans); }
 .journal-empty { display: flex; min-height: 400px; align-items: flex-start; justify-content: center; flex-direction: column; padding: clamp(26px, 4vw, 56px); }
 .journal-empty > .journal-pillar-icon { width: 85px; height: 75px; color: #a5e1eb; margin-bottom: 24px; }
 .journal-empty > p:not(.journal-eyebrow) { margin: 0; color: #ffffffbd; font: 400 13px/1.7 var(--font-sans); }
@@ -139,7 +134,6 @@
   .journal-date-ticket > svg { display: none; }
   .journal-pass { gap: 14px; padding-inline: 20px; }
   .journal-pass-copy > span { max-width: 27ch; }
-  .journal-poster { font-size: 9px; gap: 6px; }
   .journal-toolbar-note { display: none; }
 }
 @media (max-width: 1050px) {
@@ -152,7 +146,6 @@
   .journal-agenda-scroll { position: relative; inset: auto; max-height: 370px; padding: 8px 6px; margin: 0 -6px; }
   .journal-mini-words strong { font-size: 16px; }
   .journal-pass { padding: 20px 26px; }
-  .journal-poster { font-size: 11px; }
   .journal-pass-copy > span { max-width: none; }
 }
 @media (max-width: 639px) {
@@ -189,11 +182,10 @@
   .journal-actions a { font-size: 11px; }
   .journal-save-date { padding-inline: 14px; }
   .journal-pass { grid-template-columns: 68px minmax(0, 1fr); padding: 20px; gap: 8px 16px; border-radius: 0 0 20px 20px; }
-  .journal-pass-code { grid-row: 1 / 3; width: 68px; height: 68px; padding: 4px; }
+  .journal-pass-code { width: 68px; height: 68px; padding: 4px; }
   .journal-pass-code img { width: 60px; height: 60px; }
   .journal-pass-copy p { font-size: 20px; }
   .journal-pass-copy > span { font-size: 9px; line-height: 1.5; }
-  .journal-poster { grid-column: 2; justify-self: start; min-height: 38px; padding: 6px 0; font-size: 10px; }
   .journal-empty { min-height: 365px; padding: 28px 24px; }
   .journal-empty h3 { font-size: 25px; }
 }
@@ -230,3 +222,43 @@
 @media (prefers-reduced-motion: reduce) {
   #events-section.events-journal * { animation: none !important; transition: none !important; }
 }
+
+/* THE YEAR AT A GLANCE: a month-ruled track with every dated moment as a
+   dot in its pillar's tint where it falls, the one in view ringed, today a
+   line of light. Each dot names itself on hover and opens its moment. */
+.journal-year { max-width: 1500px; margin: -8px auto 30px; }
+.journal-year-months { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); margin: 0 0 8px; padding: 0; list-style: none; font: 600 8.5px/1 var(--font-sans); letter-spacing: 0.16em; color: #ffffff78; }
+.journal-year-months li { padding-left: 7px; border-left: 1px solid #ffffff1f; }
+.journal-year-track { position: relative; height: 24px; border-radius: 12px; background: repeating-linear-gradient(90deg, transparent 0 calc(100% / 12 - 1px), #ffffff14 calc(100% / 12 - 1px) calc(100% / 12)), linear-gradient(90deg, #ffffff0a, #ffffff12); box-shadow: inset 0 0 0 1px #ffffff1c; }
+.journal-year-dot { position: absolute; top: 50%; z-index: 1; width: 12px; height: 12px; margin: -6px 0 0 -6px; padding: 0; border: 2px solid #12302f; border-radius: 50%; background: var(--event-tint); transition: transform 0.25s, box-shadow 0.25s, opacity 0.25s; }
+.journal-year-dot[data-current='true'] { z-index: 2; transform: scale(1.45); box-shadow: 0 0 0 4px color-mix(in srgb, var(--event-tint) 32%, transparent), 0 0 16px color-mix(in srgb, var(--event-tint) 60%, transparent); }
+.journal-year-dot[data-dim='true'] { opacity: 0.35; }
+.journal-year-dot:is(:hover, :focus-visible) { z-index: 3; transform: scale(1.35); }
+.events-journal .journal-year-dot:focus-visible { outline-offset: 3px; }
+.journal-year-tip { position: absolute; bottom: calc(100% + 9px); left: 50%; display: grid; gap: 2px; padding: 6px 10px; border-radius: 10px; background: #f7fcf3; box-shadow: 0 10px 20px -10px #063782aa; color: #193b3a; font: 600 11px/1.25 var(--font-sans); white-space: nowrap; opacity: 0; translate: -50% 4px; scale: 0.7; transform-origin: 50% 100%; pointer-events: none; transition: opacity 0.2s, translate 0.2s; }
+.journal-year-tip small { font: 500 9.5px/1.2 var(--font-sans); color: #4e6a66; }
+.journal-year-dot:is(:hover, :focus-visible) .journal-year-tip { opacity: 1; translate: -50% 0; }
+.journal-year-today { position: absolute; top: -5px; bottom: -5px; width: 2px; margin-left: -1px; border-radius: 2px; background: #fff; box-shadow: 0 0 10px #ffffff90; pointer-events: none; }
+.journal-year-today i { position: absolute; top: calc(100% + 4px); left: 50%; translate: -50% 0; font: 600 8px/1 var(--font-sans); font-style: normal; letter-spacing: 0.16em; text-transform: uppercase; color: #ffffffb8; white-space: nowrap; }
+
+/* the countdown, turning over by the minute */
+.journal-ticker { display: inline-flex; align-items: baseline; gap: 2px; margin: 10px 0 0 14px; font: 500 10px/1 var(--font-sans); color: #ffffff9e; font-variant-numeric: tabular-nums; }
+.journal-ticker b { margin-left: 7px; font: 600 16px/1 var(--font-sans); color: #fffdf7; }
+.journal-ticker b:first-child { margin-left: 0; }
+.journal-venue-link { color: #ffffffd0; }
+.journal-venue-link svg { color: var(--event-tint); }
+.journal-venue-link:hover { color: #fff; }
+
+/* the pass: its code and its words, then the moment sent on */
+.journal-pass { grid-template-columns: 72px minmax(0, 1fr) auto; row-gap: 16px; }
+.journal-share { justify-self: end; }
+@media (max-width: 1400px) {
+  .journal-pass { grid-template-columns: 72px minmax(0, 1fr); }
+  .journal-share { grid-column: 1 / -1; justify-self: stretch; padding-top: 14px; border-top: 1px dashed #ffffff24; }
+}
+@media (max-width: 640px) {
+  .journal-year-months { font-size: 7px; letter-spacing: 0.06em; }
+  .journal-year-months li { padding-left: 3px; }
+  .journal-ticker { margin-left: 0; display: flex; }
+}
+@media (prefers-reduced-motion: reduce) { .journal-year-dot, .journal-year-tip { transition: none; } }

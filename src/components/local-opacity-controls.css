@@ -1,0 +1,11 @@
+.local-opacity-controls { position: fixed; z-index: 90; left: max(72px, env(safe-area-inset-left)); bottom: 18px; width: min(360px, calc(100vw - 96px)); border: 1px solid #cedbea; border-radius: 14px; background: rgb(255 255 255 / .96); color: #063782; box-shadow: 0 8px 30px rgb(16 46 86 / .16); font: 500 12px/1.4 var(--font-sans); pointer-events: auto; }
+.local-opacity-controls summary { cursor: pointer; padding: 12px 14px; }
+.local-opacity-controls summary span { float: right; color: #60738e; font-size: 10px; }
+.local-opacity-controls fieldset { display: grid; grid-template-columns: 1fr 1fr auto; gap: 14px; align-items: end; border: 0; margin: 0; padding: 0 14px 14px; min-width: 0; }
+.local-circle-controls fieldset { grid-template-columns: 1fr auto; }
+.local-opacity-controls label { min-width: 0; }
+.local-opacity-controls label > span { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.local-opacity-controls input { width: 100%; accent-color: #063782; cursor: pointer; }
+.local-opacity-controls button { border: 1px solid #cedbea; border-radius: 7px; padding: 5px 8px; background: #edf3fb; cursor: pointer; }
+.local-opacity-controls :focus-visible { outline: 2px solid #063782; outline-offset: 3px; }
+@media (max-width: 600px) { .local-opacity-controls { left: 12px; bottom: 12px; width: min(360px, calc(100vw - 24px)); } }

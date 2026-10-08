@@ -137,7 +137,7 @@ export const AwardLightbox: React.FC<AwardLightboxProps> = ({
      straight over the backdrop. The same trap the social sidebar hit. */
   return createPortal(
     <div
-      className="recognition-viewer fixed inset-0 flex items-center justify-center p-4 sm:p-8 bg-black/85 backdrop-blur-xl animate-fadeIn"
+      className="recognition-viewer fixed inset-0 flex items-center justify-center p-4 sm:p-8 bg-navy/85 backdrop-blur-xl animate-fadeIn"
       onClick={onClose}
     >
       <div

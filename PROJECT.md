@@ -70,7 +70,7 @@ not served by Google — `public/fonts/README.md` explains the fallback chain.
 | 1 | `Header` | Fixed header + `MainNav` mega menu, tinted by the active pillar |
 | — | `SocialSidebar` | Viewport fixture — **root level on purpose**, see below |
 | 2 | `HeroSection` | 3D pillar wheel (`HeroOrbitWheel`, `SncfLotus3D`). Owns the page's accent colour |
-| 3 | `ImpactMosaic` | Our work — the Living Mosaic: an overture of white ghost petals assembling, then four pillar chapters, each a signature (script name, tracked serif line, a small 3D medallion) beside an album page of programme photographs — a washed lead print with a watercolour-torn edge, white-bordered prints laid over it at slight angles, a chapter-tinted watercolour sprig behind them (`MosaicFoliage`) — that open a photo spotlight, over a chapter-tinted layered-wave artwork (`MosaicWaves`, canvas: shaded ribbons, a light travelling along each crest, rising motes); a pinned stage on desktop (five viewports of scroll, one screen), stacked on phones |
+| 3 | — | *Removed October 2026.* The Living Mosaic (`ImpactMosaic`, `MosaicTile`) is gone from the home page. Its Projects ground (`MosaicWaves` and `PillarArtwork` over the Projects gradient) is now the backdrop of the /projects cover (`ProjectsCover` in `ProjectsPage.tsx`), and the hall's Explore Projects opens /projects |
 | 4 | `EventsSection` | Upcoming observances + `EventsCalendarModal` |
 | 5 | `AwardsSection` | Honours carousel (+ `AwardLightbox`) |
 | 6 | `PartnershipSection` | Partners screen — video hero, floating navbar, logo marquee |
@@ -170,7 +170,8 @@ Two asset conventions that are load-bearing:
   `PavilionScene.ts`, `CurtainEntrance.tsx`, `HeroCurtain.tsx`,
   `PavilionExitCurtain.tsx`, `amritFilm.ts`, `pavilion.css` and
   `curtain-entrance.css` are the scroll-pinned 3D walkthrough that
-  `ImpactMosaic` replaced (September 2026). They still compile and their
+  `ImpactMosaic` replaced (September 2026; `ImpactMosaic` itself was removed
+  in October 2026). They still compile and their
   pure-node tests still run; swap back on one import line in `HomePage.tsx`,
   or delete them together with the earlier `PillarsSection` generation.
 - **`@google/genai` is a dependency but unused** in `src/`. So are `express`,

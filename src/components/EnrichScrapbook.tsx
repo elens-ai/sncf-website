@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
@@ -21,18 +20,21 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.EnrichScrapbook.${
    The leaves are 3D sheets hinged on the spine, a photograph on either side,
    stacked a fraction apart: the next leaf always lies on top on the right,
    and the last one turned on top on the left, as in a real book. Pointing at
-   the book holds it, and its top page lifts a little to invite a click; a
-   click on either page turns it, as do the arrows beneath. With reduced
-   motion the pages turn only when asked, and without moving. */
+   the book holds it, and pointing at a page lifts its top leaf a little to
+   invite a click. A click on the right page turns one leaf on, on the left
+   page one leaf back, as do the arrows beneath; clicked quickly, the leaves
+   follow one another rather than flying together. Turning a page by hand
+   stops the book turning by itself (the play button starts it again). With
+   reduced motion the pages turn only when asked, and without moving. */
 
 /* Geometry, in the emblem's own units (pillarLogoArt). Both page boxes are as
    wide as the right page, so a leaf turned over lands exactly on the left. */
 const [LEFT_PAGE, RIGHT_PAGE] = PILLAR_LOGOS.enrich.paths;
-const SPINE = 71.298;
-const PAGE_W = 132.344 - SPINE;
+const SPINE = 72;
+const PAGE_W = 54;
 const LEFT_X = SPINE - PAGE_W;
-const PAGE_TOP = 6.4;
-const PAGE_H = 97;
+const PAGE_TOP = 8;
+const PAGE_H = 86;
 /* The whole book, its cover included. */
 const VIEW = { x: 2, y: 2, w: 142, h: 108 };
 
@@ -62,6 +64,9 @@ const DWELL_MS = 3000;
 const END_HOLD_MS = 2400;
 const RIFFLE_MS = 620;
 const RIFFLE_STAGGER_MS = 70;
+/* Leaves turned one after another the same way start this far into the turn
+   before them, once it has lifted clear (edge-on comes at 38% of a turn). */
+const FOLLOW_MS = TURN_MS * 0.45;
 /* How far apart the stacked leaves lie. */
 const LEAF_GAP_PX = 0.25;
 
@@ -69,7 +74,7 @@ interface Snap { src: string; alt: string; programme: string; value: string; lab
 interface Move { dir: 'forward' | 'back'; key: number; delay: number; ms: number }
 /* The shadow a turning leaf casts: lifting off the page it uncovers, and
    coming down on the page it covers. */
-interface Cast { kind: 'reveal' | 'cover'; key: number }
+interface Cast { kind: 'reveal' | 'cover'; key: number; delay: number }
 
 /* The programmes' photographs dealt out in turn, so that neighbouring pages
    show different programmes; each is noted with one of its programme's
@@ -100,7 +105,7 @@ const PageEdge: React.FC<{ side: Side }> = ({ side }) => (
 );
 
 const CastShadow: React.FC<{ cast?: Cast }> = ({ cast }) =>
-  cast ? <span key={cast.key} className="scrapbook-cast" data-cast={cast.kind} aria-hidden="true" /> : null;
+  cast ? <span key={cast.key} className="scrapbook-cast" data-cast={cast.kind} style={{ '--cast-delay': `${cast.delay}ms` } as React.CSSProperties} aria-hidden="true" /> : null;
 
 /** One side of a leaf: a print taped in, its label, a note and the folio. */
 const Page: React.FC<{ side: Side; face: 'front' | 'back'; snap?: Snap; folio: number; load: boolean; shade?: number; cast?: Cast }> = ({ side, face, snap, folio, load, shade, cast }) => (
@@ -125,21 +130,30 @@ const Page: React.FC<{ side: Side; face: 'front' | 'back'; snap?: Snap; folio: n
   </div>
 );
 
-export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; motto: string; caption: string }> = ({ activities, name, motto, caption }) => {
+export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; motto: string; caption?: string }> = ({ activities, name, motto, caption }) => {
   const snaps = dealSnaps(activities);
   const leaves = Array.from({ length: Math.ceil(snaps.length / 2) }, (_, i) => ({ front: snaps[2 * i], back: snaps[2 * i + 1] }));
   const count = leaves.length;
   const [turned, setTurned] = useState(0);
+  /* The leaves in the air: each turn's entry is cleared once it lands. */
   const [moves, setMoves] = useState<Record<number, Move>>({});
+  /* How many leaves lay on the left once the last turn landed: a leaf leaves
+     its stack as it lifts, and joins the other as it comes down. */
+  const [landed, setLanded] = useState(0);
   /* How long the last turn takes, so that the next look begins once it settles. */
   const [settling, setSettling] = useState(0);
   /* Leaves whose photographs are wanted: those showing, and the next beneath. */
   const [wanted, setWanted] = useState(2);
   const [held, setHeld] = useState(false);
   const [pointing, setPointing] = useState(false);
+  /* The page the pointer is over, whose top leaf lifts to invite a click. */
+  const [hover, setHover] = useState<Side | null>(null);
   /* The last leaf turned by itself (a riffle casts no shadows), counted so each turn's shadow plays afresh. */
-  const [lastTurn, setLastTurn] = useState<{ leaf: number; forward: boolean; key: number } | null>(null);
+  const [lastTurn, setLastTurn] = useState<{ leaf: number; forward: boolean; key: number; delay: number } | null>(null);
   const turns = useRef(0);
+  /* When the last single turn began, and which way, so the next the same way can follow it. */
+  const lastStart = useRef({ at: -Infinity, forward: true });
+  const landings = useRef<number[]>([]);
   const still = useReducedMotion() ?? false;
   const root = useRef<HTMLElement>(null);
   const onScreen = useSectionActivity(root);
@@ -147,6 +161,8 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
   /* Touch screens report a pointer entering on every tap and never leaving. */
   const canHover = useMemo(() => window.matchMedia('(hover: hover)').matches, []);
   const playing = !still && !held && !pointing && onScreen && count > 0;
+  const inAir = Object.keys(moves).length > 0;
+  useEffect(() => () => landings.current.forEach(window.clearTimeout), []);
 
   const turnTo = useCallback((target: number) => {
     const to = Math.max(0, Math.min(count, target));
@@ -154,25 +170,47 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
     const forward = to > turned;
     const moving = Array.from({ length: Math.abs(to - turned) }, (_, k) => (forward ? turned + k : to + k));
     const riffle = moving.length > 1;
+    /* a leaf turned the same way as one still lifting waits until that one is clear */
+    const now = performance.now();
+    const wait = !riffle && lastStart.current.forward === forward ? Math.max(0, Math.round(lastStart.current.at + FOLLOW_MS - now)) : 0;
+    lastStart.current = riffle ? { at: -Infinity, forward } : { at: now + wait, forward };
+    const delayOf = (i: number) => (riffle
+      /* riffling back, the top leaf of the left stack goes first */
+      ? (forward ? i - turned : turned - 1 - i) * RIFFLE_STAGGER_MS
+      : wait);
+    const ms = riffle ? RIFFLE_MS : TURN_MS;
+    const keys: Record<number, number> = {};
     setMoves(previous => {
       const next = { ...previous };
       for (const i of moving) {
-        next[i] = {
-          dir: forward ? 'forward' : 'back',
-          key: (previous[i]?.key ?? 0) + 1,
-          /* riffling back, the top leaf of the left stack goes first */
-          delay: riffle ? (forward ? i - turned : turned - 1 - i) * RIFFLE_STAGGER_MS : 0,
-          ms: riffle ? RIFFLE_MS : TURN_MS,
-        };
+        keys[i] = (previous[i]?.key ?? 0) + 1;
+        next[i] = { dir: forward ? 'forward' : 'back', key: keys[i], delay: delayOf(i), ms };
       }
       return next;
     });
-    setSettling(riffle ? (moving.length - 1) * RIFFLE_STAGGER_MS + RIFFLE_MS : TURN_MS);
+    const settles = Math.max(...moving.map(delayOf)) + ms;
+    /* once down, the leaves leave the air (unless turned again meanwhile) and join their stack */
+    const landing = window.setTimeout(() => {
+      landings.current = landings.current.filter(timer => timer !== landing);
+      setMoves(previous => {
+        const next = { ...previous };
+        for (const i of moving) if (next[i]?.key === keys[i]) delete next[i];
+        return next;
+      });
+      setLanded(to);
+    }, settles);
+    landings.current.push(landing);
+    setSettling(settles);
     turns.current += 1;
-    setLastTurn(riffle ? null : { leaf: moving[0], forward, key: turns.current });
+    setLastTurn(riffle ? null : { leaf: moving[0], forward, key: turns.current, delay: wait });
     setTurned(to);
     setWanted(n => Math.max(n, to + 2));
   }, [count, turned]);
+  /* A page turned by hand: one leaf, and the book stops turning by itself. */
+  const turnBy = (step: 1 | -1) => {
+    setHeld(true);
+    turnTo(turned + step);
+  };
 
   /* A leaf's front lies on the next leaf's front, its back on the previous
      leaf's back (the inside covers stand in at either end): those are the
@@ -180,7 +218,7 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
   const castOn = (leaf: number, face: 'front' | 'back'): Cast | undefined => {
     if (!lastTurn || leaf !== lastTurn.leaf + (face === 'front' ? 1 : -1)) return undefined;
     const uncovered = face === 'front' ? lastTurn.forward : !lastTurn.forward;
-    return { kind: uncovered ? 'reveal' : 'cover', key: lastTurn.key };
+    return { kind: uncovered ? 'reveal' : 'cover', key: lastTurn.key, delay: lastTurn.delay };
   };
 
   /* A page after each look; from the last spread, back to the first. */
@@ -194,28 +232,26 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
   /* The thickness of the leaves on either side, under the pages. */
   const stack = (side: Side, edges: number) => Array.from({ length: edges }, (_, k) => edges - k).map(depth => (
     <path key={`${side}-${depth}`} className="scrapbook-stack" d={SIDES[side].d}
-      transform={`translate(${(side === 'left' ? -0.32 : 0.32) * depth} ${0.7 * depth})`} />
+      transform={`translate(0 ${0.38 * depth})`} />
   ));
 
   return (
-    <figure ref={root} className="enrich-scrapbook" style={{ '--turn-ms': `${TURN_MS}ms` } as React.CSSProperties} aria-label={c('label', 'Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres')}>
+    <figure ref={root} className="enrich-scrapbook" style={{ '--turn-ms': `${TURN_MS}ms`, '--sb-teal': PILLAR_LOGOS.enrich.tint, '--sb-edge': PILLAR_LOGOS.enrich.edge } as React.CSSProperties} aria-label={c('label', 'Enrich: a scrapbook of the foundation’s schools, scholarships and skill centres')}>
       <div
         className="scrapbook-book"
+        data-hover={hover && !inAir ? hover : undefined}
         onPointerEnter={canHover ? () => setPointing(true) : undefined}
         onPointerLeave={canHover ? () => setPointing(false) : undefined}
       >
         <svg className="scrapbook-binding" viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`} aria-hidden="true" focusable="false">
           <defs>
-            <linearGradient id={`${ids}-cloth`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#38b8cb" />
-              <stop offset="1" stopColor="#17808f" />
-            </linearGradient>
             <filter id={`${ids}-soft`} x="-10%" y="-200%" width="120%" height="500%"><feGaussianBlur stdDeviation="1.4" /></filter>
           </defs>
           <ellipse className="scrapbook-ground" cx={SPINE} cy="105.6" rx="64" ry="2.4" filter={`url(#${ids}-soft)`} />
-          <path className="scrapbook-cover" d={BOOK_COVER} fill={`url(#${ids}-cloth)`} />
-          {stack('left', Math.min(4, turned))}
-          {stack('right', Math.min(4, count - turned))}
+          <path d={BOOK_COVER} fill="#238fa7" transform="translate(-1 1.4)" />
+          <path className="scrapbook-cover" d={BOOK_COVER} fill={PILLAR_LOGOS.enrich.tint} />
+          {stack('left', Math.min(4, turned, landed))}
+          {stack('right', Math.min(4, count - Math.max(turned, landed)))}
         </svg>
         <div className="scrapbook-stage" style={{ '--back': `${-(count + 1) * LEAF_GAP_PX}px` } as React.CSSProperties}>
           {/* the inside covers: a bookplate before the first page, a note after the last */}
@@ -243,11 +279,11 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
                 className="scrapbook-leaf"
                 data-moving={move?.dir}
                 data-top={top}
-                onClick={top ? () => turnTo(top === 'right' ? turned + 1 : turned - 1) : undefined}
                 style={{
                   ...pageBox(SPINE),
                   '--turn': i < turned ? '-180deg' : '0deg',
-                  '--z': `${(count - i) * LEAF_GAP_PX}px`,
+                  /* its height above the endpapers: the next leaf highest on the right, the last turned on the left */
+                  '--z': `${(i < turned ? i + 1 : count - i) * LEAF_GAP_PX}px`,
                   '--delay': `${move?.delay ?? 0}ms`,
                   '--ms': `${move?.ms ?? TURN_MS}ms`,
                 } as React.CSSProperties}
@@ -258,23 +294,29 @@ export const EnrichScrapbook: React.FC<{ activities: Activity[]; name: string; m
             );
           })}
         </div>
+        {/* Where a click turns a page: the left page one leaf back, the right
+            page one leaf on. Plain boxes laid over the pages, so a click always
+            lands, whatever the leaves are doing in 3D beneath. */}
+        {(['left', 'right'] as const).map(side => {
+          const canTurn = side === 'left' ? turned > 0 : turned < count;
+          return (
+            <div
+              key={side}
+              className="scrapbook-turn"
+              data-side={side}
+              data-can={canTurn || undefined}
+              aria-hidden="true"
+              style={pageBox(SIDES[side].x)}
+              onClick={canTurn ? () => turnBy(side === 'left' ? -1 : 1) : undefined}
+              onPointerEnter={canHover ? () => setHover(side) : undefined}
+              onPointerLeave={canHover ? () => setHover(current => (current === side ? null : current)) : undefined}
+            />
+          );
+        })}
       </div>
-      <figcaption className="scrapbook-caption">
+      {caption && <figcaption className="scrapbook-caption">
         <span>{caption}</span>
-        <span className="scrapbook-controls">
-          <button type="button" onClick={() => turnTo(turned - 1)} disabled={turned === 0} aria-label={c('previous', 'Previous page')} title={c('previous', 'Previous page')}>
-            <ChevronLeft size={16} aria-hidden="true" />
-          </button>
-          {!still && (
-            <button type="button" onClick={() => setHeld(value => !value)} aria-label={held ? c('play', 'Play') : c('pause', 'Pause')} title={held ? c('play', 'Play') : c('pause', 'Pause')}>
-              {held ? <Play size={12} fill="currentColor" aria-hidden="true" /> : <Pause size={12} fill="currentColor" aria-hidden="true" />}
-            </button>
-          )}
-          <button type="button" onClick={() => turnTo(turned + 1)} disabled={turned >= count} aria-label={c('next', 'Next page')} title={c('next', 'Next page')}>
-            <ChevronRight size={16} aria-hidden="true" />
-          </button>
-        </span>
-      </figcaption>
+      </figcaption>}
     </figure>
   );
 };

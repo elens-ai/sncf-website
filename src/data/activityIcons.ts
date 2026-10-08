@@ -2,6 +2,6 @@
 export const ACTIVITY_ICONS = [
   'droplets', 'droplet', 'stethoscope', 'eye', 'hospital', 'graduation-cap', 'award', 'book-open', 'laptop',
   'scissors', 'trees', 'sparkles', 'package-check', 'heart', 'hand-coins', 'waves', 'sprout', 'mountain', 'house',
-  'heart-handshake',
+  'heart-handshake', 'spine',
 ] as const;
 export type ActivityIcon = typeof ACTIVITY_ICONS[number];

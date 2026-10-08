@@ -5,39 +5,39 @@
     "options": {},
     "label": "Home · Welcome intro (first screen, welcome page, mission & vision)"
   },
-  "home.intro": {
+  "home.landing": {
     "enabled": true,
     "order": 0,
     "options": {},
-    "label": "Home · Hero"
+    "label": "Home · Landing (Four paths. One purpose.) — the first screen"
   },
-  "home.mosaic": {
+  "home.intro": {
     "enabled": true,
     "order": 1,
     "options": {},
-    "label": "Home · Our work (Living Mosaic)"
+    "label": "Home · Hero"
   },
   "home.events": {
     "enabled": true,
-    "order": 2,
+    "order": 3,
     "options": {},
-    "label": "Home · Upcoming events"
+    "label": "Events page (/events) · The service journal"
   },
   "home.awards": {
     "enabled": true,
-    "order": 3,
+    "order": 4,
     "options": {},
     "label": "Home · Awards and recognition"
   },
   "home.partners": {
     "enabled": true,
-    "order": 4,
+    "order": 5,
     "options": {},
     "label": "Home · Partnerships"
   },
   "home.footer": {
     "enabled": true,
-    "order": 5,
+    "order": 6,
     "options": {},
     "label": "Home · Footer"
   },
@@ -107,22 +107,10 @@
     "options": {},
     "label": "GuidingForcePage · gf-media"
   },
-  "ProjectsPage.projects-directory": {
-    "enabled": true,
-    "order": 0,
-    "options": {},
-    "label": "ProjectsPage · projects-directory"
-  },
   "ProjectsPage.health-city": {
     "enabled": true,
     "order": 0,
     "options": {},
     "label": "ProjectsPage · health-city"
-  },
-  "GuidingForcePage.rajpita": {
-    "enabled": true,
-    "order": 0,
-    "options": {},
-    "label": "GuidingForcePage · Nirankari Rajpita Ji"
   }
 }

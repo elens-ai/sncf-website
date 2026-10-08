@@ -4,7 +4,8 @@ import { siteOverride } from '../cms/siteSettings';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React, { useEffect, useState } from 'react';
 import { AnimatedBrandWordmark } from './AnimatedBrandWordmark';
-import { Link } from 'react-router-dom';
+import { FoundationStories } from './FoundationStories';
+import { hasUnseenStories, STORIES_SEEN_EVENT } from '../data/stories';
 import { AnthemPlayer } from './AnthemPlayer';
 import { MainNav } from './MainNav';
 import { PillarState } from '../types';
@@ -30,7 +31,17 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenDonate,
   hideLogo = false,
 }) => {
-  useCMSRevision();
+  const revision = useCMSRevision();
+  const [unseenStories, setUnseenStories] = useState(hasUnseenStories);
+  useEffect(() => {
+    const sync = () => setUnseenStories(hasUnseenStories());
+    sync();
+    window.addEventListener(STORIES_SEEN_EVENT, sync);
+    window.addEventListener('storage', sync);
+    return () => { window.removeEventListener(STORIES_SEEN_EVENT, sync); window.removeEventListener('storage', sync); };
+  }, [revision]);
+  const [storiesOpen, setStoriesOpen] = useState(false);
+  const logo = resolveCMSMedia(siteOverride("branding", "logo", resolveCMSAsset("asset.Header.25aa35189463", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp")));
   /* The search control stays a single glass orb; scrolling no longer opens it.
      It expands only when there is a query to show, which comes back from the
      search modal the orb opens — so the field appears because the visitor
@@ -62,35 +73,39 @@ export const Header: React.FC<HeaderProps> = ({
           stacking context (fixed, z-50) stops it escaping underneath. */}
       <div
         aria-hidden="true"
-        className={`chrome-scrim absolute inset-0 -z-10 bg-neutral-950/40 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.25)] transition-opacity duration-500 ${
+        className={`chrome-scrim absolute inset-0 -z-10 bg-deep-blue/40 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_30px_rgba(6,55,130,0.25)] transition-opacity duration-500 ${
           scrolled ? 'opacity-100' : 'opacity-0'
         }`}
       />
       {/* LEFT: Logo + wordmark */}
       <div className="site-brand flex items-center gap-3 pointer-events-auto flex-none">
-        <Link
+        <button
           id="logo-badge-btn"
-          to="/"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'instant' })}
-          className="group relative w-[52px] h-[52px] rounded-full overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer p-0 border-none"
+          type="button"
+          data-hidden={hideLogo}
+          data-unread={unseenStories}
+          aria-haspopup="dialog"
+          onClick={() => setStoriesOpen(true)}
+          className="story-logo-trigger group relative w-[52px] h-[52px] rounded-full overflow-hidden flex items-center justify-center transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-none cursor-pointer p-0 border-none"
           /* White disc sized to the emblem's outer ring rather than the whole
              badge: the logo image has transparent padding, so a full-size disc
              left a white rim around the ring. The ring spans ~93.4% of the box,
              slightly above and left of centre; the disc sits just inside it. */
           style={{ background: 'radial-gradient(circle closest-side, #fff 99%, transparent 100%) 37.2% 38.6% / 92.8% 92.8% no-repeat' }}
-          title={getCMSCopy("copy.Header.a01941bf3134", "Sant Nirankari Charitable Foundation")}
-          aria-label={getCMSCopy("copy.Header.b79520f8055a", "Sant Nirankari Charitable Foundation logo")}
+          title={unseenStories ? "See SNCF stories — new updates" : "See SNCF stories"}
+          aria-label="Open SNCF stories"
         >
+          {unseenStories && <span className="story-logo-ring" aria-hidden="true" />}
           <img
             id="header-sncf-logo"
-            src={resolveCMSMedia(siteOverride("branding", "logo", resolveCMSAsset("asset.Header.25aa35189463", "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp")))}
+            src={logo}
             alt={getCMSCopy("copy.Header.44e3df1518ac", "Sant Nirankari Charitable Foundation Logo")}
             className={`w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 ${
               hideLogo ? 'opacity-0' : 'opacity-100'
             }`}
             referrerPolicy="no-referrer"
           />
-        </Link>
+        </button>
 
         <AnimatedBrandWordmark
           name={siteOverride("branding", "name", getCMSCopy("copy.Header.3eeeb717e545", "Sant Nirankari"))}
@@ -192,9 +207,9 @@ export const Header: React.FC<HeaderProps> = ({
           onClick={onOpenDonate}
           className="donate-ribbon relative h-[40px] w-[124px] flex items-center justify-start pl-2.5 pr-5 shadow-md select-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/50"
           style={{
-            /* Follows the stage mood via the shared variable rather than the
-               front pillar, so it stays in step on the devotional slide too. */
-            backgroundColor: 'var(--accent-a)',
+            /* the welcome screen's warm cream, on every page, its heart and
+               word in the logo's navy as the welcome screen's are */
+            backgroundColor: '#fdedd2',
             clipPath: 'polygon(0 0, 100% 0, 84% 50%, 100% 100%, 0 100%)',
           }}
           title={getCMSCopy("copy.Header.e26586bdf140", "Support the foundation")}
@@ -203,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="donate-ribbon-sheen" aria-hidden="true" />
 
           {/* Heart glyph */}
-          <span className="mr-1.5 text-white flex-shrink-0 donate-ribbon-heart">
+          <span className="mr-1.5 text-[#063782] flex-shrink-0 donate-ribbon-heart">
             <svg
               className="w-[16px] h-[16px]"
               viewBox="0 0 24 24"
@@ -214,9 +229,10 @@ export const Header: React.FC<HeaderProps> = ({
             </svg>
           </span>
 
-          <span className="text-[11px] uppercase font-bold text-white tracking-wider">{getCMSCopy("copy.Header.c91ee0f2799d", "Donate")}</span>
+          <span className="text-[11px] uppercase font-bold text-[#063782] tracking-wider">{getCMSCopy("copy.Header.c91ee0f2799d", "Donate")}</span>
         </button>
       </div>
+      {storiesOpen && <FoundationStories logo={logo} onClose={() => setStoriesOpen(false)} />}
     </header>
   );
 };

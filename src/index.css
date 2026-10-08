@@ -14,11 +14,86 @@
   font-style: normal;
   font-display: swap;
 }
-@theme {
-  --font-sans: Outfit, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-heading: 'SNCF Flared', Outfit, system-ui, sans-serif;
-  --font-script: 'Dancing Script', cursive;
+/* A static weight-400 face for numeric glyphs at every requested weight.
+   Restricting its character range preserves each surrounding text face. The
+   weight range prevents synthetic bolding when a number occurs in a heading. */
+@font-face {
+  font-family: 'Outfit Numbers';
+  src: url('./assets/fonts/outfit-regular.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039;
 }
+@font-face {
+  font-family: 'Outfit Numbers';
+  src: url('./assets/fonts/outfit-regular.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+@font-face {
+  font-family: 'Outfit Regular';
+  src: url('./assets/fonts/outfit-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Bundled Aparajita keeps Hindi typography consistent on every device. */
+@font-face {
+  font-family: 'Aparajita';
+  src: url('./assets/fonts/aparajita-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@theme {
+  --font-numeric: 'Outfit Regular', Outfit, system-ui, sans-serif;
+  --color-navy: #063782;
+  --color-deep-blue: #102e56;
+  --color-black: #063782;
+  /* Dark neutral utilities also use the foundation's navy palette. */
+  --color-neutral-700: #244c7c;
+  --color-neutral-750: #1d436e;
+  --color-neutral-800: #15365b;
+  --color-neutral-900: #102e56;
+  --color-neutral-950: #0b2445;
+  --color-gray-900: #102e56;
+  --color-gray-950: #0b2445;
+  --color-zinc-900: #102e56;
+  --color-zinc-950: #0b2445;
+  --color-stone-900: #102e56;
+  --color-stone-950: #0b2445;
+  --shadow-2xs: 0 1px rgb(16 46 86 / 0.05);
+  --shadow-xs: 0 1px 2px 0 rgb(16 46 86 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(16 46 86 / 0.1), 0 1px 2px -1px rgb(16 46 86 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(16 46 86 / 0.1), 0 2px 4px -2px rgb(16 46 86 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(16 46 86 / 0.1), 0 4px 6px -4px rgb(16 46 86 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(16 46 86 / 0.1), 0 8px 10px -6px rgb(16 46 86 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(16 46 86 / 0.25);
+  --inset-shadow-2xs: inset 0 1px rgb(16 46 86 / 0.05);
+  --inset-shadow-xs: inset 0 1px 1px rgb(16 46 86 / 0.05);
+  --inset-shadow-sm: inset 0 2px 4px rgb(16 46 86 / 0.05);
+  --drop-shadow-xs: 0 1px 1px rgb(16 46 86 / 0.05);
+  --drop-shadow-sm: 0 1px 2px rgb(16 46 86 / 0.15);
+  --drop-shadow-md: 0 3px 3px rgb(16 46 86 / 0.12);
+  --drop-shadow-lg: 0 4px 4px rgb(16 46 86 / 0.15);
+  --drop-shadow-xl: 0 9px 7px rgb(16 46 86 / 0.1);
+  --drop-shadow-2xl: 0 25px 25px rgb(16 46 86 / 0.15);
+  --shadow-inner: inset 0 2px 4px 0 rgb(16 46 86 / 0.05);
+  --font-serif: 'Outfit Numbers', Georgia, 'Times New Roman', serif;
+  --font-mono: 'Outfit Numbers', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'Outfit Numbers', Outfit, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* the Projects and Core Values pages' tabs: Geist, a crisp open UI face in the manner of Apple's system face */
+  --font-tab: 'Outfit Numbers', Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-heading: 'Outfit Numbers', 'SNCF Flared', Outfit, system-ui, sans-serif;
+  --font-script: 'Outfit Numbers', 'Dancing Script', cursive;
+  /* Shared Hindi face for quotations, slogans and illustration labels. */
+  --font-hindi: 'Outfit Numbers', 'Aparajita', 'Noto Serif Devanagari', 'Kohinoor Devanagari', serif;
+}
+:lang(hi) { font-family: var(--font-hindi); font-synthesis: none; }
+
 /* Every heading takes the heading face unless its own rule says otherwise:
    no specificity, so a component can still set a heading in another face. */
 :where(h1, h2, h3, h4, h5, h6) { font-family: var(--font-heading); }
@@ -73,7 +148,7 @@
      name, and the clearance between the two was measured per-glyph and is
      not generous. Cinzel reads larger than Jakarta at equal size anyway —
      inscriptional capitals have no lowercase and sit full-height. */
-  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   /* Sized for the DEEPER band (inner edge 32.5, was 36): the name sits on a
      recentred arc (r 40.5) with real air on both sides now. WHITE over the
      five-ink band — every ink in it is mid-dark, so one white passes on
@@ -88,17 +163,17 @@
    five rooms once, but an itinerary at the door reads as a table of
    contents — "JOURNEY BEGINS" says the one thing a threshold needs to. */
 .lotus-gate-journey {
-  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   font-size: 1.55px;
   letter-spacing: 0.72px;
   font-weight: 500;
   fill: rgb(255 255 255 / 0.58);
 }
 
-/* The farewell's salutation, in Devanagari — the Mission's own greeting.
-   None of the site's display faces carry the script, so this leans on the
-   system stack deliberately rather than pretending otherwise. */
+/* The farewell uses the same Hindi face as the quotes and station signs. */
 .lotus-gate-dhan {
+  font-family: var(--font-hindi);
+  font-synthesis: none;
   font-size: 2.4px;
   font-weight: 600;
   fill: rgb(255 255 255 / 0.6);
@@ -313,7 +388,7 @@
   bottom: -280px;
   left: calc(50% - 50vw);
   right: calc(50% - 50vw);
-  background: #04060a;
+  background: #102e56;
   opacity: var(--wall-shade, 0);
   pointer-events: none;
 }
@@ -339,10 +414,10 @@
   right: calc(50% - 50vw);
   background: linear-gradient(
     176deg,
-    color-mix(in srgb, var(--wall-a, #1f8a5c) 34%, #0b0e13),
-    color-mix(in srgb, var(--wall-b, #1f8a5c) 22%, #080a0e) 82%
+    color-mix(in srgb, var(--wall-a, #1f8a5c) 34%, #102e56),
+    color-mix(in srgb, var(--wall-b, #1f8a5c) 22%, #102e56) 82%
   );
-  box-shadow: 0 30px 90px -30px rgb(0 0 0 / 0.8);
+  box-shadow: 0 30px 90px -30px rgb(6 55 130 / 0.8);
 }
 /* The room's content is CENTRED in this box, so padding at the foot lifts
    the whole wall — label, plaques and frames together — off the rail. The
@@ -387,8 +462,8 @@
   overflow: hidden;
   background: rgb(255 255 255 / 0.07);
   box-shadow:
-    7px 11px 26px -9px rgb(0 0 0 / 0.62),
-    2px 3px 7px -3px rgb(0 0 0 / 0.4),
+    7px 11px 26px -9px rgb(6 55 130 / 0.62),
+    2px 3px 7px -3px rgb(6 55 130 / 0.4),
     inset 0 1px 0 rgb(255 255 255 / 0.22);
 }
 .lotus-plate img {
@@ -406,7 +481,7 @@
   border-radius: 2px;
 }
 .lotus-plate[data-style='mat'] .lotus-plate-art > * {
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.18);
+  box-shadow: 0 0 0 1px rgb(6 55 130 / 0.18);
 }
 
 /* moulding in the petal's own ink, image to the edge */
@@ -421,7 +496,7 @@
   border: 2px solid var(--plate-ink);
   border-radius: 1px;
   box-shadow:
-    9px 14px 30px -8px rgb(0 0 0 / 0.66),
+    9px 14px 30px -8px rgb(6 55 130 / 0.66),
     inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
@@ -484,14 +559,14 @@
   font-weight: 700;
   color: #fff;
   line-height: 1;
-  text-shadow: 0 2px 10px rgb(0 0 0 / 0.65);
+  text-shadow: 0 2px 10px rgb(6 55 130 / 0.65);
 }
 .lotus-plate-metric {
   font-size: 9px;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: rgb(255 255 255 / 0.8);
-  text-shadow: 0 1px 6px rgb(0 0 0 / 0.7);
+  text-shadow: 0 1px 6px rgb(6 55 130 / 0.7);
 }
 
 /* THE WALL LABEL sits BESIDE the work, not across it. A caption bar laid
@@ -512,7 +587,7 @@
 
 /* The wall label: a stat, engraved. */
 .lotus-plaque {
-  background: rgb(0 0 0 / 0.24);
+  background: rgb(6 55 130 / 0.24);
   border: 1px solid rgb(255 255 255 / 0.16);
   border-radius: 10px;
   backdrop-filter: blur(6px);
@@ -838,12 +913,12 @@
 /* 3D Layered Extruded Text Shadow */
 .text-3d-extruded {
   text-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.95),
+    0 1px 0 rgba(6, 55, 130, 0.95),
     0 2px 0 rgba(20, 15, 10, 0.9),
-    0 3px 1px rgba(0, 0, 0, 0.85),
-    0 4px 2px rgba(0, 0, 0, 0.7),
-    0 6px 6px rgba(0, 0, 0, 0.55),
-    0 0 14px rgba(0, 0, 0, 0.4);
+    0 3px 1px rgba(6, 55, 130, 0.85),
+    0 4px 2px rgba(6, 55, 130, 0.7),
+    0 6px 6px rgba(6, 55, 130, 0.55),
+    0 0 14px rgba(6, 55, 130, 0.4);
 }
 
 /* Keyframes for modals & smooth entries */
@@ -927,7 +1002,7 @@
 }
 
 .font-signature {
-  font-family: 'Brittany Signature', var(--font-script);
+  font-family: 'Outfit Numbers', 'Brittany Signature', var(--font-script);
 }
 
 /* SNCF brand green, sampled from the logo swoosh */
@@ -1111,7 +1186,7 @@
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.25),
+    0 4px 24px rgba(6, 55, 130, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
   overflow: hidden;
   transition:
@@ -1172,7 +1247,7 @@
 .search-morph:focus-within {
   background: rgba(255, 255, 255, 0.14);
   box-shadow:
-    0 6px 30px rgba(0, 0, 0, 0.35),
+    0 6px 30px rgba(6, 55, 130, 0.35),
     0 0 0 4px color-mix(in srgb, var(--accent-b, #ffffff) 26%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -1354,7 +1429,10 @@
   }
 }
 
-.hero-intro-rise {
+/* The path's name and headline are not part of it: they are in place as the
+   hall scrolls up, so they are never seen half-faded. The story below them
+   rises in. */
+.hero-intro-rise > .hero-details {
   animation: heroIntroRise 640ms cubic-bezier(0.22, 0.9, 0.3, 1) 60ms both;
 }
 
@@ -1362,13 +1440,13 @@
   animation: heroIntroBloom 760ms cubic-bezier(0.22, 0.9, 0.3, 1) 220ms both;
 }
 
-/* Pre-intro: content held invisible while the splash is still up */
-.hero-intro-waiting {
+/* Pre-intro: the story held invisible until the visitor arrives */
+.hero-intro-waiting > .hero-details {
   opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-intro-rise,
+  .hero-intro-rise > .hero-details,
   .hero-intro-bloom {
     animation: none;
     opacity: 1;
@@ -1428,7 +1506,13 @@
   to { transform: scaleX(1); }
 }
 
-.splash-welcome-photo { overflow: hidden; background: #0d2f2b; }
+/* THE WELCOME SCREEN'S GROUND is the site's own: built like .accent-canvas (the
+   same two-stop ramp of the page's ink, at the same angle, from the same
+   --accent-a / --accent-b the page underneath paints with), so the mission page
+   reads as part of the site and leaving it uncovers the same ground beneath.
+   It sat on a flat near-#063782 green before, a colour nothing else on the site
+   uses. Keep this in step with .accent-canvas if that changes. */
+.splash-welcome-photo { overflow: hidden; background: linear-gradient(var(--stage-angle, 135deg), var(--accent-a), var(--accent-b)); }
 
 .splash-welcome-photo-image {
   /* Satguru Mata Ji and Rajpita Ji stand at about 47% across, 46% down: with
@@ -1439,7 +1523,7 @@
 }
 
 .splash-welcome-photo.is-revealed .splash-welcome-photo-image {
-  animation: welcomePhotoSettle 7s cubic-bezier(0.25, 0.6, 0.3, 1) both;
+  animation: welcomePhotoSettle var(--welcome-duration, 10s) cubic-bezier(0.25, 0.6, 0.3, 1) both;
 }
 
 /* Deep-green tint plus a soft vignette keep the heading legible over any
@@ -1453,7 +1537,10 @@
   background:
     radial-gradient(ellipse min(40vw, 520px) min(28vh, 300px) at var(--focus-x, 47%) var(--focus-y, 46%), rgb(6 32 29 / 0) 0%, rgb(6 32 29 / 0.32) 62%, rgb(6 32 29 / 0.7) 100%),
     linear-gradient(rgb(10 48 43 / 0.2), rgb(10 48 43 / 0.2));
+  transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* the photograph's tint goes with the photograph: the message and mission pages are on the logo's navy alone */
+.splash-welcome-photo.is-mission::after { opacity: 0; }
 
 /* Set like a book's title page: the seal and motto (carried over from the
    first screen), the SNCF wordmark in the house's flared lettering, the full
@@ -1502,18 +1589,18 @@
   margin: auto 0 0;
 }
 
-/* SNCF in the flared lettering, mint like the name on the mission page; the
-   letters rise one after another. */
+/* SNCF in the flared lettering, in the logo's light blue like the name on the
+   message and mission pages; the letters rise one after another. */
 @keyframes flaredLetterIn {
   from { opacity: 0; transform: translateY(14%) scale(0.94); }
   to { opacity: 1; transform: none; }
 }
-.splash-welcome-sncf { display: block; color: #a9ecc9; filter: drop-shadow(0 6px 26px rgb(0 0 0 / 0.42)); }
+.splash-welcome-sncf { display: block; color: #95d9f1; filter: drop-shadow(0 6px 26px rgb(6 55 130 / 0.42)); }
 .splash-welcome-sncf svg { display: block; height: var(--wp-sncf); width: auto; max-width: 100%; overflow: visible; }
 .splash-welcome-sncf path {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: flaredLetterIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(1.15s + var(--i, 0) * 0.12s) both;
+  animation: flaredLetterIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) calc(0.5s + var(--i, 0) * 0.08s) both;
 }
 
 /* The full name between hairline rules that draw outwards from it. */
@@ -1527,8 +1614,8 @@
   font: 600 var(--wp-name) / 1.4 var(--font-sans);
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.4);
-  animation: welcomeRise 1s cubic-bezier(0.22, 1, 0.36, 1) 2.1s both;
+  text-shadow: 0 2px 14px rgb(6 55 130 / 0.4);
+  animation: welcomeRise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both;
 }
 /* letter-spacing trails the last letter; the matching indent recentres it */
 .splash-welcome-name > span { padding-left: 0.24em; text-wrap: balance; }
@@ -1538,7 +1625,7 @@
   height: 1px;
   background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55));
   transform-origin: right;
-  animation: welcomeRule 1s cubic-bezier(0.22, 1, 0.36, 1) 2.25s both;
+  animation: welcomeRule 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
 }
 .splash-welcome-name::after { background: linear-gradient(270deg, transparent, rgb(255 255 255 / 0.55)); transform-origin: left; }
 
@@ -1554,8 +1641,8 @@
   hyphens: auto;
   -webkit-hyphens: auto;
   hyphenate-limit-chars: 7 3 3;
-  text-shadow: 0 2px 12px rgb(0 0 0 / 0.45);
-  animation: welcomeRise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 2.6s both;
+  text-shadow: 0 2px 12px rgb(6 55 130 / 0.45);
+  animation: welcomeRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.95s both;
 }
 
 /* Phones: keep the foreword's last line clear of the arrow. */
@@ -1564,13 +1651,14 @@
 }
 
 /* ==========================================================================
-   HAND-OFF — welcome page to mission page, cut like a film transition
+   HAND-OFF — welcome page to message page, cut like a film transition
    The camera pushes in on the photograph and drifts as it softens and
-   dissolves into the deep green, a rack focus onto what comes next. The welcome
-   copy leaves like closing titles: SNCF's letters lift away one by one, the
-   name's letters spread and dissolve as its rules draw back in, the foreword
-   rises into a blur and the wash behind them clears. Meanwhile the logo glides
-   onto the foundation's name and the mission page writes itself in.
+   dissolves into the logo's navy, a rack focus onto what comes next. The
+   welcome copy leaves like closing titles: SNCF's letters lift away one by
+   one, the name's letters spread and dissolve as its rules draw back in, the
+   foreword rises into a blur and the wash behind them clears. Meanwhile the
+   logo glides onto the foundation's name and the message page writes itself
+   in. All of it within a second or so: each page stays only a few.
    ========================================================================== */
 @keyframes cameraPushPan {
   from { transform: none; filter: none; }
@@ -1583,22 +1671,22 @@
 @keyframes welcomeTextOut { to { opacity: 0; transform: translateY(-18px); filter: blur(8px); } }
 @keyframes softFadeOut { to { opacity: 0; } }
 
-/* The photograph dissolves away as the camera moves, so the mission page sits
-   on the plain deep green beneath it. The fade is a transition, not part of
-   the camera move, so it still happens (gently) with reduced motion. */
-.splash-camera { transform-origin: 62% 45%; transition: opacity 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s; }
-.splash-welcome-photo.is-mission .splash-camera { animation: cameraPushPan 3.2s cubic-bezier(0.6, 0, 0.2, 1) both; opacity: 0; }
+/* The photograph dissolves away as the camera moves, so the message and
+   mission pages sit on the logo's navy over it. The fade is a transition, not
+   part of the camera move, so it still happens (gently) with reduced motion. */
+.splash-camera { transform-origin: 62% 45%; transition: opacity 1.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s; }
+.splash-welcome-photo.is-mission .splash-camera { animation: cameraPushPan 1.8s cubic-bezier(0.6, 0, 0.2, 1) both; opacity: 0; }
 
 .splash-welcome-content[data-gone='true'] { pointer-events: none; }
-.splash-welcome-content[data-gone='true']::before { animation: softFadeOut 1.4s ease 0.3s forwards; }
-.splash-welcome-content[data-gone='true'] .splash-welcome-sncf { animation: welcomeBlurOut 0.9s ease forwards; }
+.splash-welcome-content[data-gone='true']::before { animation: softFadeOut 0.9s ease 0.15s forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-sncf { animation: welcomeBlurOut 0.7s ease forwards; }
 .splash-welcome-content[data-gone='true'] .splash-welcome-sncf path {
-  animation: flaredLetterOut 0.8s cubic-bezier(0.7, 0, 0.84, 0) calc(var(--i, 0) * 0.07s) forwards;
+  animation: flaredLetterOut 0.6s cubic-bezier(0.7, 0, 0.84, 0) calc(var(--i, 0) * 0.05s) forwards;
 }
-.splash-welcome-content[data-gone='true'] .splash-welcome-name { animation: welcomeNameOut 0.9s cubic-bezier(0.5, 0, 0.75, 0) 0.15s forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-name { animation: welcomeNameOut 0.7s cubic-bezier(0.5, 0, 0.75, 0) 0.1s forwards; }
 .splash-welcome-content[data-gone='true'] .splash-welcome-name::before,
-.splash-welcome-content[data-gone='true'] .splash-welcome-name::after { animation: welcomeRuleOut 0.7s cubic-bezier(0.5, 0, 0.75, 0) 0.1s forwards; }
-.splash-welcome-content[data-gone='true'] .splash-welcome-text { animation: welcomeTextOut 0.9s cubic-bezier(0.5, 0, 0.75, 0) 0.25s forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-name::after { animation: welcomeRuleOut 0.55s cubic-bezier(0.5, 0, 0.75, 0) 0.05s forwards; }
+.splash-welcome-content[data-gone='true'] .splash-welcome-text { animation: welcomeTextOut 0.7s cubic-bezier(0.5, 0, 0.75, 0) 0.15s forwards; }
 
 @media (prefers-reduced-motion: reduce) {
   .splash-welcome-photo.is-mission .splash-camera { animation: none; }
@@ -1633,14 +1721,42 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  /* darker on the copy side, lighter towards the portrait */
-  background: linear-gradient(90deg, rgb(4 22 20 / 0.72), rgb(4 22 20 / 0.46) 45%, rgb(4 22 20 / 0.32));
+  /* the left-to-right darkening of .accent-canvas, held a little deeper as far
+     as the copy column reaches (--shade-copy follows --mp-copy below): darker
+     on the copy side, lighter round the portrait, darker again at the far
+     edge. The logo's navy now lies over it on the message and mission pages,
+     so it only deepens the photograph as it dissolves into the navy. */
+  --shade-copy: max(40%, 33rem);
+  background: linear-gradient(to right, rgba(6, 55, 130, 0.68) 0%, rgba(6, 55, 130, 0.5) var(--shade-copy), rgba(6, 55, 130, 0.2) calc(var(--shade-copy) + 22%), rgba(6, 55, 130, 0.45) 100%);
   opacity: 0;
   transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 .splash-welcome-photo.is-mission .splash-mission-shade { opacity: 1; }
 
+/* THE MESSAGE AND MISSION PAGES' GROUND is a warm cream (#fdedd2), the
+   Satguru's portrait standing on it cut out, lit a little behind her and
+   warmer on the copy side: it comes in over the photograph as the welcome
+   page leaves, and stays through the mission page, until the whole intro
+   fades to reveal the hero. */
+.splash-message-ground {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 55% 75% at 74% 42%, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0) 70%),
+    linear-gradient(to right, rgb(214 170 120 / 0.14) 0%, rgb(214 170 120 / 0) max(40%, 33rem)),
+    #fdedd2;
+  opacity: 0;
+  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.splash-message-ground[data-shown='true'] { opacity: 1; }
+
+/* The page's inks on its cream, on the message page and the mission page
+   alike: the logo's navy for the name, the statements and the titles, a
+   deeper take on the logo's blue for the accents, and a dark navy-grey for
+   reading. */
 .splash-mission-page {
   --u: min(1vw, 1.62vh);
   --mp-pad: clamp(24px, 3.5vw, 56px);
@@ -1653,10 +1769,11 @@
   /* The name's two lines share one letter height, as large as the copy column
      allows (the longer line, logo included, is about 20 heights wide). */
   --name-line: min(clamp(22px, calc(var(--u) * 2.4), 40px), calc(100cqw / 20.2));
-  --mp-rule: rgb(255 255 255 / 0.2);
-  --mp-ink: rgb(255 255 255 / 0.84);
-  --mp-mint: #a9ecc9;
-  --mp-quote-ink: #d8f3e6;
+  --mp-rule: rgb(6 55 130 / 0.16);
+  --mp-ink: rgb(26 38 64 / 0.86);
+  --mp-strong: #063782;
+  --mp-accent: #0b5fa5;
+  --mp-quote-ink: #2c4a7c;
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -1678,7 +1795,7 @@
   --mp-pad-bottom: clamp(28px, 5vh, 60px);
   padding: var(--mp-pad-top) 0 var(--mp-pad-bottom);
   overflow: hidden auto;
-  color: #fff;
+  color: var(--mp-strong);
 }
 
 /* The copy column is a size container, so its contents follow its own width
@@ -1696,22 +1813,22 @@
   padding-left: var(--mp-pad);
 }
 
-/* Name: flared HEAL lettering in mint, with the landed logo before it. */
+/* Name: flared HEAL lettering in the logo's navy, with the landed logo
+   before it. */
 .splash-intro-name {
   display: flex;
   align-items: center;
   gap: calc(var(--mp-s) * 1.6);
   margin: 0;
-  color: var(--mp-mint);
-  filter: drop-shadow(0 3px 14px rgb(0 0 0 / 0.4));
+  color: var(--mp-strong);
   /* Fade only, no rise: the logo's landing spot is measured as this mounts. */
-  animation: introNameIn 0.6s ease 0.6s both;
+  animation: introNameIn 0.4s ease 0.3s both;
 }
 /* the name's letters rise in turn, while the logo glides in beside them */
 .splash-intro-wordmark path {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  animation: flaredLetterIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) calc(0.75s + var(--i, 0) * 0.035s) both;
+  animation: flaredLetterIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(0.35s + var(--i, 0) * 0.018s) both;
 }
 .splash-intro-logo-slot {
   flex: none;
@@ -1722,13 +1839,28 @@
 .splash-intro-wordmark svg { display: block; height: var(--name-line); width: auto; max-width: 100%; }
 
 /* --------------------------------------------------------------------------
+   The message page shares this frame (WelcomeSplashScreen 'message'): beneath
+   the name, the Satguru's message, set large as a chapter is, her name under
+   it, and a rail at the foot as the mission page has: the message plays as a
+   sequence of one (MissionChapters). Moving on, it lifts away, rail and all,
+   while the first chapter waits to come in, in the same place (one grid cell
+   holds both), so only the copy changes: the name, the logo and the portrait
+   stay where they are.
+   -------------------------------------------------------------------------- */
+@keyframes messageIn { from { opacity: 0; transform: translate3d(0, 14px, 0); filter: blur(8px); } }
+.splash-copy-body { flex: 1 1 auto; display: grid; min-height: 0; }
+.splash-copy-body > * { grid-area: 1 / 1; }
+.splash-message-sequence { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.splash-message-sequence[data-gone='true'] { pointer-events: none; animation: chapterOut 0.45s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+/* --------------------------------------------------------------------------
    The chapters. One plays at a time on a stage as tall as the longest, so
    nothing beneath it moves as they change; each is set larger than a column
    of copy could be, since it has the stage to itself. A chapter enters in
    layers: its heading, then its statement word by word or its quotation
    written in, then its body swept down into view. Leaving, it lifts away into
-   a blur as the next one rises.
-   The first chapter waits for the name to land (--mc-enter).
+   a blur as the next one rises. Each is in within about a second and a half,
+   since each stays only a few.
+   The first chapter waits for the message to lift away (--mc-enter).
    -------------------------------------------------------------------------- */
 @keyframes chapterOut { to { opacity: 0; transform: translate3d(0, -16px, 0) scale(0.985); filter: blur(10px); } }
 @keyframes chapterWordIn { from { opacity: 0; transform: translate3d(0, 0.34em, 0) scale(0.96); filter: blur(10px); } }
@@ -1738,7 +1870,7 @@
 @keyframes chapterSweep { from { opacity: 0; transform: translate3d(0, 10px, 0); -webkit-mask-position: 0 100%; mask-position: 0 100%; } }
 @keyframes chapterProgress { from { transform: scaleX(0); } to { transform: none; } }
 @keyframes chapterDivide { from { transform: scale(0); } }
-@keyframes chapterHeld { to { background-color: rgb(255 255 255 / 0.34); } }
+@keyframes chapterHeld { to { background-color: rgb(6 55 130 / 0.3); } }
 
 .mission-chapters {
   /* the heading over a statement, 5pt under the statement's size */
@@ -1747,13 +1879,13 @@
   --mc-title: clamp(30px, calc(var(--u) * 3.5), 62px);
   --mc-quote: clamp(18px, calc(var(--u) * 1.66), 29px);
   --mc-body: clamp(13px, calc(var(--u) * 1.02), 17px);
-  --mc-enter: 0.55s;
+  --mc-enter: 0.35s;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
-.mission-chapters[data-opening='true'] { --mc-enter: 1.3s; }
+.mission-chapters[data-opening='true'] { --mc-enter: 0.45s; }
 
 .mission-chapter-stage {
   flex: 1 1 auto;
@@ -1762,16 +1894,16 @@
   margin-block: calc(var(--mp-s) * 3.6);
 }
 .mission-chapter {
-  --mc-body-at: 1.15s;
+  --mc-body-at: 0.4s;
   grid-area: 1 / 1;
   position: relative;
   z-index: 0;
   min-width: 0;
 }
 /* a statement's body follows its last word */
-.mission-chapter[data-kind='statement'] { --mc-body-at: calc(0.75s + var(--words, 12) * 0.07s); }
+.mission-chapter[data-kind='statement'] { --mc-body-at: calc(0.3s + var(--words, 12) * 0.025s); }
 .mission-chapter[data-state='waiting'] { opacity: 0; pointer-events: none; }
-.mission-chapter[data-state='leaving'] { pointer-events: none; animation: chapterOut 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+.mission-chapter[data-state='leaving'] { pointer-events: none; animation: chapterOut 0.45s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
 
 /* One Purpose: lettered as Our Mission and Our Vision are, in the heading
    face, but in mint. */
@@ -1781,27 +1913,27 @@
   font: 800 var(--mc-eyebrow) / 1.08 var(--font-heading);
   letter-spacing: 0;
   text-transform: uppercase;
-  color: var(--mp-mint);
+  color: var(--mp-accent);
 }
 .mission-chapter-statement {
   max-width: 19em;
   margin: 0 0 calc(var(--mp-s) * 3);
   font: 600 var(--mc-statement) / 1.2 var(--font-sans);
   letter-spacing: -0.012em;
-  color: #fff;
+  color: var(--mp-strong);
   text-wrap: balance;
 }
 .mission-word { display: inline-block; }
 
-/* Our Mission, Our Vision: white, with a band of mint that glints across once
-   the title has landed. */
+/* Our Mission, Our Vision: in the logo's navy, with a band of the accent that
+   glints across once the title has landed. */
 .mission-chapter-title {
   width: fit-content;
   margin: 0 0 calc(var(--mp-s) * 1.4);
   font: 800 calc(var(--mc-title) * 0.82) / 1.08 var(--font-heading);
   letter-spacing: 0;
-  color: #fff;
-  background: linear-gradient(105deg, #fff 0 42%, var(--mp-mint) 50%, #fff 58%) 0 0 / 260% 100% no-repeat;
+  color: var(--mp-strong);
+  background: linear-gradient(105deg, var(--mp-strong) 0 42%, var(--mp-accent) 50%, var(--mp-strong) 58%) 0 0 / 260% 100% no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1836,7 +1968,7 @@
 .mission-chapter-highlight {
   font: 700 1.24em/1 var(--font-script);
   letter-spacing: 0;
-  color: var(--mp-mint);
+  color: var(--mp-accent);
   white-space: nowrap;
 }
 /* Following paragraphs keep the first one's left edge, a little apart. */
@@ -1865,7 +1997,7 @@
   grid-template-rows: subgrid;
   align-content: start;
 }
-.mission-chapter-part + .mission-chapter-part { --mc-part: 0.45s; }
+.mission-chapter-part + .mission-chapter-part { --mc-part: 0.2s; }
 .mission-chapter-part + .mission-chapter-part::before {
   content: '';
   position: absolute;
@@ -1883,27 +2015,28 @@
   .mission-chapter-part + .mission-chapter-part::before { bottom: auto; left: 0; right: 0; width: auto; height: 1px; background: var(--mp-rule); transform-origin: left; }
 }
 
-.mission-chapter[data-state='active'] .mission-chapter-eyebrow { animation: chapterTitleIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--mc-enter) both; }
+.mission-chapter[data-state='active'] .mission-chapter-eyebrow { animation: chapterTitleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) var(--mc-enter) both; }
 .mission-chapter[data-state='active'] .mission-word {
-  animation: chapterWordIn 1s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--mc-enter) + 0.3s + var(--w, 0) * 0.07s) both;
+  animation: chapterWordIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--mc-enter) + 0.1s + var(--w, 0) * 0.025s) both;
 }
 .mission-chapter[data-state='active'] .mission-chapter-title {
-  animation: chapterTitleIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--mc-enter) + var(--mc-part, 0s)) both,
-    chapterGlint 1.7s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--mc-enter) + 0.8s + var(--mc-part, 0s)) both;
+  animation: chapterTitleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--mc-enter) + var(--mc-part, 0s)) both,
+    chapterGlint 1s cubic-bezier(0.45, 0, 0.25, 1) calc(var(--mc-enter) + 0.45s + var(--mc-part, 0s)) both;
 }
-.mission-chapter[data-state='active'] .mission-chapter-quote { animation: chapterInk 1.9s cubic-bezier(0.45, 0.05, 0.25, 1) calc(var(--mc-enter) + 0.55s + var(--mc-part, 0s)) both; }
+.mission-chapter[data-state='active'] .mission-chapter-quote { animation: chapterInk 0.85s cubic-bezier(0.45, 0.05, 0.25, 1) calc(var(--mc-enter) + 0.2s + var(--mc-part, 0s)) both; }
 .mission-chapter[data-state='active'] .mission-chapter-body p {
-  animation: chapterSweep 1.4s cubic-bezier(0.25, 0.6, 0.3, 1) calc(var(--mc-enter) + var(--mc-body-at) + var(--mc-part, 0s) + var(--p, 0) * 0.4s) both;
+  animation: chapterSweep 0.7s cubic-bezier(0.25, 0.6, 0.3, 1) calc(var(--mc-enter) + var(--mc-body-at) + var(--mc-part, 0s) + var(--p, 0) * 0.15s) both;
 }
-.mission-chapter[data-state='active'] .mission-chapter-part + .mission-chapter-part::before { animation: chapterDivide 1.4s cubic-bezier(0.65, 0, 0.25, 1) calc(var(--mc-enter) + 0.3s) both; }
+.mission-chapter[data-state='active'] .mission-chapter-part + .mission-chapter-part::before { animation: chapterDivide 0.8s cubic-bezier(0.65, 0, 0.25, 1) calc(var(--mc-enter) + 0.1s) both; }
 
 /* The rail: each chapter's line fills as it plays, level with the Satguru's
-   quotation; pressing a name plays that chapter. */
+   quotation; pressing a name plays that chapter. It comes in early, so a
+   viewer sees at once that the page moves on, and can hold it. */
 .mission-chapter-rail {
   display: flex;
   align-items: center;
   gap: calc(var(--mp-s) * 2.2);
-  animation: welcomeRise 1s cubic-bezier(0.16, 1, 0.3, 1) 1.9s both;
+  animation: welcomeRise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
 }
 .mission-chapter-step {
   flex: 1 1 0;
@@ -1915,7 +2048,7 @@
   padding: 6px 0 4px;
   border: 0;
   background: none;
-  color: rgb(255 255 255 / 0.5);
+  color: rgb(6 55 130 / 0.5);
   font: 600 clamp(9.5px, calc(var(--u) * 0.72), 12px) / 1.2 var(--font-sans);
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1924,21 +2057,21 @@
   transition: color 0.4s ease;
 }
 .mission-chapter-step:hover,
-.mission-chapter-step[aria-current='step'] { color: #fff; }
-.mission-chapter-step:focus-visible { outline: 2px solid #fff; outline-offset: 5px; border-radius: 3px; }
+.mission-chapter-step[aria-current='step'] { color: var(--mp-strong); }
+.mission-chapter-step:focus-visible { outline: 2px solid var(--mp-strong); outline-offset: 5px; border-radius: 3px; }
 .mission-chapter-progress {
   grid-column: 1 / -1;
   position: relative;
   height: 2px;
   border-radius: 2px;
-  background: rgb(255 255 255 / 0.16);
+  background: rgb(6 55 130 / 0.14);
   overflow: hidden;
 }
 .mission-chapter-progress > i {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--mp-mint);
+  background: var(--mp-accent);
   transform: scaleX(0);
   transform-origin: left;
 }
@@ -1947,23 +2080,25 @@
 /* held: the line stops, and its track breathes until the sequence resumes */
 .mission-chapters[data-paused='true'] .mission-chapter-step[aria-current='step'] .mission-chapter-progress > i { animation-play-state: paused; }
 .mission-chapters[data-paused='true'] .mission-chapter-step[aria-current='step'] .mission-chapter-progress { animation: chapterHeld 1.1s ease-in-out infinite alternate; }
-.mission-chapter-number { color: var(--mp-mint); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+.mission-chapter-number { color: var(--mp-accent); font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
 .mission-chapter-label { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+/* a sequence of one has no number: its name takes the line's width */
+.mission-chapter-progress + .mission-chapter-label { grid-column: 1 / -1; }
 .mission-chapter-hold {
   flex: none;
   display: grid;
   place-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid rgb(255 255 255 / 0.32);
+  border: 1px solid rgb(6 55 130 / 0.3);
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.06);
-  color: #fff;
+  background: rgb(6 55 130 / 0.05);
+  color: var(--mp-strong);
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-.mission-chapter-hold:hover { background: rgb(255 255 255 / 0.16); border-color: rgb(255 255 255 / 0.6); }
-.mission-chapter-hold:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.mission-chapter-hold:hover { background: rgb(6 55 130 / 0.12); border-color: rgb(6 55 130 / 0.55); }
+.mission-chapter-hold:focus-visible { outline: 2px solid var(--mp-strong); outline-offset: 3px; }
 
 /* Set still (reduced motion): the chapters set out at once, at the sizes a
    column of copy takes: One Purpose at the top, then Mission and Vision side
@@ -1989,6 +2124,8 @@
 .mission-chapters[data-still='true'] .mission-chapter-statement { max-width: none; margin-bottom: calc(var(--mp-s) * 1.7); }
 .mission-chapters[data-still='true'] .mission-chapter-title { margin-bottom: var(--mp-s); }
 .mission-chapters[data-still='true'] .mission-chapter-quote { margin-bottom: calc(var(--mp-s) * 1.5); }
+/* the message, set still, keeps to the middle of the column as it does playing */
+.splash-message-sequence .mission-chapters[data-still='true'] { align-content: center; margin-top: 0; }
 
 /* Satguru: a cover portrait filling the right of the screen, from the top
    edge down to just above her quotation, scaled to cover so her face reads
@@ -2004,7 +2141,6 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  color: #fff;
   text-align: center;
 }
 .splash-satguru-frame {
@@ -2017,7 +2153,7 @@
   align-self: stretch;
   margin: calc(-1 * var(--mp-pad-top)) calc(-1 * var(--mp-pad)) 0 calc(-1 * clamp(16px, 2vw, 40px));
   pointer-events: none;
-  animation: portraitFocus 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  animation: portraitFocus 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
 }
 .splash-satguru img {
   display: block;
@@ -2037,14 +2173,16 @@
   flex: none;
   max-width: min(100%, 30em);
   margin-top: calc(var(--mp-s) * 2.4);
-  animation: welcomeRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.6s both;
+  animation: welcomeRise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
 }
+/* on the message page her message stands beside the portrait, so its own
+   quotation waits, its place kept, for the mission page */
+.splash-satguru figcaption[data-shown='false'] { visibility: hidden; animation: none; }
 .splash-satguru blockquote {
   margin: 0;
   font: 600 calc(var(--mp-quote) * 1.12) / 1.38 var(--font-script);
   color: var(--mp-quote-ink);
   text-wrap: balance;
-  text-shadow: 0 2px 14px rgb(0 0 0 / 0.45);
 }
 .splash-satguru cite {
   display: block;
@@ -2053,19 +2191,22 @@
   font-style: normal;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.72);
+  color: rgb(6 55 130 / 0.7);
 }
 
 /* Short desktop screens: the same copy needs more width to fit the height,
    and a touch tighter leading. */
 @media (min-width: 1024px) and (max-height: 860px) {
   .splash-mission-page { --mp-copy: max(44%, 33rem); --mp-lh: 1.66; }
+  .splash-mission-shade { --shade-copy: max(44%, 33rem); }
 }
 @media (min-width: 1024px) and (max-height: 720px) {
   .splash-mission-page { --mp-copy: max(50%, 34rem); --mp-lh: 1.6; }
+  .splash-mission-shade { --shade-copy: max(50%, 34rem); }
 }
 @media (min-width: 1024px) and (max-height: 600px) {
   .splash-mission-page { --mp-copy: max(56%, 36rem); --mp-lh: 1.56; }
+  .splash-mission-shade { --shade-copy: max(56%, 36rem); }
 }
 
 /* Below desktop: one scrolling column. The copy runs full width, and the
@@ -2078,8 +2219,13 @@
     --mp-pad-bottom: 112px;
   }
   .splash-mission-copy { max-width: none; padding-inline: clamp(20px, 5vw, 40px); }
+  /* the copy runs the full width here, so the ground is darkened evenly under it */
+  .splash-mission-shade { background: linear-gradient(rgba(6, 55, 130, 0.6), rgba(6, 55, 130, 0.5)); }
   /* the page scrolls here, so each chapter starts just under the name */
   .mission-chapter-stage { align-items: start; }
+  /* the rail can run down to the foot of the screen here, so its pause button
+     keeps clear of the arrow there */
+  .mission-chapter-rail { padding-right: 56px; }
   /* sized by its content here: it follows the copy rather than sharing its row */
   .splash-satguru { min-height: auto; justify-content: flex-start; padding: calc(var(--mp-s) * 5) clamp(20px, 5vw, 40px) 0; }
   .splash-satguru-frame {
@@ -2095,6 +2241,8 @@
     mask-image: linear-gradient(#000 62%, transparent 98%);
   }
   .splash-satguru figcaption { margin-top: calc(var(--mp-s) * 1.6); }
+  /* centred on the screen here, the couplet keeps clear of the arrow at the
+     bottom right: its lines are about ten times its size across */
 }
 /* A narrow copy column puts the logo above the name, so the name can use the
    full width, and keeps the rail to the chapters' names. */
@@ -2132,7 +2280,7 @@
 .splash-monogram[data-leaving='true'] { opacity: 0; animation: none; }
 
 /* Skip arrow, bottom right of the welcome page: jumps straight to the site.
-   It appears once the logo and tagline have moved into place (1.6s). */
+   It appears once the logo and tagline have moved into place (1.1s). */
 .splash-skip {
   position: absolute;
   right: clamp(16px, 2.5vw, 36px);
@@ -2148,7 +2296,7 @@
   color: var(--sncf-tagline);
   cursor: pointer;
   transition: color 0.8s ease, background-color 0.8s ease, border-color 0.8s ease, opacity 0.4s ease, transform 0.25s ease;
-  animation: welcomeRise 0.8s ease-out 1.8s backwards;
+  animation: welcomeRise 0.8s ease-out 1.1s backwards;
 }
 .splash-skip.is-on-photo {
   border-color: rgb(255 255 255 / 0.55);
@@ -2158,6 +2306,7 @@
 }
 .splash-skip:hover { transform: translateX(3px); background: rgb(255 255 255 / 0.22); }
 .splash-skip:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.splash-skip:not(.is-on-photo):focus-visible { outline-color: #063782; }
 #welcome-splash-screen.pointer-events-none .splash-skip { opacity: 0; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2422,9 +2571,9 @@
        page-wide layer it shades both screens identically. */
     linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.65) 0%,
-      rgba(0, 0, 0, 0.2) 60%,
-      rgba(0, 0, 0, 0.45) 100%
+      rgba(6, 55, 130, 0.65) 0%,
+      rgba(6, 55, 130, 0.2) 60%,
+      rgba(6, 55, 130, 0.45) 100%
     ),
     linear-gradient(var(--stage-angle, 135deg), var(--accent-a), var(--accent-b));
   transition:
@@ -2451,9 +2600,9 @@
   background:
     linear-gradient(
       to right,
-      rgba(0, 0, 0, 0.65) 0%,
-      rgba(0, 0, 0, 0.2) 60%,
-      rgba(0, 0, 0, 0.45) 100%
+      rgba(6, 55, 130, 0.65) 0%,
+      rgba(6, 55, 130, 0.2) 60%,
+      rgba(6, 55, 130, 0.45) 100%
     ),
     linear-gradient(var(--stage-angle, 135deg), var(--lotus-a), var(--lotus-b));
 }
@@ -2620,7 +2769,7 @@
   padding: 6px 10px;
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--nav-a) 45%, rgb(255 255 255 / 0.25));
-  background: rgb(0 0 0 / 0.38);
+  background: rgb(6 55 130 / 0.38);
   color: rgb(255 255 255 / 0.85);
   cursor: pointer;
   backdrop-filter: blur(6px);
@@ -2631,7 +2780,7 @@
   transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 .exhibition-nav-chip:hover {
-  background: color-mix(in srgb, var(--nav-a) 35%, rgb(0 0 0 / 0.35));
+  background: color-mix(in srgb, var(--nav-a) 35%, rgb(6 55 130 / 0.35));
   color: #fff;
 }
 /* The nav rides above the section jump button; on a phone that stack eats
@@ -2663,7 +2812,7 @@
   border: 0;
   padding: 0;
   cursor: pointer;
-  background: radial-gradient(120% 90% at 50% 40%, rgb(0 0 0 / 0.72), rgb(0 0 0 / 0.94));
+  background: radial-gradient(120% 90% at 50% 40%, rgb(6 55 130 / 0.72), rgb(6 55 130 / 0.94));
   backdrop-filter: blur(10px);
 }
 .gallery-catalogue-body {
@@ -2673,9 +2822,9 @@
   overflow: auto;
   overscroll-behavior: contain;
   border-radius: 16px;
-  background: #0d1014;
+  background: #102e56;
   border: 1px solid rgb(255 255 255 / 0.13);
-  box-shadow: 0 40px 110px -30px rgb(0 0 0 / 0.85);
+  box-shadow: 0 40px 110px -30px rgb(6 55 130 / 0.85);
   padding: clamp(22px, 3.4vw, 44px) clamp(16px, 3vw, 40px) 14px;
   animation: case-rise 320ms cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -2690,12 +2839,12 @@
   place-items: center;
   border-radius: 50%;
   border: 1px solid rgb(255 255 255 / 0.22);
-  background: rgb(0 0 0 / 0.4);
+  background: rgb(6 55 130 / 0.4);
   color: #fff;
   cursor: pointer;
 }
 .gallery-catalogue-close:hover {
-  background: rgb(0 0 0 / 0.65);
+  background: rgb(6 55 130 / 0.65);
 }
 .gallery-catalogue-head {
   text-align: center;
@@ -2780,8 +2929,8 @@
   padding: 0;
   cursor: pointer;
   background:
-    radial-gradient(120% 90% at 50% 45%, rgb(0 0 0 / 0.62), rgb(0 0 0 / 0.9)),
-    color-mix(in srgb, var(--case-a) 30%, #05070a);
+    radial-gradient(120% 90% at 50% 45%, rgb(6 55 130 / 0.62), rgb(6 55 130 / 0.9)),
+    color-mix(in srgb, var(--case-a) 30%, #102e56);
   backdrop-filter: blur(9px);
 }
 .activity-case-body {
@@ -2790,9 +2939,9 @@
   max-height: 88vh;
   overflow: auto;
   border-radius: 16px;
-  background: color-mix(in srgb, var(--case-a) 22%, #0d1014);
+  background: color-mix(in srgb, var(--case-a) 22%, #102e56);
   border: 1px solid rgb(255 255 255 / 0.14);
-  box-shadow: 0 40px 110px -30px rgb(0 0 0 / 0.85);
+  box-shadow: 0 40px 110px -30px rgb(6 55 130 / 0.85);
   animation: case-rise 320ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 @keyframes case-rise {
@@ -2811,12 +2960,12 @@
   place-items: center;
   border-radius: 50%;
   border: 1px solid rgb(255 255 255 / 0.22);
-  background: rgb(0 0 0 / 0.4);
+  background: rgb(6 55 130 / 0.4);
   color: #fff;
   cursor: pointer;
 }
 .activity-case-close:hover {
-  background: rgb(0 0 0 / 0.65);
+  background: rgb(6 55 130 / 0.65);
 }
 .activity-case-grid {
   display: grid;
@@ -2839,7 +2988,7 @@
   background: #f4f1ea;
   padding: 3.5%;
   box-shadow:
-    8px 13px 34px -10px rgb(0 0 0 / 0.7),
+    8px 13px 34px -10px rgb(6 55 130 / 0.7),
     inset 0 1px 0 rgb(255 255 255 / 0.3);
 }
 .activity-case-art img {
@@ -2958,7 +3107,7 @@
   box-shadow:
     0 0 0 1px var(--plate-ink),
     0 0 30px -4px var(--plate-ink),
-    7px 11px 26px -9px rgb(0 0 0 / 0.62);
+    7px 11px 26px -9px rgb(6 55 130 / 0.62);
 }
 .lotus-plate:hover .lotus-plate-label {
   color: #fff;
@@ -3012,7 +3161,7 @@
 .patron-plaque {
   border-radius: 14px;
   border: 2px solid color-mix(in srgb, var(--plate-ink, #fff) 55%, transparent);
-  background: rgb(0 0 0 / 0.22);
+  background: rgb(6 55 130 / 0.22);
   backdrop-filter: blur(8px);
   padding: 18px 20px;
   opacity: 0;
@@ -3135,7 +3284,7 @@
 }
 /* the slab's side: three layers filling the thickness — as ANNULI, not
    discs. Full discs stacked their alpha (nine dark sheets under the middle
-   summed to a black drum, twice measured); a rim band paints only where a
+   summed to a #063782 drum, twice measured); a rim band paints only where a
    slab's side actually shows, and the interiors stay clear for the top
    surfaces alone, so the page's accent finally breathes through the glass. */
 .orbit-tier i {
@@ -3451,7 +3600,7 @@
   background: var(--node-ink, #fff);
   box-shadow:
     0 0 0 3px color-mix(in srgb, var(--node-ink, #fff) 28%, transparent),
-    0 6px 18px -4px rgb(0 0 0 / 0.55),
+    0 6px 18px -4px rgb(6 55 130 / 0.55),
     0 0 16px -4px var(--node-ink, #fff);
   transition: transform 300ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 300ms ease;
 }
@@ -3476,7 +3625,7 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.06em;
-  color: var(--node-ink, #333);
+  color: var(--node-ink, #102e56);
 }
 .orbit-node:hover .orbit-medallion {
   transform: scale(1.18);
@@ -3485,7 +3634,7 @@
   transform: scale(1.3);
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--node-ink, #fff) 40%, transparent),
-    0 6px 18px -4px rgb(0 0 0 / 0.55),
+    0 6px 18px -4px rgb(6 55 130 / 0.55),
     0 0 34px 0 var(--node-ink, #fff);
 }
 /* THE NAME RIDES ALONG, revealed only for the medallion being pointed at.
@@ -3522,7 +3671,7 @@
   height: 26%;
   translate: -50% 46%;
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgb(0 0 0 / 0.42) 0%, transparent 68%);
+  background: radial-gradient(ellipse, rgb(6 55 130 / 0.42) 0%, transparent 68%);
   transform: rotateX(var(--orbit-tilt));
   transform-origin: 50% 50%;
 }
@@ -3549,7 +3698,7 @@
   width: 100%;
   margin-top: -32%;
   position: relative;
-  filter: drop-shadow(0 10px 24px rgb(0 0 0 / 0.4));
+  filter: drop-shadow(0 10px 24px rgb(6 55 130 / 0.4));
 }
 /* the presented plaque rises with each new selection (keyed remount) */
 .patron-plaque-presented {
@@ -3606,7 +3755,7 @@
   position: relative;
   padding: 12px 12px 12px 15px;
   border-radius: 12px;
-  background: rgb(0 0 0 / 0.24);
+  background: rgb(6 55 130 / 0.24);
   border: 1px solid rgb(255 255 255 / 0.12);
   backdrop-filter: blur(8px);
   overflow: hidden;
@@ -3678,9 +3827,9 @@
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #0b0e13;
+  color: #102e56;
   background: linear-gradient(100deg, var(--accent-a, #fff), var(--accent-b, #fff));
-  box-shadow: 0 10px 26px -10px rgb(0 0 0 / 0.8);
+  box-shadow: 0 10px 26px -10px rgb(6 55 130 / 0.8);
   transition: transform 260ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 260ms ease,
     filter 260ms ease;
 }
@@ -3693,7 +3842,7 @@
 .partner-cta:hover {
   transform: translateY(-2px);
   filter: brightness(1.08);
-  box-shadow: 0 16px 34px -12px rgb(0 0 0 / 0.85);
+  box-shadow: 0 16px 34px -12px rgb(6 55 130 / 0.85);
 }
 .partner-cta:hover::after {
   transform: translateX(4px);
@@ -3866,7 +4015,7 @@
   background: var(--node-ink, #fff);
   box-shadow:
     0 0 0 2px color-mix(in srgb, var(--node-ink, #fff) 30%, transparent),
-    0 6px 16px -6px rgb(0 0 0 / 0.7);
+    0 6px 16px -6px rgb(6 55 130 / 0.7);
 }
 .partner-plaque-mark .orbit-medallion-core {
   width: 78%;
@@ -3963,7 +4112,7 @@
   padding: 8px 15px;
   border-radius: 999px;
   border: 1.5px solid color-mix(in srgb, var(--chip-a, #fff) 55%, rgb(255 255 255 / 0.14));
-  background: rgb(0 0 0 / 0.18);
+  background: rgb(6 55 130 / 0.18);
   color: rgb(255 255 255 / 0.85);
   font-size: 10.5px;
   font-weight: 800;
@@ -4012,7 +4161,7 @@
 .partner-card {
   border-radius: 14px;
   border: 1.5px solid color-mix(in srgb, var(--card-ink, #fff) 45%, rgb(255 255 255 / 0.12));
-  background: rgb(0 0 0 / 0.22);
+  background: rgb(6 55 130 / 0.22);
   backdrop-filter: blur(8px);
   overflow: hidden;
   transition: border-color 280ms ease, box-shadow 280ms ease;
@@ -4076,7 +4225,7 @@
 .partner-card-initials {
   font-size: 11px;
   font-weight: 800;
-  color: var(--card-ink, #333);
+  color: var(--card-ink, #102e56);
 }
 .partner-card-chevron {
   flex: none;
@@ -4182,7 +4331,7 @@
   padding: 7px 10px;
   border-radius: 12px;
   border: 1.5px solid color-mix(in srgb, var(--card-ink, #fff) 42%, rgb(255 255 255 / 0.12));
-  background: rgb(0 0 0 / 0.2);
+  background: rgb(6 55 130 / 0.2);
   backdrop-filter: blur(8px);
   text-align: left;
   cursor: pointer;
@@ -4194,7 +4343,7 @@
 }
 .partner-row[data-selected='true'] {
   border-color: var(--card-ink);
-  background: rgb(0 0 0 / 0.32);
+  background: rgb(6 55 130 / 0.32);
   box-shadow: 0 0 0 1px var(--card-ink), 0 0 22px -7px var(--card-ink);
 }
 .partner-row:focus-visible {
@@ -4265,7 +4414,7 @@
   padding: 8px 12px;
   border-radius: 10px;
   border: 1.5px solid color-mix(in srgb, var(--cause-a, #fff) 45%, rgb(255 255 255 / 0.15));
-  background: rgb(0 0 0 / 0.28);
+  background: rgb(6 55 130 / 0.28);
   color: #fff;
   font-size: 13px;
   transition: border-color 240ms ease, box-shadow 240ms ease;
@@ -4320,146 +4469,6 @@
   .partner-aurora { animation: none; }
 }
 
-/* THE BROCHURE: exists only on paper. Hidden on screen; under print the
-   whole app steps aside and this one A4 page speaks. */
-#partner-brochure {
-  display: none;
-}
-@media print {
-  @page {
-    size: A4;
-    margin: 14mm;
-  }
-  body > #root {
-    display: none !important;
-  }
-  body {
-    background: #fff !important;
-  }
-  #partner-brochure {
-    display: block;
-    color: #1c2333;
-    font-family: var(--font-sans);
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .pb-inkline {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 18px;
-  }
-  .pb-inkline span {
-    display: block;
-    height: 5px;
-    flex: 1;
-    border-radius: 999px;
-  }
-  .pb-eyebrow {
-    font-size: 9.5px;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: #5a647e;
-    margin: 0 0 6px;
-  }
-  .pb-title {
-    font-family: var(--font-heading);
-    font-size: 32px;
-    font-weight: 800;
-    margin: 0 0 2px;
-    color: #141a2a;
-  }
-  .pb-invite {
-    font-size: 15px;
-    margin: 0 0 12px;
-    color: #2a3350;
-  }
-  .pb-invite strong {
-    color: #f81170;
-  }
-  .pb-lede {
-    font-size: 11.5px;
-    line-height: 1.6;
-    color: #333c55;
-    margin: 0 0 14px;
-    max-width: 62ch;
-  }
-  .pb-proof {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .pb-proof > div {
-    flex: 1;
-    border: 1px solid #d5dbeb;
-    border-left: 4px solid #09a6cf;
-    border-radius: 8px;
-    padding: 9px 11px;
-  }
-  .pb-proof-value {
-    display: block;
-    font-size: 19px;
-    font-weight: 800;
-    color: #141a2a;
-  }
-  .pb-proof-label {
-    display: block;
-    font-size: 9.5px;
-    color: #5a647e;
-    margin-top: 2px;
-  }
-  .pb-section {
-    font-size: 9.5px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #5a647e;
-    margin: 0 0 8px;
-  }
-  .pb-register {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 14px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px 12px;
-  }
-  .pb-register li {
-    border-left: 3px solid #b0b9d4;
-    padding: 2px 0 2px 9px;
-    break-inside: avoid;
-  }
-  .pb-register strong {
-    display: block;
-    font-size: 10.5px;
-    color: #141a2a;
-  }
-  .pb-register span {
-    display: block;
-    font-size: 9px;
-    color: #5a647e;
-    line-height: 1.4;
-  }
-  .pb-seat {
-    border-left-style: dashed !important;
-    border-left-color: #f81170 !important;
-  }
-  .pb-seat strong {
-    color: #f81170;
-  }
-  .pb-creds {
-    font-size: 9px;
-    color: #5a647e;
-    border-top: 1px solid #d5dbeb;
-    padding-top: 8px;
-    margin: 0 0 4px;
-  }
-  .pb-contact {
-    font-size: 10px;
-    font-weight: 700;
-    color: #141a2a;
-    margin: 0;
-  }
-}
-
 /* ---- PILLAR-PETAL CARDS & FULL-SCREEN COMPOSITION -------------------- */
 
 /* the cards grow into the screen: pillar-washed bodies, equal rows */
@@ -4480,7 +4489,7 @@
   background: linear-gradient(
     115deg,
     color-mix(in srgb, var(--pill-a, #6f86c9) 22%, rgb(255 255 255 / 0.04)) 0%,
-    color-mix(in srgb, var(--pill-b, #41598f) 30%, rgb(0 0 0 / 0.28)) 100%
+    color-mix(in srgb, var(--pill-b, #41598f) 30%, rgb(6 55 130 / 0.28)) 100%
   );
   border-color: color-mix(in srgb, var(--pill-a, #fff) 50%, rgb(255 255 255 / 0.14));
 }
@@ -4518,7 +4527,7 @@
   padding: 1.5px 7px;
   border-radius: 999px;
   margin-top: 3px;
-  background: color-mix(in srgb, var(--pill-a, #fff) 45%, rgb(0 0 0 / 0.3));
+  background: color-mix(in srgb, var(--pill-a, #fff) 45%, rgb(6 55 130 / 0.3));
   border: 1px solid color-mix(in srgb, var(--pill-a, #fff) 55%, transparent);
 }
 .partner-row .partner-card-mark {
@@ -4573,7 +4582,7 @@
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.9),
     inset 0 -14px 26px -20px rgb(20 30 60 / 0.35),
-    0 34px 60px -30px rgb(0 0 0 / 0.6);
+    0 34px 60px -30px rgb(6 55 130 / 0.6);
   /* the wall is trucked in and stood up on arrival */
   opacity: 0;
   transform: translateY(26px);
@@ -4610,7 +4619,7 @@
 .media-wall-title {
   /* CINZEL — the gate's own inscriptional face; the wall's lockup letters
      itself the way the monument does */
-  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', 'Times New Roman', serif;
   /* 600 is the heaviest Cinzel weight the page loads */
   font-weight: 600;
   font-size: clamp(16px, 2.7vh, 23px);
@@ -4781,7 +4790,7 @@
   background: linear-gradient(90deg, rgb(13 22 40 / 0.92) 0%, rgb(19 30 54 / 0.88) 100%);
   border: 1px solid rgb(255 255 255 / 0.14);
   backdrop-filter: blur(8px);
-  box-shadow: 0 18px 36px -22px rgb(0 0 0 / 0.7);
+  box-shadow: 0 18px 36px -22px rgb(6 55 130 / 0.7);
   /* it follows the wall in, a beat later */
   opacity: 0;
   transform: translateY(18px);
@@ -5047,7 +5056,7 @@
   justify-content: center;
   pointer-events: none;
   user-select: none;
-  font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', Georgia, 'Times New Roman', serif;
   font-size: clamp(72px, 22vw, 300px);
   font-weight: 600;
   line-height: 1;
@@ -5071,7 +5080,7 @@
   overflow: hidden;
   background: rgb(20 14 22 / 0.45);
   cursor: pointer;
-  box-shadow: 0 40px 80px -32px rgb(0 0 0 / 0.85);
+  box-shadow: 0 40px 80px -32px rgb(6 55 130 / 0.85);
 }
 .award-card img {
   display: block;
@@ -5083,7 +5092,7 @@
   object-fit: cover;
   object-position: var(--focal, 50% 50%);
 }
-.award-card--center { box-shadow: 0 56px 110px -36px rgb(0 0 0 / 0.9); }
+.award-card--center { box-shadow: 0 56px 110px -36px rgb(6 55 130 / 0.9); }
 .award-card:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
 
 /* ---------- masthead, as the ring had it ---------- */
@@ -5110,7 +5119,7 @@
 
 .award-title {
   margin: 0;
-  font-family: 'Cinzel', Georgia, 'Times New Roman', serif;
+  font-family: 'Outfit Numbers', 'Cinzel', Georgia, 'Times New Roman', serif;
   font-weight: 500;
   font-size: clamp(26px, 4.2vw, 56px);
   line-height: 1.05;
@@ -5280,7 +5289,7 @@
   line-height: 1;
   color: var(--ink-900);
   margin: 0;
-  text-shadow: 0 6px 30px rgb(0 0 0 / 0.4);
+  text-shadow: 0 6px 30px rgb(6 55 130 / 0.4);
 }
 .page-rule {
   width: 76px;
@@ -5374,10 +5383,10 @@
      plate is just as saturated and white clears 4.5:1 across the whole face. */
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--ink-a) 84%, #16182b) 0%,
-    color-mix(in srgb, var(--ink-a) 94%, #16182b) 100%
+    color-mix(in srgb, var(--ink-a) 84%, #102e56) 0%,
+    color-mix(in srgb, var(--ink-a) 94%, #102e56) 100%
   );
-  box-shadow: 0 18px 34px -22px color-mix(in srgb, var(--ink-a) 70%, #16182b);
+  box-shadow: 0 18px 34px -22px color-mix(in srgb, var(--ink-a) 70%, #102e56);
   transition: transform 260ms cubic-bezier(0.33, 1, 0.68, 1), box-shadow 260ms ease;
 }
 /* a soft light from the top-left corner, so four identical plates in a row
@@ -5760,10 +5769,10 @@
      its bright end measured 2.44:1 under white type */
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--ink-a) 84%, #16182b) 0%,
-    color-mix(in srgb, var(--ink-a) 94%, #16182b) 100%
+    color-mix(in srgb, var(--ink-a) 84%, #102e56) 0%,
+    color-mix(in srgb, var(--ink-a) 94%, #102e56) 100%
   );
-  box-shadow: 0 20px 40px -22px color-mix(in srgb, var(--ink-a) 70%, #16182b);
+  box-shadow: 0 20px 40px -22px color-mix(in srgb, var(--ink-a) 70%, #102e56);
 }
 .pj-plate-value {
   font-size: clamp(30px, 5.5vw, 46px);
@@ -6093,7 +6102,7 @@
   /* THE INK. One near-black with a little indigo in it, stepped down by
      opacity rather than by mixing toward grey — greyed text on warm paper
      reads as faded, tinted text reads as considered. */
-  --ink-900: #16182b;
+  --ink-900: #102e56;
   --ink-700: #3a3f57;
   --ink-500: #626981;
   --ink-400: #838aa8;
@@ -6128,7 +6137,7 @@
       rgb(9 166 207 / 0.14) 74%,
       rgb(105 185 71 / 0.16) 100%
     ),
-    linear-gradient(180deg, #171334 0%, #120f2a 100%);
+    linear-gradient(180deg, #171334 0%, #102e56 100%);
   box-shadow: 0 1px 0 rgb(255 255 255 / 0.08), 0 10px 30px -18px rgb(18 15 42 / 0.8);
 }
 
@@ -6308,6 +6317,99 @@
 .subnav-chip:focus-visible {
   outline: 2px solid var(--chip-ink);
   outline-offset: 2px;
+}
+/* THE RAIL AS TABS (variant 'tabs'): the chips alone, centred as one
+   segmented control on a soft track, plain names with no marks; the section
+   in view sits on a white pill that slides from chip to chip, its name in its
+   own ink. The auto margins centre the track while it fits and let the
+   rail scroll from its first chip when it does not. Same height as the rail
+   (54px), so the anchored sections' clearances hold. */
+.subnav[data-variant='tabs'] { min-height: 54px; padding-block: 0; }
+.subnav-track {
+  position: relative;
+  flex: none;
+  display: flex;
+  margin-inline: auto;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgb(22 24 43 / 0.045);
+  box-shadow: inset 0 0 0 1px rgb(22 24 43 / 0.06);
+}
+.subnav-track .subnav-list { position: relative; z-index: 1; gap: 2px; }
+.subnav-lit {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  width: var(--lit-w, 0px);
+  transform: translateX(var(--lit-x, 0px));
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(22 24 43 / 0.08), 0 6px 16px -8px rgb(22 24 43 / 0.3);
+  opacity: 0;
+}
+.subnav-track[data-lit='true'] .subnav-lit {
+  opacity: 1;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1), width 450ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+}
+.subnav[data-variant='tabs'] .subnav-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 0;
+  padding: 9px 16px;
+  border: 0;
+  font-size: 12.5px;
+  line-height: 1;
+}
+.subnav[data-variant='tabs'] .subnav-chip:hover { color: var(--ink-900); background: transparent; }
+.reading-room .subnav[data-variant='tabs'] .subnav-chip[data-on='true'] {
+  background: transparent;
+  color: color-mix(in srgb, var(--chip-ink) 72%, #102e56);
+}
+/* The Projects page's tabs (look 'segmented'): a quiet grey track, the section in view raised as a white slip, the
+   names alone in Geist (--font-tab), no colour. */
+.subnav[data-look='segmented'] .subnav-track { border-radius: 13px; background: rgb(238 238 236 / 0.92); box-shadow: inset 0 0 0 1px rgb(6 55 130 / 0.04); }
+.subnav[data-look='segmented'] .subnav-lit { border-radius: 9px; box-shadow: 0 1px 2px rgb(6 55 130 / 0.06), 0 6px 14px -8px rgb(6 55 130 / 0.18); }
+.subnav[data-look='segmented'] .subnav-chip { border-radius: 9px; font: 500 13px/1 var(--font-tab); letter-spacing: -0.01em; color: #6b706e; }
+.subnav[data-look='segmented'] .subnav-chip:hover { color: #3d4644; }
+.reading-room .subnav[data-look='segmented'] .subnav-chip[data-on='true'] { color: #063782; }
+.reading-room .subnav[data-look='segmented'] .subnav-chip:focus-visible { outline: 2px solid #063782; outline-offset: 2px; }
+/* THE RAIL ON ITS SECTION'S GROUND (tinted; Core Values): the rail is laid in
+   the ground of the section in view, the page's own ramp of that section's
+   colours under the same deep wash, so it reads as that section's top edge;
+   it fades from one section's colours to the next (registered, so they blend).
+   The page gives each section's colours (--backdrop-*) on [data-ground]. */
+@property --rail-dark { syntax: '<color>'; inherits: true; initial-value: #174c3e; }
+@property --rail-mid { syntax: '<color>'; inherits: true; initial-value: #397f62; }
+@property --rail-light { syntax: '<color>'; inherits: true; initial-value: #90cfae; }
+@property --rail-pale { syntax: '<color>'; inherits: true; initial-value: #cde9d9; }
+.subnav[data-tinted] {
+  --rail-dark: var(--backdrop-dark, #174c3e);
+  --rail-mid: var(--backdrop-mid, #397f62);
+  --rail-light: var(--backdrop-light, #90cfae);
+  --rail-pale: var(--backdrop-pale, #cde9d9);
+  background:
+    linear-gradient(90deg, #102e5640, #102e5699),
+    linear-gradient(90deg, var(--rail-dark), var(--rail-mid) 43%, var(--rail-light) 77%, var(--rail-pale));
+  backdrop-filter: none;
+  border-bottom-color: rgb(255 255 255 / 0.06);
+  transition: --rail-dark 700ms ease, --rail-mid 700ms ease, --rail-light 700ms ease, --rail-pale 700ms ease;
+}
+.subnav[data-tinted] .subnav-track { background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); }
+.subnav[data-tinted] .subnav-lit { box-shadow: 0 1px 2px rgb(6 55 130 / 0.12), 0 8px 18px -8px rgb(6 55 130 / 0.45); }
+.subnav[data-tinted] .subnav-chip { color: rgb(255 255 255 / 0.84); }
+.subnav[data-tinted] .subnav-chip:not([data-on='true']):hover { color: #fff; }
+.reading-room[data-surface='light'] .subnav[data-tinted] .subnav-chip:focus-visible { outline-color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  .subnav[data-tinted] { transition: none; }
+}
+/* on a phone each tab keeps the rail's 44px touch target, the rail its room around them */
+@media (max-width: 767px) {
+  .subnav[data-variant='tabs'] { min-height: 62px; }
+  .subnav[data-variant='tabs'] .subnav-chip { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .subnav-track[data-lit='true'] .subnav-lit { transition: none; }
 }
 /* the rail is sticky, so anchored sections must clear it AND the header */
 .reading-room[data-surface='light'] main section[id],
@@ -6490,7 +6592,7 @@ button.mgal-plate:focus-visible {
   height: 38px;
   border-radius: 999px;
   font-size: 14px;
-  color: color-mix(in srgb, var(--ink-a, #626981) 62%, #16182b);
+  color: color-mix(in srgb, var(--ink-a, #626981) 62%, #102e56);
   background: rgb(255 255 255 / 0.72);
   border: 1px solid color-mix(in srgb, var(--ink-a, #626981) 20%, transparent);
 }
@@ -6499,7 +6601,7 @@ button.mgal-plate:focus-visible {
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--ink-a, #626981) 58%, #16182b);
+  color: color-mix(in srgb, var(--ink-a, #626981) 58%, #102e56);
 }
 .mgal-caption {
   margin: 8px 2px 0;
@@ -6544,7 +6646,7 @@ button.mgal-plate:focus-visible {
   border-radius: 12px;
   display: block;
   margin: 0 auto;
-  background: #000;
+  background: #063782;
   border: 0;
 }
 .mgal-viewer-figure iframe {
@@ -6629,10 +6731,8 @@ button.mgal-plate:focus-visible {
     rgb(22 24 43 / 0.34)
   );
 }
-/* NOTE: no rule for `.social-rail span` here. SocialSidebar has no label
-   spans — its only <span> is the hover tooltip, which carries its own dark
-   pill and white text, and a light override repainted that white text to
-   near-white-on-near-black's opposite. Left alone deliberately. */
+/* Keep tooltip ink separate from the floating invitation, whose light
+   surface treatment lives in social-sidebar.css. */
 
 /* The project spreads are stacked now rather than tabbed, so they need air
    between them — and their entrance animation was written for a tab swap,
@@ -6653,7 +6753,7 @@ button.mgal-plate:focus-visible {
 
 /* THE INK PROBLEM. Each pillar carries two colours: accentA (deep) and
    accentB (bright). The reading rooms were written for the dark hall, where
-   the BRIGHT one is the readable one — Heal's #6fd19a glows on near-black.
+   the BRIGHT one is the readable one — Heal's #6fd19a glows on near-#063782.
    On paper it measures 1.86:1 against white, which is not text, it is a
    watermark. Type therefore switches to a paper cut of each ink, and the
    bright one keeps only the jobs where contrast does not apply: bar fills,
@@ -6680,7 +6780,7 @@ button.mgal-plate:focus-visible {
 .reading-room[data-surface='light'] .pj-scope,
 .reading-room[data-surface='light'] .pj-link,
 .reading-room[data-surface='light'] .gf-eyebrow {
-  color: var(--ink-type, color-mix(in srgb, var(--ink-a, #3a3f57) 82%, #16182b));
+  color: var(--ink-type, color-mix(in srgb, var(--ink-a, #3a3f57) 82%, #102e56));
 }
 .reading-room[data-surface='light'] .pj-link {
   border-bottom-color: color-mix(in srgb, var(--ink-type, var(--ink-a, #3a3f57)) 40%, transparent);
@@ -6738,7 +6838,7 @@ html:has(.reading-room[data-surface='light']) {
 /* A film tile with a file but no still: an ink ground for the play mark to
    sit on, rather than a broken image. */
 .mgal-plate[data-poster='none'] {
-  background: linear-gradient(140deg, #22263f 0%, #16182b 100%);
+  background: linear-gradient(140deg, #22263f 0%, #102e56 100%);
 }
 
 /* ---- PAPER CORRECTIONS ------------------------------------------------ */
@@ -6752,8 +6852,8 @@ html:has(.reading-room[data-surface='light']) {
    for white type: white on Health City's #9ad6ef measured 1.59:1. The chip
    therefore darkens whatever ink it is given rather than trusting it. */
 .reading-room[data-surface='light'] .subnav-chip[data-on='true'] {
-  background: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
-  border-color: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  background: color-mix(in srgb, var(--chip-ink) 42%, #102e56);
+  border-color: color-mix(in srgb, var(--chip-ink) 42%, #102e56);
   color: #fff;
 }
 
@@ -6767,16 +6867,8 @@ html:has(.reading-room[data-surface='light']) {
   color: rgb(255 255 255 / 0.88);
 }
 
-/* THE FOOTER IS ONE COLOUR ON EVERY PAGE.
-   It was `bg-black/45` — translucent — so it took whatever was behind it:
-   the hero's shifting accent on the home page, paper on the reading rooms,
-   a different shade on every screen of the exhibition. One footer with a
-   dozen appearances. It is opaque now, the same deep stone as the reading
-   rooms' cover band, so the site closes on the same note wherever you are. */
-#site-footer.site-footer {
-  background: #0b1f3a;
-  border-top: 1px solid rgb(255 255 255 / 0.1);
-}
+/* THE FOOTER IS ONE GROUND ON EVERY PAGE, opaque, so the site closes on the
+   same note wherever you are: it is drawn in components/site-footer.css. */
 
 /* The emblem needs a ground of its own here. On the footer's deep stone the
    logo's own petals — pink, purple, cyan, green — had nothing to read
@@ -6821,10 +6913,10 @@ html:has(.reading-room[data-surface='light']) {
 /* FOCUS RINGS kept the bright accent, which was the visible one on
    near-black and is not on paper. */
 .reading-room[data-surface='light'] .cv-record-head:focus-visible {
-  outline-color: var(--ink-type, #16182b);
+  outline-color: var(--ink-type, #102e56);
 }
 .reading-room[data-surface='light'] .pj-tab:focus-visible {
-  outline: 2px solid #16182b;
+  outline: 2px solid #102e56;
   outline-offset: 2px;
 }
 
@@ -6836,8 +6928,8 @@ html:has(.reading-room[data-surface='light']) {
   border-bottom-color: rgb(31 79 143 / 0.35);
 }
 .reading-room[data-surface='light'] .ww-contact-grid a:hover {
-  color: #16182b;
-  border-bottom-color: #16182b;
+  color: #102e56;
+  border-bottom-color: #102e56;
 }
 
 /* THE PORTRAIT FRAME was a white hairline on a white card — no frame at all
@@ -7036,9 +7128,9 @@ html:has(.reading-room[data-surface='light']) {
      is NOT sitting on white: the band is a mid-light tint of its own colour,
      which lifts the ground and eats the margin. The paper cuts that clear
      4.5:1 on #ffffff measured 3.45-4.5 here. Carrying the ink most of the way
-     to the page's near-black keeps each room's hue and buys the contrast
+     to the page's near-#063782 keeps each room's hue and buys the contrast
      back on every one of the seven bands. */
-  color: color-mix(in srgb, var(--ink-a) 58%, #16182b);
+  color: color-mix(in srgb, var(--ink-a) 58%, #102e56);
   margin: 0 0 8px;
 }
 .cv-threshold-title {
@@ -7256,149 +7348,7 @@ html:has(.reading-room[data-surface='light']) {
   scroll-margin-top: 132px;
 }
 
-/* ---- THE NAVIGATION PANEL --------------------------------------------- */
-/* It was a near-black plate with three columns of grey links — the last piece
-   of the site still wearing its old clothes, and a dark object dropping onto
-   pages that are now paper.
-   
-   It is paper too, and each cornerstone is a MINIATURE OF ITS ROOM: the
-   tinted door the room opens with on the page, with its folio, emblem and
-   name, and its index of activities on white beneath. You do not read the
-   panel so much as recognise it — green room, blue room, pink room — and the
-   band you land on is the one you were just looking at. */
-.nvpanel {
-  padding: 12px;
-  border-radius: 18px;
-  background: var(--paper, #fbfaf8);
-  border: 1px solid rgb(22 24 43 / 0.1);
-  box-shadow:
-    0 1px 2px rgb(22 24 43 / 0.06),
-    0 26px 60px -28px rgb(22 24 43 / 0.45);
-  min-width: 240px;
-}
-.nvrooms {
-  display: flex;
-  gap: 10px;
-}
-.nvroom {
-  width: 218px;
-  border-radius: 13px;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid rgb(22 24 43 / 0.09);
-}
-
-/* THE DOOR — the room's threshold band, at a quarter scale */
-.nvroom-door {
-  position: relative;
-  display: block;
-  padding: 12px 13px 11px;
-  overflow: hidden;
-  text-decoration: none;
-  border-bottom: 1px solid rgb(22 24 43 / 0.08);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--ink-b) 30%, #fbfaf8) 0%,
-    color-mix(in srgb, var(--ink-b) 15%, #fbfaf8) 100%
-  );
-  transition: filter 200ms ease;
-}
-.nvroom-door::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 2px;
-  background: var(--ink-a);
-}
-.nvroom-door:hover {
-  filter: brightness(0.97);
-}
-.nvroom-door:focus-visible {
-  outline: 2px solid var(--ink-a);
-  outline-offset: -2px;
-}
-/* the emblem, bled off the corner and multiplied so its disc disappears */
-.nvroom-emblem {
-  position: absolute;
-  right: -14px;
-  top: 50%;
-  translate: 0 -50%;
-  width: 74px;
-  aspect-ratio: 1;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  opacity: 0.34;
-  -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
-  mask-image: radial-gradient(closest-side, #000 58%, transparent 82%);
-  pointer-events: none;
-}
-.nvroom-folio {
-  display: block;
-  font-size: 19px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: color-mix(in srgb, var(--ink-a) 30%, transparent);
-}
-.nvroom-name {
-  display: block;
-  margin-top: 3px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  /* the deep ink carried toward the page's near-black, the same move the
-     thresholds make — the accents alone are too light on their own tint */
-  color: color-mix(in srgb, var(--ink-a) 58%, #16182b);
-}
-.nvroom-blurb {
-  display: block;
-  margin-top: 2px;
-  font-size: 11px;
-  color: rgb(22 24 43 / 0.6);
-}
-
-/* THE INDEX — the room's activities, on the white card */
-.nvroom-index,
-.nvlist {
-  list-style: none;
-  margin: 0;
-  padding: 5px;
-}
-.nvroom-row {
-  display: block;
-  padding: 7px 9px;
-  border-radius: 8px;
-  font-size: 12.5px;
-  line-height: 1.35;
-  color: #3a3f57;
-  text-decoration: none;
-  /* WRAPS, deliberately. `nowrap` in a fixed-width column clips silently, and
-     the label falls back to the activity's own title when no short form is
-     given — "Sant Nirankari Health Centre" is 28 characters and would have
-     been cut off with no sign that anything was missing. A menu row may take
-     two lines; it may not lie about its destination. */
-  white-space: normal;
-  transition: background 180ms ease, color 180ms ease;
-}
-.nvroom-row:hover {
-  background: color-mix(in srgb, var(--ink-b, #6663b5) 14%, transparent);
-  color: #16182b;
-}
-.nvroom-row:focus-visible {
-  outline: 2px solid var(--ink-a, #6663b5);
-  outline-offset: -2px;
-}
-.nvlist {
-  min-width: 200px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nvroom-door,
-  .nvroom-row {
-    transition: none;
-  }
-}
+/* The navigation's panels are styled with the header, in header-navigation.css. */
 
 /* A gallery with nothing in it yet: one line, no strip, no filter. */
 .mgal-empty {
@@ -7945,7 +7895,7 @@ button.mgal-plate-awaiting:hover {
    fills with — 6.27:1. Scoped to the light surface, which is the ground the
    number was measured against. */
 .reading-room[data-surface='light'] .subnav-chip:focus-visible {
-  outline-color: color-mix(in srgb, var(--chip-ink) 42%, #16182b);
+  outline-color: color-mix(in srgb, var(--chip-ink) 42%, #102e56);
 }
 
 /* THE TWO PAGES THAT WERE SKIPPED, PRINTED LIKE THE REST.
@@ -8001,95 +7951,6 @@ button.mgal-plate-awaiting:hover {
   mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cg%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%203.4v3.4%20M12%2017.2v3.4%20M3.4%2012h3.4%20M17.2%2012h3.4%20M6.2%206.2l2.4%202.4%20M15.4%2015.4l2.4%202.4%20M17.8%206.2l-2.4%202.4%20M8.6%2015.4l-2.4%202.4%27%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
 }
 
-/* ---- THE REGISTER OF SUPPORTS ----------------------------------------- */
-/* NINE REAL LOGO FILES HAD BEEN SITTING IN public/images/partners/ UNUSED
-   while this page printed all twelve companions as plain text. A name set
-   beside its own mark is what a register of supporters looks like; a name
-   set alone is a list.
-
-   THE MONOGRAM IS ALWAYS RENDERED and the logo is layered OVER it — the
-   media wall's idiom, and the reason a 404 leaves an entry rather than a
-   hole. Three of the twelve have no file at all (two served a CMS default,
-   one's site is gone), so the fallback is a real state, not a safety net.
-
-   THE MARK SITS ON TRUE WHITE with a small radius and no tint plate: two of
-   the nine files are opaque brand cards rather than artwork (toi.png is
-   1200x630 with no alpha, ndtv.png is 57px square), so anything painted
-   behind them would show as a rectangle around the logo on some rows and not
-   others. White is the ground every one of them was drawn against. */
-.ww-register {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-.ww-register li {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 13px 15px;
-  border-radius: 12px;
-  background: #f8f6f2;
-  border: 1px solid var(--line);
-}
-.ww-register-mark {
-  position: relative;
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
-  background: #fff;
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-.ww-register-mark img {
-  position: absolute;
-  inset: 6px;
-  width: calc(100% - 12px);
-  height: calc(100% - 12px);
-  object-fit: contain;
-}
-/* NEVER THE BRAND INK RAW. Four of the twelve miss 4.5:1 on white as
-   published — KSCF's #ee7623 measures 2.90:1, the UN's #009edb 3.04:1, Red
-   Cross and NIIT 4.38:1 each. Cut 55% toward the page ink, the whole set
-   lands between 6.57:1 (KSCF) and 13.81:1. The monogram is type: it is read,
-   not glanced at, and it is the only thing three of these rows carry. */
-.ww-register-initials {
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--tile-ink, #626981) 55%, #16182b);
-}
-.ww-register-text {
-  min-width: 0;   /* long names wrap instead of stretching the row */
-  display: block;
-}
-.ww-register-text strong {
-  display: block;
-  font-size: 14.5px;
-  color: var(--ink-900);
-  margin-bottom: 4px;
-}
-.ww-register-text > span {
-  display: block;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--ink-700);
-}
-.ww-register-note {
-  margin-top: 6px;
-  font-size: 12px;
-  font-style: italic;
-  /* 5.00:1 on this ground — quieter than the contribution above it, still
-     type rather than decoration, because it is where the UN consultative
-     status is actually stated. */
-  color: var(--ink-500);
-}
-
 /* THE SATGURU'S PORTRAIT IN THE BAND'S RIGHT-HAND SLOT.
    .pj-lockup is sized for wordmarks — a 150-240px box at 1.6:1 — and this is
    a 3:4 portrait, so it takes the slot on its own terms rather than being
@@ -8116,3 +7977,7 @@ button.mgal-plate-awaiting:hover {
 [data-motion="paused"]::after,
 [data-motion="paused"] *::before,
 [data-motion="paused"] *::after{animation-play-state:paused!important}
+
+/* Letter-by-letter welcome copy; the complete text remains available to assistive technology. */
+.welcome-typewriter > span { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .welcome-typewriter > span { visibility: visible; } }

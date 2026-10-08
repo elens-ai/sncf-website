@@ -1,0 +1,61 @@
+.humanity-slogan {
+  --slogan-x: 0px;
+  --slogan-y: 0px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: min(440px, 50vh);
+  padding: 38px 4px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: #234d83;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.humanity-slogan:focus-visible { outline: 2px solid #517193; outline-offset: 6px; }
+.humanity-slogan-composition { width: 100%; transform: translate(var(--slogan-x), var(--slogan-y)); transition: transform .4s ease-out; }
+.humanity-slogan-words {
+  display: block;
+  width: 100%;
+  font: 400 clamp(28px, 8.5cqw, 58px) / 1.75 var(--font-hindi);
+  text-align: center;
+}
+/* Whole lines preserve the Devanagari headline and carry one continuous reflection. */
+.humanity-slogan-line { display: block; white-space: nowrap; animation: humanity-line-in .9s cubic-bezier(.16, 1, .3, 1) calc(var(--line) * .16s) both; }
+.humanity-slogan-metal {
+  display: inline-block;
+  padding: .08em .04em;
+  color: #234d83;
+  background-image:
+    linear-gradient(110deg, transparent 40%, #d4ba7166 46%, #fff8d6d9 49%, #e4cf8b85 52%, transparent 58%),
+    linear-gradient(178deg, #0c3049 10%, #145979 34%, #3c7691 44%, #153f57 49%, #092d44 55%, #1e5774 78%, #0a3047 91%);
+  background-size: 260% 100%, 100% 100%;
+  background-position: 120% 0, 0 0;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: .2px #c5ae65;
+  paint-order: stroke fill;
+  filter: drop-shadow(0 1px 0 #f5d98f) drop-shadow(0 2px 1px #173c6229);
+  animation: humanity-metal-shine 4.8s ease-in-out calc(var(--line) * .16s) infinite;
+}
+.humanity-slogan:hover .humanity-slogan-metal, .humanity-slogan:focus-visible .humanity-slogan-metal { animation-duration: 2.4s; }
+.humanity-slogan[data-active='false'] * { animation-play-state: paused !important; }
+@keyframes humanity-line-in { from { opacity: 0; transform: translateY(14px); filter: blur(4px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes humanity-metal-shine { 0%, 10% { background-position: 120% 0, 0 0; } 65%, 100% { background-position: -20% 0, 0 0; } }
+@media (max-width: 1023px) {
+  .humanity-slogan { min-height: 270px; max-width: 560px; margin: 12px auto; }
+  .humanity-slogan-words { font-size: clamp(25px, 7.6vw, 46px); }
+}
+@media (max-height: 650px) and (min-width: 1024px) {
+  .humanity-slogan { min-height: 250px; padding-block: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .humanity-slogan *, .humanity-slogan { animation: none !important; transition: none !important; }
+}
+@media (forced-colors: active) {
+  .humanity-slogan-metal { background: none; -webkit-text-fill-color: ButtonText; -webkit-text-stroke: 0; filter: none; }
+}

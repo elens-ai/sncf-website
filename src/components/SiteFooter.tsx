@@ -4,19 +4,23 @@ import { getSiteSettings, siteOverride } from '../cms/siteSettings';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { MapPin, Phone, Mail, Heart } from 'lucide-react';
+import { MapPin, Phone, Mail, Heart, Handshake, CalendarHeart, ArrowUpRight, ArrowUp } from 'lucide-react';
+import { UnepSeal } from './UnAffiliation';
+import { SOCIAL_ART } from './SocialSidebar';
+import './site-footer.css';
 
 /**
- * Site footer.
+ * Site footer: the closing band.
  *
  * Links and contact details are transcribed from nirankarifoundation.org — the
  * same three groups its own footer carries, with the real destinations rather
  * than guessed paths.
  *
- * It sits on the page-wide .accent-canvas like every other screen, with a dark
- * wash over it. That wash is deliberate, not the seam problem returning: a
- * footer is meant to read as a distinct band, and this is a translucent black
- * over the SAME gradient rather than a second gradient starting over.
+ * It closes every page on the same note: the site's own deep teal (the ground
+ * its home sections end on), rising into the page in a wave edged with the
+ * logo's five petal colours, the lotus faint behind it. It opens with an
+ * invitation (give, partner, or join a moment) before the address and the
+ * links, and ends with a way back to the top.
  *
  * Not a snap target — it is a closing band, not a screen, and snapping to it
  * would strand the reader on a wall of links.
@@ -28,20 +32,73 @@ interface SiteFooterProps {
   onOpenDonate: () => void;
 }
 
+const c = (key: string, fallback: string) => getCMSCopy(`copy.SiteFooter.${key}`, fallback);
+/* the logo's petals, in the order they open */
+const PETALS = ['#f81170', '#b357ad', '#6663b5', '#09a6cf', '#69b947'];
+
 export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
   useCMSRevision();
   const site = getSiteSettings();
   const GROUPS = site.footerColumns;
+  const toTop = () => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+
   return (
   <footer
     id="site-footer"
     className="site-footer relative z-10 w-full"
   >
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-14">
-      <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
+    {/* the band rises into the page in a wave, edged in the logo's petal colours */}
+    <svg className="footer-crest" viewBox="0 0 1440 56" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="footer-petals" x1="0" x2="1" y1="0" y2="0">
+          {PETALS.map((ink, i) => <stop key={ink} offset={i / (PETALS.length - 1)} stopColor={ink} />)}
+        </linearGradient>
+      </defs>
+      <path className="footer-crest-fill" d="M0 56V32C240 6 480 0 720 18S1200 54 1440 24V56Z" />
+      <path className="footer-crest-ink" d="M0 32C240 6 480 0 720 18S1200 54 1440 24" stroke="url(#footer-petals)" />
+    </svg>
+    <img className="footer-lotus" src={resolveCMSMedia(resolveCMSAsset('asset.SiteFooter.lotus', '/images/lotus-watermark.png'))} alt="" aria-hidden="true" draggable={false} />
+
+    <div className="footer-inner w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-14">
+      {/* the closing invitation: three ways in */}
+      <section className="footer-invite" aria-labelledby="footer-invite-title">
+        <div className="footer-invite-copy">
+          <p className="footer-signature font-signature">{siteOverride("branding", "tagline", getCMSCopy("copy.SiteFooter.56219e473693", "Service with Humility"))}</p>
+          <h2 id="footer-invite-title">{c('invite-title', 'There is a place for you in this service.')}</h2>
+          <p>{c('invite-lead', 'Give, partner with us, or simply turn up. Every hand that joins makes the circle stronger.')}</p>
+        </div>
+        <ul className="footer-ways">
+          <li>
+            <button type="button" className="footer-way" style={{ '--way': PETALS[0] } as React.CSSProperties} onClick={onOpenDonate}>
+              <span className="footer-way-icon" aria-hidden="true"><Heart size={17} fill="currentColor" /></span>
+              <strong>{getCMSCopy("copy.SiteFooter.97b0c61b99f6", "Contribute")}</strong>
+              <span>{c('way-give', 'Give to the work that moves you')}</span>
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </button>
+          </li>
+          <li>
+            <Link className="footer-way" style={{ '--way': PETALS[3] } as React.CSSProperties} to="/?partner-invite=1#partners-section">
+              <span className="footer-way-icon" aria-hidden="true"><Handshake size={18} /></span>
+              <strong>{c('way-partner', 'Become a partner')}</strong>
+              <span>{c('way-partner-line', 'Bring your organisation’s CSR to the work')}</span>
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </Link>
+          </li>
+          <li>
+            <Link className="footer-way" style={{ '--way': PETALS[4] } as React.CSSProperties} to="/events">
+              <span className="footer-way-icon" aria-hidden="true"><CalendarHeart size={18} /></span>
+              <strong>{c('way-moment', 'Join a moment')}</strong>
+              <span>{c('way-moment-line', 'Camps, drives and observances near you')}</span>
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </Link>
+          </li>
+        </ul>
+      </section>
+
+      <div className="footer-main grid gap-10 lg:grid-cols-[1.2fr_2fr]">
         {/* Identity + contact */}
-        <div>
-          <div className="flex items-center gap-3 mb-4">
+        <div className="footer-identity">
+          <div className="flex items-center gap-3 mb-5">
             {/* the same white disc the header gives it — on the footer's deep
                 ground the emblem's own petals had nothing to read against */}
             <span className="footer-badge" aria-hidden="true">
@@ -56,8 +113,6 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
               <p className="font-artistic-display text-white/75 text-[10px] font-semibold tracking-[0.18em] uppercase">{getCMSCopy("copy.SiteFooter.4b0937769465", "Charitable Foundation")}</p>
             </div>
           </div>
-
-          <p className="font-signature text-white text-[30px] leading-none mb-5">{siteOverride("branding", "tagline", getCMSCopy("copy.SiteFooter.56219e473693", "Service with Humility"))}</p>
 
           <address className="not-italic space-y-2.5">
             <p className="flex items-start gap-2.5 text-[13px] text-white/70 leading-relaxed">
@@ -74,11 +129,21 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
               <Mail className="w-4 h-4 flex-none text-white/45" />{siteOverride("contact", "email", getCMSCopy("copy.SiteFooter.bee1eacddce6", "accounts@nirankarifoundation.org"))}</a>
           </address>
 
-          <button
-            onClick={onOpenDonate}
-            className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-neutral-900 font-bold text-[13px] shadow-lg hover:scale-[1.03] active:scale-[0.98] transition-transform cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-          >
-            <Heart className="w-3.5 h-3.5" fill="currentColor" />{getCMSCopy("copy.SiteFooter.97b0c61b99f6", "Contribute")}</button>
+          {/* the social links (Site settings → Social links): the left-hand rail's, and LinkedIn, which is shown here only */}
+          {site.social.length > 0 && (
+            <ul className="footer-socials" aria-label={c('social', 'Follow the foundation')}>
+              {site.social.map(link => {
+                const art = SOCIAL_ART[link.platform];
+                return art ? (
+                  <li key={link.platform}>
+                    <a className="footer-social" href={link.url} target="_blank" rel="noopener noreferrer" aria-label={art.ariaLabel} title={art.name}>{art.icon}</a>
+                  </li>
+                ) : null;
+              })}
+            </ul>
+          )}
+          {/* the UN Environment Programme, as the Core Values and Projects covers carry it, on every page */}
+          <div className="mt-5"><UnepSeal /></div>
         </div>
 
         {/* Link groups */}
@@ -91,7 +156,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
               <ul className="space-y-2">
                 {group.links.map((link) => {
                   const cls =
-                    'text-[13px] text-white/75 hover:text-white transition-colors';
+                    'footer-link text-[13px] text-white/75 hover:text-white transition-colors';
                   /* our own routes stay in the app; only the Mission's other
                      sites open in a new tab */
                   const internal = link.href.startsWith('/');
@@ -108,7 +173,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
                           rel="noopener noreferrer"
                           className={cls}
                         >
-                          {link.label}
+                          {link.label}<ArrowUpRight className="footer-link-away" size={12} aria-hidden="true" />
                         </a>
                       )}
                     </li>
@@ -120,11 +185,12 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
         </nav>
       </div>
 
-      <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="footer-base">
         {/* Year is computed, so the notice cannot go stale the way a hardcoded
             one does — the source site still reads 2025. */}
         <p className="text-[12px] text-white/55">{getCMSCopy("copy.SiteFooter.fc07ad55cde7", "© 2010–")}{new Date().getFullYear()}{getCMSCopy("copy.SiteFooter.e69147f309ca", " Sant Nirankari Charitable Foundation")}</p>
         <p className="text-[12px] text-white/45">{getCMSCopy("copy.SiteFooter.4e29309898d7", "Donations are tax deductible under section 80G(5)(vi) of the Income Tax Act, 1961.")}</p>
+        <button type="button" className="footer-top" onClick={toTop}><ArrowUp size={14} aria-hidden="true" />{c('top', 'Back to top')}</button>
       </div>
     </div>
   </footer>

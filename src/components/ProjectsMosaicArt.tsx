@@ -1,28 +1,17 @@
 import React, { useId } from 'react';
 import { resolveCMSMedia } from '../cms/media';
-import { roomPhotoFor } from '../data/pavilionGallery';
+import { roomPhoto } from '../data/pavilionGallery';
 import { PROJECTS_LOGO_OUTLINE } from './projectsLogoOutline';
 
+/* One photograph to a petal, laid over the whole petal (its box, in emblem units): the forestry, water and
+   healthcare the emblem stands for, as Oneness Vann on the top petal, Project Amrit on the right and Sant
+   Nirankari Health City on the lower left, each washed faintly in its petal's colour. The first two are the
+   Projects room's own photographs, so they change with it in the CMS. */
 const PETALS = [
-  { colour: '#a7d4b0', tiles: [
-    { x: 27, y: 0, w: 55, h: 28, src: '/images/pavilion/projects-3.jpg' },
-    { x: 27, y: 28.5, w: 28, h: 32, src: '/images/pavilion/empower-4.jpg' },
-    { x: 55.5, y: 28.5, w: 27, h: 32, src: '/images/pavilion/projects-4.jpg' },
-    { x: 27, y: 61, w: 56, h: 36, src: '/images/pavilion/empower-3.jpg' },
-  ] },
-  { colour: '#82ced7', tiles: [
-    { x: 55, y: 32, w: 37, h: 28, src: '/images/pavilion/projects-1.jpg' },
-    { x: 92.5, y: 32, w: 40, h: 28, src: '/images/pavilion/projects-2.jpg' },
-    { x: 55, y: 60.5, w: 30, h: 40, src: '/images/projects/amrit.webp' },
-    { x: 85.5, y: 60.5, w: 47, h: 40, src: '/images/pavilion/projects-5.jpg' },
-  ] },
-  { colour: '#e4aec7', tiles: [
-    { x: 17, y: 54, w: 40, h: 34, src: '/images/pavilion/heal-1.jpg' },
-    { x: 57.5, y: 54, w: 43, h: 34, src: '/images/pavilion/heal-4.jpg' },
-    { x: 17, y: 88.5, w: 40, h: 33, src: '/images/projects/health-city.webp' },
-    { x: 57.5, y: 88.5, w: 43, h: 33, src: '/images/pavilion/heal-2.jpg' },
-  ] },
-];
+  { colour: '#a7d4b0', box: [36.62, 6.81, 42.08, 64.09], photo: () => roomPhoto('projects', 2) },
+  { colour: '#82ced7', box: [58.4, 39.77, 64.92, 51.34], photo: () => roomPhoto('projects', 1) },
+  { colour: '#e4aec7', box: [22.7, 64.06, 67.62, 49.83], photo: () => '/images/projects/health-city.webp' },
+] as const;
 
 export const ProjectsMosaicArt: React.FC<{ photoFilter?: string }> = ({ photoFilter }) => {
   const id = useId().replace(/:/g, '');
@@ -32,9 +21,7 @@ export const ProjectsMosaicArt: React.FC<{ photoFilter?: string }> = ({ photoFil
       <path d={PROJECTS_LOGO_OUTLINE[i]} fill={petal.colour} transform="translate(-.65 .85)" />
       <g clipPath={`url(#${id}-${i})`}>
         <rect width="146" height="120" fill="#fbfffc" />
-        <g filter={photoFilter}>
-          {petal.tiles.map((tile, j) => <image key={j} x={tile.x} y={tile.y} width={tile.w} height={tile.h} href={resolveCMSMedia(roomPhotoFor(tile.src))} preserveAspectRatio="xMidYMid slice" />)}
-        </g>
+        <image x={petal.box[0]} y={petal.box[1]} width={petal.box[2]} height={petal.box[3]} href={resolveCMSMedia(petal.photo())} preserveAspectRatio="xMidYMid slice" filter={photoFilter} />
         <rect width="146" height="120" fill={petal.colour} opacity=".2" />
       </g>
       <path d={PROJECTS_LOGO_OUTLINE[i]} fill="none" stroke={petal.colour} strokeWidth=".55" strokeLinejoin="round" />
