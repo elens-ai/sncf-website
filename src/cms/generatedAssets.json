@@ -270,5 +270,65 @@
   "asset.RoadWall.seal": {
     "source": "/images/sncf-logo.webp",
     "label": "RoadWall · sncf-logo.webp"
+  },
+  "asset.ProjectFilms.amritModel": {
+    "source": "/models/project-amrit-full.glb",
+    "label": "ProjectFilms · project-amrit-full.glb"
+  },
+  "asset.ProjectFilms.onenessModel": {
+    "source": "/models/project-oneness-full.glb",
+    "label": "ProjectFilms · project-oneness-full.glb"
+  },
+  "asset.ProjectsPage.introHealthTeam": {
+    "source": "/images/projects/health-city/team-atrium.webp",
+    "label": "ProjectsPage · team-atrium.webp"
+  },
+  "asset.ProjectsPage.introHealthCeremony": {
+    "source": "/images/projects/health-city/ceremony.webp",
+    "label": "ProjectsPage · ceremony.webp"
+  },
+  "asset.ProjectsPage.introHealthEvening": {
+    "source": "/images/programmes/health-city-evening.webp",
+    "label": "ProjectsPage · health-city-evening.webp"
+  },
+  "asset.ProjectsPage.introHealthDedication": {
+    "source": "/images/projects/health-city/dedication.webp",
+    "label": "ProjectsPage · dedication.webp"
+  },
+  "asset.ProjectsPage.introHealthStaff": {
+    "source": "/images/projects/health-city/team.webp",
+    "label": "ProjectsPage · team.webp"
+  },
+  "asset.ProjectsPage.introHealthPlaque": {
+    "source": "/images/projects/health-city/plaque.webp",
+    "label": "ProjectsPage · plaque.webp"
+  },
+  "asset.ProjectFilms.healthCityModel": {
+    "source": "/models/health-city-sn-logo.glb",
+    "label": "ProjectFilms · health-city-sn-logo.glb"
+  },
+  "asset.ProjectFilms.healthCityFallback": {
+    "source": "/images/projects/health-city/logo.webp",
+    "label": "ProjectFilms · logo.webp"
+  },
+  "asset.ProjectFilms.amritVideo": {
+    "source": "/videos/projects/project-amrit.mp4",
+    "label": "ProjectFilms · project-amrit.mp4"
+  },
+  "asset.ProjectFilms.onenessVideo": {
+    "source": "/videos/projects/oneness-vann.mp4",
+    "label": "ProjectFilms · oneness-vann.mp4"
+  },
+  "asset.ProjectFilms.watershedVideo": {
+    "source": "/videos/projects/watershed-saiwan.mp4",
+    "label": "ProjectFilms · watershed-saiwan.mp4"
+  },
+  "asset.ProjectFilms.amritFloatingLogo": {
+    "source": "/images/projects/amrit-floating-logo.png",
+    "label": "ProjectFilms · amrit-floating-logo.png"
+  },
+  "asset.MissionVision.volunteers": {
+    "source": "/images/welcome-volunteers.jpg",
+    "label": "MissionVision · welcome-volunteers.jpg"
   }
 }

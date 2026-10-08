@@ -109,13 +109,13 @@
 .service-sketch-sewing-needle { animation: service-needle .8s ease-in-out infinite; animation-play-state: paused; }
 .empower-service-scene[data-arrived='true'][data-active='true'] :is(.service-sketch-schoolgirl, .service-sketch-girl-leg, .service-sketch-sewing-needle) { animation-play-state: running; }
 @keyframes service-walk-in {
-  0%, 37% { transform: translate(112px, 218px); opacity: 0; }
-  38% { transform: translate(112px, 218px); opacity: 1; }
-  44% { transform: translate(65px, 235px); opacity: 1; }
-  50% { transform: translate(25px, 235px); opacity: 1; }
-  58% { transform: translate(25px, 100px); opacity: 1; }
-  82%, 94% { transform: translate(330px, 0); opacity: 1; }
-  95%, 100% { transform: translate(330px, 0); opacity: 0; }
+  0%, 30% { transform: translate(112px, 218px); opacity: 0; }
+  31% { transform: translate(112px, 218px); opacity: 1; }
+  38% { transform: translate(65px, 235px); opacity: 1; }
+  46% { transform: translate(25px, 235px); opacity: 1; }
+  54% { transform: translate(25px, 100px); opacity: 1; }
+  77%, 84% { transform: translate(330px, 0); opacity: 1; }
+  86%, 100% { transform: translate(330px, 0); opacity: 0; }
 }
 @keyframes service-girl-step { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
 @keyframes service-needle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
@@ -134,9 +134,18 @@
 .school-bus-wheel { animation: school-bus-roll 14s linear infinite; animation-play-state: paused; }
 .school-bus-door { transform-origin: 73px 96px; animation: school-bus-open 14s linear infinite; animation-play-state: paused; }
 .empower-service-scene[data-arrived='true'][data-active='true'] :is(.school-bus-journey, .school-bus-wheel, .school-bus-door) { animation-play-state: running; }
-@keyframes school-bus-arrive { 0% { transform: translateX(1230px); } 35%, 90% { transform: translateX(0px); } 100% { transform: translateX(-290px); } }
-@keyframes school-bus-roll { 0% { transform: rotate(0); } 35%, 90% { transform: rotate(-1080deg); } 100% { transform: rotate(-1680deg); } }
-@keyframes school-bus-open { 0%, 34%, 91%, 100% { transform: scaleX(1); } 38%, 87% { transform: scaleX(.16); } }
+/* Four-second arrival, followed by a pupil drop-off and departure. */
+@keyframes school-bus-arrive {
+  0% { transform: translateX(var(--bus-entry)); }
+  30%, 92% { transform: translateX(0px); }
+  100% { transform: translateX(-290px); }
+}
+@keyframes school-bus-roll {
+  0% { transform: rotate(0); }
+  30%, 92% { transform: rotate(-1620deg); }
+  100% { transform: rotate(-2160deg); }
+}
+@keyframes school-bus-open { 0%, 29%, 93%, 100% { transform: scaleX(1); } 31%, 91% { transform: scaleX(.16); } }
 @media (prefers-reduced-motion: reduce) {
   .school-bus-journey { transform: translateX(0px); }
   .service-sketch-schoolgirl { opacity: 1; }
@@ -215,3 +224,17 @@
 .railway-platform :is(.railway-station-title, .railway-roundel-name) { font-family: var(--font-hindi); letter-spacing: 0; }
 .railway-platform .railway-station-title { font-size: 25px; }
 .railway-platform .railway-roundel-name { font-size: 11px; }
+
+/* Give both education buildings and their figures the same clear ink weight. */
+.service-sketch-enrich :is(.service-sketch-building, .service-sketch-nvc-campus) { opacity: 1; }
+.service-sketch-enrich .service-sketch-ink,
+.service-sketch-enrich :is(.school-teacher, .school-bus-journey) :is(path, circle) {
+  stroke-width: 1.7;
+  vector-effect: non-scaling-stroke;
+}
+.service-sketch-enrich .service-sketch-fine { opacity: .65; }
+.service-sketch-enrich :is(.service-sketch-school-name, .service-sketch-nvc-name, .service-sketch-nvc-subtitle, .service-sketch-room-label, .school-bus-name) { font-weight: 500; }
+@media (max-width: 767px) {
+  .service-sketch-enrich .service-sketch-ink,
+  .service-sketch-enrich :is(.school-teacher, .school-bus-journey) :is(path, circle) { stroke-width: 1.4; }
+}

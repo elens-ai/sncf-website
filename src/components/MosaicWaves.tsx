@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, type RefObject } from 'react';
 import { createFrameClock } from '../utils/frameClock';
 import { pageIsActive } from '../utils/pageActivity';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 import { genome, lerpGenome, easeOut, paintWaves, type Genome, type Pose, type Subject, type Mote } from '../utils/waves';
 import type { PillarState } from '../types';
 
@@ -100,6 +101,8 @@ interface MosaicWavesProps {
 
 export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input, scale = SCALE, fps = FPS, steady = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const onScreen = useSectionActivity(canvasRef);
+  const running = active && onScreen;
   const state = useRef({
     from: null as Genome | null, to: null as Genome | null, shown: null as Genome | null, u: 1,
     pose: { time: 0, travel: 0, px: 0, py: 0, ripple: 0 } as Pose,
@@ -206,14 +209,14 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
 
   useEffect(() => {
     const s = state.current;
-    if (active) { clock.current?.start(); return; }
+    if (running) { clock.current?.start(); return; }
     clock.current?.stop();
     /* Stopped mid-morph (a tile opened, the tab hidden): finish the picture
        rather than freeze it halfway, and paint it without the breath. */
     if (s.u < 1 && s.to) { s.shown = s.to; s.u = 1; }
     s.pose.ripple = 0;
     s.paint();
-  }, [active]);
+  }, [running]);
 
   return <canvas ref={canvasRef} className="mosaic-waves" aria-hidden="true" />;
 };

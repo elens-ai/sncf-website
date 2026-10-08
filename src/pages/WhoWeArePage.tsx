@@ -11,7 +11,6 @@ import { MosaicWaves, type WaveInput } from '../components/MosaicWaves';
 import { Saying } from '../components/Saying';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
 import { MediaGallery } from '../components/MediaGallery';
-import { Tally } from '../components/Tally';
 import { MissionVision } from '../components/MissionVision';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PARTNERS } from '../data/partners';
@@ -23,6 +22,7 @@ import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion
 import './who-editorial.css';
 import './who-cover.css';
 import { ServiceStory } from '../components/ServiceStory';
+import { WhoEverydayAction } from '../components/WhoEverydayAction';
 import { UnepSeal } from '../components/UnAffiliation';
 import { SubsectionNav } from '../components/SubsectionNav';
 import { HandsLede, HandsProof, handWays, splitFigure } from '../components/WorkingHands';
@@ -266,44 +266,16 @@ export const WhoWeArePage: React.FC = () => {
         </div>
 
         {/* HOW SERVICE TAKES SHAPE — the three moments, told one at a time */}
-        <div className="who-approach">
-          <div className="who-approach-head">
+        <div id="how-we-serve" className="who-service-process">
+          <div className="who-service-process-heading">
             <p className="ed-eyebrow">{getCMSCopy("copy.WhoWeArePage.approach-eyebrow", "How service takes shape")}</p>
             <h3>{getCMSCopy("copy.WhoWeArePage.approach-title", "Listen. Come together.")} <em>{getCMSCopy("copy.WhoWeArePage.approach-title-em", "Serve.")}</em></h3>
           </div>
           <ServiceStory headingLevel={4} />
         </div>
 
-        {/* WHAT THE THREE CORNERSTONES COME TO. The paragraph above names
-            them; these count them, a door for each with its own photograph,
-            each figure at its own date, so nothing is ranked against anything else. */}
-        <div className="cv-tally">
-          <h3 className="cv-sub font-artistic-display">{getCMSCopy("copy.WhoWeArePage.tally-title", "Everyday action.")}</h3>
-          <ul className="cv-tally-list who-doors">
-            {getBiggest().map(({ pillar, act }) => {
-              const photo = act.images?.[0]?.src ?? act.cardPhoto?.src;
-              return (
-                <li key={act.id} className="cv-tally-row who-door" style={{ '--value-ink': pillar.accentA, '--value-tint': pillar.accentB } as React.CSSProperties}>
-                  <span className="who-door-photo" aria-hidden="true">
-                    {photo && <img src={resolveCMSMedia(photo)} alt="" loading="lazy" decoding="async" />}
-                    <span className="who-door-pillar">{pillar.label}</span>
-                  </span>
-                  <p className="cv-tally-head">
-                    <span className="cv-tally-name font-artistic-heading">{act.title}</span>
-                    <span className="cv-tally-figure font-artistic-heading">
-                      <Tally value={act.headline.value} />
-                      <span className="cv-tally-unit">{act.headline.label}</span>
-                    </span>
-                  </p>
-                  <p className="cv-tally-key">
-                    <span className="cv-tally-period">{act.period}</span>
-                  </p>
-                  <a className="who-value-link" href={`/core-values#${pillar.id}`}>{getCMSCopy("copy.WhoWeArePage.2e1ac6e9292a", "Explore ")}{pillar.label.toLowerCase()} <ArrowUpRight size={15} /></a>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        {/* Each figure keeps its own reporting period and unit. */}
+        <WhoEverydayAction entries={getBiggest()} />
 
         {/* MISSION & VISION, and the bridge between them */}
         <MissionVision />

@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useRef } from 'react';
 import { getCMSCopy } from '../cms/runtime';
-import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
+import { useSectionActivity } from '../hooks/useSectionActivity';
+import { ambulanceScene } from '../utils/ambulanceScene';
 import './ambulance-pass.css';
 
 /** The vehicle's position and wheel angle follow one shared scroll distance. */
@@ -8,39 +9,53 @@ export function AmbulancePass() {
   const road = useRef<HTMLDivElement>(null);
   const vehicle = useRef<HTMLDivElement>(null);
   const id = useId().replace(/:/g, '');
+  const active = useSectionActivity(road);
   useEffect(() => {
     const track = road.current;
     const van = vehicle.current;
     if (!track || !van) return;
+    track.dataset.passing = 'false';
+    if (!active) return;
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
-    let frame = 0;
-    const update = () => {
+    let frame = 0, previous = 0;
+    let progress: number | null = null;
+    let geometry = { top: 0, height: 0, roadWidth: 0, vehicleWidth: 0 };
+    const update = (now: number) => {
       frame = 0;
-      const bounds = track.getBoundingClientRect();
-      const width = van.offsetWidth;
-      const progress = Math.min(1, Math.max(0, (innerHeight - bounds.top) / (innerHeight + bounds.height)));
-      const distance = (bounds.width + width) * progress;
-      const x = motion.matches ? (bounds.width - width) / 2 : distance - width;
-      van.style.transform = `translate3d(${x}px, 0, 0)`;
-      van.style.setProperty('--wheel-turn', motion.matches ? '0deg' : `${-distance / (width * 23 / 480) * 180 / Math.PI}deg`);
-      track.dataset.passing = String(progress > 0 && progress < 1 && pageIsActive(track));
+      const target = Math.min(1, Math.max(0, (innerHeight - geometry.top + scrollY) / (innerHeight + geometry.height)));
+      const elapsed = previous ? Math.min(now - previous, 64) : 16;
+      previous = now;
+      progress = progress === null || motion.matches ? target : progress + (target - progress) * (1 - Math.exp(-elapsed / 70));
+      if (Math.abs(target - progress) < .0003) progress = target;
+      const scene = ambulanceScene(geometry.roadWidth, geometry.vehicleWidth, progress, motion.matches);
+      van.style.transform = `translate3d(${scene.x}px, 0, 0)`;
+      van.style.setProperty('--wheel-turn', `${scene.wheel}deg`);
+      track.dataset.passing = String(!motion.matches && progress > 0 && progress < 1);
+      if (progress !== target) frame = requestAnimationFrame(update);
     };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
-    update();
+    const schedule = () => { if (!frame) { previous = 0; frame = requestAnimationFrame(update); } };
+    const measure = () => {
+      const bounds = track.getBoundingClientRect();
+      geometry = { top: bounds.top + scrollY, height: bounds.height, roadWidth: bounds.width, vehicleWidth: van.offsetWidth };
+      schedule();
+    };
+    // Geometry changes only on resize; scrolling moves one composited layer.
+    const resize = new ResizeObserver(measure);
+    resize.observe(track);
+    resize.observe(van);
+    measure();
     window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    document.addEventListener('visibilitychange', schedule);
-    document.addEventListener(PAGE_ACTIVITY_EVENT, schedule);
+    window.addEventListener('resize', measure);
     motion.addEventListener('change', schedule);
     return () => {
       cancelAnimationFrame(frame);
+      resize.disconnect();
       window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
-      document.removeEventListener('visibilitychange', schedule);
-      document.removeEventListener(PAGE_ACTIVITY_EVENT, schedule);
+      window.removeEventListener('resize', measure);
       motion.removeEventListener('change', schedule);
+      track.dataset.passing = 'false';
     };
-  }, []);
+  }, [active]);
 
   return <div className="ambulance-road" ref={road}>
     <div className="ambulance-road-line" aria-hidden="true" />

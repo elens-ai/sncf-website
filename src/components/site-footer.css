@@ -10,6 +10,7 @@
   isolation: isolate;
   border-top: 0;
   background:
+    linear-gradient(180deg, #0c3134, transparent 150px),
     radial-gradient(ellipse 55% 70% at 6% 0%, rgb(31 138 92 / 0.22), transparent 70%),
     radial-gradient(ellipse 45% 60% at 98% 35%, rgb(179 87 173 / 0.13), transparent 70%),
     linear-gradient(180deg, #0c3134 0%, #082528 55%, #102e56 100%);

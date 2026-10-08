@@ -1,7 +1,7 @@
 /* ==========================================================================
    THE PROJECT ORBIT (ProjectOrbit.tsx): the Core Values compass's dial
    (value-compass.css), with every project as a moon round its face, its
-   photograph ringed in its colour and its symbol beside it.
+   photograph ringed in its colour.
    ========================================================================== */
 .project-orbit .project-orbit-needle { transition: transform 1.1s cubic-bezier(0.45, 0.05, 0.25, 1); }
 /* the moons are sized by the dial they sit on: large, set a little out beyond its rim (ProjectOrbit), and still clear of the words at its centre */

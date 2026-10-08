@@ -90,7 +90,7 @@ const BRAND_EASE = 'cubic-bezier(0.45, 0, 0.2, 1)';
    page's time is shared equally among its two chapters (MissionChapters). The
    arrow button moves on at any time. */
 const WELCOME_SECONDS = 10;
-const MESSAGE_SECONDS = 3;
+const MESSAGE_SECONDS = 7;
 /* Where the welcome photo and the Satguru portrait are centred: editable in the
    CMS as "across% down%", for when an editor swaps either picture. */
 const WELCOME_PHOTO_FOCUS = { x: '47%', y: '46%' };
@@ -119,7 +119,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
 }) => {
   const c = (key: string, fallback: string) => getCMSCopy(`copy.WelcomeSplashScreen.${key}`, fallback);
   const welcomeMs = introSeconds(c("welcome-hold-seconds", "10"), WELCOME_SECONDS);
-  const messageMs = introSeconds(c("message-seconds", "3"), MESSAGE_SECONDS);
+  const messageMs = introSeconds(c("message-seconds", "7"), MESSAGE_SECONDS);
   const photoFocus = introFocus(c("welcome-photo-focus", "47% 46%"), WELCOME_PHOTO_FOCUS);
   const portraitFocus = introFocus(c("satguru-photo-focus", "50% 20%"), PORTRAIT_FOCUS);
   /* With reduced motion the chapters are set one after another, and the page simply holds. */
@@ -321,7 +321,7 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
     content: (
       <HumanitySlogan active={stage === 'message'} lines={[
         c("message-couplet-1", "मानव को हो मानव प्यारा"),
-        c("message-couplet-2", "इक दूजे का बने सहारा"),
+        c("message-couplet-2", "इक दूजे का बने सहारा।"),
       ]} />
     ),
   }];

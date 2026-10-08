@@ -15,6 +15,8 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
 }
 
 @media (max-width: 767px) {
+  /* Local art-tuning tools must not cover the phone preview. */
+  .local-opacity-controls { display: none; }
   #site-header[data-compact], .reading-room #site-header[data-compact] { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); gap: 8px; }
   #site-header .site-brand { flex: 0 0 44px; }
   #site-header #logo-badge-btn { width: 44px; height: 44px; flex-shrink: 0; }
@@ -75,4 +77,72 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
   .mgal-viewer-arrow { top: 50%; bottom: auto; translate: 0 -50%; }
   .mgal-viewer-prev { left: 12px; }
   .mgal-viewer-next { right: 12px; }
+}
+
+@media (pointer: coarse) {
+  :where(button, a, summary) { touch-action: manipulation; }
+  :where(.preport-stage-turns, .mgal-controls, .hero-playback) button { min-width: 44px; min-height: 44px; }
+}
+
+@media (max-width: 639px) {
+  .home-page #hero-clone-stage { padding-top: 92px; padding-inline: max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right)); }
+  .home-page #hero-foreground-content .hero-heal-art { width: min(68vw, 29svh, 280px); margin-block: 6px 16px; }
+  .home-page #hero-foreground-content:has(.hero-heal-art) #hero-headline { font-size: clamp(24px, 6.8vw, 28px); }
+  .home-page #hero-foreground-content:has(.hero-heal-art) #hero-body-text { line-height: 1.6; margin-bottom: 12px; }
+  .home-page #hero-clone-stage .hero-explore { margin-bottom: 12px; }
+  .home-page #hero-clone-stage .hero-explore-link { min-height: 44px; }
+  .home-page #hero-clone-stage .hero-impact { margin-bottom: 8px; }
+  .home-page #hero-clone-stage .hero-path-tabs { padding-inline: 12px; bottom: max(10px, env(safe-area-inset-bottom)); }
+  .reading-room .subnav { scroll-padding-inline: 12px; overscroll-behavior-x: contain; }
+  .reading-room .subnav-chip { min-height: 44px; }
+  .reading-room .subnav[data-floating] { top: 78px; max-width: calc(100% - 24px); }
+}
+
+/* Handheld chapters read vertically, with all four paths available at the top. */
+@media (max-width: 1023px) {
+  .home-page .hero-track { height: auto; }
+  .home-page .hero-track > #hero-clone-stage { position: relative; top: auto; min-height: 0; padding: 28px max(20px, env(safe-area-inset-left)) 36px max(20px, env(safe-area-inset-right)); }
+  .home-page #hero-clone-stage > .hero-path-tabs { position: relative; inset: auto; order: -1; flex: none; width: 100%; margin: 0 0 28px; padding: 0; opacity: 1; }
+  .home-page #hero-clone-stage .hero-path-tabs [role='tablist'] { width: 100%; max-width: 600px; gap: 0; }
+  .home-page #hero-clone-stage .hero-path-tabs [role='tab'] { flex: 1; min-height: 44px; }
+  .home-page #hero-foreground-content { flex: none; opacity: 1; }
+  .home-page #hero-clone-stage .hero-goals ul { flex-wrap: wrap; gap: 6px; }
+  .home-page #hero-clone-stage .hero-goals ul:has(li:nth-child(8)) { display: grid; grid-template-columns: repeat(4, 44px); }
+  .home-page #hero-clone-stage .hero-goals { --sdg-w: 44px; }
+  .home-page #hero-clone-stage .hero-goals .sdg-row-label { font-size: 9px; letter-spacing: .08em; }
+  .home-page #hero-clone-stage .hero-goals .sdg-row-label svg { flex: none; }
+  .home-page #hero-clone-stage .hero-impact { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .home-page #hero-clone-stage .hero-impact > div { min-width: 0; }
+  .home-page #hero-clone-stage .hero-impact > div + div { padding-left: 14px; }
+  .home-page #hero-clone-stage .hero-impact > div > span:first-child { font-size: clamp(22px, 6.2vw, 29px); }
+  .home-page #hero-clone-stage .hero-explore-link { min-height: 44px; }
+}
+@media (max-width: 639px) {
+  .home-page #hero-foreground-content .hero-eyebrow { font-size: 10px; margin-bottom: 8px; }
+  .home-page #hero-foreground-content .hero-heal-art { width: min(60vw, 24svh, 230px); margin-block: 12px 20px; }
+  .home-page #hero-foreground-content .hero-heal-art > figcaption { width: max-content; max-width: calc(100vw - 40px); left: 50%; transform: translateX(-50%); font-size: 20px; }
+  .home-page #hero-clone-stage .hero-impact { padding-block: 14px; }
+  .home-page #hero-clone-stage .hero-goals-wrap { margin-block: 4px 18px; }
+}
+
+/* Keep the two-line message and portrait together within the phone screen. */
+@media (max-width: 767px) and (orientation: portrait) {
+  .splash-mission-page[data-page='message'] { --mp-pad-top: max(24px, env(safe-area-inset-top)); --mp-pad-bottom: max(20px, env(safe-area-inset-bottom)); grid-template-rows: minmax(0, 1fr); overflow: hidden; }
+  .splash-mission-page[data-page='message'] .splash-mission-copy { padding-inline: 20px; max-width: none; }
+  .splash-mission-page[data-page='message'] .splash-intro-name { flex-direction: row; align-items: center; gap: 10px; --name-line: min(24px, calc(100cqw / 20.2)); }
+  .splash-mission-page[data-page='message'] .splash-copy-body { margin-top: clamp(24px, 5svh, 46px); }
+  .splash-mission-page[data-page='message'] .mission-chapter-stage { flex: none; margin: 0; align-items: start; }
+  .splash-mission-page[data-page='message'] .humanity-slogan { min-height: 0; margin: 0; padding: 0; }
+  .splash-mission-page[data-page='message'] .humanity-slogan-words { font-size: clamp(28px, 9.4cqw, 48px); line-height: 1.18; }
+  .splash-mission-page[data-page='message'] .mission-chapter-rail { margin-top: auto; padding-right: 62px; gap: 10px; }
+  .splash-mission-page[data-page='message'] .mission-chapter-hold { width: 44px; height: 44px; }
+  .splash-mission-page[data-page='message'] .mission-chapter-step { min-height: 44px; align-content: center; font-size: 9px; letter-spacing: .08em; }
+  .splash-mission-page[data-page='message'] .splash-satguru { position: absolute; inset: 32% 0 66px; padding: 0; pointer-events: none; }
+  .splash-mission-page[data-page='message'] .splash-satguru-frame { width: 100%; height: 100%; aspect-ratio: auto; }
+  .splash-mission-page[data-page='message'] .splash-satguru img { object-fit: contain; object-position: center bottom; }
+  #welcome-splash-screen .splash-skip { width: 44px; height: 44px; bottom: max(20px, env(safe-area-inset-bottom)); right: 20px; }
+}
+@media (max-width: 767px) and (max-height: 650px) and (orientation: portrait) {
+  .splash-mission-page[data-page='message'] .splash-copy-body { margin-top: 22px; }
+  .splash-mission-page[data-page='message'] .splash-satguru { top: 36%; }
 }

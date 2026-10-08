@@ -6,6 +6,7 @@ import landTopology from 'world-atlas/land-110m.json';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { nimaJourney, nimaStory, type NimaStep } from '../data/nima';
 import './nima-journey.css';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 
 /**
  * NIMA'S JOURNEY, from Delhi across borders: a globe that turns to each new
@@ -42,7 +43,7 @@ export default function NimaJourney() {
   const [index, setIndex] = useState(0);
   const root = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [visible, setVisible] = useState(false);
+  const visible = useSectionActivity(root);
   const still = useRef(false);
   const view = useRef({ rotate: [-INDIA[0], -INDIA[1]] as [number, number], from: [-INDIA[0], -INDIA[1]] as [number, number], to: [-INDIA[0], -INDIA[1]] as [number, number], turnAt: 0, stepAt: 0 });
 
@@ -53,13 +54,7 @@ export default function NimaJourney() {
     query.addEventListener('change', sync);
     return () => query.removeEventListener('change', sync);
   }, []);
-  useEffect(() => {
-    const element = root.current;
-    if (!element) return;
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: .25 });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
+
 
   /* a new step: turn to face it, and start its flight */
   useEffect(() => {

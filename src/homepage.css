@@ -315,3 +315,18 @@ html.hero-turning.hero-turning-back::view-transition-new(hero-page) { animation:
 #hero-clone-stage .hero-waves .mosaic-waves { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 900ms ease; }
 #hero-clone-stage .hero-waves .mosaic-waves[data-ready='true'] { opacity: 1; }
 @media (forced-colors: active), (prefers-contrast: more) { #hero-clone-stage .hero-waves { display: none; } }
+
+/* The shared home chapter order: story, relevant SDGs, figures, Explore. */
+#hero-clone-stage .hero-goals-wrap { width: 100%; margin: 4px 0 18px; }
+#hero-clone-stage .hero-goals { --sdg-w: 40px; width: 100%; max-width: 420px; flex-direction: column; align-items: flex-start; gap: 9px; }
+#hero-clone-stage .hero-goals .sdg-row-label { min-height: 0; font-size: 9px; line-height: 1.5; letter-spacing: .1em; }
+#hero-clone-stage .hero-goals ul { width: 100%; flex-wrap: wrap; gap: 5px; }
+#hero-clone-stage .hero-goals li { flex: 0 0 var(--sdg-w); }
+#hero-clone-stage .hero-details .hero-explore { margin: 12px 0 0; }
+#hero-clone-stage .hero-details .hero-impact { margin-bottom: 0; }
+@media (max-width: 639px) {
+  #hero-clone-stage .hero-goals { --sdg-w: clamp(32px, 9.2vw, 38px); }
+  #hero-clone-stage .hero-goals-wrap { margin-block: 2px 14px; }
+  .home-page #hero-clone-stage .hero-details .hero-explore { margin-top: 8px; }
+  .home-page #hero-foreground-content .hero-heal-art { width: min(62vw, 24svh, 250px); }
+}

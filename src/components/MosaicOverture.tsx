@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowUpRight, CalendarDays } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, CalendarDays, Pause, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
@@ -123,7 +123,32 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
 }) {
   const root = useRef<HTMLElement>(null);
   useAssembly(root, play);
-  const [lit, setLit] = useState<MosaicPillar | null>(null);
+  const [selected, setLit] = useState<MosaicPillar | null>(null);
+  const [autoIndex, setAutoIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [calm, setCalm] = useState(false);
+  const lit = selected ?? paths()[autoIndex].id;
+  const rotating = play && visible && !paused && !selected && !calm;
+  useEffect(() => {
+    const query = matchMedia('(prefers-reduced-motion: reduce)');
+    const read = () => {
+      const bounds = root.current?.getBoundingClientRect();
+      setVisible(!document.hidden && !!bounds && bounds.bottom > 0 && bounds.top < innerHeight);
+      setCalm(query.matches);
+    };
+    const observer = new IntersectionObserver(read);
+    if (root.current) observer.observe(root.current);
+    read();
+    document.addEventListener('visibilitychange', read);
+    query.addEventListener('change', read);
+    return () => { observer.disconnect(); document.removeEventListener('visibilitychange', read); query.removeEventListener('change', read); };
+  }, []);
+  useEffect(() => {
+    if (!rotating) return;
+    const timer = window.setTimeout(() => setAutoIndex(index => (index + 1) % 4), 2750);
+    return () => clearTimeout(timer);
+  }, [rotating, autoIndex]);
   /* Where a cursor exists a door leads on, its photographs lit as it is pointed at; on a touch screen (a phone) a
      tap only lights them, and the visitor stays where they are. */
   const [cursor, setCursor] = useState(true);
@@ -176,7 +201,7 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
       </div>
       <nav className="mosaic-paths" aria-label="Explore our four pillars">
         {paths().map(({ id, detail }, index) => (
-          <button type="button" key={id} className="mosaic-path" onClick={event => (cursor ? onChoose(id, event.currentTarget) : setLit(id))}
+          <button type="button" key={id} className="mosaic-path" data-active={lit === id} onClick={event => (cursor ? onChoose(id, event.currentTarget) : setLit(id))}
             aria-label={`${cursor ? `${getCMSCopy('copy.MosaicOverture.enter', 'Enter')} ` : ''}${PILLAR_LOGOS[id].label}: ${detail}`} aria-pressed={cursor ? undefined : lit === id}
             onPointerEnter={event => { if (event.pointerType !== 'touch') setLit(id); }} onPointerLeave={event => { if (event.pointerType !== 'touch') setLit(null); }}
             onFocus={() => setLit(id)} onBlur={() => setLit(null)}
@@ -188,10 +213,12 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
                   src={id === 'projects' ? resolveCMSAsset("asset.projects.bloom", "/images/projects-bloom.png?v=balanced") : resolveCMSAsset("asset.MosaicOverture.enrich-book", "/images/emblem-marks/enrich-book.webp")} />
               : <svg viewBox="0 0 146 120" className="mosaic-path-icon" aria-hidden="true"><PillarMarkShapes pillar={id} /></svg>}
             <span className="mosaic-path-copy"><strong>{PILLAR_LOGOS[id].label}</strong><span>{detail}</span></span>
+            {lit === id && <span key={`${id}-${rotating}`} className="mosaic-path-progress" data-running={rotating} aria-hidden="true"><i /></span>}
           </button>
         ))}
       </nav>
       <div className="mosaic-overture-foot">
+        {!calm && <button type="button" className="mosaic-rotation-pause" onClick={() => setPaused(value => !value)} aria-label={paused ? 'Resume pillar rotation' : 'Pause pillar rotation'}>{paused ? <Play size={14} /> : <Pause size={14} />}</button>}
         {onScrollOn
           ? <button type="button" className="mosaic-scroll-cue" onClick={onScrollOn}>{getCMSCopy('copy.MosaicOverture.scroll', 'Scroll to explore')} <ArrowDown size={14} aria-hidden="true" /></button>
           : <span className="mosaic-scroll-cue">{getCMSCopy('copy.MosaicOverture.scroll', 'Scroll to explore')} <ArrowDown size={14} aria-hidden="true" /></span>}

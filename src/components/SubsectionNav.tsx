@@ -24,6 +24,7 @@ interface SubsectionNavProps {
       section's id (data-ground), and the page gives each id its colours
       (--backdrop-dark, -mid, -light and -pale), which it fades between. */
   tinted?: boolean;
+  floating?: boolean;
 }
 
 /**
@@ -51,7 +52,9 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
   variant = 'rail',
   look,
   tinted = false,
+  floating = false,
 }) => {
+  const [hidden, setHidden] = useState(false);
   const [active, setActive] = useState(links[0]?.id ?? '');
   const railRef = useRef<HTMLElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -66,6 +69,26 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
      render — and CoreValuesPage re-renders whenever a record is opened. Keyed
      on the ids instead, the measurement effect binds its listeners once. */
   const key = links.map((l) => l.id).join('|');
+
+  useEffect(() => {
+    if (!floating) return;
+    let previous = window.scrollY, distance = 0, direction = 0, frame = 0;
+    const read = () => {
+      frame = 0;
+      const y = Math.max(0, window.scrollY);
+      const delta = y - previous;
+      previous = y;
+      if (!delta) return;
+      const nextDirection = Math.sign(delta);
+      distance = nextDirection === direction ? distance + Math.abs(delta) : Math.abs(delta);
+      direction = nextDirection;
+      if (y < 80 || direction < 0 && distance > 8) setHidden(false);
+      else if (direction > 0 && distance > 18 && !railRef.current?.contains(document.activeElement)) setHidden(true);
+    };
+    const scroll = () => { if (!frame) frame = requestAnimationFrame(read); };
+    window.addEventListener('scroll', scroll, { passive: true });
+    return () => { window.removeEventListener('scroll', scroll); cancelAnimationFrame(frame); };
+  }, [floating]);
 
   useEffect(() => {
     let raf = 0;
@@ -236,6 +259,7 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
 
   return (
     <nav className="subnav" aria-label={label} ref={railRef} data-variant={variant} data-look={look}
+      data-floating={floating || undefined} data-hidden={floating && hidden || undefined} onFocusCapture={() => setHidden(false)}
       data-tinted={tinted || undefined} data-ground={tinted ? active : undefined}>
       {variant === 'tabs' ? (
         <div className="subnav-track" ref={trackRef}>

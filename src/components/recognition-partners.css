@@ -94,6 +94,14 @@
   .honour-meta { display: flex; gap: 28px; padding: 0; border-left: 0; }
   .collaboration-heading { display: block; }
   .collaboration-layout { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .collaboration-editorial { display: contents; }
+  .collaboration-layout { row-gap: 20px; }
+  .collaboration-editorial > .collaboration-heading { order: 0; margin: 0; }
+  .collaboration-intro { order: 1; margin: 0; }
+  .collaboration-directory { order: 2; margin-block: 8px; }
+  .collaboration-partner { order: 3; margin: 0; }
+  .collaboration-join { order: 4; justify-self: start; margin-top: 4px; }
+  .collaboration-join-note { order: 5; margin: -10px 0 0; }
   .collaboration-intro { max-width: none; }
   .collaboration-partner { max-width: none; }
   .collaboration-mark { width: 51px; height: 51px; padding: 9px; }

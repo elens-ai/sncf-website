@@ -7,6 +7,7 @@ import { BOOK_COVER, EMPOWER_COMPANIONS, EMPOWER_TILT, PILLAR_LOGOS, companionTr
 import { PILLARS } from '../data/pillars';
 import { roomPhoto } from '../data/pavilionGallery';
 import { LocalOpacityControls } from './LocalOpacityControls';
+import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 
 // Smooth brand contours preserve the model proportions without polygon edges.
 const TILES = [
@@ -77,12 +78,14 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
     if (pillar !== 'heal' || !svg) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     let onScreen = true;
-    const apply = () => (onScreen && !reduced.matches ? svg.unpauseAnimations() : svg.pauseAnimations());
+    const apply = () => (onScreen && !reduced.matches && pageIsActive(svg as unknown as HTMLElement) ? svg.unpauseAnimations() : svg.pauseAnimations());
     const observer = new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; apply(); });
     observer.observe(svg);
     reduced.addEventListener('change', apply);
+    document.addEventListener('visibilitychange', apply);
+    document.addEventListener(PAGE_ACTIVITY_EVENT, apply);
     apply();
-    return () => { observer.disconnect(); reduced.removeEventListener('change', apply); };
+    return () => { observer.disconnect(); reduced.removeEventListener('change', apply); document.removeEventListener('visibilitychange', apply); document.removeEventListener(PAGE_ACTIVITY_EVENT, apply); };
   }, [pillar]);
   return <figure className="heal-photo-mosaic" data-pillar={pillar} aria-label={`${logo.label} ${solid ? 'solid emblem' : 'logo photo mosaic'}`}>
     <svg ref={svgRef} viewBox="-4 -12 174 142" role="img" aria-labelledby={`${clip}-title`}>

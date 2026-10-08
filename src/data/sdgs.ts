@@ -76,6 +76,7 @@ export const PROGRAMME_SDGS: Record<string, number[]> = {
   'oneness-vann': [15, 13],
   watershed: [6, 15],
   'adopted-villages': [1, 3, 11],
+  'health-city': [3],
 };
 
 /** The goals a cornerstone's programmes advance, most shared first. */

@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 /**
  * A route change should start at the top of the new page — unless the address
@@ -16,28 +16,32 @@ import { useLocation } from 'react-router-dom';
  * has to exist before it can be scrolled to.
  */
 export const ScrollToTop = () => {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, search, key } = useLocation();
+  const navigate = useNavigate();
+  const previousPath = useRef<string | null>(null);
+  const projectsEntryKey = useRef<string | null>(null);
 
   useEffect(() => {
+    // Projects opens with its photo introduction; later chapter links still work.
+    if (pathname === '/projects' && previousPath.current !== pathname) projectsEntryKey.current = key;
+    previousPath.current = pathname;
+    if (pathname === '/projects' && projectsEntryKey.current === key && hash) {
+      navigate({ pathname, search, hash: '' }, { replace: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
     if (!hash) {
       window.scrollTo(0, 0);
       return;
     }
-    /* The target has to exist and be laid out before it can be scrolled to,
-       and it may still be waiting on an image's height. So: try immediately,
-       then retry on a short timer until it lands or the attempts run out.
-       TIMERS, NOT requestAnimationFrame — rAF is suspended in a backgrounded
-       or throttled tab, which is the same trap this codebase already avoids
-       for its entrance animations, and a deep link that silently does
-       nothing when the tab was not focused is exactly that bug again. */
+    // Wait for a lazy route's target, then scroll once. Re-scrolling after
+    // media loads pulls the reader backwards if they have already moved on.
     let tries = 0;
     let timer = 0;
     const attempt = () => {
       const el = document.getElementById(hash.slice(1));
       if (el) {
         el.scrollIntoView({ block: 'start' });
-        /* one more pass to settle late-loading media above the target */
-        if (++tries < 3) timer = window.setTimeout(attempt, 220);
         return;
       }
       if (++tries < 8) timer = window.setTimeout(attempt, 60);
@@ -45,7 +49,7 @@ export const ScrollToTop = () => {
     };
     attempt();
     return () => window.clearTimeout(timer);
-  }, [pathname, hash]);
+  }, [pathname, hash, search, key, navigate]);
 
   return null;
 };

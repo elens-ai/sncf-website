@@ -189,3 +189,6 @@
 .home-page #hero-social-sidebar[data-light='true'] a { background: rgb(255 255 255 / 0.74); border-color: rgb(20 58 51 / 0.14); color: rgb(20 58 51 / 0.72); }
 .home-page #hero-social-sidebar[data-light='true'] .rail-line:first-child { background: linear-gradient(transparent, rgb(20 58 51 / 0.32)); }
 .home-page #hero-social-sidebar[data-light='true'] .rail-line:last-child { background: linear-gradient(rgb(20 58 51 / 0.32), transparent); }
+
+.nvproject-model { position: relative; display: block; width: 76px; height: 70px; }
+.nvproject-model > div > .absolute { inset: 0; }

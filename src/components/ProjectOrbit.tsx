@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import type { LucideIcon } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import { PillarModelCard } from './PillarModelCard';
@@ -15,7 +14,6 @@ export interface OrbitProject {
   href: string;
   ink: string;
   light: string;
-  icon: LucideIcon;
   /** A photograph of the project; without one its node shows contour lines. */
   photo?: string;
 }

@@ -221,3 +221,30 @@
 @media (forced-colors: active) {
   .home-landing { background: Canvas; }
 }
+
+/* Keep the four ways into the site within reach on a phone, with room to grow
+   naturally on short screens and when the visitor enlarges the text. */
+@media (max-width: 639px) {
+  .home-page { --shore-band: clamp(48px, 8svh, 72px); }
+  .home-landing > .mosaic-overture {
+    min-height: calc(100svh - var(--shore-band));
+    grid-template-rows: minmax(0, 1fr) auto auto;
+    gap: 16px;
+    padding: 88px max(20px, env(safe-area-inset-left)) 16px max(20px, env(safe-area-inset-right));
+  }
+  .home-landing .mosaic-overture-composition { gap: 12px; }
+  .home-landing .mosaic-emblem { width: min(48vw, 23svh, 210px); }
+  .home-landing .mosaic-overture-title > .font-dancing-script { font-size: clamp(44px, 12.5vw, 58px); }
+  .home-landing .mosaic-overture-lead { margin: 12px auto 0; font-size: 13px; }
+  .home-landing .mosaic-overture-sign { font-size: clamp(28px, 8.2vw, 36px); }
+  .home-landing .mosaic-overture-events { min-height: 44px; margin-top: 14px; padding-block: 12px; }
+  .home-landing .mosaic-paths { gap: 10px; }
+  .home-landing .mosaic-path { min-height: 74px; padding: 12px 10px; gap: 9px; border-radius: 15px; }
+  .home-landing .mosaic-path-icon { width: 30px; height: 30px; }
+  .home-landing .mosaic-path-copy { min-width: 0; }
+  .home-landing .mosaic-path-copy strong { font-size: clamp(17px, 4.8vw, 21px); }
+  .home-landing .mosaic-path-copy > span { font-size: 10px; line-height: 1.4; }
+  .home-landing .mosaic-overture-foot { flex-direction: row; justify-content: center; gap: 12px; }
+  .home-landing .mosaic-rotation-pause { width: 44px; height: 44px; margin: 0; flex: none; }
+  .home-landing button.mosaic-scroll-cue { min-height: 44px; }
+}

@@ -2,7 +2,7 @@ import { CMSMetadata } from './cms/CMSMetadata';
 import { useCMSRevision } from './cms/CMSContentProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import HomePage from './pages/HomePage';
+const HomePage = lazy(() => import('./pages/HomePage'));
 import { ScrollToTop } from './components/ScrollToTop';
 const CMSPage = lazy(() => import('./pages/CMSPage'));
 const ContributionPage = lazy(() => import('./pages/ContributionPage'));

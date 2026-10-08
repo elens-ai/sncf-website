@@ -192,9 +192,9 @@ class PillarRenderer {
   }
   sync = () => {
     if (this.disposed || this.lost) return;
-    this.stop();
     const next = [...this.clients].find(c => c.active && c.visible && pageIsActive(c.host) && this.assets.has(c.assetKey));
     if (this.current !== next) {
+      this.stop();
       if (this.current) {
         const asset = this.assets.get(this.current.assetKey);
         if (asset) this.snapshot(asset, this.current.rotation(), this.current.look);
@@ -203,14 +203,16 @@ class PillarRenderer {
       this.current = next;
       if (next) this.assets.get(next.assetKey)?.book?.restart(next.animate);
     }
-    if (!next) { this.renderer.domElement.remove(); return; }
-    next.host.appendChild(this.renderer.domElement);
+    if (!next) { this.stop(); this.renderer.domElement.remove(); return; }
+    // Re-appending an unchanged canvas detaches its composited surface and
+    // makes a fixed logo flash during otherwise unrelated visibility updates.
+    if (this.renderer.domElement.parentElement !== next.host) next.host.appendChild(this.renderer.domElement);
     this.pixels = Math.min(768, Math.max(128, Math.round(next.host.clientWidth * Math.min(devicePixelRatio, 1.25))));
     this.drawCurrent(); next.live(true);
     if (next.animate) {
       this.renderer.domElement.dataset.renderState = 'running';
       this.clock.start();
-    }
+    } else this.stop();
   };
   drawCurrent() {
     if (!this.current) return;
@@ -258,7 +260,12 @@ export function attachModel(host: HTMLElement, id: string, poster: Client['poste
   const observer = new ResizeObserver(() => { if (renderer.current === client) renderer.sync(); });
   observer.observe(host);
   return {
-    update(state) { Object.assign(client, state); renderer.sync(); },
+    update(state) {
+      const changed = (['active', 'animate', 'visible'] as const).some(key => state[key] !== undefined && state[key] !== client[key]);
+      if (!changed) return;
+      Object.assign(client, state);
+      renderer.sync();
+    },
     dispose() {
       observer.disconnect(); renderer.clients.delete(client);
       if (renderer.current === client) renderer.current = undefined;

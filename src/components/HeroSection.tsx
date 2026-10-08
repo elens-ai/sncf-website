@@ -5,6 +5,9 @@ import { getCMSCopy } from '../cms/runtime';
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { PILLARS } from '../data/pillars';
+import { ACTIVITIES } from '../data/activities';
+import { goalsOf, PROGRAMME_SDGS } from '../data/sdgs';
+import { SdgRow } from './SdgRow';
 import { PillarState } from '../types';
 import { PillarHeroVisual } from './PillarHeroVisual';
 import { PillarArtwork } from './PillarArtwork';
@@ -64,6 +67,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     backdropStack.current = [...backdropStack.current.filter(id => id !== currentPillar.id), currentPillar.id];
   }
   const [heroVisible, setHeroVisible] = useState(true);
+  const [goalsOpen, setGoalsOpen] = useState(false);
   /* THE WATER UNDER THE HALL: the layered-wave artwork the chapters below
      swim in, here beneath every path's page in that path's own colours (it
      morphs with a ripple as the hall turns). It paints only while the hall
@@ -210,14 +214,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         ? 'opacity-0 translate-y-4 !transition-none'
         : 'opacity-100 translate-y-0';
   useEffect(() => {
-    if (scrollDriven || isPaused || !introActive || !heroVisible) return;
+    if (scrollDriven || isPaused || goalsOpen || !introActive || !heroVisible) return;
     const timer = window.setInterval(() => {
       if (!document.hidden && !reducedMotionRef.current) onActiveIndexChange((activeIndex + 1) % pillars.length);
     }, 8000);
     return () => window.clearInterval(timer);
-  }, [scrollDriven, activeIndex, isPaused, introActive, heroVisible, onActiveIndexChange, pillars.length]);
+  }, [scrollDriven, activeIndex, isPaused, goalsOpen, introActive, heroVisible, onActiveIndexChange, pillars.length]);
 
   const [displayPillar, setDisplayPillar] = useState<PillarState>(currentPillar);
+  const pillarActivities = ACTIVITIES.filter(activity => activity.pillarId === displayPillar.id);
+  const goalIds = pillarActivities.map(activity => activity.id);
+  const programmes = pillarActivities.map(activity => ({ title: activity.title, goals: PROGRAMME_SDGS[activity.id] ?? [] }));
+  if (displayPillar.id === 'projects') {
+    goalIds.push('health-city');
+    programmes.push({ title: getCMSCopy('copy.ProjectsPage.7560b5b78854', 'Health City'), goals: PROGRAMME_SDGS['health-city'] });
+  }
+  const pillarGoals = goalsOf(goalIds);
   const stageAccentA = displayPillar.accentA;
   const stageAccentB = displayPillar.accentB;
 
@@ -423,24 +435,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {displayPillar.body}
             </p>
 
-            {/* 4. Action Button, under the story (Delay: 180ms, with 1000ms color transition) */}
-            <div
-              style={{ transitionDelay: phase === 'exiting' ? '20ms' : '180ms' }}
-              className={`hero-explore flex flex-wrap items-center gap-3 mb-5 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
-            >
-              {/* a line of text on a hairline, with its arrow: each chapter's own Explore, below */}
-              <button
-                id={`hero-learn-more-${displayPillar.id}-btn`}
-                type="button"
-                onClick={() => onOpenDetails(displayPillar)}
-                className="hero-explore-link"
-              >
-                <span>{getCMSCopy("copy.HeroSection.2e1ac6e9292a", "Explore ")}{getPillarScriptTitle(displayPillar)}</span>
-                <ArrowUpRight size={17} aria-hidden="true" />
-              </button>
+            <div className={`hero-goals-wrap transition-[opacity,translate] duration-500 ${copyPhaseClass}`}>
+              <SdgRow goals={pillarGoals} id={`home-${displayPillar.id}`} name={displayPillar.label}
+                programmes={programmes} className="hero-goals" onOpenChange={setGoalsOpen} />
             </div>
 
-            {/* 5. Impact Metrics Strip, at the foot (Delay: 240ms) */}
+            {/* Impact figures lead into the matching Explore action. */}
             {showMetrics && (
               <div
                 style={{ transitionDelay: phase === 'exiting' ? '0ms' : '240ms' }}
@@ -462,6 +462,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 ))}
               </div>
             )}
+            {/* Explore follows the statistics on all four paths. */}
+            <div
+              style={{ transitionDelay: phase === 'exiting' ? '20ms' : '300ms' }}
+              className={`hero-explore flex flex-wrap items-center gap-3 mb-0 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.33,1,0.68,1)] ${copyPhaseClass}`}
+            >
+              {/* a line of text on a hairline, with its arrow: each chapter's own Explore, below */}
+              <button
+                id={`hero-learn-more-${displayPillar.id}-btn`}
+                type="button"
+                onClick={() => onOpenDetails(displayPillar)}
+                className="hero-explore-link"
+              >
+                <span>{getCMSCopy("copy.HeroSection.2e1ac6e9292a", "Explore ")}{getPillarScriptTitle(displayPillar)}</span>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </button>
+            </div>
+
           </div>
         </div>
         {/* turning pages, the emblem belongs to the page it is on: it changes with the page, inside the turn */}

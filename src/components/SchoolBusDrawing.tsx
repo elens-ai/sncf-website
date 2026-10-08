@@ -1,10 +1,9 @@
 import React from 'react';
 import { getCMSCopy } from '../cms/runtime';
 
-/** A sketch bus pauses at the left-hand school while the shared arrival
- * timeline brings the pupils through its doorway. */
+/** The school bus arrives and pauses for its pupil drop-off. */
 export function SchoolBusDrawing({ compact = false }: { compact?: boolean }) {
-  return <g className="school-bus-journey" aria-label={getCMSCopy('copy.SchoolBusDrawing.description', 'A Sant Nirankari Public School bus arrives from the right, stops to drop off pupils, then continues left.')}>
+  return <g className="school-bus-journey" style={{ '--bus-entry': compact ? '630px' : '1230px' } as React.CSSProperties} aria-label={getCMSCopy('copy.SchoolBusDrawing.description', 'A Sant Nirankari Public School bus arrives for its pupil drop-off.')}>
     <g transform={compact ? "translate(0 260) scale(.65)" : "translate(0 501) scale(.65)"}>
       <path d="M15 119V77L38 36Q42 25 55 25H360Q375 25 378 41L385 113V129H340Q340 105 315 105Q290 105 290 129H112Q112 105 87 105Q62 105 62 129H25Q15 129 15 119Z" fill="var(--sketch-stone)" fillOpacity=".08" />
       <path d="M22 72H45M35 66L24 59V72M383 81H393V94M14 111H29" />

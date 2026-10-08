@@ -55,6 +55,13 @@ const welcomeWasShown = () => {
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [compactViewport, setCompactViewport] = useState(() => window.matchMedia('(max-width: 1023px)').matches);
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 1023px)');
+    const update = () => setCompactViewport(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
   /* 'showing' -> 'exiting' (logo flies to the header) -> 'done'.
      The hero is mounted underneath the whole time so the handoff is seamless.
      A visitor arriving from a scanned pass (?invite=...) skips the splash
@@ -158,6 +165,9 @@ export default function HomePage() {
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
   useEffect(() => {
+    // Phones read the whole chapter in normal document flow; the tabs choose
+    // a pillar without pinning a tall composition above the viewport.
+    if (compactViewport) return;
     let raf = 0;
     /* THE TURNING RULE. A page turns 30% of the way into a scroll in the
        direction of travel (at is measured in screens along the track, 0 at
@@ -200,7 +210,7 @@ export default function HomePage() {
       window.removeEventListener('resize', onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [activePillarsList.length, cmsRevision]);
+  }, [activePillarsList.length, cmsRevision, compactViewport]);
   /* FAR SECTIONS HOLD THEIR COLOURS. The page's accent (--accent-a/-b)
      changes with each turn of the hall and each explore chapter; every element
      of the page inherits it, so each change restyled all ~3,600 of them, a
@@ -316,12 +326,14 @@ export default function HomePage() {
   const goToPillar = useCallback((index: number, takeFocus = false) => {
     const geometry = heroTrack();
     if (!geometry) return;
-    const offset = index === 0 ? 0 : geometry.extra + index * geometry.vh;
+    const offset = compactViewport
+      ? -(document.getElementById('site-header')?.offsetHeight ?? 72)
+      : index === 0 ? 0 : geometry.extra + index * geometry.vh;
     setActiveIndex(index);
     setHeroArrived(true);
     scrollHolding(window.scrollY + geometry.track.getBoundingClientRect().top + offset, index);
     if (takeFocus) document.getElementById('hero-clone-stage')?.focus({ preventScroll: true });
-  }, [scrollHolding]);
+  }, [scrollHolding, compactViewport]);
   /* Explore on a path opens that path's own page: Heal's, Enrich's and
      Empower's sections on Core Values, and the Projects page for the projects
      (each of which has its section there). */

@@ -8,6 +8,7 @@ import type { NavLink, PillarGroup } from '../data/navigation';
 import { PILLARS } from '../data/pillars';
 import { slug } from '../utils/slug';
 import { ACTIVITY_SYMBOLS } from './activitySymbols';
+import { PillarModelCard } from './PillarModelCard';
 import { UnSeal } from './UnAffiliation';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.NavPanels.${key}`, fallback);
@@ -85,15 +86,14 @@ export const ProjectsPanel: React.FC<{ links: NavLink[]; onNavigate: () => void 
     <div className="nvprojects">
       <ul className="nvproject-cards">
         {cards.map(({ link, project }, i) => {
-          const Symbol = symbolOf(project) ?? Hospital;
-          const photo = project!.images?.[0]?.src ?? project!.cardPhoto?.src;
+          const isAmrit = project!.id === 'project-amrit';
+          const isOneness = project!.id === 'oneness-vann';
+          const modelId = isAmrit ? 'amrit' : isOneness ? 'oneness' : 'projects';
+          const modelUrl = isAmrit ? resolveCMSAsset('asset.ProjectFilms.amritModel', '/models/project-amrit-full.glb') : isOneness ? resolveCMSAsset('asset.ProjectFilms.onenessModel', '/models/project-oneness-full.glb') : undefined;
           return (
             <li key={link.href} style={{ '--i': i } as React.CSSProperties}>
               <Go link={link} className="nvproject" onNavigate={onNavigate}>
-                <span className="nvproject-photo" data-empty={!photo} aria-hidden="true">
-                  {photo ? <img src={resolveCMSMedia(photo)} alt="" loading="lazy" decoding="async" /> : null}
-                  <span className="nvproject-symbol"><Symbol size={16} strokeWidth={1.7} /></span>
-                </span>
+                <span className="nvproject-model" aria-hidden="true"><PillarModelCard id={modelId} label={link.label} modelUrl={modelUrl} active={false} animate={false} /></span>
                 <span className="nvproject-words">
                   <span className="nvproject-name">{link.label}</span>
                 </span>

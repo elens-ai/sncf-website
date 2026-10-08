@@ -27,25 +27,6 @@
 .who-editorial .who-story .who-facts .ww-fact-v { margin-top: 4px; font: 600 20px/1.3 var(--font-sans); color: #20374a; }
 .who-fact-more { margin-top: 5px; font: 500 11.5px/1.4 var(--font-sans); color: #5f778a; }
 
-/* how service takes shape: the three moments, beside their heading */
-.who-approach { display: grid; grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr); align-items: center; gap: clamp(20px, 4vw, 56px); margin: 46px 0 6px; padding: clamp(24px, 3.4vw, 42px); overflow: hidden; border-radius: 28px; background: radial-gradient(ellipse at 8% 10%, #e3f2ea, transparent 60%), linear-gradient(130deg, #f4f8f5, #fff 55%, #f8f1f5); box-shadow: inset 0 0 0 1px #e1ebe5; }
-.who-approach-head h3 { margin: 14px 0 0; font: 800 clamp(24px, 2.7vw, 36px)/1.14 var(--font-heading); letter-spacing: 0; text-wrap: balance; color: #24443a; }
-.who-approach-head h3 em { font: 400 1.3em/1 var(--font-script); color: #cd1760; }
-.who-approach .service-story { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); grid-template-areas: 'sculpture steps' 'sculpture copy'; align-items: center; column-gap: 26px; max-width: none; }
-.who-approach .service-story-sculpture { grid-area: sculpture; height: 300px; }
-.who-approach .service-story-steps { grid-area: steps; align-self: end; margin-top: 0; }
-.who-approach .service-story-copy { grid-area: copy; align-self: start; }
-
-/* the three values, each a door with its own photograph */
-.who-editorial .who-story .who-door { padding: 12px 12px 22px; overflow: hidden; transition: translate 0.35s, box-shadow 0.35s; }
-.who-editorial .who-story .who-door:hover { translate: 0 -4px; box-shadow: 0 22px 40px -30px var(--value-ink); }
-.who-door-photo { position: relative; display: block; height: 190px; margin-bottom: 18px; overflow: hidden; border-radius: 50% 50% 14px 14px / 46% 46% 14px 14px; background: color-mix(in srgb, var(--value-tint) 35%, #eef3f0); }
-.who-door-photo img { width: 100%; height: 100%; object-fit: cover; transition: scale 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
-.who-door:hover .who-door-photo img { scale: 1.06; }
-.who-door-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, color-mix(in srgb, var(--value-ink) 55%, transparent)); }
-.who-door-pillar { position: absolute; left: 50%; bottom: 12px; z-index: 1; translate: -50% 0; padding: 5px 13px; border-radius: 999px; background: rgb(255 255 255 / 0.9); color: var(--value-ink); font: 800 10px/1.2 var(--font-heading); letter-spacing: 0.18em; }
-.who-editorial .who-story .who-door :is(.cv-tally-head, .cv-tally-key, .who-value-link) { padding-inline: 12px; }
-
 /* the registered office, as an old postcard: blue airmail paper faded with age, its edge perforated like a stamp
    all the way round, a fine frame printed within, a stamp and its postmark, lines to write on. The card's soft
    shadow follows its perforations. The paper is set by its colours: --paper at its heart, --paper-edge where it has
@@ -96,26 +77,13 @@
 .who-postcard .who-contact-tax svg { flex: none; margin-top: 3px; color: #2f8a5f; }
 .who-postcard .who-contact-tax strong { display: inline; margin: 0 6px 0 0; color: #2d4a40; }
 
-@media (max-width: 900px) {
-  .who-approach { grid-template-columns: minmax(0, 1fr); }
-  .who-editorial .who-story .who-door { display: grid; grid-template-columns: 170px minmax(0, 1fr); grid-template-rows: auto auto 1fr; column-gap: 18px; }
-  .who-editorial .who-story .who-door .who-door-photo { grid-row: 1 / span 3; height: 100%; min-height: 170px; margin: 0; }
-  .who-editorial .who-story .who-door :is(.cv-tally-head, .cv-tally-key, .who-value-link) { padding-inline: 0; }
-}
 @media (max-width: 650px) {
-  .who-approach .service-story { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'sculpture' 'steps' 'copy'; }
-  .who-approach .service-story-sculpture { height: 260px; }
-  .who-editorial .who-story .who-door { display: block; }
-  .who-editorial .who-story .who-door .who-door-photo { height: 170px; margin-bottom: 16px; }
   .who-postcard-note { padding: 34px 24px 26px; }
   .who-postcard-mapframe iframe { height: 260px; }
   .who-postcard-lines { margin: 0 18px; padding: 140px 6px 24px; border-left: 0; border-top: 1px dashed var(--paper-line); }
   .who-postcard-stamp { top: 22px; right: 10px; }
   .who-postcard-postmark { top: 40px; right: 92px; }
   .who-postcard .who-contact-tax { padding: 16px 16px 18px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .who-door-photo img, .who-editorial .who-story .who-door { transition: none; }
 }
 
 /* THE CREED, in three moments, across the chapter's full width and set flush on both sides (justified), not

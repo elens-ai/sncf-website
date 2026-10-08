@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { MEDIA, MediaItem } from '../data/media';
 import { PhotoCarousel } from './PhotoCarousel';
+import { useSectionActivity } from '../hooks/useSectionActivity';
 
 /**
  * THE GALLERY — photographs and films for one subsection.
@@ -80,6 +81,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
   const stripRef = useRef<HTMLUListElement | null>(null);
   /* true while a reader has the band — pointer over it, or focus inside */
   const heldRef = useRef(false);
+  const stripActive = useSectionActivity(stripRef);
 
   const hasPhoto = items.some((m) => m.kind === 'photo' && m.src);
   const hasFilm = items.some((m) => m.kind === 'film' && m.src);
@@ -128,7 +130,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
      It stops when a pointer is over it, when focus is inside it, when the
      gallery is off screen, and entirely under prefers-reduced-motion. */
   useEffect(() => {
-    if (layout !== 'carousel') return;
+    if (layout !== 'carousel' || !stripActive) return;
     const el = stripRef.current;
     if (!el) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -155,9 +157,6 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
       raf = requestAnimationFrame(step);
 
       if (heldRef.current) return;
-      /* off screen: nothing to watch, so nothing to spend */
-      const r = el.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > window.innerHeight) return;
 
       /* THE PERIOD IS MEASURED, NOT DIVIDED.
          `scrollWidth / 2` looks like the length of one pass and is not: the
@@ -186,7 +185,7 @@ export const MediaGallery: React.FC<MediaGalleryProps> = ({
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [layout, stripActive]);
 
   /* THE WHEEL DRIVES THE STRIP SIDEWAYS.
      A vertical wheel gesture over the strip scrolls it horizontally — but

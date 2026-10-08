@@ -1,6 +1,7 @@
 import React, { useId } from 'react';
 import { getCMSCopy } from '../cms/runtime';
 import { SchoolBusDrawing } from './SchoolBusDrawing';
+import { SchoolTeacherDrawing } from './SchoolTeacherDrawing';
 
 export const Ink: React.FC<{ d: string; className?: string }> = ({ d, className = '' }) =>
   <path className={`service-sketch-ink ${className}`} pathLength="1" d={d} />;
@@ -99,6 +100,7 @@ export function HealDrawing() {
       {[103,114,125].map(y => <Ink className="service-sketch-city-detail" key={y} d={`M54 ${y}L148 ${y-16}`} />)}
       {[157,173,189,205].map(y => <Ink className="service-sketch-city-detail" key={y} d={`M42 ${y}L154 ${y-8} 209 ${y+6}`} />)}
       <Ink className="service-sketch-city-detail" d="M164 139V213M176 143V213M188 146V213M200 149V213M179 109V139M188 106V141M196 104V142M174 117L201 111M174 128L201 123M92 213V190H110V213" />
+      <rect data-health-city-exit x="92" y="190" width="18" height="23" fill="none" stroke="none" />
       {/* A pair of palms recalls the landscaped frontage in the reference. */}
       <Ink d="M52 225L55 184M54 192Q42 181 32 190M54 192Q46 173 36 176M54 192Q60 175 72 180M54 192Q65 183 76 192M194 225L191 183M191 191Q177 181 169 190M191 191Q178 172 170 179M191 191Q200 174 210 181M191 191Q201 182 214 194M31 228Q123 224 222 229" />
       <Ink d="M36 35H222V65H36ZM54 65V87M202 65V98" />
@@ -164,7 +166,7 @@ export function HealDrawing() {
 
 export function EnrichDrawing({ compact = false }: { compact?: boolean }) {
   const entrance = useId().replace(/:/g, '');
-  return <>
+  return <g className="service-sketch-enrich">
     <g transform={compact ? "translate(-90 10) scale(.65)" : "translate(-75 240) scale(.64)"}>
     <defs><clipPath id={`${entrance}-entrance`}><path d="M0 160H373V600H0Z" /></clipPath></defs>
     <g className="service-sketch-school-sign">
@@ -196,12 +198,6 @@ export function EnrichDrawing({ compact = false }: { compact?: boolean }) {
       </g>)}
     </g>
     <Ink d="M373 185V311M376 185V311" />
-    {/* Teacher at the board. */}
-    <g style={{ '--sketch-delay': '.5s' } as React.CSSProperties}>
-      <path className="service-sketch-wash" fill="var(--sketch-rose)" d="M673 170L696 174 708 240 665 244Z" />
-      <Ink d="M678 169Q665 166 665 151Q668 138 681 139Q695 144 691 158L685 171M666 148Q662 137 677 133Q695 134 698 155L692 175M675 171L662 185 657 223 667 246 705 240 710 208 697 177 687 170M675 180L681 189 690 179M668 245L666 278 665 310M689 244L691 278 701 306M665 310L656 315H674L679 308M701 306L696 314 713 316 719 312 709 306M701 189L720 210 710 229M695 200L709 214 702 223" />
-      <g className="service-sketch-teacher-hand"><Ink d="M666 185L648 173 623 167M662 195L644 182 622 175M623 167L615 164 611 169 621 175M612 169L605 163" /></g>
-    </g>
     {/* Two children share an open book at the desk. */}
     <g style={{ '--sketch-delay': '.8s' } as React.CSSProperties}>
       <Ink d="M403 244Q391 238 395 225Q400 214 412 218Q423 224 418 236L412 245M395 223Q393 212 407 211Q422 213 425 226M400 245L388 257 385 282 419 291 431 277 424 253 414 245M402 252L408 261 417 252M390 270L407 279 430 273M396 261L411 270 430 265M388 285L410 299 408 337M417 290L430 305 439 334M408 337L403 343H419L423 338M439 334L436 341 452 344 457 339M382 271V294H432M386 296V341M430 296V337" />
@@ -214,7 +210,8 @@ export function EnrichDrawing({ compact = false }: { compact?: boolean }) {
     </g>
     <g transform={compact ? "translate(-230 375) scale(.7)" : "translate(355 138) scale(.7)"}><NVCCentreDrawing /></g>
     <SchoolBusDrawing compact={compact} />
-  </>;
+    <SchoolTeacherDrawing compact={compact} />
+  </g>;
 }
 
 /** NIMA: the supplied banner's painter, sitar, tabla and classical dancer motifs. */

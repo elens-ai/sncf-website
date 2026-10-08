@@ -46,8 +46,11 @@ export const SAYINGS = () => ({
     english: c('amrit-english', 'Clean water, clean mind.'),
     by: c('amrit-by', 'Project Amrit, Sant Nirankari Charitable Foundation'),
   },
+  // Official Oneness Vann launch slogan, 21 August 2021:
+  // https://nirankari.org/tour-and-samagams/onenessvann20210821/
   'oneness-vann': {
-    english: c('vann-english', 'Just as the Oneness Vann embodies the vision of unity in diversity, humanity too must forget all differences and embrace the spirit of peaceful coexistence to enhance the world.'),
+    hindi: c('vann-hindi', 'वृक्ष की छाया, वृद्ध का साया।'),
+    english: c('vann-english', 'The shade of trees, the shelter of elders.'),
     by: c('vann-by', 'Satguru Mata Sudiksha Ji Maharaj'),
   },
   watershed: {
