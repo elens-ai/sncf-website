@@ -19,11 +19,13 @@
 .humanity-slogan-words {
   display: block;
   width: 100%;
-  font: 400 clamp(32px, 10cqw, 68px) / 1.28 var(--font-hindi);
+  font: 400 clamp(32px, 10cqw, 68px) / 1.05 var(--font-hindi);
   text-align: center;
 }
 /* Graphemes keep Hindi vowels and conjuncts together; both complete lines reserve their space. */
 .humanity-slogan-line { display: block; white-space: nowrap; }
+/* the couplet set close, its second line drawn up under the first */
+.humanity-slogan-line + .humanity-slogan-line { margin-top: -.18em; }
 .humanity-slogan-letter { visibility: hidden; }
 .mission-chapters[data-paused='true'] .humanity-slogan * { animation-play-state: paused; }
 .humanity-slogan-metal {

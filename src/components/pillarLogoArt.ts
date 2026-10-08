@@ -19,7 +19,8 @@ export const PILLAR_LOGOS = {
     label: 'Empower',
     paths: [
       'M86.395 22.385A17.02 17.02 0 1 1 52.355 22.385A17.02 17.02 0 1 1 86.395 22.385Z',
-      'M9.805 7.215L57.165 39.405C65.120 44.585 72.705 44.585 81.030 39.775L128.945 8.325L136.160 17.205L94.165 45.510C87.135 50.505 85.655 56.980 85.655 65.490L85.655 106.375L51.430 106.375L51.430 65.490C51.430 56.980 49.580 50.505 44.400 46.620L2.405 17.575Z',
+      /* the arms broadened by half (about 19 units across), their lower edges carried out and the armpits lower */
+      'M10.370 6.390L57.730 38.580C65.690 43.750 72.160 43.750 80.480 38.940L128.400 7.490L139.070 21.640L97.075 49.940C89.400 54.600 85.655 61.500 85.655 69.500L85.655 106.375L51.430 106.375L51.430 69.500C51.430 61.500 47.600 55.600 41.405 50.990L-0.590 21.950Z',
     ],
     tint: '#db4293', edge: '#fff0f8', caption: 'Together, we rise.', description: 'environmental care, growing plants and sustainable communities',
   },
