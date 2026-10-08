@@ -135,6 +135,21 @@ class PillarRenderer {
     if (this.loads.has(assetKey)) return this.loads.get(assetKey);
     const promise = new GLTFLoader().loadAsync(url).then(({ scene: model }) => {
       if (this.disposed || ![...this.clients].some(client => client.assetKey === assetKey)) { release(model); this.loads.delete(assetKey); return; }
+      if (id === 'sncf-emblem') {
+        // Preserve the official artwork's colours; only the rounded rim receives studio lighting.
+        const faces = new Map<T.MeshStandardMaterial, T.MeshBasicMaterial>();
+        model.traverse(node => {
+          if (!(node instanceof T.Mesh)) return;
+          const original = Array.isArray(node.material) ? node.material : [node.material];
+          const materials = original.map(material => {
+            if (!(material instanceof T.MeshStandardMaterial) || !material.map) return material;
+            if (!faces.has(material)) faces.set(material, new T.MeshBasicMaterial({ map: material.map, toneMapped: false, side: material.side }));
+            return faces.get(material)!;
+          });
+          node.material = Array.isArray(node.material) ? materials : materials[0];
+        });
+        for (const material of faces.keys()) material.dispose();
+      }
       const bounds = new T.Box3().setFromObject(model);
       model.position.sub(bounds.getCenter(new T.Vector3()));
       const size = bounds.getSize(new T.Vector3());

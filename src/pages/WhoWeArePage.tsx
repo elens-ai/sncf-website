@@ -120,13 +120,8 @@ const marked = (text: string, marks: { phrase: string; ink: string }[]) => {
    the contact postcard's paper, with the same waves over it in those blues. */
 const WHO_GROUND = { id: 'who-we-are', accentA: '#2ab2ea', accentB: '#cfe9f3' };
 
-/** The cover: the words and the way on, beside the five-leaf star, each of its
-    five petals a photograph of a thing the foundation's hands do. The script
-    line and the lede carry those things as highlighted phrases, and pointing
-    at any of them (phrase or petal) brings it into view with its reported
-    figure. Beneath the star, the line the foundation was set up to act on;
-    at the foot, UNEP and the foundation's own figures; and the page's paper
-    laps up over the foot. */
+/** The foundation emblem floats beside interactive phrases about its work.
+    Selecting a phrase reveals the corresponding impact figure. */
 const WhoCover: React.FC = () => {
   useCMSRevision();
   const ref = useRef<HTMLElement>(null);
@@ -136,8 +131,7 @@ const WhoCover: React.FC = () => {
   const ways = handWays(FACTS[1]?.v ?? '');
   const [current, setCurrent] = useState(0);
   const [held, setHeld] = useState(false);
-  /* announced only when the visitor chooses, never on the bloom's own turns; and once they
-     have chosen, the bloom stops turning on its own */
+  /* Announce figures only on visitor selection, which also holds the current story. */
   const [told, setTold] = useState(false);
   const pick = (i: number) => { if (i < 0) return; setTold(true); setCurrent(i); };
   useEffect(() => {
@@ -185,7 +179,7 @@ const WhoCover: React.FC = () => {
     </div>
     {/* The service icon and the belief behind it. */}
     <div className="who-cover-stage" {...hold}>
-      <ServicePortrait />
+      <ServicePortrait active={active} reducedMotion={calm} />
       <div className="who-cover-voice"><Saying id="contribute" className="who-cover-saying" /></div>
     </div>
     <div className="who-cover-footer">

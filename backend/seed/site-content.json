@@ -3797,7 +3797,7 @@
     "copy.RecognitionArchive.press.title": "Press & Media",
     "copy.RecognitionArchive.press.eyebrow": "Service in the news",
     "copy.RecognitionArchive.press.intro": "Stories of the foundation’s work, as reported by the media.",
-    "copy.ServicePortrait.icon-label": "A hand holding a heart — service with humility"
+    "copy.ServicePortrait.icon-label": "Sant Nirankari Charitable Foundation emblem"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -4059,6 +4059,14 @@
     "asset.PillarPhotoMosaic.heal-photo-bottom-left": {
       "source": "/images/heal-emblem/photo-bottom-left.webp",
       "label": "PillarPhotoMosaic · photo-bottom-left.webp"
+    },
+    "asset.ServicePortrait.model": {
+      "source": "/models/sncf-emblem.glb",
+      "label": "ServicePortrait · sncf-emblem.glb"
+    },
+    "asset.ServicePortrait.poster": {
+      "source": "/images/sncf-logo.webp",
+      "label": "ServicePortrait · sncf-logo.webp"
     }
   },
   "slots": {

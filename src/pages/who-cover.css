@@ -59,7 +59,7 @@
 .who-cover-cta:hover { border-bottom-color: currentColor; }
 .who-cover-cta:hover svg { translate: 0 2px; }
 
-/* THE LOTUS, and the line beneath it */
+/* THE FOUNDATION EMBLEM, and the line beneath it */
 .who-cover-stage { display: flex; flex-direction: column; align-items: center; align-self: center; min-width: 0; }
 .who-cover-voice { display: grid; justify-items: center; width: 100%; min-height: 84px; }
 .saying.who-cover-saying { --saying-ink: var(--who-type); margin: 0 auto; padding: 4px 12px 0; max-width: 500px; animation: who-reveal 0.85s 0.3s both; }
@@ -93,7 +93,7 @@
   @media (min-height: 760px) {
     .who-cover-voice { padding-top: 14px; }
   }
-  /* on a short screen the line beneath the lotus gives way */
+  /* on a short screen the line beneath the emblem gives way */
   @media (max-height: 759px) {
     .who-cover { row-gap: 8px; }
     .who-cover-footer { padding-block: 9px; }
