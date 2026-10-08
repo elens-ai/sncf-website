@@ -27,9 +27,11 @@
 .service-compass[data-value] .service-compass-sculpture { top: 52.5%; width: 52%; height: auto; aspect-ratio: 1; z-index: 1; isolation: isolate; border-radius: 50%; border: 1px solid #ffffffc9; background: radial-gradient(120% 80% at 50% 115%, color-mix(in srgb, var(--value-light) 90%, #fff), transparent 72%), linear-gradient(160deg, color-mix(in srgb, var(--value-light) 55%, #ffffff80), color-mix(in srgb, var(--centre-ink) 78%, transparent)); box-shadow: inset 0 2px 3px #fffffff2, inset 0 -3px 9px #ffffff59, 0 0 0 6px color-mix(in srgb, var(--value-light) 30%, transparent), 0 22px 38px -20px color-mix(in srgb, var(--centre-ink) 65%, transparent); -webkit-backdrop-filter: blur(12px) saturate(1.5); backdrop-filter: blur(12px) saturate(1.5); }
 .service-compass[data-value] .service-compass-sculpture::before { content: ''; position: absolute; inset: 4% 12% auto; height: 45%; border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%; background: linear-gradient(180deg, #ffffffd9, #ffffff00); opacity: .7; }
 .service-compass[data-value] .service-compass-sculpture::after { content: ''; position: absolute; inset: 4%; border: 1px solid #ffffff59; border-radius: inherit; pointer-events: none; }
-/* the icons' boxes are set where they are drawn (ValueCompass: ICON_BOX), one box for all three */
+/* One centred group keeps the artwork and label balanced inside the bubble. */
+.service-compass-centre-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6%; }
+.service-compass-icon-frame { position: relative; width: 68%; aspect-ratio: 68 / 43; flex: 0 0 auto; }
 .service-compass-centre-mark { position: absolute; background: #fff; mask: var(--mark) center / contain no-repeat; -webkit-mask: var(--mark) center / contain no-repeat; filter: drop-shadow(0 2px 3px #17483a20); }
-.service-compass-empower-mark { position: absolute; overflow: visible; filter: drop-shadow(0 2px 3px #17483a20); }
+.service-compass-empower-mark { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 2px 3px #17483a20); }
 .service-compass[data-value] .service-compass-sculpture { width: 84%; top: 47%; }
 .service-compass[data-value] .service-compass-face { inset: 0 3% 7%; }
 .service-compass[data-value='heal'] { --centre-ink: #31b280; }

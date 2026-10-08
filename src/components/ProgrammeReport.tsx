@@ -9,13 +9,14 @@ import { PROGRAMME_SDGS } from '../data/sdgs';
 import { insightsFor } from '../data/insights';
 import { programmeAbout } from '../data/programmeAbout';
 import { programmePhotos } from '../data/programmePhotos';
-import { NVC_PHOTOS, SEWING_PHOTOS, partLabel, programmeGoals, withGroups } from '../data/programmeGroups';
+import { NVC_PHOTOS, programmeGoals, withGroups } from '../data/programmeGroups';
 import { SdgRow } from './SdgRow';
 import { ACTIVITY_SYMBOLS } from './activitySymbols';
 import { OdometerStatCounter } from './OdometerStatCounter';
 import { iconFor } from './figureIcons';
 import { Saying } from './Saying';
-import { NimaStory } from './NimaStory';
+import { nvcProgrammes } from '../data/nvcProgrammes';
+import { NvcProgrammeSection, NVC_ICONS } from './NvcProgrammeSection';
 import './programme-report.css';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.ProgrammeReport.${key}`, fallback);
@@ -86,7 +87,10 @@ export const ProgrammeReport: React.FC<{ id: string; activity: Activity; photos?
             <span><CalendarDays size={13} aria-hidden="true" />{activity.period}</span>
           </div>
           {photos.length > 0 && <div className="preport-stage-foot">
-            <p className="preport-caption" key={`${activity.id}-${shot}`}>{photos[shot]?.alt}</p>
+            <div className="preport-captions">
+              {photos.map((photo, index) => <p className="preport-caption" key={photo.src}
+                data-active={index === shot} aria-hidden={index !== shot}>{photo.alt}</p>)}
+            </div>
             {photos.length > 1 && <div className="preport-stage-turns">
               <button type="button" onClick={() => turn(-1)} aria-label={c('previous', 'Previous photograph')}><ChevronLeft size={17} aria-hidden="true" /></button>
               <span aria-live="polite">{shot + 1} / {photos.length}</span>
@@ -140,34 +144,49 @@ export const ProgrammeReport: React.FC<{ id: string; activity: Activity; photos?
   );
 };
 
-/** THE NIRANKARI VOCATIONAL CENTRE'S REPORT: the centre itself (its photograph, its lines, its figures and each
-    part's share of them), then a tab for each part: NIMA told in full (NimaStory), and the sewing and beautician
-    centres as a programme's report with more of their photographs. */
-export const NvcReport: React.FC<{ id: string; programme: Activity; parts: Activity[]; part: string; onPart: (id: string) => void }> = ({ id, programme, parts, part, onPart }) => {
+/** NVC is the parent: one introduction, four equally weighted programme sections. */
+export const NvcReport: React.FC<{ id: string; programme: Activity; part: string; onPart: (id: string) => void }> = ({ id, programme, part, onPart }) => {
   useCMSRevision();
-  const shown = parts.find(p => p.id === part) ?? parts[0];
+  const programmes = nvcProgrammes();
+  const selectedIndex = Math.max(0, programmes.findIndex(p => p.id === part));
+  const shown = programmes[selectedIndex];
   const centre = NVC_PHOTOS()[0];
-  const share = (p: Activity) => p.dataPoints.filter(point => /centres?$/i.test(point.label)).map(point => `${point.value} ${point.label.toLowerCase()}`).join(' · ');
+  const onTabKey = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    const next = event.key === 'ArrowRight' ? (index + 1) % programmes.length
+      : event.key === 'ArrowLeft' ? (index - 1 + programmes.length) % programmes.length
+      : event.key === 'Home' ? 0 : event.key === 'End' ? programmes.length - 1 : undefined;
+    if (next === undefined) return;
+    event.preventDefault();
+    onPart(programmes[next].id);
+    document.getElementById(programmes[next].id)?.focus();
+  };
   return (
     <article className="nvc-report" id={id}>
       <header className="nvc-head" style={{ '--photo': `url("${resolveCMSMedia(centre.src)}")` } as React.CSSProperties}>
         <div className="nvc-head-words">
-          <p className="nvc-kicker"><span>{c('kicker', 'Programme in focus')}</span><span><CalendarDays size={13} aria-hidden="true" />{programme.period}</span></p>
+          <p className="nvc-kicker"><span>{c('nvc-kicker', 'One centre. Many ways to grow.')}</span></p>
           <h4>{programme.title}</h4>
           <p>{programmeAbout(programme.id) ?? programme.blurb}</p>
+          <p>{c('nvc-purpose', 'From independent study and free coaching to vocational training and creative expression, these four programmes share a commitment to personal growth. Explore each part of the NVC family below, with its own purpose, learning opportunities and reported reach.')}</p>
         </div>
-        <dl className="nvc-head-figures">
-          {programme.dataPoints.map(point => <div key={point.label}><dt>{point.label}</dt><dd><Rolling value={point.value} /></dd></div>)}
-          {parts.map(p => <div key={p.id} className="nvc-head-part"><dt>{partLabel(p.id, p.title)}</dt><dd>{p.headline.value} <small>{p.headline.label.toLowerCase()}</small></dd><dd className="nvc-head-share">{share(p)}</dd></div>)}
-        </dl>
+        <div className="nvc-family" aria-label={c('nvc-family', 'Programmes within NVC')}>
+          {programmes.map((p, i) => {
+            const Icon = NVC_ICONS[p.id];
+            return <div key={p.id}><Icon size={22} strokeWidth={1.5} aria-hidden="true" /><span><small>0{i + 1}</small>{p.title}</span></div>;
+          })}
+        </div>
       </header>
       <div className="nvc-tabs" role="tablist" aria-label={programme.title}>
-        {parts.map(p => <button key={p.id} type="button" role="tab" id={p.id} aria-selected={p.id === shown.id} aria-controls={`${id}-${p.id}`} onClick={() => onPart(p.id)}>{partLabel(p.id, p.title)}</button>)}
+        {programmes.map((p, i) => {
+          const Icon = NVC_ICONS[p.id];
+          return <button key={p.id} type="button" role="tab" id={p.id} tabIndex={p.id === shown.id ? 0 : -1} aria-selected={p.id === shown.id} aria-controls={`${id}-${p.id}`} onClick={() => onPart(p.id)} onKeyDown={event => onTabKey(event, i)}><Icon size={17} aria-hidden="true" /><span>{p.title}</span></button>;
+        })}
       </div>
-      <div role="tabpanel" id={`${id}-${shown.id}`} aria-labelledby={shown.id} className="nvc-panel" key={shown.id}>
-        {shown.id === 'skill-nima'
-          ? <NimaStory photos={shown.images ?? []} />
-          : <ProgrammeReport id={`${id}-${shown.id}-report`} activity={shown} photos={[...(shown.images ?? []), ...(shown.id === 'skill-trades' ? SEWING_PHOTOS() : [])]} />}
+      <div className="nvc-panels">
+        {programmes.map((p, i) => <div role="tabpanel" id={`${id}-${p.id}`} aria-labelledby={p.id} tabIndex={p.id === shown.id ? 0 : -1}
+          aria-hidden={p.id !== shown.id} inert={p.id !== shown.id} data-active={p.id === shown.id} className="nvc-panel" key={p.id}>
+          <NvcProgrammeSection programme={p} index={i} />
+        </div>)}
       </div>
     </article>
   );

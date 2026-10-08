@@ -103,9 +103,10 @@ export interface ResolvedEvent {
   accentB: string;
 }
 
-/** Calendar order, January first; ongoing programmes close the line. */
+/** Upcoming calendar only; exact past records belong to the archive, never recurring invitations. */
 export const resolveEvents = (events: SNCFEvent[]): ResolvedEvent[] =>
   events
+    .filter(event => event.kind !== 'past')
     .map((event) => {
       const pillar = PILLARS.find((p) => p.id === event.pillarId);
       const date =

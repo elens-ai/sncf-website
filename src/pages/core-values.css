@@ -18,7 +18,7 @@
 .values-cover-ground > .pillar-artwork[data-visible='true'] { opacity: .3; }
 @media (forced-colors: active), (prefers-contrast: more) { .values-cover-ground > .mosaic-waves { display: none; } }
 .values-cover-copy { padding: 28px 0 50px; align-self: center; }
-.values-cover-vertical-name { position: absolute; left: 5%; right: 5%; bottom: 12%; margin: 0; color: #fff; text-align: center; font: 800 clamp(30px, min(3.4vw, 6.4svh), 52px)/1.06 var(--font-heading); letter-spacing: 0; text-shadow: 0 1px 24px rgb(6 55 130 / .25); }
+.values-cover-vertical-name { position: relative; margin: 0; max-width: 90%; color: #fff; text-align: center; font: 800 clamp(30px, min(3.4vw, 6.4svh), 52px)/1.06 var(--font-heading); letter-spacing: 0; text-shadow: 0 1px 24px rgb(6 55 130 / .25); }
 .values-cover h1 { font: 800 clamp(36px, 4.4vw, 66px)/1.06 var(--font-heading); letter-spacing: 0; margin: 24px 0; text-wrap: balance; text-shadow: 0 1px 24px rgb(6 55 130 / .25); }
 .values-cover h1 em { display: inline-block; font-family: var(--font-script); font-weight: 700; font-size: 1.3em; color: color-mix(in srgb, var(--value-light) 70%, #fff); letter-spacing: -.025em; text-wrap: balance; }
 /* the headline's words, one to each cornerstone: the one in view rises a little larger, in the same

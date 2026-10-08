@@ -12,7 +12,7 @@ const c = (key: string, fallback: string) => getCMSCopy(`copy.RoadWall.${key}`, 
  * THE ROAD SO FAR, AS A WALL, after the mosaic at the close of the Mission's
  * documentary Sukoon-e-Satguru: the foundation's photographs come together on
  * a wall, four years at a time, as the page is scrolled, from 2010 to 2026,
- * and at the last the foundation's seal comes up over the whole of it.
+ * and at the last the supplied Jagriti artwork comes up over the whole of it.
  *
  * The wall stays in view while its section scrolls past (a tall section, the
  * wall sticky within it). It begins empty, every cell a bare slot, the seal
@@ -63,7 +63,7 @@ const HOP = .45, RANGE_IN = .3, RANGE_OUT = .62, ARRIVE_AT = .6, SPREAD = .35, A
 const TILT = 48, TURNS = [-22, 16, -12, 24, -16], DRIFT = 5;
 /* how much of the wall's colour lies on a photograph once its stop has passed; and, at the end, how strongly the
    photographs and the seal over them show */
-const TONE = .5, PHOTOS_AT_END = .62, SEAL_AT_END = .62;
+const TONE = .5, PHOTOS_AT_END = .62, SEAL_AT_END = .88;
 /* the wall's colour, top to bottom, the seal's own: its navy, into its sky blue, into its pink */
 const PALETTE = [[24, 48, 120], [48, 168, 240], [216, 96, 168]];
 const paletteAt = (t: number) => {
@@ -169,11 +169,13 @@ export function RoadWall() {
           el.style.height = `${height}px`;
         }
         /* the seal, in the middle of what shows of the whole wall below the header, as large as fits there */
-        const room = vh - (vw < 768 ? 108 : 124), mark = Math.min(height * .62, vw * .82, room * .78);
+        const room = vh - (vw < 768 ? 108 : 124);
+        const markWidth = Math.min(vw * .86, room * .8 * (596 / 335)), markHeight = markWidth * (335 / 596);
         for (const el of seals.current) {
-          el?.style.setProperty('--seal-x', `${width / 2 - mark / 2}px`);
-          el?.style.setProperty('--seal-y', `${vh - room / 2 - mark / 2}px`);
-          el?.style.setProperty('--seal-size', `${mark}px`);
+          el?.style.setProperty('--seal-x', `${width / 2 - markWidth / 2}px`);
+          el?.style.setProperty('--seal-y', `${vh - room / 2 - markHeight / 2}px`);
+          el?.style.setProperty('--seal-width', `${markWidth}px`);
+          el?.style.setProperty('--seal-height', `${markHeight}px`);
         }
       }
       /* the view: the whole wall, square on; or, like the walk round a model of the exhibition, the wall laid back and
@@ -268,7 +270,7 @@ export function RoadWall() {
 
   return (
     <section ref={root} className="road-wall" data-still={still || undefined} style={{ '--wall-span': SPAN } as React.CSSProperties}>
-      <div className="road-wall-view" role="img" aria-label={c('label', 'The foundation’s photographs, year by year from 2010 to 2026, coming together under the foundation’s seal')}>
+      <div className="road-wall-view" role="img" aria-label={c('jagriti-label', 'The foundation’s photographs from 2010 to 2026, coming together beneath Jagriti — The Awakening, 79th Nirankari Sant Samagam')}>
         <div ref={wall} className="road-wall-wall" style={{ '--wall-cols': COLS, ...(near ? sprite : {}) } as React.CSSProperties}>
           {CELLS.map((cell, i) => {
             const style = { '--wall-tint': cell.tint, '--wall-tone': cell.tone.toFixed(2) } as React.CSSProperties;
@@ -290,7 +292,7 @@ export function RoadWall() {
             the photographs are one picture */}
         <div ref={dim} className="road-wall-dim" />
         <div ref={el => { seals.current[0] = el; }} className="road-wall-over road-wall-seal">
-          {near && <img src={resolveCMSMedia(resolveCMSAsset('asset.RoadWall.seal', '/images/sncf-logo.webp'))} alt="" decoding="async" draggable={false} />}
+          {near && <img src={resolveCMSMedia(resolveCMSAsset('asset.RoadWall.jagriti', '/images/road-wall-jagriti.png'))} alt="" decoding="async" draggable={false} />}
         </div>
         <div ref={tint} className="road-wall-over road-wall-tint" />
         <div className="road-wall-ranges" aria-hidden="true">

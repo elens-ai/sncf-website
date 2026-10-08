@@ -8,11 +8,16 @@ import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 
 type ViewState = { active: boolean; animate: boolean; visible: boolean };
 export interface ModelView { update(state: Partial<ViewState>): void; dispose(): void }
-/** How a model is coloured: as its file paints it, or deepened for a white
-    ground — the hero's plates want the dark one, the mosaic's medallions on
-    their dark water want the light one. Posters are kept per look. */
-export type Look = 'light' | 'dark';
-type Tint = { material: T.MeshStandardMaterial; light: T.Color; dark: T.Color };
+/** Palettes are selected at draw time and posters are cached per look. The
+    Empower project cards use their own leaf colours without changing the
+    original palette used by other instances of the same Projects model. */
+export type Look = 'light' | 'dark' | 'projects-empower';
+type Tint = { material: T.MeshStandardMaterial; light: T.Color; dark: T.Color; 'projects-empower': T.Color };
+const EMPOWER_PROJECT_PETALS: Record<string, string> = {
+  'Mint petal': '#cdd9d0',
+  'Aqua petal': '#cedce0',
+  'Blush petal': '#d51c6a',
+};
 type Asset = {
   pivot: T.Group; extent: number; elapsed: number; phase: number; tints: Tint[]; look: Look;
   poster: Partial<Record<Look, string>>; book?: ReturnType<typeof createBookOpening>;
@@ -43,7 +48,11 @@ function collectTints(root: T.Group) {
       const standard = material as T.MeshStandardMaterial;
       if (seen.has(material) || !standard.color || standard.map) continue;
       seen.add(material);
-      tints.push({ material: standard, light: standard.color.clone(), dark: deepen(standard.color) });
+      const empowerPetal = EMPOWER_PROJECT_PETALS[material.name];
+      tints.push({
+        material: standard, light: standard.color.clone(), dark: deepen(standard.color),
+        'projects-empower': empowerPetal ? new T.Color(empowerPetal) : standard.color.clone(),
+      });
     }
   });
   return tints;

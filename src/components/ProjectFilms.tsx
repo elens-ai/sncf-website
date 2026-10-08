@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { useReducedMotion } from 'motion/react';
-import { PillarModelCard } from './PillarModelCard';
 import { ACTIVITY_SYMBOLS } from './activitySymbols';
 import { iconFor } from './figureIcons';
 import { OdometerStatCounter } from './OdometerStatCounter';
@@ -121,7 +120,7 @@ function ProjectFilmChapter({ project, face, active }: {
   const openingActive = useSectionActivity(opening);
   const emblemOrigin = useRef<HTMLDivElement>(null);
   const id = project.id === 'health-city' ? 'health-city' : slug(project.title);
-  const travellingEmblem = project.id === 'project-amrit';
+  const travellingEmblem = project.id === 'project-amrit' || project.id === 'oneness-vann' || project.id === 'health-city' ? project.id : null;
   const isHealth = project.id === 'health-city';
   const story = projectStory(project.id);
   const Symbol = ACTIVITY_SYMBOLS[project.icon ?? (isHealth ? 'hospital' : 'heart')];
@@ -130,11 +129,6 @@ function ProjectFilmChapter({ project, face, active }: {
   const remaining = project.dataPoints.map((_, index) => index).filter(index => !configuredGroups.some(group => group.points.includes(index)));
   const groups = [...configuredGroups, ...(remaining.length ? [{ title: c('additional', 'Additional reported figures'), points: remaining }] : [])];
   const calm = useReducedMotion() ?? true;
-  const emblem = project.id === 'project-amrit'
-    ? { id: 'amrit', url: resolveCMSAsset('asset.ProjectFilms.amritModel', '/models/project-amrit-full.glb') }
-    : project.id === 'oneness-vann'
-      ? { id: 'oneness', url: resolveCMSAsset('asset.ProjectFilms.onenessModel', '/models/project-oneness-full.glb') }
-      : isHealth ? { id: 'health-city', url: resolveCMSAsset('asset.ProjectFilms.healthCityModel', '/models/health-city-sn-logo.glb') } : null;
   const headline = <div className="project-film-headline project-film-headline-inline"><Symbol className="project-film-headline-symbol" size={27} strokeWidth={1.4} aria-hidden="true" /><strong><OdometerStatCounter value={project.headline.value} duration={950} /></strong><span>{project.headline.label}</span><small>{project.period}</small></div>;
   const goals = PROGRAMME_SDGS[project.id] ?? [];
   const films = (MEDIA[project.id] ?? []).filter(item => item.kind === 'film');
@@ -145,13 +139,12 @@ function ProjectFilmChapter({ project, face, active }: {
   const poster = film?.poster || (face.image.startsWith('/') ? face.image : roomPhotoFor(`/images/pavilion/${face.image}.jpg`));
   const photos = [...project.images, ...(MEDIA[project.id] ?? []).filter(item => item.kind === 'photo' && item.src).map(item => ({ src: item.src!, alt: item.alt || item.caption }))].filter((photo, i, all) => !photo.src.includes('volunteers-planning') && all.findIndex(other => other.src === photo.src) === i);
   return <section ref={chapter} id={id} data-film-project={project.id} data-active={active} className="project-film-chapter" aria-labelledby={`${id}-title`} style={{ '--film-accent': face.light, '--project-ink': face.ink, '--project-light': face.light } as React.CSSProperties}>
-    {travellingEmblem && emblem && <ProjectTravellingEmblem chapter={chapter} source={emblemOrigin} reduced={calm} />}
+    {travellingEmblem && <ProjectTravellingEmblem project={travellingEmblem} chapter={chapter} source={emblemOrigin} reduced={calm} />}
     <div ref={opening} className="project-film-hero">
       <ProjectFilmBackdrop videoSrc={videoSrc} videoId={video} poster={poster} title={project.title} active={openingActive} illustrative={!film?.poster && face.illustrative} />
       <div className="project-film-content">
       <header className="project-film-opening" data-film-reveal={travellingEmblem ? undefined : true}>
-        {travellingEmblem && <div ref={emblemOrigin} className="project-film-emblem project-film-emblem-origin" aria-hidden="true"><ProjectEmblemArt /></div>}
-        {emblem && !travellingEmblem && <div className="project-film-emblem"><PillarModelCard id={emblem.id} label={project.title} modelUrl={emblem.url} fallbackUrl={isHealth ? resolveCMSAsset('asset.ProjectFilms.healthCityFallback', '/images/projects/health-city/logo.webp') : undefined} active={openingActive} animate={openingActive && !calm} /></div>}
+        {travellingEmblem && <div ref={emblemOrigin} className="project-film-emblem project-film-emblem-origin" aria-hidden="true"><ProjectEmblemArt project={travellingEmblem} /></div>}
         <h2 id={`${id}-title`}>{project.title}</h2>
         {headline}
         <div className="project-film-opening-bottom">

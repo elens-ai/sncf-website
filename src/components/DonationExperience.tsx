@@ -34,8 +34,10 @@ export function DonationExperience({ onClose }: { onClose?: () => void }) {
   const site = getSiteSettings();
   const pillar = PILLARS.find(p => p.id === cause);
   const impact = ACTIVITIES.find(a => a.pillarId === cause);
-  const ink = pillar?.accentA ?? '#256c50';
-  const light = pillar?.accentB ?? '#96cbaa';
+  // The reach card on Who We Are uses these same live pillar colours. The
+  // unrestricted choice keeps its quiet ink and mist rather than favouring Heal.
+  const ink = pillar?.accentA ?? '#173f45';
+  const light = pillar?.accentB ?? '#d5e2de';
   const causeLabel = (value: typeof CAUSES[number]) => value === 'all' ? c('whereNeeded', 'Where needed most') : PILLARS.find(p => p.id === value)!.label;
   const donorLabels = [c('individual', 'Individual'), c('company', 'Corporate'), c('organisation', 'Society / foundation')];
   const nonMonetaryLabels = { volunteer: c('volunteer', 'Volunteer time'), talent: c('talent', 'Fundraise through talent'), resources: c('resources', 'Resources or equipment') };
@@ -58,7 +60,7 @@ export function DonationExperience({ onClose }: { onClose?: () => void }) {
   };
   const closeAnswer = (details: HTMLDetailsElement | null) => { if (!details) return; details.open = false; details.querySelector('summary')?.focus(); };
 
-  return <div ref={root} data-active={active} data-kind={kind} data-step={step} className="donation-experience" style={{ '--give-ink': ink, '--give-light': light } as React.CSSProperties}
+  return <div ref={root} data-active={active} data-kind={kind} data-step={step} data-cause={cause} className="donation-experience" style={{ '--give-ink': ink, '--give-light': light } as React.CSSProperties}
     onKeyDown={event => { const open = openAnswers()[0]; if (event.key === 'Escape' && open) { event.preventDefault(); closeAnswer(open); } }}
     onPointerDown={event => openAnswers().forEach(open => { if (!open.contains(event.target as Node)) open.open = false; })}>
     {formOpen && <ContributionDialog onClose={() => setFormOpen(false)} />}

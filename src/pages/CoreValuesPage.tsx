@@ -135,7 +135,6 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
   const [tab, setTab] = useState<ExploreTab>('reports');
   const selected = listed.find(a => a.id === selectedId) ?? listed[0];
   const group = groupById(selected.id);
-  const parts = group ? activities.filter(a => group.parts.includes(a.id)) : [];
   /* a programme named by its own id opens in the report; a group's part opens in its group, on its own tab */
   const openProgramme = (activityId: string) => {
     const owner = groupOf(activityId);
@@ -144,7 +143,13 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
     setTab('reports');
   };
   useEffect(() => {
-    if (!ACTIVITIES.some(a => a.id === linkedActivity && a.pillarId === id)) return;
+    if (id === 'enrich' && groupById(linkedActivity)) {
+      setSelectedId(linkedActivity);
+      setPart('');
+      setTab('reports');
+      return;
+    }
+    if (!ACTIVITIES.some(a => a.id === linkedActivity && a.pillarId === id) && !(id === 'enrich' && groupOf(linkedActivity))) return;
     const owner = groupOf(linkedActivity);
     setSelectedId(owner ? owner.id : linkedActivity);
     if (owner) setPart(linkedActivity);
@@ -183,7 +188,7 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
                   })}
                 </div>
                 {group
-                  ? <NvcReport id={`${id}-detail`} programme={selected} parts={parts} part={parts.some(p => p.id === part) ? part : parts[0].id} onPart={setPart} />
+                  ? <NvcReport id={`${id}-detail`} programme={selected} part={part} onPart={setPart} />
                   : <ProgrammeReport id={`${id}-detail`} activity={selected} />}
               </div>
             ),
@@ -197,7 +202,8 @@ const ValueChapter: React.FC<{ id: Cornerstone; index: number; linkedActivity: s
 const cornerstoneForHash = (hash: string): Cornerstone | undefined => {
   const target = hash.replace(/^#/, '');
   return CORNERSTONES.find(id => target === id || target.startsWith(`${id}-`))
-    ?? CORNERSTONES.find(id => ACTIVITIES.some(activity => activity.id === target && activity.pillarId === id));
+    ?? CORNERSTONES.find(id => ACTIVITIES.some(activity => activity.id === target && activity.pillarId === id))
+    ?? (groupOf(target) || target === 'nvc' ? 'enrich' : undefined);
 };
 
 export const CoreValuesPage: React.FC = () => {

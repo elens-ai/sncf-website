@@ -12,6 +12,7 @@ export function previewPath(slug: string | undefined, data: Data): string {
     case 'activities': return data?.pillarId === 'projects' ? '/projects' : `/core-values${key ? `#${key}` : ''}`
     case 'pillars': return key === 'projects' ? '/projects' : `/core-values${key ? `#${key}` : ''}`
     case 'awards': return '/#awards'
+    case 'events': return data?.kind === 'past' ? '/events#past-events' : '/events'
     case 'partners': return '/who-we-are#partners'
     case 'content-slots': case 'asset-slots': return PAGE_PATHS[data?.page as string] ?? '/'
     case 'gallery-items': {

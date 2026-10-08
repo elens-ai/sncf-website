@@ -3,20 +3,21 @@ import type { Activity } from './activities';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.ProgrammeGroups.${key}`, fallback);
 
-/** Programmes Core Values shows as one: the Nirankari Vocational Centre (NVC) holds the NIMA music and arts centres
-    and the sewing and beautician centres. Each part keeps its own record (its figures, its photographs, its place in
-    Stats and in links such as #skill-nima); the NVC's own figures are theirs added up, and its report opens on a tab
-    for each part. */
+/** NVC's editorial programme order. Library has no count in the supplied report;
+    coaching figures retain their existing CMS source in the free-schools record. */
+export const NVC_PART_IDS = ['nvc-library', 'nvc-coaching', 'skill-trades', 'skill-nima'] as const;
 export interface ProgrammeGroup { id: string; parts: string[] }
-export const PROGRAMME_GROUPS: ProgrammeGroup[] = [{ id: 'nvc', parts: ['skill-nima', 'skill-trades'] }];
+export const PROGRAMME_GROUPS: ProgrammeGroup[] = [{ id: 'nvc', parts: [...NVC_PART_IDS] }];
 
 export const groupOf = (activityId: string) => PROGRAMME_GROUPS.find(group => group.parts.includes(activityId));
 export const groupById = (id: string) => PROGRAMME_GROUPS.find(group => group.id === id);
 
 /** A part's short name, for its tab. */
 export const partLabel = (activityId: string, fallback: string) => ({
-  'skill-nima': c('nvc-nima', 'NIMA'),
-  'skill-trades': c('nvc-trades', 'Sewing & Beautician'),
+  'nvc-library': c('nvc-library', 'Library'),
+  'nvc-coaching': c('nvc-coaching', 'Coaching Centre'),
+  'skill-trades': c('nvc-trades', 'Beautician & Sewing'),
+  'skill-nima': c('nvc-nima', 'Nirankari Institute of Music & Arts'),
 } as Record<string, string>)[activityId] ?? fallback;
 
 /** The NVC's own photographs: the centre itself, then its opening. */
@@ -37,20 +38,20 @@ const amount = (value: string | undefined) => Number((value ?? '').replace(/[^\d
 const figure = (n: number) => n.toLocaleString('en-US');
 const pointOf = (activity: Activity | undefined, label: string) => amount(activity?.dataPoints.find(point => point.label === label)?.value);
 
-/** The NVC as a programme of its own: its parts' centres and youth added up. */
+/** The tile's figure covers skills and arts only, never all NVC programmes. */
 function nvcProgramme(parts: Activity[]): Activity {
   const nima = parts.find(part => part.id === 'skill-nima');
   const trades = parts.find(part => part.id === 'skill-trades');
   const centres = pointOf(nima, 'NIMA centres') + pointOf(trades, 'Sewing centres') + pointOf(trades, 'Beautician centres');
   const youth = amount(nima?.headline.value) + amount(trades?.headline.value);
-  const youthLabel = c('nvc-youth', 'Youth benefitted');
+  const youthLabel = c('nvc-youth', 'Skills & arts learner records');
   return {
     id: 'nvc', pillarId: 'enrich', icon: 'sparkles',
     title: c('nvc-title', 'Nirankari Vocational Centre'), menuLabel: c('nvc-menu', 'Vocational Centre'),
     period: nima?.period ?? trades?.period ?? '',
-    blurb: c('nvc-blurb', 'Music and the arts at NIMA, and livelihood trades in sewing and beautician centres.'),
+    blurb: c('nvc-blurb', 'A shared home for reading, academic support, practical skills, music and the arts.'),
     headline: { label: youthLabel, value: figure(youth) },
-    dataPoints: [{ label: c('nvc-centres', 'Centres'), value: figure(centres) }, { label: youthLabel, value: figure(youth) }],
+    dataPoints: [{ label: c('nvc-centres', 'Skills & arts centres'), value: figure(centres) }, { label: youthLabel, value: figure(youth) }],
     images: [...NVC_PHOTOS(), ...(nima?.images ?? []).slice(0, 2), ...(trades?.images ?? []).slice(0, 2)],
   };
 }
@@ -66,7 +67,15 @@ export function withGroups(activities: Activity[]): Activity[] {
   const listed: Activity[] = [];
   for (const activity of activities) {
     const group = groupOf(activity.id);
-    if (!group) { listed.push(activity); continue; }
+    if (!group) {
+      // Coaching now has its own section inside NVC; keep the CMS records intact.
+      listed.push(activity.id === 'free-schools' ? {
+        ...activity,
+        blurb: c('free-schools-blurb', 'Free schooling and support for community schools.'),
+        dataPoints: activity.dataPoints.filter(point => !/coaching/i.test(point.label)),
+      } : activity);
+      continue;
+    }
     if (listed.some(entry => entry.id === group.id)) continue;
     listed.push(nvcProgramme(activities.filter(entry => group.parts.includes(entry.id))));
   }

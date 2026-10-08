@@ -419,7 +419,7 @@ export interface Media {
   };
 }
 /**
- * Annual observances and ongoing programmes shown in the events journal.
+ * Annual observances, ongoing programmes and past events with photographs and reported figures.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
@@ -435,9 +435,13 @@ export interface Event {
    */
   order?: number | null;
   title: string;
-  kind: 'annual' | 'ongoing';
+  kind: 'annual' | 'ongoing' | 'past';
   month?: number | null;
   day?: number | null;
+  /**
+   * The exact event date in YYYY-MM-DD format. This date does not repeat each year.
+   */
+  occurredOn?: string | null;
   pillarId: 'heal' | 'enrich' | 'empower' | 'projects';
   tag?: string | null;
   blurb?: string | null;
@@ -447,6 +451,40 @@ export interface Event {
    * A page on this site such as /projects, or an https:// link.
    */
   href?: string | null;
+  photos?:
+    | {
+        /**
+         * Choose from the Media library, or upload a new file. This wins over a path.
+         */
+        media?: (number | null) | Media;
+        /**
+         * Only if you are not choosing an upload: a site path such as /images/photo.jpg, or an https:// link.
+         */
+        src?: string | null;
+        /**
+         * Describe this photograph from the event.
+         */
+        alt: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Only use figures documented for this event. Leave empty when no figures were reported.
+   */
+  facts?:
+    | {
+        label: string;
+        /**
+         * Exactly as reported, e.g. 1,500,230.
+         */
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Link to the report supporting the event date, photographs and figures.
+   */
+  source?: string | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1170,12 +1208,29 @@ export interface EventsSelect<T extends boolean = true> {
   kind?: T;
   month?: T;
   day?: T;
+  occurredOn?: T;
   pillarId?: T;
   tag?: T;
   blurb?: T;
   location?: T;
   time?: T;
   href?: T;
+  photos?:
+    | T
+    | {
+        media?: T;
+        src?: T;
+        alt?: T;
+        id?: T;
+      };
+  facts?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  source?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

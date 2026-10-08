@@ -1,7 +1,6 @@
 import { bindCMSValue, getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import React from 'react';
-import { ArrowUpRight, ArrowRight } from 'lucide-react';
-import { PILLARS } from '../data/pillars';
+import { ArrowUpRight } from 'lucide-react';
 import './mission-vision-editorial.css';
 
 let CHAPTERS = bindCMSValue(() => ([
@@ -9,22 +8,17 @@ let CHAPTERS = bindCMSValue(() => ([
     name: getCMSCopy("copy.MissionVision.cf198785f902", "Our mission"), time: getCMSCopy('copy.MissionVision.mission-time', 'What we do today'), heading: getCMSCopy("copy.MissionVision.da1d72247ac3", "Give with"), emphasis: getCMSCopy('copy.MissionVision.mission-emphasis', 'humility.'),
     body: getCMSCopy("copy.MissionVision.e84df2244dc8", "To serve with humility and to share what the foundation has — to heal, to enrich and to empower, wherever in the world the need is. The conviction underneath it is simple: what is given cheerfully and received gratefully leaves both sides better off."),
     caption: getCMSCopy("copy.MissionVision.0310283e4357", "Every act of care starts with us."), link: '/core-values', action: getCMSCopy('copy.MissionVision.mission-action', 'See our values in action'),
-    words: [getCMSCopy("copy.MissionVision.word-heal", "Heal"), getCMSCopy("copy.MissionVision.word-enrich", "Enrich"), getCMSCopy("copy.MissionVision.word-empower", "Empower")],
   },
   {
     name: getCMSCopy("copy.MissionVision.2642f93dd297", "Our vision"), time: getCMSCopy('copy.MissionVision.vision-time', 'The future we work towards'), heading: getCMSCopy("copy.MissionVision.7e9be7ae33a1", "A world where"), emphasis: getCMSCopy('copy.MissionVision.vision-emphasis', 'we all thrive.'),
     body: getCMSCopy("copy.MissionVision.7197209907ef", "Living the spirit of service. The foundation works towards a world in which people are healthy, educated and able to stand on their own — and it expects to get there through ordinary volunteers doing extraordinary amounts of quiet work, alongside others who want the same thing."),
-    caption: getCMSCopy("copy.MissionVision.fd978c2cda84", "A shared future, shaped together."), link: '/projects', action: getCMSCopy('copy.MissionVision.vision-action', 'Explore the work taking shape'),
-    words: [getCMSCopy("copy.MissionVision.word-healthy", "Healthy"), getCMSCopy("copy.MissionVision.word-educated", "Educated"), getCMSCopy("copy.MissionVision.word-self-reliant", "Self-reliant")],
+    link: '/projects', action: getCMSCopy('copy.MissionVision.vision-action', 'Explore the work taking shape'),
   },
 ]), value => { CHAPTERS = value; });
 
-/* the three cornerstones, in the order the words are written, each in its own ink */
-const LANE_PILLARS = ['heal', 'enrich', 'empower'];
-
 /** An open editorial spread, led by the people behind the work. */
 export const MissionVision: React.FC = () => {
-  const [mission, vision] = CHAPTERS;
+  const [mission] = CHAPTERS;
   return <section id="mission" className="purpose-story" aria-labelledby="purpose-story-title">
     <header className="purpose-story-heading" data-reveal>
       <p>{getCMSCopy("copy.MissionVision.d416dc3ddd2f", "Mission and vision")}</p>
@@ -45,22 +39,6 @@ export const MissionVision: React.FC = () => {
           <a className="purpose-story-link" href={chapter.link}>{chapter.action}<span><ArrowUpRight size={17} aria-hidden="true" /></span></a>
         </article>)}
       </div>
-    </div>
-    <div className="purpose-story-outcomes" data-reveal>
-      <p>{vision.caption}</p>
-      <ul>
-        {mission.words.map((word, i) => {
-          const pillar = PILLARS.find(p => p.id === LANE_PILLARS[i]);
-          return <li key={word} style={{ '--purpose-accent': pillar?.accentA ?? '#426b89' } as React.CSSProperties}>
-            <a href={`/core-values#${LANE_PILLARS[i]}`}>
-              <span className="purpose-story-value">{word}</span>
-              <ArrowRight size={20} strokeWidth={1.2} aria-hidden="true" />
-              <span className="sr-only">{getCMSCopy("copy.MissionVision.bridge", "grows into")} </span>
-              <span className="purpose-story-outcome">{vision.words[i]}</span>
-            </a>
-          </li>;
-        })}
-      </ul>
     </div>
   </section>;
 };

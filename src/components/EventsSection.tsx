@@ -1,23 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarDays, CalendarPlus, ArrowUpRight, ChevronLeft, ChevronRight, Phone, QrCode, Sparkles } from 'lucide-react';
+import { CalendarDays, CalendarPlus, ArrowUpRight, ChevronLeft, ChevronRight, Phone, QrCode, Sparkles, Images } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { getCMSLink } from '../cms/links';
-import { resolveCMSMedia } from '../cms/media';
-import { roomPhoto } from '../data/pavilionGallery';
 import { useCMSRevision } from '../cms/CMSContentProvider';
-import { EVENTS } from '../data/events';
+import { EVENTS, isPastEvent } from '../data/events';
 import { PILLARS } from '../data/pillars';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { onArrival } from '../utils/arrival';
-import { resolveEvents, countdownLabel, icsHref, wrapCalendar, vevent, nowStamp, inviteUrl, dayOfYear, startOfToday, pad, MONTHS_SHORT, MONTHS_LONG } from '../utils/events';
+import { resolveEvents, countdownLabel, icsHref, wrapCalendar, vevent, nowStamp, inviteUrl, pad, MONTHS_SHORT, MONTHS_LONG } from '../utils/events';
 import { eventQr } from '../utils/eventPoster';
 import { EventShare } from './EventShare';
 import { EventsCalendarModal } from './EventsCalendarModal';
-import { PillarPhotoMosaic } from './PillarPhotoMosaic';
-import { PillarArtwork } from './PillarArtwork';
+import { JournalIllustration } from './JournalIllustration';
 import { PILLAR_LOGOS, type MosaicPillar } from './pillarLogoArt';
 import { PillarMarkShapes } from './PillarMark';
 import { UnDayMark, isUnObservance } from './UnAffiliation';
+import { PastEventsJournal } from './PastEventsJournal';
 import './events-journal.css';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.EventsJournal.${key}`, fallback);
@@ -28,9 +26,6 @@ function JournalPillarIcon({ pillar }: { pillar: MosaicPillar }) {
     <PillarMarkShapes pillar={pillar} />
   </svg>;
 }
-
-/* where a day falls along the year, as a share of its width */
-const yearAt = (month: number, day: number) => ((dayOfYear(month, day) - 0.5) / 365) * 100;
 
 /** Days, hours and minutes to the moment, turning over while the section is on screen. */
 function Ticker({ date, live }: { date: Date; live: boolean }) {
@@ -61,6 +56,12 @@ export const EventsSection: React.FC = () => {
   const [filter, setFilter] = useState<'all' | MosaicPillar>('all');
   const [calendar, setCalendar] = useState(false);
   const [qr, setQr] = useState<{ id: string; url: string } | null>(null);
+  const [view, setView] = useState<'upcoming' | 'past'>(() => window.location.hash === '#past-events' ? 'past' : 'upcoming');
+  useEffect(() => {
+    const openArchive = () => { if (window.location.hash === '#past-events') setView('past'); };
+    window.addEventListener('hashchange', openArchive);
+    return () => window.removeEventListener('hashchange', openArchive);
+  }, []);
   useEffect(() => {
     if (!visible) return;
     setTick(t => t + 1);
@@ -68,6 +69,7 @@ export const EventsSection: React.FC = () => {
     return () => clearInterval(id);
   }, [visible]);
   const items = useMemo(() => { void tick; void revision; return resolveEvents(EVENTS).sort((a, b) => (a.days ?? Infinity) - (b.days ?? Infinity)); }, [tick, revision]);
+  const pastItems = useMemo(() => { void revision; return EVENTS.filter(isPastEvent).sort((a, b) => b.occurredOn.localeCompare(a.occurredOn)); }, [revision]);
   const filtered = items.filter(i => filter === 'all' || i.event.pillarId === filter);
   const selected = filtered.find(i => i.event.id === chosen) ?? filtered[0];
   const pillar = selected?.event.pillarId ?? (filter === 'all' ? 'projects' : filter);
@@ -107,19 +109,35 @@ export const EventsSection: React.FC = () => {
     <header className="journal-heading">
       <div><p className="journal-eyebrow"><span aria-hidden="true" />{c('eyebrow', 'The service journal')}</p>
         <h2>{c('title', 'Make time for')} <em>{c('titleAccent', 'something meaningful.')}</em></h2>
+        <p className="journal-heading-intro">{c('introduction', 'A little of your time. A world of difference. Find your next moment to care, connect and contribute.')}</p>
       </div>
       <button ref={calendarButton} className="journal-calendar-link" type="button" onClick={() => setCalendar(true)}>
         <CalendarDays size={17} aria-hidden="true" />{c('calendar', 'View calendar')}<ArrowUpRight size={16} aria-hidden="true" />
       </button>
     </header>
 
+    <div className="journal-view-switch" role="tablist" aria-label={c('viewLabel', 'Choose upcoming or past events')} onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 'upcoming' : event.key === 'End' ? 'past' : view === 'upcoming' ? 'past' : 'upcoming';
+      setView(next);
+      event.currentTarget.querySelector<HTMLButtonElement>(`#journal-${next}-tab`)?.focus();
+    }}>
+      <button id="journal-upcoming-tab" role="tab" type="button" aria-selected={view === 'upcoming'} aria-controls="journal-upcoming-panel" tabIndex={view === 'upcoming' ? 0 : -1} onClick={() => setView('upcoming')}><CalendarDays size={16} aria-hidden="true" />{c('upcomingView', 'Upcoming & ongoing')}<span>{items.length}</span></button>
+      <button id="journal-past-tab" role="tab" type="button" aria-selected={view === 'past'} aria-controls="journal-past-panel" tabIndex={view === 'past' ? 0 : -1} onClick={() => setView('past')}><Images size={16} aria-hidden="true" />{c('pastView', 'Past events')}<span>{pastItems.length}</span></button>
+    </div>
+
+    <div id="journal-past-panel" role="tabpanel" aria-labelledby="journal-past-tab" hidden={view !== 'past'}>
+      <PastEventsJournal events={pastItems} />
+    </div>
+    <div id="journal-upcoming-panel" role="tabpanel" aria-labelledby="journal-upcoming-tab" hidden={view !== 'upcoming'}>
     <div className="journal-toolbar">
       <div className="journal-filters" role="group" aria-label={c('filter', 'Filter by value')}>
         {FILTERS.map(id => {
           const count = id === 'all' ? items.length : items.filter(i => i.event.pillarId === id).length;
           /* a value with no dates yet is shown, but cannot be chosen into an empty page */
           return <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} disabled={count === 0} title={count === 0 ? c('noDates', 'No dates announced yet') : undefined}
-            style={id === 'all' ? undefined : { '--filter-tint': PILLAR_LOGOS[id].edge } as React.CSSProperties}>
+            style={id === 'all' ? undefined : { '--filter-tint': PILLARS.find(p => p.id === id)?.accentA } as React.CSSProperties}>
             {id === 'all' ? <Sparkles size={16} strokeWidth={1.5} aria-hidden="true" /> : <JournalPillarIcon pillar={id} />}
             <span>{id === 'all' ? c('all', 'All moments') : PILLAR_LOGOS[id].label}</span>
             <small>{count}</small>
@@ -129,18 +147,16 @@ export const EventsSection: React.FC = () => {
       <p className="journal-toolbar-note">{c('invitationNote', 'Small moments. Lasting change.')}</p>
     </div>
 
-    {/* the year at a glance: every dated moment where it falls, and today */}
     <div className="journal-year" role="group" aria-label={c('year', 'The year at a glance')}>
-      <ol className="journal-year-months" aria-hidden="true">{MONTHS_SHORT.map(month => <li key={month}>{month}</li>)}</ol>
-      <div className="journal-year-track">
-        <span className="journal-year-today" style={{ left: `${yearAt(startOfToday().getMonth() + 1, startOfToday().getDate())}%` }} aria-hidden="true"><i>{c('today', 'Today')}</i></span>
-        {items.filter(item => item.date && item.event.month && item.event.day).map(item => {
-          const dim = filter !== 'all' && item.event.pillarId !== filter;
-          const month = item.event.month as number, day = item.event.day as number;
-          return <button key={item.event.id} type="button" className="journal-year-dot" data-current={item.event.id === selected?.event.id} data-dim={dim}
-            style={{ left: `${yearAt(month, day)}%`, '--event-ink': item.accentA, '--event-tint': item.accentB } as React.CSSProperties}
-            onClick={() => { if (dim) setFilter('all'); chooseEvent(item.event.id); }} aria-label={`${item.event.title}, ${day} ${MONTHS_LONG[month - 1]}`}>
-            <span className="journal-year-tip" aria-hidden="true">{item.event.title}<small>{day} {MONTHS_SHORT[month - 1]}</small></span>
+      <div className="journal-year-heading"><span>{c('yearHeading', 'A year of giving back')}</span><span>{items.length} {c('moments', 'moments')}</span></div>
+      <div className="journal-months">
+        {MONTHS_SHORT.map((month, index) => {
+          const monthItems = items.filter(item => item.event.month === index + 1);
+          const current = selected?.event.month === index + 1;
+          return <button key={month} type="button" disabled={!monthItems.length} aria-pressed={current}
+            aria-label={`${MONTHS_LONG[index]}: ${monthItems.length} ${monthItems.length === 1 ? c('moment', 'moment') : c('moments', 'moments')}`}
+            onClick={() => { setFilter('all'); chooseEvent(monthItems[0].event.id); }}>
+            <span>{month}</span><span className="journal-month-dots" aria-hidden="true">{monthItems.map(item => <i key={item.event.id} style={{ background: item.accentA }} />)}</span>
           </button>;
         })}
       </div>
@@ -159,14 +175,7 @@ export const EventsSection: React.FC = () => {
           </div>
           <div className="journal-feature-scene" key={selected.event.id}>
             <div className="journal-emblem-stage" aria-hidden="true">
-              <img className="journal-scene-photo" src={resolveCMSMedia(roomPhoto(pillar, 2))} alt="" loading="lazy" />
-              <PillarArtwork pillarId={pillar} />
-              <svg className="journal-emblem-orbits" viewBox="0 0 400 370" fill="none">
-                <ellipse cx="200" cy="165" rx="170" ry="135" transform="rotate(-16 200 165)" />
-                <ellipse cx="200" cy="165" rx="150" ry="156" transform="rotate(20 200 165)" />
-                <circle cx="60" cy="82" r="3" /><circle cx="350" cy="212" r="2" />
-              </svg>
-              <div className="journal-emblem"><PillarPhotoMosaic pillar={pillar} caption={false} /></div>
+              <JournalIllustration pillar={pillar} />
               <div className="journal-date-ticket">
                 <CalendarDays size={16} strokeWidth={1.5} />
                 <strong>{selected.date ? String(selected.date.getDate()).padStart(2, '0') : '∞'}</strong>
@@ -187,6 +196,8 @@ export const EventsSection: React.FC = () => {
               </div>
             </div>
           </div>
+          <details className="journal-share-drawer" key={`pass-${selected.event.id}`}>
+            <summary><QrCode size={18} aria-hidden="true" />{c('shareTools', 'Your invitation, ready to share')}<span>+</span></summary>
           <div className="journal-pass">
             <a className="journal-pass-code" href={inviteUrl(selected.event.id)} aria-label={c('passOpen', 'Open the invitation')}>
               {qrUrl ? <img src={qrUrl} alt="" width={80} height={80} /> : <QrCode size={35} strokeWidth={1} aria-hidden="true" />}
@@ -198,6 +209,7 @@ export const EventsSection: React.FC = () => {
             {/* send it on: the networks, a calendar, or its artwork */}
             <EventShare item={selected} when={dateLabel} artwork className="journal-share" />
           </div>
+          </details>
         </> : <div className="journal-empty">
           <JournalPillarIcon pillar={pillar} /><p className="journal-eyebrow">{pillarLabel(pillar)}</p>
           <h3 id="journal-event-title" tabIndex={-1}>{c('empty', 'No events in this category yet.')}</h3>
@@ -220,6 +232,7 @@ export const EventsSection: React.FC = () => {
       </aside>
     </div>
     <p className="journal-selection-status sr-only" role="status" aria-live="polite">{selected ? `${selected.event.title}. ${dateLabel}.` : c('empty', 'No events in this category yet.')}</p>
+    </div>
     <EventsCalendarModal isOpen={calendar} onClose={closeCalendar} items={items} initialEventId={selected?.event.id ?? null} />
   </section>;
 };

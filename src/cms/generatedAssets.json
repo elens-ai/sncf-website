@@ -267,10 +267,6 @@
     "source": "/images/sncf-logo.webp",
     "label": "ServicePortrait · sncf-logo.webp"
   },
-  "asset.RoadWall.seal": {
-    "source": "/images/sncf-logo.webp",
-    "label": "RoadWall · sncf-logo.webp"
-  },
   "asset.ProjectFilms.amritModel": {
     "source": "/models/project-amrit-full.glb",
     "label": "ProjectFilms · project-amrit-full.glb"
@@ -303,14 +299,6 @@
     "source": "/images/projects/health-city/plaque.webp",
     "label": "ProjectsPage · plaque.webp"
   },
-  "asset.ProjectFilms.healthCityModel": {
-    "source": "/models/health-city-sn-logo.glb",
-    "label": "ProjectFilms · health-city-sn-logo.glb"
-  },
-  "asset.ProjectFilms.healthCityFallback": {
-    "source": "/images/projects/health-city/logo.webp",
-    "label": "ProjectFilms · logo.webp"
-  },
   "asset.ProjectFilms.amritVideo": {
     "source": "/videos/projects/project-amrit.mp4",
     "label": "ProjectFilms · project-amrit.mp4"
@@ -330,5 +318,21 @@
   "asset.MissionVision.volunteers": {
     "source": "/images/welcome-volunteers.jpg",
     "label": "MissionVision · welcome-volunteers.jpg"
+  },
+  "asset.ProjectFilms.onenessFloatingLogo": {
+    "source": "/images/projects/oneness-floating-logo.png",
+    "label": "ProjectFilms · oneness-floating-logo.png"
+  },
+  "asset.ProjectFilms.healthCityFloatingLogo": {
+    "source": "/images/projects/health-city-floating-logo.png",
+    "label": "ProjectFilms · health-city-floating-logo.png"
+  },
+  "asset.RoadWall.jagriti": {
+    "source": "/images/road-wall-jagriti.png",
+    "label": "RoadWall · road-wall-jagriti.png"
+  },
+  "asset.WhoWeArePage.service-lettering": {
+    "source": "/images/service-with-humility-lettering-bold.png",
+    "label": "WhoWeArePage · service-with-humility-lettering-bold.png"
   }
 }

@@ -98,6 +98,7 @@
 .project-travelling-emblem[data-visible='true'] { visibility: visible; }
 .project-emblem-art { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px #102e5626); animation: project-emblem-float 5.5s ease-in-out infinite; }
 .project-travelling-emblem:not([data-visible='true']) > img { animation-play-state: paused; }
+.project-emblem-art[data-project='health-city'] { filter: drop-shadow(0 0 1px #e2fff3) drop-shadow(0 2px 8px #d3f4e899); }
 .project-travelling-emblem[data-reduced='true'] > img { animation: none; }
 @keyframes project-emblem-float { 0%,100% { transform: translate3d(0,2px,0) rotate(-1deg); } 50% { transform: translate3d(0,-4px,0) rotate(1deg); } }
 .project-film-emblem.project-film-emblem-origin { width: 112px; height: 112px; flex-shrink: 0; }
@@ -106,20 +107,6 @@
 .project-film-emblem-origin[data-following='true'] .project-emblem-art { visibility: hidden; animation-play-state: paused; }
 @keyframes project-emblem-rest { 0%,100% { transform: translate3d(0,1px,0); } 50% { transform: translate3d(0,-1px,0); } }
 @media(prefers-reduced-motion:reduce) { .project-emblem-art { animation: none !important; } }
-
-/* A floating chapter selector: no full-width strip over the film. */
-.reading-room .subnav[data-floating] {
-  width: max-content; max-width: calc(100% - 32px); height: 52px; min-height: 52px; box-sizing: border-box;
-  margin: 0 auto -52px; padding: 0; top: 82px;
-  border: 0; border-radius: 16px; background: transparent;
-  backdrop-filter: none; box-shadow: 0 8px 30px #102e5633;
-  transform: translateY(10px); transition: transform .28s ease, opacity .22s ease;
-}
-.subnav[data-floating] .subnav-track { margin: 0; backdrop-filter: blur(18px); }
-.reading-room .subnav[data-floating][data-hidden='true']:not(:focus-within) {
-  transform: translateY(calc(-100% - 90px)); opacity: 0; pointer-events: none;
-}
-@media(prefers-reduced-motion:reduce) { .reading-room .subnav[data-floating] { transition: none; } }
 
 /* Reports use each project’s identity colors with consistent navy text. */
 .projects-films .project-film-impact {

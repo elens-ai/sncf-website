@@ -77,6 +77,28 @@ test('unsafe links and impossible annual dates do not enter event cards; awards 
   assert.deepEqual(resolveAwards({ version: 'bad', awards: [{ id: 'award', title: 'Name', awardedBy: 'Body', year: '2026', photos: [{ src: '/photo.webp', alt: 'Ceremony', width: 0, height: 500 }] }] }, []), []);
 });
 
+test('past-event CMS records preserve exact dates, photos and facts while rejecting malformed reports', () => {
+  const past = { id: 'past-camp', title: 'Community camp', kind: 'past' as const, tag: 'From the field', blurb: 'A completed camp.', pillarId: 'heal' as const,
+    occurredOn: '2025-04-26', photos: [{ src: '/events/camp.webp', alt: 'Volunteers at the camp' }], facts: [{ label: 'Donors', value: '114' }], source: 'https://example.com/camp' };
+  assert.deepEqual(resolveEvents({ version: 'past', events: [past] }, []), [past]);
+  for (const fields of [
+    { occurredOn: '2025-02-29' }, { occurredOn: '2025-4-26' }, { occurredOn: '9999-12-31' },
+    { photos: [] }, { photos: [{ src: 'javascript:bad', alt: 'Photo' }] }, { photos: [{ src: '/photo.jpg', alt: '' }] },
+    { facts: [{ label: 'Donors', value: 114 }] }, { source: 'javascript:bad' },
+  ]) assert.deepEqual(resolveEvents({ version: 'invalid', events: [{ ...past, ...fields }] }, []), []);
+});
+
+test('legacy event publications gain archive defaults without losing edits or overriding explicit archive records', () => {
+  const annual = { ...DEFAULT_EVENTS.find(event => event.kind === 'annual')! };
+  const past = { id: 'old-camp', title: 'Archived camp', kind: 'past' as const, occurredOn: '2025-04-26', photos: [{ src: '/camp.jpg', alt: 'Camp volunteers' }], tag: 'Report', blurb: 'A completed camp.', pillarId: 'heal' as const };
+  const defaults = [annual, past];
+  const changed = { ...annual, title: 'Edited observance' };
+  assert.deepEqual(resolveEvents({ version: 'legacy', events: [changed] }, defaults), [changed, past]);
+  assert.deepEqual(resolveEvents({ version: 'empty', events: [] }, defaults), []);
+  const added = { ...past, id: 'new-camp' };
+  assert.deepEqual(resolveEvents({ version: 'archive', events: [changed, added] }, defaults), [changed, added]);
+});
+
 test('published media supports additions and removals without replacing locked physical room layouts', () => {
   const defaults = { heal: [{ id: 'one', kind: 'photo', src: '/original.webp', alt: 'Original', caption: 'Original' }] };
   assert.deepEqual(resolveGalleryGroups({ version: 'empty', gallery: [] }, defaults, 'media', validMedia), { heal: [] });

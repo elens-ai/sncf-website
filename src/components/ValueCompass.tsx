@@ -11,22 +11,17 @@ type Value = typeof VALUES[number];
 /* Each value's own emblem, as the menu shows it (the leaves, the open book, the figure with arms
    raised), cut out on transparency so its disc can paint it in the value's colour or in white. */
 const mark = (id: Value) => resolveCMSMedia(`/images/emblem-marks/${id}.webp`);
-/* One box every value's icon is fitted into, as fractions of the globe (centred across it, its foot `bottom` down
-   it), so the three read the same size and stand on the same line, just above the name. Each is fitted by its
-   visible shape: the mark images' content within their 192 px squares (measured), and the Empower trio from its
-   companions' raised hands and the figure's head down to the figure's feet, where the companions have faded out.
-   The box is as wide as lets the trio (the one held by its width) put about as much white on the glass as the
-   open book does. */
-const ICON_BOX = { w: .68, h: .43, bottom: .69 };
+/* Centre the icon and its name as one group. Fit visible artwork, rather than its
+   transparent image padding, into an equally sized frame for every cornerstone. */
+const ICON_BOX = { w: .68, h: .43 };
 const MARK_CONTENT: Record<Exclude<Value, 'empower'>, [x: number, y: number, w: number, h: number]> = { heal: [5, 23, 181, 145], enrich: [6, 28, 180, 136] };
 const EMPOWER_FEET = 106.375;
 const EMPOWER_VIEW = `${EMPOWER_TRIO_BOX.x} ${EMPOWER_TRIO_BOX.y} ${EMPOWER_TRIO_BOX.w} ${EMPOWER_FEET - EMPOWER_TRIO_BOX.y}`;
 const pct = (n: number) => `${(n * 100).toFixed(2)}%`;
-const ICON_FRAME: React.CSSProperties = { left: pct(.5 - ICON_BOX.w / 2), top: pct(ICON_BOX.bottom - ICON_BOX.h), width: pct(ICON_BOX.w), height: pct(ICON_BOX.h) };
 const markBox = (id: Exclude<Value, 'empower'>): React.CSSProperties => {
   const [x, y, w, h] = MARK_CONTENT[id];
   const s = Math.min(ICON_BOX.w / w, ICON_BOX.h / h);
-  return { left: pct(.5 - (x + w / 2) * s), top: pct(ICON_BOX.bottom - (y + h) * s), width: pct(192 * s), height: pct(192 * s) };
+  return { left: pct(.5 - (x + w / 2) * s / ICON_BOX.w), top: pct(.5 - (y + h / 2) * s / ICON_BOX.h), width: pct(192 * s / ICON_BOX.w), height: pct(192 * s / ICON_BOX.h) };
 };
 
 export function ValueCompass({ choice, onChange, active, held = false }: {
@@ -118,7 +113,9 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
         </svg>
       </div>
       <div className="service-compass-sculpture" aria-hidden="true">
-        {choice === 'empower' ? <svg className="service-compass-empower-mark" viewBox={EMPOWER_VIEW} preserveAspectRatio="xMidYMax meet" style={ICON_FRAME} fill="white">
+        <div className="service-compass-centre-content">
+        <div className="service-compass-icon-frame">
+        {choice === 'empower' ? <svg className="service-compass-empower-mark" viewBox={EMPOWER_VIEW} preserveAspectRatio="xMidYMid meet" fill="white">
           <defs><linearGradient id={companionFade} gradientUnits="userSpaceOnUse" x1="0" y1="5.365" x2="0" y2={EMPOWER_FEET}>
             <stop offset="0" stopColor="white" stopOpacity=".5" />
             <stop offset="1" stopColor="white" stopOpacity="0" />
@@ -128,7 +125,9 @@ export function ValueCompass({ choice, onChange, active, held = false }: {
           </g>)}
           {PILLAR_LOGOS.empower.paths.map(d => <path key={d} d={d} />)}
         </svg> : <i className="service-compass-centre-mark" style={{ ...markBox(choice), '--mark': `url("${mark(choice)}")` } as React.CSSProperties} />}
+        </div>
         <p className="values-cover-vertical-name">{PILLARS.find(p => p.id === choice)!.label}</p>
+        </div>
         <div className="service-compass-shadow" />
       </div>
     </div>

@@ -7,7 +7,7 @@ const TASKS = [
   { href: '/admin/collections/asset-slots', title: 'Logos & design images', body: 'Portraits, logos and artwork built into the page design.' },
   { href: '/admin/globals/site-settings', title: 'Menu, footer & contact', body: 'Main menu, footer links, social links, contact details and logo.' },
   { href: '/admin/collections/media', title: 'Upload to the library', body: 'Add photos, films and 3D models, then choose them anywhere.' },
-  { href: '/admin/collections/events', title: 'Events', body: 'Annual observances and ongoing programmes.' },
+  { href: '/admin/collections/events', title: 'Events', body: 'Observances, ongoing programmes and past-event photo stories.' },
   { href: '/admin/collections/component-settings', title: 'Show or hide sections', body: 'Turn whole sections on or off, and order the home page.' },
 ]
 

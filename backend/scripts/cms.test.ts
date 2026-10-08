@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {spawnSync} from 'node:child_process'
-import {safeURL,safeColor,validateAnnualDate} from '../src/cms/validation'
+import {safeURL,safeColor,validateAnnualDate,validatePastEvent} from '../src/cms/validation'
 import {enforcePublishing} from '../src/cms/fields'
 import {cached,invalidateContent} from '../src/cms/cache'
 test('one-shot commands finish despite retained handles, flush logs, and preserve failures',()=>{
@@ -32,6 +32,17 @@ test('annual event validation rejects dates which can never occur',()=>{
   assert.equal(validateAnnualDate({kind:'annual',month:2,day:29}),true)
   assert.notEqual(validateAnnualDate({kind:'annual',month:2,day:30}),true)
   assert.equal(validateAnnualDate({kind:'ongoing'}),true)
+})
+test('past-event records require an exact elapsed date, usable photographs and supported figures',()=>{
+  const today=new Date(2026,9,9)
+  const record={kind:'past',occurredOn:'2026-06-21',photos:[{src:'/events/yoga.webp',alt:'A community yoga session'}],facts:[{label:'Participants',value:'114'}],source:'https://example.com/event-report'}
+  assert.equal(validatePastEvent(record,today),true)
+  assert.equal(validatePastEvent({...record,photos:[{media:123,alt:'A community yoga session'}]},today),true)
+  for(const occurredOn of ['2026-02-30','2026-6-21','2026-10-10','0000-01-01'])assert.notEqual(validatePastEvent({...record,occurredOn},today),true)
+  for(const photos of [[],[{src:'javascript:alert(1)',alt:'Photo'}],[{src:'/event.jpg',alt:''}]])assert.notEqual(validatePastEvent({...record,photos},today),true)
+  assert.notEqual(validatePastEvent({...record,source:'javascript:alert(1)'},today),true)
+  assert.notEqual(validatePastEvent({...record,facts:[{label:'Participants',value:114}]},today),true)
+  assert.equal(validatePastEvent({kind:'annual',month:6,day:21},today),true)
 })
 test('contributors cannot publish or update a published document without a draft',()=>{
   const req={user:{role:'contributor'}}
@@ -70,5 +81,7 @@ test('live preview opens the page where the edited record appears',async()=>{
   assert.equal(previewURL('content-slots',{page:'who-we-are'}),`${site}/who-we-are?cms-preview=true`)
   assert.equal(previewURL('gallery-items',{group:'media:guiding-force'}),`${site}/our-guiding-force?cms-preview=true`)
   assert.equal(previewURL('awards',{}),`${site}/?cms-preview=true#awards`)
+  assert.equal(previewURL('events',{kind:'past'}),`${site}/events?cms-preview=true#past-events`)
+  assert.equal(previewURL('events',{kind:'annual'}),`${site}/events?cms-preview=true`)
   assert.equal(previewURL('site-settings',{}),`${site}/?cms-preview=true`)
 })

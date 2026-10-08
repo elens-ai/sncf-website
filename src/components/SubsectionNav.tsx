@@ -25,6 +25,8 @@ interface SubsectionNavProps {
       (--backdrop-dark, -mid, -light and -pale), which it fades between. */
   tinted?: boolean;
   floating?: boolean;
+  /** For floating rails, keep the natural rail visible until this element has fully scrolled away. */
+  keepVisibleUntil?: string;
 }
 
 /**
@@ -53,6 +55,7 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
   look,
   tinted = false,
   floating = false,
+  keepVisibleUntil,
 }) => {
   const [hidden, setHidden] = useState(false);
   const [active, setActive] = useState(links[0]?.id ?? '');
@@ -73,11 +76,20 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
   useEffect(() => {
     if (!floating) return;
     let previous = window.scrollY, distance = 0, direction = 0, frame = 0;
+    const visibilityBoundary = keepVisibleUntil ? document.querySelector(keepVisibleUntil) : null;
     const read = () => {
       frame = 0;
       const y = Math.max(0, window.scrollY);
       const delta = y - previous;
       previous = y;
+      /* Do not hide a rail before it reaches its natural position beneath
+         the cover. Direction tracking begins once that cover is fully gone. */
+      if (visibilityBoundary && visibilityBoundary.getBoundingClientRect().bottom > 0) {
+        distance = 0;
+        direction = 0;
+        setHidden(false);
+        return;
+      }
       if (!delta) return;
       const nextDirection = Math.sign(delta);
       distance = nextDirection === direction ? distance + Math.abs(delta) : Math.abs(delta);
@@ -86,9 +98,15 @@ export const SubsectionNav: React.FC<SubsectionNavProps> = ({
       else if (direction > 0 && distance > 18 && !railRef.current?.contains(document.activeElement)) setHidden(true);
     };
     const scroll = () => { if (!frame) frame = requestAnimationFrame(read); };
+    read();
     window.addEventListener('scroll', scroll, { passive: true });
-    return () => { window.removeEventListener('scroll', scroll); cancelAnimationFrame(frame); };
-  }, [floating]);
+    window.addEventListener('resize', scroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', scroll);
+      window.removeEventListener('resize', scroll);
+      cancelAnimationFrame(frame);
+    };
+  }, [floating, keepVisibleUntil]);
 
   useEffect(() => {
     let raf = 0;

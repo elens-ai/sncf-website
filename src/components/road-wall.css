@@ -37,7 +37,7 @@
 .road-wall-dim { position: absolute; inset: 0; pointer-events: none; opacity: 0; visibility: hidden; background: linear-gradient(180deg, #0d1c48, #12306e 55%, #3b1d52); }
 .road-wall-tint { background: linear-gradient(174deg, rgb(24 48 120), rgb(48 168 240) 50%, rgb(216 96 168)); mix-blend-mode: color; opacity: 0; }
 .road-wall-seal { opacity: 0; }
-.road-wall-seal img { position: absolute; left: var(--seal-x); top: var(--seal-y); width: var(--seal-size); height: var(--seal-size); max-width: none; object-fit: contain; user-select: none; }
+.road-wall-seal img { position: absolute; left: var(--seal-x); top: var(--seal-y); width: var(--seal-width); height: var(--seal-height); max-width: none; object-fit: contain; user-select: none; -webkit-mask-image: radial-gradient(ellipse closest-side, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse closest-side, #000 62%, transparent 100%); }
 
 /* a stop's years, large in the middle of what shows below the header and the tabs, before its photographs come */
 .road-wall-ranges { position: absolute; inset: 0; z-index: 2; pointer-events: none; }

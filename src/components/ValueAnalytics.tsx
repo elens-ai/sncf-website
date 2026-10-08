@@ -1,8 +1,8 @@
 import { getCMSCopy } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
 import { insightsFor, type Insight } from '../data/insights';
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Droplet, Heart, TreePine, Users, Building2, Scissors, Laptop, School, GraduationCap, Sparkles, Ambulance, Package, ShieldCheck, Wind, Syringe, Landmark, HeartHandshake, type LucideIcon } from 'lucide-react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, ArrowLeft, ArrowRight, ChevronDown, Droplet, Heart, TreePine, Users, Building2, Scissors, Laptop, School, GraduationCap, Sparkles, Ambulance, Package, ShieldCheck, Wind, Syringe, Landmark, HeartHandshake, type LucideIcon } from 'lucide-react';
 import type { Activity } from '../data/activities';
 import { OdometerStatCounter } from './OdometerStatCounter';
 import { onArrival } from '../utils/arrival';
@@ -28,6 +28,10 @@ import './value-analytics.css';
  */
 type Cornerstone = 'heal' | 'enrich' | 'empower';
 
+// The chart kit is also used on Projects; filtering only applies inside the
+// Core Values programme story. Each programme keeps its original comparisons.
+const ProgrammeCharts = createContext<string[] | null>(null);
+
 export const point = (activities: Activity[], id: string, label: string) =>
   activities.find(a => a.id === id)?.dataPoints.find(p => p.label === label)?.value ?? '';
 export const when = (activities: Activity[], id: string) => activities.find(a => a.id === id)?.period ?? '';
@@ -41,8 +45,10 @@ export const Figure: React.FC<{ value: string; size?: 'xl' | 'lg' | 'md' | 'sm';
 );
 
 export const Card: React.FC<{ title: string; note?: string; period: string; span: number; activityId?: string; explorerId?: string; onSelect?: (id: string) => void; photo?: string; children?: React.ReactNode }> =
-  ({ title, note, period, span, activityId, explorerId, onSelect, photo, children }) => (
-    <article className="va-card" style={{ '--span': span } as React.CSSProperties}>
+  ({ title, note, period, span, activityId, explorerId, onSelect, photo, children }) => {
+    const visible = useContext(ProgrammeCharts);
+    if (visible && activityId && !visible.includes(activityId)) return null;
+    return <article className="va-card" style={{ '--span': span } as React.CSSProperties}>
       <header className="va-card-head">
         {/* the programme the chart is about, by its own photograph */}
         {photo && <img className="va-card-photo" src={resolveCMSMedia(photo)} alt="" loading="lazy" decoding="async" />}
@@ -52,8 +58,8 @@ export const Card: React.FC<{ title: string; note?: string; period: string; span
       {note && <p className="va-card-note">{note}</p>}
       <div className="va-card-body">{children}</div>
       {explorerId && activityId && <a className="va-card-link" href={`#${explorerId}`} onClick={() => onSelect?.(activityId)}>{getCMSCopy("copy.ValueAnalytics.programme", "See the programme")} <ArrowUpRight size={14} aria-hidden="true" /></a>}
-    </article>
-  );
+    </article>;
+  };
 
 /* ----- the chart kit ----- */
 
@@ -75,22 +81,28 @@ export const Bars: React.FC<{ items: { label: string; value: string; note?: stri
 
 /** One measure at one date, divided. */
 export const Donut: React.FC<{ segments: { label: string; value: string }[]; centre: { value: string; label: string } }> = ({ segments, centre }) => {
+  const [selected, setSelected] = useState<string | null>(null);
   const total = segments.reduce((sum, s) => sum + num(s.value), 0) || 1;
   const C = 2 * Math.PI * 42;
   let offset = 0;
   const arcs = segments.map((s, i) => { const f = num(s.value) / total; const arc = { ...s, f, start: offset, i }; offset += f; return arc; });
+  const current = arcs.find(arc => arc.label === selected);
   return (
     <div className="va-donut">
       <svg viewBox="0 0 100 100" aria-hidden="true">
         <circle className="va-donut-track" cx="50" cy="50" r="42" />
         {arcs.map(arc => (
           <circle key={arc.label} className="va-donut-arc" cx="50" cy="50" r="42"
-            style={{ '--len': arc.f * C, '--gap': C, '--d': `${arc.i * 140}ms`, strokeDashoffset: -arc.start * C, opacity: 1 - arc.i * (0.55 / Math.max(1, arcs.length - 1)) } as React.CSSProperties} />
+            style={{ '--len': arc.f * C, '--gap': C, '--d': `${arc.i * 100}ms`, strokeDashoffset: -arc.start * C, opacity: current ? (current.label === arc.label ? 1 : .16) : 1 - arc.i * (0.55 / Math.max(1, arcs.length - 1)) } as React.CSSProperties} />
         ))}
       </svg>
-      <div className="va-donut-centre" data-long={centre.value.replace(/\D/g, '').length > 6}><Figure value={centre.value} size="lg" /><span className="va-donut-label">{centre.label}</span></div>
+      <div className="va-donut-centre" data-long={(current?.value ?? centre.value).replace(/\D/g, '').length > 6} aria-live="polite"><Figure value={current?.value ?? centre.value} size="lg" plain /><span className="va-donut-label">{current?.label ?? centre.label}</span></div>
       <ul className="va-legend">
-        {arcs.map(arc => <li key={arc.label} style={{ '--o': 1 - arc.i * (0.55 / Math.max(1, arcs.length - 1)) } as React.CSSProperties}><i /><span>{arc.label}</span><strong>{arc.value}</strong><small>{Math.round(arc.f * 100)}%</small></li>)}
+        {arcs.map(arc => <li key={arc.label} style={{ '--o': 1 - arc.i * (0.55 / Math.max(1, arcs.length - 1)) } as React.CSSProperties}>
+          <button type="button" aria-pressed={current?.label === arc.label} onClick={() => setSelected(current?.label === arc.label ? null : arc.label)}>
+            <i /><span>{arc.label}</span><strong>{arc.value}</strong><small>{Math.round(arc.f * 100)}%</small>
+          </button>
+        </li>)}
       </ul>
     </div>
   );
@@ -333,9 +345,106 @@ export const InsightRibbon: React.FC<{ entries: { key: string; insight: Insight;
   );
 };
 
+/** Programme-led statistics, with one story open at a time. The numbers and
+ * chart comparisons remain attached to their own units and reporting dates. */
 export const ValueAnalytics: React.FC<{ pillarId: Cornerstone; activities: Activity[]; explorerId: string; onSelect: (id: string) => void }> = ({ pillarId, activities, explorerId, onSelect }) => {
+  const [selectedId, setSelectedId] = useState(activities[0]?.id ?? '');
+  const [insightIndex, setInsightIndex] = useState(0);
+  const root = useRef<HTMLDivElement>(null);
+  const picker = useRef<HTMLDivElement>(null);
+  const [arrived, setArrived] = useState(false);
+  useEffect(() => { const el = root.current; if (el) return onArrival(el, () => setArrived(true)); }, []);
+  const selected = activities.find(activity => activity.id === selectedId) ?? activities[0];
+  const selectedIndex = activities.findIndex(activity => activity.id === selected?.id);
+  const insights = selected ? insightsFor(selected) : [];
+  const insight = insights[insightIndex % Math.max(insights.length, 1)];
+  const InsightIcon = insight?.icon ?? Sparkles;
+  const photo = selected?.images?.[0] ?? selected?.cardPhoto;
   const Band = BANDS[pillarId];
-  /* the first insight of each programme, each opening that programme */
-  const entries = activities.flatMap(activity => insightsFor(activity).slice(0, 1).map(insight => ({ key: activity.id, insight, caption: activity.title, href: `#${explorerId}`, onPick: () => onSelect(activity.id) })));
-  return <ChartBand id={`${pillarId}-analytics`} lead={<InsightRibbon entries={entries} />}><Band activities={activities} explorerId={explorerId} onSelect={onSelect} /></ChartBand>;
+  const choose = (id: string) => {
+    setSelectedId(id);
+    setInsightIndex(0);
+    const row = picker.current;
+    const button = row?.querySelector<HTMLButtonElement>(`[id="${pillarId}-stat-tab-${id}"]`);
+    if (row && button) {
+      const offset = button.getBoundingClientRect().left - row.getBoundingClientRect().left;
+      if (offset < 0 || offset + button.offsetWidth > row.clientWidth) row.scrollBy({ left: offset - (row.clientWidth - button.offsetWidth) / 2, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    }
+  };
+  const step = (direction: number) => choose(activities[(selectedIndex + direction + activities.length) % activities.length].id);
+  const changeByKey = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next = index;
+    if (event.key === 'ArrowRight') next = (index + 1) % activities.length;
+    else if (event.key === 'ArrowLeft') next = (index - 1 + activities.length) % activities.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = activities.length - 1;
+    else return;
+    event.preventDefault();
+    choose(activities[next].id);
+    picker.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus();
+  };
+  if (!selected) return null;
+  // Free-school figures share the existing education comparison. NIMA and
+  // livelihood training retain the cross-trade and centre-count comparisons.
+  const chartIds = selected.id === 'free-schools' ? ['schools-colleges']
+    : ['skill-nima', 'skill-trades'].includes(selected.id) ? ['skill-nima', 'skill-trades']
+    : [selected.id];
+  const heading = pillarId === 'heal'
+    ? getCMSCopy('copy.ValueAnalytics.stories.heal-title', 'Care that reaches further.')
+    : pillarId === 'enrich'
+      ? getCMSCopy('copy.ValueAnalytics.stories.enrich-title', 'Room to learn. Space to grow.')
+      : getCMSCopy('copy.ValueAnalytics.stories.empower-title', 'Small actions. Shared futures.');
+  return <div className="value-analytics va-stories" ref={root} id={`${pillarId}-analytics`} data-arrived={arrived} data-pillar={pillarId}>
+    <header className="va-story-heading">
+      <div>
+        <p className="va-story-eyebrow"><span />{getCMSCopy('copy.ValueAnalytics.stories.kicker', 'Our impact, in perspective')}</p>
+        <h3>{heading}</h3>
+      </div>
+      <p>{getCMSCopy('copy.ValueAnalytics.stories.lead', 'Explore the work behind the numbers. Every figure belongs to a programme, a purpose and a moment in our journey.')}</p>
+    </header>
+
+    <div className="va-story-picker" role="tablist" aria-label={getCMSCopy('copy.ValueAnalytics.stories.picker-label', '{pillar} programme statistics').replace('{pillar}', pillarId)} ref={picker}>
+      {activities.map((activity, index) => <button type="button" role="tab" key={activity.id} id={`${pillarId}-stat-tab-${activity.id}`} aria-selected={selected.id === activity.id} aria-controls={`${pillarId}-stat-story`} tabIndex={selected.id === activity.id ? 0 : -1} onClick={() => choose(activity.id)} onKeyDown={event => changeByKey(event, index)}>
+        <span className="va-story-tab-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <span>{activity.menuLabel ?? activity.title}</span>
+      </button>)}
+    </div>
+
+    <section className="va-story-panel" id={`${pillarId}-stat-story`} role="tabpanel" tabIndex={0} aria-labelledby={`${pillarId}-stat-tab-${selected.id}`}>
+      <p className="sr-only" role="status" aria-live="polite">{selected.title}</p>
+      <div className="va-story-feature">
+        <figure className="va-story-image" data-has-photo={Boolean(photo?.src)}>
+          {photo?.src ? <img src={resolveCMSMedia(photo.src)} alt={photo.alt ?? ''} loading="lazy" decoding="async" /> : <div className="va-story-illustration" aria-hidden="true"><HeartHandshake strokeWidth={.8} /><span /><span /><span /></div>}
+          <div className="va-story-image-shade" />
+          <figcaption><span>{String(selectedIndex + 1).padStart(2, '0')} <i>/ {String(activities.length).padStart(2, '0')}</i></span><span>{getCMSCopy('copy.ValueAnalytics.stories.photo-caption', 'Service with Humility')}</span></figcaption>
+        </figure>
+        <div className="va-story-copy">
+          <p className="va-story-period">{selected.period}</p>
+          <h4>{selected.title}</h4>
+          <p className="va-story-description">{selected.blurb}</p>
+          <div className="va-story-main-number" data-long={selected.headline.value.length > 10}>
+            <Figure value={selected.headline.value} size="xl" /><span>{selected.headline.label}</span>
+          </div>
+          {insight && <div className="va-story-insight">
+            <div className="va-story-insight-top"><span><InsightIcon size={15} aria-hidden="true" />{getCMSCopy('copy.ValueAnalytics.stories.insight-label', 'A closer perspective')}</span>{insights.length > 1 && <button type="button" onClick={() => setInsightIndex(index => (index + 1) % insights.length)} aria-label={getCMSCopy('copy.ValueAnalytics.stories.next-insight', 'Show the next programme insight')}><span>{insightIndex % insights.length + 1}/{insights.length}</span><ArrowRight size={16} aria-hidden="true" /></button>}</div>
+            <p key={insight.label} aria-live="polite" aria-atomic="true"><strong>{insight.value}</strong><span>{insight.label}</span></p>
+            <small>{getCMSCopy('copy.ValueAnalytics.stories.insight-note', 'Calculated from this programme’s reported figures.')}</small>
+          </div>}
+          <div className="va-story-actions">
+            <a href={`#${explorerId}`} onClick={() => onSelect(selected.id)}>{getCMSCopy('copy.ValueAnalytics.programme', 'See the programme')}<ArrowUpRight size={17} aria-hidden="true" /></a>
+            <div className="va-story-arrows"><button type="button" aria-label={getCMSCopy('copy.ValueAnalytics.stories.previous-programme', 'Previous programme statistics')} onClick={() => step(-1)}><ArrowLeft size={18} aria-hidden="true" /></button><button type="button" aria-label={getCMSCopy('copy.ValueAnalytics.stories.next-programme', 'Next programme statistics')} onClick={() => step(1)}><ArrowRight size={18} aria-hidden="true" /></button></div>
+          </div>
+        </div>
+      </div>
+      <div className="va-story-details" key={`detail-${selected.id}`}>
+        <div className="va-story-detail-heading"><span>{getCMSCopy('copy.ValueAnalytics.stories.detail-heading', 'Look a little closer')}</span><span className="va-story-detail-rule" /><Sparkles size={18} aria-hidden="true" /></div>
+        <ProgrammeCharts.Provider value={chartIds}><div className="va-grid"><Band activities={activities} explorerId={explorerId} onSelect={onSelect} /></div></ProgrammeCharts.Provider>
+        <details className="va-story-record">
+          <summary><span>{getCMSCopy('copy.ValueAnalytics.stories.record', 'Every reported figure')}<small>{selected.period}</small></span><ChevronDown size={18} aria-hidden="true" /></summary>
+          <dl>{selected.dataPoints.map(entry => <div key={entry.label}><dt>{entry.label}</dt><dd data-prose={/[a-z]/i.test(entry.value)}>{entry.value}</dd></div>)}</dl>
+        </details>
+      </div>
+    </section>
+    <p className="va-story-source">{getCMSCopy('copy.ValueAnalytics.stories.source', 'Source: SNCF programme records · Figures retain their reported units and period. Programme reach is not a count of unique individuals.')}</p>
+  </div>;
 };

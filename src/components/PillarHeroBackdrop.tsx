@@ -2,8 +2,7 @@ import React from 'react';
 import { useReducedMotion } from 'motion/react';
 import type { MosaicPillar } from './pillarLogoArt';
 
-/** Each path fades into its own colour gradient while the foreground emblem
-    retains its photographs. */
+/** Quiet gradient grounds keep the foreground emblems in focus. */
 export const PillarHeroBackdrop = React.memo(function PillarHeroBackdrop({ pillar, shown, layer }: { pillar: MosaicPillar; shown: boolean; layer: number }) {
   const calm = useReducedMotion();
   return <div className="heal-layered-backdrop" data-theme={pillar} aria-hidden="true" style={{

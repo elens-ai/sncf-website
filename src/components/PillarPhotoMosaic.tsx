@@ -67,6 +67,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
   const ownPhotos = pillar === 'heal';
   /* Empower's figure always stands with its companions. */
   const companions = pillar === 'empower';
+  const softSurface = pillar === 'heal' || pillar === 'projects';
   const clip = useId().replace(/:/g, '');
   const tintChannels = [1, 3, 5].map(offset => parseInt(logo.tint.slice(offset, offset + 2), 16) / 255);
   const photoFilter = pillar === 'heal' ? undefined : `url(#${clip}-photo-tone)`;
@@ -109,6 +110,11 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
           <stop offset="0" stopColor="#fff" stopOpacity=".95" />
           <stop offset=".45" stopColor={logo.edge} stopOpacity=".65" />
           <stop offset="1" stopColor="#163f49" stopOpacity=".45" />
+        </linearGradient>
+        <linearGradient id={`${clip}-soft-edge`} x1="0" y1="0" x2=".7" y2="1">
+          <stop offset="0" stopColor={logo.edge} />
+          <stop offset=".55" stopColor={logo.tint} />
+          <stop offset="1" stopColor={logo.tint} stopOpacity=".75" />
         </linearGradient>
         <linearGradient id={`${clip}-glaze`} x1="0" y1="0" x2="0.8" y2="1">
           <stop offset="0" stopColor="#fff" stopOpacity=".16" />
@@ -158,8 +164,9 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
           <path d={BOOK_COVER} fill="#238fa7" transform="translate(-1 1.4)" />
           <path d={BOOK_COVER} fill={logo.tint} stroke="#8ed5df" strokeWidth=".4" strokeLinejoin="round" />
         </>}
-        {(pillar === 'enrich' ? [4, 3, 2, 1] : [6, 5, 4, 3, 2, 1]).map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${pillar === 'enrich' ? 0 : -layer * .24} ${layer * .38})`} fill={pillar === 'enrich' ? (layer % 2 ? '#fdfbf5' : '#dbe3e8') : layer > 4 ? '#234a4c' : logo.tint} />)}
-        <use href={`#${clip}-outline`} transform="translate(-.25 .4)" fill={logo.edge} />
+        {softSurface ? <use href={`#${clip}-outline`} transform="translate(-.35 .65)" fill={`url(#${clip}-soft-edge)`} stroke={`url(#${clip}-soft-edge)`} strokeWidth=".6" strokeLinejoin="round" />
+          : (pillar === 'enrich' ? [4, 3, 2, 1] : [6, 5, 4, 3, 2, 1]).map(layer => <use key={layer} href={`#${clip}-outline`} transform={`translate(${pillar === 'enrich' ? 0 : -layer * .24} ${layer * .38})`} fill={pillar === 'enrich' ? (layer % 2 ? '#fdfbf5' : '#dbe3e8') : layer > 4 ? '#234a4c' : logo.tint} />)}
+        <use href={`#${clip}-outline`} transform={softSurface ? 'translate(-.1 .15)' : 'translate(-.25 .4)'} fill={logo.edge} />
       </g>
       <g className="heal-mosaic-leaves">
         <g id={`${clip}-photo-face`}>
@@ -186,7 +193,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
           {/* Heal's soft wave of light, drifting over the surface. */}
           {pillar === 'heal' && HEAL_WAVES.map((wave, i) => <rect key={wave.tile} x="-4" y="-12" width="174" height="142" fill={`url(#${clip}-sheen-${i})`} />)}
         </g>
-        <use href={`#${clip}-outline`} fill="none" stroke={`url(#${clip}-bevel)`} strokeWidth=".45" strokeLinejoin="round" aria-hidden="true" />
+        <use href={`#${clip}-outline`} fill="none" stroke={`url(#${clip}-bevel)`} strokeWidth={softSurface ? '.28' : '.45'} strokeLinejoin="round" aria-hidden="true" />
       </g>
       </g>
     </svg>

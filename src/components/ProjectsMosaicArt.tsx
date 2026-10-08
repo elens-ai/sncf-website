@@ -18,13 +18,13 @@ export const ProjectsMosaicArt: React.FC<{ photoFilter?: string }> = ({ photoFil
   return <g className="projects-mosaic-petals">
     <defs>{PROJECTS_LOGO_OUTLINE.map((path, i) => <clipPath key={i} id={`${id}-${i}`}><path d={path} /></clipPath>)}</defs>
     {PETALS.map((petal, i) => <g key={petal.colour}>
-      <path d={PROJECTS_LOGO_OUTLINE[i]} fill={petal.colour} transform="translate(-.65 .85)" />
+      <path d={PROJECTS_LOGO_OUTLINE[i]} fill={petal.colour} transform="translate(-.2 .35)" />
       <g clipPath={`url(#${id}-${i})`}>
         <rect width="146" height="120" fill="#fbfffc" />
         <image x={petal.box[0]} y={petal.box[1]} width={petal.box[2]} height={petal.box[3]} href={resolveCMSMedia(petal.photo())} preserveAspectRatio="xMidYMid slice" filter={photoFilter} />
         <rect width="146" height="120" fill={petal.colour} opacity=".2" />
       </g>
-      <path d={PROJECTS_LOGO_OUTLINE[i]} fill="none" stroke={petal.colour} strokeWidth=".55" strokeLinejoin="round" />
+      <path d={PROJECTS_LOGO_OUTLINE[i]} fill="none" stroke={petal.colour} strokeWidth=".3" strokeLinejoin="round" />
     </g>)}
     <g className="projects-centre-badge">
       <circle cx="64.84" cy="69.35" r="16.8" fill="#f4fcf8" stroke="#fff" strokeWidth=".5" />

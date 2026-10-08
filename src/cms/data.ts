@@ -115,15 +115,36 @@ export function resolveActivities(publication: CMSPublication, defaults: Activit
 }
 
 export function resolveEvents(publication: CMSPublication, defaults: SNCFEvent[]) {
-  return collection(publication.events, defaults, (item): item is SNCFEvent => {
+  const values = collection(publication.events, defaults, (item): item is SNCFEvent => {
     if (!isRecord(item) || !recordID(item.id) || !fields(item, ['title', 'tag', 'blurb']) || !rooms.includes(item.pillarId as string)) return false;
     if (!optionalFields(item, ['location', 'time'])) return false;
-    if (item.href !== undefined && !safeCMSURL(item.href, true)) return false;
+    if (item.href != null && item.href !== '' && !safeCMSURL(item.href, true)) return false;
+    if (item.source != null && item.source !== '' && !safeCMSURL(item.source)) return false;
+    if (item.kind === 'past') {
+      if (!text(item.occurredOn) || !/^\d{4}-\d{2}-\d{2}$/.test(item.occurredOn)) return false;
+      const [year, month, day] = item.occurredOn.split('-').map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day));
+      const today = new Date();
+      const latest = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      if (year < 1000 || date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day || item.occurredOn > latest) return false;
+      if (!Array.isArray(item.photos) || !item.photos.length || !item.photos.every(photo => image(photo) && isRecord(photo) && (photo.alt as string).trim())) return false;
+      return item.facts == null || (Array.isArray(item.facts) && item.facts.every(fact => point(fact) && fact.label.trim() && fact.value.trim()));
+    }
     if (item.kind === 'ongoing') return true;
     if (item.kind !== 'annual' || !Number.isInteger(item.month) || !Number.isInteger(item.day)) return false;
     const month = item.month as number, day = item.day as number;
     return month >= 1 && month <= 12 && day >= 1 && day <= new Date(2024, month, 0).getDate();
   });
+  // Publications created before the archive existed contain only annual/ongoing
+  // records. Keep their edits and add the new bundled archive until it is seeded.
+  // An explicit empty collection, or a publication with any past record, remains
+  // authoritative, including removal of individual archive entries.
+  if (Array.isArray(publication.events) && publication.events.length > 0 &&
+    publication.events.every(item => isRecord(item) && (item.kind === 'annual' || item.kind === 'ongoing')) &&
+    !values.some(item => item.kind === 'past')) {
+    return [...values, ...defaults.filter(item => item.kind === 'past')];
+  }
+  return values;
 }
 
 export function resolvePartners(publication: CMSPublication, defaults: Partner[]) {

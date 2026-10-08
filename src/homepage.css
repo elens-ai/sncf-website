@@ -46,6 +46,7 @@
   color: rgb(255 255 255 / .66);
 }
 #site-header { border-bottom: 1px solid rgb(255 255 255 / .06); }
+.home-page #site-header[data-section='recognition'] .chrome-scrim { background: #102e56; }
 #hero-social-sidebar { opacity: .7; transition: opacity 300ms ease; }
 #hero-social-sidebar:hover, #hero-social-sidebar:focus-within { opacity: 1; }
 #hero-clone-stage { padding-top: 112px; padding-bottom: 28px; min-height: 100svh; }

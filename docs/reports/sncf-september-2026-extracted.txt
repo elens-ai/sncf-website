@@ -1,0 +1,297 @@
+SNCF ACTIVITY REPORT - CONSOLIDATED THROUGH SEPTEMBER 2026
+Source: SNCF_Activity_Report_Sept2026.xlsx.pdf
+Latest detail rows are the main record; older 2026 snapshots are separate.
+
+
+Heal / Blood Donation Camp (PDF page 2)
+As on September 2026 | cumulative
+Note: Potentially saved lives is an estimate in the source, not a confirmed recipient headcount.
+  Units collected: 1,500,230 blood units
+  Camps organised: 9,174 camps
+  Potentially saved lives: 4,500,690 potential lives
+
+Heal / Health Checkup Camps (PDF page 2)
+As on September 2026 | cumulative
+  Patients treated: 483,439 patient records
+  Camps organised: 727 camps
+
+Heal / Eye Checkup Camp (PDF page 2)
+As on September 2026 | cumulative
+Note: Surgeries and spectacles are separate service measures; do not add them to OPD as additional unique people.
+  OPD: 165,122 OPD records
+  Camps: 512 camps
+  Cataract surgeries: 15,493 surgeries
+  Free spectacles: 38,148 spectacles
+
+Heal / Sant Nirankari Health Centre (PDF page 2)
+As on September 2026 | facility inventory
+  Allopathic: 47 centres
+  Homeopathic: 37 centres
+  Physiotherapy: 4 centres
+  Oneness labs: 4 labs
+  Chiropractic: 1 centre
+  Oneness pharma: 1 pharmacy
+  Ambulance: 16 ambulances
+  X-ray: 2 centres
+  Dental centre: 6 centres
+  Eye centre: 5 centres
+
+Heal / Blood Bank (PDF page 2)
+As on September 2026 | cumulative
+  Units: 54,261 blood units
+  Camps: 444 camps
+
+Heal / Blood Bank (PDF page 2)
+2026 | 2026 row only
+Note: Already included in the cumulative September 2026 row. Never add both rows.
+  Units: 7,509 blood units
+  Camps: 57 camps
+
+Enrich / Schools / Colleges (PDF page 3)
+As on September 2026 | cumulative / inventory
+Note: The source provides no deduplicated person IDs. College students are treated as a subset of students benefitted for aggregation.
+  Schools: 14 schools
+  Students benefitted: 217,723 student records
+  Colleges: 1 college
+  College students: 25,880 student records
+  Scholarship students: 1,829 student records
+  Scholarship disbursed: 54,097,718 INR
+  Free schools: 4 schools
+  Students in free schools: 9,696 student records
+  Schools supported by SNCF: 2 schools
+
+Enrich / Skill Development (PDF page 3)
+As on September 2026 | cumulative / inventory
+  NIMA centres: 27 centres
+  NIMA youth benefitted: 4,114 learner records
+  Sewing centres: 45 centres
+  Sewing youth benefitted: 16,500 learner records
+  Beautician centres: 1 centre
+  Beautician youth benefitted: 631 learner records
+  Free coaching centres: 3 centres
+  Free coaching students: 1,370 learner records
+
+Empower / Tree Plantation Drives (PDF page 4)
+As on September 2026 | cumulative / reported components
+Note: WED and Vann Mahotsav are reported components; do not add to the tree or drive total again.
+  Trees planted excluding Oneness Vann: 2,041,947 trees
+  Total drives: 3,518 drives
+  WED drives: 18 drives
+  WED plantation: 3,100 trees
+  Vann Mahotsav and miscellaneous drives: 80 drives
+  Vann Mahotsav plantation: 16,000 trees
+
+Empower / Cleanliness Drives (PDF page 4)
+As on September 2026 (Cumulative) | cumulative
+Note: Volunteer participation is contribution to service, not a count of unique beneficiaries. The same person may participate repeatedly.
+  Total manhours: 35,223,330 hours
+  Railway station drives: 444 drives
+  Hospital drives: 1,385 drives
+  WED drives: 18 drives
+  Railway / hospital volunteers: 420,788 volunteer participations
+  Waterbody drives: 5,962 drives
+  Waterbody volunteers: 5,449,767 volunteer participations
+
+Empower / Cleanliness Drives (PDF page 4)
+As on September 2026 | latest period row, noncumulative
+Note: Included within the cumulative row; not an extra total. The report does not specify a full-calendar-year period.
+  Total manhours: 7,290,000 hours
+  Railway station drives: 10 drives
+  Hospital drives: 10 drives
+  WED drives: 18 drives
+  Railway / hospital volunteers: 15,000 volunteer participations
+  Waterbody drives: 1,600 drives
+  Waterbody volunteers: 1,200,000 volunteer participations
+
+Empower / COVID-19 Relief (PDF page 4)
+2022 total; latest available in September 2026 report | historical cumulative record
+Note: No 2026 update or recipient headcount is provided. Supplies and beds cannot be converted to unique lives impacted.
+  Oxygen concentrators: 775 concentrators
+  Food packets: 5,000,000 packets
+  PPE kits: 30,000 kits
+  Masks: 150,000 masks
+  Vaccination centres: 55 centres
+  Care centres: 13 centres
+  Total beds: 1,670 beds
+  ICU beds: 200 beds
+  PM / CM Care Funds contribution: 70,000,000 INR
+
+Empower / Mass Marriages (PDF page 4)
+As on September 2026 | cumulative
+Note: The events column retains a 1998–2025 heading, although the latest row is September 2026.
+  Couples married: 5,652 couples
+  Events: 61 events
+
+Empower / Financial Help (PDF page 4)
+Till 15 May 2025 | latest available amount
+Note: No September 2026 update is provided.
+  Financial help: 104,583,834 INR
+
+Empower / Disaster Relief & Fund (PDF page 4)
+Undated in September 2026 report | latest available amount
+  Disaster relief & fund: 79,521,918 INR
+
+Empower / Supporting Youth in Sports (NBGSMCT) (PDF page 4)
+Undated in September 2026 report | latest available record
+  Years: 26 years
+  Tournaments: 26 tournaments
+
+Projects / Project Amrit (PDF page 5)
+As on September 2026 | cumulative
+Note: Do not add Project Amrit to Empower cleanliness totals: scopes overlap, with differently reported volunteer totals.
+  Water bodies: 5,962 water bodies
+  Cities: 3,460 cities
+  States / UTs: 28 states / UTs
+  Volunteers participated: 3,927,615 volunteer participations
+  Manhours: 23,565,690 hours
+
+Projects / Oneness Vann (PDF page 5)
+As on September 2026 (Total) | cumulative
+Note: The three area figures describe the same footprint in different units.
+  Sites: 700 sites
+  Plants: 600,330 plants
+  Area: 19,582,822 square feet
+  Acres: 449 acres
+  Hectares: 182 hectares
+  States / UTs: 27 states / UTs
+
+Projects / Watershed Programme (PDF page 5)
+As on September 2026 | cumulative
+  People benefitted: 30,000 people
+  Gram panchayats: 9 gram panchayats
+  Hamlets: 144 hamlets
+
+Projects / Adopted Villages overview (PDF page 5)
+Since 2017; September 2026 report | programme overview
+Note: Villages: Patti Kalyana, Bhodwal Majri, Panchi Gujran, Mandaura. This overview has a different stated scope from the village-level table.
+  Villages: 4 villages
+  Impacted population: 112,500 people
+  Schools: 7 schools
+  School children: 10,000 children
+
+Projects / Adopted Villages: Bhodwal Majri (PDF page 5)
+Undated village-level table in September 2026 report | village detail
+Note: Village total and component rows must not be added together.
+  Population: 8,000 people
+  Beneficiaries: 6,500 people
+  Health & eye camps: 5 camps
+  Patients treated: 800 patient records
+  Schools supported: 2 schools
+  Students benefitting: 2,250 student records
+  Sewing centres: 1 centres
+
+Projects / Adopted Villages: Mandaura (PDF page 5)
+Undated village-level table in September 2026 report | village detail
+Note: Village total and component rows must not be added together.
+  Population: 10,000 people
+  Beneficiaries: 8,000 people
+  Health & eye camps: 5 camps
+  Patients treated: 1,000 patient records
+  Schools supported: 2 schools
+  Students benefitting: 2,000 student records
+  Sewing centres: 1 centres
+
+Projects / Adopted Villages: Panchi Gujran (PDF page 5)
+Undated village-level table in September 2026 report | village detail
+Note: Village total and component rows must not be added together.
+  Population: 5,127 people
+  Beneficiaries: 5,127 people
+  Health & eye camps: 4 camps
+  Patients treated: 120 patient records
+  Schools supported: 1 schools
+  Students benefitting: 800 student records
+  Sewing centres: 0 centres
+
+Projects / Adopted Villages: Patti Kalyana (PDF page 5)
+Undated village-level table in September 2026 report | village detail
+Note: Village total and component rows must not be added together.
+  Population: 12,000 people
+  Beneficiaries: 10,000 people
+  Health & eye camps: 5 camps
+  Patients treated: 1,500 patient records
+  Schools supported: 2 schools
+  Students benefitting: 2,700 student records
+  Sewing centres: 1 centres
+
+Projects / Adopted Villages: All four villages (PDF page 5)
+Undated village-level table in September 2026 report | village detail
+Note: Village total and component rows must not be added together.
+  Population: 35,127 people
+  Beneficiaries: 29,627 people
+  Health & eye camps: 19 camps
+  Patients treated: 3,420 patient records
+  Schools supported: 7 schools
+  Students benefitting: 7,750 student records
+  Sewing centres: 3 centres
+
+Projects / Adopted Villages: all four villages (PDF page 5)
+Undated village-level table in September 2026 report | village detail
+  Saplings planted: 91,500 saplings
+  Green cover: 732,000 square feet
+
+Heal / Blood Donation Camp (PDF page 2)
+As on March 2026 | superseded 2026 snapshot
+  Units collected: 1,500,230 blood units
+  Camps organised: 9,174 camps
+  Potentially saved lives: 4,500,690 potential lives
+
+Heal / Eye Checkup Camp (PDF page 2)
+As on August 2026 | superseded 2026 snapshot
+  OPD: 164,797 OPD records
+  Camps: 511 camps
+  Cataract surgeries: 15,443 surgeries
+  Free spectacles: 37,999 spectacles
+
+Empower / Tree Plantation Drives (PDF page 4)
+As on March 2026 | superseded 2026 snapshot
+  Trees planted excluding Oneness Vann: 2,038,847 trees
+  Total drives: 3,500 drives
+  WED drives: 18 drives
+  WED plantation: 2,200 trees
+  Vann Mahotsav and miscellaneous drives: 80 drives
+  Vann Mahotsav plantation: 16,000 trees
+
+Projects / Project Amrit (PDF page 5)
+As on February 2026 | 2026 component row
+Note: Included in September cumulative figures; do not add again.
+  Water bodies: 1,600 water bodies
+  Cities: 900 cities
+  States / UTs: 26 states / UTs
+  Volunteers participated: 1,200,000 volunteer participations
+  Manhours: 7,200,000 hours
+
+Dashboard / Executive KPI / highlight figures (PDF page 1)
+As on September 2026 | dashboard summary
+Note: Repeated detail values are not additional records. Tree total includes Oneness Vann.
+  Blood units collected: 1,500,230 blood units
+  Health-checkup patients treated: 483,439 patient records
+  Students benefitted: 217,723 student records
+  Trees planted: 2,642,277 trees
+  Oneness Vann plants: 600,330 plants
+  Amrit water bodies: 5,962 water bodies
+  Cleanliness manhours: 35,223,330 hours
+  Adopted villages impacted population: 112,500 people
+  Tree plantation drives: 4,218 drives
+  Cleanliness drives: 7,809 drives
+
+Dashboard / Headline Beneficiaries chart (PDF page 1)
+As on September 2026 | mixed-unit chart, unsuitable as lives impacted
+Note: Printed as Headline Beneficiaries; the source notes this is a directional view. Do not label these values as unique people.
+  Heal: 2,144,490 mixed measures
+  Enrich: 217,723 student records
+  Empower: 2,038,847 trees
+  Projects: 718,792 mixed measures
+
+RECONCILIATION NOTES
+1. The report is consolidated through September 2026, not a full-calendar-year 2026 activity total.
+2. Latest September detail rows supersede older snapshots. Earlier rows, component rows and totals must not be added together.
+3. Dashboard Heal 2,144,490 equals blood units 1,500,230 + health-checkup patients 483,439 + September 2025 eye OPD 160,821. This arithmetic match suggests a stale link and mixed units; the PDF does not expose spreadsheet formulas.
+4. Dashboard Empower 2,038,847 matches the older tree count, not people. September 2026 tree count excluding Oneness Vann is 2,041,947.
+5. Dashboard Projects 718,792 equals 600,330 plants + 5,962 water bodies + 112,500 impacted population; this arithmetic match suggests mixed units. It is not a person total.
+6. The reported 2,642,277 trees equals 2,041,947 trees excluding Oneness Vann plus 600,330 Oneness Vann plants. The reported 4,218 plantation drives equals 3,518 + 700 Oneness Vann sites; these component labels differ.
+7. The dashboard cleanliness drive count 7,809 equals railway 444 + hospitals 1,385 + WED 18 + waterbodies 5,962.
+8. Blood-bank annual rows sum to 54,261 units and 444 camps, matching the cumulative total.
+9. COVID totals retain their 2022 date; financial help retains its 15-May-2025 date. They are included because they remain the latest records in the consolidated report, not relabelled as 2026 activity.
+10. Village overview population 112,500 and school children 10,000 differ in scope from village detail population 35,127, beneficiaries 29,627 and students 7,750. Preserve both without combining.
+11. There is no deduplicated count of lives impacted across Heal, Enrich and Empower in this PDF. Potential lives, patients, learners, volunteers, couples, supplies, trees, hours and money describe different measures.
+12. Chiropractic patient total 83,146 exists elsewhere in the website but does not appear in this five-page PDF and is excluded from this extraction.

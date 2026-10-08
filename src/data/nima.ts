@@ -2,7 +2,7 @@ import { getCMSCopy } from '../cms/runtime';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.Nima.${key}`, fallback);
 
-/* NIMA — the Nirankari Institute of Music & Arts, one half of the Nirankari
+/* NIMA — the Nirankari Institute of Music & Arts, a programme of the Nirankari
    Vocational Centre — told in full in its tab of the Enrich report: its
    story, its art forms, its journey from Delhi across borders, and its
    impact. The words and figures are the foundation's own (its NIMA brief);

@@ -4,12 +4,20 @@ import { resolveCMSAsset } from '../cms/runtime';
 import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 import { projectEmblemPose } from '../utils/projectEmblemMotion';
 
-export function ProjectEmblemArt() {
-  return <img className="project-emblem-art" src={resolveCMSAsset('asset.ProjectFilms.amritFloatingLogo', '/images/projects/amrit-floating-logo.png')} alt="" width={384} height={384} decoding="async" draggable={false} />;
+export type ProjectEmblemId = 'project-amrit' | 'oneness-vann' | 'health-city';
+
+export function ProjectEmblemArt({ project }: { project: ProjectEmblemId }) {
+  const src = project === 'oneness-vann'
+    ? resolveCMSAsset('asset.ProjectFilms.onenessFloatingLogo', '/images/projects/oneness-floating-logo.png')
+    : project === 'health-city'
+      ? resolveCMSAsset('asset.ProjectFilms.healthCityFloatingLogo', '/images/projects/health-city-floating-logo.png')
+      : resolveCMSAsset('asset.ProjectFilms.amritFloatingLogo', '/images/projects/amrit-floating-logo.png');
+  return <img className="project-emblem-art" data-project={project} src={src} alt="" width={384} height={384} decoding="async" draggable={false} />;
 }
 
 /** Scroll the journey on one fixed layer; hold its corner until the chapter fades. */
-export function ProjectTravellingEmblem({ chapter, source, reduced }: {
+export function ProjectTravellingEmblem({ project, chapter, source, reduced }: {
+  project: ProjectEmblemId;
   chapter: RefObject<HTMLElement | null>;
   source: RefObject<HTMLDivElement | null>;
   reduced: boolean;
@@ -66,7 +74,7 @@ export function ProjectTravellingEmblem({ chapter, source, reduced }: {
   }, [chapter, source, reduced]);
 
   // Outside transformed/revealing content so it can never be clipped by it.
-  return createPortal(<div ref={host} className="project-travelling-emblem" data-reduced={reduced} aria-hidden="true">
-    <ProjectEmblemArt />
+  return createPortal(<div ref={host} className="project-travelling-emblem" data-project={project} data-reduced={reduced} aria-hidden="true">
+    <ProjectEmblemArt project={project} />
   </div>, document.body);
 }

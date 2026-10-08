@@ -11,14 +11,8 @@ import { SearchModal } from '../components/SearchModal';
 import { GalleryModal } from '../components/GalleryModal';
 import { DonateModal } from '../components/DonateModal';
 
-/**
- * THE EVENTS PAGE (/events): the service journal, moved off the home page to a
- * page of its own (the landing's "Event info" leads here). It keeps the hall's
- * own ground rather than the reading rooms' paper (PageShell): the green
- * canvas and the hall's header, so the journal reads exactly as it did on the
- * home page, which is why the page carries the home page's class. Its CMS
- * switch is still the one it had there (home.events).
- */
+/** The standalone Service Journal shares its event data and controls with the site,
+ * on a light editorial ground with cornerstone colours and a navy masthead. */
 export function EventsPage() {
   useCMSRevision();
   const navigate = useNavigate();

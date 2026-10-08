@@ -1,9 +1,10 @@
 import { bindCMSData, resolveEvents } from '../cms/data';
+import { DEFAULT_PAST_EVENTS } from './pastEvents';
 
 /**
- * Upcoming events.
+ * Service Journal events.
  *
- * Two kinds, deliberately:
+ * Three kinds, deliberately:
  *
  *  'annual'  — observances on a FIXED calendar date. The date is the fact; the
  *              year is computed, so 24 April rolls to next year the moment it
@@ -15,14 +16,17 @@ import { bindCMSData, resolveEvents } from '../cms/data';
  *              events, so they are shown as "join anytime" rather than given
  *              an invented date.
  *
- * VENUES AND TIMES ARE DELIBERATELY ABSENT. The dates below are the fixed
+ *  'past'    — an actual dated event, with its own photographs and report.
+ *              These stay out of the upcoming calendar and invitation tools.
+ *
+ * UPCOMING VENUES AND TIMES ARE DELIBERATELY ABSENT. The dates below are the fixed
  * international and Mission observances; where a specific camp is held, and at
  * what hour, is decided locally and is not something to guess at — a wrong
  * address is a person turning up to nothing. Add `location` and `time` per
  * event once SNCF confirms them and the cards will show them.
  */
 
-export type EventKind = 'annual' | 'ongoing';
+export type EventKind = 'annual' | 'ongoing' | 'past';
 
 export interface SNCFEvent {
   id: string;
@@ -41,7 +45,22 @@ export interface SNCFEvent {
   location?: string;
   time?: string;
   href?: string;
+  /** An actual event date, never the report's publication date. */
+  occurredOn?: string;
+  photos?: { src: string; alt: string }[];
+  /** Facts for this event only, not cumulative programme totals. */
+  facts?: { label: string; value: string }[];
+  source?: string;
 }
+
+export interface PastSNCFEvent extends SNCFEvent {
+  kind: 'past';
+  occurredOn: string;
+  photos: { src: string; alt: string }[];
+}
+
+export const isPastEvent = (event: SNCFEvent): event is PastSNCFEvent =>
+  event.kind === 'past' && Boolean(event.occurredOn) && Boolean(event.photos?.length);
 
 export const DEFAULT_EVENTS: SNCFEvent[] = [
   {
@@ -152,6 +171,7 @@ export const DEFAULT_EVENTS: SNCFEvent[] = [
     pillarId: 'projects',
     href: '/projects',
   },
+  ...DEFAULT_PAST_EVENTS,
 ];
 
 export let EVENTS: SNCFEvent[] = bindCMSData(DEFAULT_EVENTS, resolveEvents, value => { EVENTS = value; });

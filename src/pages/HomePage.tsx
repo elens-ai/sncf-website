@@ -275,6 +275,14 @@ export default function HomePage() {
       const bottom = ground ? ground.getBoundingClientRect().bottom + Math.min(40, Math.max(20, window.innerHeight * 0.035)) : -Infinity;
       mark('site-header', bottom > (document.getElementById('site-header')?.offsetHeight ?? 72));
       mark('hero-social-sidebar', bottom > window.innerHeight * 0.72);
+      const header = document.getElementById('site-header');
+      const recognition = page.querySelector('#awards-section')?.getBoundingClientRect();
+      if (header) {
+        const overRecognition = recognition && recognition.top <= header.offsetHeight && recognition.bottom > header.offsetHeight;
+        if (overRecognition) {
+          if (header.dataset.section !== 'recognition') header.dataset.section = 'recognition';
+        } else if (header.dataset.section === 'recognition') delete header.dataset.section;
+      }
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
     read();
@@ -285,6 +293,7 @@ export default function HomePage() {
       window.removeEventListener('resize', onScroll);
       if (raf) cancelAnimationFrame(raf);
       for (const id of ['site-header', 'hero-social-sidebar']) delete document.getElementById(id)?.dataset.light;
+      if (document.getElementById('site-header')?.dataset.section === 'recognition') delete document.getElementById('site-header')?.dataset.section;
     };
   }, [cmsRevision, isSplashUp]);
   /* Scroll the page to top (smoothly; at once under reduced motion) with the

@@ -1518,6 +1518,116 @@
       "blurb": "Cleaning and reviving ponds, lakes and riverbanks — one water body, one weekend at a time.",
       "pillarId": "projects",
       "href": "/projects"
+    },
+    {
+      "id": "health-city-opening-2026",
+      "kind": "past",
+      "occurredOn": "2026-08-15",
+      "title": "Health City opens its doors",
+      "tag": "Inaugural ceremony",
+      "pillarId": "projects",
+      "location": "Nirankari Sarovar, Delhi",
+      "blurb": "The inaugural ceremony brought Sant Nirankari Health City a step closer to its purpose: affordable, compassionate healthcare. Her Holiness Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji blessed the occasion, ahead of the start of outpatient services.",
+      "facts": [
+        {
+          "value": "17 Aug 2026",
+          "label": "OPD services began"
+        }
+      ],
+      "photos": [
+        {
+          "src": "/images/events/health-city-opening-2026.jpg",
+          "alt": "Her Holiness Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji at the Health City inaugural ceremony on 15 August 2026"
+        }
+      ],
+      "source": "https://nirankarihealthcity.org/news/sant-nirankari-health-city-opens-its-doors-to-humanity/",
+      "href": "/projects#health-city"
+    },
+    {
+      "id": "yoga-day-mumbai-2026",
+      "kind": "past",
+      "occurredOn": "2026-06-21",
+      "title": "A shared moment of wellbeing",
+      "tag": "International Day of Yoga",
+      "pillarId": "heal",
+      "location": "Mumbai zone, Maharashtra",
+      "blurb": "Communities across the Mumbai zone came together for International Day of Yoga. The Mission’s photographic record captures group sessions in Chembur, Borivali, Kopri and other branches, with movement, breathing and time for collective wellbeing.",
+      "photos": [
+        {
+          "src": "/images/events/yoga-kopri-2026.jpg",
+          "alt": "The official photo collection of International Day of Yoga sessions at Kopri on 21 June 2026"
+        },
+        {
+          "src": "/images/events/yoga-chembur-2026.jpg",
+          "alt": "Participants practising yoga at Chembur on International Day of Yoga 2026"
+        },
+        {
+          "src": "/images/events/yoga-borivali-2026.jpg",
+          "alt": "The Mission’s photo collection of International Day of Yoga at Borivali in 2026"
+        }
+      ],
+      "source": "https://www.nirankari.org/mumbai/events/2026/yogaday/index.shtml"
+    },
+    {
+      "id": "project-amrit-mumbai-2026",
+      "kind": "past",
+      "occurredOn": "2026-02-22",
+      "title": "Many hands for cleaner waters",
+      "tag": "Project Amrit",
+      "pillarId": "projects",
+      "location": "Mumbai zone, Maharashtra",
+      "blurb": "Volunteers joined Project Amrit clean-up activities along beaches, lakes and ponds across the Mumbai zone. The official gallery records work at Reti Bunder, Eksar Talao, Powai Lake and other local water bodies.",
+      "photos": [
+        {
+          "src": "/images/events/amrit-dadar-2026.jpg",
+          "alt": "Project Amrit volunteers clearing litter at Reti Bunder beach on 22 February 2026"
+        },
+        {
+          "src": "/images/events/amrit-dadar-action-2026.jpg",
+          "alt": "The official gallery of Project Amrit clean-up activities at Reti Bunder beach in February 2026"
+        },
+        {
+          "src": "/images/events/amrit-borivali-2026.jpg",
+          "alt": "Project Amrit volunteers working at Eksar Talao, Borivali, on 22 February 2026"
+        }
+      ],
+      "source": "https://www.nirankari.org/mumbai/events/2026/cleanliness/index.shtml",
+      "href": "/projects#project-amrit"
+    },
+    {
+      "id": "humanness-blood-drive-toronto-2025",
+      "kind": "past",
+      "occurredOn": "2025-04-26",
+      "title": "Compassion, one donation at a time",
+      "tag": "Humanness Blood Drive",
+      "pillarId": "heal",
+      "location": "Centre for Oneness, Toronto",
+      "blurb": "Donors and volunteers gathered at the Centre for Oneness in Toronto for the Humanness Blood Drive. Held with Canadian Blood Services, the camp honoured the spirit of Manav Ekta Diwas through a shared act of care.",
+      "facts": [
+        {
+          "value": "114",
+          "label": "Donors participated"
+        },
+        {
+          "value": "Canadian Blood Services",
+          "label": "Blood donation partner"
+        }
+      ],
+      "photos": [
+        {
+          "src": "/images/events/blood-drive-toronto-2025.jpg",
+          "alt": "A donor with volunteers at the Humanness Blood Drive in Toronto on 26 April 2025"
+        },
+        {
+          "src": "/images/events/blood-drive-toronto-donor-2025.jpg",
+          "alt": "A participant donating blood at the Toronto Humanness Blood Drive in April 2025"
+        },
+        {
+          "src": "/images/events/blood-drive-toronto-team-2025.jpg",
+          "alt": "People taking part in the Toronto Humanness Blood Drive in April 2025"
+        }
+      ],
+      "source": "https://www.nirankari.org/toronto/events/reports/2025/blood_donation_apr2025.shtml"
     }
   ],
   "partners": [
@@ -2907,7 +3017,6 @@
     "copy.MissionVision.2642f93dd297": "Our vision",
     "copy.MissionVision.7e9be7ae33a1": "A world where",
     "copy.MissionVision.7197209907ef": "Living the spirit of service. The foundation works towards a world in which people are healthy, educated and able to stand on their own — and it expects to get there through ordinary volunteers doing extraordinary amounts of quiet work, alongside others who want the same thing.",
-    "copy.MissionVision.fd978c2cda84": "A shared future, shaped together.",
     "copy.MissionVision.d416dc3ddd2f": "Mission and vision",
     "copy.PartnersSection.1eac70612fcd": "blood units",
     "copy.PartnersSection.5d8fee134d25": "trees planted",
@@ -2955,21 +3064,16 @@
     "copy.GuidingForcePage.b98c09f4d313": "Oneness Vann",
     "copy.GuidingForcePage.a81619ca1e37": "Project Amrit",
     "copy.GuidingForcePage.fb4c55902430": "Nirankari Youth Symposium & NIMA",
-    "copy.GuidingForcePage.b733f26c2ca4": "Our Guiding Force",
     "copy.GuidingForcePage.bab255b4564b": "Our guiding force",
-    "copy.GuidingForcePage.bc1bc49859a9": "The present Satguru ",
+    "copy.GuidingForcePage.bc1bc49859a9": "HER HOLINESS",
     "copy.GuidingForcePage.e19d3f2c98e2": "Satguru Mata Sudiksha Ji Maharaj",
-    "copy.GuidingForcePage.d16757403eaf": "The present Satguru",
+    "copy.GuidingForcePage.d16757403eaf": "HER HOLINESS",
     "copy.GuidingForcePage.d42bb56cd2a9": "Head of the Sant Nirankari Mission, whose subject is universal love, inner change and service asked of no one.",
     "copy.GuidingForcePage.9c10007c694f": "Her Holiness is the head of the Sant Nirankari Mission, a worldwide spiritual body whose concerns are peace, human oneness and the welfare of others. Her teaching reaches millions, and its subject is consistent: universal love, inner change, service asked of no one and offered to everyone, and the duty of being a decent citizen.",
     "copy.GuidingForcePage.789311938ee2": "What that produces is visible rather than theoretical. Volunteers reach earthquakes, floods and wildfires with relief and stay to rebuild. Through the COVID-19 emergency the Mission opened its own centres as quarantine and vaccination sites. Affordable healthcare, the education of the young, and the repair of the natural world are the three directions Her guidance has pushed hardest.",
-    "copy.GuidingForcePage.6c4e91b61bcb": "“Become One with the Formless One, so that we can become One with Everyone.”",
+    "copy.GuidingForcePage.6c4e91b61bcb": "Become One with the Formless One, so that we can become One with Everyone.",
     "copy.GuidingForcePage.a367e6652e45": "What follows from it",
     "copy.GuidingForcePage.457585ce2838": "Under Her guidance",
-    "copy.GuidingForcePage.ee5bdda7de91": "Four undertakings the Mission runs, and one emergency it was counted through.",
-    "copy.GuidingForcePage.b9c6d4099b41": "The COVID-19 emergency, as it was counted",
-    "copy.GuidingForcePage.747466c9112f": "COVID-19 relief figures",
-    "copy.GuidingForcePage.0bfa7d2ab669": " · the Mission's own centres, given over to quarantine, care and vaccination. The full record for every activity is on the Core Values page.",
     "copy.GuidingForcePage.cfc915c141b5": "An invitation to listen",
     "copy.GuidingForcePage.be3639b3ac91": "To hear any of this properly, attend a Satsang. This page can only point the way.",
     "copy.ProjectsPage.7ca7dea90680": "Water",
@@ -2992,14 +3096,7 @@
     "copy.WhoWeArePage.696ab4d5bfb5": "Who we are",
     "copy.WhoWeArePage.3c34f30db957": "Discover our story ",
     "copy.WhoWeArePage.eefebe5695c5": "Who We Are · About the foundation",
-    "copy.WhoWeArePage.b96d49653114": "The Sant Nirankari Charitable Foundation is the Mission’s working hands\n      — the part of it that builds hospitals, funds classrooms, plants forests\n      and turns up after a flood.",
-    "copy.WhoWeArePage.788281056a5e": "About the foundation",
-    "copy.WhoWeArePage.faac0dc151a5": "A purpose bigger than ourselves.",
-    "copy.WhoWeArePage.428e0aab4777": "The belief that brings us together, and the work that carries it forward.",
-    "copy.WhoWeArePage.8fb1d447ef9c": "The foundation was set up in 2010 to act on a single line of Baba Hardev Singh Ji’s: that a life gets its meaning if it is lived for others. That is not a slogan the organisation wears lightly — it is the whole operating principle. Everything below follows from it.",
-    "copy.WhoWeArePage.56219e473693": "Service with Humility",
-    "copy.WhoWeArePage.d4ef378ef3af": "The work is organised into three cornerstones — healing, enriching and empowering — with care for the natural world running through all three rather than sitting apart from them. Its reach is deliberately weighted towards places that are easy to overlook: remote districts, under-served neighbourhoods, villages a long way from a hospital.",
-    "copy.WhoWeArePage.2e1ac6e9292a": "Explore ",
+    "copy.WhoWeArePage.b96d49653114": "Established in 2010, Sant Nirankari Charitable Foundation serves communities through healthcare, education, and social and environmental welfare.",
     "copy.WhoWeArePage.77d72aaa5ec2": "The road so far",
     "copy.WhoWeArePage.b68d1e8eda83": "Supports & collaborations",
     "copy.WhoWeArePage.b66e8cc28209": "Who walks with us",
@@ -3007,9 +3104,6 @@
     "copy.WhoWeArePage.f3bd895aae45": "Find an organisation or a cause…",
     "copy.WhoWeArePage.7d25129d73f9": "No collaborations match that search. Try another name or cause.",
     "copy.WhoWeArePage.630add5617cc": "The registered office",
-    "copy.WhoWeArePage.d06af8e88b68": "Where to find us",
-    "copy.WhoWeArePage.dbfafcc18936": "Where the foundation is, and under what terms a gift to it is made.",
-    "copy.WhoWeArePage.bc395eb428a7": "Registered office",
     "copy.WhoWeArePage.129d2c4eafb3": "Service begins",
     "copy.WhoWeArePage.6265a53e30a6": "with a conversation.",
     "copy.WhoWeArePage.e1df9065fffb": "80-A, Avtar Marg, Nirankari Colony",
@@ -3034,10 +3128,6 @@
     "copy.ProjectsPage.c2dc7b1fa516": "Restoring the land that sustains us.",
     "copy.ProjectsPage.904eb1d10ff3": "Since 2017 · Haryana",
     "copy.ProjectsPage.c2eb86f270ec": "Growing stronger, together.",
-    "copy.WhoWeArePage.7d12ba56e9f8": "2010",
-    "copy.WhoWeArePage.6520e4488973": "Founded",
-    "copy.WhoWeArePage.2068b81b75d4": "Reach",
-    "copy.WhoWeArePage.9d3f458ea970": "250+ branches nationwide",
     "copy.Link.InvitationCard.e3dc1a537132": "tel:+911147660380",
     "copy.CMSPage.ec7c20b5b09e": "Watch the video",
     "copy.CMSPage.2e1ac6e9292a": "Explore ",
@@ -3288,7 +3378,6 @@
     "copy.ValueAnalytics.centres": "centres",
     "copy.ValueAnalytics.youthLegend": "Each figure stands for 250 youth",
     "copy.ValueAnalytics.empowerCovid": "COVID-19 relief",
-    "copy.GuidingForcePage.reliefEyebrow": "Pandemic response",
     "copy.ProjectsPage.faceWaterAlt": "Project Amrit volunteers clearing a riverbank in Mantova, Italy",
     "copy.ProjectsPage.faceForestAlt": "Women planting saplings for a Oneness Vann micro-forest in Solapur",
     "copy.ProjectsPage.faceLandAlt": "A volunteer plants a sapling on a hillside",
@@ -3372,7 +3461,6 @@
     "copy.EventsJournal.minutes": "m",
     "copy.EventsJournal.noDates": "No dates announced yet",
     "copy.EventsJournal.year": "The year at a glance",
-    "copy.EventsJournal.today": "Today",
     "copy.EventsJournal.venue": "Find a venue near you",
     "copy.PhotoCarousel.carousel": "carousel",
     "copy.PhotoCarousel.slide": "slide",
@@ -3430,13 +3518,6 @@
     "copy.Insights.covid-icu": "of the care-centre beds were ICU beds",
     "copy.Insights.marriages-per-event": "couples married per event",
     "copy.Insights.support-total": "given in financial help and disaster relief together",
-    "copy.MissionVision.word-heal": "Heal",
-    "copy.MissionVision.word-enrich": "Enrich",
-    "copy.MissionVision.word-empower": "Empower",
-    "copy.MissionVision.word-healthy": "Healthy",
-    "copy.MissionVision.word-educated": "Educated",
-    "copy.MissionVision.word-self-reliant": "Self-reliant",
-    "copy.MissionVision.bridge": "grows into",
     "copy.ProjectAnalytics.villages3": "Care, skills and green cover",
     "copy.ProjectAnalytics.saplingLegend": "Each tree stands for 5,000 saplings planted",
     "copy.WorkingHands.hands": "working hands",
@@ -3467,18 +3548,10 @@
     "copy.GuidingForcePage.dir-health": "Affordable healthcare",
     "copy.GuidingForcePage.dir-young": "The education of the young",
     "copy.GuidingForcePage.dir-nature": "The repair of the natural world",
-    "copy.GuidingForcePage.work-explore": "Explore this project",
     "copy.GuidingForcePage.work-hc-alt": "Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji on the stage before Sant Nirankari Health City",
-    "copy.GuidingForcePage.work-hc-status": "Dedicated 23 February 2026 · OPD services started",
     "copy.GuidingForcePage.work-vann-alt": "Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji planting a sapling",
     "copy.GuidingForcePage.work-amrit-alt": "Project Amrit volunteers clearing a riverbank",
-    "copy.GuidingForcePage.work-explore-enrich": "Explore Enrich",
     "copy.GuidingForcePage.work-nima-alt": "Two students playing tabla at a Nirankari Institute of Music and Art evening",
-    "copy.GuidingForcePage.rail": "On this page",
-    "copy.GuidingForcePage.rail-satguru": "The present Satguru",
-    "copy.GuidingForcePage.rail-guidance": "Under Her guidance",
-    "copy.GuidingForcePage.rail-relief": "Pandemic response",
-    "copy.GuidingForcePage.rail-media": "Photographs",
     "copy.GuidingForcePage.teachings": "The subject of Her teaching",
     "copy.WhoWeArePage.rail": "On this page",
     "copy.WhoWeArePage.rail-account": "About us",
@@ -3486,16 +3559,9 @@
     "copy.WhoWeArePage.rail-road": "The road so far",
     "copy.WhoWeArePage.rail-partners": "Partners",
     "copy.WhoWeArePage.rail-contact": "Contact",
-    "copy.WhoWeArePage.mark-line": "a life gets its meaning if it is lived for others",
-    "copy.WhoWeArePage.mark-heal": "healing",
-    "copy.WhoWeArePage.mark-enrich": "enriching",
-    "copy.WhoWeArePage.mark-empower": "empowering",
-    "copy.WhoWeArePage.fact-years": "years of service",
     "copy.WhoWeArePage.approach-eyebrow": "How service takes shape",
     "copy.WhoWeArePage.approach-title": "Listen. Come together.",
     "copy.WhoWeArePage.approach-title-em": "Serve.",
-    "copy.WhoWeArePage.stamp": "Since 2010",
-    "copy.WhoWeArePage.postmark": "Delhi · 110009",
     "copy.MosaicOverture.enter": "Enter",
     "copy.MosaicOverture.scroll": "Scroll to explore",
     "copy.WelcomeSplashScreen.message-seconds": "7",
@@ -3546,11 +3612,6 @@
     "copy.ValueAnalytics.healChiroNote": "At the International Samagams in Delhi–Samalkha and Maharashtra.",
     "copy.ValueAnalytics.chiroLegend": "Each figure stands for 2,500 patients",
     "copy.Insights.chiro-per-camp": "patients treated per camp",
-    "copy.WhoWeArePage.tally-title": "Everyday action.",
-    "copy.WhoWeArePage.cover-script": "the Mission’s working hands",
-    "copy.WhoWeArePage.cover-lede": "The part of it that builds hospitals, funds classrooms, plants forests and turns up after a flood.",
-    "copy.WhoWeArePage.cover-figures": "The foundation in figures",
-    "copy.WhoWeArePage.interlude-line": "The humility matters as much as the service: blood is given to whoever needs it, and a classroom is opened to whoever will sit in it.",
     "copy.GuidingForcePage.cover-lede": "Every camp, classroom and forest in this site traces back to spiritual guidance rather than a strategy document.",
     "copy.WelcomeSplashScreen.welcome-hold-seconds": "10",
     "copy.NavPanels.feature-visit": "Visit",
@@ -3675,16 +3736,16 @@
     "copy.ProgrammeAbout.health-centre": "Standing facilities rather than camps: allopathic and homeopathic dispensaries, physiotherapy, dental and eye centres, X-ray, Oneness labs and a pharmacy, and ambulances on call.",
     "copy.ProgrammeAbout.schools-colleges": "Schools and a college run by the foundation, where students are taught to do well and to do good: from the first classes to college degrees.",
     "copy.ProgrammeAbout.scholarships": "Merit-cum-means aid and higher-education scholarships, so that a student’s ability, not the family’s means, decides how far the studies go.",
-    "copy.ProgrammeAbout.free-schools": "Education at no cost to the families: free schools of the foundation’s own, schools it supports, and free coaching centres for students preparing for what comes next.",
-    "copy.ProgrammeAbout.nvc": "Two kinds of vocational learning under one name: music, dance and painting at the Nirankari Institute of Music & Arts (NIMA), and livelihood trades at the sewing and beautician centres, where women and youth learn a skill they can live by.",
+    "copy.ProgrammeAbout.free-schools": "Education at no cost to families through the foundation’s free schools, alongside support for other community schools. Free coaching is presented within the Nirankari Vocational Centre programme.",
+    "copy.ProgrammeAbout.nvc": "Nirankari Vocational Centre brings learning and skill development together. Its programmes create space to read, receive academic support, learn practical trades and explore music and the arts. Each offers a different way for learners to build knowledge, confidence and self-reliance.",
     "copy.ProgrammeAbout.skill-trades": "Livelihood trades taught to women and youth in local centres: sewing at centres across the country, and beauty care at a beautician centre, each learner leaving with a skill that earns.",
     "copy.ProgrammeAbout.tree-plantation": "Plantation drives through the year, World Environment Day and Vann Mahotsav among them, with volunteers planting and caring for the saplings that grow into the Mission’s green cover.",
     "copy.ProgrammeAbout.cleanliness": "Mega cleanliness drives at railway stations, hospitals and riverbanks, where volunteers give their hours to the places a whole community shares.",
     "copy.ProgrammeAbout.covid-relief": "Help through the pandemic: oxygen concentrators, food packets, PPE kits and masks; vaccination centres, care centres and beds, intensive care among them; and contributions to the national and state care funds.",
     "copy.ProgrammeAbout.mass-marriages": "Collective weddings held since 1998, at no cost to the families, so that no couple has to put off a marriage, or go into debt for one.",
     "copy.ProgrammeAbout.financial-support": "Direct financial help where it is needed most, relief when disaster strikes, and steady support for young sportspeople through the foundation’s tournaments.",
-    "copy.ProgrammeGroups.nvc-nima": "NIMA",
-    "copy.ProgrammeGroups.nvc-trades": "Sewing & Beautician",
+    "copy.ProgrammeGroups.nvc-nima": "Nirankari Institute of Music & Arts",
+    "copy.ProgrammeGroups.nvc-trades": "Beautician & Sewing",
     "copy.ProgrammeGroups.nvc-photo-centre": "A Nirankari Vocational Centre, its name over the door",
     "copy.ProgrammeGroups.nvc-photo-opening": "The ribbon cut at the opening of a Nirankari Vocational Centre",
     "copy.ProgrammeGroups.sewing-photo-class": "A sewing class at work on its machines",
@@ -3692,11 +3753,11 @@
     "copy.ProgrammeGroups.sewing-photo-learner": "A learner stitching at her machine",
     "copy.ProgrammeGroups.sewing-photo-practice": "Practice at the machine, a teacher beside",
     "copy.ProgrammeGroups.sewing-photo-group": "Learners sewing together on the floor of a centre",
-    "copy.ProgrammeGroups.nvc-youth": "Youth benefitted",
+    "copy.ProgrammeGroups.nvc-youth": "Skills & arts learner records",
     "copy.ProgrammeGroups.nvc-title": "Nirankari Vocational Centre",
     "copy.ProgrammeGroups.nvc-menu": "Vocational Centre",
-    "copy.ProgrammeGroups.nvc-blurb": "Music and the arts at NIMA, and livelihood trades in sewing and beautician centres.",
-    "copy.ProgrammeGroups.nvc-centres": "Centres",
+    "copy.ProgrammeGroups.nvc-blurb": "A shared home for reading, academic support, practical skills, music and the arts.",
+    "copy.ProgrammeGroups.nvc-centres": "Skills & arts centres",
     "copy.ProgrammeReport.previous": "Previous photograph",
     "copy.ProgrammeReport.next": "Next photograph",
     "copy.Nima.moments-kicker": "From our centres",
@@ -3764,14 +3825,8 @@
     "copy.ServiceIllustration.flood-button": "Flood Relief",
     "copy.ServiceIllustration.railway-button": "Bhodwal Majri",
     "copy.RecognitionArchive.tweets.title": "Tweets",
-    "copy.RecognitionArchive.tweets.eyebrow": "Voices of appreciation",
-    "copy.RecognitionArchive.tweets.intro": "Words of encouragement from public figures, institutions and communities.",
     "copy.RecognitionArchive.awards.title": "Awards & Certificates",
-    "copy.RecognitionArchive.awards.eyebrow": "Service, recognised",
-    "copy.RecognitionArchive.awards.intro": "Honours, certificates and mementos that celebrate a shared commitment to humanity.",
     "copy.RecognitionArchive.press.title": "Press & Media",
-    "copy.RecognitionArchive.press.eyebrow": "Service in the news",
-    "copy.RecognitionArchive.press.intro": "Stories of the foundation’s work, as reported by the media.",
     "copy.ServicePortrait.icon-label": "Sant Nirankari Charitable Foundation emblem",
     "copy.RoadClock.moment": "moment",
     "copy.RoadClock.moments": "moments",
@@ -3889,8 +3944,179 @@
     "copy.MissionVision.photo-alt": "Foundation volunteers gathered in blue shirts, with folded hands, beneath the words Service with Humility",
     "copy.MissionVision.photo-label": "The people behind our purpose",
     "copy.WhoEverydayAction.eyebrow": "Our values, in action",
-    "copy.WhoEverydayAction.invitation": "Explore the care, learning and collective effort behind the figures.",
-    "copy.WhoEverydayAction.select": "Choose a cornerstone"
+    "copy.WhoEverydayAction.select": "Choose a cornerstone",
+    "copy.WhoWeArePage.cover-heading": "Service with",
+    "copy.WhoWeArePage.cover-hands": "Humility",
+    "copy.WhoWeArePage.cover-introduction": "Established in 2010, Sant Nirankari Charitable Foundation serves communities through healthcare, education, and social and environmental welfare.",
+    "copy.WhoWeArePage.cover-pillars": "Explore our three cornerstones",
+    "copy.RoadWall.jagriti-label": "The foundation’s photographs from 2010 to 2026, coming together beneath Jagriti — The Awakening, 79th Nirankari Sant Samagam",
+    "copy.FoundationPurpose.heal": "Heal",
+    "copy.FoundationPurpose.heal-description": "Care that reaches everyone.",
+    "copy.FoundationPurpose.enrich": "Enrich",
+    "copy.FoundationPurpose.enrich-description": "Learning that opens possibilities.",
+    "copy.FoundationPurpose.empower": "Empower",
+    "copy.FoundationPurpose.empower-description": "Communities that grow together.",
+    "copy.FoundationPurpose.eyebrow": "About the foundation",
+    "copy.FoundationPurpose.title": "A purpose bigger",
+    "copy.FoundationPurpose.title-em": "than ourselves.",
+    "copy.FoundationPurpose.introduction": "Established in 2010, Sant Nirankari Charitable Foundation brings a belief in selfless service into everyday action. We reach out with care, education and support, especially where they are needed most.",
+    "copy.FoundationPurpose.since": "One shared purpose. Since 2010.",
+    "copy.FoundationPurpose.motto": "Service with Humility",
+    "copy.FoundationPurpose.quote": "A life gets its meaning if it is lived for others.",
+    "copy.FoundationPurpose.attribution": "Baba Hardev Singh Ji",
+    "copy.FoundationPurpose.quote-note": "Care offered openly. A classroom for every learner. Service that sees everyone as one.",
+    "copy.FoundationPurpose.cornerstones": "Our three cornerstones",
+    "copy.FoundationPurpose.environment": "Care for the natural world runs through everything we do.",
+    "copy.WhoEverydayAction.heal-title": "Care that makes a difference.",
+    "copy.WhoEverydayAction.heal-unit": "Patient visits recorded",
+    "copy.WhoEverydayAction.heal-description": "Health checkups and eye-care camps bring accessible care closer to communities.",
+    "copy.WhoEverydayAction.heal-note": "Includes health-checkup patients and eye-care OPD records. Repeat visits may be included.",
+    "copy.WhoEverydayAction.heal-exclusion": "Blood units, estimated lives potentially saved, surgeries and spectacles are separate measures and are not added to this figure.",
+    "copy.WhoEverydayAction.enrich-title": "More room to learn and grow.",
+    "copy.WhoEverydayAction.enrich-unit": "Learning & support records",
+    "copy.WhoEverydayAction.enrich-description": "Schooling, scholarships, creative skills and vocational learning open doors to possibility.",
+    "copy.WhoEverydayAction.enrich-note": "A sum of reported programme figures. Learners may appear in more than one programme.",
+    "copy.WhoEverydayAction.enrich-exclusion": "The college-student subtotal is not added separately. This is not a count of unique learners.",
+    "copy.WhoEverydayAction.empower-title": "Many hands. Shared purpose.",
+    "copy.WhoEverydayAction.empower-unit": "Volunteer participations",
+    "copy.WhoEverydayAction.empower-description": "People come together to care for railway stations, hospitals and our water bodies.",
+    "copy.WhoEverydayAction.empower-note": "Participation in cleanliness programmes. Returning volunteers may be counted more than once.",
+    "copy.WhoEverydayAction.empower-exclusion": "Volunteers are participants, not a beneficiary headcount. Trees planted, service hours and other outcomes remain separate measures.",
+    "copy.WhoEverydayAction.title": "Every act reaches further.",
+    "copy.WhoEverydayAction.period": "Cumulative programme reach",
+    "copy.WhoEverydayAction.date": "Through September 2026",
+    "copy.WhoEverydayAction.explore": "Explore ",
+    "copy.WhoEverydayAction.method": "What this figure includes",
+    "copy.WhoEverydayAction.source": "Source: SNCF consolidated activity report, September 2026, page ",
+    "copy.GuidingForcePage.quote-label": "A message of oneness",
+    "copy.GuidingForcePage.service-title": "Compassion,",
+    "copy.GuidingForcePage.service-emphasis": "in action.",
+    "copy.GuidingForcePage.guidance-introduction": "Her guidance takes shape in places of care, spaces to learn and a greener world for everyone.",
+    "copy.WhoWeArePage.rail-reach": "Our reach",
+    "copy.WhoWeArePage.approach-caption": "A simple belief becomes meaningful change, one thoughtful act at a time.",
+    "copy.WhoWeArePage.gallery-label": "Stories from the foundation",
+    "copy.WhoWeArePage.gallery-eyebrow": "A closer look",
+    "copy.WhoWeArePage.location-city": "Come find us in Delhi",
+    "copy.RecognitionArchive.featured-label": "From the archive",
+    "copy.EventsJournal.introduction": "A little of your time. A world of difference. Find your next moment to care, connect and contribute.",
+    "copy.EventsJournal.yearHeading": "A year of giving back",
+    "copy.EventsJournal.moments": "moments",
+    "copy.EventsJournal.shareTools": "Your invitation, ready to share",
+    "copy.EventsJournal.moment": "moment",
+    "copy.RoadWall.hc-plaque": "The plaque recording the dedication of Sant Nirankari Health City to the service of humanity",
+    "copy.RoadWall.hc-ceremony": "The ceremony at Sant Nirankari Health City",
+    "copy.RoadWall.hc-atrium": "The Health City’s team in the hospital’s atrium",
+    "copy.NvcProgrammeSection.parent": "Nirankari Vocational Centre",
+    "copy.ProgrammeReport.nvc-kicker": "One centre. Many ways to grow.",
+    "copy.ProgrammeReport.nvc-purpose": "From independent study and free coaching to vocational training and creative expression, these four programmes share a commitment to personal growth. Explore each part of the NVC family below, with its own purpose, learning opportunities and reported reach.",
+    "copy.ProgrammeReport.nvc-family": "Programmes within NVC",
+    "copy.NvcProgrammes.report-period": "Cumulative programme figures through September 2026. Learner records may include repeat participation.",
+    "copy.NvcProgrammes.library-line": "A place for curious minds.",
+    "copy.NvcProgrammes.library-description": "The Library gives reading a place within NVC’s wider learning programme. Books, curiosity and independent study complement the practical skills and creative disciplines offered through the centre, encouraging learners to keep discovering and developing their interests.",
+    "copy.NvcProgrammes.library-read-title": "Read",
+    "copy.NvcProgrammes.library-read": "Make room for books and the ideas they open up.",
+    "copy.NvcProgrammes.library-study-title": "Study",
+    "copy.NvcProgrammes.library-study": "Build knowledge through reading and independent learning.",
+    "copy.NvcProgrammes.library-discover-title": "Discover",
+    "copy.NvcProgrammes.library-discover": "Follow an interest and keep the habit of learning alive.",
+    "copy.NvcProgrammes.library-fact-one": "Reading",
+    "copy.NvcProgrammes.library-fact-one-label": "At the heart of learning",
+    "copy.NvcProgrammes.library-fact-one-detail": "A space for knowledge and curiosity",
+    "copy.NvcProgrammes.library-fact-two": "Discovery",
+    "copy.NvcProgrammes.library-fact-two-label": "Part of the NVC family",
+    "copy.NvcProgrammes.library-fact-two-detail": "Alongside coaching, skills and the arts",
+    "copy.NvcProgrammes.library-footnote": "Library facilities are part of NVC’s learning programme. The September 2026 report does not provide a separate library count.",
+    "copy.NvcProgrammes.coaching-line": "Support for the next step.",
+    "copy.NvcProgrammes.coaching-description": "Free coaching brings additional academic support into NVC’s learning programme. It extends the Foundation’s educational work beyond formal classrooms, helping students continue learning through a dedicated programme of support available without a coaching fee.",
+    "copy.NvcProgrammes.coaching-learn-title": "Learn",
+    "copy.NvcProgrammes.coaching-learn": "Continue learning with additional academic support.",
+    "copy.NvcProgrammes.coaching-practise-title": "Practise",
+    "copy.NvcProgrammes.coaching-practise": "Give time to study, revision and building understanding.",
+    "copy.NvcProgrammes.coaching-progress-title": "Progress",
+    "copy.NvcProgrammes.coaching-progress": "Develop knowledge and confidence for the next step.",
+    "copy.NvcProgrammes.coaching-centres": "Free coaching centres",
+    "copy.NvcProgrammes.coaching-centres-detail": "Dedicated academic support",
+    "copy.NvcProgrammes.coaching-students": "Student records",
+    "copy.NvcProgrammes.coaching-students-detail": "Reported under Skill Development",
+    "copy.NvcProgrammes.trades-line": "Practical skills. New possibilities.",
+    "copy.NvcProgrammes.trades-description": "Practical training in beauty care and sewing helps women and young people develop useful vocational skills. Through instruction and practice, learners build their abilities in these trades as part of NVC’s wider commitment to personal development and self-reliance.",
+    "copy.NvcProgrammes.trades-photo": "Learners practising at sewing machines in a Nirankari sewing centre",
+    "copy.NvcProgrammes.trades-beauty-title": "Beauty care",
+    "copy.NvcProgrammes.trades-beauty": "Develop practical abilities through beautician training.",
+    "copy.NvcProgrammes.trades-sewing-title": "Sewing",
+    "copy.NvcProgrammes.trades-sewing": "Learn and practise the craft of working with fabric.",
+    "copy.NvcProgrammes.trades-confidence-title": "Self-reliance",
+    "copy.NvcProgrammes.trades-confidence": "Build useful skills and confidence for everyday life.",
+    "copy.NvcProgrammes.trades-beauty-learners": "Beautician learner records",
+    "copy.NvcProgrammes.trades-beauty-centre": "beautician centre",
+    "copy.NvcProgrammes.trades-sewing-learners": "Sewing learner records",
+    "copy.NvcProgrammes.trades-sewing-centres": "sewing centres",
+    "copy.NvcProgrammes.nima-line": "Find your creative expression.",
+    "copy.NvcProgrammes.nima-description": "NIMA offers affordable learning in singing, musical instruments and dance, guided by experienced teachers. Students develop their creative expression through practice and performance, with assessment and certification supported by its affiliation with Pracheen Kala Kendra.",
+    "copy.NvcProgrammes.nima-photo": "Students learning tabla at the Nirankari Institute of Music & Arts",
+    "copy.NvcProgrammes.nima-music-title": "Music",
+    "copy.NvcProgrammes.nima-music": "Explore singing and instrumental music through practice.",
+    "copy.NvcProgrammes.nima-dance-title": "Dance & arts",
+    "copy.NvcProgrammes.nima-dance": "Make space for movement, imagination and expression.",
+    "copy.NvcProgrammes.nima-perform-title": "Performance",
+    "copy.NvcProgrammes.nima-perform": "Share learning through artistic practice and performance.",
+    "copy.NvcProgrammes.nima-centres": "NIMA centres",
+    "copy.NvcProgrammes.nima-centres-detail": "Spaces for music and the arts",
+    "copy.NvcProgrammes.nima-learners": "Learner records",
+    "copy.NvcProgrammes.nima-learners-detail": "Creative learning through NIMA",
+    "copy.ProgrammeGroups.nvc-library": "Library",
+    "copy.ProgrammeGroups.nvc-coaching": "Coaching Centre",
+    "copy.ProgrammeGroups.free-schools-blurb": "Free schooling and support for community schools.",
+    "copy.ServiceStory.resume-label": "Resume automatic steps",
+    "copy.ServiceStory.pause-label": "Pause automatic steps",
+    "copy.ServiceStory.resume": "Resume",
+    "copy.ServiceStory.pause": "Pause",
+    "copy.ValueAnalytics.stories.heal-title": "Care that reaches further.",
+    "copy.ValueAnalytics.stories.enrich-title": "Room to learn. Space to grow.",
+    "copy.ValueAnalytics.stories.empower-title": "Small actions. Shared futures.",
+    "copy.ValueAnalytics.stories.kicker": "Our impact, in perspective",
+    "copy.ValueAnalytics.stories.lead": "Explore the work behind the numbers. Every figure belongs to a programme, a purpose and a moment in our journey.",
+    "copy.ValueAnalytics.stories.photo-caption": "Service with Humility",
+    "copy.ValueAnalytics.stories.insight-label": "A closer perspective",
+    "copy.ValueAnalytics.stories.insight-note": "Calculated from this programme’s reported figures.",
+    "copy.ValueAnalytics.stories.detail-heading": "Look a little closer",
+    "copy.ValueAnalytics.stories.record": "Every reported figure",
+    "copy.ValueAnalytics.stories.source": "Source: SNCF Activity Report · Each programme retains its reported units and period. Programme reach is not a count of unique individuals.",
+    "copy.ValueAnalytics.stories.picker-label": "{pillar} programme statistics",
+    "copy.ValueAnalytics.stories.next-insight": "Show the next programme insight",
+    "copy.ValueAnalytics.stories.previous-programme": "Previous programme statistics",
+    "copy.ValueAnalytics.stories.next-programme": "Next programme statistics",
+    "copy.RecognitionArchive.heading": "Awards &",
+    "copy.RecognitionArchive.heading-script": "Recognition",
+    "copy.RecognitionArchive.heading-intro": "Celebrating service and a shared commitment to humanity.",
+    "copy.EventsJournal.viewLabel": "Choose upcoming or past events",
+    "copy.EventsJournal.upcomingView": "Upcoming & ongoing",
+    "copy.EventsJournal.pastView": "Past events",
+    "copy.PastEventsJournal.eyebrow": "From the journal",
+    "copy.PastEventsJournal.title": "Moments we’ve shared.",
+    "copy.PastEventsJournal.intro": "Photographs, stories and recorded details from days of service.",
+    "copy.PastEventsJournal.recordedEvents": "recorded events",
+    "copy.PastEventsJournal.filter": "Filter past events by value",
+    "copy.PastEventsJournal.all": "All stories",
+    "copy.PastEventsJournal.year": "Year",
+    "copy.PastEventsJournal.yearLabel": "Filter past events by year",
+    "copy.PastEventsJournal.allYears": "All years",
+    "copy.PastEventsJournal.previousPhoto": "Previous event photograph",
+    "copy.PastEventsJournal.nextPhoto": "Next event photograph",
+    "copy.PastEventsJournal.photos": "Event photographs",
+    "copy.PastEventsJournal.showPhoto": "Show photograph",
+    "copy.PastEventsJournal.officialPhoto": "From the official event record",
+    "copy.PastEventsJournal.openPhoto": "Open full photograph",
+    "copy.PastEventsJournal.viewPhoto": "View photo",
+    "copy.PastEventsJournal.source": "Read the event report",
+    "copy.PastEventsJournal.browse": "Explore the archive",
+    "copy.PastEventsJournal.stories": "stories",
+    "copy.PastEventsJournal.choose": "Choose a past event",
+    "copy.PastEventsJournal.matching": "matching past events",
+    "copy.PastEventsJournal.empty": "More stories are on their way.",
+    "copy.PastEventsJournal.emptyHint": "Choose another year or value to explore the archive.",
+    "copy.PastEventsJournal.reset": "Show all past events",
+    "copy.PastEventsJournal.story": "story"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -4193,14 +4419,6 @@
       "source": "/images/projects/health-city/plaque.webp",
       "label": "ProjectsPage · plaque.webp"
     },
-    "asset.ProjectFilms.healthCityModel": {
-      "source": "/models/health-city-sn-logo.glb",
-      "label": "ProjectFilms · health-city-sn-logo.glb"
-    },
-    "asset.ProjectFilms.healthCityFallback": {
-      "source": "/images/projects/health-city/logo.webp",
-      "label": "ProjectFilms · logo.webp"
-    },
     "asset.ProjectFilms.amritVideo": {
       "source": "/videos/projects/project-amrit.mp4",
       "label": "ProjectFilms · project-amrit.mp4"
@@ -4220,6 +4438,22 @@
     "asset.MissionVision.volunteers": {
       "source": "/images/welcome-volunteers.jpg",
       "label": "MissionVision · welcome-volunteers.jpg"
+    },
+    "asset.ProjectFilms.onenessFloatingLogo": {
+      "source": "/images/projects/oneness-floating-logo.png",
+      "label": "ProjectFilms · oneness-floating-logo.png"
+    },
+    "asset.ProjectFilms.healthCityFloatingLogo": {
+      "source": "/images/projects/health-city-floating-logo.png",
+      "label": "ProjectFilms · health-city-floating-logo.png"
+    },
+    "asset.RoadWall.jagriti": {
+      "source": "/images/road-wall-jagriti.png",
+      "label": "RoadWall · road-wall-jagriti.png"
+    },
+    "asset.WhoWeArePage.service-lettering": {
+      "source": "/images/service-with-humility-lettering-bold.png",
+      "label": "WhoWeArePage · service-with-humility-lettering-bold.png"
     }
   },
   "slots": {
@@ -8909,45 +9143,15 @@
         "section": "Recognition Archive",
         "label": "Recognition Archive · Tweets"
       },
-      "copy.RecognitionArchive.tweets.eyebrow": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Voices of appreciation"
-      },
-      "copy.RecognitionArchive.tweets.intro": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Words of encouragement from public figures, institutions and communit…"
-      },
       "copy.RecognitionArchive.awards.title": {
         "page": "other",
         "section": "Recognition Archive",
         "label": "Recognition Archive · Awards & Certificates"
       },
-      "copy.RecognitionArchive.awards.eyebrow": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Service, recognised"
-      },
-      "copy.RecognitionArchive.awards.intro": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Honours, certificates and mementos that celebrate a shared commitment…"
-      },
       "copy.RecognitionArchive.press.title": {
         "page": "other",
         "section": "Recognition Archive",
         "label": "Recognition Archive · Press & Media"
-      },
-      "copy.RecognitionArchive.press.eyebrow": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Service in the news"
-      },
-      "copy.RecognitionArchive.press.intro": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Stories of the foundation’s work, as reported by the media."
       },
       "copy.ServicePortrait.icon-label": {
         "page": "other",
@@ -8993,6 +9197,151 @@
         "page": "other",
         "section": "Road Clock",
         "label": "Road Clock · The Health City’s team in the hospital’s atrium"
+      },
+      "copy.RecognitionArchive.heading-intro": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Celebrating service and a shared commitment to humanity."
+      },
+      "copy.EventsJournal.viewLabel": {
+        "page": "home",
+        "section": "Events",
+        "label": "Choose upcoming or past events"
+      },
+      "copy.EventsJournal.upcomingView": {
+        "page": "home",
+        "section": "Events",
+        "label": "Upcoming & ongoing"
+      },
+      "copy.EventsJournal.pastView": {
+        "page": "home",
+        "section": "Events",
+        "label": "Past events"
+      },
+      "copy.PastEventsJournal.eyebrow": {
+        "page": "home",
+        "section": "Events",
+        "label": "From the journal"
+      },
+      "copy.PastEventsJournal.title": {
+        "page": "home",
+        "section": "Events",
+        "label": "Moments we’ve shared."
+      },
+      "copy.PastEventsJournal.intro": {
+        "page": "home",
+        "section": "Events",
+        "label": "Photographs, stories and recorded details from days of service."
+      },
+      "copy.PastEventsJournal.recordedEvents": {
+        "page": "home",
+        "section": "Events",
+        "label": "recorded events"
+      },
+      "copy.PastEventsJournal.filter": {
+        "page": "home",
+        "section": "Events",
+        "label": "Filter past events by value"
+      },
+      "copy.PastEventsJournal.all": {
+        "page": "home",
+        "section": "Events",
+        "label": "All stories"
+      },
+      "copy.PastEventsJournal.year": {
+        "page": "home",
+        "section": "Events",
+        "label": "Year"
+      },
+      "copy.PastEventsJournal.yearLabel": {
+        "page": "home",
+        "section": "Events",
+        "label": "Filter past events by year"
+      },
+      "copy.PastEventsJournal.allYears": {
+        "page": "home",
+        "section": "Events",
+        "label": "All years"
+      },
+      "copy.PastEventsJournal.previousPhoto": {
+        "page": "home",
+        "section": "Events",
+        "label": "Previous event photograph"
+      },
+      "copy.PastEventsJournal.nextPhoto": {
+        "page": "home",
+        "section": "Events",
+        "label": "Next event photograph"
+      },
+      "copy.PastEventsJournal.photos": {
+        "page": "home",
+        "section": "Events",
+        "label": "Event photographs"
+      },
+      "copy.PastEventsJournal.showPhoto": {
+        "page": "home",
+        "section": "Events",
+        "label": "Show photograph"
+      },
+      "copy.PastEventsJournal.officialPhoto": {
+        "page": "home",
+        "section": "Events",
+        "label": "From the official event record"
+      },
+      "copy.PastEventsJournal.openPhoto": {
+        "page": "home",
+        "section": "Events",
+        "label": "Open full photograph"
+      },
+      "copy.PastEventsJournal.viewPhoto": {
+        "page": "home",
+        "section": "Events",
+        "label": "View photo"
+      },
+      "copy.PastEventsJournal.source": {
+        "page": "home",
+        "section": "Events",
+        "label": "Read the event report"
+      },
+      "copy.PastEventsJournal.browse": {
+        "page": "home",
+        "section": "Events",
+        "label": "Explore the archive"
+      },
+      "copy.PastEventsJournal.stories": {
+        "page": "home",
+        "section": "Events",
+        "label": "stories"
+      },
+      "copy.PastEventsJournal.choose": {
+        "page": "home",
+        "section": "Events",
+        "label": "Choose a past event"
+      },
+      "copy.PastEventsJournal.matching": {
+        "page": "home",
+        "section": "Events",
+        "label": "matching past events"
+      },
+      "copy.PastEventsJournal.empty": {
+        "page": "home",
+        "section": "Events",
+        "label": "More stories are on their way."
+      },
+      "copy.PastEventsJournal.emptyHint": {
+        "page": "home",
+        "section": "Events",
+        "label": "Choose another year or value to explore the archive."
+      },
+      "copy.PastEventsJournal.reset": {
+        "page": "home",
+        "section": "Events",
+        "label": "Show all past events"
+      },
+      "copy.PastEventsJournal.story": {
+        "page": "home",
+        "section": "Past events",
+        "label": "story"
       }
     },
     "assets": {
@@ -9435,12 +9784,6 @@
       "order": 0,
       "options": {},
       "label": "GuidingForcePage · gf-relief"
-    },
-    "GuidingForcePage.gf-media": {
-      "enabled": true,
-      "order": 0,
-      "options": {},
-      "label": "GuidingForcePage · gf-media"
     },
     "ProjectsPage.health-city": {
       "enabled": true,

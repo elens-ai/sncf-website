@@ -88,12 +88,13 @@ export const ProjectsPanel: React.FC<{ links: NavLink[]; onNavigate: () => void 
         {cards.map(({ link, project }, i) => {
           const isAmrit = project!.id === 'project-amrit';
           const isOneness = project!.id === 'oneness-vann';
+          const isEmpower = project!.id === 'watershed' || project!.id === 'adopted-villages';
           const modelId = isAmrit ? 'amrit' : isOneness ? 'oneness' : 'projects';
           const modelUrl = isAmrit ? resolveCMSAsset('asset.ProjectFilms.amritModel', '/models/project-amrit-full.glb') : isOneness ? resolveCMSAsset('asset.ProjectFilms.onenessModel', '/models/project-oneness-full.glb') : undefined;
           return (
             <li key={link.href} style={{ '--i': i } as React.CSSProperties}>
               <Go link={link} className="nvproject" onNavigate={onNavigate}>
-                <span className="nvproject-model" aria-hidden="true"><PillarModelCard id={modelId} label={link.label} modelUrl={modelUrl} active={false} animate={false} /></span>
+                <span className="nvproject-model" data-project={project!.id} aria-hidden="true"><PillarModelCard id={modelId} label={link.label} modelUrl={modelUrl} look={isEmpower ? 'projects-empower' : 'light'} active={false} animate={false} /></span>
                 <span className="nvproject-words">
                   <span className="nvproject-name">{link.label}</span>
                 </span>

@@ -6374,6 +6374,20 @@
 .subnav[data-look='segmented'] .subnav-chip:hover { color: #3d4644; }
 .reading-room .subnav[data-look='segmented'] .subnav-chip[data-on='true'] { color: #063782; }
 .reading-room .subnav[data-look='segmented'] .subnav-chip:focus-visible { outline: 2px solid #063782; outline-offset: 2px; }
+/* A floating chapter selector: no full-width strip over the film. */
+.reading-room .subnav[data-floating] {
+  width: max-content; max-width: calc(100% - 32px); height: 52px; min-height: 52px; box-sizing: border-box;
+  margin: 0 auto -52px; padding: 0; top: 82px;
+  border: 0; border-radius: 16px; background: transparent;
+  backdrop-filter: none; box-shadow: 0 8px 30px #102e5633;
+  transform: translateY(10px); transition: transform .28s ease, opacity .22s ease;
+}
+.subnav[data-floating] .subnav-track { margin: 0; backdrop-filter: blur(18px); }
+.reading-room .subnav[data-floating][data-hidden='true']:not(:focus-within) {
+  transform: translateY(calc(-100% - 90px)); opacity: 0; pointer-events: none;
+}
+@media(prefers-reduced-motion:reduce) { .reading-room .subnav[data-floating] { transition: none; } }
+
 /* THE RAIL ON ITS SECTION'S GROUND (tinted; Core Values): the rail is laid in
    the ground of the section in view, the page's own ramp of that section's
    colours under the same deep wash, so it reads as that section's top edge;

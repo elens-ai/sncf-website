@@ -56,6 +56,22 @@
 .preport-thumbs button:focus-visible { outline: 3px solid var(--value-color); outline-offset: 2px; }
 .preport-thumbs img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
+/* Keep the report's frame, text slot and controls identical on every turn.
+   Intrinsic portrait/landscape dimensions never participate in this layout. */
+.preport .preport-card { bottom: auto; height: 100%; }
+.preport .preport-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.preport .preport-stage-foot { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; }
+.preport-captions { display: grid; min-width: 0; }
+/* The longest caption reserves the same space for all slides without truncating it. */
+.preport .preport-caption { grid-area: 1 / 1; max-width: none; overflow-wrap: anywhere; animation: none; }
+.preport .preport-caption[data-active='false'] { visibility: hidden; }
+.preport .preport-caption[data-active='true'] { animation: preport-in .6s ease both; }
+.preport .preport-stage-turns { align-self: end; }
+.preport .preport-stage-turns > span { min-width: 38px; text-align: center; }
+.preport .preport-stage-turns button { flex: 0 0 34px; }
+.preport .preport-thumbs li { height: 63px; }
+.preport .preport-thumbs button { height: 100%; }
+
 .preport-body { display: flex; flex-direction: column; gap: 14px; min-width: 0; padding: 10px 10px 6px 2px; }
 .preport-head { display: flex; align-items: flex-start; gap: 12px; }
 .preport-symbol { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: color-mix(in srgb, var(--value-light) 30%, #fff); color: var(--value-color); }
@@ -83,25 +99,37 @@
 .preport-goals .sdg-row-flag:focus-visible { outline-color: var(--value-color); }
 @keyframes preport-in { from { opacity: 0; } }
 
-/* the Nirankari Vocational Centre: its own header over its photograph, then a tab for each part */
-.nvc-report { display: grid; gap: 14px; }
-.nvc-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: end; gap: 20px; min-height: 280px; padding: clamp(20px, 2.6vw, 32px); overflow: hidden; border-radius: 22px; color: #fff;
-  background: linear-gradient(90deg, rgb(8 38 52 / .92), rgb(8 38 52 / .62) 60%, rgb(8 38 52 / .4)), var(--photo) center 40% / cover no-repeat; }
-.nvc-kicker { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+/* NVC's parent introduction and four equally weighted programme tabs. */
+.nvc-report { display: grid; gap: 18px; }
+.nvc-head { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); align-items: center; gap: 38px; min-height: 340px; padding: clamp(25px, 3vw, 42px); overflow: hidden; border-radius: 22px; color: #fff;
+  background: linear-gradient(90deg, rgb(8 38 52 / .94), rgb(8 38 52 / .8) 60%, rgb(8 38 52 / .65)), var(--photo) center 40% / cover no-repeat; }
+.nvc-kicker { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
 .nvc-head h4 { margin: 0; font: 700 clamp(26px, 3vw, 40px)/1.1 var(--font-sans); letter-spacing: -.01em; }
-.nvc-head-words > p:last-child { max-width: 560px; margin: 12px 0 0; font: 400 14.5px/1.65 var(--font-sans); color: rgb(255 255 255 / .88); }
-.nvc-head-figures { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0; }
-.nvc-head-figures > div { padding: 10px 12px; border-radius: 12px; background: rgb(255 255 255 / .12); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); }
-.nvc-head-figures dt { font: 700 9.5px/1.3 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; color: rgb(255 255 255 / .75); }
-.nvc-head-figures dd { margin: 4px 0 0; font: 600 22px/1.1 var(--font-sans); font-variant-numeric: tabular-nums; }
-.nvc-head-figures dd small { font: 500 11px/1 var(--font-sans); color: rgb(255 255 255 / .75); }
-.nvc-head-figures .nvc-head-share { margin-top: 3px; font: 400 11px/1.35 var(--font-sans); color: rgb(255 255 255 / .7); }
-.nvc-tabs { display: inline-flex; justify-self: start; gap: 4px; padding: 4px; border-radius: 13px; background: rgb(238 238 236 / .92); box-shadow: inset 0 0 0 1px rgb(6 55 130 / .04); }
-.nvc-tabs button { padding: 9px 20px; border: 0; border-radius: 9px; background: none; color: #6b706e; font: 500 13.5px/1 var(--font-tab); letter-spacing: -.01em; cursor: pointer; transition: background-color .25s, color .25s, box-shadow .25s; }
-.nvc-tabs button:hover { color: #3d4644; }
-.nvc-tabs button[aria-selected='true'] { background: #fff; color: #063782; box-shadow: 0 1px 2px rgb(6 55 130 / .06), 0 6px 14px -8px rgb(6 55 130 / .18); }
-.nvc-tabs button:focus-visible { outline: 2px solid #063782; outline-offset: 2px; }
-.nvc-panel { animation: preport-in .4s ease both; }
+.nvc-head-words > p:not(.nvc-kicker) { max-width: 600px; margin: 16px 0 0; font: 400 14px/1.75 var(--font-sans); color: rgb(255 255 255 / .88); }
+.nvc-family { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.nvc-family > div { display: flex; align-items: start; gap: 12px; min-height: 104px; padding: 19px 16px; border: 1px solid #c6f2ee33; border-radius: 13px; background: #d5efea12; }
+.nvc-family svg { flex-shrink: 0; margin-top: 20px; color: #96dfe4; }
+.nvc-family span { font: 500 13px/1.5 var(--font-sans); }
+.nvc-family small { display: block; margin-bottom: 6px; font: 400 10px/1 var(--font-sans); letter-spacing: .12em; color: #98c9cc; }
+.nvc-tabs { display: grid; grid-template-columns: .75fr 1fr 1.1fr 1.6fr; gap: 5px; padding: 5px; border: 1px solid #cddfe0; border-radius: 15px; background: #eaf2f1; }
+.nvc-tabs button { display: flex; justify-content: center; align-items: center; gap: 9px; min-height: 56px; padding: 10px 14px; border: 0; border-radius: 10px; background: none; color: #486570; font: 500 12px/1.45 var(--font-tab); cursor: pointer; transition: background-color .25s, color .25s, box-shadow .25s; }
+.nvc-tabs svg { flex-shrink: 0; }
+.nvc-tabs button:hover { color: #176d7b; background: #fff9; }
+.nvc-tabs button[aria-selected='true'] { background: #176d7b; color: #fff; box-shadow: 0 3px 10px #176d7b22; }
+.nvc-tabs button:focus-visible, .nvc-panel:focus-visible { outline: 2px solid #176d7b; outline-offset: 3px; }
+.nvc-panels { display: grid; }
+/* All panels share one grid cell, so the longest sets a stable height without
+   clipping text. Inactive panels are also inert and hidden from assistive tech. */
+.nvc-panel { grid-area: 1 / 1; min-width: 0; display: flex; }
+.nvc-panel[data-active='false'] { visibility: hidden; pointer-events: none; }
+.nvc-panel[data-active='true'] { animation: preport-in .4s ease both; }
+@media (max-width: 720px) {
+  .nvc-head { gap: 24px; }
+  .nvc-family > div { min-height: 110px; padding: 15px 12px; }
+  .nvc-family span { font-size: 12px; }
+  .nvc-tabs { grid-template-columns: 1fr 1fr; }
+  .nvc-tabs button { justify-content: flex-start; min-height: 66px; padding: 10px; font-size: 11px; }
+}
 
 @media (max-width: 900px) {
   .preport, .nvc-head { grid-template-columns: 1fr; }
@@ -109,4 +137,11 @@
   .preport-caption { max-width: 55%; font-size: 12px; }
   .preport-body { padding: 4px; }
 }
-@media (prefers-reduced-motion: reduce) { .preport-card { transition: none; } .preport-caption, .preport-figures > div, .nvc-panel { animation: none; } }
+@media (max-width: 480px) {
+  .preport .preport-stage { height: 360px; aspect-ratio: auto; }
+  .preport .preport-stage-foot { grid-template-columns: minmax(0,1fr); gap: 12px; }
+  .preport .preport-caption { font-size: 12px; line-height: 1.5; }
+  .preport .preport-stage-turns { justify-self: end; }
+  .preport .preport-stage-turns button { width: 44px; height: 44px; flex-basis: 44px; }
+}
+@media (prefers-reduced-motion: reduce) { .preport-card { transition: none; } .preport-caption, .preport .preport-caption[data-active='true'], .preport-figures > div, .nvc-panel { animation: none; } }

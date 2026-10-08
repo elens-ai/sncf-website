@@ -1,6 +1,6 @@
 import { APIError, type CollectionBeforeChangeHook, type CollectionConfig, type Field } from 'payload'
 import { contentCollection, text, area, colorField, imagePicker, imageFields, statFields, pillarField, sourceField } from '../cms/fields'
-import { validateAnnualDate } from '../cms/validation'
+import { validateAnnualDate, validatePastEvent } from '../cms/validation'
 import { syncPublishedStats } from '../cms/statSync'
 
 /* Sidebar groups, in the order an editor reaches for them. */
@@ -76,21 +76,36 @@ export const Activities = contentCollection('activities', {
 ] }])
 
 export const Events = contentCollection('events', {
-  singular: 'Event', plural: 'Events', group: GROUP.content, title: 'title', columns: ['title', 'kind', 'month', 'day'], search: ['title'],
-  description: 'Annual observances and ongoing programmes shown in the events journal.',
+  singular: 'Event', plural: 'Events', group: GROUP.content, title: 'title', columns: ['title', 'kind', 'occurredOn', 'month', 'day'], search: ['title'],
+  description: 'Annual observances, ongoing programmes and past events with photographs and reported figures.',
 }, [
   text('title', true, { label: 'Title' }),
   { type: 'row', fields: [
-    { name: 'kind', label: 'When', type: 'select', required: true, options: [{ label: 'Every year on a date', value: 'annual' }, { label: 'Ongoing', value: 'ongoing' }] },
+    { name: 'kind', label: 'When', type: 'select', required: true, options: [{ label: 'Every year on a date', value: 'annual' }, { label: 'Ongoing', value: 'ongoing' }, { label: 'Past event', value: 'past' }] },
     { name: 'month', label: 'Month (1–12)', type: 'number', min: 1, max: 12, admin: { condition: data => data?.kind === 'annual' } },
     { name: 'day', label: 'Day', type: 'number', min: 1, max: 31, admin: { condition: data => data?.kind === 'annual' } },
   ] },
+  { name: 'occurredOn', label: 'Date held', type: 'text', admin: { condition: data => data?.kind === 'past', placeholder: '2026-06-21', description: 'The exact event date in YYYY-MM-DD format. This date does not repeat each year.' } },
   { type: 'row', fields: [pillarField, text('tag', false, { label: 'Tag' })] },
   area('blurb', false, { label: 'Description' }),
   { type: 'row', fields: [text('location', false, { label: 'Venue' }), text('time', false, { label: 'Time' })] },
   sourceField('href', { label: 'Link (optional)', description: 'A page on this site such as /projects, or an https:// link.' }),
+  { type: 'collapsible', label: 'Past-event record', admin: { condition: data => data?.kind === 'past' }, fields: [
+    { name: 'photos', label: 'Event photographs', type: 'array', labels: { singular: 'Photograph', plural: 'Photographs' }, fields: [...imagePicker(), text('alt', true, { label: 'Photo description', description: 'Describe this photograph from the event.' })] },
+    { name: 'facts', label: 'Reported figures', type: 'array', labels: { singular: 'Figure', plural: 'Figures' }, admin: { description: 'Only use figures documented for this event. Leave empty when no figures were reported.' }, fields: statFields },
+    sourceField('source', { label: 'Original event report', description: 'Link to the report supporting the event date, photographs and figures.' }),
+  ] },
 ])
-Events.hooks!.beforeValidate = [({ data }) => { if (data) { const valid = validateAnnualDate(data); if (valid !== true) throw new APIError(valid, 400) } return data }]
+Events.hooks!.beforeValidate = [({ data, originalDoc }) => {
+  if (data) {
+    const record = { ...originalDoc, ...data }
+    for (const validate of [validateAnnualDate, validatePastEvent]) {
+      const valid = validate(record)
+      if (valid !== true) throw new APIError(valid, 400)
+    }
+  }
+  return data
+}]
 
 export const Partners = contentCollection('partners', {
   singular: 'Partner', plural: 'Partners', group: GROUP.content, title: 'name', columns: ['name', 'short'], search: ['name', 'short'],
