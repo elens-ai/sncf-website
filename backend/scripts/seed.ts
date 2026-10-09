@@ -15,6 +15,7 @@ import path from 'node:path'
 import {getPayload,type CollectionSlug} from 'payload'
 import config from '../src/payload.config'
 import {runCMSCommand} from './run-cms-command'
+import {seedCopyEntries} from './seed-copy'
 const fillMissingSettings=process.argv.includes('--fill-missing-settings')
 const refreshLabels=process.argv.includes('--refresh-labels')
 const refreshFigures=process.argv.includes('--refresh-figures')
@@ -111,7 +112,7 @@ await runCMSCommand(async()=>{
   for(const [field,slug]of Object.entries(collections))for(const [order,doc]of(seed[field]||[]).entries())await insert(slug,doc.id||doc.key,doc,order)
   // Text and image slots carry the page and section they appear in, so editors can filter by page.
   const where=(kind:'copy'|'assets',key:string)=>seed.slots?.[kind]?.[key]??{label:key}
-  for(const[key,value]of Object.entries(seed.copy||{}))await insert('content-slots',key,{value,...where('copy',key)})
+  for(const[key,value]of seedCopyEntries(seed.copy||{}))await insert('content-slots',key,{value,...where('copy',key)})
   for(const[key,value]of Object.entries(seed.assets||{})){const {source:file}=(typeof value==='string'?{source:value}:value) as {source:string};await insert('asset-slots',key,{source:file,...where('assets',key)})}
   for(const[key,value]of Object.entries(seed.components||{})){const {label,enabled,order}=value as {label?:string,enabled?:boolean,order?:number};await insert('component-settings',key,{label,enabled},order??0)}
   for(const[key,value]of Object.entries(seed.stats||{}))await insert('live-stats',key,{...value as object})

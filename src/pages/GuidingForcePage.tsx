@@ -9,6 +9,7 @@ import { useSectionActivity } from '../hooks/useSectionActivity';
 import { ArrowDown, HeartHandshake, Trees, Droplets, Music, Heart, Sprout, HandHeart, Landmark } from 'lucide-react';
 import { EditorialMotion, EditorialHeading } from '../components/EditorialMotion';
 import { PageShell } from '../components/PageShell';
+import { RoadWall } from '../components/RoadWall';
 import { PILLARS } from '../data/pillars';
 import './guiding-force.css';
 
@@ -229,6 +230,10 @@ return (
         <GuidanceAccordion />
       </div>
     </section></CMSSection>
+
+    <section id="journey" className="gf-journey" aria-label={getCMSCopy('copy.GuidingForcePage.journey', 'Our journey of service')}>
+      <RoadWall />
+    </section>
 
     <div className="ed-closing gf-closing" data-reveal>
       {/* listening: rings spreading from the logo's lotus */}

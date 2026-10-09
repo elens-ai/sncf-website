@@ -1178,12 +1178,12 @@
       "blurb": "“Clean Water, Pure Mind” — cleaning and reviving water bodies.",
       "headline": {
         "label": "Water bodies",
-        "value": "5,962"
+        "value": "1,600+"
       },
       "dataPoints": [
         {
           "label": "Water bodies",
-          "value": "5,962"
+          "value": "1,600+"
         },
         {
           "label": "Cities",
@@ -2730,14 +2730,6 @@
       "group": "media:oneness-vann"
     },
     {
-      "id": "vann-planting",
-      "kind": "photo",
-      "src": "/images/mataji-rajpita-planting.webp",
-      "alt": "A sapling being planted",
-      "caption": "The first sapling of a new vann",
-      "group": "media:oneness-vann"
-    },
-    {
       "id": "vann-film",
       "kind": "film",
       "src": null,
@@ -2746,20 +2738,27 @@
       "group": "media:oneness-vann"
     },
     {
-      "id": "ws-check",
+      "id": "ws-field",
       "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A check dam holding the monsoon",
-      "wide": true,
+      "src": "/images/projects/watershed/village-landscape.jpg",
+      "alt": "Water retained beside village fields in Saiwan — film still",
+      "caption": "Water retained beside village fields in Saiwan — film still",
       "group": "media:watershed"
     },
     {
-      "id": "ws-field",
+      "id": "ws-check",
       "kind": "photo",
-      "src": null,
-      "alt": "",
-      "caption": "A field under crop where the land was arid",
+      "src": "/images/projects/watershed/check-dam.jpg",
+      "alt": "A check dam across a rocky stream in Saiwan — film still",
+      "caption": "A check dam across a rocky stream in Saiwan — film still",
+      "group": "media:watershed"
+    },
+    {
+      "id": "ws-water",
+      "kind": "photo",
+      "src": "/images/projects/watershed/village-water-source.jpg",
+      "alt": "A village hand pump and solar panel in Saiwan — film still",
+      "caption": "A village hand pump and solar panel in Saiwan — film still",
       "group": "media:watershed"
     },
     {
@@ -3596,7 +3595,7 @@
     "copy.ProjectsPage.hcPlaqueAlt": "The plaque recording that Satguru Mata Sudiksha Ji Maharaj dedicated the premises of Sant Nirankari Health City to the service of humanity on 23 February 2026",
     "copy.ProjectsPage.hcDedicationAlt": "A gathering at Sant Nirankari Health City, the SNHC monogram in flowers on the stage before the hospital",
     "copy.ProjectsPage.hcCollageCaption": "Dedicated to the service of humanity · 23 February 2026",
-    "copy.CoreValuesPage.cover-headline": "Love, peace, kindness",
+    "copy.CoreValuesPage.cover-headline": "Heal, Enrich, Empower",
     "copy.CoreValuesPage.cover-headline-script": "with a purpose of giving",
     "copy.UnAffiliation.unep-short": "UNEP",
     "copy.UnAffiliation.unep-name": "United Nations Environment Programme",
@@ -4387,30 +4386,6 @@
       "source": "/models/project-oneness-full.glb",
       "label": "ProjectFilms · project-oneness-full.glb"
     },
-    "asset.ProjectsPage.introHealthTeam": {
-      "source": "/images/projects/health-city/team-atrium.webp",
-      "label": "ProjectsPage · team-atrium.webp"
-    },
-    "asset.ProjectsPage.introHealthCeremony": {
-      "source": "/images/projects/health-city/ceremony.webp",
-      "label": "ProjectsPage · ceremony.webp"
-    },
-    "asset.ProjectsPage.introHealthEvening": {
-      "source": "/images/programmes/health-city-evening.webp",
-      "label": "ProjectsPage · health-city-evening.webp"
-    },
-    "asset.ProjectsPage.introHealthDedication": {
-      "source": "/images/projects/health-city/dedication.webp",
-      "label": "ProjectsPage · dedication.webp"
-    },
-    "asset.ProjectsPage.introHealthStaff": {
-      "source": "/images/projects/health-city/team.webp",
-      "label": "ProjectsPage · team.webp"
-    },
-    "asset.ProjectsPage.introHealthPlaque": {
-      "source": "/images/projects/health-city/plaque.webp",
-      "label": "ProjectsPage · plaque.webp"
-    },
     "asset.ProjectFilms.amritVideo": {
       "source": "/videos/projects/project-amrit.mp4",
       "label": "ProjectFilms · project-amrit.mp4"
@@ -4432,8 +4407,8 @@
       "label": "MissionVision · welcome-volunteers.jpg"
     },
     "asset.ProjectFilms.onenessFloatingLogo": {
-      "source": "/images/projects/oneness-floating-logo.png",
-      "label": "ProjectFilms · oneness-floating-logo.png"
+      "source": "/images/projects/oneness-floating-logo-clean.png",
+      "label": "ProjectFilms · oneness-floating-logo-clean.png"
     },
     "asset.ProjectFilms.healthCityFloatingLogo": {
       "source": "/images/projects/health-city-floating-logo.png",
@@ -7757,7 +7732,7 @@
       "copy.CoreValuesPage.cover-headline": {
         "page": "core-values",
         "section": "Page",
-        "label": "Page · Love, peace, kindness"
+        "label": "Page · Heal, Enrich, Empower"
       },
       "copy.CoreValuesPage.cover-headline-script": {
         "page": "core-values",
@@ -10724,7 +10699,7 @@
       "asset.ProjectFilms.onenessFloatingLogo": {
         "page": "other",
         "section": "Project Films",
-        "label": "Project Films · oneness-floating-logo.png"
+        "label": "Project Films · oneness-floating-logo-clean.png"
       },
       "asset.ProjectFilms.healthCityFloatingLogo": {
         "page": "other",
@@ -11396,9 +11371,14 @@
       "period": "As on September 2026",
       "source": "SNCF Activity Report, September 2026"
     },
+    "activity:project-amrit:headline": {
+      "label": "Water bodies",
+      "value": "1,600+",
+      "period": "As on September 2026"
+    },
     "activity:project-amrit:metric:water-bodies": {
       "label": "Water bodies",
-      "value": "5,962",
+      "value": "1,600+",
       "period": "As on September 2026",
       "source": "SNCF Activity Report, September 2026"
     },

@@ -4,6 +4,12 @@ import {spawnSync} from 'node:child_process'
 import {safeURL,safeColor,validateAnnualDate,validatePastEvent} from '../src/cms/validation'
 import {enforcePublishing} from '../src/cms/fields'
 import {cached,invalidateContent} from '../src/cms/cache'
+import {seedCopyEntries} from './seed-copy'
+test('seed omits empty optional defaults without changing authored text',()=>{
+  const copy={film:'',blank:'  ',title:' Service with humility ',count:'0',invalid:null}
+  assert.deepEqual(seedCopyEntries(copy),[['title',' Service with humility '],['count','0']])
+  assert.equal(copy.film,'')
+})
 test('one-shot commands finish despite retained handles, flush logs, and preserve failures',()=>{
   const helper=new URL('./run-cms-command.ts',import.meta.url).href
   for(const fail of [false,true]){

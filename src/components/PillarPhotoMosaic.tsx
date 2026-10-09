@@ -5,7 +5,6 @@ import { resolveCMSAsset } from '../cms/runtime';
 import './heal-photo-mosaic.css';
 import { BOOK_COVER, EMPOWER_COMPANIONS, EMPOWER_TILT, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
-import { LocalOpacityControls } from './LocalOpacityControls';
 import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 
 /* Empower's figure carries six photographs, one to each part of it: volunteers
@@ -159,8 +158,8 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         {pillar === 'empower' && empowerTiles().map((tile, i) => <clipPath key={i} id={`${clip}-tile-${i}`}><rect x={tile.x} y={tile.y} width={tile.w} height={tile.h} /></clipPath>)}
         {companions && <>
           <linearGradient id={`${clip}-companion-opacity`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="110">
-            <stop offset="0" stopColor="#fff" stopOpacity="var(--empower-companion-top, 0.4)" />
-            <stop offset="1" stopColor="#fff" stopOpacity="var(--empower-companion-bottom, 0.1)" />
+            <stop offset="0" stopColor="#fff" stopOpacity="var(--empower-companion-top, 0.58)" />
+            <stop offset="1" stopColor="#fff" stopOpacity="var(--empower-companion-bottom, 0)" />
           </linearGradient>
           <mask id={`${clip}-companion-mask`} maskUnits="userSpaceOnUse" x="-10" y="-14" width="166" height="140" style={{ maskType: 'alpha' }}>
             <rect x="-10" y="-14" width="166" height="140" fill={`url(#${clip}-companion-opacity)`} />
@@ -242,6 +241,5 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
       </g>
     </svg>
     {caption && <figcaption>{PILLARS.find(item => item.id === pillar)?.emblemCaption ?? logo.caption}</figcaption>}
-    {companions && heroArt && <LocalOpacityControls />}
   </figure>;
 };

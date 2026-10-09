@@ -74,15 +74,15 @@ export function ProjectPhotoGallery({ photos, title, period }: {
         </figure>;
       })}
       <div className="preport-lead-top"><span>{title}</span><span><CalendarDays size={13} aria-hidden="true" />{period}</span></div>
-      <div className="preport-stage-foot">
-        <p className="preport-caption" key={current}>{photos[current]?.alt}</p>
-        {photos.length > 1 && <div className="preport-stage-turns">
-          <button type="button" onClick={() => choose(current - 1)} aria-label={c('previous', 'Previous photograph')}><ChevronLeft size={19} /></button>
-          <span aria-live={announced ? 'polite' : 'off'}>{current + 1} / {photos.length}</span>
-          <button type="button" onClick={() => choose(current + 1)} aria-label={c('next', 'Next photograph')}><ChevronRight size={19} /></button>
-          {!reduced && <button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? c('play', 'Play slideshow') : c('pause', 'Pause slideshow')}>{paused ? <Play size={15} /> : <Pause size={15} />}</button>}
-        </div>}
-      </div>
+    </div>
+    <div className="preport-stage-foot">
+      <p className="preport-caption" key={current}>{photos[current]?.alt}</p>
+      {photos.length > 1 && <div className="preport-stage-turns">
+        <button type="button" onClick={() => choose(current - 1)} aria-label={c('previous', 'Previous photograph')}><ChevronLeft size={19} /></button>
+        <span aria-live={announced ? 'polite' : 'off'}>{current + 1} / {photos.length}</span>
+        <button type="button" onClick={() => choose(current + 1)} aria-label={c('next', 'Next photograph')}><ChevronRight size={19} /></button>
+        {!reduced && <button type="button" onClick={() => setPaused(value => !value)} aria-label={paused ? c('play', 'Play slideshow') : c('pause', 'Pause slideshow')}>{paused ? <Play size={15} /> : <Pause size={15} />}</button>}
+      </div>}
     </div>
     {photos.length > 1 && <ul ref={strip} className="preport-thumbs" aria-label={c('choose', 'Choose a photograph')}>
       {photos.map((photo, index) => <li key={photo.src}><button type="button" aria-pressed={index === current} aria-label={`${index + 1} / ${photos.length}: ${photo.alt}`} onClick={() => choose(index)}><img src={resolveCMSMedia(photo.src)} alt="" loading="lazy" decoding="async" /></button></li>)}

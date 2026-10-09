@@ -8,11 +8,11 @@ import type { SdgCubeView } from './sdgCubeRenderer';
 import './sdg-row.css';
 
 const TIP_WIDTH = 320;
-const icon = (goal: number) => resolveCMSMedia(`/images/sdg/goal-${String(goal).padStart(2, '0')}.webp`);
+const icon = (goal: number) => resolveCMSMedia(`/images/sdg/goal-${String(goal).padStart(2, '0')}.png`);
 
 /** The UN goals a value advances: the chapters' own line ("Advancing the UN Sustainable Development Goals", the same
     CMS text as SdgTags), and in one row the UN's flat icons (public/images/sdg, from tools/sdg), each hung as a
-    pennant (the whole icon, then its goal's colour running on to a point) at 80% opacity. The icons are keyed by
+    pennant (the whole icon, then its goal's colour running on to a point) at full opacity. The icons are keyed by
     the value, so a change of value brings its pennants in afresh.
 
     A pennant pointed at, focused or tapped opens a small window above the row: the goal's own box turning
@@ -82,14 +82,17 @@ export function SdgRow({ goals, id, name, programmes, label: words, className = 
     <p id={label} className="sdg-row-label"><Globe2 size={14} strokeWidth={1.7} aria-hidden="true" /><span>{line}</span></p>
     <ul key={id} aria-labelledby={label}>
       {goals.map((g, i) => <li key={g} style={{ '--i': i, '--sdg': SDGS[g]?.color } as React.CSSProperties}>
-        <button type="button" className="sdg-row-flag" aria-expanded={open?.goal === g} aria-describedby={open?.goal === g ? tipId : undefined}
+        <button type="button" className="sdg-row-flag" aria-label={`${g}. ${SDGS[g]?.name ?? ''}`} aria-expanded={open?.goal === g} aria-describedby={open?.goal === g ? tipId : undefined}
           onPointerEnter={event => { if (event.pointerType === 'mouse' && !open?.pinned) show(g, event.currentTarget, false); }}
           onPointerLeave={event => { if (event.pointerType === 'mouse' && !open?.pinned) setOpen(null); }}
           onFocus={event => { if (!open) show(g, event.currentTarget, false); }}
           onBlur={() => { if (!open?.pinned) setOpen(null); }}
           onClick={event => { if (open?.goal === g && open.pinned) setOpen(null); else show(g, event.currentTarget, true); }}>
-          <span className="sdg-row-pennant">
-            <img src={icon(g)} alt={`${g}. ${SDGS[g]?.name ?? ''}`} width={240} height={240} loading="lazy" decoding="async" />
+          <span className="sdg-row-pennant" aria-hidden="true">
+            <span className="sdg-row-heading"><strong>{g}</strong><span>{SDGS[g]?.name}</span></span>
+            <svg className="sdg-row-symbol" viewBox="0 480 1500 950" preserveAspectRatio="xMidYMid meet">
+              <image href={icon(g)} width="1500" height="1500" />
+            </svg>
           </span>
         </button>
       </li>)}

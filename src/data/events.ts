@@ -55,6 +55,8 @@ export interface SNCFEvent {
 
 export interface PastSNCFEvent extends SNCFEvent {
   kind: 'past';
+  /** `reported` marks a publication date used when the source omits a held-on date. */
+  dateBasis?: 'reported' | 'held';
   occurredOn: string;
   photos: { src: string; alt: string }[];
 }

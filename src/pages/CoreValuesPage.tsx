@@ -88,7 +88,8 @@ const ValueCover: React.FC<{ choice: Cornerstone; onChange: (id: Cornerstone) =>
   /* and its programmes, each with the goals it serves, for the goals' windows */
   const programmes = useMemo(() => withGroups(ACTIVITIES.filter(a => a.pillarId === choice)).map(a => ({ title: a.title, goals: programmeGoals(a.id, id => PROGRAMME_SDGS[id] ?? []) })), [choice]);
   /* a headline written otherwise than as three comma-separated words is set as written */
-  const headline = getCMSCopy("copy.CoreValuesPage.cover-headline", "Love, peace, kindness");
+  const configuredHeadline = getCMSCopy("copy.CoreValuesPage.cover-headline", "Heal, Enrich, Empower");
+  const headline = /^love,\s*peace,\s*kindness$/i.test(configuredHeadline.trim()) ? 'Heal, Enrich, Empower' : configuredHeadline;
   const words = headline.split(',').map(word => word.trim());
   return <section ref={root} className="values-cover" data-cornerstone={choice} data-active={active} style={{ '--value-color': pillar.accentA, '--value-light': pillar.accentB } as React.CSSProperties} aria-labelledby="values-cover-title">
     <div className="values-cover-ground" aria-hidden="true">
@@ -105,17 +106,33 @@ const ValueCover: React.FC<{ choice: Cornerstone; onChange: (id: Cornerstone) =>
         }) : headline}
         <br /><em>{getCMSCopy("copy.CoreValuesPage.cover-headline-script", "with a purpose of giving")}</em>
       </h1>
-      <Saying key={choice} id={choice} className="values-cover-saying" breakBefore="not just" closeInline />
+      <div className="values-cover-saying-slot">
+        {CORNERSTONES.map(id => <div key={id} className="values-cover-content-layer" data-current={choice === id} aria-hidden={choice !== id} inert={choice !== id}>
+          <Saying id={id} className="values-cover-saying" breakBefore="not just" closeInline />
+        </div>)}
+      </div>
       {/* the UN goals the value in view advances: their line, and their flags beneath it, changing with it */}
-      <SdgRow goals={goals} id={choice} name={pillar.label} programmes={programmes} className="values-cover-goals" onOpenChange={setPeeking} />
+      <div className="values-cover-goals-slot">
+        {CORNERSTONES.map(id => <div key={id} className="values-cover-content-layer" data-current={choice === id} aria-hidden={choice !== id} inert={choice !== id}>
+          <SdgRow goals={id === choice ? goals : goalsOf(ACTIVITIES.filter(a => a.pillarId === id).map(a => a.id)).sort((a, b) => a - b)}
+            id={id === choice ? choice : `reserve-${id}`} name={PILLARS.find(p => p.id === id)!.label} programmes={id === choice ? programmes : []}
+            className="values-cover-goals" onOpenChange={id === choice ? setPeeking : undefined} />
+        </div>)}
+      </div>
     </div>
     {/* The compass follows the cornerstone described in the left column. */}
     <div className="values-cover-stage">
       <ValueCompass choice={choice} onChange={setChoice} active={active} held={pointing || reading || peeking} />
     </div>
-    {choice === 'heal' && <p className="values-cover-introduction">{getCMSCopy('copy.CoreValuesPage.heal-cover-introduction', 'At SNCF, healing is a profound act of compassion. Beyond medicine, it upholds dignity, nurtures well-being and unites hearts, transforming care and compassion into a meaningful service to humanity.')}</p>}
-    {choice === 'enrich' && <p className="values-cover-introduction">{getCMSCopy('copy.CoreValuesPage.enrich-cover-introduction', 'Expanding access to education across schools, colleges, and training centers. Nurturing creativity and self reliance through libraries and arts initiatives.')}</p>}
-    {choice === 'empower' && <p className="values-cover-introduction">{getCMSCopy('copy.CoreValuesPage.empower-cover-introduction', 'Driving sustainable social and economic development. Creating skills and career opportunities while working for a clean and green environment.')}</p>}
+    <div className="values-cover-introduction-slot">
+      {CORNERSTONES.map(id => <div key={id} className="values-cover-content-layer" data-current={choice === id} aria-hidden={choice !== id} inert={choice !== id}>
+        <p className="values-cover-introduction">{id === 'heal'
+          ? getCMSCopy('copy.CoreValuesPage.heal-cover-introduction', 'At SNCF, healing is a profound act of compassion. Beyond medicine, it upholds dignity, nurtures well-being and unites hearts, transforming care and compassion into a meaningful service to humanity.')
+          : id === 'enrich'
+            ? getCMSCopy('copy.CoreValuesPage.enrich-cover-introduction', 'Expanding access to education across schools, colleges, and training centers. Nurturing creativity and self reliance through libraries and arts initiatives.')
+            : getCMSCopy('copy.CoreValuesPage.empower-cover-introduction', 'Driving sustainable social and economic development. Creating skills and career opportunities while working for a clean and green environment.')}</p>
+      </div>)}
+    </div>
   </section>;
 };
 

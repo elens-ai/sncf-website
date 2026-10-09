@@ -1,6 +1,8 @@
 /* Guiding Force: original portrait on warm cream, a message of oneness,
    teachings, an interactive project accordion and the closing invitation. */
 
+.gf-journey { margin-bottom: clamp(40px, 6vw, 80px); }
+
 /* Match the header's Donate ribbon while retaining the original portrait colours. */
 .ed-cover.gf-cover { isolation: isolate; background: #fdedd2; border-bottom-color: #ead8b9; }
 .gf-cover-ground { position: absolute; z-index: -1; inset: 0; overflow: hidden; pointer-events: none; background: radial-gradient(ellipse at 85% 15%,#fff9ec99,transparent 65%); }
