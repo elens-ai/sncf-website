@@ -5,20 +5,34 @@ import { resolveCMSAsset } from '../cms/runtime';
 import './heal-photo-mosaic.css';
 import { BOOK_COVER, EMPOWER_COMPANIONS, EMPOWER_TILT, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
-import { roomPhoto } from '../data/pavilionGallery';
 import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 
-// Smooth brand contours preserve the model proportions without polygon edges.
-const TILES = [
-  { x: 0, y: 0, w: 48, h: 40, photo: 1 },
-  { x: 49, y: 0, w: 45, h: 40, photo: 2 },
-  { x: 95, y: 0, w: 51, h: 40, photo: 5 },
-  { x: 0, y: 41, w: 48, h: 39, photo: 5 },
-  { x: 49, y: 41, w: 45, h: 39, photo: 4 },
-  { x: 95, y: 41, w: 51, h: 39, photo: 1 },
-  { x: 0, y: 81, w: 48, h: 39, photo: 4 },
-  { x: 49, y: 81, w: 45, h: 39, photo: 2 },
-  { x: 95, y: 81, w: 51, h: 39, photo: 5 },
+/* Empower's figure carries six photographs, one to each part of it: volunteers
+   planting a sapling in its head (the photograph's blown-out white sky repainted
+   blue, with faded clouds); along its raised arms, the flood rescue (its
+   helpers at the hand, the boat and its crew at the shoulder) on the left and
+   students marching with their placards on the right (their line running from
+   the shoulder to the nearest of them at the hand); the Delhi State Kids
+   Athletics Championships across its chest; the foundation's toilet block and its
+   mural below that; and at its foot a volunteer clearing litter on the shore.
+   Each is its own image, cut to its part and replaceable in the CMS, and held to
+   its part's box; a fine gap between the parts, as between the book's pages.
+   An arm is a band some 18 units across, so its photograph is laid along it,
+   turned (`at`, `angle`, then `x`, `y`, `w`, `h` in the turned frame) to the arm
+   or, for the march, less steeply, so the band follows its line of students from
+   the far ones to the near; each arm's photograph has its background carried on
+   a little past its edge, to reach the shoulder and armpit. */
+/* `photo`, where given, is the box the photograph fills, when it is not the part's own (the head's is the circle's square) */
+type EmpowerTile = { x: number; y: number; w: number; h: number; src: string; photo?: { x: number; y: number; w: number; h: number }; strip?: { at: [number, number]; angle: number; x: number; y: number; w: number; h: number } };
+const empowerTiles = (): EmpowerTile[] => [
+  { x: 51, y: 0, w: 36, h: 40, photo: { x: 51.84, y: 5.12, w: 34.56, h: 34.56 }, src: resolveCMSAsset("asset.PillarPhotoMosaic.empower-photo-head", "/images/empower-emblem/photo-head.webp") },
+  { x: -4, y: -4, w: 54.5, h: 74, src: resolveCMSAsset("asset.PillarPhotoMosaic.empower-photo-left-arm", "/images/empower-emblem/photo-left-arm.webp"),
+    strip: { at: [12.22, -5.46], angle: 34.4, x: 0, y: 0, w: 88.35, h: 42.08 } },
+  { x: 88, y: -4, w: 62, h: 74, src: resolveCMSAsset("asset.PillarPhotoMosaic.empower-photo-right-arm", "/images/empower-emblem/photo-right-arm.webp"),
+    strip: { at: [29.25, 10.38], angle: -9.7, x: 0, y: 0, w: 106, h: 65.01 } },
+  { x: 51, y: 41, w: 36, h: 21.5, src: resolveCMSAsset("asset.PillarPhotoMosaic.empower-photo-chest", "/images/empower-emblem/photo-chest.webp") },
+  { x: 51, y: 63.5, w: 36, h: 21.5, photo: { x: 50.1, y: 64.4, w: 36, h: 21.5 }, src: resolveCMSAsset("asset.PillarPhotoMosaic.empower-photo-waist", "/images/empower-emblem/photo-waist.webp") },
+  { x: 51, y: 86, w: 36, h: 21.5, photo: { x: 50.1, y: 86.6, w: 36, h: 21.5 }, src: resolveCMSAsset("asset.PillarPhotoMosaic.empower-photo-foot", "/images/empower-emblem/photo-foot.webp") },
 ];
 
 /* Heal: a soft wave of light rolls over the emblem's surface, like a sheet of
@@ -39,17 +53,50 @@ const SHEEN_STOPS = SINE_STEPS.map(o => {
   return { offset: o, color: s >= 0 ? '#ffffff' : '#0b2a24', opacity: +(Math.abs(s) * (s >= 0 ? .12 : .09)).toFixed(3) };
 });
 /* Heal's emblem carries the foundation's own photographs, one to a leaf: the yoga
-   day (top right), a blood donation camp (top left), the Health City (bottom
-   right) and an eye checkup camp (bottom left), each cropped to its leaf and
+   day (top right), a blood donation camp (top left), an eye checkup camp
+   (bottom right) and the Sant Nirankari Health Centre (bottom left), each cropped to its leaf and
    replaceable in the CMS. Each box places its image over its leaf, in emblem
    units, in the order of the outline's paths; images fill their box, so a
    replacement photo of any shape still covers its leaf. */
-const healLeaves = (): { box: [number, number, number, number]; src: string }[] => [
-  { box: [61.62, 4.12, 76.77, 67.85], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-top-right", "/images/heal-emblem/photo-top-right.webp") },
+type Box = [number, number, number, number];
+const healLeaves = (): { box: Box; src: string; second?: { box: Box; src: string } }[] => [
+  { box: [67.6, 4.12, 76.77, 67.85], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-top-right", "/images/heal-emblem/photo-top-right.webp"),
+    second: { box: [44.78, 19.56, 75.84, 53.09], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-top-right-second", "/images/heal-emblem/photo-top-right-2.webp") } },
   { box: [3.54, 20.12, 57.24, 51.52], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-top-left", "/images/heal-emblem/photo-top-left.webp") },
   { box: [61.62, 72.64, 30.81, 27.78], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-bottom-right", "/images/heal-emblem/photo-bottom-right.webp") },
   { box: [18.52, 73.15, 42.26, 38.38], src: resolveCMSAsset("asset.PillarPhotoMosaic.heal-photo-bottom-left", "/images/heal-emblem/photo-bottom-left.webp") },
 ];
+
+/* The large leaf carries two photographs side by side, either side of a gently
+   curving seam that runs from the leaf's top edge down through the tip of its
+   vein (the curved split in the outline) to its foot: the chiropractic camp on
+   the left (the leaf's second photograph), the yoga day on the right. SEAM is
+   drawn as a fine line in the outline's colour; the sides are the seam closed
+   round either way. */
+const SEAM = 'M103.4 6.6 C102.6 16 101.6 25 100.9 32.4 C100.3 42 99.6 56 98.4 71.2';
+const SPLIT = 'M103.6 0 L103.4 6.6 C102.6 16 101.6 25 100.9 32.4 C100.3 42 99.6 56 98.4 71.2 L98.2 80';
+const SPLIT_SIDES = { second: `${SPLIT} L40 80 L40 0 Z`, first: `${SPLIT} L150 80 L150 0 Z` };
+
+/* Enrich's book carries six photographs, three to a page, one above another:
+   the sewing class, the coaching centre's study hall and the Nirankari Baba Gurbachan Singh
+   Memorial College on the left page; a school's computer lab, its chemistry lab
+   and the Annual Day at SNPS Avtar Enclave on the right. The rows are set so the book's curved top and
+   foot leave each about the same height in view (the top and bottom rows run
+   on under the curves), and each photograph is its own image, cut to its row
+   and replaceable in the CMS. */
+const ENRICH_ROWS = [{ y: 9, h: 29.5 }, { y: 39.5, h: 23 }, { y: 63.5, h: 30 }];
+const ENRICH_PAGES = [{ x: 17, w: 54 }, { x: 73, w: 54 }];
+const enrichPages = (): { x: number; y: number; w: number; h: number; src: string }[] => {
+  const photos = [
+    [resolveCMSAsset("asset.PillarPhotoMosaic.enrich-photo-top-left", "/images/enrich-emblem/photo-top-left.webp"),
+      resolveCMSAsset("asset.PillarPhotoMosaic.enrich-photo-top-right", "/images/enrich-emblem/photo-top-right.webp")],
+    [resolveCMSAsset("asset.PillarPhotoMosaic.enrich-photo-middle-left", "/images/enrich-emblem/photo-middle-left.webp"),
+      resolveCMSAsset("asset.PillarPhotoMosaic.enrich-photo-middle-right", "/images/enrich-emblem/photo-middle-right.webp")],
+    [resolveCMSAsset("asset.PillarPhotoMosaic.enrich-photo-bottom-left", "/images/enrich-emblem/photo-bottom-left.webp"),
+      resolveCMSAsset("asset.PillarPhotoMosaic.enrich-photo-bottom-right", "/images/enrich-emblem/photo-bottom-right.webp")],
+  ];
+  return ENRICH_ROWS.flatMap((row, r) => ENRICH_PAGES.map((page, p) => ({ ...page, ...row, src: photos[r][p] })));
+};
 
 /* Empower's figure is lifted by its companions (EMPOWER_COMPANIONS), here with
    photographs of their own: the room's dealt round one place for the first and
@@ -68,8 +115,6 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
   const companions = pillar === 'empower';
   const softSurface = pillar === 'heal' || pillar === 'projects';
   const clip = useId().replace(/:/g, '');
-  const tintChannels = [1, 3, 5].map(offset => parseInt(logo.tint.slice(offset, offset + 2), 16) / 255);
-  const photoFilter = pillar === 'heal' ? undefined : `url(#${clip}-photo-tone)`;
   const svgRef = useRef<SVGSVGElement>(null);
   /* The light wave runs on SMIL, which CSS cannot pause: stop it off screen
      and for reduced motion. */
@@ -94,17 +139,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         <g id={`${clip}-outline`}>{logo.paths.map(d => <path key={d} d={d} />)}</g>
         <clipPath id={clip}>{logo.paths.map(d => <path key={d} d={d} />)}</clipPath>
         {ownPhotos && logo.paths.map((d, i) => <clipPath key={d} id={`${clip}-leaf-${i}`}><path d={d} /></clipPath>)}
-        {/* Blend a pillar-coloured duotone with the original photograph so
-            faces and activity details remain readable through the colour. */}
-        <filter id={`${clip}-photo-tone`} colorInterpolationFilters="sRGB">
-          <feColorMatrix type="saturate" values="0" result="luminance" />
-          <feComponentTransfer in="luminance" result="pillar-tone">
-            <feFuncR type="linear" slope={.76 - .04 * tintChannels[0]} intercept={.28 * tintChannels[0]} />
-            <feFuncG type="linear" slope={.76 - .04 * tintChannels[1]} intercept={.28 * tintChannels[1]} />
-            <feFuncB type="linear" slope={.76 - .04 * tintChannels[2]} intercept={.28 * tintChannels[2]} />
-          </feComponentTransfer>
-          <feComposite in="pillar-tone" in2="SourceGraphic" operator="arithmetic" k1="0" k2=".72" k3=".28" k4="0" />
-        </filter>
+        {ownPhotos && Object.entries(SPLIT_SIDES).map(([side, d]) => <clipPath key={side} id={`${clip}-split-${side}`}><path d={d} /></clipPath>)}
         <linearGradient id={`${clip}-bevel`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#fff" stopOpacity=".95" />
           <stop offset=".45" stopColor={logo.edge} stopOpacity=".65" />
@@ -120,6 +155,7 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
           <stop offset=".5" stopColor="#fff" stopOpacity="0" />
           <stop offset="1" stopColor="#142f38" stopOpacity=".14" />
         </linearGradient>
+        {pillar === 'empower' && empowerTiles().map((tile, i) => <clipPath key={i} id={`${clip}-tile-${i}`}><rect x={tile.x} y={tile.y} width={tile.w} height={tile.h} /></clipPath>)}
         {companions && <>
           <linearGradient id={`${clip}-companion-opacity`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="110">
             <stop offset="0" stopColor="#fff" stopOpacity="var(--empower-companion-top, 0.58)" />
@@ -173,15 +209,23 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
           {/* the photographs keep their own colour, as in the foundation's print */}
           {healLeaves().map((leaf, i) => <g key={i} clipPath={`url(#${clip}-leaf-${i})`}>
             <rect x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} fill={logo.edge} />
-            <image href={leaf.src} x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} preserveAspectRatio="xMidYMid slice" />
+            {leaf.second ? <>
+              <g clipPath={`url(#${clip}-split-first)`}><image href={leaf.src} x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} preserveAspectRatio="xMidYMid slice" /></g>
+              <g clipPath={`url(#${clip}-split-second)`}><image href={leaf.second.src} x={leaf.second.box[0]} y={leaf.second.box[1]} width={leaf.second.box[2]} height={leaf.second.box[3]} preserveAspectRatio="xMidYMid slice" /></g>
+              <path d={SEAM} fill="none" stroke={logo.edge} strokeWidth=".6" strokeLinecap="round" />
+            </> : <image href={leaf.src} x={leaf.box[0]} y={leaf.box[1]} width={leaf.box[2]} height={leaf.box[3]} preserveAspectRatio="xMidYMid slice" />}
           </g>)}
           {logo.paths.map(d => <path key={d} d={d} fill="none" stroke={logo.edge} strokeWidth=".3" strokeLinejoin="round" />)}
-        </> : pillar === 'projects' ? <ProjectsMosaicArt photoFilter={photoFilter} /> : <>
+        </> : pillar === 'projects' ? <ProjectsMosaicArt /> : <>
         <g clipPath={`url(#${clip})`}>
           <rect x="0" y="0" width="146" height="120" fill={logo.edge} />
-          <g filter={photoFilter}>
-            {TILES.map((tile, i) => <image key={i} href={resolveCMSMedia(roomPhoto(pillar, pillar === 'empower' && i === 1 || pillar === 'enrich' && i === 7 ? 3 : tile.photo))} x={tile.x} y={tile.y} width={tile.w} height={tile.h} preserveAspectRatio="xMidYMid slice" />)}
-          </g>
+          {pillar === 'enrich'
+            ? enrichPages().map((page, i) => <image key={i} href={resolveCMSMedia(page.src)} x={page.x} y={page.y} width={page.w} height={page.h} preserveAspectRatio="xMidYMid slice" />)
+            : empowerTiles().map((tile, i) => <g key={i} clipPath={`url(#${clip}-tile-${i})`}>
+              {tile.strip
+                ? <image href={resolveCMSMedia(tile.src)} x={tile.strip.x} y={tile.strip.y} width={tile.strip.w} height={tile.strip.h} preserveAspectRatio="xMidYMid slice" transform={`translate(${tile.strip.at[0]} ${tile.strip.at[1]}) rotate(${tile.strip.angle})`} />
+                : <image href={resolveCMSMedia(tile.src)} x={(tile.photo ?? tile).x} y={(tile.photo ?? tile).y} width={(tile.photo ?? tile).w} height={(tile.photo ?? tile).h} preserveAspectRatio="xMidYMid slice" />}
+            </g>)}
           {pillar === 'enrich' && <rect width="146" height="120" fill={`url(#${clip}-fold)`} /> }
         </g>
         {logo.paths.map(d => <path key={d} d={d} fill="none" stroke={logo.edge} strokeWidth={pillar === 'enrich' ? 1 : .3} strokeLinejoin="round" />)}

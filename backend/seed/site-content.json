@@ -3780,7 +3780,7 @@
     "copy.ServiceIllustration.heal-description": "A hand-drawn community clinic: a doctor cares for a patient, while a second doctor attends a seated blood donor beside a collection bag.",
     "copy.ServiceIllustration.enrich-label": "Enrich • Room to grow",
     "copy.ServiceIllustration.enrich-caption": "Every lesson opens a new possibility.",
-    "copy.ServiceIllustration.enrich-description": "A teacher stands beside the classroom at Sant Nirankari Public School while a bus brings pupils to school. The Nirankari Vocational Centre has rooms for arts, sewing, a library and coaching.",
+    "copy.ServiceIllustration.enrich-description": "The classroom teacher runs out of Sant Nirankari Public School, jumps and dives, then lies flat on the ground as the bus brakes safely. He stands up, thinks Shukar Datyaa, and returns to school before the bus continues and pupils arrive. NVC has rooms for arts, sewing, library and coaching.",
     "copy.ServiceIllustration.nima-label": "NIMA • Music, dance & painting",
     "copy.ServiceIllustration.nima-caption": "Where creativity finds its expression.",
     "copy.ServiceIllustration.nima-description": "Illustrations inspired by the NIMA banner: a painter at an easel, a sitar player, a tabla player and a classical dancer.",
@@ -3807,7 +3807,7 @@
     "copy.AmbulancePass.purpose": "Mobile Dispensary Cum Ambulance",
     "copy.ServiceSceneArtwork.sewing-name": "Sewing Centre",
     "copy.ServiceSceneArtwork.nima-building-name": "Nirankari Vocational Centre",
-    "copy.SchoolBusDrawing.description": "A Sant Nirankari Public School bus arrives for its pupil drop-off.",
+    "copy.SchoolBusDrawing.description": "A Sant Nirankari Public School bus brakes safely before the teacher, then continues to its pupil drop-off.",
     "copy.SchoolBusDrawing.name": "Sant Nirankari Public School",
     "copy.ServiceSceneArtwork.nvc-subtitle": "Learning • Skills • Creativity",
     "copy.ServiceSceneArtwork.library": "Library",
@@ -3827,14 +3827,9 @@
     "copy.RecognitionArchive.awards.title": "Awards & Certificates",
     "copy.RecognitionArchive.press.title": "Press & Media",
     "copy.ServicePortrait.icon-label": "Sant Nirankari Charitable Foundation emblem",
-    "copy.RoadClock.moment": "moment",
-    "copy.RoadClock.moments": "moments",
-    "copy.RoadClock.label": "The foundation’s road so far, year by year",
-    "copy.RoadClock.arc": "Sixteen years of service with humility",
-    "copy.RoadClock.seal": "The foundation’s seal",
-    "copy.RoadClock.hc-plaque": "The plaque recording the dedication of Sant Nirankari Health City to the service of humanity",
-    "copy.RoadClock.hc-ceremony": "The ceremony at Sant Nirankari Health City",
-    "copy.RoadClock.hc-atrium": "The Health City’s team in the hospital’s atrium",
+    "copy.RoadWall.hc-plaque": "The plaque recording the dedication of Sant Nirankari Health City to the service of humanity",
+    "copy.RoadWall.hc-ceremony": "The ceremony at Sant Nirankari Health City",
+    "copy.RoadWall.hc-atrium": "The Health City’s team in the hospital’s atrium",
     "copy.Sayings.vann-hindi": "वृक्ष की छाया, वृद्ध का साया।",
     "copy.ProjectFilms.health": "Healthcare",
     "copy.ProjectFilms.healthLine": "Advanced care. A human touch.",
@@ -4002,9 +3997,6 @@
     "copy.EventsJournal.moments": "moments",
     "copy.EventsJournal.shareTools": "Your invitation, ready to share",
     "copy.EventsJournal.moment": "moment",
-    "copy.RoadWall.hc-plaque": "The plaque recording the dedication of Sant Nirankari Health City to the service of humanity",
-    "copy.RoadWall.hc-ceremony": "The ceremony at Sant Nirankari Health City",
-    "copy.RoadWall.hc-atrium": "The Health City’s team in the hospital’s atrium",
     "copy.NvcProgrammeSection.parent": "Nirankari Vocational Centre",
     "copy.ProgrammeReport.nvc-kicker": "One centre. Many ways to grow.",
     "copy.ProgrammeReport.nvc-purpose": "From independent study and free coaching to vocational training and creative expression, these four programmes share a commitment to personal growth. Explore each part of the NVC family below, with its own purpose, learning opportunities and reported reach.",
@@ -4429,6 +4421,70 @@
     "asset.WhoWeArePage.service-lettering": {
       "source": "/images/service-with-humility-lettering-bold.png",
       "label": "WhoWeArePage · service-with-humility-lettering-bold.png"
+    },
+    "asset.PillarPhotoMosaic.empower-photo-head": {
+      "source": "/images/empower-emblem/photo-head.webp",
+      "label": "PillarPhotoMosaic · photo-head.webp"
+    },
+    "asset.PillarPhotoMosaic.empower-photo-left-arm": {
+      "source": "/images/empower-emblem/photo-left-arm.webp",
+      "label": "PillarPhotoMosaic · photo-left-arm.webp"
+    },
+    "asset.PillarPhotoMosaic.empower-photo-right-arm": {
+      "source": "/images/empower-emblem/photo-right-arm.webp",
+      "label": "PillarPhotoMosaic · photo-right-arm.webp"
+    },
+    "asset.PillarPhotoMosaic.empower-photo-chest": {
+      "source": "/images/empower-emblem/photo-chest.webp",
+      "label": "PillarPhotoMosaic · photo-chest.webp"
+    },
+    "asset.PillarPhotoMosaic.empower-photo-waist": {
+      "source": "/images/empower-emblem/photo-waist.webp",
+      "label": "PillarPhotoMosaic · photo-waist.webp"
+    },
+    "asset.PillarPhotoMosaic.empower-photo-foot": {
+      "source": "/images/empower-emblem/photo-foot.webp",
+      "label": "PillarPhotoMosaic · photo-foot.webp"
+    },
+    "asset.PillarPhotoMosaic.heal-photo-top-right-second": {
+      "source": "/images/heal-emblem/photo-top-right-2.webp",
+      "label": "PillarPhotoMosaic · photo-top-right-2.webp"
+    },
+    "asset.PillarPhotoMosaic.enrich-photo-top-left": {
+      "source": "/images/enrich-emblem/photo-top-left.webp",
+      "label": "PillarPhotoMosaic · photo-top-left.webp"
+    },
+    "asset.PillarPhotoMosaic.enrich-photo-top-right": {
+      "source": "/images/enrich-emblem/photo-top-right.webp",
+      "label": "PillarPhotoMosaic · photo-top-right.webp"
+    },
+    "asset.PillarPhotoMosaic.enrich-photo-middle-left": {
+      "source": "/images/enrich-emblem/photo-middle-left.webp",
+      "label": "PillarPhotoMosaic · photo-middle-left.webp"
+    },
+    "asset.PillarPhotoMosaic.enrich-photo-middle-right": {
+      "source": "/images/enrich-emblem/photo-middle-right.webp",
+      "label": "PillarPhotoMosaic · photo-middle-right.webp"
+    },
+    "asset.PillarPhotoMosaic.enrich-photo-bottom-left": {
+      "source": "/images/enrich-emblem/photo-bottom-left.webp",
+      "label": "PillarPhotoMosaic · photo-bottom-left.webp"
+    },
+    "asset.PillarPhotoMosaic.enrich-photo-bottom-right": {
+      "source": "/images/enrich-emblem/photo-bottom-right.webp",
+      "label": "PillarPhotoMosaic · photo-bottom-right.webp"
+    },
+    "asset.ProjectsMosaicArt.petal-photo-top": {
+      "source": "/images/projects-emblem/photo-top.webp",
+      "label": "ProjectsMosaicArt · photo-top.webp"
+    },
+    "asset.ProjectsMosaicArt.petal-photo-right": {
+      "source": "/images/projects-emblem/photo-right.webp",
+      "label": "ProjectsMosaicArt · photo-right.webp"
+    },
+    "asset.ProjectsMosaicArt.petal-photo-bottom": {
+      "source": "/images/projects-emblem/photo-bottom.webp",
+      "label": "ProjectsMosaicArt · photo-bottom.webp"
     }
   },
   "slots": {
@@ -4778,11 +4834,6 @@
         "section": "Mission & vision",
         "label": "Mission & vision · Living the spirit of service. The foundation works towards a world in…"
       },
-      "copy.MissionVision.fd978c2cda84": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · A shared future, shaped together."
-      },
       "copy.MissionVision.d416dc3ddd2f": {
         "page": "who-we-are",
         "section": "Mission & vision",
@@ -5018,11 +5069,6 @@
         "section": "Page",
         "label": "Page · Nirankari Youth Symposium & NIMA"
       },
-      "copy.GuidingForcePage.b733f26c2ca4": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Our Guiding Force"
-      },
       "copy.GuidingForcePage.bab255b4564b": {
         "page": "guiding-force",
         "section": "Page",
@@ -5031,7 +5077,7 @@
       "copy.GuidingForcePage.bc1bc49859a9": {
         "page": "guiding-force",
         "section": "Page",
-        "label": "Page · The present Satguru"
+        "label": "Page · HER HOLINESS"
       },
       "copy.GuidingForcePage.e19d3f2c98e2": {
         "page": "guiding-force",
@@ -5041,7 +5087,7 @@
       "copy.GuidingForcePage.d16757403eaf": {
         "page": "guiding-force",
         "section": "Page",
-        "label": "Page · The present Satguru"
+        "label": "Page · HER HOLINESS"
       },
       "copy.GuidingForcePage.d42bb56cd2a9": {
         "page": "guiding-force",
@@ -5061,7 +5107,7 @@
       "copy.GuidingForcePage.6c4e91b61bcb": {
         "page": "guiding-force",
         "section": "Page",
-        "label": "Page · “Become One with the Formless One, so that we can become One with Eve…"
+        "label": "Page · Become One with the Formless One, so that we can become One with Ever…"
       },
       "copy.GuidingForcePage.a367e6652e45": {
         "page": "guiding-force",
@@ -5072,26 +5118,6 @@
         "page": "guiding-force",
         "section": "Page",
         "label": "Page · Under Her guidance"
-      },
-      "copy.GuidingForcePage.ee5bdda7de91": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Four undertakings the Mission runs, and one emergency it was counted …"
-      },
-      "copy.GuidingForcePage.b9c6d4099b41": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · The COVID-19 emergency, as it was counted"
-      },
-      "copy.GuidingForcePage.747466c9112f": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · COVID-19 relief figures"
-      },
-      "copy.GuidingForcePage.0bfa7d2ab669": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · · the Mission's own centres, given over to quarantine, care and vacci…"
       },
       "copy.GuidingForcePage.cfc915c141b5": {
         "page": "guiding-force",
@@ -5123,11 +5149,6 @@
         "section": "Page",
         "label": "Page · Communities"
       },
-      "copy.ProjectsPage.982a72dda0d4": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Service that takes shape"
-      },
       "copy.ProjectsPage.988b94ac8a81": {
         "page": "projects",
         "section": "Page",
@@ -5138,40 +5159,10 @@
         "section": "Page",
         "label": "Page · Rooted in purpose."
       },
-      "copy.ProjectsPage.d90ca7d5eb20": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · From reviving water bodies to growing forests and supporting villages…"
-      },
-      "copy.ProjectsPage.1102171bd1b3": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Explore our projects"
-      },
       "copy.ProjectsPage.04e2a9728af7": {
         "page": "projects",
         "section": "Page",
         "label": "Page · Projects"
-      },
-      "copy.ProjectsPage.5feceb66ffc8": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · 0"
-      },
-      "copy.ProjectsPage.9970f438a483": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Illustrative photography"
-      },
-      "copy.ProjectsPage.6fb73aee5b23": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · The project in focus"
-      },
-      "copy.ProjectsPage.ba12ecefbd57": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Continue exploring"
       },
       "copy.ProjectsPage.36fc0059896e": {
         "page": "projects",
@@ -5241,42 +5232,7 @@
       "copy.WhoWeArePage.b96d49653114": {
         "page": "who-we-are",
         "section": "Page",
-        "label": "Page · The Sant Nirankari Charitable Foundation is the Mission’s working han…"
-      },
-      "copy.WhoWeArePage.788281056a5e": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · About the foundation"
-      },
-      "copy.WhoWeArePage.faac0dc151a5": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · A purpose bigger than ourselves."
-      },
-      "copy.WhoWeArePage.428e0aab4777": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The belief that brings us together, and the work that carries it forw…"
-      },
-      "copy.WhoWeArePage.8fb1d447ef9c": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The foundation was set up in 2010 to act on a single line of Baba Har…"
-      },
-      "copy.WhoWeArePage.56219e473693": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Service with Humility"
-      },
-      "copy.WhoWeArePage.d4ef378ef3af": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The work is organised into three cornerstones — healing, enriching an…"
-      },
-      "copy.WhoWeArePage.2e1ac6e9292a": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Explore"
+        "label": "Page · Established in 2010, Sant Nirankari Charitable Foundation serves comm…"
       },
       "copy.WhoWeArePage.77d72aaa5ec2": {
         "page": "who-we-are",
@@ -5312,21 +5268,6 @@
         "page": "who-we-are",
         "section": "Page",
         "label": "Page · The registered office"
-      },
-      "copy.WhoWeArePage.d06af8e88b68": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Where to find us"
-      },
-      "copy.WhoWeArePage.dbfafcc18936": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Where the foundation is, and under what terms a gift to it is made."
-      },
-      "copy.WhoWeArePage.bc395eb428a7": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Registered office"
       },
       "copy.WhoWeArePage.129d2c4eafb3": {
         "page": "who-we-are",
@@ -5448,26 +5389,6 @@
         "section": "Page",
         "label": "Page · Growing stronger, together."
       },
-      "copy.WhoWeArePage.7d12ba56e9f8": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · 2010"
-      },
-      "copy.WhoWeArePage.6520e4488973": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Founded"
-      },
-      "copy.WhoWeArePage.2068b81b75d4": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Reach"
-      },
-      "copy.WhoWeArePage.9d3f458ea970": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · 250+ branches nationwide"
-      },
       "copy.Link.InvitationCard.e3dc1a537132": {
         "page": "home",
         "section": "Event invitation",
@@ -5517,11 +5438,6 @@
         "page": "guiding-force",
         "section": "Page",
         "label": "Page · Link: #satguru"
-      },
-      "copy.Link.ProjectsPage.6a68430d8c61": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Link: #project-amrit"
       },
       "copy.Link.ProjectsPage.b03f7697e124": {
         "page": "projects",
@@ -6073,20 +5989,10 @@
         "section": "Service story",
         "label": "Service story · In a classroom, a health camp or a greener neighbourhood, service bec…"
       },
-      "copy.ServiceStory.motto": {
-        "page": "who-we-are",
-        "section": "Service story",
-        "label": "Service story · Service with humility"
-      },
       "copy.ServiceStory.choose": {
         "page": "who-we-are",
         "section": "Service story",
         "label": "Service story · Explore how service takes shape"
-      },
-      "copy.ServiceStory.next": {
-        "page": "who-we-are",
-        "section": "Service story",
-        "label": "Service story · Explore the next moment"
       },
       "copy.EventsJournal.label": {
         "page": "home",
@@ -6733,11 +6639,6 @@
         "section": "Charts",
         "label": "Charts · COVID-19 relief"
       },
-      "copy.GuidingForcePage.reliefEyebrow": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Pandemic response"
-      },
       "copy.ProjectsPage.faceWaterAlt": {
         "page": "projects",
         "section": "Page",
@@ -6961,7 +6862,7 @@
       "copy.Sayings.vann-english": {
         "page": "everywhere",
         "section": "Sayings & slogans",
-        "label": "Sayings & slogans · Just as the Oneness Vann embodies the vision of unity in diversity, h…"
+        "label": "Sayings & slogans · The shade of trees, the shelter of elders."
       },
       "copy.Sayings.vann-by": {
         "page": "everywhere",
@@ -7152,11 +7053,6 @@
         "page": "home",
         "section": "Events",
         "label": "Events · The year at a glance"
-      },
-      "copy.EventsJournal.today": {
-        "page": "home",
-        "section": "Events",
-        "label": "Events · Today"
       },
       "copy.EventsJournal.venue": {
         "page": "home",
@@ -7443,41 +7339,6 @@
         "section": "Charts",
         "label": "Charts · given in financial help and disaster relief together"
       },
-      "copy.MissionVision.word-heal": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · Heal"
-      },
-      "copy.MissionVision.word-enrich": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · Enrich"
-      },
-      "copy.MissionVision.word-empower": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · Empower"
-      },
-      "copy.MissionVision.word-healthy": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · Healthy"
-      },
-      "copy.MissionVision.word-educated": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · Educated"
-      },
-      "copy.MissionVision.word-self-reliant": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · Self-reliant"
-      },
-      "copy.MissionVision.bridge": {
-        "page": "who-we-are",
-        "section": "Mission & vision",
-        "label": "Mission & vision · grows into"
-      },
       "copy.ProjectAnalytics.villages3": {
         "page": "projects",
         "section": "Charts",
@@ -7628,20 +7489,10 @@
         "section": "Page",
         "label": "Page · The repair of the natural world"
       },
-      "copy.GuidingForcePage.work-explore": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Explore this project"
-      },
       "copy.GuidingForcePage.work-hc-alt": {
         "page": "guiding-force",
         "section": "Page",
         "label": "Page · Satguru Mata Sudiksha Ji Maharaj and Nirankari Rajpita Ramit Ji on th…"
-      },
-      "copy.GuidingForcePage.work-hc-status": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Dedicated 23 February 2026 · OPD services started"
       },
       "copy.GuidingForcePage.work-vann-alt": {
         "page": "guiding-force",
@@ -7653,50 +7504,15 @@
         "section": "Page",
         "label": "Page · Project Amrit volunteers clearing a riverbank"
       },
-      "copy.GuidingForcePage.work-explore-enrich": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Explore Enrich"
-      },
       "copy.GuidingForcePage.work-nima-alt": {
         "page": "guiding-force",
         "section": "Page",
         "label": "Page · Two students playing tabla at a Nirankari Institute of Music and Art …"
       },
-      "copy.GuidingForcePage.rail": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · On this page"
-      },
-      "copy.GuidingForcePage.rail-satguru": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · The present Satguru"
-      },
-      "copy.GuidingForcePage.rail-guidance": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Under Her guidance"
-      },
-      "copy.GuidingForcePage.rail-relief": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Pandemic response"
-      },
-      "copy.GuidingForcePage.rail-media": {
-        "page": "guiding-force",
-        "section": "Page",
-        "label": "Page · Photographs"
-      },
       "copy.GuidingForcePage.teachings": {
         "page": "guiding-force",
         "section": "Page",
         "label": "Page · The subject of Her teaching"
-      },
-      "copy.ProjectsPage.dossier-kicker": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · Project in focus"
       },
       "copy.WhoWeArePage.rail": {
         "page": "who-we-are",
@@ -7728,31 +7544,6 @@
         "section": "Page",
         "label": "Page · Contact"
       },
-      "copy.WhoWeArePage.mark-line": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · a life gets its meaning if it is lived for others"
-      },
-      "copy.WhoWeArePage.mark-heal": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · healing"
-      },
-      "copy.WhoWeArePage.mark-enrich": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · enriching"
-      },
-      "copy.WhoWeArePage.mark-empower": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · empowering"
-      },
-      "copy.WhoWeArePage.fact-years": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · years of service"
-      },
       "copy.WhoWeArePage.approach-eyebrow": {
         "page": "who-we-are",
         "section": "Page",
@@ -7768,16 +7559,6 @@
         "section": "Page",
         "label": "Page · Serve."
       },
-      "copy.WhoWeArePage.stamp": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Since 2010"
-      },
-      "copy.WhoWeArePage.postmark": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Delhi · 110009"
-      },
       "copy.MosaicOverture.enter": {
         "page": "home",
         "section": "Landing (Four paths. One purpose.)",
@@ -7791,7 +7572,7 @@
       "copy.WelcomeSplashScreen.message-seconds": {
         "page": "home",
         "section": "Intro · Message page time (seconds)",
-        "label": "Intro · Message page time (seconds) · 3"
+        "label": "Intro · Message page time (seconds) · 7"
       },
       "copy.WelcomeSplashScreen.message-couplet-1": {
         "page": "home",
@@ -7801,7 +7582,7 @@
       "copy.WelcomeSplashScreen.message-couplet-2": {
         "page": "home",
         "section": "Intro · Message page",
-        "label": "Intro · Message page · इक दूजे का बने सहारा"
+        "label": "Intro · Message page · इक दूजे का बने सहारा।"
       },
       "copy.MosaicOverture.events": {
         "page": "home",
@@ -8027,31 +7808,6 @@
         "page": "core-values",
         "section": "Charts",
         "label": "Charts · patients treated per camp"
-      },
-      "copy.WhoWeArePage.tally-title": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · Everyday action."
-      },
-      "copy.WhoWeArePage.cover-script": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · the Mission’s working hands"
-      },
-      "copy.WhoWeArePage.cover-lede": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The part of it that builds hospitals, funds classrooms, plants forest…"
-      },
-      "copy.WhoWeArePage.cover-figures": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The foundation in figures"
-      },
-      "copy.WhoWeArePage.interlude-line": {
-        "page": "who-we-are",
-        "section": "Page",
-        "label": "Page · The humility matters as much as the service: blood is given to whoeve…"
       },
       "copy.GuidingForcePage.cover-lede": {
         "page": "guiding-force",
@@ -8676,12 +8432,12 @@
       "copy.ProgrammeAbout.free-schools": {
         "page": "other",
         "section": "Programme About",
-        "label": "Programme About · Education at no cost to the families: free schools of the foundation’…"
+        "label": "Programme About · Education at no cost to families through the foundation’s free school…"
       },
       "copy.ProgrammeAbout.nvc": {
         "page": "other",
         "section": "Programme About",
-        "label": "Programme About · Two kinds of vocational learning under one name: music, dance and pai…"
+        "label": "Programme About · Nirankari Vocational Centre brings learning and skill development tog…"
       },
       "copy.ProgrammeAbout.skill-trades": {
         "page": "other",
@@ -8716,12 +8472,12 @@
       "copy.ProgrammeGroups.nvc-nima": {
         "page": "other",
         "section": "Programme Groups",
-        "label": "Programme Groups · NIMA"
+        "label": "Programme Groups · Nirankari Institute of Music & Arts"
       },
       "copy.ProgrammeGroups.nvc-trades": {
         "page": "other",
         "section": "Programme Groups",
-        "label": "Programme Groups · Sewing & Beautician"
+        "label": "Programme Groups · Beautician & Sewing"
       },
       "copy.ProgrammeGroups.nvc-photo-centre": {
         "page": "other",
@@ -8761,7 +8517,7 @@
       "copy.ProgrammeGroups.nvc-youth": {
         "page": "other",
         "section": "Programme Groups",
-        "label": "Programme Groups · Youth benefitted"
+        "label": "Programme Groups · Skills & arts learner records"
       },
       "copy.ProgrammeGroups.nvc-title": {
         "page": "other",
@@ -8776,12 +8532,12 @@
       "copy.ProgrammeGroups.nvc-blurb": {
         "page": "other",
         "section": "Programme Groups",
-        "label": "Programme Groups · Music and the arts at NIMA, and livelihood trades in sewing and beaut…"
+        "label": "Programme Groups · A shared home for reading, academic support, practical skills, music …"
       },
       "copy.ProgrammeGroups.nvc-centres": {
         "page": "other",
         "section": "Programme Groups",
-        "label": "Programme Groups · Centres"
+        "label": "Programme Groups · Skills & arts centres"
       },
       "copy.ProgrammeReport.previous": {
         "page": "other",
@@ -8901,7 +8657,7 @@
       "copy.ServiceIllustration.enrich-description": {
         "page": "other",
         "section": "Service Illustration",
-        "label": "Service Illustration · Two schoolgirls with backpacks walk towards Sant Nirankari Public Sch…"
+        "label": "Service Illustration · The classroom teacher runs out of Sant Nirankari Public School, jumps…"
       },
       "copy.ServiceIllustration.nima-label": {
         "page": "other",
@@ -9036,7 +8792,7 @@
       "copy.SchoolBusDrawing.description": {
         "page": "other",
         "section": "School Bus Drawing",
-        "label": "School Bus Drawing · A Sant Nirankari Public School bus arrives from the right, stops to d…"
+        "label": "School Bus Drawing · A Sant Nirankari Public School bus brakes safely before the teacher, …"
       },
       "copy.SchoolBusDrawing.name": {
         "page": "other",
@@ -9114,209 +8870,1429 @@
         "label": "Service Illustration · Bhodwal Majri"
       },
       "copy.RecognitionArchive.tweets.title": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Tweets"
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Tweets"
       },
       "copy.RecognitionArchive.awards.title": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Awards & Certificates"
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Awards & Certificates"
       },
       "copy.RecognitionArchive.press.title": {
-        "page": "other",
-        "section": "Recognition Archive",
-        "label": "Recognition Archive · Press & Media"
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Press & Media"
       },
       "copy.ServicePortrait.icon-label": {
         "page": "other",
         "section": "Service Portrait",
         "label": "Service Portrait · Sant Nirankari Charitable Foundation emblem"
       },
-      "copy.RoadClock.moment": {
+      "copy.RoadWall.hc-plaque": {
         "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · moment"
+        "section": "Road Wall",
+        "label": "Road Wall · The plaque recording the dedication of Sant Nirankari Health City to …"
       },
-      "copy.RoadClock.moments": {
+      "copy.RoadWall.hc-ceremony": {
         "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · moments"
+        "section": "Road Wall",
+        "label": "Road Wall · The ceremony at Sant Nirankari Health City"
       },
-      "copy.RoadClock.label": {
+      "copy.RoadWall.hc-atrium": {
         "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · The foundation’s road so far, year by year"
+        "section": "Road Wall",
+        "label": "Road Wall · The Health City’s team in the hospital’s atrium"
       },
-      "copy.RoadClock.arc": {
-        "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · Sixteen years of service with humility"
+      "copy.Sayings.vann-hindi": {
+        "page": "everywhere",
+        "section": "Sayings & slogans",
+        "label": "Sayings & slogans · वृक्ष की छाया, वृद्ध का साया।"
       },
-      "copy.RoadClock.seal": {
+      "copy.ProjectFilms.health": {
         "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · The foundation’s seal"
+        "section": "Project Films",
+        "label": "Project Films · Healthcare"
       },
-      "copy.RoadClock.hc-plaque": {
+      "copy.ProjectFilms.healthLine": {
         "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · The plaque recording the dedication of Sant Nirankari Health City to …"
+        "section": "Project Films",
+        "label": "Project Films · Advanced care. A human touch."
       },
-      "copy.RoadClock.hc-ceremony": {
+      "copy.ProjectFilms.discover": {
         "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · The ceremony at Sant Nirankari Health City"
+        "section": "Project Films",
+        "label": "Project Films · Discover the story"
       },
-      "copy.RoadClock.hc-atrium": {
+      "copy.ProjectFilms.purpose": {
         "page": "other",
-        "section": "Road Clock",
-        "label": "Road Clock · The Health City’s team in the hospital’s atrium"
+        "section": "Project Films",
+        "label": "Project Films · Purpose, put into practice"
+      },
+      "copy.ProjectFilms.impact": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · The work, measured"
+      },
+      "copy.ProjectFilms.figures": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Every number. A shared effort."
+      },
+      "copy.Link.ProjectFilms.adoptedVillages": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Link: (blank)"
+      },
+      "copy.Link.ProjectFilms.healthCity": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Link: https://youtu.be/xfBAkNp1ZXQ"
+      },
+      "copy.ProjectsPage.amrit-introduction": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Through Project Amrit, volunteers come together to care for the water…"
+      },
+      "copy.ProjectsPage.oneness-introduction": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Oneness Vann brings people together to plant and nurture native trees…"
+      },
+      "copy.ProjectsPage.watershed-introduction": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · The Watershed Programme helps communities care for their land and wat…"
+      },
+      "copy.ProjectsPage.villages-introduction": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · In our adopted villages, service grows through enduring relationships…"
+      },
+      "copy.ProjectsPage.health-city-introduction": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · Sant Nirankari Health City brings compassionate care and medical expe…"
+      },
+      "copy.ProjectFilms.additional": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Additional reported figures"
+      },
+      "copy.ProjectFilms.hospitalWebsite": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Visit the hospital website"
+      },
+      "copy.ProjectFilms.background": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Read the project background"
+      },
+      "copy.ProjectFilms.approach": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · The work in practice"
+      },
+      "copy.ProjectFilms.perspective": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · The figures in perspective"
+      },
+      "copy.ProjectFilms.insightMethod": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Calculated from the reported totals above. Ratios describe overall av…"
+      },
+      "copy.Link.ProjectStories.amrit": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Link: https://nirankarifoundation.org/project-amrit/"
+      },
+      "copy.Link.ProjectStories.oneness": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Link: https://nirankarifoundation.org/oneness-vann/"
+      },
+      "copy.Link.ProjectStories.watershed": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Link: https://nirankarifoundation.org/watershed-program/"
+      },
+      "copy.Link.ProjectStories.villages": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Link: https://nirankarifoundation.org/adopted-villages/"
+      },
+      "copy.Link.ProjectStories.health": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Link: https://nirankarihealthcity.org/"
+      },
+      "copy.ProjectStories.amrit-title": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · A cleaner shore. A shared responsibility."
+      },
+      "copy.ProjectStories.amrit-story": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Water connects our homes, our communities and the natural world. Proj…"
+      },
+      "copy.ProjectStories.amrit-context": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Launched in 2023, “Swachh Jal, Swachh Mann” connects hands-on service…"
+      },
+      "copy.ProjectStories.amrit-work-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Care for our water"
+      },
+      "copy.ProjectStories.amrit-detail-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Volunteers clear plastic, discarded materials and debris from water b…"
+      },
+      "copy.ProjectStories.amrit-work-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Bring people together"
+      },
+      "copy.ProjectStories.amrit-detail-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Local communities and young volunteers contribute their time to a com…"
+      },
+      "copy.ProjectStories.amrit-work-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Keep the message flowing"
+      },
+      "copy.ProjectStories.amrit-detail-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Awareness activities encourage water conservation and less dependence…"
+      },
+      "copy.ProjectStories.amrit-impact": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Many hands. One shared purpose."
+      },
+      "copy.ProjectStories.amrit-note": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · From the places reached to the time volunteered, these figures show t…"
+      },
+      "copy.ProjectStories.amrit-reach": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Across our water bodies"
+      },
+      "copy.ProjectStories.amrit-effort": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · The people behind the work"
+      },
+      "copy.ProjectStories.oneness-title": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Plant a sapling. Nurture a forest."
+      },
+      "copy.ProjectStories.oneness-story": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · A forest begins with planting, but grows through care. Oneness Vann c…"
+      },
+      "copy.ProjectStories.oneness-context": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Introduced in August 2021, the programme pairs planting with a commit…"
+      },
+      "copy.ProjectStories.oneness-work-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Plant with purpose"
+      },
+      "copy.ProjectStories.oneness-detail-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Clusters of trees create the foundations of micro forests across part…"
+      },
+      "copy.ProjectStories.oneness-work-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Stay for the growing years"
+      },
+      "copy.ProjectStories.oneness-detail-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · A three-to-five-year care commitment gives young saplings attention b…"
+      },
+      "copy.ProjectStories.oneness-work-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Make room for nature"
+      },
+      "copy.ProjectStories.oneness-detail-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Growing forests aim to support biodiversity, environmental balance an…"
+      },
+      "copy.ProjectStories.oneness-impact": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · A growing commitment to the Earth."
+      },
+      "copy.ProjectStories.oneness-note": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Planting and reach are shown alongside land area. Square feet, acres …"
+      },
+      "copy.ProjectStories.oneness-network": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · The growing network"
+      },
+      "copy.ProjectStories.oneness-footprint": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · The land, in three measures"
+      },
+      "copy.ProjectStories.watershed-title": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · When water stays, possibility grows."
+      },
+      "copy.ProjectStories.watershed-story": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · In water-stressed communities in Maharashtra, reliable water shapes d…"
+      },
+      "copy.ProjectStories.watershed-context": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Work includes water-retaining structures, well repair and cleaning, a…"
+      },
+      "copy.ProjectStories.watershed-work-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Retain the rain"
+      },
+      "copy.ProjectStories.watershed-detail-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Water-retaining structures support groundwater recharge and the lands…"
+      },
+      "copy.ProjectStories.watershed-work-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Strengthen local access"
+      },
+      "copy.ProjectStories.watershed-detail-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Well maintenance and water infrastructure address the practical needs…"
+      },
+      "copy.ProjectStories.watershed-work-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Support the growing season"
+      },
+      "copy.ProjectStories.watershed-detail-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Planting material, training and livelihood support connect water cons…"
+      },
+      "copy.ProjectStories.watershed-impact": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Water that serves whole communities."
+      },
+      "copy.ProjectStories.watershed-note": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · The reported reach brings together people, hamlets and gram panchayat…"
+      },
+      "copy.ProjectStories.watershed-reach": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Community reach"
+      },
+      "copy.ProjectStories.villages-title": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Care that becomes part of village life."
+      },
+      "copy.ProjectStories.villages-story": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Strong communities need opportunities to learn, access to care and a …"
+      },
+      "copy.ProjectStories.villages-context": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · This report covers Patti Kalyana, Bhodwal Majri, Panchi Gujran and Ma…"
+      },
+      "copy.ProjectStories.villages-work-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Learning and livelihoods"
+      },
+      "copy.ProjectStories.villages-detail-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Support for schools and skill development places education and practi…"
+      },
+      "copy.ProjectStories.villages-work-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Care within reach"
+      },
+      "copy.ProjectStories.villages-detail-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Health and eye camps bring attention to the wellbeing of village resi…"
+      },
+      "copy.ProjectStories.villages-work-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · A healthier shared home"
+      },
+      "copy.ProjectStories.villages-detail-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Planting, sanitation and environmental care support the places where …"
+      },
+      "copy.ProjectStories.villages-impact": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · One community. Many ways to care."
+      },
+      "copy.ProjectStories.villages-note": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Overview reach and village-level figures have different scopes. Popul…"
+      },
+      "copy.ProjectStories.villages-reach": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · People and places"
+      },
+      "copy.ProjectStories.villages-learning": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Education and skills"
+      },
+      "copy.ProjectStories.villages-health": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Health and wellbeing"
+      },
+      "copy.ProjectStories.villages-green": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · A greener neighbourhood"
+      },
+      "copy.ProjectStories.health-title": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Medical expertise. A human connection."
+      },
+      "copy.ProjectStories.health-story": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Sant Nirankari Health City in North Delhi is being developed to bring…"
+      },
+      "copy.ProjectStories.health-context": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · OPD services have started as an early milestone. The wider campus bri…"
+      },
+      "copy.ProjectStories.health-work-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Begin with a consultation"
+      },
+      "copy.ProjectStories.health-detail-1": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Outpatient services offer an entry point to the hospital and its clin…"
+      },
+      "copy.ProjectStories.health-work-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Care across specialties"
+      },
+      "copy.ProjectStories.health-detail-2": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · The hospital lists departments including cardiology, ophthalmology, p…"
+      },
+      "copy.ProjectStories.health-work-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Keep people at the centre"
+      },
+      "copy.ProjectStories.health-detail-3": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · The campus vision combines medical infrastructure with spaces and ser…"
+      },
+      "copy.ProjectStories.health-impact": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · Building capacity for compassionate care."
+      },
+      "copy.ProjectStories.health-note": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · These are the hospital’s published campus, phase and staffing figures…"
+      },
+      "copy.ProjectStories.health-capacity": {
+        "page": "other",
+        "section": "Project Stories",
+        "label": "Project Stories · The campus at a glance"
+      },
+      "copy.ProjectPhotoGallery.carousel": {
+        "page": "other",
+        "section": "Project Photo Gallery",
+        "label": "Project Photo Gallery · carousel"
+      },
+      "copy.ProjectPhotoGallery.photos": {
+        "page": "other",
+        "section": "Project Photo Gallery",
+        "label": "Project Photo Gallery · Photographs"
+      },
+      "copy.ProjectPhotoGallery.previous": {
+        "page": "other",
+        "section": "Project Photo Gallery",
+        "label": "Project Photo Gallery · Previous photograph"
+      },
+      "copy.ProjectPhotoGallery.next": {
+        "page": "other",
+        "section": "Project Photo Gallery",
+        "label": "Project Photo Gallery · Next photograph"
+      },
+      "copy.ProjectPhotoGallery.play": {
+        "page": "other",
+        "section": "Project Photo Gallery",
+        "label": "Project Photo Gallery · Play slideshow"
+      },
+      "copy.ProjectPhotoGallery.pause": {
+        "page": "other",
+        "section": "Project Photo Gallery",
+        "label": "Project Photo Gallery · Pause slideshow"
+      },
+      "copy.ProjectPhotoGallery.choose": {
+        "page": "other",
+        "section": "Project Photo Gallery",
+        "label": "Project Photo Gallery · Choose a photograph"
+      },
+      "copy.MissionVision.mission-time": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · What we do today"
+      },
+      "copy.MissionVision.mission-emphasis": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · humility."
+      },
+      "copy.MissionVision.mission-action": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · See our values in action"
+      },
+      "copy.MissionVision.vision-time": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · The future we work towards"
+      },
+      "copy.MissionVision.vision-emphasis": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · we all thrive."
+      },
+      "copy.MissionVision.vision-action": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Explore the work taking shape"
+      },
+      "copy.MissionVision.today-heading": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Service today."
+      },
+      "copy.MissionVision.tomorrow-heading": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · A better tomorrow."
+      },
+      "copy.MissionVision.photo-alt": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · Foundation volunteers gathered in blue shirts, with folded hands, ben…"
+      },
+      "copy.MissionVision.photo-label": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · The people behind our purpose"
+      },
+      "copy.WhoEverydayAction.eyebrow": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Our values, in action"
+      },
+      "copy.WhoEverydayAction.select": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Choose a cornerstone"
+      },
+      "copy.WhoWeArePage.cover-heading": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Service with"
+      },
+      "copy.WhoWeArePage.cover-hands": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Humility"
+      },
+      "copy.WhoWeArePage.cover-introduction": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Established in 2010, Sant Nirankari Charitable Foundation serves comm…"
+      },
+      "copy.WhoWeArePage.cover-pillars": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Explore our three cornerstones"
+      },
+      "copy.RoadWall.jagriti-label": {
+        "page": "other",
+        "section": "Road Wall",
+        "label": "Road Wall · The foundation’s photographs from 2010 to 2026, coming together benea…"
+      },
+      "copy.FoundationPurpose.heal": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Heal"
+      },
+      "copy.FoundationPurpose.heal-description": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Care that reaches everyone."
+      },
+      "copy.FoundationPurpose.enrich": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Enrich"
+      },
+      "copy.FoundationPurpose.enrich-description": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Learning that opens possibilities."
+      },
+      "copy.FoundationPurpose.empower": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Empower"
+      },
+      "copy.FoundationPurpose.empower-description": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Communities that grow together."
+      },
+      "copy.FoundationPurpose.eyebrow": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · About the foundation"
+      },
+      "copy.FoundationPurpose.title": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · A purpose bigger"
+      },
+      "copy.FoundationPurpose.title-em": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · than ourselves."
+      },
+      "copy.FoundationPurpose.introduction": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Established in 2010, Sant Nirankari Charitable Foundation brings a be…"
+      },
+      "copy.FoundationPurpose.since": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · One shared purpose. Since 2010."
+      },
+      "copy.FoundationPurpose.motto": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Service with Humility"
+      },
+      "copy.FoundationPurpose.quote": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · A life gets its meaning if it is lived for others."
+      },
+      "copy.FoundationPurpose.attribution": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Baba Hardev Singh Ji"
+      },
+      "copy.FoundationPurpose.quote-note": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Care offered openly. A classroom for every learner. Service that sees…"
+      },
+      "copy.FoundationPurpose.cornerstones": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Our three cornerstones"
+      },
+      "copy.FoundationPurpose.environment": {
+        "page": "other",
+        "section": "Foundation Purpose",
+        "label": "Foundation Purpose · Care for the natural world runs through everything we do."
+      },
+      "copy.WhoEverydayAction.heal-title": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Care that makes a difference."
+      },
+      "copy.WhoEverydayAction.heal-unit": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Patient visits recorded"
+      },
+      "copy.WhoEverydayAction.heal-description": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Health checkups and eye-care camps bring accessible care closer to co…"
+      },
+      "copy.WhoEverydayAction.heal-note": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Includes health-checkup patients and eye-care OPD records. Repeat vis…"
+      },
+      "copy.WhoEverydayAction.heal-exclusion": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Blood units, estimated lives potentially saved, surgeries and spectac…"
+      },
+      "copy.WhoEverydayAction.enrich-title": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · More room to learn and grow."
+      },
+      "copy.WhoEverydayAction.enrich-unit": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Learning & support records"
+      },
+      "copy.WhoEverydayAction.enrich-description": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Schooling, scholarships, creative skills and vocational learning open…"
+      },
+      "copy.WhoEverydayAction.enrich-note": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · A sum of reported programme figures. Learners may appear in more than…"
+      },
+      "copy.WhoEverydayAction.enrich-exclusion": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · The college-student subtotal is not added separately. This is not a c…"
+      },
+      "copy.WhoEverydayAction.empower-title": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Many hands. Shared purpose."
+      },
+      "copy.WhoEverydayAction.empower-unit": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Volunteer participations"
+      },
+      "copy.WhoEverydayAction.empower-description": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · People come together to care for railway stations, hospitals and our …"
+      },
+      "copy.WhoEverydayAction.empower-note": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Participation in cleanliness programmes. Returning volunteers may be …"
+      },
+      "copy.WhoEverydayAction.empower-exclusion": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Volunteers are participants, not a beneficiary headcount. Trees plant…"
+      },
+      "copy.WhoEverydayAction.title": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Every act reaches further."
+      },
+      "copy.WhoEverydayAction.period": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Cumulative programme reach"
+      },
+      "copy.WhoEverydayAction.date": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Through September 2026"
+      },
+      "copy.WhoEverydayAction.explore": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Explore"
+      },
+      "copy.WhoEverydayAction.method": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · What this figure includes"
+      },
+      "copy.WhoEverydayAction.source": {
+        "page": "other",
+        "section": "Who Everyday Action",
+        "label": "Who Everyday Action · Source: SNCF consolidated activity report, September 2026, page"
+      },
+      "copy.GuidingForcePage.quote-label": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · A message of oneness"
+      },
+      "copy.GuidingForcePage.service-title": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Compassion,"
+      },
+      "copy.GuidingForcePage.service-emphasis": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · in action."
+      },
+      "copy.GuidingForcePage.guidance-introduction": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Her guidance takes shape in places of care, spaces to learn and a gre…"
+      },
+      "copy.WhoWeArePage.rail-reach": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Our reach"
+      },
+      "copy.WhoWeArePage.approach-caption": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · A simple belief becomes meaningful change, one thoughtful act at a ti…"
+      },
+      "copy.WhoWeArePage.gallery-label": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Stories from the foundation"
+      },
+      "copy.WhoWeArePage.gallery-eyebrow": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · A closer look"
+      },
+      "copy.WhoWeArePage.location-city": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · Come find us in Delhi"
+      },
+      "copy.RecognitionArchive.featured-label": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · From the archive"
+      },
+      "copy.EventsJournal.introduction": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · A little of your time. A world of difference. Find your next moment t…"
+      },
+      "copy.EventsJournal.yearHeading": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · A year of giving back"
+      },
+      "copy.EventsJournal.moments": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · moments"
+      },
+      "copy.EventsJournal.shareTools": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Your invitation, ready to share"
+      },
+      "copy.EventsJournal.moment": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · moment"
+      },
+      "copy.NvcProgrammeSection.parent": {
+        "page": "other",
+        "section": "Nvc Programme Section",
+        "label": "Nvc Programme Section · Nirankari Vocational Centre"
+      },
+      "copy.ProgrammeReport.nvc-kicker": {
+        "page": "other",
+        "section": "Programme Report",
+        "label": "Programme Report · One centre. Many ways to grow."
+      },
+      "copy.ProgrammeReport.nvc-purpose": {
+        "page": "other",
+        "section": "Programme Report",
+        "label": "Programme Report · From independent study and free coaching to vocational training and c…"
+      },
+      "copy.ProgrammeReport.nvc-family": {
+        "page": "other",
+        "section": "Programme Report",
+        "label": "Programme Report · Programmes within NVC"
+      },
+      "copy.NvcProgrammes.report-period": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Cumulative programme figures through September 2026. Learner records …"
+      },
+      "copy.NvcProgrammes.library-line": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · A place for curious minds."
+      },
+      "copy.NvcProgrammes.library-description": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · The Library gives reading a place within NVC’s wider learning program…"
+      },
+      "copy.NvcProgrammes.library-read-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Read"
+      },
+      "copy.NvcProgrammes.library-read": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Make room for books and the ideas they open up."
+      },
+      "copy.NvcProgrammes.library-study-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Study"
+      },
+      "copy.NvcProgrammes.library-study": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Build knowledge through reading and independent learning."
+      },
+      "copy.NvcProgrammes.library-discover-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Discover"
+      },
+      "copy.NvcProgrammes.library-discover": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Follow an interest and keep the habit of learning alive."
+      },
+      "copy.NvcProgrammes.library-fact-one": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Reading"
+      },
+      "copy.NvcProgrammes.library-fact-one-label": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · At the heart of learning"
+      },
+      "copy.NvcProgrammes.library-fact-one-detail": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · A space for knowledge and curiosity"
+      },
+      "copy.NvcProgrammes.library-fact-two": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Discovery"
+      },
+      "copy.NvcProgrammes.library-fact-two-label": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Part of the NVC family"
+      },
+      "copy.NvcProgrammes.library-fact-two-detail": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Alongside coaching, skills and the arts"
+      },
+      "copy.NvcProgrammes.library-footnote": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Library facilities are part of NVC’s learning programme. The Septembe…"
+      },
+      "copy.NvcProgrammes.coaching-line": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Support for the next step."
+      },
+      "copy.NvcProgrammes.coaching-description": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Free coaching brings additional academic support into NVC’s learning …"
+      },
+      "copy.NvcProgrammes.coaching-learn-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Learn"
+      },
+      "copy.NvcProgrammes.coaching-learn": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Continue learning with additional academic support."
+      },
+      "copy.NvcProgrammes.coaching-practise-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Practise"
+      },
+      "copy.NvcProgrammes.coaching-practise": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Give time to study, revision and building understanding."
+      },
+      "copy.NvcProgrammes.coaching-progress-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Progress"
+      },
+      "copy.NvcProgrammes.coaching-progress": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Develop knowledge and confidence for the next step."
+      },
+      "copy.NvcProgrammes.coaching-centres": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Free coaching centres"
+      },
+      "copy.NvcProgrammes.coaching-centres-detail": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Dedicated academic support"
+      },
+      "copy.NvcProgrammes.coaching-students": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Student records"
+      },
+      "copy.NvcProgrammes.coaching-students-detail": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Reported under Skill Development"
+      },
+      "copy.NvcProgrammes.trades-line": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Practical skills. New possibilities."
+      },
+      "copy.NvcProgrammes.trades-description": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Practical training in beauty care and sewing helps women and young pe…"
+      },
+      "copy.NvcProgrammes.trades-photo": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Learners practising at sewing machines in a Nirankari sewing centre"
+      },
+      "copy.NvcProgrammes.trades-beauty-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Beauty care"
+      },
+      "copy.NvcProgrammes.trades-beauty": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Develop practical abilities through beautician training."
+      },
+      "copy.NvcProgrammes.trades-sewing-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Sewing"
+      },
+      "copy.NvcProgrammes.trades-sewing": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Learn and practise the craft of working with fabric."
+      },
+      "copy.NvcProgrammes.trades-confidence-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Self-reliance"
+      },
+      "copy.NvcProgrammes.trades-confidence": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Build useful skills and confidence for everyday life."
+      },
+      "copy.NvcProgrammes.trades-beauty-learners": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Beautician learner records"
+      },
+      "copy.NvcProgrammes.trades-beauty-centre": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · beautician centre"
+      },
+      "copy.NvcProgrammes.trades-sewing-learners": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Sewing learner records"
+      },
+      "copy.NvcProgrammes.trades-sewing-centres": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · sewing centres"
+      },
+      "copy.NvcProgrammes.nima-line": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Find your creative expression."
+      },
+      "copy.NvcProgrammes.nima-description": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · NIMA offers affordable learning in singing, musical instruments and d…"
+      },
+      "copy.NvcProgrammes.nima-photo": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Students learning tabla at the Nirankari Institute of Music & Arts"
+      },
+      "copy.NvcProgrammes.nima-music-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Music"
+      },
+      "copy.NvcProgrammes.nima-music": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Explore singing and instrumental music through practice."
+      },
+      "copy.NvcProgrammes.nima-dance-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Dance & arts"
+      },
+      "copy.NvcProgrammes.nima-dance": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Make space for movement, imagination and expression."
+      },
+      "copy.NvcProgrammes.nima-perform-title": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Performance"
+      },
+      "copy.NvcProgrammes.nima-perform": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Share learning through artistic practice and performance."
+      },
+      "copy.NvcProgrammes.nima-centres": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · NIMA centres"
+      },
+      "copy.NvcProgrammes.nima-centres-detail": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Spaces for music and the arts"
+      },
+      "copy.NvcProgrammes.nima-learners": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Learner records"
+      },
+      "copy.NvcProgrammes.nima-learners-detail": {
+        "page": "other",
+        "section": "Nvc Programmes",
+        "label": "Nvc Programmes · Creative learning through NIMA"
+      },
+      "copy.ProgrammeGroups.nvc-library": {
+        "page": "other",
+        "section": "Programme Groups",
+        "label": "Programme Groups · Library"
+      },
+      "copy.ProgrammeGroups.nvc-coaching": {
+        "page": "other",
+        "section": "Programme Groups",
+        "label": "Programme Groups · Coaching Centre"
+      },
+      "copy.ProgrammeGroups.free-schools-blurb": {
+        "page": "other",
+        "section": "Programme Groups",
+        "label": "Programme Groups · Free schooling and support for community schools."
+      },
+      "copy.ServiceStory.resume-label": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Resume automatic steps"
+      },
+      "copy.ServiceStory.pause-label": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Pause automatic steps"
+      },
+      "copy.ServiceStory.resume": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Resume"
+      },
+      "copy.ServiceStory.pause": {
+        "page": "who-we-are",
+        "section": "Service story",
+        "label": "Service story · Pause"
+      },
+      "copy.ValueAnalytics.stories.heal-title": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Care that reaches further."
+      },
+      "copy.ValueAnalytics.stories.enrich-title": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Room to learn. Space to grow."
+      },
+      "copy.ValueAnalytics.stories.empower-title": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Small actions. Shared futures."
+      },
+      "copy.ValueAnalytics.stories.kicker": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Our impact, in perspective"
+      },
+      "copy.ValueAnalytics.stories.lead": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Explore the work behind the numbers. Every figure belongs to a progra…"
+      },
+      "copy.ValueAnalytics.stories.photo-caption": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Service with Humility"
+      },
+      "copy.ValueAnalytics.stories.insight-label": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · A closer perspective"
+      },
+      "copy.ValueAnalytics.stories.insight-note": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Calculated from this programme’s reported figures."
+      },
+      "copy.ValueAnalytics.stories.detail-heading": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Look a little closer"
+      },
+      "copy.ValueAnalytics.stories.record": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Every reported figure"
+      },
+      "copy.ValueAnalytics.stories.source": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Source: SNCF Activity Report · Each programme retains its reported un…"
+      },
+      "copy.ValueAnalytics.stories.picker-label": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · {pillar} programme statistics"
+      },
+      "copy.ValueAnalytics.stories.next-insight": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Show the next programme insight"
+      },
+      "copy.ValueAnalytics.stories.previous-programme": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Previous programme statistics"
+      },
+      "copy.ValueAnalytics.stories.next-programme": {
+        "page": "core-values",
+        "section": "Charts",
+        "label": "Charts · Next programme statistics"
+      },
+      "copy.RecognitionArchive.heading": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Awards &"
+      },
+      "copy.RecognitionArchive.heading-script": {
+        "page": "home",
+        "section": "Awards",
+        "label": "Awards · Recognition"
       },
       "copy.RecognitionArchive.heading-intro": {
         "page": "home",
         "section": "Awards",
-        "label": "Celebrating service and a shared commitment to humanity."
+        "label": "Awards · Celebrating service and a shared commitment to humanity."
       },
       "copy.EventsJournal.viewLabel": {
         "page": "home",
         "section": "Events",
-        "label": "Choose upcoming or past events"
+        "label": "Events · Choose upcoming or past events"
       },
       "copy.EventsJournal.upcomingView": {
         "page": "home",
         "section": "Events",
-        "label": "Upcoming & ongoing"
+        "label": "Events · Upcoming & ongoing"
       },
       "copy.EventsJournal.pastView": {
         "page": "home",
         "section": "Events",
-        "label": "Past events"
+        "label": "Events · Past events"
       },
       "copy.PastEventsJournal.eyebrow": {
         "page": "home",
-        "section": "Events",
-        "label": "From the journal"
+        "section": "Past events",
+        "label": "Past events · From the journal"
       },
       "copy.PastEventsJournal.title": {
         "page": "home",
-        "section": "Events",
-        "label": "Moments we’ve shared."
+        "section": "Past events",
+        "label": "Past events · Moments we’ve shared."
       },
       "copy.PastEventsJournal.intro": {
         "page": "home",
-        "section": "Events",
-        "label": "Photographs, stories and recorded details from days of service."
+        "section": "Past events",
+        "label": "Past events · Photographs, stories and recorded details from days of service."
       },
       "copy.PastEventsJournal.recordedEvents": {
         "page": "home",
-        "section": "Events",
-        "label": "recorded events"
+        "section": "Past events",
+        "label": "Past events · recorded events"
       },
       "copy.PastEventsJournal.filter": {
         "page": "home",
-        "section": "Events",
-        "label": "Filter past events by value"
+        "section": "Past events",
+        "label": "Past events · Filter past events by value"
       },
       "copy.PastEventsJournal.all": {
         "page": "home",
-        "section": "Events",
-        "label": "All stories"
+        "section": "Past events",
+        "label": "Past events · All stories"
       },
       "copy.PastEventsJournal.year": {
         "page": "home",
-        "section": "Events",
-        "label": "Year"
+        "section": "Past events",
+        "label": "Past events · Year"
       },
       "copy.PastEventsJournal.yearLabel": {
         "page": "home",
-        "section": "Events",
-        "label": "Filter past events by year"
+        "section": "Past events",
+        "label": "Past events · Filter past events by year"
       },
       "copy.PastEventsJournal.allYears": {
         "page": "home",
-        "section": "Events",
-        "label": "All years"
+        "section": "Past events",
+        "label": "Past events · All years"
       },
       "copy.PastEventsJournal.previousPhoto": {
         "page": "home",
-        "section": "Events",
-        "label": "Previous event photograph"
+        "section": "Past events",
+        "label": "Past events · Previous event photograph"
       },
       "copy.PastEventsJournal.nextPhoto": {
         "page": "home",
-        "section": "Events",
-        "label": "Next event photograph"
+        "section": "Past events",
+        "label": "Past events · Next event photograph"
       },
       "copy.PastEventsJournal.photos": {
         "page": "home",
-        "section": "Events",
-        "label": "Event photographs"
+        "section": "Past events",
+        "label": "Past events · Event photographs"
       },
       "copy.PastEventsJournal.showPhoto": {
         "page": "home",
-        "section": "Events",
-        "label": "Show photograph"
+        "section": "Past events",
+        "label": "Past events · Show photograph"
       },
       "copy.PastEventsJournal.officialPhoto": {
         "page": "home",
-        "section": "Events",
-        "label": "From the official event record"
+        "section": "Past events",
+        "label": "Past events · From the official event record"
       },
       "copy.PastEventsJournal.openPhoto": {
         "page": "home",
-        "section": "Events",
-        "label": "Open full photograph"
+        "section": "Past events",
+        "label": "Past events · Open full photograph"
       },
       "copy.PastEventsJournal.viewPhoto": {
         "page": "home",
-        "section": "Events",
-        "label": "View photo"
+        "section": "Past events",
+        "label": "Past events · View photo"
       },
       "copy.PastEventsJournal.source": {
         "page": "home",
-        "section": "Events",
-        "label": "Read the event report"
+        "section": "Past events",
+        "label": "Past events · Read the event report"
       },
       "copy.PastEventsJournal.browse": {
         "page": "home",
-        "section": "Events",
-        "label": "Explore the archive"
+        "section": "Past events",
+        "label": "Past events · Explore the archive"
       },
       "copy.PastEventsJournal.stories": {
         "page": "home",
-        "section": "Events",
-        "label": "stories"
+        "section": "Past events",
+        "label": "Past events · stories"
       },
       "copy.PastEventsJournal.choose": {
         "page": "home",
-        "section": "Events",
-        "label": "Choose a past event"
+        "section": "Past events",
+        "label": "Past events · Choose a past event"
       },
       "copy.PastEventsJournal.matching": {
         "page": "home",
-        "section": "Events",
-        "label": "matching past events"
+        "section": "Past events",
+        "label": "Past events · matching past events"
       },
       "copy.PastEventsJournal.empty": {
         "page": "home",
-        "section": "Events",
-        "label": "More stories are on their way."
+        "section": "Past events",
+        "label": "Past events · More stories are on their way."
       },
       "copy.PastEventsJournal.emptyHint": {
         "page": "home",
-        "section": "Events",
-        "label": "Choose another year or value to explore the archive."
+        "section": "Past events",
+        "label": "Past events · Choose another year or value to explore the archive."
       },
       "copy.PastEventsJournal.reset": {
         "page": "home",
-        "section": "Events",
-        "label": "Show all past events"
+        "section": "Past events",
+        "label": "Past events · Show all past events"
       },
       "copy.PastEventsJournal.story": {
         "page": "home",
         "section": "Past events",
-        "label": "story"
+        "label": "Past events · story"
       }
     },
     "assets": {
@@ -9654,6 +10630,171 @@
         "page": "other",
         "section": "Service Portrait",
         "label": "Service Portrait · sncf-logo.webp"
+      },
+      "asset.ProjectFilms.amritModel": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · project-amrit-full.glb"
+      },
+      "asset.ProjectFilms.onenessModel": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · project-oneness-full.glb"
+      },
+      "asset.ProjectsPage.introHealthTeam": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · team-atrium.webp"
+      },
+      "asset.ProjectsPage.introHealthCeremony": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · ceremony.webp"
+      },
+      "asset.ProjectsPage.introHealthEvening": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · health-city-evening.webp"
+      },
+      "asset.ProjectsPage.introHealthDedication": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · dedication.webp"
+      },
+      "asset.ProjectsPage.introHealthStaff": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · team.webp"
+      },
+      "asset.ProjectsPage.introHealthPlaque": {
+        "page": "projects",
+        "section": "Page",
+        "label": "Page · plaque.webp"
+      },
+      "asset.ProjectFilms.amritVideo": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · project-amrit.mp4"
+      },
+      "asset.ProjectFilms.onenessVideo": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · oneness-vann.mp4"
+      },
+      "asset.ProjectFilms.watershedVideo": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · watershed-saiwan.mp4"
+      },
+      "asset.ProjectFilms.amritFloatingLogo": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · amrit-floating-logo.png"
+      },
+      "asset.MissionVision.volunteers": {
+        "page": "who-we-are",
+        "section": "Mission & vision",
+        "label": "Mission & vision · welcome-volunteers.jpg"
+      },
+      "asset.ProjectFilms.onenessFloatingLogo": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · oneness-floating-logo.png"
+      },
+      "asset.ProjectFilms.healthCityFloatingLogo": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · health-city-floating-logo.png"
+      },
+      "asset.RoadWall.jagriti": {
+        "page": "other",
+        "section": "Road Wall",
+        "label": "Road Wall · road-wall-jagriti.png"
+      },
+      "asset.WhoWeArePage.service-lettering": {
+        "page": "who-we-are",
+        "section": "Page",
+        "label": "Page · service-with-humility-lettering-bold.png"
+      },
+      "asset.PillarPhotoMosaic.empower-photo-head": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-head.webp"
+      },
+      "asset.PillarPhotoMosaic.empower-photo-left-arm": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-left-arm.webp"
+      },
+      "asset.PillarPhotoMosaic.empower-photo-right-arm": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-right-arm.webp"
+      },
+      "asset.PillarPhotoMosaic.empower-photo-chest": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-chest.webp"
+      },
+      "asset.PillarPhotoMosaic.empower-photo-waist": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-waist.webp"
+      },
+      "asset.PillarPhotoMosaic.empower-photo-foot": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-foot.webp"
+      },
+      "asset.PillarPhotoMosaic.heal-photo-top-right-second": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-top-right-2.webp"
+      },
+      "asset.PillarPhotoMosaic.enrich-photo-top-left": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-top-left.webp"
+      },
+      "asset.PillarPhotoMosaic.enrich-photo-top-right": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-top-right.webp"
+      },
+      "asset.PillarPhotoMosaic.enrich-photo-middle-left": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-middle-left.webp"
+      },
+      "asset.PillarPhotoMosaic.enrich-photo-middle-right": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-middle-right.webp"
+      },
+      "asset.PillarPhotoMosaic.enrich-photo-bottom-left": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-bottom-left.webp"
+      },
+      "asset.PillarPhotoMosaic.enrich-photo-bottom-right": {
+        "page": "home",
+        "section": "Hero · Heal emblem photos",
+        "label": "Hero · Heal emblem photos · photo-bottom-right.webp"
+      },
+      "asset.ProjectsMosaicArt.petal-photo-top": {
+        "page": "other",
+        "section": "Projects Mosaic Art",
+        "label": "Projects Mosaic Art · photo-top.webp"
+      },
+      "asset.ProjectsMosaicArt.petal-photo-right": {
+        "page": "other",
+        "section": "Projects Mosaic Art",
+        "label": "Projects Mosaic Art · photo-right.webp"
+      },
+      "asset.ProjectsMosaicArt.petal-photo-bottom": {
+        "page": "other",
+        "section": "Projects Mosaic Art",
+        "label": "Projects Mosaic Art · photo-bottom.webp"
       }
     }
   },
@@ -9759,6 +10900,12 @@
       "order": 0,
       "options": {},
       "label": "GuidingForcePage · gf-relief"
+    },
+    "GuidingForcePage.gf-media": {
+      "enabled": true,
+      "order": 0,
+      "options": {},
+      "label": "GuidingForcePage · gf-media"
     },
     "ProjectsPage.health-city": {
       "enabled": true,

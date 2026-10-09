@@ -310,5 +310,69 @@
   "asset.WhoWeArePage.service-lettering": {
     "source": "/images/service-with-humility-lettering-bold.png",
     "label": "WhoWeArePage · service-with-humility-lettering-bold.png"
+  },
+  "asset.PillarPhotoMosaic.empower-photo-head": {
+    "source": "/images/empower-emblem/photo-head.webp",
+    "label": "PillarPhotoMosaic · photo-head.webp"
+  },
+  "asset.PillarPhotoMosaic.empower-photo-left-arm": {
+    "source": "/images/empower-emblem/photo-left-arm.webp",
+    "label": "PillarPhotoMosaic · photo-left-arm.webp"
+  },
+  "asset.PillarPhotoMosaic.empower-photo-right-arm": {
+    "source": "/images/empower-emblem/photo-right-arm.webp",
+    "label": "PillarPhotoMosaic · photo-right-arm.webp"
+  },
+  "asset.PillarPhotoMosaic.empower-photo-chest": {
+    "source": "/images/empower-emblem/photo-chest.webp",
+    "label": "PillarPhotoMosaic · photo-chest.webp"
+  },
+  "asset.PillarPhotoMosaic.empower-photo-waist": {
+    "source": "/images/empower-emblem/photo-waist.webp",
+    "label": "PillarPhotoMosaic · photo-waist.webp"
+  },
+  "asset.PillarPhotoMosaic.empower-photo-foot": {
+    "source": "/images/empower-emblem/photo-foot.webp",
+    "label": "PillarPhotoMosaic · photo-foot.webp"
+  },
+  "asset.PillarPhotoMosaic.heal-photo-top-right-second": {
+    "source": "/images/heal-emblem/photo-top-right-2.webp",
+    "label": "PillarPhotoMosaic · photo-top-right-2.webp"
+  },
+  "asset.PillarPhotoMosaic.enrich-photo-top-left": {
+    "source": "/images/enrich-emblem/photo-top-left.webp",
+    "label": "PillarPhotoMosaic · photo-top-left.webp"
+  },
+  "asset.PillarPhotoMosaic.enrich-photo-top-right": {
+    "source": "/images/enrich-emblem/photo-top-right.webp",
+    "label": "PillarPhotoMosaic · photo-top-right.webp"
+  },
+  "asset.PillarPhotoMosaic.enrich-photo-middle-left": {
+    "source": "/images/enrich-emblem/photo-middle-left.webp",
+    "label": "PillarPhotoMosaic · photo-middle-left.webp"
+  },
+  "asset.PillarPhotoMosaic.enrich-photo-middle-right": {
+    "source": "/images/enrich-emblem/photo-middle-right.webp",
+    "label": "PillarPhotoMosaic · photo-middle-right.webp"
+  },
+  "asset.PillarPhotoMosaic.enrich-photo-bottom-left": {
+    "source": "/images/enrich-emblem/photo-bottom-left.webp",
+    "label": "PillarPhotoMosaic · photo-bottom-left.webp"
+  },
+  "asset.PillarPhotoMosaic.enrich-photo-bottom-right": {
+    "source": "/images/enrich-emblem/photo-bottom-right.webp",
+    "label": "PillarPhotoMosaic · photo-bottom-right.webp"
+  },
+  "asset.ProjectsMosaicArt.petal-photo-top": {
+    "source": "/images/projects-emblem/photo-top.webp",
+    "label": "ProjectsMosaicArt · photo-top.webp"
+  },
+  "asset.ProjectsMosaicArt.petal-photo-right": {
+    "source": "/images/projects-emblem/photo-right.webp",
+    "label": "ProjectsMosaicArt · photo-right.webp"
+  },
+  "asset.ProjectsMosaicArt.petal-photo-bottom": {
+    "source": "/images/projects-emblem/photo-bottom.webp",
+    "label": "ProjectsMosaicArt · photo-bottom.webp"
   }
 }
