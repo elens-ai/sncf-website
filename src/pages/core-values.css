@@ -352,3 +352,23 @@
   .values-cover-copy { display: flex; grid-row: 1; padding: 0; gap: 24px; }
   .values-cover > .values-cover-stage { grid-row: 2; margin-top: 20px; }
 }
+
+/* Empower's drawing is centred at x=71.5 inside a viewBox centred at x=83.
+   Align the visible trio with the page and its caption, rather than the SVG margins. */
+.value-screen .activity-emblem-art .heal-photo-mosaic[data-pillar='empower'] > svg {
+  translate: 6.61% 0;
+}
+
+/* All values share the largest measured content footprint, including CMS copy
+   and wrapped flags. Switching values changes visibility, never document flow. */
+.values-cover-saying-slot, .values-cover-goals-slot, .values-cover-introduction-slot { display: grid; min-width: 0; }
+.values-cover-content-layer { grid-area: 1 / 1; min-width: 0; visibility: hidden; opacity: 0; pointer-events: none; }
+.values-cover-content-layer[data-current='true'] { visibility: visible; opacity: 1; pointer-events: auto; }
+.values-cover-saying-slot .values-cover-content-layer[data-current='true'] { animation: values-copy-fade .55s ease both; }
+.values-cover-saying-slot .saying { animation: none; }
+.values-cover-introduction-slot { grid-column: 1 / -1; grid-row: 2; align-self: center; }
+.values-cover-word[data-on='true'] { transform: none; }
+.values-cover-goals-slot .values-cover-content-layer[data-current='true'] .sdg-row li { animation: sdg-row-in .9s cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--i) * 110ms); }
+@keyframes values-copy-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 800px) { .values-cover-introduction-slot { grid-row: 3; } }
+@media (prefers-reduced-motion: reduce) { .values-cover-content-layer { animation: none !important; } }

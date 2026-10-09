@@ -1,16 +1,19 @@
 /* The goals' line and their pennants in one row, the line at its very left and the pennants at its very right. The
    line, one line centred on the icons, is set flush left; the pennants hang from the same top, the icon square and
-   then its goal's colour running on to a point, at 80% opacity, full where pointed at. On a screen too narrow for
+   then its goal's colour running on to a point, at full opacity. On a screen too narrow for
    both, the pennants go beneath the line. When the value changes, its pennants drop in one after another. */
 .sdg-row { --sdg-w: 48px; position: relative; display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 24px; }
 .sdg-row-label { display: inline-flex; align-items: center; gap: 8px; min-height: var(--sdg-w); margin: 0; font: 600 12px/20px var(--font-sans); letter-spacing: .12em; text-transform: uppercase; color: rgb(255 255 255 / .86); }
-.sdg-row ul { display: flex; gap: 6px; min-width: 0; margin: 0; padding: 0; list-style: none; }
-.sdg-row li { flex: 0 1 var(--sdg-w); min-width: 0; filter: drop-shadow(0 5px 7px rgb(6 30 40 / .35)); animation: sdg-row-in .9s cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--i) * 110ms); }
+.sdg-row ul { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; margin: 0; padding: 0; list-style: none; }
+.sdg-row li { flex: 0 0 var(--sdg-w); min-width: 0; filter: drop-shadow(0 5px 7px rgb(6 30 40 / .35)); animation: sdg-row-in .9s cubic-bezier(.22, 1, .36, 1) both; animation-delay: calc(var(--i) * 110ms); }
 .sdg-row-flag { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
 .sdg-row-flag:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 2px; }
-.sdg-row-pennant { display: block; opacity: .8; aspect-ratio: 1 / 1.32; background: var(--sdg); clip-path: polygon(0 0, 100% 0, 100% 75.8%, 50% 100%, 0 75.8%); transition: opacity .2s, translate .2s; }
+.sdg-row-pennant { position: relative; container-type: inline-size; display: block; opacity: 1; aspect-ratio: 1 / 1.32; background: var(--sdg); clip-path: polygon(0 0, 100% 0, 100% 75.8%, 50% 100%, 0 75.8%); transition: opacity .2s, translate .2s; }
 .sdg-row-flag:is(:hover, :focus-visible, [aria-expanded='true']) .sdg-row-pennant { opacity: 1; translate: 0 -2px; }
-.sdg-row-pennant img { display: block; width: 100%; aspect-ratio: 1; height: auto; }
+.sdg-row-heading { color: #fff; text-align: left; }
+.sdg-row-heading strong { position: absolute; top: 5%; left: 7%; font: 800 29cqw/1 Arial, sans-serif; letter-spacing: -.06em; }
+.sdg-row-heading > span { position: absolute; top: 28%; left: 7%; width: 86%; font: 700 12cqw/1.05 Arial, sans-serif; text-transform: uppercase; overflow-wrap: anywhere; }
+.sdg-row-symbol { position: absolute; width: 52%; height: 26%; left: 24%; top: 60%; display: block; overflow: hidden; }
 @keyframes sdg-row-in { from { opacity: 0; translate: 0 -10px; } 40% { opacity: .6; } }
 
 /* The goal's window, above the row and pointing at its pennant: the goal's box turning, its name, the goal as the

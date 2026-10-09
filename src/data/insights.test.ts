@@ -25,7 +25,7 @@ test('a sum names how many kinds it adds up, and a programme without a rule has 
 });
 
 test('the flagship projects read their own figures together', () => {
-  assert.deepEqual(values('project-amrit'), ['≈ 659', '6']);
+  assert.deepEqual(values('project-amrit'), ['≈ 2,455', '6']);
   assert.deepEqual(values('oneness-vann'), ['≈ 858', '≈ 1,337']);
   assert.deepEqual(values('watershed'), ['≈ 208', '16']);
   assert.deepEqual(values('adopted-villages'), ['84%', '180', '22,875']);

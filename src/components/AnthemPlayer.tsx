@@ -1,7 +1,8 @@
 import { resolveCMSMedia } from '../cms/media';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { resolveCMSAsset } from '../cms/runtime';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { audioFocus, fadeMediaVolume } from '../utils/audioFocus';
 import { Volume2, VolumeX } from 'lucide-react';
 
 const anthemURL = () => resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "/media/sncf-anthem-instrumental-v1.2.mp3");
@@ -26,6 +27,7 @@ const MUTED_KEY = 'sncf:anthem-muted';
 export const AnthemPlayer: React.FC = () => {
   useCMSRevision();
   const ANTHEM_URL = anthemURL();
+  const projectAudioActive = useSyncExternalStore(audioFocus.subscribe, audioFocus.active, () => false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [muted, setMuted] = useState<boolean>(() => {
     try {
@@ -55,8 +57,10 @@ export const AnthemPlayer: React.FC = () => {
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
+    if (projectAudioActive) { setPlaying(false); return; }
+    if (muted) { el.pause(); setPlaying(false); return; }
 
-    el.volume = VOLUME;
+    el.volume = 0;
     const onMeta = () => cue(el);
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
@@ -69,11 +73,12 @@ export const AnthemPlayer: React.FC = () => {
     const events: (keyof WindowEventMap)[] = ['pointerdown', 'keydown', 'touchstart', 'wheel'];
 
     const unlock = () => {
+      if (!audioFocus.permits(el)) return;
       disarm();
       cue(el);
       void el
         .play()
-        .then(() => setBlocked(false))
+        .then(() => { setBlocked(false); void fadeMediaVolume(el, VOLUME); })
         .catch(() => {
           /* still refused — leave it to the toggle */
         });
@@ -92,13 +97,13 @@ export const AnthemPlayer: React.FC = () => {
     };
 
     const attempt = () =>
-      el
+      audioFocus.permits(el) ? el
         .play()
-        .then(() => setBlocked(false))
+        .then(() => { setBlocked(false); void fadeMediaVolume(el, VOLUME); })
         .catch(() => {
           setBlocked(true);
           arm(); // refused → start on the visitor's first interaction
-        });
+        }) : Promise.resolve();
 
     if (!muted) {
       cue(el);
@@ -126,7 +131,7 @@ export const AnthemPlayer: React.FC = () => {
     };
     // Intentionally runs once: the toggle drives playback afterwards.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cue, ANTHEM_URL]);
+  }, [cue, ANTHEM_URL, muted, projectAudioActive]);
 
   useEffect(() => {
     try {
@@ -139,6 +144,7 @@ export const AnthemPlayer: React.FC = () => {
   const toggle = () => {
     const el = audioRef.current;
     if (!el) return;
+    if (!audioFocus.permits(el)) return;
 
     if (playing) {
       el.pause();
@@ -157,6 +163,7 @@ export const AnthemPlayer: React.FC = () => {
       <audio ref={audioRef} src={resolveCMSMedia(ANTHEM_URL)} preload="auto" playsInline />
       <button
         id="anthem-toggle"
+        disabled={projectAudioActive}
         onClick={toggle}
         title={
           blocked

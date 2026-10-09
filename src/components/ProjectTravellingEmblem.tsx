@@ -8,7 +8,7 @@ export type ProjectEmblemId = 'project-amrit' | 'oneness-vann' | 'health-city';
 
 export function ProjectEmblemArt({ project }: { project: ProjectEmblemId }) {
   const src = project === 'oneness-vann'
-    ? resolveCMSAsset('asset.ProjectFilms.onenessFloatingLogo', '/images/projects/oneness-floating-logo.png')
+    ? resolveCMSAsset('asset.ProjectFilms.onenessFloatingLogo', '/images/projects/oneness-floating-logo-clean.png')
     : project === 'health-city'
       ? resolveCMSAsset('asset.ProjectFilms.healthCityFloatingLogo', '/images/projects/health-city-floating-logo.png')
       : resolveCMSAsset('asset.ProjectFilms.amritFloatingLogo', '/images/projects/amrit-floating-logo.png');

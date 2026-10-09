@@ -1,55 +1,55 @@
 {
   "asset.AnthemPlayer.bf1bfa524baa": {
     "source": "/media/sncf-anthem-instrumental-v1.2.mp3",
-    "label": "AnthemPlayer · sncf-anthem-instrumental-v1.2.mp3"
+    "label": "AnthemPlayer \u00b7 sncf-anthem-instrumental-v1.2.mp3"
   },
   "asset.CardIllustration.7144da391fb1": {
     "source": "/images/vertical-heal.webp",
-    "label": "CardIllustration · vertical-heal.webp"
+    "label": "CardIllustration \u00b7 vertical-heal.webp"
   },
   "asset.CardIllustration.486823e29a83": {
     "source": "/images/vertical-enrich.webp",
-    "label": "CardIllustration · vertical-enrich.webp"
+    "label": "CardIllustration \u00b7 vertical-enrich.webp"
   },
   "asset.CardIllustration.7e886446b163": {
     "source": "/images/vertical-empower.webp",
-    "label": "CardIllustration · vertical-empower.webp"
+    "label": "CardIllustration \u00b7 vertical-empower.webp"
   },
   "asset.DevotionalPhotoCard.4daa8ff53979": {
     "source": "/images/mataji-rajpita-planting.webp",
-    "label": "DevotionalPhotoCard · mataji-rajpita-planting.webp"
+    "label": "DevotionalPhotoCard \u00b7 mataji-rajpita-planting.webp"
   },
   "asset.DevotionalPhotoCard.b4324b25c1ce": {
     "source": "/images/nirankari-rajpita-ramit-ji.jpg",
-    "label": "DevotionalPhotoCard · nirankari-rajpita-ramit-ji.jpg"
+    "label": "DevotionalPhotoCard \u00b7 nirankari-rajpita-ramit-ji.jpg"
   },
   "asset.Header.25aa35189463": {
     "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
-    "label": "Header · sncf-logo-only.webp"
+    "label": "Header \u00b7 sncf-logo-only.webp"
   },
   "asset.InvitationCard.51c5d5f403d2": {
     "source": "/images/lotus-watermark.png",
-    "label": "InvitationCard · lotus-watermark.png"
+    "label": "InvitationCard \u00b7 lotus-watermark.png"
   },
   "asset.MediaGallery.76f684891a21": {
     "source": "/images/volunteers-planning.webp",
-    "label": "MediaGallery · volunteers-planning.webp"
+    "label": "MediaGallery \u00b7 volunteers-planning.webp"
   },
   "asset.PillarModelCard.c73c056cfd4f": {
     "source": "/images/projects/amrit.webp",
-    "label": "PillarModelCard · amrit.webp"
+    "label": "PillarModelCard \u00b7 amrit.webp"
   },
   "asset.SiteFooter.25aa35189463": {
     "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
-    "label": "SiteFooter · sncf-logo-only.webp"
+    "label": "SiteFooter \u00b7 sncf-logo-only.webp"
   },
   "asset.WelcomeSplashScreen.25aa35189463": {
     "source": "https://elens-graphics.s3.ap-south-1.amazonaws.com/sncf-logo-only.webp",
-    "label": "WelcomeSplashScreen · sncf-logo-only.webp"
+    "label": "WelcomeSplashScreen \u00b7 sncf-logo-only.webp"
   },
   "asset.GuidingForcePage.4daa8ff53979": {
     "source": "/images/mataji-rajpita-planting.webp",
-    "label": "GuidingForcePage · mataji-rajpita-planting.webp"
+    "label": "GuidingForcePage \u00b7 mataji-rajpita-planting.webp"
   },
   "/images/vertical-empower.webp": {
     "source": "/images/vertical-empower.webp",
@@ -101,15 +101,15 @@
   },
   "asset.ProjectsPage.healthCity": {
     "source": "/images/projects/health-city.webp",
-    "label": "ProjectsPage · health-city.webp"
+    "label": "ProjectsPage \u00b7 health-city.webp"
   },
   "asset.InvitationCard.logo": {
     "source": "/images/sncf-logo.webp",
-    "label": "InvitationCard · sncf-logo.webp"
+    "label": "InvitationCard \u00b7 sncf-logo.webp"
   },
   "asset.projects.bloom": {
     "source": "/images/projects-bloom.png?v=balanced",
-    "label": "projects · projects-bloom.png?v=balanced"
+    "label": "projects \u00b7 projects-bloom.png?v=balanced"
   },
   "/images/petals/petal-empower.webp": {
     "source": "/images/petals/petal-empower.webp",
@@ -133,246 +133,254 @@
   },
   "asset.WelcomeSplashScreen.welcome-photo": {
     "source": "/images/welcome-volunteers.jpg",
-    "label": "WelcomeSplashScreen · welcome-volunteers.jpg"
+    "label": "WelcomeSplashScreen \u00b7 welcome-volunteers.jpg"
   },
   "asset.Reports.heal": {
     "source": "",
-    "label": "Reports · heal (PDF, empty until uploaded)"
+    "label": "Reports \u00b7 heal (PDF, empty until uploaded)"
   },
   "asset.Reports.enrich": {
     "source": "",
-    "label": "Reports · enrich (PDF, empty until uploaded)"
+    "label": "Reports \u00b7 enrich (PDF, empty until uploaded)"
   },
   "asset.Reports.empower": {
     "source": "",
-    "label": "Reports · empower (PDF, empty until uploaded)"
+    "label": "Reports \u00b7 empower (PDF, empty until uploaded)"
   },
   "asset.Reports.project-amrit": {
     "source": "",
-    "label": "Reports · project-amrit (PDF, empty until uploaded)"
+    "label": "Reports \u00b7 project-amrit (PDF, empty until uploaded)"
   },
   "asset.Reports.oneness-vann": {
     "source": "",
-    "label": "Reports · oneness-vann (PDF, empty until uploaded)"
+    "label": "Reports \u00b7 oneness-vann (PDF, empty until uploaded)"
   },
   "asset.Reports.watershed": {
     "source": "",
-    "label": "Reports · watershed (PDF, empty until uploaded)"
+    "label": "Reports \u00b7 watershed (PDF, empty until uploaded)"
   },
   "asset.Reports.adopted-villages": {
     "source": "",
-    "label": "Reports · adopted-villages (PDF, empty until uploaded)"
+    "label": "Reports \u00b7 adopted-villages (PDF, empty until uploaded)"
   },
   "asset.UnSeal.undp-logo": {
     "source": "",
-    "label": "UnSeal · UNDP logo (only with UNDP’s written permission)"
+    "label": "UnSeal \u00b7 UNDP logo (only with UNDP\u2019s written permission)"
   },
   "asset.PartnerCircle.hub": {
     "source": "/images/sncf-logo.webp",
-    "label": "PartnerCircle · sncf-logo.webp"
+    "label": "PartnerCircle \u00b7 sncf-logo.webp"
   },
   "asset.SiteFooter.lotus": {
     "source": "/images/lotus-watermark.png",
-    "label": "SiteFooter · lotus-watermark.png"
+    "label": "SiteFooter \u00b7 lotus-watermark.png"
   },
   "asset.WorkingHands.hands": {
     "source": "/images/welcome-volunteers.jpg",
-    "label": "WorkingHands · welcome-volunteers.jpg"
+    "label": "WorkingHands \u00b7 welcome-volunteers.jpg"
   },
   "asset.WorkingHands.hospitals": {
     "source": "/images/projects/health-city.webp",
-    "label": "WorkingHands · health-city.webp"
+    "label": "WorkingHands \u00b7 health-city.webp"
   },
   "asset.WorkingHands.classrooms": {
     "source": "/images/programmes/schools-classroom.webp",
-    "label": "WorkingHands · schools-classroom.webp"
+    "label": "WorkingHands \u00b7 schools-classroom.webp"
   },
   "asset.WorkingHands.forests": {
     "source": "/images/programmes/oneness-vann-planting.webp",
-    "label": "WorkingHands · oneness-vann-planting.webp"
+    "label": "WorkingHands \u00b7 oneness-vann-planting.webp"
   },
   "asset.GuidingForcePage.work-amrit": {
     "source": "/images/programmes/amrit-riverbank.webp",
-    "label": "GuidingForcePage · amrit-riverbank.webp"
+    "label": "GuidingForcePage \u00b7 amrit-riverbank.webp"
   },
   "asset.GuidingForcePage.work-nima": {
     "source": "/images/programmes/nima-tabla.webp",
-    "label": "GuidingForcePage · nima-tabla.webp"
+    "label": "GuidingForcePage \u00b7 nima-tabla.webp"
   },
   "asset.GuidingForcePage.closing-lotus": {
     "source": "/images/lotus-watermark.png",
-    "label": "GuidingForcePage · lotus-watermark.png"
+    "label": "GuidingForcePage \u00b7 lotus-watermark.png"
   },
   "asset.WhoWeArePage.stamp": {
     "source": "/images/sncf-logo.webp",
-    "label": "WhoWeArePage · sncf-logo.webp"
+    "label": "WhoWeArePage \u00b7 sncf-logo.webp"
   },
   "asset.ProjectsPage.hcLogo": {
     "source": "/images/projects/health-city/logo.webp",
-    "label": "ProjectsPage · logo.webp"
+    "label": "ProjectsPage \u00b7 logo.webp"
   },
   "asset.ProjectsPage.hcTeam": {
     "source": "/images/projects/health-city/team-atrium.webp",
-    "label": "ProjectsPage · team-atrium.webp"
+    "label": "ProjectsPage \u00b7 team-atrium.webp"
   },
   "asset.ProjectsPage.hcPlaque": {
     "source": "/images/projects/health-city/plaque.webp",
-    "label": "ProjectsPage · plaque.webp"
+    "label": "ProjectsPage \u00b7 plaque.webp"
   },
   "asset.ProjectsPage.hcDedication": {
     "source": "/images/projects/health-city/ceremony.webp",
-    "label": "ProjectsPage · ceremony.webp"
+    "label": "ProjectsPage \u00b7 ceremony.webp"
   },
   "asset.UnepSeal.logo": {
     "source": "/images/partners/unep.png",
-    "label": "UnepSeal · unep.png"
+    "label": "UnepSeal \u00b7 unep.png"
   },
   "asset.GuidingForcePage.cover-portrait": {
     "source": "/images/satguru-mata-sudiksha-ji-portrait.webp",
-    "label": "GuidingForcePage · satguru-mata-sudiksha-ji-portrait.webp"
+    "label": "GuidingForcePage \u00b7 satguru-mata-sudiksha-ji-portrait.webp"
   },
   "asset.GuidingForcePage.work-hc-photo": {
     "source": "/images/programmes/health-city-evening.webp",
-    "label": "GuidingForcePage · health-city-evening.webp"
+    "label": "GuidingForcePage \u00b7 health-city-evening.webp"
   },
   "asset.WelcomeSplashScreen.message-portrait": {
     "source": "/images/satguru-mata-sudiksha-ji-welcome.webp",
-    "label": "WelcomeSplashScreen · satguru-mata-sudiksha-ji-welcome.webp"
+    "label": "WelcomeSplashScreen \u00b7 satguru-mata-sudiksha-ji-welcome.webp"
   },
   "asset.MosaicOverture.enrich-book": {
     "source": "/images/emblem-marks/enrich-book.webp",
-    "label": "MosaicOverture · enrich-book.webp"
+    "label": "MosaicOverture \u00b7 enrich-book.webp"
   },
   "asset.PillarPhotoMosaic.heal-photo-top-right": {
     "source": "/images/heal-emblem/photo-top-right.webp",
-    "label": "PillarPhotoMosaic · photo-top-right.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-top-right.webp"
   },
   "asset.PillarPhotoMosaic.heal-photo-top-left": {
     "source": "/images/heal-emblem/photo-top-left.webp",
-    "label": "PillarPhotoMosaic · photo-top-left.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-top-left.webp"
   },
   "asset.PillarPhotoMosaic.heal-photo-bottom-right": {
     "source": "/images/heal-emblem/photo-bottom-right.webp",
-    "label": "PillarPhotoMosaic · photo-bottom-right.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-bottom-right.webp"
   },
   "asset.PillarPhotoMosaic.heal-photo-bottom-left": {
     "source": "/images/heal-emblem/photo-bottom-left.webp",
-    "label": "PillarPhotoMosaic · photo-bottom-left.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-bottom-left.webp"
   },
   "asset.ServicePortrait.model": {
     "source": "/models/sncf-emblem.glb",
-    "label": "ServicePortrait · sncf-emblem.glb"
+    "label": "ServicePortrait \u00b7 sncf-emblem.glb"
   },
   "asset.ServicePortrait.poster": {
     "source": "/images/sncf-logo.webp",
-    "label": "ServicePortrait · sncf-logo.webp"
+    "label": "ServicePortrait \u00b7 sncf-logo.webp"
   },
   "asset.ProjectFilms.amritModel": {
     "source": "/models/project-amrit-full.glb",
-    "label": "ProjectFilms · project-amrit-full.glb"
+    "label": "ProjectFilms \u00b7 project-amrit-full.glb"
   },
   "asset.ProjectFilms.onenessModel": {
     "source": "/models/project-oneness-full.glb",
-    "label": "ProjectFilms · project-oneness-full.glb"
+    "label": "ProjectFilms \u00b7 project-oneness-full.glb"
   },
   "asset.ProjectFilms.amritVideo": {
     "source": "/videos/projects/project-amrit.mp4",
-    "label": "ProjectFilms · project-amrit.mp4"
+    "label": "ProjectFilms \u00b7 project-amrit.mp4"
   },
   "asset.ProjectFilms.onenessVideo": {
     "source": "/videos/projects/oneness-vann.mp4",
-    "label": "ProjectFilms · oneness-vann.mp4"
+    "label": "ProjectFilms \u00b7 oneness-vann.mp4"
   },
   "asset.ProjectFilms.watershedVideo": {
     "source": "/videos/projects/watershed-saiwan.mp4",
-    "label": "ProjectFilms · watershed-saiwan.mp4"
+    "label": "ProjectFilms \u00b7 watershed-saiwan.mp4"
   },
   "asset.ProjectFilms.amritFloatingLogo": {
     "source": "/images/projects/amrit-floating-logo.png",
-    "label": "ProjectFilms · amrit-floating-logo.png"
+    "label": "ProjectFilms \u00b7 amrit-floating-logo.png"
   },
   "asset.MissionVision.volunteers": {
     "source": "/images/welcome-volunteers.jpg",
-    "label": "MissionVision · welcome-volunteers.jpg"
+    "label": "MissionVision \u00b7 welcome-volunteers.jpg"
   },
   "asset.ProjectFilms.onenessFloatingLogo": {
-    "source": "/images/projects/oneness-floating-logo.png",
-    "label": "ProjectFilms · oneness-floating-logo.png"
+    "source": "/images/projects/oneness-floating-logo-clean.png",
+    "label": "ProjectFilms \u00b7 oneness-floating-logo-clean.png"
   },
   "asset.ProjectFilms.healthCityFloatingLogo": {
     "source": "/images/projects/health-city-floating-logo.png",
-    "label": "ProjectFilms · health-city-floating-logo.png"
+    "label": "ProjectFilms \u00b7 health-city-floating-logo.png"
   },
   "asset.RoadWall.jagriti": {
     "source": "/images/road-wall-jagriti.png",
-    "label": "RoadWall · road-wall-jagriti.png"
+    "label": "RoadWall \u00b7 road-wall-jagriti.png"
   },
   "asset.WhoWeArePage.service-lettering": {
     "source": "/images/service-with-humility-lettering-bold.png",
-    "label": "WhoWeArePage · service-with-humility-lettering-bold.png"
+    "label": "WhoWeArePage \u00b7 service-with-humility-lettering-bold.png"
   },
   "asset.PillarPhotoMosaic.empower-photo-head": {
     "source": "/images/empower-emblem/photo-head.webp",
-    "label": "PillarPhotoMosaic · photo-head.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-head.webp"
   },
   "asset.PillarPhotoMosaic.empower-photo-left-arm": {
     "source": "/images/empower-emblem/photo-left-arm.webp",
-    "label": "PillarPhotoMosaic · photo-left-arm.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-left-arm.webp"
   },
   "asset.PillarPhotoMosaic.empower-photo-right-arm": {
     "source": "/images/empower-emblem/photo-right-arm.webp",
-    "label": "PillarPhotoMosaic · photo-right-arm.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-right-arm.webp"
   },
   "asset.PillarPhotoMosaic.empower-photo-chest": {
     "source": "/images/empower-emblem/photo-chest.webp",
-    "label": "PillarPhotoMosaic · photo-chest.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-chest.webp"
   },
   "asset.PillarPhotoMosaic.empower-photo-waist": {
     "source": "/images/empower-emblem/photo-waist.webp",
-    "label": "PillarPhotoMosaic · photo-waist.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-waist.webp"
   },
   "asset.PillarPhotoMosaic.empower-photo-foot": {
     "source": "/images/empower-emblem/photo-foot.webp",
-    "label": "PillarPhotoMosaic · photo-foot.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-foot.webp"
   },
   "asset.PillarPhotoMosaic.heal-photo-top-right-second": {
     "source": "/images/heal-emblem/photo-top-right-2.webp",
-    "label": "PillarPhotoMosaic · photo-top-right-2.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-top-right-2.webp"
   },
   "asset.PillarPhotoMosaic.enrich-photo-top-left": {
     "source": "/images/enrich-emblem/photo-top-left.webp",
-    "label": "PillarPhotoMosaic · photo-top-left.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-top-left.webp"
   },
   "asset.PillarPhotoMosaic.enrich-photo-top-right": {
     "source": "/images/enrich-emblem/photo-top-right.webp",
-    "label": "PillarPhotoMosaic · photo-top-right.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-top-right.webp"
   },
   "asset.PillarPhotoMosaic.enrich-photo-middle-left": {
     "source": "/images/enrich-emblem/photo-middle-left.webp",
-    "label": "PillarPhotoMosaic · photo-middle-left.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-middle-left.webp"
   },
   "asset.PillarPhotoMosaic.enrich-photo-middle-right": {
     "source": "/images/enrich-emblem/photo-middle-right.webp",
-    "label": "PillarPhotoMosaic · photo-middle-right.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-middle-right.webp"
   },
   "asset.PillarPhotoMosaic.enrich-photo-bottom-left": {
     "source": "/images/enrich-emblem/photo-bottom-left.webp",
-    "label": "PillarPhotoMosaic · photo-bottom-left.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-bottom-left.webp"
   },
   "asset.PillarPhotoMosaic.enrich-photo-bottom-right": {
     "source": "/images/enrich-emblem/photo-bottom-right.webp",
-    "label": "PillarPhotoMosaic · photo-bottom-right.webp"
+    "label": "PillarPhotoMosaic \u00b7 photo-bottom-right.webp"
   },
   "asset.ProjectsMosaicArt.petal-photo-top": {
     "source": "/images/projects-emblem/photo-top.webp",
-    "label": "ProjectsMosaicArt · photo-top.webp"
+    "label": "ProjectsMosaicArt \u00b7 photo-top.webp"
   },
   "asset.ProjectsMosaicArt.petal-photo-right": {
     "source": "/images/projects-emblem/photo-right.webp",
-    "label": "ProjectsMosaicArt · photo-right.webp"
+    "label": "ProjectsMosaicArt \u00b7 photo-right.webp"
   },
   "asset.ProjectsMosaicArt.petal-photo-bottom": {
     "source": "/images/projects-emblem/photo-bottom.webp",
-    "label": "ProjectsMosaicArt · photo-bottom.webp"
+    "label": "ProjectsMosaicArt \u00b7 photo-bottom.webp"
+  },
+  "asset.ProjectAudio.amrit": {
+    "source": "/media/projects/project-amrit.mp3",
+    "label": "ProjectAudio \u00b7 project-amrit.mp3"
+  },
+  "asset.ProjectAudio.oneness": {
+    "source": "/media/projects/oneness-vann.mp3",
+    "label": "ProjectAudio \u00b7 oneness-vann.mp3"
   }
 }

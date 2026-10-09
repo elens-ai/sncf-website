@@ -5,7 +5,6 @@ import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import { MapPin, Phone, Mail, Heart, Handshake, CalendarHeart, ArrowUpRight, ArrowUp } from 'lucide-react';
-import { UnepSeal } from './UnAffiliation';
 import { SOCIAL_ART } from './SocialSidebar';
 import './site-footer.css';
 
@@ -143,7 +142,6 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
             </ul>
           )}
           {/* the UN Environment Programme, as the Core Values and Projects covers carry it, on every page */}
-          <div className="mt-5"><UnepSeal /></div>
         </div>
 
         {/* Link groups */}

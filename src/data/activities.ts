@@ -327,9 +327,9 @@ export const DEFAULT_ACTIVITIES: Activity[] = [
     title: 'Project Amrit',
     period: 'As on September 2026',
     blurb: '“Clean Water, Pure Mind” — cleaning and reviving water bodies.',
-    headline: { label: 'Water bodies', value: '5,962' },
+    headline: { label: 'Water bodies', value: '1,600+' },
     dataPoints: [
-      { label: 'Water bodies', value: '5,962' },
+      { label: 'Water bodies', value: '1,600+' },
       { label: 'Cities', value: '3,460' },
       { label: 'States / UTs', value: '28' },
       { label: 'Volunteers participated', value: '3,927,615' },

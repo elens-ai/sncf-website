@@ -19,6 +19,7 @@ import { slug } from '../utils/slug';
 import { youtubeId } from '../utils/youtube';
 import { projectGalleryPhotos } from '../utils/projectGalleryPhotos';
 import { ProjectFilmBackdrop } from './ProjectFilmBackdrop';
+import { ProjectAudio } from './ProjectAudio';
 import { ProjectPhotoGallery } from './ProjectPhotoGallery';
 import { ProjectEmblemArt, ProjectTravellingEmblem } from './ProjectTravellingEmblem';
 import { Saying, hasSaying } from './Saying';
@@ -146,7 +147,9 @@ function ProjectFilmChapter({ project, face, active }: {
       <div className="project-film-content">
       <header className="project-film-opening" data-film-reveal={travellingEmblem ? undefined : true}>
         {travellingEmblem && <div ref={emblemOrigin} className="project-film-emblem project-film-emblem-origin" aria-hidden="true"><ProjectEmblemArt project={travellingEmblem} /></div>}
-        <h2 id={`${id}-title`}>{project.title}</h2>
+        <h2 id={`${id}-title`}>{project.id === 'oneness-vann' ? c('onenessTitle', 'Oneness Vann') : project.title}</h2>
+        {project.id === 'oneness-vann' && <p className="project-film-subtitle">{c('onenessSubtitle', 'In harmony With Nature')}</p>}
+        {(project.id === 'project-amrit' || project.id === 'oneness-vann') && <ProjectAudio active={active} project={project.id} title={project.title} />}
         {headline}
         <div className="project-film-opening-bottom">
           <div><p className="project-film-line">{face.line}</p><p className="project-film-intro">{project.blurb}</p><a className="project-film-scroll" href={`#${id}-reports`}>{c('discover', 'Discover the story')}<ArrowDown size={17} /></a></div>

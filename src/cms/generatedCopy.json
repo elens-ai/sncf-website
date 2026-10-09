@@ -647,7 +647,7 @@
   "copy.ProjectsPage.hcPlaqueAlt": "The plaque recording that Satguru Mata Sudiksha Ji Maharaj dedicated the premises of Sant Nirankari Health City to the service of humanity on 23 February 2026",
   "copy.ProjectsPage.hcDedicationAlt": "A gathering at Sant Nirankari Health City, the SNHC monogram in flowers on the stage before the hospital",
   "copy.ProjectsPage.hcCollageCaption": "Dedicated to the service of humanity · 23 February 2026",
-  "copy.CoreValuesPage.cover-headline": "Love, peace, kindness",
+  "copy.CoreValuesPage.cover-headline": "Heal, Enrich, Empower",
   "copy.CoreValuesPage.cover-headline-script": "with a purpose of giving",
   "copy.UnAffiliation.unep-short": "UNEP",
   "copy.UnAffiliation.unep-name": "United Nations Environment Programme",
@@ -1159,5 +1159,13 @@
   "copy.PastEventsJournal.empty": "More stories are on their way.",
   "copy.PastEventsJournal.emptyHint": "Choose another year or value to explore the archive.",
   "copy.PastEventsJournal.reset": "Show all past events",
-  "copy.PastEventsJournal.story": "story"
+  "copy.PastEventsJournal.story": "story",
+  "copy.AmbulancePass.pedestrian": "A man leaves Health City with his check-up report, pauses to think Tuhi Nirankar, then runs toward the ambulance as it reverses to the left.",
+  "copy.AmbulancePass.thought": "Tuhi Nirankar",
+  "copy.GuidingForcePage.journey": "Our journey of service",
+  "copy.ProjectAudio.enable": "Play project audio",
+  "copy.ProjectAudio.mute": "Mute project audio",
+  "copy.ProjectAudio.play": "Play project audio",
+  "copy.ProjectFilms.onenessTitle": "Oneness Vann",
+  "copy.ProjectFilms.onenessSubtitle": "In harmony With Nature"
 }
