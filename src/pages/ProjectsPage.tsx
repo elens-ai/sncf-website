@@ -14,7 +14,6 @@ import { subjectFor } from '../utils/waves';
 import { slug } from '../utils/slug';
 import './projects.css';
 import { ProjectFilms } from '../components/ProjectFilms';
-import { ProjectPhotoIntro } from '../components/ProjectPhotoIntro';
 import { SdgRow } from '../components/SdgRow';
 import { goalsOf, PROGRAMME_SDGS } from '../data/sdgs';
 
@@ -76,17 +75,7 @@ const ProjectsCover: React.FC = () => {
   const current = ways[choice] ?? ways[0];
   return <section ref={root} className="projects-cover" data-active={active} style={{ '--cover-ink': current.ink, '--cover-light': current.light, '--ground-a': ground?.accentA, '--ground-b': ground?.accentB } as React.CSSProperties} aria-labelledby="projects-heading">
     <div className="projects-cover-ground" aria-hidden="true">
-      {ground && <MosaicWaves subject={subjectFor(ground)} active={active && !calm} input={waveInput} scale={3} fps={24} />}
-      <ProjectPhotoIntro active={active} reduced={calm} photos={[
-        ...ways.flatMap(way => way.photo ? [way.photo] : []),
-        ...projects.flatMap(project => project.images.slice(1).map(image => image.src)),
-        resolveCMSAsset('asset.ProjectsPage.introHealthTeam', '/images/projects/health-city/team-atrium.webp'),
-        resolveCMSAsset('asset.ProjectsPage.introHealthCeremony', '/images/projects/health-city/ceremony.webp'),
-        resolveCMSAsset('asset.ProjectsPage.introHealthEvening', '/images/programmes/health-city-evening.webp'),
-        resolveCMSAsset('asset.ProjectsPage.introHealthDedication', '/images/projects/health-city/dedication.webp'),
-        resolveCMSAsset('asset.ProjectsPage.introHealthStaff', '/images/projects/health-city/team.webp'),
-        resolveCMSAsset('asset.ProjectsPage.introHealthPlaque', '/images/projects/health-city/plaque.webp'),
-      ]} />
+      {ground && <MosaicWaves subject={subjectFor(ground)} active={active && !calm} input={waveInput} scale={1.4} fps={24} steady />}
     </div>
     <div className="projects-cover-copy">
       <h1 id="projects-heading">{getCMSCopy("copy.ProjectsPage.988b94ac8a81", "Built for people,")}<em>{getCMSCopy("copy.ProjectsPage.27f463b7e8ab", "Rooted in purpose.")}</em></h1>

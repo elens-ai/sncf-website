@@ -17,6 +17,7 @@ import { useSectionActivity } from '../hooks/useSectionActivity';
 import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 import { slug } from '../utils/slug';
 import { youtubeId } from '../utils/youtube';
+import { projectGalleryPhotos } from '../utils/projectGalleryPhotos';
 import { ProjectFilmBackdrop } from './ProjectFilmBackdrop';
 import { ProjectPhotoGallery } from './ProjectPhotoGallery';
 import { ProjectEmblemArt, ProjectTravellingEmblem } from './ProjectTravellingEmblem';
@@ -137,7 +138,7 @@ function ProjectFilmChapter({ project, face, active }: {
   const video = youtubeId(filmSource);
   const videoSrc = /\.(mp4|webm)(?:[?#]|$)/i.test(filmSource) ? filmSource : undefined;
   const poster = film?.poster || (face.image.startsWith('/') ? face.image : roomPhotoFor(`/images/pavilion/${face.image}.jpg`));
-  const photos = [...project.images, ...(MEDIA[project.id] ?? []).filter(item => item.kind === 'photo' && item.src).map(item => ({ src: item.src!, alt: item.alt || item.caption }))].filter((photo, i, all) => !photo.src.includes('volunteers-planning') && all.findIndex(other => other.src === photo.src) === i);
+  const photos = projectGalleryPhotos(project, MEDIA[project.id] ?? []);
   return <section ref={chapter} id={id} data-film-project={project.id} data-active={active} className="project-film-chapter" aria-labelledby={`${id}-title`} style={{ '--film-accent': face.light, '--project-ink': face.ink, '--project-light': face.light } as React.CSSProperties}>
     {travellingEmblem && <ProjectTravellingEmblem project={travellingEmblem} chapter={chapter} source={emblemOrigin} reduced={calm} />}
     <div ref={opening} className="project-film-hero">

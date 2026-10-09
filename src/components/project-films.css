@@ -80,6 +80,14 @@
   .project-film-section-heading { display: block; }.project-film-section-heading > span { display: block; text-align: left; margin-top: 18px; }
   .project-film-figures dd { font-size: clamp(22px,6vw,30px); }.project-film-figures > div { padding-right: 12px; }
 }
+
+/* Give the three opening project marks a little more presence above their
+   headings. The separate fixed travelling marks in the upper-right stay 96px. */
+.projects-films .project-film-emblem.project-film-emblem-origin { width: 148px; height: 148px; }
+@media(max-width:600px) {
+  .projects-films .project-film-emblem.project-film-emblem-origin { width: 132px; height: 132px; }
+}
+
 @media(prefers-reduced-motion:reduce) { .projects-films *, .projects-films *::before, .projects-films *::after { animation: none!important; transition: none!important; scroll-behavior: auto!important; } }
 
 

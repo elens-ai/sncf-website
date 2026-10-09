@@ -6,7 +6,6 @@ import './heal-photo-mosaic.css';
 import { BOOK_COVER, EMPOWER_COMPANIONS, EMPOWER_TILT, PILLAR_LOGOS, companionTransform, type MosaicPillar } from './pillarLogoArt';
 import { PILLARS } from '../data/pillars';
 import { roomPhoto } from '../data/pavilionGallery';
-import { LocalOpacityControls } from './LocalOpacityControls';
 import { PAGE_ACTIVITY_EVENT, pageIsActive } from '../utils/pageActivity';
 
 // Smooth brand contours preserve the model proportions without polygon edges.
@@ -123,8 +122,8 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         </linearGradient>
         {companions && <>
           <linearGradient id={`${clip}-companion-opacity`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="110">
-            <stop offset="0" stopColor="#fff" stopOpacity="var(--empower-companion-top, 0.4)" />
-            <stop offset="1" stopColor="#fff" stopOpacity="var(--empower-companion-bottom, 0.1)" />
+            <stop offset="0" stopColor="#fff" stopOpacity="var(--empower-companion-top, 0.58)" />
+            <stop offset="1" stopColor="#fff" stopOpacity="var(--empower-companion-bottom, 0)" />
           </linearGradient>
           <mask id={`${clip}-companion-mask`} maskUnits="userSpaceOnUse" x="-10" y="-14" width="166" height="140" style={{ maskType: 'alpha' }}>
             <rect x="-10" y="-14" width="166" height="140" fill={`url(#${clip}-companion-opacity)`} />
@@ -198,6 +197,5 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
       </g>
     </svg>
     {caption && <figcaption>{PILLARS.find(item => item.id === pillar)?.emblemCaption ?? logo.caption}</figcaption>}
-    {companions && heroArt && <LocalOpacityControls />}
   </figure>;
 };

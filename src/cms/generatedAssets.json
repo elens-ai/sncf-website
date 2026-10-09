@@ -275,30 +275,6 @@
     "source": "/models/project-oneness-full.glb",
     "label": "ProjectFilms · project-oneness-full.glb"
   },
-  "asset.ProjectsPage.introHealthTeam": {
-    "source": "/images/projects/health-city/team-atrium.webp",
-    "label": "ProjectsPage · team-atrium.webp"
-  },
-  "asset.ProjectsPage.introHealthCeremony": {
-    "source": "/images/projects/health-city/ceremony.webp",
-    "label": "ProjectsPage · ceremony.webp"
-  },
-  "asset.ProjectsPage.introHealthEvening": {
-    "source": "/images/programmes/health-city-evening.webp",
-    "label": "ProjectsPage · health-city-evening.webp"
-  },
-  "asset.ProjectsPage.introHealthDedication": {
-    "source": "/images/projects/health-city/dedication.webp",
-    "label": "ProjectsPage · dedication.webp"
-  },
-  "asset.ProjectsPage.introHealthStaff": {
-    "source": "/images/projects/health-city/team.webp",
-    "label": "ProjectsPage · team.webp"
-  },
-  "asset.ProjectsPage.introHealthPlaque": {
-    "source": "/images/projects/health-city/plaque.webp",
-    "label": "ProjectsPage · plaque.webp"
-  },
   "asset.ProjectFilms.amritVideo": {
     "source": "/videos/projects/project-amrit.mp4",
     "label": "ProjectFilms · project-amrit.mp4"

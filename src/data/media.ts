@@ -1,4 +1,5 @@
 import { bindCMSData, resolveGalleryGroups, validMedia } from '../cms/data';
+import { WATERSHED_PHOTOS } from './watershedPhotos';
 
 /**
  * THE MEDIA LIBRARY — photographs and films for the four content pages.
@@ -62,12 +63,10 @@ export const DEFAULT_MEDIA: Record<string, MediaItem[]> = {
   ],
   'oneness-vann': [
     { id: 'vann-forest', kind: 'photo', src: '/images/programmes/oneness-vann-group.webp', alt: 'Volunteers planting beneath the Oneness Vann banner in Solapur', caption: 'A new Oneness Vann in Solapur, August 2026', wide: true },
-    { id: 'vann-planting', kind: 'photo', src: '/images/mataji-rajpita-planting.webp', alt: 'A sapling being planted', caption: 'The first sapling of a new vann' },
     { id: 'vann-film', kind: 'film', src: null, alt: '', caption: 'Film — how a vann is grown' },
   ],
   watershed: [
-    { id: 'ws-check', kind: 'photo', src: null, alt: '', caption: 'A check dam holding the monsoon', wide: true },
-    { id: 'ws-field', kind: 'photo', src: null, alt: '', caption: 'A field under crop where the land was arid' },
+    ...WATERSHED_PHOTOS.map((photo, index): MediaItem => ({ id: ['ws-field', 'ws-check', 'ws-water'][index], kind: 'photo', ...photo, caption: photo.alt })),
     { id: 'ws-film', kind: 'film', src: null, alt: '', caption: 'Film — the water that stayed' },
   ],
   'adopted-villages': [
