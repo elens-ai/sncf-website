@@ -49,6 +49,16 @@ const RecognitionArchive: React.FC<{ archive: typeof ARCHIVES[number]; items: Aw
     return () => window.clearInterval(timer);
   }, [archive.category, inView, paused, held, reduced, target, prints.length, step]);
   const close = useCallback(() => setTarget(null), []);
+  /* On a phone the side prints step aside (recognition-archive.css), so a sideways swipe on the desk turns the records. */
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (event: React.TouchEvent) => { const t = event.touches[0]; swipe.current = t ? { x: t.clientX, y: t.clientY } : null; };
+  const onTouchEnd = (event: React.TouchEvent) => {
+    const start = swipe.current, t = event.changedTouches[0];
+    swipe.current = null;
+    if (!start || !t || prints.length < 2) return;
+    const dx = t.clientX - start.x, dy = t.clientY - start.y;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.4) step(dx < 0 ? 1 : -1);
+  };
   const open = () => { if (current) setTarget({ award: current.award, photos: current.award.photos!, index: current.index }); };
   const title = archive.title;
   const visible = Array.from({ length: Math.min(5, prints.length) }, (_, offset) => ({ ...prints[(active + offset) % prints.length], offset, indexInArchive: (active + offset) % prints.length }));
@@ -63,9 +73,9 @@ const RecognitionArchive: React.FC<{ archive: typeof ARCHIVES[number]; items: Aw
           {current && <button type="button" className="archive-featured-record" onClick={open} onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)} onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
             <span className="archive-featured-icon" aria-hidden="true"><AwardIcon size={23} strokeWidth={1.4} /></span>
             <span className="archive-featured-copy">
-              <span className="archive-featured-label">{getCMSCopy('copy.RecognitionArchive.featured-label', 'From the archive')}</span>
+              <span className="archive-featured-label">{getCMSCopy('copy.RecognitionArchive.featured-label', 'From the archive')}{current.award.year && <span className="archive-featured-label-year"> · {current.award.year}</span>}</span>
               <strong>{current.award.title}</strong>
-              <span>{current.award.awardedBy}{current.award.year ? ` · ${current.award.year}` : ''}</span>
+              <span>{current.award.awardedBy}{current.award.year && <span className="archive-featured-meta-year"> · {current.award.year}</span>}</span>
             </span>
             <Maximize2 className="archive-featured-open" size={15} aria-hidden="true" />
           </button>}
@@ -74,7 +84,7 @@ const RecognitionArchive: React.FC<{ archive: typeof ARCHIVES[number]; items: Aw
       </aside>
       <div className="archive-collection" id={`${archive.category}-archive-panel`} role="tabpanel" aria-labelledby={`${archive.category}-archive-tab`} tabIndex={0}>
       {current ? <div className="archive-exhibition" onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)} onFocusCapture={() => setHeld(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setHeld(false); }}>
-        <div className="archive-desk" role="group" aria-label={`${title} — select a print to bring it forward`}>
+        <div className="archive-desk" role="group" aria-label={`${title} — select a print to bring it forward`} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           {visible.map(print => <button key={print.key} type="button" className="archive-print" data-slot={print.offset} aria-label={`${print.offset === 0 ? 'Enlarge' : 'Select'} ${print.award.title}`} aria-pressed={print.offset === 0}
             style={{ '--print-ratio': print.photo.width / print.photo.height } as React.CSSProperties}
             onClick={() => { if (print.offset === 0) open(); else setSelected(print.indexInArchive); }}>

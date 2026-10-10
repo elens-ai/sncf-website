@@ -54,11 +54,30 @@ export function HomeLanding({ play, onEnter, onScrollOn, onReplayIntro }: {
     }, GROUND_STEP);
     return () => window.clearInterval(timer);
   }, [active]);
+  /* The foot floats in the screen's corner on a desktop (home-landing.css); once most of the landing has been
+     scrolled away it goes, since its controls belong to the landing. */
+  useEffect(() => {
+    const section = root.current;
+    if (!section) return;
+    let frame = 0, away = false;
+    const read = () => {
+      frame = 0;
+      const next = section.getBoundingClientRect().bottom < window.innerHeight * 0.6;
+      if (next === away) return;
+      away = next;
+      section.dataset.footAway = String(away);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read); };
+    read();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); if (frame) cancelAnimationFrame(frame); };
+  }, []);
   return (
     <section ref={root} id="home-landing" className="home-landing snap-screen" data-active={active}>
       <button className="landing-intro-replay" onClick={onReplayIntro}>Replay introduction <RotateCcw size={12}/></button>
       <div ref={ground} className="landing-ground" aria-hidden="true"><i /><i /></div>
-      <MosaicOverture onChoose={id => onEnter(id)} play={play} heading="h1" onScrollOn={onScrollOn} />
+      <MosaicOverture onChoose={id => onEnter(id)} play={play} heading="h1" onScrollOn={onScrollOn} onReplayIntro={onReplayIntro} />
       {/* the water at the foot of the ground, over the photographs running down into it */}
       <div ref={shore} className="landing-shore" aria-hidden="true"><i /><i /></div>
     </section>

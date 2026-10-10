@@ -1178,5 +1178,7 @@
   "copy.PastEventsJournal.noPhoto": "The report carries no photograph",
   "copy.PastEventsJournal.seeWork": "See the work today",
   "copy.ProgrammeReport.thumbsBack": "Show earlier photographs",
-  "copy.ProgrammeReport.thumbsMore": "Show more photographs"
+  "copy.ProgrammeReport.thumbsMore": "Show more photographs",
+  "copy.MosaicOverture.replay": "Replay introduction",
+  "copy.PullToRefresh.refreshing": "Refreshing"
 }

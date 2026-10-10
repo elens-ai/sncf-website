@@ -98,11 +98,26 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
   .reading-room .subnav[data-floating] { top: 78px; max-width: calc(100% - 24px); }
 }
 
-/* Handheld chapters read vertically, with all four paths available at the top. */
+/* Handheld: the hall is pinned as on the desktop, one screen of scroll per
+   path, with all four paths in a bar at the top under the header. A path
+   taller than the screen scrolls on under that bar before the page turns
+   (--hall-lift, HomePage), and after Projects the page goes on to Awards.
+   overflow: clip, not hidden, so nothing inside loses its sticking. */
 @media (max-width: 1023px) {
-  .home-page .hero-track { height: auto; }
-  .home-page .hero-track > #hero-clone-stage { position: relative; top: auto; min-height: 0; padding: 28px max(20px, env(safe-area-inset-left)) 36px max(20px, env(safe-area-inset-right)); }
-  .home-page #hero-clone-stage > .hero-path-tabs { position: relative; inset: auto; order: -1; flex: none; width: 100%; margin: 0 0 28px; padding: 0; opacity: 1; }
+  .home-page .hero-track { height: calc(100vh * (var(--hero-count, 4) + .35)); height: calc(100dvh * (var(--hero-count, 4) + .35)); }
+  .home-page .hero-track > #hero-clone-stage {
+    position: sticky; top: 0; height: 100vh; height: 100dvh; min-height: 0; overflow: clip; justify-content: flex-start;
+    padding: var(--site-header-height, 72px) max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right));
+  }
+  .home-page #hero-clone-stage > .hero-path-tabs {
+    position: relative; z-index: 30; inset: auto; order: -1; flex: none; opacity: 1;
+    margin: 0 calc(-1 * max(20px, env(safe-area-inset-right))) 18px calc(-1 * max(20px, env(safe-area-inset-left)));
+    padding: 2px max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
+    background: linear-gradient(color-mix(in srgb, var(--backdrop-dark, #174c3e) 78%, transparent), color-mix(in srgb, var(--backdrop-dark, #174c3e) 62%, transparent));
+    -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2);
+    box-shadow: 0 10px 24px -18px rgb(0 0 0 / .55);
+  }
+  .home-page .hero-track #hero-foreground-content { transform: translate3d(0, calc(var(--hall-lift, 0px) * -1), 0); }
   .home-page #hero-clone-stage .hero-path-tabs [role='tablist'] { width: 100%; max-width: 600px; gap: 0; }
   .home-page #hero-clone-stage .hero-path-tabs [role='tab'] { flex: 1; min-height: 44px; }
   .home-page #hero-foreground-content { flex: none; opacity: 1; }
@@ -145,4 +160,67 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
 @media (max-width: 767px) and (max-height: 650px) and (orientation: portrait) {
   .splash-mission-page[data-page='message'] .splash-copy-body { margin-top: 22px; }
   .splash-mission-page[data-page='message'] .splash-satguru { top: 36%; }
+}
+
+/* THE HALL FITS THE SCREEN on a handheld held upright: everything from the
+   eyebrow to below Explore stands between the path bar and the screen's foot,
+   the emblem as large as the room left allows (--hall-art-w, measured in
+   HomePage). The words keep a readable size and close up; the goals stand in
+   one row however many there are. (Scoped under the track's own stage so
+   these win over the earlier #hero-clone-stage rules.) */
+@media (max-width: 1023px) and (orientation: portrait) {
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content { gap: 0; }
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content .hero-eyebrow { margin-bottom: 6px; }
+  .home-page .hero-track > #hero-clone-stage #hero-script-pillar-name { margin-bottom: 4px; }
+  .home-page .hero-track > #hero-clone-stage #hero-headline { margin-bottom: 0; }
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content .hero-heal-art { width: var(--hall-art-w, min(60vw, 24svh, 230px)); max-width: 100%; margin-block: 10px 12px; }
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content .hero-heal-art > figcaption { margin-top: 2px; }
+  .home-page .hero-track > #hero-clone-stage #hero-body-text { min-height: 0 !important; margin-bottom: 12px; }
+  .home-page .hero-track > #hero-clone-stage .hero-goals-wrap { margin-block: 0 12px; }
+  .home-page .hero-track > #hero-clone-stage .hero-goals { --sdg-w: min(42px, calc((100vw - 40px - 7 * 5px) / 8)); gap: 7px; }
+  .home-page .hero-track > #hero-clone-stage .hero-goals ul,
+  .home-page .hero-track > #hero-clone-stage .hero-goals ul:has(li:nth-child(8)) { display: flex; flex-wrap: nowrap; gap: 5px; }
+  .home-page .hero-track > #hero-clone-stage .hero-impact { padding-block: 10px; margin-bottom: 4px; }
+  .home-page .hero-track > #hero-clone-stage .hero-impact > div > span:first-child { font-size: clamp(22px, 6vw, 27px); }
+  .home-page .hero-track > #hero-clone-stage .hero-explore { margin-block: 0; }
+}
+/* A SHORT SCREEN (an SE, most Androids under 780px tall) has no room for the
+   emblem on a line of its own: it stands beside the headline and paragraph,
+   the name above both and the goals, figures and Explore below. The two
+   wrappers step aside (display: contents) so their lines can take places in
+   one grid; they carry no styling of their own, and the fades are on the
+   lines themselves. */
+@media (max-width: 1023px) and (orientation: portrait) and (max-height: 780px) {
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 14px; align-items: start;
+    grid-template-areas: "eyebrow eyebrow" "name name" "headline art" "body art" "goals goals" "impact impact" "explore explore";
+  }
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content :is(.hero-intro-title, .hero-details) { display: contents; }
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content .hero-eyebrow { grid-area: eyebrow; margin-bottom: 4px; }
+  .home-page .hero-track > #hero-clone-stage #hero-script-pillar-name { grid-area: name; }
+  .home-page .hero-track > #hero-clone-stage #hero-headline { grid-area: headline; font-size: clamp(19px, 5.4vw, 22px); line-height: 1.18; }
+  .home-page .hero-track > #hero-clone-stage #hero-body-text { grid-area: body; align-self: start; margin-top: 8px; font-size: 13px; line-height: 1.5; }
+  .home-page .hero-track > #hero-clone-stage .hero-goals-wrap { grid-area: goals; }
+  .home-page .hero-track > #hero-clone-stage .hero-impact { grid-area: impact; padding-block: 8px; }
+  .home-page .hero-track > #hero-clone-stage .hero-impact > div > span:first-child { font-size: clamp(20px, 5.6vw, 25px); }
+  .home-page .hero-track > #hero-clone-stage .hero-explore { grid-area: explore; }
+  .home-page .hero-track > #hero-clone-stage .hero-explore-link { min-height: 40px; padding-block: 6px; }
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content .hero-heal-art { grid-area: art; align-self: center; margin: 4px 0 12px; }
+  .home-page .hero-track > #hero-clone-stage #hero-foreground-content .hero-heal-art > figcaption { width: auto; max-width: 100%; left: auto; transform: none; font-size: 15px; line-height: 1.25; white-space: normal; }
+}
+
+/* The site carries its own pull to refresh on a touch screen (PullToRefresh):
+   the browser's own is turned off there, so the two never go together. */
+@media (max-width: 1023px) and (pointer: coarse) { html { overscroll-behavior-y: contain; } }
+
+/* On a handheld the path bar belongs to the pinned hall: hidden while the hall
+   rises into view (and when it leaves after Projects), it fades in under the
+   header once Heal has the screen (HomePage sets data-hall-pinned). */
+@media (max-width: 1023px) {
+  .home-page #hero-clone-stage > .hero-path-tabs { visibility: visible; transition: opacity .35s ease, translate .45s cubic-bezier(.22, 1, .36, 1), visibility 0s linear 0s; }
+  /* hidden, not just faded: its tabs take taps of their own (pointer-events: auto) */
+  .home-page #hero-clone-stage:not([data-hall-pinned='true']) > .hero-path-tabs { opacity: 0; translate: 0 -10px; visibility: hidden; transition: opacity .35s ease, translate .45s cubic-bezier(.22, 1, .36, 1), visibility 0s linear .35s; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  .home-page #hero-clone-stage > .hero-path-tabs { transition: none; translate: none; }
 }

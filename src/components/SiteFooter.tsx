@@ -3,8 +3,8 @@ import { useCMSRevision } from '../cms/CMSContentProvider';
 import { getSiteSettings, siteOverride } from '../cms/siteSettings';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { Link } from 'react-router-dom';
-import React from 'react';
-import { MapPin, Phone, Mail, Heart, Handshake, CalendarHeart, ArrowUpRight, ArrowUp } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { MapPin, Phone, Mail, Heart, Handshake, CalendarHeart, ArrowUpRight, ArrowUp, ChevronDown } from 'lucide-react';
 import { SOCIAL_ART } from './SocialSidebar';
 import './site-footer.css';
 
@@ -40,6 +40,15 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
   const site = getSiteSettings();
   const GROUPS = site.footerColumns;
   const toTop = () => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  /* On a phone the link columns fold into sections that open on a tap
+     (site-footer.css), so the band stays short and every link is a full row. */
+  const [folded, setFolded] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches);
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 640px)');
+    const sync = () => setFolded(media.matches);
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   return (
   <footer
@@ -145,12 +154,14 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
         </div>
 
         {/* Link groups */}
-        <nav aria-label={getCMSCopy("copy.SiteFooter.26c87bb51e69", "Footer")} className="grid gap-8 sm:grid-cols-3">
-          {GROUPS.map((group) => (
-            <div key={group.title}>
+        <nav aria-label={getCMSCopy("copy.SiteFooter.26c87bb51e69", "Footer")} className="footer-nav grid gap-8 sm:grid-cols-3">
+          {GROUPS.map((group) => {
+            const title = (
               <h2 className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-white/55 mb-3">
                 {group.title}
               </h2>
+            );
+            const links = (
               <ul className="space-y-2">
                 {group.links.map((link) => {
                   const cls =
@@ -178,8 +189,16 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ onOpenDonate }) => {
                   );
                 })}
               </ul>
-            </div>
-          ))}
+            );
+            return folded ? (
+              <details key={group.title} className="footer-group">
+                <summary>{title}<ChevronDown className="footer-group-chevron" size={18} aria-hidden="true" /></summary>
+                {links}
+              </details>
+            ) : (
+              <div key={group.title}>{title}{links}</div>
+            );
+          })}
         </nav>
       </div>
 

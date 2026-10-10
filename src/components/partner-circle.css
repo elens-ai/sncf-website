@@ -59,3 +59,5 @@
 /* a small circle sets the cornerstones' names larger in its own measure, so they stay readable */
 @media (max-width: 560px) { .partner-circle-field-name { font-size: 17px; letter-spacing: 0.14em; } .partner-circle-band { stroke-width: 24; } .partner-circle-field[data-on='true'] .partner-circle-band { stroke-width: 26; } }
 @media (prefers-reduced-motion: reduce) { .partner-circle *, .collaboration-section[data-arrived='true'] .partner-circle-node { animation: none !important; transition: none !important; } }
+/* each badge answers a little beyond its rim, so a finger finds it on a phone (the circle's own picture is unchanged) */
+.partner-circle-node::before { content: ''; position: absolute; inset: -4px; border-radius: 50%; }

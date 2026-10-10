@@ -121,8 +121,8 @@
       "emblemCaption": "One purpose. Lasting impact.",
       "stats": [
         {
-          "label": "Water Bodies Revived",
-          "value": "5,962"
+          "label": "Water Bodies",
+          "value": "1,600+"
         },
         {
           "label": "Oneness Vann Plants",
@@ -4148,7 +4148,9 @@
     "copy.PastEventsJournal.noPhoto": "The report carries no photograph",
     "copy.PastEventsJournal.seeWork": "See the work today",
     "copy.ProgrammeReport.thumbsBack": "Show earlier photographs",
-    "copy.ProgrammeReport.thumbsMore": "Show more photographs"
+    "copy.ProgrammeReport.thumbsMore": "Show more photographs",
+    "copy.MosaicOverture.replay": "Replay introduction",
+    "copy.PullToRefresh.refreshing": "Refreshing"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -10437,6 +10439,16 @@
         "page": "other",
         "section": "Programme Report",
         "label": "Programme Report · Show more photographs"
+      },
+      "copy.MosaicOverture.replay": {
+        "page": "home",
+        "section": "Landing (Four paths. One purpose.)",
+        "label": "Landing (Four paths. One purpose.) · Replay introduction"
+      },
+      "copy.PullToRefresh.refreshing": {
+        "page": "other",
+        "section": "Pull To Refresh",
+        "label": "Pull To Refresh · Refreshing"
       }
     },
     "assets": {
@@ -11711,9 +11723,9 @@
       "value": "4,200+",
       "source": "SNCF Activity Report, September 2026 (pillar summary)"
     },
-    "pillar:projects:stat:water-bodies-revived": {
-      "label": "Water Bodies Revived",
-      "value": "5,962",
+    "pillar:projects:stat:water-bodies": {
+      "label": "Water Bodies",
+      "value": "1,600+",
       "source": "SNCF Activity Report, September 2026 (pillar summary)"
     },
     "pillar:projects:stat:oneness-vann-plants": {

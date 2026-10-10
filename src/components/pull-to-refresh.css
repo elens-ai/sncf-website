@@ -1,0 +1,15 @@
+/* PULL TO REFRESH (PullToRefresh.tsx): a disc drawn out from under the
+   header as the page is pulled down at its top, turning as it comes, filled
+   with the page's colour once letting go will refresh, and spinning while
+   the page reloads. */
+.pull-refresh { position: fixed; z-index: 45; left: 50%; top: calc(var(--site-header-height, 72px) - 46px); pointer-events: none;
+  translate: -50% var(--pull, 0px); opacity: min(1, calc(var(--pull-p, 0) * 1.6)); transition: translate .3s cubic-bezier(.22, 1, .36, 1), opacity .25s ease; }
+.pull-refresh[data-state='pulling'], .pull-refresh[data-state='armed'] { transition: none; }
+.pull-refresh-disc { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+  background: rgb(255 255 255 / .94); color: var(--accent-a, #1f8a5c);
+  box-shadow: 0 10px 24px -10px rgb(0 0 0 / .5), inset 0 0 0 1px rgb(0 0 0 / .06);
+  rotate: calc(var(--pull-p, 0) * 300deg); transition: background .2s ease, color .2s ease, scale .2s ease; }
+.pull-refresh[data-state='armed'] .pull-refresh-disc { background: var(--accent-a, #1f8a5c); color: #fff; scale: 1.08; }
+.pull-refresh[data-state='refreshing'] .pull-refresh-disc { background: var(--accent-a, #1f8a5c); color: #fff; animation: pull-refresh-spin .8s linear infinite; }
+@keyframes pull-refresh-spin { to { rotate: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .pull-refresh, .pull-refresh-disc { transition: none; } .pull-refresh[data-state='refreshing'] .pull-refresh-disc { animation: none; } }

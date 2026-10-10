@@ -251,3 +251,32 @@
 
 .landing-intro-replay {position:absolute;right:22px;bottom:12px;z-index:8;display:flex;align-items:center;gap:6px;padding:8px;color:#345c59;font-size:9px;opacity:.7;cursor:pointer;}
 .landing-intro-replay:focus-visible {outline:2px solid #258864;outline-offset:3px;}
+/* Replay introduction: in the landing's foot, beside the pause and the cue,
+   wherever that foot is a row on the first screen (tablet and desktop);
+   on a phone it keeps its place at the landing's foot, by the water. */
+.home-landing .mosaic-intro-replay { display: inline-flex; align-items: center; gap: 8px; padding: 6px 2px; border: 0; background: none; cursor: pointer;
+  font: 500 9px/1.5 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; color: rgb(20 58 51 / 0.72); transition: color .2s ease; }
+.home-landing .mosaic-intro-replay:hover { color: var(--landing-ink); }
+.home-landing .mosaic-intro-replay svg { transition: rotate .45s cubic-bezier(.22, 1, .36, 1); }
+.home-landing .mosaic-intro-replay:hover svg { rotate: -300deg; }
+.home-landing .mosaic-intro-replay:focus-visible { outline: 2px solid var(--landing-ink); outline-offset: 4px; border-radius: 4px; }
+@media (min-width: 640px) { .landing-intro-replay { display: none; } }
+@media (max-width: 639px) { .home-landing .mosaic-intro-replay { display: none; } }
+/* On a desktop the foot (Replay introduction, the pause, Scroll to explore)
+   floats in the screen's bottom-right corner: fixed there while the landing
+   is on screen, so it does not move with the scroll, and gone once the
+   landing has been scrolled away (HomeLanding sets data-foot-away), since
+   its controls belong to the landing. Only the words and icons, each lifted
+   off the photographs by a soft light of its own. */
+@media (min-width: 1024px) {
+  .home-landing .mosaic-overture-foot {
+    position: fixed; z-index: 30; right: clamp(20px, 2.4vw, 40px); bottom: clamp(10px, 1.5svh, 26px);
+    width: auto; max-width: none; margin: 0; padding: 0; justify-content: flex-end; gap: 22px;
+    transition: opacity .35s ease, visibility 0s linear 0s;
+  }
+  .home-landing .mosaic-overture-foot :is(.mosaic-intro-replay, .mosaic-scroll-cue) { text-shadow: 0 0 10px rgb(255 255 255 / 0.9), 0 0 2px rgb(255 255 255 / 0.9); }
+  .home-landing .mosaic-overture-foot svg { filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.9)); }
+  .home-landing .mosaic-overture-foot .mosaic-rotation-pause { width: 28px; height: 28px; margin: 0; border: 0; background: none; box-shadow: none; color: rgb(20 58 51 / 0.72); }
+  .home-landing .mosaic-overture-foot .mosaic-rotation-pause:hover { color: var(--landing-ink); }
+  .home-landing[data-foot-away='true'] .mosaic-overture-foot { opacity: 0 !important; visibility: hidden; pointer-events: none; transition: opacity .35s ease, visibility 0s linear .35s; }
+}

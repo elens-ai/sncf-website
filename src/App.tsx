@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 const HomePage = lazy(() => import('./pages/HomePage'));
 import { ScrollToTop } from './components/ScrollToTop';
+import { PullToRefresh } from './components/PullToRefresh';
 const CMSPage = lazy(() => import('./pages/CMSPage'));
 const ContributionPage = lazy(() => import('./pages/ContributionPage'));
 const CoreValuesPage = lazy(() => import('./pages/CoreValuesPage').then(m => ({ default: m.CoreValuesPage })));
@@ -29,6 +30,7 @@ export default function App() {
     <BrowserRouter>
       <CMSMetadata />
       <ScrollToTop />
+      <PullToRefresh />
       <Suspense fallback={<div className="min-h-screen grid place-items-center bg-deep-blue text-white/70" role="status">Loading page…</div>}>
       <Routes>
         <Route path="/" element={<HomePage />} />
