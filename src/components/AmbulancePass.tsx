@@ -31,19 +31,6 @@ export function AmbulancePass() {
       const scene = ambulanceScene(geometry.roadWidth, geometry.vehicleWidth, progress, motion.matches, doorway);
       van.style.transform = `translate3d(${scene.x}px, 0, 0)`;
       van.style.setProperty('--wheel-turn', `${scene.wheel}deg`);
-      track.style.setProperty('--pedestrian-left', `${scene.pedestrianLeft}px`);
-      track.style.setProperty('--runner-stride', `${scene.stride}deg`);
-      track.style.setProperty('--runner-counter-stride', `${-scene.stride}deg`);
-      track.style.setProperty('--runner-bounce', `${-scene.bounce}px`);
-      track.dataset.running = String(scene.running);
-      track.dataset.noticing = String(scene.noticing || scene.thinking);
-      track.dataset.thinking = String(scene.thinking);
-      track.dataset.frozen = String(scene.frozen);
-      track.dataset.reversing = String(scene.reversing);
-      track.style.setProperty('--runner-rise', `${-scene.rise}px`);
-      track.style.setProperty('--runner-scale', `${scene.scale}`);
-      track.style.setProperty('--runner-opacity', `${scene.opacity}`);
-      track.style.setProperty('--road-ground', `${10 + geometry.vehicleWidth * 14 / 480}px`);
       track.dataset.passing = String(!scene.frozen && !motion.matches && progress > 0 && progress < 1);
       if (progress !== target) frame = requestAnimationFrame(update);
     };
@@ -76,23 +63,6 @@ export function AmbulancePass() {
 
   return <div className="ambulance-road" ref={road}>
     <div className="ambulance-road-line" aria-hidden="true" />
-    <div className="ambulance-pedestrian" role="img" aria-label={getCMSCopy('copy.AmbulancePass.pedestrian', 'A man leaves Health City with his check-up report, pauses to think Tuhi Nirankar, then runs toward the ambulance as it reverses to the left.')}>
-      <svg viewBox="0 0 36 90" aria-hidden="true">
-        <g className="ambulance-runner-body">
-          <path className="runner-leg runner-limb-back" d="M18 51L13 69 14 85 20 88H10L7 69 14 51" />
-          <path className="runner-arm runner-limb-back" d="M23 25L29 39 22 48 18 44 23 37 19 28" />
-          <g className="runner-head"><circle cx="18" cy="11" r="8" /><path d="M11 8Q18 2 25 8M23 11L25 14 22 15" /><circle cx="21" cy="10" r=".6" /></g>
-          <g className="runner-notice"><path d="M0 6L-4 -1M-5 12H-11M3 0V-7" /></g>
-          <path d="M14 20L10 25 9 49 15 53H23L27 48 25 25 21 20M14 24L18 29 22 24" />
-          <path className="runner-leg runner-limb-front" d="M18 51L23 68 20 84 28 88H17L17 69 12 53" />
-          <g className="runner-arm runner-limb-front"><path d="M11 25L6 39 16 44 18 40 12 36 16 28" /><g className="runner-report"><path d="M14 40L25 38 28 54 17 56ZM18 44L23 43M19 47L24 46M20 50L22 52 26 48" /></g></g>
-        </g>
-      </svg>
-    </div>
-    <div className="ambulance-thought" aria-hidden="true">
-      <svg viewBox="0 0 190 90"><path d="M27 59C8 61 4 41 16 31C12 14 31 8 43 15C52 1 77 3 85 13C102 1 124 5 131 16C147 5 170 15 168 30C190 35 186 58 169 62C159 78 137 76 126 67C108 79 90 74 83 68C65 79 44 74 40 65C35 66 29 64 27 59Z"/><circle cx="158" cy="80" r="5"/><circle cx="174" cy="88" r="2"/></svg>
-      <span>{getCMSCopy('copy.AmbulancePass.thought', 'Tuhi Nirankar')}</span>
-    </div>
     <div className="ambulance-vehicle" ref={vehicle}>
       <svg viewBox="0 0 480 200" role="img" aria-label={getCMSCopy('copy.AmbulancePass.description', 'Sant Nirankari Mobile Dispensary Cum Ambulance, with turning wheels and illuminated roof lights.')}>
         <defs>

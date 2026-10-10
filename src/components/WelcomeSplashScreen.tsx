@@ -34,6 +34,8 @@ const WelcomeTypewriter = ({ text, delay, duration }: { text: string; delay: num
 };
 
 interface WelcomeSplashScreenProps {
+  active?: boolean;
+  skipWelcomePhoto?: boolean;
   /** Fired when the logo starts flying to the header. */
   onExitStart: () => void;
   /** Fired as the welcome starts to dissolve into the page beneath it. */
@@ -113,6 +115,8 @@ const BRAND_SCALE_MIN = 0.22;
 const BRAND_SCALE_MAX = 0.5;
 
 export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
+  active = true,
+  skipWelcomePhoto = false,
   onExitStart,
   onLeaveStart,
   onComplete,
@@ -281,28 +285,30 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
      The message and mission pages keep their own time on their rails, which a
      viewer can pause, and end themselves; set still, they hold like the others. */
   useEffect(() => {
-    const next = stage === 'intro' ? [beginWelcome, HOLD_MS]
+    if(!active)return;
+    const next = stage === 'intro' ? [skipWelcomePhoto?beginMessage:beginWelcome, HOLD_MS]
       : stage === 'welcome' ? [beginMessage, welcomeMs]
       : stage === 'message' && still ? [beginLeave, messageMs]
       : null;
     if (!next) return;
     const timer = setTimeout(next[0] as () => void, next[1] as number);
     return () => clearTimeout(timer);
-  }, [stage, still, beginWelcome, beginMessage, beginLeave, welcomeMs, messageMs]);
+  }, [active, skipWelcomePhoto, stage, still, beginWelcome, beginMessage, beginLeave, welcomeMs, messageMs]);
 
   /* Distant last resort, in case a stage's timer never fires: re-armed with
      each stage for the time still to come. It stands down while the message
      and the chapters play, since a viewer may pause them for as long as they
      like. */
   useEffect(() => {
-    const rest = stage === 'intro' ? HOLD_MS + welcomeMs + messageMs
+    if(!active)return;
+    const rest = stage === 'intro' ? HOLD_MS + (skipWelcomePhoto?0:welcomeMs) + messageMs
       : stage === 'welcome' ? welcomeMs + messageMs
       : stage === 'message' ? (still ? messageMs : null)
       : 0;
     if (rest === null) return;
     const finishTimer = setTimeout(completeOnce, rest + FLY_MS + 6000);
     return () => clearTimeout(finishTimer);
-  }, [completeOnce, stage, still, welcomeMs, messageMs]);
+  }, [active, skipWelcomePhoto, completeOnce, stage, still, welcomeMs, messageMs]);
 
   const advance = () => (stage === 'welcome' ? beginMessage() : beginLeave());
 
@@ -329,6 +335,8 @@ export const WelcomeSplashScreen: React.FC<WelcomeSplashScreenProps> = ({
   return (
     <div
       id="welcome-splash-screen"
+      data-active={active}
+      data-stage={stage}
       role="dialog"
       aria-label={getCMSCopy("copy.WelcomeSplashScreen.da87301fca5f", "Sant Nirankari Charitable Foundation — Service with Humility")}
       aria-modal="true"
