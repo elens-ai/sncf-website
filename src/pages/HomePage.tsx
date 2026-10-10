@@ -236,6 +236,9 @@ export default function HomePage() {
       const geometry = heroTrack();
       if (!geometry) return;
       const r = geometry.track.getBoundingClientRect();
+      /* the hall is pinned while its track spans the screen: on a handheld its path bar shows only then (responsive.css) */
+      const pinned = String(r.top <= 1 && r.bottom >= geometry.vh - 1);
+      if (stage && stage.dataset.hallPinned !== pinned) stage.dataset.hallPinned = pinned;
       if (r.top >= geometry.vh || r.bottom <= 0) return;
       const at = (-r.top - geometry.extra) / geometry.vh;
       if (heroClaim.current !== null) { lift(heroClaim.current, at, geometry.vh); return; }
@@ -279,6 +282,7 @@ export default function HomePage() {
       if (raf) cancelAnimationFrame(raf);
       stage?.style.removeProperty('--hall-lift');
       stage?.style.removeProperty('--hall-art-w');
+      if (stage) delete stage.dataset.hallPinned;
     };
   }, [activePillarsList.length, cmsRevision, compactViewport]);
   /* FAR SECTIONS HOLD THEIR COLOURS. The page's accent (--accent-a/-b)

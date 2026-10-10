@@ -212,3 +212,15 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
 /* The site carries its own pull to refresh on a touch screen (PullToRefresh):
    the browser's own is turned off there, so the two never go together. */
 @media (max-width: 1023px) and (pointer: coarse) { html { overscroll-behavior-y: contain; } }
+
+/* On a handheld the path bar belongs to the pinned hall: hidden while the hall
+   rises into view (and when it leaves after Projects), it fades in under the
+   header once Heal has the screen (HomePage sets data-hall-pinned). */
+@media (max-width: 1023px) {
+  .home-page #hero-clone-stage > .hero-path-tabs { visibility: visible; transition: opacity .35s ease, translate .45s cubic-bezier(.22, 1, .36, 1), visibility 0s linear 0s; }
+  /* hidden, not just faded: its tabs take taps of their own (pointer-events: auto) */
+  .home-page #hero-clone-stage:not([data-hall-pinned='true']) > .hero-path-tabs { opacity: 0; translate: 0 -10px; visibility: hidden; transition: opacity .35s ease, translate .45s cubic-bezier(.22, 1, .36, 1), visibility 0s linear .35s; }
+}
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  .home-page #hero-clone-stage > .hero-path-tabs { transition: none; translate: none; }
+}
