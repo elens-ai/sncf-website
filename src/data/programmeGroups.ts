@@ -47,12 +47,14 @@ function nvcProgramme(parts: Activity[]): Activity {
   const youthLabel = c('nvc-youth', 'Skills & arts learner records');
   return {
     id: 'nvc', pillarId: 'enrich', icon: 'sparkles',
-    title: c('nvc-title', 'Nirankari Vocational Centre'), menuLabel: c('nvc-menu', 'Vocational Centre'),
+    title: c('nvc-title', 'Nirankari Vocational Centre'), menuLabel: c('nvc-menu', 'Nirankari Vocational Centre'),
     period: nima?.period ?? trades?.period ?? '',
     blurb: c('nvc-blurb', 'A shared home for reading, academic support, practical skills, music and the arts.'),
     headline: { label: youthLabel, value: figure(youth) },
     dataPoints: [{ label: c('nvc-centres', 'Skills & arts centres'), value: figure(centres) }, { label: youthLabel, value: figure(youth) }],
     images: [...NVC_PHOTOS(), ...(nima?.images ?? []).slice(0, 2), ...(trades?.images ?? []).slice(0, 2)],
+    /* the showcase behind the tile on hover: the centre, a sewing class, its opening, its music */
+    hoverPhotos: [NVC_PHOTOS()[0], SEWING_PHOTOS()[0], NVC_PHOTOS()[1], ...(nima?.images ?? []).slice(0, 1)],
   };
 }
 

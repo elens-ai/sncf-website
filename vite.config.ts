@@ -2,10 +2,12 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
+// TEMPORARY: lets a developer add photographs to the carousels from the page (dev server only).
+import {devPhotoTool} from './scripts/dev-photo-tool';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), devPhotoTool()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

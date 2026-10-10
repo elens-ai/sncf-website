@@ -140,6 +140,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+/* a long name (Nirankari Vocational Centre) is written out in full, over two balanced lines */
+.scrapbook-label[data-long] { padding: 0.8cqw 0.5cqw 1.1cqw; font-size: 2.35cqw; line-height: 1.05; white-space: normal; text-wrap: balance; }
 /* washi tape, its ends torn */
 .scrapbook-tape {
   position: absolute;
@@ -175,7 +177,8 @@
 }
 .scrapbook-note strong { display: block; font: 700 4cqw / 1.05 var(--font-script); color: var(--sb-ink); }
 .scrapbook-page[data-side='right'] .scrapbook-note { left: 20%; }
-.scrapbook-page[data-side='left'] .scrapbook-note { left: 13%; }
+/* clear of the folio beneath it, so a note that runs to two lines never writes over the page number */
+.scrapbook-page[data-side='left'] .scrapbook-note { left: 18%; width: 62%; }
 .scrapbook-doodle { position: absolute; left: -5.2cqw; top: -1.4cqw; width: 4.4cqw; height: auto; overflow: visible; }
 .scrapbook-doodle path { fill: none; stroke: var(--sb-teal); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 .scrapbook-folio { position: absolute; bottom: 12.5%; font: 600 2.3cqw / 1 var(--font-script); color: rgb(23 112 127 / 0.7); }

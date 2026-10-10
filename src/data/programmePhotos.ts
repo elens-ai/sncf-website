@@ -1,5 +1,7 @@
 import { getCMSCopy } from '../cms/runtime';
 import type { Activity } from './activities';
+import ADDED from './addedPhotos.json';
+import { arrangePhotos } from '../utils/photoArrangement';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.ProgrammePhotos.${key}`, fallback);
 const own = (file: string, alt: string) => ({ src: `/images/programmes/${file}`, alt });
@@ -37,7 +39,9 @@ const MORE = (): Record<string, { src: string; alt: string }[]> => ({
   ],
 });
 
-export function programmePhotos(activity: Activity): { src: string; alt: string }[] {
-  const all = [...(activity.images ?? []), ...(MORE()[activity.id] ?? [])];
-  return all.filter((photo, i) => all.findIndex(other => other.src === photo.src) === i);
+export function programmePhotos(activity: Pick<Activity, 'id' | 'images'>): { src: string; alt: string }[] {
+  /* last, any added with the developer photo tool (scripts/dev-photo-tool.ts) */
+  const added = (ADDED as Record<string, { src: string; alt: string }[]>)[activity.id] ?? [];
+  const all = [...(activity.images ?? []), ...(MORE()[activity.id] ?? []), ...added];
+  return arrangePhotos(activity.id, all.filter((photo, i) => all.findIndex(other => other.src === photo.src) === i));
 }

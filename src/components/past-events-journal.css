@@ -43,9 +43,9 @@
 .past-journal-facts>div { display: flex; flex-direction: column-reverse; align-items: flex-start; gap: 5px; flex: 1; min-width: min(125px,100%); }
 .past-journal-facts dt { color: #71858b; font: 400 10px/1.5 var(--font-sans); }
 .past-journal-facts dd { margin: 0; color: #244d54; font: 500 clamp(20px,2.2vw,29px)/1.15 var(--font-sans); letter-spacing: -.03em; overflow-wrap: anywhere; }
-.past-journal-source { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; margin-top: 23px; padding: 8px 0; border-bottom: 1px solid #acc4bd; color: #245a5a; font: 500 12px/1.5 var(--font-sans); text-decoration: none; }
-.past-journal-source:hover svg { transform: translate(2px,-2px); }
-.past-journal-source svg { transition: transform .2s; }
+.past-journal-source, .past-journal-more { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 8px 0; border-bottom: 1px solid #acc4bd; color: #245a5a; font: 500 12px/1.5 var(--font-sans); text-decoration: none; }
+.past-journal-source:hover svg, .past-journal-more:hover svg { transform: translate(2px,-2px); }
+.past-journal-source svg, .past-journal-more svg { transition: transform .2s; }
 .past-journal-browse-heading { display: flex; justify-content: space-between; align-items: center; margin: 30px 0 14px; color: #6c8285; font: 600 10px/1.5 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; }
 .past-journal-browse-heading>span:last-child { font-size: 9px; letter-spacing: .05em; font-weight: 400; }
 .past-journal-cards { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; align-items: stretch; }
@@ -106,3 +106,13 @@
  .past-journal * { transition: none !important; }
  .past-journal-card:hover { transform: none; }
 }
+
+/* a record with no photograph: its value's mark on its colour, the year, what it was */
+.past-journal-art { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; color: var(--past-accent); background: radial-gradient(circle at 28% 22%, color-mix(in srgb, var(--past-accent) 16%, #fff), transparent 62%), linear-gradient(150deg, color-mix(in srgb, var(--past-accent) 9%, #fbfaf6), color-mix(in srgb, var(--past-accent) 24%, #eef2ee)); }
+.past-journal-art svg { width: min(40%, 190px); height: auto; filter: drop-shadow(0 14px 22px color-mix(in srgb, var(--past-accent) 30%, transparent)); }
+.past-journal-art small { position: absolute; top: 18px; left: 20px; padding: 5px 10px; border-radius: 999px; background: #ffffffc8; font: 700 10px/1.2 var(--font-sans); letter-spacing: .12em; text-transform: uppercase; color: color-mix(in srgb, var(--past-accent) 82%, #13212b); }
+.past-journal-art b { position: absolute; right: 22px; bottom: 6px; font: 800 clamp(56px, 7vw, 96px)/1 var(--font-heading); letter-spacing: 0; color: color-mix(in srgb, var(--past-accent) 22%, transparent); }
+.past-journal-art-compact svg { width: 46%; }
+.past-journal-art-compact b { display: none; }
+.past-journal-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; margin-top: 23px; }
+.past-journal-links:empty { display: none; }

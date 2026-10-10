@@ -115,7 +115,7 @@ const Page: React.FC<{ side: Side; face: 'front' | 'back'; snap?: Snap; folio: n
         <span className="scrapbook-tape" aria-hidden="true" />
         <span className="scrapbook-tape" aria-hidden="true" />
         <div className="scrapbook-print">{load && <img src={snap.src} alt={snap.alt} decoding="async" draggable={false} />}</div>
-        <span className="scrapbook-label">{snap.programme}</span>
+        <span className="scrapbook-label" data-long={snap.programme.length > 20 || undefined}>{snap.programme}</span>
       </div>
       <p className="scrapbook-note">
         <svg className="scrapbook-doodle" viewBox="0 0 24 18" aria-hidden="true" focusable="false"><path d="M3 16C5 9 10 5 19 4.5M15 1.5l4.2 3-3.4 3.6" /></svg>

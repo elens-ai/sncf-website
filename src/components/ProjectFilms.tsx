@@ -25,6 +25,10 @@ import { ProjectEmblemArt, ProjectTravellingEmblem } from './ProjectTravellingEm
 import { Saying, hasSaying } from './Saying';
 import { SdgRow } from './SdgRow';
 import './project-films.css';
+import { useDevPhotos } from '../utils/devPhotos';
+
+/* TEMPORARY: the developer photo tool, loaded only under `npm run dev` (scripts/dev-photo-tool.ts); never in a build */
+const DevPhotoTool = import.meta.env.DEV ? React.lazy(() => import('./DevPhotoTool')) : null;
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.ProjectFilms.${key}`, fallback);
 export interface ProjectFilmFace {
@@ -139,7 +143,7 @@ function ProjectFilmChapter({ project, face, active }: {
   const video = youtubeId(filmSource);
   const videoSrc = /\.(mp4|webm)(?:[?#]|$)/i.test(filmSource) ? filmSource : undefined;
   const poster = film?.poster || (face.image.startsWith('/') ? face.image : roomPhotoFor(`/images/pavilion/${face.image}.jpg`));
-  const photos = projectGalleryPhotos(project, MEDIA[project.id] ?? []);
+  const photos = useDevPhotos(project.id, projectGalleryPhotos(project, MEDIA[project.id] ?? []));
   return <section ref={chapter} id={id} data-film-project={project.id} data-active={active} className="project-film-chapter" aria-labelledby={`${id}-title`} style={{ '--film-accent': face.light, '--project-ink': face.ink, '--project-light': face.light } as React.CSSProperties}>
     {travellingEmblem && <ProjectTravellingEmblem project={travellingEmblem} chapter={chapter} source={emblemOrigin} reduced={calm} />}
     <div ref={opening} className="project-film-hero">
@@ -194,8 +198,9 @@ function ProjectFilmChapter({ project, face, active }: {
         </aside>}
       </div>
 
-      {photos.length > 0 && <div className="project-film-gallery" id={`${id}-gallery`}>
-        <ProjectPhotoGallery photos={photos} title={project.title} period={project.period} />
+      {(photos.length > 0 || DevPhotoTool) && <div className="project-film-gallery" id={`${id}-gallery`}>
+        {DevPhotoTool && <div className="dev-photo-anchor" style={{ position: 'relative', height: 0, zIndex: 5 }}><React.Suspense fallback={null}><DevPhotoTool id={project.id} label={project.title} photos={photos} /></React.Suspense></div>}
+        {photos.length > 0 && <ProjectPhotoGallery photos={photos} title={project.title} period={project.period} />}
       </div>}
     </div>
   </section>;
