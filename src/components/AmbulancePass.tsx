@@ -19,7 +19,6 @@ export function AmbulancePass() {
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0, previous = 0;
     let progress: number | null = null;
-    let doorway: { left: number; rise: number; scale: number } | undefined;
     let geometry = { top: 0, height: 0, roadWidth: 0, vehicleWidth: 0 };
     const update = (now: number) => {
       frame = 0;
@@ -28,19 +27,16 @@ export function AmbulancePass() {
       previous = now;
       progress = progress === null || motion.matches ? target : progress + (target - progress) * (1 - Math.exp(-elapsed / 70));
       if (Math.abs(target - progress) < .0003) progress = target;
-      const scene = ambulanceScene(geometry.roadWidth, geometry.vehicleWidth, progress, motion.matches, doorway);
+      const scene = ambulanceScene(geometry.roadWidth, geometry.vehicleWidth, progress, motion.matches);
       van.style.transform = `translate3d(${scene.x}px, 0, 0)`;
       van.style.setProperty('--wheel-turn', `${scene.wheel}deg`);
-      track.dataset.passing = String(!scene.frozen && !motion.matches && progress > 0 && progress < 1);
+      track.dataset.passing = String(!motion.matches && progress > 0 && progress < 1);
       if (progress !== target) frame = requestAnimationFrame(update);
     };
     const schedule = () => { if (!frame) { previous = 0; frame = requestAnimationFrame(update); } };
     const measure = () => {
       const bounds = track.getBoundingClientRect();
       geometry = { top: bounds.top + scrollY, height: bounds.height, roadWidth: bounds.width, vehicleWidth: van.offsetWidth };
-      const ground = 10 + geometry.vehicleWidth * 14 / 480;
-      const door = track.closest('.empower-service-scene')?.querySelector('[data-health-city-exit]')?.getBoundingClientRect();
-      doorway = door ? { left: door.left + door.width / 2 - bounds.left - 18, rise: bounds.bottom - ground - door.bottom, scale: Math.max(.2, Math.min(.7, door.height / 90)) } : undefined;
       schedule();
     };
     // Geometry changes only on resize; scrolling moves one composited layer.
