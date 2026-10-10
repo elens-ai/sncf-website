@@ -100,7 +100,7 @@ export const DEFAULT_PILLARS: PillarState[] = [
     emblemCaption: 'One purpose. Lasting impact.',
     /* Figures from the SNCF activity report, September 2026. */
     stats: [
-      { label: 'Water Bodies Revived', value: '5,962' },
+      { label: 'Water Bodies', value: '1,600+' },
       { label: 'Oneness Vann Plants', value: '600,330' },
       { label: 'Cities Reached', value: '3,460' },
       { label: 'Adopted Villages', value: '4' }

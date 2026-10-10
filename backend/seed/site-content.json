@@ -121,8 +121,8 @@
       "emblemCaption": "One purpose. Lasting impact.",
       "stats": [
         {
-          "label": "Water Bodies Revived",
-          "value": "5,962"
+          "label": "Water Bodies",
+          "value": "1,600+"
         },
         {
           "label": "Oneness Vann Plants",
@@ -4107,7 +4107,13 @@
     "copy.PastEventsJournal.empty": "More stories are on their way.",
     "copy.PastEventsJournal.emptyHint": "Choose another year or value to explore the archive.",
     "copy.PastEventsJournal.reset": "Show all past events",
-    "copy.PastEventsJournal.story": "story"
+    "copy.PastEventsJournal.story": "story",
+    "copy.GuidingForcePage.journey": "Our journey of service",
+    "copy.ProjectAudio.enable": "Play project audio",
+    "copy.ProjectAudio.mute": "Mute project audio",
+    "copy.ProjectAudio.play": "Play project audio",
+    "copy.ProjectFilms.onenessTitle": "Oneness Vann",
+    "copy.ProjectFilms.onenessSubtitle": "In harmony With Nature"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -4485,6 +4491,14 @@
     "asset.ProjectsMosaicArt.petal-photo-bottom": {
       "source": "/images/projects-emblem/photo-bottom.webp",
       "label": "ProjectsMosaicArt · photo-bottom.webp"
+    },
+    "asset.ProjectAudio.amrit": {
+      "source": "/media/projects/project-amrit.mp3",
+      "label": "ProjectAudio · project-amrit.mp3"
+    },
+    "asset.ProjectAudio.oneness": {
+      "source": "/media/projects/oneness-vann.mp3",
+      "label": "ProjectAudio · oneness-vann.mp3"
     }
   },
   "slots": {
@@ -10293,6 +10307,36 @@
         "page": "home",
         "section": "Past events",
         "label": "Past events · story"
+      },
+      "copy.GuidingForcePage.journey": {
+        "page": "guiding-force",
+        "section": "Page",
+        "label": "Page · Our journey of service"
+      },
+      "copy.ProjectAudio.enable": {
+        "page": "other",
+        "section": "Project Audio",
+        "label": "Project Audio · Play project audio"
+      },
+      "copy.ProjectAudio.mute": {
+        "page": "other",
+        "section": "Project Audio",
+        "label": "Project Audio · Mute project audio"
+      },
+      "copy.ProjectAudio.play": {
+        "page": "other",
+        "section": "Project Audio",
+        "label": "Project Audio · Play project audio"
+      },
+      "copy.ProjectFilms.onenessTitle": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · Oneness Vann"
+      },
+      "copy.ProjectFilms.onenessSubtitle": {
+        "page": "other",
+        "section": "Project Films",
+        "label": "Project Films · In harmony With Nature"
       }
     },
     "assets": {
@@ -10641,36 +10685,6 @@
         "section": "Project Films",
         "label": "Project Films · project-oneness-full.glb"
       },
-      "asset.ProjectsPage.introHealthTeam": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · team-atrium.webp"
-      },
-      "asset.ProjectsPage.introHealthCeremony": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · ceremony.webp"
-      },
-      "asset.ProjectsPage.introHealthEvening": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · health-city-evening.webp"
-      },
-      "asset.ProjectsPage.introHealthDedication": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · dedication.webp"
-      },
-      "asset.ProjectsPage.introHealthStaff": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · team.webp"
-      },
-      "asset.ProjectsPage.introHealthPlaque": {
-        "page": "projects",
-        "section": "Page",
-        "label": "Page · plaque.webp"
-      },
       "asset.ProjectFilms.amritVideo": {
         "page": "other",
         "section": "Project Films",
@@ -10795,6 +10809,16 @@
         "page": "other",
         "section": "Projects Mosaic Art",
         "label": "Projects Mosaic Art · photo-bottom.webp"
+      },
+      "asset.ProjectAudio.amrit": {
+        "page": "other",
+        "section": "Project Audio",
+        "label": "Project Audio · project-amrit.mp3"
+      },
+      "asset.ProjectAudio.oneness": {
+        "page": "other",
+        "section": "Project Audio",
+        "label": "Project Audio · oneness-vann.mp3"
       }
     }
   },
@@ -11371,11 +11395,6 @@
       "period": "As on September 2026",
       "source": "SNCF Activity Report, September 2026"
     },
-    "activity:project-amrit:headline": {
-      "label": "Water bodies",
-      "value": "1,600+",
-      "period": "As on September 2026"
-    },
     "activity:project-amrit:metric:water-bodies": {
       "label": "Water bodies",
       "value": "1,600+",
@@ -11592,9 +11611,9 @@
       "value": "4,200+",
       "source": "SNCF Activity Report, September 2026 (pillar summary)"
     },
-    "pillar:projects:stat:water-bodies-revived": {
-      "label": "Water Bodies Revived",
-      "value": "5,962",
+    "pillar:projects:stat:water-bodies": {
+      "label": "Water Bodies",
+      "value": "1,600+",
       "source": "SNCF Activity Report, September 2026 (pillar summary)"
     },
     "pillar:projects:stat:oneness-vann-plants": {

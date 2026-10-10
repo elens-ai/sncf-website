@@ -178,10 +178,42 @@ export default function HomePage() {
        within the current path's screen. */
     const stage = document.getElementById('hero-clone-stage');
     const content = document.getElementById('hero-foreground-content');
+    /* THE HALL FITS THE SCREEN on a handheld held upright: everything from the
+       eyebrow to below Explore stands between the path bar and the screen's
+       foot. The words keep a readable size (responsive.css); the emblem takes
+       the room that is left, as large as that room allows (--hall-art-w).
+       Its caption keeps its size, so only the emblem above it is scaled. */
+    const upright = window.matchMedia('(orientation: portrait)');
+    /* a short screen sets the emblem beside the headline (responsive.css) */
+    const short = window.matchMedia('(max-height: 780px)');
+    const FOOT = 14;
+    let lastArt = -1;
+    const fit = () => {
+      if (!stage || !content) return;
+      if (!compactViewport || !upright.matches) {
+        if (lastArt !== -1) { lastArt = -1; stage.style.removeProperty('--hall-art-w'); }
+        return;
+      }
+      const art = content.querySelector<HTMLElement>('.hero-heal-art');
+      if (!art || !art.offsetHeight) return;
+      const caption = art.querySelector<HTMLElement>(':scope > figcaption');
+      const fixed = caption ? caption.offsetHeight + parseFloat(getComputedStyle(caption).marginTop || '0') : 0;
+      const drawn = Math.max(1, art.offsetHeight - fixed);
+      /* the words are centred in the room left over (an auto margin): measure from where they would start */
+      const top = content.offsetTop - (parseFloat(getComputedStyle(content).marginTop) || 0);
+      const spare = stage.clientHeight - FOOT - top - content.offsetHeight;
+      const room = stage.clientWidth - 40;
+      const widest = short.matches ? Math.min(room * 0.46, 190) : Math.min(room * 0.92, 380);
+      const want = Math.round(Math.max(96, Math.min(widest, art.offsetWidth * (drawn + spare) / drawn)));
+      if (Math.abs(want - art.offsetWidth) < 2) return;
+      lastArt = want;
+      stage.style.setProperty('--hall-art-w', `${want}px`);
+    };
     let lastLift = -1;
     const lift = (index: number, at: number, vh: number) => {
+      fit();
       if (!compactViewport || !stage || !content) return;
-      const overflow = Math.max(0, content.offsetTop + content.offsetHeight + 24 - stage.clientHeight);
+      const overflow = Math.max(0, content.offsetTop + content.offsetHeight + FOOT - stage.clientHeight);
       /* Heal scrolls on from the moment the hall pins; every later path is
          centred on its own screen, its top shown as it turns in and its foot
          before it turns on, whichever way the page is going. */
@@ -233,15 +265,20 @@ export default function HomePage() {
     read();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    upright.addEventListener('change', onScroll);
+    short.addEventListener('change', onScroll);
     /* a path of another height turned in, or fonts and photographs settled */
     const sized = new ResizeObserver(onScroll);
     if (content) sized.observe(content);
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      upright.removeEventListener('change', onScroll);
+      short.removeEventListener('change', onScroll);
       sized.disconnect();
       if (raf) cancelAnimationFrame(raf);
       stage?.style.removeProperty('--hall-lift');
+      stage?.style.removeProperty('--hall-art-w');
     };
   }, [activePillarsList.length, cmsRevision, compactViewport]);
   /* FAR SECTIONS HOLD THEIR COLOURS. The page's accent (--accent-a/-b)
