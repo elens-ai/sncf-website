@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { CalendarDays, CalendarPlus, ArrowUpRight, ChevronLeft, ChevronRight, Phone, QrCode, Sparkles, Images } from 'lucide-react';
+import { CalendarDays, CalendarPlus, ArrowUpRight, ChevronLeft, ChevronRight, Phone, QrCode, Sparkles, Images, Repeat } from 'lucide-react';
 import { getCMSCopy } from '../cms/runtime';
 import { getCMSLink } from '../cms/links';
 import { useCMSRevision } from '../cms/CMSContentProvider';
-import { EVENTS, isPastEvent } from '../data/events';
+import { EVENTS, isPastEvent, type SNCFEvent } from '../data/events';
+import { MAJOR_PAST_EVENTS, RECURRING_EVENTS, SERIES_OF, UPCOMING_EVENTS } from '../data/foundationEvents';
 import { PILLARS } from '../data/pillars';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import { onArrival } from '../utils/arrival';
@@ -20,6 +21,15 @@ import './events-journal.css';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.EventsJournal.${key}`, fallback);
 const FILTERS: ('all' | MosaicPillar)[] = ['all', 'heal', 'enrich', 'empower', 'projects'];
+
+/* THREE VIEWS: what is open or coming up, what comes round again, and the one-time milestones behind us. */
+type View = 'upcoming' | 'recurring' | 'past';
+const VIEWS: View[] = ['upcoming', 'recurring', 'past'];
+const RECURRING_IDS = new Set(RECURRING_EVENTS.map(event => event.id));
+/** An observance on a fixed date, or one of the foundation's regular camps and drives. */
+const isRecurring = (event: SNCFEvent) => event.kind === 'annual' || RECURRING_IDS.has(event.id);
+const viewFromHash = (): View => window.location.hash === '#past-events' ? 'past' : window.location.hash === '#recurring-events' ? 'recurring' : 'upcoming';
+const heldOn = (date: string) => new Date(`${date}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 function JournalPillarIcon({ pillar }: { pillar: MosaicPillar }) {
   return <svg className="journal-pillar-icon" viewBox="0 0 146 120" aria-hidden="true">
@@ -56,25 +66,45 @@ export const EventsSection: React.FC = () => {
   const [filter, setFilter] = useState<'all' | MosaicPillar>('all');
   const [calendar, setCalendar] = useState(false);
   const [qr, setQr] = useState<{ id: string; url: string } | null>(null);
-  const [view, setView] = useState<'upcoming' | 'past'>(() => window.location.hash === '#past-events' ? 'past' : 'upcoming');
+  const [view, setView] = useState<View>(viewFromHash);
   useEffect(() => {
-    const openArchive = () => { if (window.location.hash === '#past-events') setView('past'); };
-    window.addEventListener('hashchange', openArchive);
-    return () => window.removeEventListener('hashchange', openArchive);
+    const openView = () => { if (/^#(past|recurring)-events$/.test(window.location.hash)) setView(viewFromHash()); };
+    window.addEventListener('hashchange', openView);
+    return () => window.removeEventListener('hashchange', openView);
   }, []);
+  /* each view starts from its own first moment, unfiltered */
+  useEffect(() => { setFilter('all'); setChosen(null); }, [view]);
   useEffect(() => {
     if (!visible) return;
     setTick(t => t + 1);
     const id = window.setInterval(() => setTick(t => t + 1), 3600000);
     return () => clearInterval(id);
   }, [visible]);
-  const items = useMemo(() => { void tick; void revision; return resolveEvents(EVENTS).sort((a, b) => (a.days ?? Infinity) - (b.days ?? Infinity)); }, [tick, revision]);
-  const pastItems = useMemo(() => { void revision; return EVENTS.filter(isPastEvent).sort((a, b) => b.occurredOn.localeCompare(a.occurredOn)); }, [revision]);
+  /* the CMS's events, then the foundation's recurring camps and current openings (data/foundationEvents) */
+  const allItems = useMemo(() => {
+    void tick; void revision;
+    const known = new Set(EVENTS.map(event => event.id));
+    return resolveEvents([...EVENTS, ...[...RECURRING_EVENTS, ...UPCOMING_EVENTS].filter(event => !known.has(event.id))])
+      .sort((a, b) => (a.days ?? Infinity) - (b.days ?? Infinity));
+  }, [tick, revision]);
+  const recurringItems = useMemo(() => allItems.filter(item => isRecurring(item.event)), [allItems]);
+  const upcomingItems = useMemo(() => allItems.filter(item => !isRecurring(item.event)), [allItems]);
+  const items = view === 'recurring' ? recurringItems : upcomingItems;
+  /* one-time milestones only: an edition of a recurring event is shown on that event instead */
+  const pastItems = useMemo(() => {
+    void revision;
+    const recorded = EVENTS.filter(isPastEvent).filter(event => !SERIES_OF[event.id]);
+    const known = new Set(recorded.map(event => event.id));
+    return [...recorded, ...MAJOR_PAST_EVENTS.filter(event => !known.has(event.id))].sort((a, b) => b.occurredOn.localeCompare(a.occurredOn));
+  }, [revision]);
+  const editions = useMemo(() => { void revision; return EVENTS.filter(isPastEvent).filter(event => SERIES_OF[event.id]); }, [revision]);
   const filtered = items.filter(i => filter === 'all' || i.event.pillarId === filter);
   const selected = filtered.find(i => i.event.id === chosen) ?? filtered[0];
   const pillar = selected?.event.pillarId ?? (filter === 'all' ? 'projects' : filter);
   const pillarLabel = (id: string) => PILLARS.find(p => p.id === id)?.label ?? id;
-  const dateLabel = selected?.date?.toLocaleDateString('en-GB', { dateStyle: 'full' }) ?? c('join', 'An ongoing initiative');
+  const dateLabel = selected?.date?.toLocaleDateString('en-GB', { dateStyle: 'full' }) ?? selected?.event.cadence ?? c('join', 'An ongoing initiative');
+  const lastHeld = selected ? editions.filter(event => SERIES_OF[event.id] === selected.event.id).sort((a, b) => b.occurredOn.localeCompare(a.occurredOn))[0] : undefined;
+  const recurringSelected = selected ? isRecurring(selected.event) : false;
   const position = selected ? filtered.indexOf(selected) + 1 : 0;
   const qrUrl = qr?.id === selected?.event.id ? qr?.url : null;
   useEffect(() => {
@@ -116,21 +146,23 @@ export const EventsSection: React.FC = () => {
       </button>
     </header>
 
-    <div className="journal-view-switch" role="tablist" aria-label={c('viewLabel', 'Choose upcoming or past events')} onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+    <div className="journal-view-switch" role="tablist" aria-label={c('viewChoose', 'Choose upcoming, recurring or past events')} onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault();
-      const next = event.key === 'Home' ? 'upcoming' : event.key === 'End' ? 'past' : view === 'upcoming' ? 'past' : 'upcoming';
+      const at = VIEWS.indexOf(view);
+      const next = event.key === 'Home' ? VIEWS[0] : event.key === 'End' ? VIEWS[VIEWS.length - 1] : VIEWS[(at + (event.key === 'ArrowRight' ? 1 : VIEWS.length - 1)) % VIEWS.length];
       setView(next);
       event.currentTarget.querySelector<HTMLButtonElement>(`#journal-${next}-tab`)?.focus();
     }}>
-      <button id="journal-upcoming-tab" role="tab" type="button" aria-selected={view === 'upcoming'} aria-controls="journal-upcoming-panel" tabIndex={view === 'upcoming' ? 0 : -1} onClick={() => setView('upcoming')}><CalendarDays size={16} aria-hidden="true" />{c('upcomingView', 'Upcoming & ongoing')}<span>{items.length}</span></button>
+      <button id="journal-upcoming-tab" role="tab" type="button" aria-selected={view === 'upcoming'} aria-controls="journal-upcoming-panel" tabIndex={view === 'upcoming' ? 0 : -1} onClick={() => setView('upcoming')}><CalendarDays size={16} aria-hidden="true" />{c('upcomingView', 'Upcoming & ongoing')}<span>{upcomingItems.length}</span></button>
+      <button id="journal-recurring-tab" role="tab" type="button" aria-selected={view === 'recurring'} aria-controls="journal-upcoming-panel" tabIndex={view === 'recurring' ? 0 : -1} onClick={() => setView('recurring')}><Repeat size={16} aria-hidden="true" />{c('recurringView', 'Recurring')}<span>{recurringItems.length}</span></button>
       <button id="journal-past-tab" role="tab" type="button" aria-selected={view === 'past'} aria-controls="journal-past-panel" tabIndex={view === 'past' ? 0 : -1} onClick={() => setView('past')}><Images size={16} aria-hidden="true" />{c('pastView', 'Past events')}<span>{pastItems.length}</span></button>
     </div>
 
     <div id="journal-past-panel" role="tabpanel" aria-labelledby="journal-past-tab" hidden={view !== 'past'}>
       <PastEventsJournal events={pastItems} />
     </div>
-    <div id="journal-upcoming-panel" role="tabpanel" aria-labelledby="journal-upcoming-tab" hidden={view !== 'upcoming'}>
+    <div id="journal-upcoming-panel" role="tabpanel" aria-labelledby={view === 'recurring' ? 'journal-recurring-tab' : 'journal-upcoming-tab'} hidden={view === 'past'}>
     <div className="journal-toolbar">
       <div className="journal-filters" role="group" aria-label={c('filter', 'Filter by value')}>
         {FILTERS.map(id => {
@@ -147,7 +179,7 @@ export const EventsSection: React.FC = () => {
       <p className="journal-toolbar-note">{c('invitationNote', 'Small moments. Lasting change.')}</p>
     </div>
 
-    <div className="journal-year" role="group" aria-label={c('year', 'The year at a glance')}>
+    {items.some(item => item.date) && <div className="journal-year" role="group" aria-label={c('year', 'The year at a glance')}>
       <div className="journal-year-heading"><span>{c('yearHeading', 'A year of giving back')}</span><span>{items.length} {c('moments', 'moments')}</span></div>
       <div className="journal-months">
         {MONTHS_SHORT.map((month, index) => {
@@ -160,7 +192,7 @@ export const EventsSection: React.FC = () => {
           </button>;
         })}
       </div>
-    </div>
+    </div>}
 
     <div className="journal-spread">
       <article ref={featureRef} className="journal-feature" aria-labelledby="journal-event-title">
@@ -178,17 +210,27 @@ export const EventsSection: React.FC = () => {
               <JournalIllustration pillar={pillar} />
               <div className="journal-date-ticket">
                 <CalendarDays size={16} strokeWidth={1.5} />
-                <strong>{selected.date ? String(selected.date.getDate()).padStart(2, '0') : '∞'}</strong>
-                <span>{selected.date?.toLocaleDateString('en-GB', { month: 'long' }) ?? c('yearRound', 'Year round')}<small>{selected.date?.getFullYear() ?? c('joinAnytime', 'Join anytime')}</small></span>
+                <strong>{selected.date ? String(selected.date.getDate()).padStart(2, '0') : recurringSelected ? '↻' : '∞'}</strong>
+                <span>{selected.date?.toLocaleDateString('en-GB', { month: 'long' }) ?? (selected.event.cadence ? selected.event.tag : c('yearRound', 'Year round'))}<small>{selected.date?.getFullYear() ?? (recurringSelected ? c('recurs', 'Comes round again') : c('joinAnytime', 'Join anytime'))}</small></span>
               </div>
             </div>
             <div className="journal-feature-copy">
               <p className="journal-tag">{isUnObservance(selected.event.tag) ? <UnDayMark /> : selected.event.tag}</p>
               <h3 id="journal-event-title" tabIndex={-1}>{selected.event.title}</h3>
               <p className="journal-when"><CalendarDays size={15} aria-hidden="true" />{dateLabel}</p>
-              <span className="journal-countdown"><span aria-hidden="true" />{selected.days !== null ? countdownLabel(selected.days) : c('yearRound', 'Year round')}</span>
+              <span className="journal-countdown"><span aria-hidden="true" />{selected.days !== null ? countdownLabel(selected.days) : recurringSelected ? c('recurring', 'Recurring') : c('yearRound', 'Year round')}</span>
               {selected.date && (selected.days ?? 0) > 0 && <Ticker date={selected.date} live={visible} />}
               <p className="journal-blurb">{selected.event.blurb}{selected.event.location ? ` · ${selected.event.location}` : ''}{selected.event.time ? ` · ${selected.event.time}` : ''}</p>
+              {Boolean(selected.event.facts?.length) && <dl className="journal-facts">{selected.event.facts!.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}
+              {lastHeld && <p className="journal-last">
+                {lastHeld.photos[0] && <img src={lastHeld.photos[0].src} alt="" loading="lazy" decoding="async" />}
+                <span><small>{c('lastHeld', 'Last held')}</small><time dateTime={lastHeld.occurredOn}>{heldOn(lastHeld.occurredOn)}</time>{lastHeld.location ? ` · ${lastHeld.location}` : ''}</span>
+                {lastHeld.source && <a href={lastHeld.source} target="_blank" rel="noopener noreferrer">{c('readReport', 'Read the report')}<ArrowUpRight size={14} aria-hidden="true" /></a>}
+              </p>}
+              {(selected.event.href || selected.event.source) && <p className="journal-more">
+                {selected.event.href && <a href={selected.event.href}>{c('seeWork', 'See the work')}<ArrowUpRight size={14} aria-hidden="true" /></a>}
+                {selected.event.source && <a href={selected.event.source} target="_blank" rel="noopener noreferrer">{c('onSite', 'On the foundation’s website')}<ArrowUpRight size={14} aria-hidden="true" /></a>}
+              </p>}
               <div className="journal-actions">
                 {selected.date && <a className="journal-save-date" href={icsHref(wrapCalendar(vevent(selected.event, selected.date, nowStamp())))} download={`${selected.event.id}.ics`}><CalendarPlus size={17} aria-hidden="true" />{c('save', 'Save the date')}</a>}
                 <a className="journal-invitation-link" href={inviteUrl(selected.event.id)}>{c('invite', 'View invitation')}<ArrowUpRight size={16} aria-hidden="true" /></a>
@@ -223,7 +265,7 @@ export const EventsSection: React.FC = () => {
         <div className="journal-agenda-scroll">
           {filtered.map((item, i) => <button key={item.event.id} type="button" aria-pressed={item.event.id === selected?.event.id}
             onClick={() => chooseEvent(item.event.id)} style={{ '--event-ink': item.accentA, '--event-tint': item.accentB, '--i': i } as React.CSSProperties}>
-            <span className="journal-mini-date"><strong>{item.date?.getDate() ?? '∞'}</strong><span>{item.date?.toLocaleDateString('en-GB', { month: 'short' }) ?? c('ongoingShort', 'Ongoing')}</span></span>
+            <span className="journal-mini-date"><strong>{item.date?.getDate() ?? (isRecurring(item.event) ? '↻' : '∞')}</strong><span>{item.date?.toLocaleDateString('en-GB', { month: 'short' }) ?? (isRecurring(item.event) ? c('recursShort', 'Recurs') : c('ongoingShort', 'Ongoing'))}</span></span>
             <span className="journal-mini-words"><small>{isUnObservance(item.event.tag) ? <UnDayMark compact /> : item.event.tag}</small><strong>{item.event.title}</strong></span>
             <ArrowUpRight size={15} aria-hidden="true" />
           </button>)}
@@ -233,6 +275,6 @@ export const EventsSection: React.FC = () => {
     </div>
     <p className="journal-selection-status sr-only" role="status" aria-live="polite">{selected ? `${selected.event.title}. ${dateLabel}.` : c('empty', 'No events in this category yet.')}</p>
     </div>
-    <EventsCalendarModal isOpen={calendar} onClose={closeCalendar} items={items} initialEventId={selected?.event.id ?? null} />
+    <EventsCalendarModal isOpen={calendar} onClose={closeCalendar} items={allItems} initialEventId={selected?.event.id ?? null} />
   </section>;
 };

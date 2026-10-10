@@ -1,6 +1,7 @@
 import { getCMSCopy } from '../cms/runtime';
 import { ACTIVITIES } from './activities';
-import { NVC_PART_IDS, partLabel } from './programmeGroups';
+import { NVC_PART_IDS, SEWING_PHOTOS, partLabel } from './programmeGroups';
+import { programmePhotos } from './programmePhotos';
 
 const c = (key: string, fallback: string) => getCMSCopy(`copy.NvcProgrammes.${key}`, fallback);
 export type NvcPartId = typeof NVC_PART_IDS[number];
@@ -13,6 +14,15 @@ export interface NvcProgramme {
   features: { title: string; text: string }[];
   facts: { value: string; label: string; detail: string }[];
   footnote: string;
+}
+
+/** Each NVC programme's photographs, for its carousel: its own photograph, the sewing centres' for Beautician & Sewing,
+    those its record carries (sewing and NIMA have records of their own), then any added with the developer photo tool
+    (src/data/addedPhotos.json, under the programme's id), as arranged with that tool. */
+export function nvcPartPhotos(programme: NvcProgramme) {
+  const record = ACTIVITIES.find(item => item.id === programme.id);
+  const given = [...(programme.photo ? [programme.photo] : []), ...(programme.id === 'skill-trades' ? SEWING_PHOTOS() : [])];
+  return programmePhotos({ id: programme.id, images: [...given, ...(record?.images ?? [])] });
 }
 
 /** The report's existing CMS records stay authoritative. Library is qualitative:

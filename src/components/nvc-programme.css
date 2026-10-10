@@ -3,6 +3,9 @@
 .nvc-programme-main { display: grid; grid-template-columns: .9fr 1.1fr; min-height: 380px; }
 .nvc-programme-visual { position: relative; min-width: 0; overflow: hidden; background: #ebf6f1; }
 .nvc-programme-visual > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* with photographs, the programme's carousel takes the place of the still, at a programme report's proportions */
+.nvc-programme-main[data-gallery] { grid-template-columns: minmax(0, 13fr) minmax(0, 8fr); }
+.nvc-programme-visual[data-gallery] { overflow: visible; padding: 12px; background: transparent; }
 .nvc-learning-art { display: block; width: 100%; height: 100%; max-height: 380px; }
 .nvc-programme-seal { position: absolute; bottom: 20px; left: 20px; display: flex; align-items: center; gap: 18px; padding: 12px 16px; border-radius: 12px; color: #176a78; background: #fffefa; box-shadow: 0 6px 22px #123c5112; font: 600 21px/1 var(--font-sans); }
 .nvc-programme-seal small { font-size: 11px; color: #5a7b83; }
@@ -27,6 +30,8 @@
 @media (max-width: 720px) {
   .nvc-programme-main { grid-template-columns: 1fr; grid-template-rows: 260px 1fr; }
   .nvc-programme-visual { height: 260px; }
+  .nvc-programme-main[data-gallery] { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .nvc-programme-visual[data-gallery] { height: auto; }
   .nvc-programme-copy { min-height: 470px; padding: 27px 22px; }
   .nvc-programme h4 { font-size: 27px; }
   .nvc-programme-line { font-size: 28px; }

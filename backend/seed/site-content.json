@@ -415,7 +415,18 @@
       ],
       "images": [],
       "icon": "spine",
-      "menuLabel": "Chiropractic"
+      "menuLabel": "Chiropractic",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/chiropractic-adjustment.jpg"
+        },
+        {
+          "src": "/images/programmes/chiropractic-clinic.jpg"
+        },
+        {
+          "src": "/images/programmes/chiropractic-satguru.jpg"
+        }
+      ]
     },
     {
       "id": "blood-bank",
@@ -1054,7 +1065,18 @@
       ],
       "images": [],
       "icon": "package-check",
-      "menuLabel": "COVID-19 Relief"
+      "menuLabel": "COVID-19 Relief",
+      "hoverPhotos": [
+        {
+          "src": "/images/programmes/covid-relief-meals.jpg"
+        },
+        {
+          "src": "/images/programmes/covid-relief-care-centre.jpg"
+        },
+        {
+          "src": "/images/programmes/covid-relief-vaccination.jpg"
+        }
+      ]
     },
     {
       "id": "mass-marriages",
@@ -3754,7 +3776,7 @@
     "copy.ProgrammeGroups.sewing-photo-group": "Learners sewing together on the floor of a centre",
     "copy.ProgrammeGroups.nvc-youth": "Skills & arts learner records",
     "copy.ProgrammeGroups.nvc-title": "Nirankari Vocational Centre",
-    "copy.ProgrammeGroups.nvc-menu": "Vocational Centre",
+    "copy.ProgrammeGroups.nvc-menu": "Nirankari Vocational Centre",
     "copy.ProgrammeGroups.nvc-blurb": "A shared home for reading, academic support, practical skills, music and the arts.",
     "copy.ProgrammeGroups.nvc-centres": "Skills & arts centres",
     "copy.ProgrammeReport.previous": "Previous photograph",
@@ -4080,7 +4102,6 @@
     "copy.RecognitionArchive.heading": "Awards &",
     "copy.RecognitionArchive.heading-script": "Recognition",
     "copy.RecognitionArchive.heading-intro": "Celebrating service and a shared commitment to humanity.",
-    "copy.EventsJournal.viewLabel": "Choose upcoming or past events",
     "copy.EventsJournal.upcomingView": "Upcoming & ongoing",
     "copy.EventsJournal.pastView": "Past events",
     "copy.PastEventsJournal.eyebrow": "From the journal",
@@ -4114,6 +4135,20 @@
     "copy.ProjectAudio.play": "Play project audio",
     "copy.ProjectFilms.onenessTitle": "Oneness Vann",
     "copy.ProjectFilms.onenessSubtitle": "In harmony With Nature",
+    "copy.EventsJournal.viewChoose": "Choose upcoming, recurring or past events",
+    "copy.EventsJournal.recurringView": "Recurring",
+    "copy.EventsJournal.recurs": "Comes round again",
+    "copy.EventsJournal.recurring": "Recurring",
+    "copy.EventsJournal.lastHeld": "Last held",
+    "copy.EventsJournal.readReport": "Read the report",
+    "copy.EventsJournal.seeWork": "See the work",
+    "copy.EventsJournal.onSite": "On the foundation’s website",
+    "copy.EventsJournal.recursShort": "Recurs",
+    "copy.PastEventsJournal.reported": "Reported",
+    "copy.PastEventsJournal.noPhoto": "The report carries no photograph",
+    "copy.PastEventsJournal.seeWork": "See the work today",
+    "copy.ProgrammeReport.thumbsBack": "Show earlier photographs",
+    "copy.ProgrammeReport.thumbsMore": "Show more photographs",
     "copy.MosaicOverture.replay": "Replay introduction",
     "copy.PullToRefresh.refreshing": "Refreshing"
   },
@@ -8543,7 +8578,7 @@
       "copy.ProgrammeGroups.nvc-menu": {
         "page": "other",
         "section": "Programme Groups",
-        "label": "Programme Groups · Vocational Centre"
+        "label": "Programme Groups · Nirankari Vocational Centre"
       },
       "copy.ProgrammeGroups.nvc-blurb": {
         "page": "other",
@@ -10170,11 +10205,6 @@
         "section": "Awards",
         "label": "Awards · Celebrating service and a shared commitment to humanity."
       },
-      "copy.EventsJournal.viewLabel": {
-        "page": "home",
-        "section": "Events",
-        "label": "Events · Choose upcoming or past events"
-      },
       "copy.EventsJournal.upcomingView": {
         "page": "home",
         "section": "Events",
@@ -10339,6 +10369,76 @@
         "page": "other",
         "section": "Project Films",
         "label": "Project Films · In harmony With Nature"
+      },
+      "copy.EventsJournal.viewChoose": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Choose upcoming, recurring or past events"
+      },
+      "copy.EventsJournal.recurringView": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Recurring"
+      },
+      "copy.EventsJournal.recurs": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Comes round again"
+      },
+      "copy.EventsJournal.recurring": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Recurring"
+      },
+      "copy.EventsJournal.lastHeld": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Last held"
+      },
+      "copy.EventsJournal.readReport": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Read the report"
+      },
+      "copy.EventsJournal.seeWork": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · See the work"
+      },
+      "copy.EventsJournal.onSite": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · On the foundation’s website"
+      },
+      "copy.EventsJournal.recursShort": {
+        "page": "home",
+        "section": "Events",
+        "label": "Events · Recurs"
+      },
+      "copy.PastEventsJournal.reported": {
+        "page": "home",
+        "section": "Past events",
+        "label": "Past events · Reported"
+      },
+      "copy.PastEventsJournal.noPhoto": {
+        "page": "home",
+        "section": "Past events",
+        "label": "Past events · The report carries no photograph"
+      },
+      "copy.PastEventsJournal.seeWork": {
+        "page": "home",
+        "section": "Past events",
+        "label": "Past events · See the work today"
+      },
+      "copy.ProgrammeReport.thumbsBack": {
+        "page": "other",
+        "section": "Programme Report",
+        "label": "Programme Report · Show earlier photographs"
+      },
+      "copy.ProgrammeReport.thumbsMore": {
+        "page": "other",
+        "section": "Programme Report",
+        "label": "Programme Report · Show more photographs"
       },
       "copy.MosaicOverture.replay": {
         "page": "home",

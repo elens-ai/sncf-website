@@ -450,8 +450,11 @@ const PRESENTATION: Record<string, Partial<Activity>> = {
     /* Satguru Mata ji and Ramit ji at the centre of the team photograph. */
     hoverFocus: { photo: 2, x: 52, y: 63, width: 11, height: 21 },
   },
-  /* no photographs of the camps yet: its symbol stands in */
-  chiropractic: { icon: 'spine', menuLabel: 'Chiropractic' },
+  /* its tile shows its symbol; the clinics at the Samagams blend in behind the chapter on hover */
+  chiropractic: {
+    icon: 'spine', menuLabel: 'Chiropractic',
+    hoverPhotos: [photo('chiropractic-adjustment.jpg'), photo('chiropractic-clinic.jpg'), photo('chiropractic-satguru.jpg')],
+  },
   'blood-bank': {
     icon: 'droplet', menuLabel: 'Blood Bank',
     images: [
@@ -495,7 +498,10 @@ const PRESENTATION: Record<string, Partial<Activity>> = {
     own('cleanliness-hillside.webp', 'Volunteers bagging litter on a hillside in Mussoorie'),
     own('cleanliness-recycle.webp', 'Students with reduce, reuse and recycle placards in Shimla'),
   ]) },
-  'covid-relief': { icon: 'package-check', menuLabel: 'COVID-19 Relief' },
+  'covid-relief': {
+    icon: 'package-check', menuLabel: 'COVID-19 Relief',
+    hoverPhotos: [photo('covid-relief-meals.jpg'), photo('covid-relief-care-centre.jpg'), photo('covid-relief-vaccination.jpg')],
+  },
   'mass-marriages': { icon: 'heart', menuLabel: 'Mass Marriages', ...album([
     own('mass-marriages-couples.webp', 'Couples at the mass marriage ceremony, showered with rose petals'),
     own('mass-marriages-hall.webp', 'The mass marriage ceremony, April 2026'),

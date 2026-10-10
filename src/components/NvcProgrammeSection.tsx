@@ -2,7 +2,9 @@ import React from 'react';
 import { ArrowUpRight, BookOpen, GraduationCap, Music2, Scissors } from 'lucide-react';
 import { resolveCMSMedia } from '../cms/media';
 import { getCMSCopy } from '../cms/runtime';
-import type { NvcProgramme, NvcPartId } from '../data/nvcProgrammes';
+import { nvcPartPhotos, type NvcProgramme, type NvcPartId } from '../data/nvcProgrammes';
+import { useDevPhotos } from '../utils/devPhotos';
+import { ProgrammeCarousel } from './ProgrammeCarousel';
 import './nvc-programme.css';
 
 export const NVC_ICONS = { 'nvc-library': BookOpen, 'nvc-coaching': GraduationCap, 'skill-trades': Scissors, 'skill-nima': Music2 };
@@ -44,13 +46,23 @@ function LearningArtwork({ programme }: { programme: NvcPartId }) {
   </svg>;
 }
 
-export function NvcProgrammeSection({ programme, index }: { programme: NvcProgramme; index: number }) {
+/** `active`: this programme's tab is the one chosen, so its carousel may turn by itself. */
+export function NvcProgrammeSection({ programme, index, active = true }: { programme: NvcProgramme; index: number; active?: boolean }) {
   const Icon = NVC_ICONS[programme.id];
+  /* its photographs as a carousel, the same as a programme report's; the illustration stands in until it has any */
+  const photos = useDevPhotos(programme.id, nvcPartPhotos(programme));
+  const gallery = photos.length > 0 || undefined;
   return <section className="nvc-programme" aria-labelledby={`${programme.id}-title`}>
-    <div className="nvc-programme-main">
-      <div className="nvc-programme-visual">
-        {programme.photo ? <img src={resolveCMSMedia(programme.photo.src)} alt={programme.photo.alt} loading="lazy" decoding="async" /> : <LearningArtwork programme={programme.id} />}
-        <span className="nvc-programme-seal"><Icon size={24} strokeWidth={1.5} /><span>0{index + 1}<small> / 04</small></span></span>
+    <div className="nvc-programme-main" data-gallery={gallery}>
+      <div className="nvc-programme-visual" data-gallery={gallery}>
+        {gallery
+          ? <ProgrammeCarousel id={programme.id} label={programme.title} photos={photos} paused={!active}
+            kicker={getCMSCopy('copy.ProgrammeReport.kicker', 'Programme in focus')}
+            badge={<><Icon size={13} aria-hidden="true" />0{index + 1} / 04</>} />
+          : <>
+            {programme.photo ? <img src={resolveCMSMedia(programme.photo.src)} alt={programme.photo.alt} loading="lazy" decoding="async" /> : <LearningArtwork programme={programme.id} />}
+            <span className="nvc-programme-seal"><Icon size={24} strokeWidth={1.5} /><span>0{index + 1}<small> / 04</small></span></span>
+          </>}
       </div>
       <div className="nvc-programme-copy">
         <p className="nvc-programme-eyebrow">{getCMSCopy('copy.NvcProgrammeSection.parent', 'Nirankari Vocational Centre')}</p>

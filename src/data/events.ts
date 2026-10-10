@@ -50,6 +50,8 @@ export interface SNCFEvent {
   photos?: { src: string; alt: string }[];
   /** Facts for this event only, not cumulative programme totals. */
   facts?: { label: string; value: string }[];
+  /** How often an event with no fixed date comes round ("Held all year", "Every June"). */
+  cadence?: string;
   source?: string;
 }
 

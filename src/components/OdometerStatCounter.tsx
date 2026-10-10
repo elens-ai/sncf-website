@@ -104,6 +104,8 @@ const RollingDigitColumn: React.FC<RollingDigitColumnProps> = ({
   return (
     <div
       className="odometer-digit relative inline-block overflow-hidden select-none"
+      /* the digit it lands on, so a setting can fit the column to it (see programme-report.css) */
+      data-digit={targetDigit}
       style={{
         height: '1.2em',
         width: '1ch',
