@@ -251,3 +251,14 @@
 
 .landing-intro-replay {position:absolute;right:22px;bottom:12px;z-index:8;display:flex;align-items:center;gap:6px;padding:8px;color:#345c59;font-size:9px;opacity:.7;cursor:pointer;}
 .landing-intro-replay:focus-visible {outline:2px solid #258864;outline-offset:3px;}
+/* Replay introduction: in the landing's foot, beside the pause and the cue,
+   wherever that foot is a row on the first screen (tablet and desktop);
+   on a phone it keeps its place at the landing's foot, by the water. */
+.home-landing .mosaic-intro-replay { display: inline-flex; align-items: center; gap: 8px; padding: 6px 2px; border: 0; background: none; cursor: pointer;
+  font: 500 9px/1.5 var(--font-sans); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; color: rgb(20 58 51 / 0.72); transition: color .2s ease; }
+.home-landing .mosaic-intro-replay:hover { color: var(--landing-ink); }
+.home-landing .mosaic-intro-replay svg { transition: rotate .45s cubic-bezier(.22, 1, .36, 1); }
+.home-landing .mosaic-intro-replay:hover svg { rotate: -300deg; }
+.home-landing .mosaic-intro-replay:focus-visible { outline: 2px solid var(--landing-ink); outline-offset: 4px; border-radius: 4px; }
+@media (min-width: 640px) { .landing-intro-replay { display: none; } }
+@media (max-width: 639px) { .home-landing .mosaic-intro-replay { display: none; } }

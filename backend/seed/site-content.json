@@ -4113,7 +4113,9 @@
     "copy.ProjectAudio.mute": "Mute project audio",
     "copy.ProjectAudio.play": "Play project audio",
     "copy.ProjectFilms.onenessTitle": "Oneness Vann",
-    "copy.ProjectFilms.onenessSubtitle": "In harmony With Nature"
+    "copy.ProjectFilms.onenessSubtitle": "In harmony With Nature",
+    "copy.MosaicOverture.replay": "Replay introduction",
+    "copy.PullToRefresh.refreshing": "Refreshing"
   },
   "assets": {
     "asset.AnthemPlayer.bf1bfa524baa": {
@@ -10337,6 +10339,16 @@
         "page": "other",
         "section": "Project Films",
         "label": "Project Films · In harmony With Nature"
+      },
+      "copy.MosaicOverture.replay": {
+        "page": "home",
+        "section": "Landing (Four paths. One purpose.)",
+        "label": "Landing (Four paths. One purpose.) · Replay introduction"
+      },
+      "copy.PullToRefresh.refreshing": {
+        "page": "other",
+        "section": "Pull To Refresh",
+        "label": "Pull To Refresh · Refreshing"
       }
     },
     "assets": {

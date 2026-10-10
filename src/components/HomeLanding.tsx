@@ -58,7 +58,7 @@ export function HomeLanding({ play, onEnter, onScrollOn, onReplayIntro }: {
     <section ref={root} id="home-landing" className="home-landing snap-screen" data-active={active}>
       <button className="landing-intro-replay" onClick={onReplayIntro}>Replay introduction <RotateCcw size={12}/></button>
       <div ref={ground} className="landing-ground" aria-hidden="true"><i /><i /></div>
-      <MosaicOverture onChoose={id => onEnter(id)} play={play} heading="h1" onScrollOn={onScrollOn} />
+      <MosaicOverture onChoose={id => onEnter(id)} play={play} heading="h1" onScrollOn={onScrollOn} onReplayIntro={onReplayIntro} />
       {/* the water at the foot of the ground, over the photographs running down into it */}
       <div ref={shore} className="landing-shore" aria-hidden="true"><i /><i /></div>
     </section>

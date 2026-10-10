@@ -1165,5 +1165,7 @@
   "copy.ProjectAudio.mute": "Mute project audio",
   "copy.ProjectAudio.play": "Play project audio",
   "copy.ProjectFilms.onenessTitle": "Oneness Vann",
-  "copy.ProjectFilms.onenessSubtitle": "In harmony With Nature"
+  "copy.ProjectFilms.onenessSubtitle": "In harmony With Nature",
+  "copy.MosaicOverture.replay": "Replay introduction",
+  "copy.PullToRefresh.refreshing": "Refreshing"
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowUpRight, CalendarDays, Pause, Play } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, CalendarDays, Pause, Play, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
 import { resolveCMSMedia } from '../cms/media';
@@ -112,7 +112,7 @@ function useAssembly(root: React.RefObject<HTMLElement | null>, play: boolean) {
     home page: choosing a door walks the visitor into that path (onChoose is
     handed the door it was chosen from), or on a phone lights that path's
     photographs, and the cue at its foot carries on down the page. */
-export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScrollOn }: {
+export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScrollOn, onReplayIntro }: {
   onChoose: (pillar: MosaicPillar, from: HTMLElement) => void;
   /** Starts the emblem assembling and the words and doors arriving. */
   play?: boolean;
@@ -120,6 +120,8 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
   heading?: 'h1' | 'h2';
   /** Where "Scroll to explore" goes when it is pressed. */
   onScrollOn?: () => void;
+  /** Plays the welcome introduction again (the landing's foot, beside the cue). */
+  onReplayIntro?: () => void;
 }) {
   const root = useRef<HTMLElement>(null);
   useAssembly(root, play);
@@ -218,6 +220,7 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
         ))}
       </nav>
       <div className="mosaic-overture-foot">
+        {onReplayIntro && <button type="button" className="mosaic-intro-replay" onClick={onReplayIntro}>{getCMSCopy('copy.MosaicOverture.replay', 'Replay introduction')} <RotateCcw size={13} aria-hidden="true" /></button>}
         {!calm && <button type="button" className="mosaic-rotation-pause" onClick={() => setPaused(value => !value)} aria-label={paused ? 'Resume pillar rotation' : 'Pause pillar rotation'}>{paused ? <Play size={14} /> : <Pause size={14} />}</button>}
         {onScrollOn
           ? <button type="button" className="mosaic-scroll-cue" onClick={onScrollOn}>{getCMSCopy('copy.MosaicOverture.scroll', 'Scroll to explore')} <ArrowDown size={14} aria-hidden="true" /></button>
