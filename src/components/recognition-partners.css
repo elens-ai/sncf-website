@@ -161,3 +161,48 @@
 .recognition-viewer .award-icon-btn:focus-visible { outline: 2px solid #e4efd4; outline-offset: 3px; }
 @media (max-width: 639px) { .recognition-viewer .award-lightbox-stage { height: 48dvh; }.recognition-viewer figcaption h3 { font-size: 16px; } }
 @media (prefers-reduced-motion: reduce) { .recognition-viewer { animation: none; } }
+
+/* ==========================================================================
+   PARTNERS ON A PHONE: one tight column, the circle at full stretch.
+   - The circle runs almost to the screen's edges, so its badges grow, and
+     each badge answers a little beyond its rim (partner-circle.css).
+   - The partner's card keeps one height (the longest story's), so nothing
+     moves as the partners take their turns, but it no longer wastes it: the
+     logo sits in the card's corner, the words take the full width, and
+     "Visit their website" stands at the card's foot.
+   - "Become a partner" spans the column, its note centred beneath it.
+   - The collective impact reads as one row of four.
+   ========================================================================== */
+@media (max-width: 760px) {
+  .collaboration-layout { row-gap: 18px; }
+  .collaboration-directory { margin-block: 4px; margin-inline: -16px; }
+  .partner-circle-stage { width: min(100%, 540px); }
+
+  .collaboration-partner { position: relative; display: block; padding: 16px 16px 12px; }
+  .collaboration-partner > .collaboration-mark { position: absolute; top: 14px; right: 14px; width: 48px; height: 48px; padding: 8px; border-radius: 12px; }
+  .collaboration-partner-copy { display: flex; flex-direction: column; }
+  .collaboration-partner-copy > :is(.collaboration-partner-kicker, h3) { padding-right: 60px; }
+  .collaboration-partner h3 { margin: 4px 0 8px; font-size: 18px; }
+  .collaboration-partner-copy > p { font-size: 13px; line-height: 1.6; }
+  .collaboration-partner-link { align-self: flex-start; margin-top: auto; min-height: 44px; align-items: flex-end; padding: 12px 0 6px; font-size: 13px; }
+
+  .collaboration-join { justify-self: stretch; width: 100%; margin-top: 2px; }
+  .collaboration-join-note { margin: -8px 0 0; text-align: center; }
+
+  .collaboration-outcomes { margin-top: 30px; padding-top: 20px; }
+  .collaboration-outcomes > p { margin-bottom: 16px; font-size: 24px; }
+  .collaboration-outcomes > p span { margin-top: 4px; }
+  .collaboration-outcomes ul { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .collaboration-outcomes li { padding-left: 9px; }
+  .collaboration-outcomes li::before { top: 9px; }
+  .collaboration-outcomes li strong { font-size: clamp(19px, 5.6vw, 24px); }
+  .collaboration-outcomes li span { margin-top: 4px; font-size: 10px; line-height: 1.35; }
+}
+@media (max-width: 389px) {
+  /* a long name keeps to two lines beside the logo */
+  .collaboration-partner > .collaboration-mark { width: 42px; height: 42px; padding: 7px; }
+  .collaboration-partner-copy > :is(.collaboration-partner-kicker, h3) { padding-right: 50px; }
+  .collaboration-partner h3 { font-size: 16.5px; }
+  .collaboration-partner-copy > p { font-size: 12.5px; }
+}
+@media (max-width: 379px) { .collaboration-directory { margin-inline: -12px; } }
