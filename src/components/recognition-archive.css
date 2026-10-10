@@ -128,3 +128,63 @@
   .recognition-hub .recognition-hub-heading > p { opacity: 1; }
   .recognition-hub-heading h2 > :is(span, em) { transform: none !important; will-change: auto; }
 }
+
+/* ==========================================================================
+   ON A PHONE every collection keeps one layout, whatever its photographs are
+   like or however many it holds:
+   - the record's card is always the same height (its title held to two
+     lines, the source to one), so nothing below it moves as records turn;
+   - the stage fills the screen and the desk takes the room that is left, so
+     the arrows are always on it;
+   - the print forward is one frame (9:10) with its photograph laid on the
+     mount inside it, the same size for a tweet, a certificate or a clipping;
+   - behind it, two sheets lie askew in every collection, in place of the
+     side prints, which a collection of two could not fill. The records turn
+     with the arrows, by themselves, or with a sideways swipe on the desk.
+   ========================================================================== */
+@media (max-width: 760px) {
+  .recognition-stage { display: flex; flex-direction: column; height: 100svh; min-height: 0; padding-top: calc(var(--site-header-height, 72px) + 14px); }
+  .recognition-hub-heading { flex: none; margin-bottom: 18px; }
+  .recognition-hub-heading > p { margin-top: 10px; }
+  .recognition-gallery { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .recognition-archive { flex: 1; min-height: 0; display: flex; flex-direction: column; padding-top: 4px; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+  .archive-inner, .archive-browse, .archive-collection { flex: 1; min-height: 0; width: 100%; display: flex; flex-direction: column; }
+  .archive-browse { gap: 14px; }
+  .archive-sidebar { flex: none; gap: 14px; }
+  .archive-tabs button { min-height: 50px; padding-block: 8px; }
+
+  .archive-featured-record { height: auto; padding: 16px 36px 16px 16px; gap: 14px; }
+  .archive-featured-copy { gap: 5px; }
+  .archive-featured-copy strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; min-height: calc(2 * 1.4em); font-size: 15px; line-height: 1.4; overflow-wrap: break-word; }
+  .archive-featured-copy > span:last-child { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .archive-catalogue { margin-top: 8px; }
+  /* the year stands by the label, where a long source line cannot cut it off */
+  .archive-featured-meta-year { display: none; }
+
+  .archive-exhibition { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+  .archive-desk { flex: 1; min-height: 170px; height: auto; width: 100%; container-type: size; touch-action: pan-y; }
+  .archive-desk > *, .archive-desk::before, .archive-desk::after { --frame-w: min(76cqw, 88cqh * .9); }
+  .archive-print[data-slot='0'] { left: 50%; top: 50%; width: var(--frame-w); height: calc(var(--frame-w) * 10 / 9); min-height: 0; max-height: none; padding: 0; overflow: hidden; background: #f7f2e8; }
+  .archive-print[data-slot='0'] img { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); max-height: none; object-fit: contain; }
+  .archive-print:not([data-slot='0']) { display: none; }
+  .archive-desk::before, .archive-desk::after {
+    content: ''; position: absolute; left: 50%; top: 50%; width: var(--frame-w); aspect-ratio: 9 / 10;
+    border: 1px solid #fff4df40; border-radius: 2px; background: linear-gradient(160deg, #efe7d6, #e2d8c4);
+    box-shadow: 0 20px 36px -18px #071e43aa; pointer-events: none;
+  }
+  .archive-desk::before { transform: translate(-58%, -48%) rotate(-7deg); opacity: .55; }
+  .archive-desk::after { transform: translate(-42%, -51%) rotate(5deg); opacity: .7; }
+  .archive-controls { flex: none; margin-top: 0; width: min(100%, 236px); }
+  .archive-controls button { width: 44px; height: 44px; }
+}
+@media (max-width: 760px) and (max-height: 760px) {
+  .recognition-hub-heading { margin-bottom: 14px; }
+  .archive-featured-record { padding-block: 13px; }
+  .archive-featured-copy strong { font-size: 14px; }
+}
+.archive-featured-label-year { display: none; }
+@media (max-width: 760px) { .archive-featured-label-year { display: inline; color: #f2d59a; } }
+@media (max-width: 760px) and (max-height: 700px) {
+  .recognition-hub-heading h2 { font-size: 31px; }
+  .recognition-hub-heading > p { margin-top: 6px; }
+}
