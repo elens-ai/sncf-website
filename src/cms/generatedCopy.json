@@ -1160,8 +1160,6 @@
   "copy.PastEventsJournal.emptyHint": "Choose another year or value to explore the archive.",
   "copy.PastEventsJournal.reset": "Show all past events",
   "copy.PastEventsJournal.story": "story",
-  "copy.AmbulancePass.pedestrian": "A man leaves Health City with his check-up report, pauses to think Tuhi Nirankar, then runs toward the ambulance as it reverses to the left.",
-  "copy.AmbulancePass.thought": "Tuhi Nirankar",
   "copy.GuidingForcePage.journey": "Our journey of service",
   "copy.ProjectAudio.enable": "Play project audio",
   "copy.ProjectAudio.mute": "Mute project audio",

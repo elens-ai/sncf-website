@@ -3,6 +3,7 @@ import { MosaicOverture } from './MosaicOverture';
 import type { MosaicPillar } from './pillarLogoArt';
 import { useSectionActivity } from '../hooks/useSectionActivity';
 import './home-landing.css';
+import { RotateCcw } from 'lucide-react';
 
 /* THE LANDING'S GROUND passes through these colours, a new one each second,
    starting from the peach: soft tints of the seal's own, and a mid grey, never
@@ -14,7 +15,8 @@ const GROUND_STEP = 1000;
     the hall. Its emblem assembles once the welcome has handed over, and each
     of its four doors leads straight into the hall with that path in front of
     the visitor. */
-export function HomeLanding({ play, onEnter, onScrollOn }: {
+export function HomeLanding({ play, onEnter, onScrollOn, onReplayIntro }: {
+  onReplayIntro: () => void;
   /** Starts the emblem assembling (once the welcome is leaving or done). */
   play: boolean;
   /** Bring the hall forward on this path, and move there. */
@@ -54,6 +56,7 @@ export function HomeLanding({ play, onEnter, onScrollOn }: {
   }, [active]);
   return (
     <section ref={root} id="home-landing" className="home-landing snap-screen" data-active={active}>
+      <button className="landing-intro-replay" onClick={onReplayIntro}>Replay introduction <RotateCcw size={12}/></button>
       <div ref={ground} className="landing-ground" aria-hidden="true"><i /><i /></div>
       <MosaicOverture onChoose={id => onEnter(id)} play={play} heading="h1" onScrollOn={onScrollOn} />
       {/* the water at the foot of the ground, over the photographs running down into it */}

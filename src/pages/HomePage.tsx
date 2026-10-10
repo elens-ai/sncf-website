@@ -44,7 +44,7 @@ const HomeLandingMemo = React.memo(HomeLanding);
 /* the header is painted from the page's CSS colours and never reads the hall's path it is handed */
 const HeaderMemo = React.memo(Header, (previous, next) => (Object.keys(next) as (keyof typeof next)[]).every(key => key === 'currentPillar' || previous[key] === next[key]));
 
-const WELCOME_SESSION_KEY = 'sncf.welcome.shown';
+const WELCOME_SESSION_KEY = 'sncf.welcome.shown.v3';
 /* Editors can switch the whole welcome intro off under "Sections on/off". */
 const introSwitchedOff = () => getCMSSnapshot().components?.['home.welcome']?.enabled === false;
 let welcomeShownInMemory = false;
@@ -62,11 +62,8 @@ export default function HomePage() {
     media.addEventListener('change', update);
     return () => media.removeEventListener('change', update);
   }, []);
-  /* 'showing' -> 'exiting' (logo flies to the header) -> 'done'.
-     The hero is mounted underneath the whole time so the handoff is seamless.
-     A visitor arriving from a scanned pass (?invite=...) skips the splash
-     entirely — they came for an invitation, and 5.7s of signature animation
-     between scan and invitation reads as the page not opening at all. */
+  /* Service with Humility -> group photograph -> Satguru message -> homepage.
+     Invitation links bypass the introduction. */
   const [splashPhase, setSplashPhase] = useState<'showing' | 'exiting' | 'done'>(() =>
     /* partner-invite: the CSR desk's personalised links (PartnersSection)
        skip the splash for the same reason event passes do */
@@ -81,13 +78,22 @@ export default function HomePage() {
     if (splashPhase === 'showing' && introSwitchedOff()) setSplashPhase('done');
   }, [cmsRevision, splashPhase]);
   useEffect(() => {
-    if (splashPhase === 'done') return;
+    if (splashPhase !== 'done') return;
     welcomeShownInMemory = true;
     try { sessionStorage.setItem(WELCOME_SESSION_KEY, '1'); } catch { /* In-memory fallback when storage is unavailable. */ }
   }, [splashPhase]);
+  const [welcomeLeaving,setWelcomeLeaving]=useState(false);
+  const replayWelcome = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setWelcomeLeaving(false);
+    setSplashPhase('showing');
+  }, []);
   const isSplashUp = splashPhase !== 'done';
-  /* the landing's emblem assembles as the welcome dissolves (or at once, without a welcome) */
-  const [welcomeLeaving, setWelcomeLeaving] = useState(false);
+  useEffect(()=>{
+    if(!isSplashUp)return;
+    const overflow=document.body.style.overflow;document.body.style.overflow='hidden';
+    return()=>{document.body.style.overflow=overflow;};
+  },[isSplashUp]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -433,20 +439,12 @@ export default function HomePage() {
   };
 
   return (
-    <div ref={pageRef} className="home-page relative min-h-screen w-full flex flex-col bg-deep-blue font-sans select-none" data-hero-theme={currentPillar.id}>
+    <div ref={pageRef} className="home-page relative min-h-screen w-full flex flex-col bg-deep-blue font-sans select-none" data-hero-theme={currentPillar.id} data-welcome-intro={isSplashUp}>
       {/* One fixed color surface beneath the hero and every following section.
           The active chapter takes over the palette as it enters view. */}
       <div className="accent-canvas absolute inset-0 z-0 pointer-events-none" aria-hidden="true" />
 
-      {/* 0. WELCOME SPLASH SCREEN — hands off to the hero via a shared-element
-             logo flight into the header. */}
-      {isSplashUp && (
-        <WelcomeSplashScreen
-          onExitStart={() => setSplashPhase('exiting')}
-          onLeaveStart={() => setWelcomeLeaving(true)}
-          onComplete={() => setSplashPhase('done')}
-        />
-      )}
+      {isSplashUp&&<WelcomeSplashScreen onExitStart={()=>setSplashPhase('exiting')} onLeaveStart={()=>setWelcomeLeaving(true)} onComplete={()=>setSplashPhase('done')}/>}
 
       {/* 1. TOP HEADER NAVIGATION */}
       <CMSSection id="shared.Header"><HeaderMemo
@@ -473,7 +471,7 @@ export default function HomePage() {
       {/* 2. LANDING — "Four paths. One purpose.", the first screen; its doors lead into the hall.
           3. HERO — the site's single hero, the hall, second. */}
       <CMSLayout sections={[
-        {id:'home.landing',node:(<HomeLandingMemo play={welcomeLeaving || !isSplashUp} onEnter={enterPath} onScrollOn={toFirstPath} />)},
+        {id:'home.landing',node:(<HomeLandingMemo onReplayIntro={replayWelcome} play={welcomeLeaving||!isSplashUp} onEnter={enterPath} onScrollOn={toFirstPath} />)},
         {id:'home.intro',node:(<><div id="hero-track" className="hero-track" style={{ '--hero-count': activePillarsList.length } as React.CSSProperties}>
         <HeroSection
         activeIndex={activeIndex}
