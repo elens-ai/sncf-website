@@ -1,6 +1,10 @@
 /* A ring of SNCF colours around the stationary foundation seal. */
 #site-header #logo-badge-btn.story-logo-trigger { overflow: visible; isolation: isolate; }
-.story-logo-ring { position: absolute; inset: -6px; border-radius: 50%; padding: 5px; background: conic-gradient(#31b280, #24b6d0, #9367b4, #ed579f, #9bcd86, #31b280); mask: linear-gradient(#fff 0 0) content-box exclude, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; animation: story-ring-turn 3s linear infinite; filter: saturate(1.4) brightness(1.18); pointer-events: none; }
+.story-logo-ring { position: absolute; inset: -6px; border-radius: 50%; padding: 5px; background: conic-gradient(#31b280, #24b6d0, #9367b4, #ed579f, #9bcd86, #31b280); mask: linear-gradient(#fff 0 0) content-box exclude, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; animation: story-ring-turn 3s linear 4; filter: saturate(1.4) brightness(1.18); pointer-events: none; }
+/* The ring turns four times as the page opens (and the glow beats five), then holds still, still ringing the seal in
+   its colours. Turning for as long as the page was open kept every page drawing a frame on the main thread at every
+   refresh of the screen: while anything on a page watches for elements coming into view (an IntersectionObserver,
+   which this site has many of), Chrome works out a running animation there, not on the compositor alone. */
 .story-logo-trigger[data-hidden='true'] .story-logo-ring { opacity: 0; }
 .story-logo-trigger:focus-visible { outline: 2px solid #fff; outline-offset: 7px; }
 @keyframes story-ring-turn { to { transform: rotate(360deg); } }
@@ -96,7 +100,7 @@
 
 .foundation-stories-brand > img, .stories-byline > img { border-radius: 50%; background: radial-gradient(circle, #fff 65%, transparent 67%); }
 
-.story-logo-trigger[data-unread='true']::after { content: ''; position: absolute; inset: -8px; border: 1px solid #b8e8e780; border-radius: 50%; box-shadow: 0 0 12px #50d2cc70, 0 0 20px #e872b940; pointer-events: none; animation: story-ring-glow 2s ease-in-out infinite; }
+.story-logo-trigger[data-unread='true']::after { content: ''; position: absolute; inset: -8px; border: 1px solid #b8e8e780; border-radius: 50%; box-shadow: 0 0 12px #50d2cc70, 0 0 20px #e872b940; pointer-events: none; animation: story-ring-glow 2s ease-in-out 5; }
 .story-logo-trigger[data-hidden='true']::after { display: none; }
 @keyframes story-ring-glow { 50% { opacity: .45; transform: scale(1.05); } }
 @media (prefers-reduced-motion: reduce) { .story-logo-trigger[data-unread='true']::after { animation: none; } }

@@ -28,6 +28,18 @@
 :is(.heal-photo-mosaic, .hero-heal-art) > figcaption { position: relative; text-align: center; color: var(--pillar-ui-ink, #24494b); font: 400 23px/1.4 var(--font-script); margin-top: 8px; }
 :is(.heal-photo-mosaic, .hero-heal-art) > figcaption span { display: block; margin-top: 6px; font: 500 8px/1.5 var(--font-sans); letter-spacing: .2em; text-transform: uppercase; color: color-mix(in srgb, var(--pillar-ui-ink, #24494b) 66%, transparent); }
 .pillar-mosaic-depth { pointer-events: none; }
+/* Heal's soft wave of light (PillarPhotoMosaic): two strips of its banded tiles laid over the emblem and cut to its
+   outline by a mask, each slid on by exactly one tile (T, -T in the emblem's units) per cycle, by the compositor
+   alone. Their box is the SVG's own (its viewBox, 174 by 142); a strip starts a tile to the left and runs a tile
+   below, so wherever it is in its travel it covers the box. The travel is the tile as a share of the strip:
+   T / (174 + T) across and T / (142 + T) up, for the tiles of 230 and 150. */
+.heal-sheen { position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 174 / 142; overflow: hidden; pointer-events: none; -webkit-mask: var(--sheen-mask) 0 0 / 100% 100% no-repeat; mask: var(--sheen-mask) 0 0 / 100% 100% no-repeat; }
+.heal-sheen > i { position: absolute; top: 0; left: calc(var(--tile) / -174 * 100%); width: calc((174 + var(--tile)) / 174 * 100%); height: calc((142 + var(--tile)) / 142 * 100%); background: var(--sheen-tile) 0 0 / calc(var(--tile) / (174 + var(--tile)) * 100%) calc(var(--tile) / (142 + var(--tile)) * 100%) repeat; animation: heal-sheen-wide 10s linear infinite; }
+.heal-sheen > i:nth-child(2) { animation-name: heal-sheen-narrow; }
+@keyframes heal-sheen-wide { to { transform: translate(56.9307%, -61.828%); } }
+@keyframes heal-sheen-narrow { to { transform: translate(46.2963%, -51.3699%); } }
+.heal-sheen[data-paused='true'] > i { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .heal-sheen > i { animation: none; } }
 
 /* Heal: faint currents of air drift across behind the emblem (the soft wave
    of light over its surface is SVG in PillarPhotoMosaic). */

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, type RefObject } from 'react';
 import { createFrameClock } from '../utils/frameClock';
 import { pageIsActive } from '../utils/pageActivity';
 import { useSectionActivity } from '../hooks/useSectionActivity';
+import { usePerfTier } from '../hooks/usePerfTier';
 import { genome, lerpGenome, easeOut, paintWaves, type Genome, type Pose, type Subject, type Mote } from '../utils/waves';
 import type { PillarState } from '../types';
 
@@ -99,10 +100,18 @@ interface MosaicWavesProps {
   steady?: boolean;
 }
 
-export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input, scale = SCALE, fps = FPS, steady = false }) => {
+export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input, scale: wantedScale = SCALE, fps: wantedFps = FPS, steady = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const onScreen = useSectionActivity(canvasRef);
-  const running = active && onScreen;
+  /* What the device can spare (utils/perfTier): a device in the middle tier
+     paints fewer frames into a smaller buffer; one in the lowest keeps a still
+     picture, painted once per subject and per size. */
+  const tier = usePerfTier();
+  const fps = tier === 'high' ? wantedFps : Math.min(wantedFps, 20);
+  const scale = tier === 'high' ? wantedScale : wantedScale * 1.5;
+  const running = active && onScreen && tier !== 'low';
+  const runningRef = useRef(running);
+  runningRef.current = running;
   const state = useRef({
     from: null as Genome | null, to: null as Genome | null, shown: null as Genome | null, u: 1,
     pose: { time: 0, travel: 0, px: 0, py: 0, ripple: 0 } as Pose,
@@ -162,6 +171,8 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
       }
       s.paint();
     }, fps);
+    /* set up afresh for another tier while already running: carry on */
+    if (runningRef.current) clock.current.start();
 
     /* Only where a cursor exists: a touch is not a hover. */
     const fine = matchMedia('(hover: hover) and (pointer: fine)');
@@ -181,7 +192,7 @@ export const MosaicWaves: React.FC<MosaicWavesProps> = ({ subject, active, input
       host.removeEventListener('pointermove', move);
       host.removeEventListener('pointerleave', leave);
     };
-  }, [input]);
+  }, [input, scale, fps]);
 
   /* The turn: morph from whatever is on screen to the subject's genome —
      only when the subject really changed, never on a re-activation or a

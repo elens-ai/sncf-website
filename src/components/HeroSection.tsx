@@ -14,6 +14,7 @@ import { PillarArtwork } from './PillarArtwork';
 import { MosaicWaves, type WaveInput } from './MosaicWaves';
 import { subjectFor } from '../utils/waves';
 import { OdometerStatCounter } from '../components/OdometerStatCounter';
+import { usePerfTier } from '../hooks/usePerfTier';
 import { ArrowUpRight, Pause, Play } from 'lucide-react';
 
 interface HeroSectionProps {
@@ -257,7 +258,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
      view leaves upwards, fading and settling back a little, while the next
      rises from below into its place, both drawn at once by a view transition;
      the new page's lines then rise in. */
-  const pageTurns = scrollDriven && canTurnPages();
+  /* A device in the lowest tier (utils/perfTier) changes the page in place, as
+     browsers without view transitions do: capturing both pages as pictures, then
+     drawing them through the turn, was the costliest moment of the hall. */
+  const tier = usePerfTier();
+  const pageTurns = scrollDriven && canTurnPages() && tier !== 'low';
   const latestTurn = useRef<unknown>(null);
   /* the page the hall will show once any turn under way has landed: a turn
      sets it at once, though its page only comes when the turn's capture is

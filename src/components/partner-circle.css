@@ -9,8 +9,15 @@
 .partner-circle-stage { position: relative; container-type: inline-size; width: min(100%, 620px); aspect-ratio: 1; isolation: isolate; }
 .partner-circle-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .partner-circle-guide { fill: none; stroke: #f3eed6; stroke-width: 1; stroke-dasharray: 2 7; opacity: 0.28; }
-.partner-circle-orbits circle { fill: none; stroke: #f3eed6; stroke-width: 1; stroke-dasharray: 1 9; opacity: 0.35; transform-origin: 320px 320px; animation: partner-orbit 60s linear infinite; }
-.partner-circle-orbits circle + circle { stroke-dasharray: 14 10; opacity: 0.18; animation-duration: 90s; animation-direction: reverse; }
+/* the two orbits about the heart: each a layer of its own, turned whole (an SVG shape turned inside the picture was
+   painted again every frame, the whole picture with it) */
+.partner-circle-orbit { position: absolute; inset: 0; pointer-events: none; animation: partner-orbit 60s linear infinite; }
+.partner-circle-orbit + .partner-circle-orbit { animation-duration: 90s; animation-direction: reverse; }
+.partner-circle-orbit svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.partner-circle-orbit circle { fill: none; stroke: #f3eed6; stroke-width: 1; stroke-dasharray: 1 9; opacity: 0.35; }
+.partner-circle-orbit + .partner-circle-orbit circle { stroke-dasharray: 14 10; opacity: 0.18; }
+/* the threads' own layer, so their flow repaints them alone */
+.partner-circle-threads { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; will-change: transform; }
 
 /* the fields: a soft arc each, brightening with the partner or field in view */
 .partner-circle-band { fill: none; stroke: var(--sector); stroke-width: 20; stroke-linecap: round; opacity: 0.22; transition: opacity 0.4s, stroke-width 0.4s; }
@@ -23,6 +30,9 @@
 /* the threads: flowing from the foundation outward, lit for the partner or field in view */
 .partner-circle-thread { stroke: var(--sector); stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 4 6; opacity: 0.62; animation: partner-flow 2.6s linear infinite; transition: opacity 0.35s, stroke-width 0.35s; }
 .partner-circle-thread[data-on='true'] { stroke-width: 3; stroke-dasharray: 26 6; opacity: 1; filter: drop-shadow(0 0 5px var(--sector)); animation-duration: 1.6s; }
+/* Where the device has less to spare (html[data-perf], perfTier.ts) only the lit thread flows; at the least, none. */
+html[data-perf='medium'] .partner-circle-thread:not([data-on='true']) { animation: none; }
+html[data-perf='low'] .partner-circle-thread { animation: none; }
 .partner-circle-thread-seat { stroke: #f3eed6; opacity: 0.3; }
 
 /* the foundation at the heart */

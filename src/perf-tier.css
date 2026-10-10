@@ -1,0 +1,40 @@
+/* ==========================================================================
+   WHAT A DEVICE WITH LESS TO SPARE IS SPARED (html[data-perf], utils/perfTier).
+
+   high    everything as designed (no rules here);
+   medium  the costliest motion thinned (here, and in the components that
+           draw for themselves: the waves paint fewer frames, the partners'
+           threads flow only to the partner in view);
+   low     decorative motion rests: what moves for its own sake stands still
+           as it stands for those who ask for less motion, while content,
+           colour and the turns between the hall's pages stay. The fixed
+           header's frosted glass becomes a plain tint, which a device draws
+           once rather than blurring the page behind it at every frame.
+   ========================================================================== */
+
+/* The header's own motion runs on every page, for as long as the page is open, and while anything on a page watches
+   for elements coming into view (this site has many such watchers) Chrome works out every running animation on the
+   main thread, a frame at each refresh of the screen. So in the middle tier the donate pennant waves, glints and
+   beats four times and rests, and the rail's travelling words stand; in the lowest, none of it moves. */
+html[data-perf='medium'] :is(.donate-ribbon, .donate-ribbon-sheen, .donate-ribbon-heart) { animation-iteration-count: 4; }
+html[data-perf='medium'] .social-rail-text-traveller { animation: none; top: 120px; will-change: auto; }
+html[data-perf='low'] :is(.story-logo-ring, .donate-ribbon, .donate-ribbon-sheen, .donate-ribbon-heart) { animation: none; }
+html[data-perf='low'] .story-logo-trigger[data-unread='true']::after { animation: none; }
+html[data-perf='low'] .social-rail-text-traveller { animation: none; top: 120px; will-change: auto; }
+html[data-perf='low'] #site-header .chrome-scrim { -webkit-backdrop-filter: none; backdrop-filter: none; }
+html[data-perf='low'] .home-page #site-header:not([data-light='true'], [data-section]) .chrome-scrim { background: color-mix(in srgb, var(--pillar-ui-ink, #112f3a) 96%, transparent); }
+html[data-perf='low'] .home-page #site-header[data-light='true'] .chrome-scrim { background: rgb(255 255 255 / 0.62); }
+
+/* the landing: the wall stands and the doors no longer take turns by themselves (MosaicOverture: a door pointed at
+   or tapped still lights its photographs, fading as ever), the emblem and the water rest */
+html[data-perf='low'] .mosaic-wall-col { animation: none; will-change: auto; }
+html[data-perf='low'] :is(.mosaic-lotus, .mosaic-scroll-cue svg, .landing-shore > i) { animation: none; }
+html[data-perf='low'] .home-landing .mosaic-overture-title > span:first-child { transition: none; }
+html[data-perf='low'] .mosaic-path-progress i { animation: none !important; }
+
+/* the hall: Heal's light rests on the emblem */
+html[data-perf='low'] .heal-sheen > i { animation: none; }
+
+/* awards and partners: the drifting sheets behind them, the orbits about the heart */
+html[data-perf='low'] .continuity-art i { animation: none; }
+html[data-perf='low'] .partner-circle-orbit { animation: none; }

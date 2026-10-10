@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowDown, ArrowUpRight, CalendarDays, Pause, Play, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getCMSCopy, resolveCMSAsset } from '../cms/runtime';
@@ -9,6 +9,7 @@ import { PillarMarkShapes } from './PillarMark';
 import { PILLARS } from '../data/pillars';
 import { MOSAIC_WALL } from './mosaicWallTiles';
 import { easeOut } from '../utils/waves';
+import { usePerfTier } from '../hooks/usePerfTier';
 import './mosaic-overture.css';
 
 // Keep every piece in the foundation artwork's original proportions.
@@ -47,21 +48,24 @@ const wallColumns = Array.from({ length: WALL_COLUMNS }, (_, c) =>
   Array.from({ length: WALL_DEPTH }, (_, k) => (c * 5 + k * 7) % MOSAIC_WALL.tiles.length));
 const tileAt = (t: number) => `${(t % MOSAIC_WALL.cols) / (MOSAIC_WALL.cols - 1) * 100}% ${Math.floor(t / MOSAIC_WALL.cols) / Math.max(1, MOSAIC_WALL.rows - 1) * 100}%`;
 
-function MosaicWall({ lit }: { lit: MosaicPillar | null }) {
+/* The doors take turns every few seconds and the wall lights each one's photographs: only the wall's data-lit
+   changes then, so its 240 tiles are made once and kept, rather than made again (and compared) at every turn. */
+const MosaicWall = React.memo(function MosaicWall({ lit }: { lit: MosaicPillar | null }) {
+  const columns = useMemo(() => wallColumns.map((column, c) => (
+    <div key={c} className="mosaic-wall-col" style={{ '--wall-time': `${84 + (c % 4) * 17}s`, '--wall-delay': `${-c * 13}s` } as React.CSSProperties}>
+      {[...column, ...column].map((t, k) => {
+        const pillar = MOSAIC_WALL.tiles[t];
+        return <i key={k} data-pillar={pillar} style={{ backgroundPosition: tileAt(t), '--tile-light': PILLARS.find(item => item.id === pillar)?.accentB } as React.CSSProperties} />;
+      })}
+    </div>
+  )), [PILLARS]);
   return (
     <div className="mosaic-wall" data-lit={lit ?? undefined} aria-hidden="true"
       style={{ '--wall-sprite': `url(${resolveCMSMedia(MOSAIC_WALL.src)})`, '--sprite-cols': MOSAIC_WALL.cols, '--sprite-rows': MOSAIC_WALL.rows } as React.CSSProperties}>
-      {wallColumns.map((column, c) => (
-        <div key={c} className="mosaic-wall-col" style={{ '--wall-time': `${84 + (c % 4) * 17}s`, '--wall-delay': `${-c * 13}s` } as React.CSSProperties}>
-          {[...column, ...column].map((t, k) => {
-            const pillar = MOSAIC_WALL.tiles[t];
-            return <i key={k} data-pillar={pillar} style={{ backgroundPosition: tileAt(t), '--tile-light': PILLARS.find(item => item.id === pillar)?.accentB } as React.CSSProperties} />;
-          })}
-        </div>
-      ))}
+      {columns}
     </div>
   );
-}
+});
 
 /* THE ASSEMBLY, over a little more than two seconds once it is told to play:
    a cupped hand, then the centre petal, then the mirrored pairs unfolding, the
@@ -131,7 +135,10 @@ export function MosaicOverture({ onChoose, play = true, heading = 'h2', onScroll
   const [visible, setVisible] = useState(false);
   const [calm, setCalm] = useState(false);
   const lit = selected ?? paths()[autoIndex].id;
-  const rotating = play && visible && !paused && !selected && !calm;
+  /* A device with least to spare (utils/perfTier) is not walked through the doors: the first stays lit and the
+     wall still, and a door pointed at or tapped still lights its photographs. */
+  const still = usePerfTier() === 'low';
+  const rotating = play && visible && !paused && !selected && !calm && !still;
   useEffect(() => {
     const query = matchMedia('(prefers-reduced-motion: reduce)');
     const read = () => {

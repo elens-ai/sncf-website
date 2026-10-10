@@ -70,14 +70,20 @@
    the hall's own green carries on. They move as the photographs above do:
    rising and falling slowly, as the columns drift up and down, and swaying a
    little as water does, each to its own rhythm, so the two never move as one.
-   The tint at their crests follows the ground's colour as it changes. */
+   The tint at their crests follows the ground's colour as it changes: the
+   water is drawn twice, and as the ground's upper layer fades in or out over
+   its lower one, so does the water's, each having taken its colour while
+   hidden (HomeLanding). The tint itself never moves: a moving colour painted
+   the water afresh every frame, the whole time the landing was on screen. The
+   two run the same waves at the same moment, so the fade shows no second wave. */
 @property --shore-ground { syntax: '<color>'; inherits: true; initial-value: #f9e2c7; }
 .landing-shore {
   --shore-end: color-mix(in srgb, var(--shore-ground) 86%, #063782);
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; height: var(--landing-blend);
   overflow: hidden; pointer-events: none;
-  transition: --shore-ground 0.85s ease-in-out;
 }
+.landing-shore--upper { opacity: 0; transition: opacity 0.85s ease-in-out; }
+.landing-ground[data-upper='shown'] ~ .landing-shore--upper { opacity: 1; }
 .landing-shore > i {
   position: absolute; left: -4%; right: -4%; top: 0; height: 100%;
   -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;

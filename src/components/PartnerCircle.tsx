@@ -111,10 +111,6 @@ export function PartnerCircle({ partners, shown, pinned, onChoose, onHover, onJo
           </defs>
           <circle cx={MID} cy={MID} r={170} fill={`url(#${id}-halo)`} />
           <circle className="partner-circle-guide" cx={MID} cy={MID} r={RING} />
-          <g className="partner-circle-orbits">
-            <circle cx={MID} cy={MID} r={HUB + 22} />
-            <circle cx={MID} cy={MID} r={HUB + 46} />
-          </g>
           {/* the cornerstones, each an arc of colour with its name along it; pointing at one (a wide, unseen band over
               it) lights its partners, and on a touch screen a tap does, until the next */}
           {spans.map(({ sector }) => (
@@ -127,6 +123,14 @@ export function PartnerCircle({ partners, shown, pinned, onChoose, onHover, onJo
                 onPointerUp={event => { if (event.pointerType === 'touch') setLens(now => (now === sector.id ? null : sector.id)); }} />
             </g>
           ))}
+        </svg>
+        {/* The two orbits about the heart, each turned whole by the compositor, and the threads, drawn on a layer of
+            their own (partner-circle.css): turned or flowing inside the picture above, they had the whole picture,
+            its arcs and the names set along them, painted again every frame. */}
+        {[HUB + 22, HUB + 46].map(r => <span key={r} className="partner-circle-orbit" aria-hidden="true">
+          <svg viewBox={`0 0 ${SIZE} ${SIZE}`}><circle cx={MID} cy={MID} r={r} /></svg>
+        </span>)}
+        <svg className="partner-circle-threads" viewBox={`0 0 ${SIZE} ${SIZE}`} aria-hidden="true">
           {/* a thread of light from the foundation to each partner */}
           {ring.map(({ partner, sector }, i) => {
             const [x0, y0] = polar(HUB + 6, angle(i)), [x1, y1] = polar(RING - 38, angle(i));

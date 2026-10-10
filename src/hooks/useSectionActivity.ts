@@ -9,10 +9,13 @@ export function useSectionActivity(ref: RefObject<HTMLElement | null>) {
     if (!element) return;
     let visible = false;
     const sync = () => setActive(visible && pageIsActive(element));
+    /* An element only touching the screen's edge counts as intersecting: the
+       hall's waves, ending exactly where the landing ends and the awards begin,
+       went on drawing above and below the screen. A pixel's margin keeps it out. */
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       sync();
-    });
+    }, { rootMargin: '-1px 0px' });
     observer.observe(element);
     document.addEventListener('visibilitychange', sync);
     document.addEventListener(PAGE_ACTIVITY_EVENT, sync);

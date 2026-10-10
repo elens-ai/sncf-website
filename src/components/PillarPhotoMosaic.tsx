@@ -41,7 +41,12 @@ const empowerTiles = (): EmpowerTile[] => [
    drift across it. Two broad waves of different width and pace overlap so the
    swell never repeats like stripes. Each is one seamless T×T tile of sine
    bands (perpendicular to the diagonal) slid by exactly (T, −T) per cycle, so
-   its loop is invisible. */
+   its loop is invisible.
+   The waves are drawn over the emblem rather than in it (heal-photo-mosaic.css):
+   a strip of tiles, cut to the emblem's outline by a mask, that the compositor
+   slides along. Moved inside the emblem's own picture, the light re-laid and
+   repainted the whole emblem, its photographs, clips and shadows, every frame. */
+/* (each wave's travel, one tile, is written out in heal-photo-mosaic.css: change a tile there too) */
 const HEAL_WAVES = [
   { tile: 230, seconds: 10 },
   { tile: 150, seconds: 7.5 },
@@ -52,6 +57,21 @@ const SHEEN_STOPS = SINE_STEPS.map(o => {
   const s = Math.sin(o * Math.PI * 2);
   return { offset: o, color: s >= 0 ? '#ffffff' : '#0b2a24', opacity: +(Math.abs(s) * (s >= 0 ? .12 : .09)).toFixed(3) };
 });
+/* the emblem's own box (the SVG's viewBox), in which the tiles and the outline are measured */
+const VIEW = { x: -4, y: -12, w: 174, h: 142 };
+const svgImage = (body: string, viewBox: string) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='${viewBox}' preserveAspectRatio='none'>${body}</svg>`)}")`;
+/* one tile of a wave: the same banded gradient the emblem's pattern used, across a T×T square */
+const sheenTile = (tile: number) => svgImage(
+  `<linearGradient id='g' gradientUnits='userSpaceOnUse' x1='0' y1='${tile}' x2='${tile / 2}' y2='${tile / 2}' spreadMethod='repeat'>${SHEEN_STOPS.map(stop => `<stop offset='${stop.offset}' stop-color='${stop.color}' stop-opacity='${stop.opacity}'/>`).join('')}</linearGradient><rect width='${tile}' height='${tile}' fill='url(#g)'/>`,
+  `0 0 ${tile} ${tile}`);
+const SHEEN_TILES = HEAL_WAVES.map(wave => sheenTile(wave.tile));
+const outlineMasks = new Map<string, string>();
+const outlineMask = (paths: string[]) => {
+  const key = paths.join('|');
+  let mask = outlineMasks.get(key);
+  if (!mask) outlineMasks.set(key, mask = svgImage(paths.map(d => `<path d='${d}'/>`).join(''), `${VIEW.x} ${VIEW.y} ${VIEW.w} ${VIEW.h}`));
+  return mask;
+};
 /* Heal's emblem carries the foundation's own photographs, one to a leaf: the yoga
    day (top right), a blood donation camp (top left), an eye checkup camp
    (bottom right) and the Sant Nirankari Health Centre (bottom left), each cropped to its leaf and
@@ -115,25 +135,22 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
   const companions = pillar === 'empower';
   const softSurface = pillar === 'heal' || pillar === 'projects';
   const clip = useId().replace(/:/g, '');
-  const svgRef = useRef<SVGSVGElement>(null);
-  /* The light wave runs on SMIL, which CSS cannot pause: stop it off screen
-     and for reduced motion. */
+  const sheenRef = useRef<HTMLSpanElement>(null);
+  /* The light wave moves only while the emblem is on the screen and the page is in front. */
   useEffect(() => {
-    const svg = svgRef.current;
-    if (pillar !== 'heal' || !svg) return;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sheen = sheenRef.current;
+    if (pillar !== 'heal' || !sheen) return;
     let onScreen = true;
-    const apply = () => (onScreen && !reduced.matches && pageIsActive(svg as unknown as HTMLElement) ? svg.unpauseAnimations() : svg.pauseAnimations());
-    const observer = new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; apply(); });
-    observer.observe(svg);
-    reduced.addEventListener('change', apply);
+    const apply = () => { sheen.dataset.paused = String(!(onScreen && pageIsActive(sheen))); };
+    const observer = new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; apply(); }, { rootMargin: '-1px 0px' });
+    observer.observe(sheen);
     document.addEventListener('visibilitychange', apply);
     document.addEventListener(PAGE_ACTIVITY_EVENT, apply);
     apply();
-    return () => { observer.disconnect(); reduced.removeEventListener('change', apply); document.removeEventListener('visibilitychange', apply); document.removeEventListener(PAGE_ACTIVITY_EVENT, apply); };
+    return () => { observer.disconnect(); document.removeEventListener('visibilitychange', apply); document.removeEventListener(PAGE_ACTIVITY_EVENT, apply); };
   }, [pillar]);
   return <figure className="heal-photo-mosaic" data-pillar={pillar} aria-label={`${logo.label} ${solid ? 'solid emblem' : 'logo photo mosaic'}`}>
-    <svg ref={svgRef} viewBox="-4 -12 174 142" role="img" aria-labelledby={`${clip}-title`}>
+    <svg viewBox="-4 -12 174 142" role="img" aria-labelledby={`${clip}-title`}>
       <title id={`${clip}-title`}>{solid ? `The ${logo.label} emblem in solid colour` : `The ${logo.label} emblem filled with photographs of ${logo.description}`}</title>
       <defs>
         <g id={`${clip}-outline`}>{logo.paths.map(d => <path key={d} d={d} />)}</g>
@@ -165,15 +182,6 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
             <rect x="-10" y="-14" width="166" height="140" fill={`url(#${clip}-companion-opacity)`} />
           </mask>
         </>}
-        {pillar === 'heal' && HEAL_WAVES.map((wave, i) => <React.Fragment key={wave.tile}>
-            <linearGradient id={`${clip}-sheen-bands-${i}`} gradientUnits="userSpaceOnUse" x1="0" y1={wave.tile} x2={wave.tile / 2} y2={wave.tile / 2} spreadMethod="repeat">
-              {SHEEN_STOPS.map(stop => <stop key={stop.offset} offset={stop.offset} stopColor={stop.color} stopOpacity={stop.opacity} />)}
-            </linearGradient>
-            <pattern id={`${clip}-sheen-${i}`} patternUnits="userSpaceOnUse" width={wave.tile} height={wave.tile}>
-              <rect width={wave.tile} height={wave.tile} fill={`url(#${clip}-sheen-bands-${i})`} />
-              <animateTransform attributeName="patternTransform" type="translate" from="0 0" to={`${wave.tile} ${-wave.tile}`} dur={`${wave.seconds}s`} repeatCount="indefinite" />
-            </pattern>
-          </React.Fragment>)}
         <linearGradient id={`${clip}-fold`}>
           <stop offset="0" stopColor="#073949" stopOpacity="0" />
           <stop offset=".42" stopColor="#073949" stopOpacity=".08" />
@@ -233,13 +241,15 @@ export const PillarPhotoMosaic: React.FC<{ pillar: MosaicPillar; caption?: boole
         </g>
         <g clipPath={`url(#${clip})`} aria-hidden="true">
           <rect width="146" height="120" fill={`url(#${clip}-glaze)`} />
-          {/* Heal's soft wave of light, drifting over the surface. */}
-          {pillar === 'heal' && HEAL_WAVES.map((wave, i) => <rect key={wave.tile} x="-4" y="-12" width="174" height="142" fill={`url(#${clip}-sheen-${i})`} />)}
         </g>
         <use href={`#${clip}-outline`} fill="none" stroke={`url(#${clip}-bevel)`} strokeWidth={softSurface ? '.28' : '.45'} strokeLinejoin="round" aria-hidden="true" />
       </g>
       </g>
     </svg>
+    {/* Heal's soft wave of light, drifting over the surface (above, and heal-photo-mosaic.css) */}
+    {pillar === 'heal' && <span ref={sheenRef} className="heal-sheen" aria-hidden="true" style={{ '--sheen-mask': outlineMask(logo.paths) } as React.CSSProperties}>
+      {HEAL_WAVES.map((wave, i) => <i key={wave.tile} style={{ '--tile': wave.tile, '--sheen-tile': SHEEN_TILES[i], animationDuration: `${wave.seconds}s` } as React.CSSProperties} />)}
+    </span>}
     {caption && <figcaption>{PILLARS.find(item => item.id === pillar)?.emblemCaption ?? logo.caption}</figcaption>}
   </figure>;
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useReducedMotion } from 'motion/react';
+import { usePerfTier } from '../hooks/usePerfTier';
 import './animated-brand-wordmark.css';
 
 type LetterPosition = { x: number; y: number; scale: number; shortX: number; shortY: number };
@@ -34,12 +35,15 @@ export const AnimatedBrandWordmark: React.FC<{
     return () => document.removeEventListener('visibilitychange', onVisibility);
   }, []);
 
+  /* a device with least to spare (utils/perfTier) keeps the full name, still */
+  const still = usePerfTier() === 'low';
   useEffect(() => {
-    if (hidden || reducedMotion || engaged || !visible) return;
+    if (still && compact && !hidden) { setCompact(false); return; }
+    if (hidden || reducedMotion || engaged || !visible || still) return;
     // A long reading hold, followed by a shorter monogram hold.
     const timer = window.setTimeout(() => setCompact(value => !value), compact ? 4800 : 7600);
     return () => window.clearTimeout(timer);
-  }, [compact, engaged, hidden, reducedMotion, visible]);
+  }, [compact, engaged, hidden, reducedMotion, visible, still]);
 
   useLayoutEffect(() => {
     let disposed = false;
@@ -108,11 +112,16 @@ export const AnimatedBrandWordmark: React.FC<{
       {words.map((word, i) => <span key={i}><span ref={element => { targetLetters.current[i] = element; }}>{word[0]}</span><span>.</span></span>)}
     </span>
     <span className="brand-initials" aria-hidden="true">
-      {positions.slice(0, words.length).map((position, i) => <span key={i} className="brand-moving-initial" style={{
-        '--full-x': `${position.x}px`, '--full-y': `${position.y}px`, '--full-scale': position.scale,
-        '--short-x': `${position.shortX}px`, '--short-y': `${position.shortY}px`, '--letter-index': i,
-        '--full-weight': i < rows[0].length ? 800 : 600,
-      } as React.CSSProperties}>{words[i][0]}<span className="brand-monogram-dot">.</span></span>)}
+      {positions.slice(0, words.length).map((position, i) => {
+        /* the descriptor's initials are lighter in the full name than in the monogram: both weights of the
+           letter are set, one over the other, and their opacities cross (animated-brand-wordmark.css) */
+        const light = i >= rows[0].length;
+        return <span key={i} className="brand-moving-initial" data-light-face={light || undefined} style={{
+          '--full-x': `${position.x}px`, '--full-y': `${position.y}px`, '--full-scale': position.scale,
+          '--short-x': `${position.shortX}px`, '--short-y': `${position.shortY}px`, '--letter-index': i,
+          '--full-weight': light ? 600 : 800,
+        } as React.CSSProperties}><span className="brand-initial-bold">{words[i][0]}</span>{light && <span className="brand-initial-light">{words[i][0]}</span>}<span className="brand-monogram-dot">.</span></span>;
+      })}
     </span>
   </Link>;
 };

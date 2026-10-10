@@ -120,6 +120,7 @@ export const AwardsSection: React.FC = () => {
     const section = hub.current, scene = stage.current, title = heading.current, collection = gallery.current;
     if (!section || !scene || !title || !collection) return;
     const parts = Array.from(title.children) as HTMLElement[];
+    const description = title.parentElement?.querySelector<HTMLElement>(':scope > p') ?? null;
     const query = matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0, disposed = false, dimensionsDirty = true;
     let travel = 0;
@@ -157,12 +158,15 @@ export const AwardsSection: React.FC = () => {
         const place = placements[i];
         part.style.transform = query.matches || !place ? 'none' : `translate(${place.x * (1 - progress)}px, ${place.y * (1 - progress)}px) scale(${1 + (place.scale - 1) * (1 - progress)})`;
       });
-      section.style.setProperty('--recognition-reveal', String(reveal));
-      section.style.setProperty('--recognition-gallery-y', `${(1 - reveal) * 46}px`);
-      section.style.setProperty('--recognition-description-opacity', String(smooth((progress - .82) / .18)));
-      section.dataset.galleryVisible = String(reveal > .9);
-      section.dataset.introResting = String(progress >= .99);
-
+      /* Set on the gallery and the heading's line, the two things they move:
+         set on the section, as variables, they were inherited by every element
+         of the archive, and each frame of the scroll restyled all of it. */
+      collection.style.opacity = String(reveal);
+      collection.style.transform = `translate3d(0, ${(1 - reveal) * 46}px, 0)`;
+      if (description) description.style.opacity = query.matches ? '' : String(smooth((progress - .82) / .18));
+      const galleryVisible = String(reveal > .9), resting = String(progress >= .99);
+      if (section.dataset.galleryVisible !== galleryVisible) section.dataset.galleryVisible = galleryVisible;
+      if (section.dataset.introResting !== resting) section.dataset.introResting = resting;
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
     const resize = () => { dimensionsDirty = true; schedule(); };
@@ -181,6 +185,8 @@ export const AwardsSection: React.FC = () => {
       collection.removeEventListener('focusin', paint); collection.removeEventListener('focusout', schedule);
       query.removeEventListener('change', resize);
       parts.forEach(part => part.style.removeProperty('transform'));
+      collection.style.removeProperty('opacity'); collection.style.removeProperty('transform');
+      description?.style.removeProperty('opacity');
     };
   }, []);
   useEffect(() => {

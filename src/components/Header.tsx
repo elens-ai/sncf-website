@@ -52,12 +52,20 @@ export const Header: React.FC<HeaderProps> = ({
      header's ground — a blur-and-tint underlay so content sliding beneath the
      fixed header stops mixing with the nav. Deliberately not reused for the
      search control, which stays collapsed on scroll by explicit request. */
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(() => window.scrollY > 24);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    /* A strip as tall as the threshold at the very top of the document: once
+       it is out of view the page has scrolled past it. Watched rather than read
+       on each scroll event, where asking for the scroll position made the
+       browser finish its pending style and layout work there and then, every
+       event, on every page. */
+    const marker = document.createElement('div');
+    marker.setAttribute('aria-hidden', 'true');
+    marker.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:24px;pointer-events:none;visibility:hidden';
+    document.body.prepend(marker);
+    const observer = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting));
+    observer.observe(marker);
+    return () => { observer.disconnect(); marker.remove(); };
   }, []);
 
   return (

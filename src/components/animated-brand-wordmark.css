@@ -12,8 +12,17 @@
 .brand-monogram-measure { position: absolute; left: 0; top: calc((100% - var(--monogram-size)) / 2); visibility: hidden; display: flex; font-size: var(--monogram-size); line-height: 1; font-weight: 800; letter-spacing: .06em; }
 .brand-monogram-measure > span > span { display: inline-block; line-height: 1; }
 .brand-initials { position: absolute; inset: 0; pointer-events: none; }
-.brand-moving-initial { position: absolute; top: 0; left: 0; display: block; font-size: var(--monogram-size); line-height: 1; font-weight: var(--full-weight); letter-spacing: .06em; transform-origin: top left; transform: translate3d(var(--full-x), var(--full-y), 0) scale(var(--full-scale)); transition: transform .95s cubic-bezier(.76,0,.24,1), font-weight .7s ease; transition-delay: calc(var(--letter-index) * .065s); }
-[data-mode='compact'] .brand-moving-initial { transform: translate3d(var(--short-x), var(--short-y), 0) scale(1); font-weight: 800; }
+.brand-moving-initial { position: absolute; top: 0; left: 0; display: block; font-size: var(--monogram-size); line-height: 1; font-weight: 800; letter-spacing: .06em; transform-origin: top left; transform: translate3d(var(--full-x), var(--full-y), 0) scale(var(--full-scale)); transition: transform .95s cubic-bezier(.76,0,.24,1); transition-delay: calc(var(--letter-index) * .065s); }
+[data-mode='compact'] .brand-moving-initial { transform: translate3d(var(--short-x), var(--short-y), 0) scale(1); }
+/* The descriptor's initials are lighter in the full name (--full-weight) than in the monogram. The two weights of
+   the letter lie one over the other and their opacities cross: animating the weight itself set the letter's text
+   afresh, a layout every frame of every change, every few seconds on every page. */
+.brand-initial-bold { display: inline-block; }
+.brand-initial-light { position: absolute; top: 0; left: 0; font-weight: var(--full-weight); }
+.brand-moving-initial[data-light-face] :is(.brand-initial-bold, .brand-initial-light) { transition: opacity .7s ease; transition-delay: calc(var(--letter-index) * .065s); }
+.brand-moving-initial[data-light-face] .brand-initial-bold { opacity: 0; }
+[data-mode='compact'] .brand-moving-initial[data-light-face] .brand-initial-bold { opacity: 1; }
+[data-mode='compact'] .brand-initial-light { opacity: 0; }
 .brand-monogram-dot { opacity: 0; display: inline-block; transform: translateY(4px) scale(.5); color: #bce6d9; transition: opacity .25s ease, transform .4s cubic-bezier(.2,.8,.2,1); }
 [data-mode='compact'] .brand-monogram-dot { opacity: 1; transform: none; transition-delay: calc(.65s + var(--letter-index) * .065s); }
 @media (min-width: 1024px) {

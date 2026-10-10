@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { MosaicOverture } from './MosaicOverture';
 import type { MosaicPillar } from './pillarLogoArt';
 import { useSectionActivity } from '../hooks/useSectionActivity';
+import { usePerfTier } from '../hooks/usePerfTier';
 import './home-landing.css';
 import { RotateCcw } from 'lucide-react';
 
@@ -9,7 +10,8 @@ import { RotateCcw } from 'lucide-react';
    starting from the peach: soft tints of the seal's own, and a mid grey, never
    white. The header over the landing is frosted glass, so it shows the same. */
 const GROUND_COLOURS = ['#f9e2c7', '#f1dde6', '#dad8ee', '#cde6f2', '#cfe3d8', '#b3bcb7'];
-const GROUND_STEP = 1000;
+/* a device with less to spare (utils/perfTier) changes colour half as often; one with least keeps the peach */
+const GROUND_STEP = { high: 1000, medium: 2000, low: 0 } as const;
 
 /** THE LANDING: "Different paths. One purpose." opens the home page, before
     the hall. Its emblem assembles once the welcome has handed over, and each
@@ -27,33 +29,37 @@ export function HomeLanding({ play, onEnter, onScrollOn, onReplayIntro }: {
   const root = useRef<HTMLElement>(null);
   const ground = useRef<HTMLDivElement>(null);
   const shore = useRef<HTMLDivElement>(null);
+  const shoreUpper = useRef<HTMLDivElement>(null);
   const active = useSectionActivity(root);
   /* Each second the ground moves on to its next colour (home-landing.css): the
      upper of its two layers either takes that colour while hidden and fades in
      over the lower, or fades out to show the lower, which took it while
      covered. So a colour is only ever painted out of sight, and only the upper
-     layer's opacity moves; the water at the shore turns to the same colour
-     at its crests as it goes. It moves on only while the landing is on the
-     screen, and stays on the peach for those who ask for less motion. */
+     layer's opacity moves; the water at the shore, likewise two layers fading
+     with the ground's, turns to the same colour at its crests as it goes. It
+     moves on only while the landing is on the screen, and stays on the peach
+     for those who ask for less motion. */
   const step = useRef(0);
+  const pace = GROUND_STEP[usePerfTier()];
   useEffect(() => {
     const layers = ground.current;
-    if (!layers || !active || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!layers || !active || !pace || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const [lower, upper] = Array.from(layers.children) as HTMLElement[];
     const timer = window.setInterval(() => {
       step.current = (step.current + 1) % GROUND_COLOURS.length;
       const colour = GROUND_COLOURS[step.current];
-      shore.current?.style.setProperty('--shore-ground', colour);
       if (layers.dataset.upper === 'shown') {
         lower.style.setProperty('--ground', colour);
+        shore.current?.style.setProperty('--shore-ground', colour);
         delete layers.dataset.upper;
       } else {
         upper.style.setProperty('--ground', colour);
+        shoreUpper.current?.style.setProperty('--shore-ground', colour);
         layers.dataset.upper = 'shown';
       }
-    }, GROUND_STEP);
+    }, pace);
     return () => window.clearInterval(timer);
-  }, [active]);
+  }, [active, pace]);
   /* The foot floats in the screen's corner on a desktop (home-landing.css); once most of the landing has been
      scrolled away it goes, since its controls belong to the landing. */
   useEffect(() => {
@@ -73,13 +79,17 @@ export function HomeLanding({ play, onEnter, onScrollOn, onReplayIntro }: {
     window.addEventListener('resize', onScroll);
     return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); if (frame) cancelAnimationFrame(frame); };
   }, []);
+  /* Not a snap point (index.css .snap-screen): the landing runs on down past the screen into its shore, and as the
+     page's only snap point it took every gentle scroll past the screen's foot back to its foot, so a wheel or a
+     trackpad could not leave it without a hard flick. The hall below has none either (homepage.css). */
   return (
-    <section ref={root} id="home-landing" className="home-landing snap-screen" data-active={active}>
+    <section ref={root} id="home-landing" className="home-landing" data-active={active}>
       <button className="landing-intro-replay" onClick={onReplayIntro}>Replay introduction <RotateCcw size={12}/></button>
       <div ref={ground} className="landing-ground" aria-hidden="true"><i /><i /></div>
       <MosaicOverture onChoose={id => onEnter(id)} play={play} heading="h1" onScrollOn={onScrollOn} onReplayIntro={onReplayIntro} />
       {/* the water at the foot of the ground, over the photographs running down into it */}
       <div ref={shore} className="landing-shore" aria-hidden="true"><i /><i /></div>
+      <div ref={shoreUpper} className="landing-shore landing-shore--upper" aria-hidden="true"><i /><i /></div>
     </section>
   );
 }

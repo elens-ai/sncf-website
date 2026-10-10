@@ -46,8 +46,9 @@ export const SocialSidebar: React.FC = () => {
       const element = rail.current;
       if (!element || !element.offsetWidth) return;
       const readingRoom = element.closest('.reading-room');
-      const darkAreas = [...document.querySelectorAll('.values-cover, .value-chapter, .page-cover, .projects-cover')].map(section => section.getBoundingClientRect());
-      const landing = document.querySelector('.home-landing > .mosaic-overture')?.getBoundingClientRect();
+      /* only the page in hand is measured (a reading room's dark covers, or the home page's light landing) */
+      const darkAreas = readingRoom ? [...document.querySelectorAll('.values-cover, .value-chapter, .page-cover, .projects-cover')].map(section => section.getBoundingClientRect()) : [];
+      const landing = readingRoom ? undefined : document.querySelector('.home-landing > .mosaic-overture')?.getBoundingClientRect();
       element.querySelectorAll<HTMLElement>('.social-rail-link').forEach(link => {
         const bounds = link.getBoundingClientRect();
         const x = bounds.left + bounds.width / 2;
@@ -55,7 +56,9 @@ export const SocialSidebar: React.FC = () => {
         const light = readingRoom
           ? !darkAreas.some(area => area.left <= x && area.right >= x && area.top <= y && area.bottom >= y)
           : Boolean(landing && landing.top <= y && landing.bottom >= y);
-        link.dataset.contrast = light ? 'light' : 'dark';
+        /* written only on a change: each write restyled the link, every frame of a scroll */
+        const contrast = light ? 'light' : 'dark';
+        if (link.dataset.contrast !== contrast) link.dataset.contrast = contrast;
       });
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(syncContrast); };

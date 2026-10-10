@@ -93,7 +93,9 @@
    looks just as it did (only the photograph, covering a taller box, is drawn
    a little larger). */
 @media (min-width: 640px) and (orientation: landscape) and (min-height: 481px), (min-width: 1024px) and (orientation: portrait) {
-  .home-page .hero-track > #hero-clone-stage { overflow: visible; clip-path: inset(calc(-1 * var(--shore-band)) 0 0 0); }
+  /* clipped at the sides (overflow-x: clip, which, unlike the clip-path, also keeps the hall's arcs from widening
+     the page: they made it 306px wider than a 1440px screen); open at the top, where the clip-path lets the band in */
+  .home-page .hero-track > #hero-clone-stage { overflow: visible; overflow-x: clip; clip-path: inset(calc(-1 * var(--shore-band)) 0 0 0); }
   .home-page .hero-track > #hero-clone-stage > .hero-backdrops { top: calc(-1 * var(--shore-band)); }
   .home-page .hero-track > #hero-clone-stage > .hero-backdrops > .heal-layered-backdrop {
     mask-image: linear-gradient(180deg, transparent 0, #000 var(--top-soft), #000 calc(var(--shore-band) + (100% - var(--shore-band)) * 0.45), #000d calc(var(--shore-band) + (100% - var(--shore-band)) * 0.65), #0005 calc(var(--shore-band) + (100% - var(--shore-band)) * 0.85), transparent 100%);
