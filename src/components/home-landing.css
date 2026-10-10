@@ -263,14 +263,20 @@
 @media (min-width: 640px) { .landing-intro-replay { display: none; } }
 @media (max-width: 639px) { .home-landing .mosaic-intro-replay { display: none; } }
 /* On a desktop the foot (Replay introduction, the pause, Scroll to explore)
-   sits in the first screen's bottom-right corner, on a strip of frosted
-   glass so its small capitals read over the photographs. */
+   floats in the screen's bottom-right corner: fixed there while the landing
+   is on screen, so it does not move with the scroll, and gone once the
+   landing has been scrolled away (HomeLanding sets data-foot-away), since
+   its controls belong to the landing. Only the words and icons, each lifted
+   off the photographs by a soft light of its own. */
 @media (min-width: 1024px) {
   .home-landing .mosaic-overture-foot {
-    position: absolute; z-index: 6; right: clamp(20px, 2.4vw, 40px); bottom: clamp(10px, 1.5svh, 26px);
-    width: auto; max-width: none; margin: 0; justify-content: flex-end; gap: 18px;
-    padding: 5px 8px 5px 18px; border-radius: 999px;
-    background: rgb(255 255 255 / 0.38); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55), 0 10px 26px -18px rgb(20 58 51 / 0.45);
-    -webkit-backdrop-filter: blur(10px) saturate(1.15); backdrop-filter: blur(10px) saturate(1.15);
+    position: fixed; z-index: 30; right: clamp(20px, 2.4vw, 40px); bottom: clamp(10px, 1.5svh, 26px);
+    width: auto; max-width: none; margin: 0; padding: 0; justify-content: flex-end; gap: 22px;
+    transition: opacity .35s ease, visibility 0s linear 0s;
   }
+  .home-landing .mosaic-overture-foot :is(.mosaic-intro-replay, .mosaic-scroll-cue) { text-shadow: 0 0 10px rgb(255 255 255 / 0.9), 0 0 2px rgb(255 255 255 / 0.9); }
+  .home-landing .mosaic-overture-foot svg { filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.9)); }
+  .home-landing .mosaic-overture-foot .mosaic-rotation-pause { width: 28px; height: 28px; margin: 0; border: 0; background: none; box-shadow: none; color: rgb(20 58 51 / 0.72); }
+  .home-landing .mosaic-overture-foot .mosaic-rotation-pause:hover { color: var(--landing-ink); }
+  .home-landing[data-foot-away='true'] .mosaic-overture-foot { opacity: 0 !important; visibility: hidden; pointer-events: none; transition: opacity .35s ease, visibility 0s linear .35s; }
 }
