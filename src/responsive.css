@@ -98,11 +98,26 @@ html { scroll-padding-top: calc(var(--site-header-height) + 16px); }
   .reading-room .subnav[data-floating] { top: 78px; max-width: calc(100% - 24px); }
 }
 
-/* Handheld chapters read vertically, with all four paths available at the top. */
+/* Handheld: the hall is pinned as on the desktop, one screen of scroll per
+   path, with all four paths in a bar at the top under the header. A path
+   taller than the screen scrolls on under that bar before the page turns
+   (--hall-lift, HomePage), and after Projects the page goes on to Awards.
+   overflow: clip, not hidden, so nothing inside loses its sticking. */
 @media (max-width: 1023px) {
-  .home-page .hero-track { height: auto; }
-  .home-page .hero-track > #hero-clone-stage { position: relative; top: auto; min-height: 0; padding: 28px max(20px, env(safe-area-inset-left)) 36px max(20px, env(safe-area-inset-right)); }
-  .home-page #hero-clone-stage > .hero-path-tabs { position: relative; inset: auto; order: -1; flex: none; width: 100%; margin: 0 0 28px; padding: 0; opacity: 1; }
+  .home-page .hero-track { height: calc(100vh * (var(--hero-count, 4) + .35)); height: calc(100dvh * (var(--hero-count, 4) + .35)); }
+  .home-page .hero-track > #hero-clone-stage {
+    position: sticky; top: 0; height: 100vh; height: 100dvh; min-height: 0; overflow: clip; justify-content: flex-start;
+    padding: var(--site-header-height, 72px) max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right));
+  }
+  .home-page #hero-clone-stage > .hero-path-tabs {
+    position: relative; z-index: 30; inset: auto; order: -1; flex: none; opacity: 1;
+    margin: 0 calc(-1 * max(20px, env(safe-area-inset-right))) 18px calc(-1 * max(20px, env(safe-area-inset-left)));
+    padding: 2px max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
+    background: linear-gradient(color-mix(in srgb, var(--backdrop-dark, #174c3e) 78%, transparent), color-mix(in srgb, var(--backdrop-dark, #174c3e) 62%, transparent));
+    -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2);
+    box-shadow: 0 10px 24px -18px rgb(0 0 0 / .55);
+  }
+  .home-page .hero-track #hero-foreground-content { transform: translate3d(0, calc(var(--hall-lift, 0px) * -1), 0); }
   .home-page #hero-clone-stage .hero-path-tabs [role='tablist'] { width: 100%; max-width: 600px; gap: 0; }
   .home-page #hero-clone-stage .hero-path-tabs [role='tab'] { flex: 1; min-height: 44px; }
   .home-page #hero-foreground-content { flex: none; opacity: 1; }

@@ -171,9 +171,26 @@ export default function HomePage() {
   const activeIndexRef = useRef(activeIndex);
   activeIndexRef.current = activeIndex;
   useEffect(() => {
-    // Phones read the whole chapter in normal document flow; the tabs choose
-    // a pillar without pinning a tall composition above the viewport.
-    if (compactViewport) return;
+    /* Phones and tablets are pinned as well (responsive.css): one screen of
+       scroll per path, the four paths in a bar at the top. A path taller than
+       the screen scrolls through under that bar, 1:1 with the finger, before
+       the page turns: --hall-lift, worked out below from where the page is
+       within the current path's screen. */
+    const stage = document.getElementById('hero-clone-stage');
+    const content = document.getElementById('hero-foreground-content');
+    let lastLift = -1;
+    const lift = (index: number, at: number, vh: number) => {
+      if (!compactViewport || !stage || !content) return;
+      const overflow = Math.max(0, content.offsetTop + content.offsetHeight + 24 - stage.clientHeight);
+      /* Heal scrolls on from the moment the hall pins; every later path is
+         centred on its own screen, its top shown as it turns in and its foot
+         before it turns on, whichever way the page is going. */
+      const raw = index === 0 ? at * vh : (at - index) * vh + overflow / 2;
+      const value = Math.round(Math.max(0, Math.min(overflow, raw)));
+      if (value === lastLift) return;
+      lastLift = value;
+      stage.style.setProperty('--hall-lift', `${value}px`);
+    };
     let raf = 0;
     /* THE TURNING RULE. A page turns 30% of the way into a scroll in the
        direction of travel (at is measured in screens along the track, 0 at
@@ -185,10 +202,15 @@ export default function HomePage() {
     const read = () => {
       raf = 0;
       const geometry = heroTrack();
-      if (!geometry || heroClaim.current !== null) return;
+      if (!geometry) return;
       const r = geometry.track.getBoundingClientRect();
       if (r.top >= geometry.vh || r.bottom <= 0) return;
       const at = (-r.top - geometry.extra) / geometry.vh;
+      if (heroClaim.current !== null) { lift(heroClaim.current, at, geometry.vh); return; }
+      turn(at);
+      lift(held < 0 ? activeIndexRef.current : held, at, geometry.vh);
+    };
+    const turn = (at: number) => {
       const last = activePillarsList.length - 1;
       /* chosen elsewhere (a door, a button, a key) or just arrived: start from here;
          a change this reader made itself is only waiting for React to catch up */
@@ -211,10 +233,15 @@ export default function HomePage() {
     read();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    /* a path of another height turned in, or fonts and photographs settled */
+    const sized = new ResizeObserver(onScroll);
+    if (content) sized.observe(content);
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      sized.disconnect();
       if (raf) cancelAnimationFrame(raf);
+      stage?.style.removeProperty('--hall-lift');
     };
   }, [activePillarsList.length, cmsRevision, compactViewport]);
   /* FAR SECTIONS HOLD THEIR COLOURS. The page's accent (--accent-a/-b)
@@ -341,9 +368,9 @@ export default function HomePage() {
   const goToPillar = useCallback((index: number, takeFocus = false) => {
     const geometry = heroTrack();
     if (!geometry) return;
-    const offset = compactViewport
-      ? -(document.getElementById('site-header')?.offsetHeight ?? 72)
-      : index === 0 ? 0 : geometry.extra + index * geometry.vh;
+    const offset = index === 0 ? 0
+      : compactViewport ? (index - 0.12) * geometry.vh
+      : geometry.extra + index * geometry.vh;
     setActiveIndex(index);
     setHeroArrived(true);
     scrollHolding(window.scrollY + geometry.track.getBoundingClientRect().top + offset, index);
