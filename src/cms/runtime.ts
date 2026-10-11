@@ -133,8 +133,16 @@ export function resolveCMSAsset(key: string, fallback: string): string {
 export const resolveAsset = resolveCMSAsset;
 
 const env: Record<string, string | undefined> = (import.meta as unknown as { env?: Record<string, string> }).env ?? {};
-const cmsBase = (env.VITE_CMS_URL ?? '').replace(/\/$/, '');
 const preview = typeof location !== 'undefined' && new URLSearchParams(location.search).get('cms-preview') === 'true';
+/* THE PUBLISHED SNAPSHOT IS READ FROM THE SITE'S OWN ORIGIN. The CMS copies it
+   into the site's bucket on every publication (backend/src/cms/publish.ts), so
+   visitors read a plain file through the site's CDN: nothing to wake, no
+   cross-origin request, and the site is the same whether the CMS is up or not.
+   Only an editor's draft preview (?cms-preview=true, with their CMS sign-in)
+   goes to the CMS itself, at VITE_CMS_URL. Without a snapshot in the bucket the
+   request answers with the site's HTML, which is not JSON, so the bundled
+   content stands, as before. */
+const cmsBase = preview ? (env.VITE_CMS_URL ?? '').replace(/\/$/, '') : '';
 const endpoint = `${cmsBase}/api/site-content${preview ? '?preview=true' : ''}`;
 const cacheKey = `sncf:cms:v1:${cmsBase || 'same-origin'}`;
 const requestTimeout = 3500;

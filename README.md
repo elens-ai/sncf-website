@@ -8,7 +8,7 @@ The SNCF website combines a responsive React frontend, interactive 3D pillar mod
 | Content Studio | Not yet hosted in production — runs locally at `http://localhost:3001/admin` |
 | Repository | `elens-ai/sncf-website` — work happens on `dev`; `main` deploys automatically |
 
-Until the CMS is hosted and `VITE_CMS_URL` is set, the live website shows the content bundled into its build. Everything below still works locally end to end.
+The CMS is hosted at https://sncfcms.elens.in and writes each publication into the website's own bucket, where the site reads it; a site built without that file shows the content bundled into its build. Everything below still works locally end to end.
 
 ## Contents
 
@@ -139,7 +139,7 @@ flowchart TB
     Cms --> Vol
   end
 
-  CF -. "VITE_CMS_URL (once hosted)" .-> Proxy
+  CF -. "VITE_CMS_URL (draft previews only)" .-> Proxy
 ```
 
 - **Website hosting** (`infra/bootstrap.sh`, run by an operator): a private S3 bucket behind CloudFront with Origin Access Control, Route 53 alias records for `sncf.elens.in`, and an IAM role that GitHub Actions assumes through OIDC, scoped to the `production` environment.
@@ -216,7 +216,7 @@ The Vite server proxies `/api` to the local CMS, so the website at `http://local
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_CMS_URL` | Public HTTPS origin of the CMS, e.g. `https://cms.example.org`. Unset: the site uses `/api` on its own origin, else bundled content. Never put secrets in `VITE_` variables. |
+| `VITE_CMS_URL` | Public HTTPS origin of the CMS (`https://sncfcms.elens.in`), used only for editors' draft previews. Published content is always read from `/api/site-content` on the site's own origin, else bundled content. Never put secrets in `VITE_` variables. |
 | `CMS_PROXY_TARGET` | Dev only: where Vite proxies `/api` (default `http://127.0.0.1:3001`). |
 
 **CMS** (`backend/.env`, private, never committed):
@@ -229,7 +229,7 @@ The Vite server proxies `/api` to the local CMS, so the website at `http://local
 | `PAYLOAD_PUBLIC_SITE_URL` | Public URL of the website (used by live preview) |
 | `CMS_ALLOWED_ORIGINS` | Extra origins allowed to call the CMS (comma-separated) |
 
-**GitHub repository variables** (deployment): `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, and optionally `VITE_CMS_URL`. See [DEPLOYMENT.md](DEPLOYMENT.md).
+**GitHub environment `dev`** (deployment): `AWS_ROLE_ARN`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`, `VITE_CMS_URL`, `CMS_DEPLOY_ROLE_ARN`, `SST_STAGE`, `CMS_URL` and the secret `PAYLOAD_SECRET`. See [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Validate changes
 

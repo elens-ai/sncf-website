@@ -22,3 +22,7 @@ backend/media/
 # is the record of what production actually ran).
 backend/tsconfig.tsbuildinfo
 backend/next-env.d.ts
+
+# SST (the CMS's serverless deployment, sst.config.ts) and OpenNext build output
+.sst/
+backend/.open-next/

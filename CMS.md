@@ -99,9 +99,9 @@ Statistics do not invent a real-time feed. They update when an authorised person
 
 ## Production
 
-Use HTTPS, a durable PostgreSQL database and persistent media storage. Run `npm run migrate` before starting a new CMS release; development (SQLite) synchronises its schema automatically. Set a strong `PAYLOAD_SECRET`, the public CMS/site URLs and the allowed frontend origins. The CMS service must be deployed as well as the static frontend; a frontend deployment alone cannot host Payload or its database. Until the CMS is deployed and `VITE_CMS_URL` is set, the live website shows its bundled content.
+The CMS runs serverless at https://sncfcms.elens.in, deployed by GitHub Actions from the `dev` environment (`.github/workflows/cms.yml`, `sst.config.ts`): a Lambda server function, Aurora Serverless v2 PostgreSQL that pauses when idle, and an S3 media library served at `/media/*`. Pending migrations are applied as the server starts, and an empty database is seeded from `backend/seed/site-content.json`. Each publication is also written to the website's own bucket as `/api/site-content`, which is where visitors read it; the website never waits for the CMS. [DEPLOYMENT.md](DEPLOYMENT.md) has the settings and the first-run steps (create the administrator at `/admin` before sharing the address).
 
-Back up the database and media directory together before migrations or releases. Keep secret environment files, local SQLite databases and uploads out of Git. See `backend/README.md` and the repository's infrastructure configuration for deployment commands.
+Back up the database and the media bucket together before migrations or releases. Keep secret environment files, local SQLite databases and uploads out of Git. The Compose stack in `docker-compose.yml` runs the same CMS on a server of your own.
 
 ## Validation
 

@@ -1,0 +1,86 @@
+name: CMS deploy
+
+# The content studio (backend/, Payload on Next.js) deployed serverless by SST
+# (sst.config.ts): a CloudFront router at https://sncfcms.elens.in, a Lambda
+# server function, Aurora Serverless v2 PostgreSQL that pauses when idle, and
+# an S3 media library. Every setting comes from the GitHub environment `dev`:
+#   variables  AWS_REGION, CMS_DEPLOY_ROLE_ARN, SST_STAGE, CMS_URL
+#   secrets    PAYLOAD_SECRET (signs CMS sessions; handed to SST as its secret)
+# The role is created by infra/bootstrap-cms-deploy.sh. Backend CI (backend.yml)
+# still checks every change; this workflow deploys it.
+on:
+  push:
+    branches: [dev]
+    paths:
+      - "backend/**"
+      - "sst.config.ts"
+      - "package-lock.json"
+      - ".github/workflows/cms.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: cms-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: ${{ vars.CMS_URL }}
+    # the first deployment creates the database cluster, which takes a while
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            backend/package-lock.json
+
+      # the repository root holds the SST CLI; the CMS has its own dependencies
+      - name: Install dependencies
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix backend --no-audit --no-fund
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.CMS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Set the CMS secret
+        env:
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          SST_STAGE: ${{ vars.SST_STAGE }}
+        run: |
+          test -n "$PAYLOAD_SECRET"
+          npx sst secret set PayloadSecret "$PAYLOAD_SECRET" --stage "$SST_STAGE"
+
+      - name: Deploy
+        env:
+          SST_STAGE: ${{ vars.SST_STAGE }}
+          CI: "true"
+        run: npx sst deploy --stage "$SST_STAGE"
+
+      # a cold function and a paused database: the first answer can take a minute
+      - name: Verify
+        env:
+          CMS_URL: ${{ vars.CMS_URL }}
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            if curl -fsS --max-time 60 "$CMS_URL/api/access" -o /dev/null; then echo "CMS answers at $CMS_URL"; exit 0; fi
+            sleep 20
+          done
+          echo "The CMS did not answer at $CMS_URL" >&2
+          exit 1

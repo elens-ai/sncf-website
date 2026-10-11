@@ -52,7 +52,7 @@ export const Media: CollectionConfig = {
       if (file && !/\.(jpe?g|png|webp|avif|gif|mp4|webm|mp3|m4a|ogg|wav|glb|gltf)$/i.test(file.name)) throw new Error('Upload a supported image, video, audio or glTF model file.')
     }
     return args
-  }],afterChange:[({doc})=>{invalidateContent();return doc}],afterDelete:[({doc})=>{invalidateContent();return doc}]},
+  }],afterChange:[({doc,req})=>{invalidateContent(req.payload);return doc}],afterDelete:[({doc,req})=>{invalidateContent(req.payload);return doc}]},
   fields: [
     {name:'folder',type:'text',index:true,admin:{description:'For example Pavilion / Heal or Projects / Amrit.'}},
     {name:'tags',type:'array',fields:[{name:'tag',type:'text',required:true}]},

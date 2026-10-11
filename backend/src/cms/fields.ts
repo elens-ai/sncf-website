@@ -78,7 +78,7 @@ export function contentCollection(slug: string, options: CollectionOptions, fiel
     access: { read: publishedOrSignedIn, create: isLoggedIn, update: isLoggedIn, delete: isEditor },
     // Autosave keeps work safe without a version for every keystroke.
     versions: { drafts: { autosave: { interval: 4000 } }, maxPerDoc: 30 },
-    hooks: { beforeChange: [enforcePublishing], afterChange: [({ doc }) => { invalidateContent(); return doc }], afterDelete: [({ doc }) => { invalidateContent(); return doc }] },
+    hooks: { beforeChange: [enforcePublishing], afterChange: [({ doc, req }) => { invalidateContent(req.payload); return doc }], afterDelete: [({ doc, req }) => { invalidateContent(req.payload); return doc }] },
     fields: [keyField, orderField, ...fields],
   }
 }

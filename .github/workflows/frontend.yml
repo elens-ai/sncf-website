@@ -32,6 +32,8 @@ jobs:
   # ---------- CI: every push and PR ----------
   build:
     runs-on: ubuntu-latest
+    # every setting, VITE_CMS_URL included, lives in the GitHub environment `dev`
+    environment: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -72,20 +74,21 @@ jobs:
           path: dist/
           retention-days: 3
 
-  # ---------- Deploy: main pushes and manual dispatch ----------
+  # ---------- Deploy: pushes to dev and main, and manual dispatch ----------
   deploy:
     permissions:
       id-token: write
       contents: read
     needs: build
-    # Auto-deploys on pushes to main. A manual run deploys unless it was
-    # dispatched with deploy=false, which builds and typechecks only.
+    # sncf.elens.in is the dev environment: every push to dev (and to main)
+    # deploys it. A manual run deploys unless it was dispatched with
+    # deploy=false, which builds and typechecks only.
     if: |
       (github.event_name == 'workflow_dispatch' && inputs.deploy) ||
-      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+      (github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'))
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: dev
       url: https://sncf.elens.in
     concurrency:
       group: deploy-production

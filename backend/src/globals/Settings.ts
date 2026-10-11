@@ -7,7 +7,7 @@ function settingsGlobal(slug: string, label: string, description: string, fields
   return {
     slug, label, admin: { group: 'Site setup', description },
     access: { read: isLoggedIn, update: isEditor }, versions: { drafts: true, max: 20 },
-    hooks: { afterChange: [({ doc }) => { invalidateContent(); return doc }] }, fields,
+    hooks: { afterChange: [({ doc, req }) => { invalidateContent(req.payload); return doc }] }, fields,
   }
 }
 

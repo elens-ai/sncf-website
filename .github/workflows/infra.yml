@@ -19,8 +19,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Shell syntax and lint
         run: |
-          bash -n infra/bootstrap.sh
-          shellcheck infra/bootstrap.sh
+          bash -n infra/bootstrap.sh infra/bootstrap-cms-deploy.sh
+          shellcheck infra/bootstrap.sh infra/bootstrap-cms-deploy.sh
       - name: Bootstrap configuration tests (mock AWS)
         run: node --test infra/*.test.cjs scripts/check-cms-url.test.cjs scripts/check-cms-url.test.cjs
       - name: Validate every Compose profile

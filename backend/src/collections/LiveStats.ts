@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isEditor } from '../access/roles'
 import { contentCollection, text, area, sourceField } from '../cms/fields'
+import {invalidateContent} from '../cms/cache'
 export const StatAudit:CollectionConfig={
   slug:'stat-audit',labels:{singular:'Statistic change',plural:'Statistics history'},
   admin:{group:'Statistics',useAsTitle:'label',defaultColumns:['label','previousValue','value','actor','createdAt'],description:'Every published change to a live figure: what it was, what it became, and who published it.',
@@ -18,6 +19,7 @@ export const LiveStats=contentCollection('live-stats',{
   {type:'row',fields:[{name:'verifiedAt',label:'Verified on',type:'date'}]},area('notes',false,{label:'Internal notes',description:'Not shown on the website.'}),
 ])
 LiveStats.hooks!.afterChange!.push(async({doc,previousDoc,req,operation})=>{
+  invalidateContent(req.payload)
   // The initial import is not an edit: only record figures a person changed, or later updates.
   if(!req.user&&operation==='create')return doc
   if(doc._status==='published' && (previousDoc?._status!=='published'||doc.value!==previousDoc?.value||doc.period!==previousDoc?.period)) {

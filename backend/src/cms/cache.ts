@@ -1,8 +1,11 @@
 /** Single-flight cache; explicit invalidation on publication and a short cross-process TTL. */
+import type { Payload } from 'payload'
+import { publishSiteSnapshotSoon } from './publish'
 let generation = 0
 const entries = new Map<string,{expires:number,generation:number,value:unknown}>()
 const pending = new Map<string,Promise<unknown>>()
-export const invalidateContent = () => { generation++; entries.clear(); pending.clear() }
+/** After a change: the snapshot is built afresh and, given the Payload instance, copied to the website's bucket (publish.ts). */
+export const invalidateContent = (payload?: Payload) => { generation++; entries.clear(); pending.clear(); if (payload) publishSiteSnapshotSoon(payload) }
 export async function cached<T>(key:string,loader:()=>Promise<T>,ttl=15000):Promise<T> {
   const entry=entries.get(key)
   if(entry && entry.expires>Date.now() && entry.generation===generation) return entry.value as T
