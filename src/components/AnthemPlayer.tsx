@@ -1,8 +1,9 @@
 import { resolveCMSMedia } from '../cms/media';
 import { useCMSRevision } from '../cms/CMSContentProvider';
 import { resolveCMSAsset } from '../cms/runtime';
-import React, { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { audioFocus, fadeMediaVolume } from '../utils/audioFocus';
+import { anthemAudio, anthemPlaying } from '../utils/anthemAudio';
 import { Volume2, VolumeX } from 'lucide-react';
 
 const anthemURL = () => resolveCMSAsset("asset.AnthemPlayer.bf1bfa524baa", "/media/sncf-anthem-instrumental-v1.2.mp3");
@@ -12,7 +13,7 @@ const VOLUME = 0.7;
 const MUTED_KEY = 'sncf:anthem-muted';
 
 /**
- * Plays the SNCF anthem from 0:05 on arrival.
+ * Plays the SNCF anthem on arrival, and on through the whole visit.
  *
  * Browsers block audible autoplay until the visitor has interacted with the
  * page, so a bare play() call is rejected on most first visits. We attempt it
@@ -21,14 +22,19 @@ const MUTED_KEY = 'sncf:anthem-muted';
  * listeners so the anthem begins at the visitor's first click, tap, key or
  * scroll instead of silently never playing.
  *
+ * The sound itself is the site's one anthem element (utils/anthemAudio), not
+ * this header's: each page draws its own header, and the anthem plays on as
+ * they change, from wherever it had got to. A header arriving while it plays
+ * leaves it be.
+ *
  * The toggle is always visible so the anthem can be silenced, and that choice
  * is remembered.
  */
 export const AnthemPlayer: React.FC = () => {
   useCMSRevision();
   const ANTHEM_URL = anthemURL();
+  const src = resolveCMSMedia(ANTHEM_URL);
   const projectAudioActive = useSyncExternalStore(audioFocus.subscribe, audioFocus.active, () => false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [muted, setMuted] = useState<boolean>(() => {
     try {
       return localStorage.getItem(MUTED_KEY) === '1';
@@ -36,7 +42,8 @@ export const AnthemPlayer: React.FC = () => {
       return false;
     }
   });
-  const [playing, setPlaying] = useState(false);
+  /* already sounding when this page's header arrives, carried over from the page before */
+  const [playing, setPlaying] = useState(anthemPlaying);
   /* True when the browser refused autoplay. Nothing in JS can override that
      policy, so the honest response is to make the control visible enough that
      a visitor knows sound is waiting for them. */
@@ -55,12 +62,20 @@ export const AnthemPlayer: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
+    const el = anthemAudio(src);
     if (projectAudioActive) { setPlaying(false); return; }
     if (muted) { el.pause(); setPlaying(false); return; }
 
-    el.volume = 0;
+    /* From silence it rises; one already sounding (from the page before) is left
+       as it is, and one that has played to its end is not begun again by moving
+       to another page (the toggle plays it again). */
+    const start = () => {
+      if (!el.paused) { setBlocked(false); return Promise.resolve(); }
+      if (el.ended) return Promise.resolve();
+      el.volume = 0;
+      return el.play().then(() => { setBlocked(false); void fadeMediaVolume(el, VOLUME); });
+    };
+    setPlaying(!el.paused);
     const onMeta = () => cue(el);
     const onPlay = () => setPlaying(true);
     const onPause = () => setPlaying(false);
@@ -76,12 +91,9 @@ export const AnthemPlayer: React.FC = () => {
       if (!audioFocus.permits(el)) return;
       disarm();
       cue(el);
-      void el
-        .play()
-        .then(() => { setBlocked(false); void fadeMediaVolume(el, VOLUME); })
-        .catch(() => {
-          /* still refused — leave it to the toggle */
-        });
+      start().catch(() => {
+        /* still refused — leave it to the toggle */
+      });
     };
 
     const disarm = () => {
@@ -97,9 +109,7 @@ export const AnthemPlayer: React.FC = () => {
     };
 
     const attempt = () =>
-      audioFocus.permits(el) ? el
-        .play()
-        .then(() => { setBlocked(false); void fadeMediaVolume(el, VOLUME); })
+      audioFocus.permits(el) ? start()
         .catch(() => {
           setBlocked(true);
           arm(); // refused → start on the visitor's first interaction
@@ -131,7 +141,7 @@ export const AnthemPlayer: React.FC = () => {
     };
     // Intentionally runs once: the toggle drives playback afterwards.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cue, ANTHEM_URL, muted, projectAudioActive]);
+  }, [cue, src, muted, projectAudioActive]);
 
   useEffect(() => {
     try {
@@ -142,8 +152,7 @@ export const AnthemPlayer: React.FC = () => {
   }, [muted]);
 
   const toggle = () => {
-    const el = audioRef.current;
-    if (!el) return;
+    const el = anthemAudio(src);
     if (!audioFocus.permits(el)) return;
 
     if (playing) {
@@ -151,16 +160,17 @@ export const AnthemPlayer: React.FC = () => {
       setMuted(true);
       return;
     }
-    // A click is a user gesture, so this play() is always allowed.
+    // A click is a user gesture, so this play() is always allowed. (A project
+    // film may have faded it right down before it paused, so it rises again.)
     setMuted(false);
     setBlocked(false);
     cue(el);
-    void el.play().catch(() => undefined);
+    if (el.volume < VOLUME) { el.volume = 0; void el.play().then(() => fadeMediaVolume(el, VOLUME)).catch(() => undefined); }
+    else void el.play().catch(() => undefined);
   };
 
   return (
     <>
-      <audio ref={audioRef} src={resolveCMSMedia(ANTHEM_URL)} preload="auto" playsInline />
       <button
         id="anthem-toggle"
         disabled={projectAudioActive}
