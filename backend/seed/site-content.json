@@ -3208,7 +3208,7 @@
     "copy.DonationExperience.offerPlaceholder": "For example: teaching, organising events or sharing a professional skill…",
     "copy.DonationExperience.optionalNote": "Optional. Please leave personal or financial details out.",
     "copy.DonationExperience.reviewAction": "CONTRIBUTE NOW",
-    "copy.DonationExperience.enquiryNotice": "Continue to enter your contribution details. Other gifts begin with an enquiry.",
+    "copy.DonationExperience.enquiryNotice": "Financial gifts continue on the foundation’s official contribution portal. Other gifts begin with an enquiry.",
     "copy.DonationExperience.summaryTitle": "Your contribution, your way",
     "copy.DonationExperience.offering": "Offering",
     "copy.DonationExperience.emailAction": "Open email draft",
@@ -3225,6 +3225,7 @@
     "copy.DonationExperience.nonMonetaryTitle": "Ways to give",
     "copy.DonationExperience.contributeAction": "Continue to contribute",
     "copy.DonationExperience.portalNotice": "You’ll choose your amount and enter your details on the official portal. Please read its FAQs before proceeding.",
+    "copy.Link.DonationExperience.e3ba2d351b4c": "https://contribute.nirankarifoundation.org/contribute",
     "copy.DonationExperience.onlineQuestion": "How can I donate online?",
     "copy.DonationExperience.onlineAnswer": "The foundation lists debit and credit cards, net banking, bank transfers, e-wallets and UPI, through Razorpay (powered by HDFC Bank) and PayUmoney.",
     "copy.DonationExperience.taxQuestion": "Are donations tax deductible?",
@@ -5738,7 +5739,7 @@
       "copy.DonationExperience.enquiryNotice": {
         "page": "contribute",
         "section": "Donation form",
-        "label": "Donation form · Continue to enter your contribution details. Other gifts begin with a…"
+        "label": "Donation form · Financial gifts continue on the foundation’s official contribution po…"
       },
       "copy.DonationExperience.summaryTitle": {
         "page": "contribute",
@@ -5819,6 +5820,11 @@
         "page": "contribute",
         "section": "Donation form",
         "label": "Donation form · You’ll choose your amount and enter your details on the official port…"
+      },
+      "copy.Link.DonationExperience.e3ba2d351b4c": {
+        "page": "contribute",
+        "section": "Donation form",
+        "label": "Donation form · Link: https://contribute.nirankarifoundation.org/contribute"
       },
       "copy.DonationExperience.onlineQuestion": {
         "page": "contribute",
